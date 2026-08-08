@@ -7,7 +7,7 @@
     "faction": "companion",
     "tier": 1,
     "row": "front",
-    "stats": { "hp": 45, "atk": 12, "def": 8, "initiative": 8 },
+    "stats": { "hp": 48, "atk": 10, "def": 9, "initiative": 8 },
     "abilities": ["stand_in_the_doorway", "barefoot_rush", "debt_collection"],
     "traits": ["starter", "shield"]
   },
@@ -19,7 +19,7 @@
     "faction": "companion",
     "tier": 1,
     "row": "back",
-    "stats": { "hp": 29, "atk": 8, "def": 4, "initiative": 12 },
+    "stats": { "hp": 30, "atk": 8, "def": 4, "initiative": 12 },
     "abilities": ["hook_shot", "rag_bandage"],
     "traits": ["starter", "shooter"]
   }

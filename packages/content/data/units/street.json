@@ -7,7 +7,7 @@
     "faction": "street",
     "tier": 1,
     "row": "front",
-    "stats": { "hp": 44, "atk": 12, "def": 7, "initiative": 10 },
+    "stats": { "hp": 46, "atk": 12, "def": 6, "initiative": 10 },
     "abilities": ["plain_strike", "barefoot_rush"],
     "recruitable": { "kind": "never" },
     "traits": ["fighter"]
@@ -20,8 +20,8 @@
     "faction": "street",
     "tier": 1,
     "row": "back",
-    "stats": { "hp": 28, "atk": 7, "def": 3, "initiative": 11 },
-    "abilities": ["hook_shot", "paper_slap"],
+    "stats": { "hp": 30, "atk": 8, "def": 3, "initiative": 11 },
+    "abilities": ["hook_shot", "pick_the_pocket"],
     "recruitable": { "kind": "axis", "axis": "honesty_deceit", "op": "lte", "value": -40 },
     "traits": ["shooter"]
   }

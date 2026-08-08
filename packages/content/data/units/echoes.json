@@ -7,7 +7,7 @@
     "faction": "echo",
     "tier": 2,
     "row": "back",
-    "stats": { "hp": 46, "atk": 18, "def": 6, "initiative": 12 },
+    "stats": { "hp": 54, "atk": 18, "def": 6, "initiative": 12 },
     "abilities": ["smoke_of_ples", "ember_spit"],
     "traits": ["echo", "life_smolokur", "fear"]
   },

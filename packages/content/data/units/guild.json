@@ -7,7 +7,7 @@
     "faction": "greedy_memory_guild",
     "tier": 1,
     "row": "front",
-    "stats": { "hp": 34, "atk": 12, "def": 4, "initiative": 13 },
+    "stats": { "hp": 38, "atk": 12, "def": 5, "initiative": 13 },
     "abilities": ["barefoot_rush", "pick_the_pocket"],
     "evolvesTo": "guild_hoarder_vey",
     "evolveAt": 250,

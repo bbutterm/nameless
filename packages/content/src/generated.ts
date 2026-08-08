@@ -1,6 +1,7 @@
 /* СГЕНЕРИРОВАНО gen-index.ts — не редактировать руками. */
 /* eslint-disable */
 
+import scenes_0_scenes from './../data/scenes/ch3/audit_arrives.json';
 import units_0_units from './../data/units/brotherhood.json';
 import units_1_units from './../data/units/companions.json';
 import units_2_units from './../data/units/echoes.json';
@@ -23,7 +24,7 @@ import chapters_0_chapters from './../data/chapters/chapters.json';
 import axes_0_axes from './../data/axes/axes.json';
 import speakers_0_speakers from './../data/speakers/speakers.json';
 
-export const scenes: unknown[] = ([] as unknown[]).flatMap((x) => (Array.isArray(x) ? x : [x]));
+export const scenes: unknown[] = ([scenes_0_scenes] as unknown[]).flatMap((x) => (Array.isArray(x) ? x : [x]));
 export const units: unknown[] = ([units_0_units, units_1_units, units_2_units, units_3_units, units_4_units, units_5_units, units_6_units] as unknown[]).flatMap((x) => (Array.isArray(x) ? x : [x]));
 export const abilities: unknown[] = ([abilities_0_abilities, abilities_1_abilities, abilities_2_abilities, abilities_3_abilities] as unknown[]).flatMap((x) => (Array.isArray(x) ? x : [x]));
 export const battles: unknown[] = ([] as unknown[]).flatMap((x) => (Array.isArray(x) ? x : [x]));

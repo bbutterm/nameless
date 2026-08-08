@@ -7,8 +7,8 @@
     "faction": "companion",
     "tier": 1,
     "row": "front",
-    "stats": { "hp": 45, "atk": 12, "def": 8, "initiative": 9 },
-    "abilities": ["plain_strike", "barefoot_rush"],
+    "stats": { "hp": 46, "atk": 11, "def": 9, "initiative": 9 },
+    "abilities": ["debt_collection", "barefoot_rush"],
     "evolvesTo": "almshouse_sister",
     "evolveAt": 250,
     "recruitable": { "kind": "axis", "axis": "mercy_cruelty", "op": "gte", "value": 40 },
@@ -22,7 +22,7 @@
     "faction": "companion",
     "tier": 2,
     "row": "back",
-    "stats": { "hp": 53, "atk": 17, "def": 7, "initiative": 12 },
+    "stats": { "hp": 56, "atk": 17, "def": 7, "initiative": 12 },
     "abilities": ["bucket_round", "rag_bandage", "coin_sling"],
     "recruitable": { "kind": "axis", "axis": "mercy_cruelty", "op": "gte", "value": 40 },
     "traits": ["healer", "pole_mercy"]
@@ -35,7 +35,7 @@
     "faction": "companion",
     "tier": 1,
     "row": "front",
-    "stats": { "hp": 35, "atk": 12, "def": 4, "initiative": 12 },
+    "stats": { "hp": 40, "atk": 12, "def": 5, "initiative": 12 },
     "abilities": ["plain_strike", "barefoot_rush"],
     "recruitable": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -40 },
     "traits": ["fighter", "pole_cruelty"]
@@ -61,7 +61,7 @@
     "faction": "companion",
     "tier": 1,
     "row": "back",
-    "stats": { "hp": 28, "atk": 7, "def": 3, "initiative": 13 },
+    "stats": { "hp": 30, "atk": 8, "def": 3, "initiative": 13 },
     "abilities": ["inventory", "hook_shot"],
     "recruitable": { "kind": "axis", "axis": "honesty_deceit", "op": "gte", "value": 40 },
     "traits": ["breaker", "pole_honesty"]
@@ -74,7 +74,7 @@
     "faction": "companion",
     "tier": 2,
     "row": "front",
-    "stats": { "hp": 57, "atk": 14, "def": 9, "initiative": 10 },
+    "stats": { "hp": 64, "atk": 14, "def": 9, "initiative": 10 },
     "abilities": ["appraisal", "debt_collection", "plain_strike"],
     "recruitable": { "kind": "axis", "axis": "honesty_deceit", "op": "gte", "value": 40 },
     "traits": ["breaker", "pole_honesty"]
@@ -113,7 +113,7 @@
     "faction": "companion",
     "tier": 1,
     "row": "back",
-    "stats": { "hp": 34, "atk": 11, "def": 4, "initiative": 12 },
+    "stats": { "hp": 32, "atk": 11, "def": 4, "initiative": 12 },
     "abilities": ["appraisal", "paper_slap"],
     "evolvesTo": "cold_reckoner",
     "evolveAt": 250,
@@ -128,7 +128,7 @@
     "faction": "companion",
     "tier": 2,
     "row": "back",
-    "stats": { "hp": 49, "atk": 15, "def": 8, "initiative": 13 },
+    "stats": { "hp": 52, "atk": 14, "def": 8, "initiative": 13 },
     "abilities": ["inventory", "fading", "coin_sling"],
     "recruitable": { "kind": "axis", "axis": "reason_obsession", "op": "gte", "value": 40 },
     "traits": ["breaker", "pole_reason"]
@@ -141,7 +141,7 @@
     "faction": "companion",
     "tier": 1,
     "row": "front",
-    "stats": { "hp": 36, "atk": 12, "def": 6, "initiative": 12 },
+    "stats": { "hp": 40, "atk": 12, "def": 6, "initiative": 12 },
     "abilities": ["barefoot_rush", "pick_the_pocket"],
     "recruitable": { "kind": "axis", "axis": "reason_obsession", "op": "lte", "value": -40 },
     "traits": ["fighter", "pole_obsession"]
@@ -154,7 +154,7 @@
     "faction": "companion",
     "tier": 2,
     "row": "back",
-    "stats": { "hp": 51, "atk": 14, "def": 9, "initiative": 10 },
+    "stats": { "hp": 58, "atk": 18, "def": 9, "initiative": 10 },
     "abilities": ["borrowed_grief", "fading", "coin_sling"],
     "recruitable": { "kind": "axis", "axis": "reason_obsession", "op": "lte", "value": -40 },
     "traits": ["mage", "pole_obsession"]
@@ -167,7 +167,7 @@
     "faction": "companion",
     "tier": 1,
     "row": "front",
-    "stats": { "hp": 45, "atk": 12, "def": 8, "initiative": 8 },
+    "stats": { "hp": 48, "atk": 10, "def": 9, "initiative": 8 },
     "abilities": ["plain_strike", "debt_collection"],
     "recruitable": { "kind": "axis", "axis": "grasp_release", "op": "gte", "value": 40 },
     "traits": ["shield", "pole_grasp"]
@@ -193,7 +193,7 @@
     "faction": "companion",
     "tier": 1,
     "row": "front",
-    "stats": { "hp": 44, "atk": 12, "def": 6, "initiative": 10 },
+    "stats": { "hp": 46, "atk": 12, "def": 7, "initiative": 10 },
     "abilities": ["barefoot_rush", "white_book_reading"],
     "recruitable": { "kind": "axis", "axis": "grasp_release", "op": "lte", "value": -40 },
     "traits": ["fighter", "pole_release"]
@@ -206,7 +206,7 @@
     "faction": "companion",
     "tier": 2,
     "row": "front",
-    "stats": { "hp": 65, "atk": 16, "def": 10, "initiative": 9 },
+    "stats": { "hp": 72, "atk": 18, "def": 11, "initiative": 9 },
     "abilities": ["white_book_reading", "debt_collection"],
     "recruitable": { "kind": "axis", "axis": "grasp_release", "op": "lte", "value": -40 },
     "traits": ["healer", "pole_release"]
