@@ -5,6 +5,7 @@ import { DialogueScreen } from './screens/DialogueScreen';
 import { TitleScreen } from './screens/TitleScreen';
 import { GameProvider, useGame } from './store/game';
 import { t } from './i18n';
+import '@nameless/content/palette.css';
 import './theme.css';
 import './screens.css';
 
