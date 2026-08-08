@@ -78,7 +78,8 @@ await page.waitForTimeout(400);
 const b = await measure();
 console.log(`scrollTop после scrollTop=-9999: ${a.scrollTop}; после колеса вверх: ${b.scrollTop}`);
 console.log(
-  `первый блок ленты «${m.firstText}» ${m.firstAbove ? 'ВЫШЕ видимой области (не перечитать)' : 'виден'}`,
+  `внизу ленты первый блок «${m.firstText}» ${m.firstAbove ? 'ВЫШЕ видимой области' : 'виден'};` +
+    ` после прокрутки вверх он ${b.firstAbove ? 'ВСЁ ЕЩЁ НЕДОСТУПЕН' : 'виден — перечитать можно'}`,
 );
 await page.screenshot({ path: `${outDir}/feed-after-scroll-up.png` });
 

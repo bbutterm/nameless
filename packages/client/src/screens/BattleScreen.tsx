@@ -118,6 +118,7 @@ export function BattleScreen() {
             targetable={targets.includes(u.uid)}
             anim={anims[u.uid]}
             floats={floats.filter((f) => f.uid === u.uid)}
+            intentName={u.intent ? loc(combat.abilities.get(u.intent.ability)?.name, lang) : undefined}
             onTap={() => onTapUnit(u)}
           />
         );
@@ -201,8 +202,6 @@ export function BattleScreen() {
           {selectedAbility ? t(lang, 'chooseTarget') : t(lang, 'yourTurn')}
         </div>
       )}
-
-      {!over && <TutorialHint step="battle" lang={lang} anchor="top" />}
 
       {over && (
         <div className="battle-over">

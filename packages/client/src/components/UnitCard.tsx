@@ -22,6 +22,7 @@ export function UnitCard({
   targetable,
   anim,
   floats,
+  intentName,
   onTap,
 }: {
   unit: BattleUnitState;
@@ -29,6 +30,8 @@ export function UnitCard({
   lang: Lang;
   selected?: boolean;
   targetable?: boolean;
+  /** Человеческое имя способности, которую враг готовит на этот раунд. */
+  intentName?: string;
   anim?: 'lunge-up' | 'lunge-down' | 'hit' | 'die' | undefined;
   floats?: FloatingNumber[];
   onTap?: () => void;
@@ -73,7 +76,9 @@ export function UnitCard({
       </div>
 
       {unit.intent && (
-        <div className="intent" title={unit.intent.ability}>
+        // В title лежало сырое id способности («pick_the_pocket»): служебная
+        // строка, которая утекала в интерфейс. Показываем человеческое имя.
+        <div className="intent" title={intentName ?? unit.intent.ability}>
           <Icon name={unit.intent.icon} size={14} />
         </div>
       )}

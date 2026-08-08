@@ -66,7 +66,7 @@ for (const size of SIZES) {
     const tooSmall = [...document.querySelectorAll('button')]
       .filter((b) => b.offsetParent !== null)
       .map((b) => ({ cls: b.className, w: b.getBoundingClientRect().width, h: b.getBoundingClientRect().height }))
-      .filter((b) => b.h < 44 && !b.cls.includes('lore-toggle'));
+      .filter((b) => b.h < 44);
     const bubble = document.querySelector('.bubble-text, .narration');
     const fontSize = bubble ? parseFloat(getComputedStyle(bubble).fontSize) : null;
     return {

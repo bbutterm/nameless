@@ -213,7 +213,9 @@
   display: flex;
   gap: 7px;
   align-items: center;
-  min-height: 40px;
+  /* 48px — общий минимум тап-цели (--tap). Раскрывашка лора была 40px и
+     единственной кнопкой в игре, промахнуться по которой можно пальцем. */
+  min-height: var(--tap);
   color: var(--text-faint);
   font-size: 15px;
   font-style: italic;
@@ -696,6 +698,9 @@
 /* В потоке: подсказка над кнопками выбора, а не поверх них — накрывать
    собой два варианта из четырёх подсказка не должна. */
 .tutorial-flow { position: static; margin: 0 0 8px; }
+/* Полка для подсказки боя: в потоке между шапкой и полем, чтобы поле ужалось,
+   а не оказалось накрытым. */
+.tutorial-slot { position: relative; z-index: 4; padding: 0 10px; flex-shrink: 0; }
 .tutorial-text { font-size: 16px; line-height: 1.35; }
 .tutorial-skip {
   margin-top: 6px;

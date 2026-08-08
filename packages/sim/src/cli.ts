@@ -75,10 +75,16 @@ if (!only || only === 'battles') {
         if (n.kind === 'battle') battleChapter.set(n.battle, sc.chapter);
       }
     }
-    const party = defaultParty(content.units, 1);
+    const party = defaultParty(content.units, 1, 1);
     const rep = scriptedBattles(
       content,
-      (id) => defaultParty(content.units, Math.max(1, (battleChapter.get(id) ?? 1) * 2 - 1)),
+      (id) => {
+        // К главе 2 игрок успевает набрать наёмников второго тира на стене найма,
+        // к главе 3 — ещё и отголоски закреплённых жизней. Мерить эти бои отрядом
+        // первого тира — мерить не тот вход: там 0% побед у любого баланса.
+        const ch = battleChapter.get(id) ?? 1;
+        return defaultParty(content.units, ch === 1 ? 1 : ch === 2 ? 2 : 3, ch);
+      },
       Math.max(20, Math.floor(runs / 2)),
     );
     for (const r of rep) {
@@ -166,11 +172,13 @@ function dedupe(items: string[]): string[] {
   return [...new Set(items)];
 }
 
-/** Отряд «среднего игрока»: тир 1, три спереди, три сзади, заданного уровня. */
-function defaultParty(units: UnitDef[], level: number): PartyUnit[] {
-  const t1 = units.filter((u) => u.tier === 1);
-  const front = t1.filter((u) => u.row === 'front').slice(0, 3);
-  const back = t1.filter((u) => u.row === 'back').slice(0, 3);
+/** Отряд «среднего игрока» заданной главы: потолок тира и уровень. */
+function defaultParty(units: UnitDef[], maxTier: number, level: number): PartyUnit[] {
+  const pool = units.filter((u) => u.tier <= maxTier);
+  // Берём сильнейших доступных: игрок к этой главе уже выбирал, кого держать.
+  const byTier = (a: UnitDef, b: UnitDef) => b.tier - a.tier;
+  const front = pool.filter((u) => u.row === 'front').sort(byTier).slice(0, 3);
+  const back = pool.filter((u) => u.row === 'back').sort(byTier).slice(0, 3);
   const out: PartyUnit[] = [];
   const push = (u: UnitDef, row: 'front' | 'back', i: number) =>
     out.push({
