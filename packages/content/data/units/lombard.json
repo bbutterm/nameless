@@ -50,7 +50,7 @@
     "row": "front",
     "stats": {
       "initiative": 9,
-      "hp": 55,
+      "hp": 51,
       "atk": 18,
       "def": 9
     },
@@ -121,9 +121,9 @@
     "tier": 2,
     "row": "back",
     "stats": {
-      "initiative": 9,
-      "hp": 46,
-      "atk": 15,
+      "initiative": 11,
+      "hp": 47,
+      "atk": 14,
       "def": 6
     },
     "abilities": [

@@ -364,11 +364,26 @@ export function validateBundle(bundle: ContentBundle): Issue[] {
     noteRecruits(b.rewards, recruitTargets);
   }
 
+  const lifeByMemory = new Map<string, string[]>();
+  for (const l of bundle.lives) {
+    for (const m of l.memories) {
+      lifeByMemory.set(m, [...(lifeByMemory.get(m) ?? []), l.id]);
+    }
+  }
   for (const m of bundle.memories) {
     if (!lifeIds.has(m.life)) {
       issues.push({ level: 'error', where: `memory:${m.id}`, message: `Нет жизни «${m.life}»` });
+    } else if (!(lifeByMemory.get(m.id) ?? []).includes(m.life)) {
+      // Жизнь есть, но её мозаика не знает об этом воспоминании: прогресс
+      // жизни и её пробуждение это воспоминание не учтут.
+      issues.push({
+        level: 'warn',
+        where: `memory:${m.id}`,
+        message: `Воспоминание не входит в memories своей жизни «${m.life}»`,
+      });
     }
     effectWrites(m.grants, writes);
+    noteRecruits(m.grants, recruitTargets);
   }
   for (const l of bundle.lives) {
     if (!axisIds.has(l.axis)) {
@@ -380,6 +395,7 @@ export function validateBundle(bundle: ContentBundle): Issue[] {
       }
     }
     effectWrites(l.grants, writes);
+    noteRecruits(l.grants, recruitTargets);
   }
   for (const d of bundle.deaths) {
     if (!sceneIds.has(d.wakeScene)) {
@@ -426,6 +442,74 @@ export function validateBundle(bundle: ContentBundle): Issue[] {
   for (const m of writes.memories) {
     if (!memoryIds.has(m)) {
       issues.push({ level: 'error', where: 'memories', message: `Осколок неизвестного воспоминания «${m}»` });
+    }
+  }
+  // Эффекты тоже обязаны ссылаться на существующие id — раньше проверялись только условия.
+  for (const u of writes.units) {
+    if (!unitIds.has(u)) {
+      issues.push({ level: 'error', where: 'units', message: `Эффект ссылается на неизвестного юнита «${u}»` });
+    }
+  }
+  for (const l of writes.lives) {
+    if (!lifeIds.has(l)) {
+      issues.push({ level: 'error', where: 'lives', message: `awakenLife неизвестной жизни «${l}»` });
+    }
+  }
+  for (const a of writes.axes) {
+    if (!axisIds.has(a)) {
+      issues.push({ level: 'error', where: 'axes', message: `Эффект двигает неизвестную ось «${a}»` });
+    }
+  }
+  for (const s of reads.scenes) {
+    if (!sceneIds.has(s)) {
+      issues.push({ level: 'error', where: 'scenes', message: `Условие visited ссылается на неизвестную сцену «${s}»` });
+    }
+  }
+
+  // Воспоминание, которому ни один эффект не даёт осколков, закрепить нельзя.
+  for (const m of bundle.memories) {
+    if (!writes.memories.has(m.id)) {
+      issues.push({
+        level: 'warn',
+        where: `memory:${m.id}`,
+        message: 'Осколков не даёт ни один эффект — воспоминание не закрепить',
+      });
+    }
+  }
+
+  // Юнит, которого не даёт ни recruit, ни эволюция, и который не стоит врагом
+  // ни в одном бою, — мёртвый контент.
+  const enemyUnits = new Set<string>();
+  for (const b of bundle.battles) for (const e of b.enemies) enemyUnits.add(e.unit);
+  const evolveTargets = new Set<string>();
+  for (const u of bundle.units) if (u.evolvesTo) evolveTargets.add(u.evolvesTo);
+  for (const u of bundle.units) {
+    if (!recruitTargets.has(u.id) && !evolveTargets.has(u.id) && !enemyUnits.has(u.id)) {
+      issues.push({
+        level: 'warn',
+        where: `unit:${u.id}`,
+        message: 'Юнита нельзя получить: нет recruit-эффекта, эволюции в него и боя с ним',
+      });
+    }
+  }
+
+  // Способность, не привязанная ни к одному юниту, никогда не попадёт в бой.
+  const usedAbilities = new Set<string>();
+  for (const u of bundle.units) for (const a of u.abilities) usedAbilities.add(a);
+  for (const a of bundle.abilities) {
+    if (!usedAbilities.has(a.id)) {
+      issues.push({ level: 'warn', where: `ability:${a.id}`, message: 'Способность не привязана ни к одному юниту' });
+    }
+  }
+
+  // Эволюция без порога (и наоборот) молча не срабатывает.
+  for (const u of bundle.units) {
+    if (!!u.evolvesTo !== (u.evolveAt !== undefined)) {
+      issues.push({
+        level: 'warn',
+        where: `unit:${u.id}`,
+        message: 'evolvesTo и evolveAt должны идти парой — иначе эволюция не сработает',
+      });
     }
   }
 

@@ -16,7 +16,7 @@
     "stats": {
       "initiative": 8,
       "hp": 40,
-      "atk": 11,
+      "atk": 9,
       "def": 9
     },
     "abilities": [
@@ -44,10 +44,10 @@
     "tier": 1,
     "row": "back",
     "stats": {
-      "initiative": 14,
       "hp": 30,
       "atk": 10,
-      "def": 4
+      "def": 4,
+      "initiative": 12
     },
     "abilities": [
       "hook_shot",

@@ -1,15 +1,32 @@
 {
   "id": "zaklad_hub",
   "chapter": 1,
-  "title": { "ru": "Закладная сторона под вечер", "en": "The Pledge Side Towards Evening" },
-  "tags": ["hub"],
-  "available": { "kind": "visited", "scene": "appraiser_hall" },
+  "title": {
+    "ru": "Закладная сторона под вечер",
+    "en": "The Pledge Side Towards Evening"
+  },
+  "tags": [
+    "hub"
+  ],
+  "available": {
+    "kind": "visited",
+    "scene": "appraiser_hall"
+  },
   "entry": "hub_router",
   "nodes": [
     {
       "kind": "branch",
       "id": "hub_router",
-      "branches": [{ "when": { "kind": "deaths", "op": "gte", "value": 1 }, "to": "hub_after_death" }],
+      "branches": [
+        {
+          "when": {
+            "kind": "deaths",
+            "op": "gte",
+            "value": 1
+          },
+          "to": "hub_after_death"
+        }
+      ],
       "fallback": "hub_in"
     },
     {
@@ -58,7 +75,15 @@
         "ru": "Пуговица! Короче: на мостках с утра труха, стража уже там. У Жички новый товар, тёплый.",
         "en": "Button! So: there's dust on the boardwalk since morning, the watch is already there. Zhichka's got new stock, still warm."
       },
-      "keywords": [{ "match": { "ru": "труха", "en": "dust" }, "tone": "danger" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "труха",
+            "en": "dust"
+          },
+          "tone": "danger"
+        }
+      ],
       "next": "klyost_tips2"
     },
     {
@@ -74,52 +99,117 @@
     {
       "kind": "choice",
       "id": "hub_choice",
-      "prompt": { "ru": "До темноты успеть можно в одно место.", "en": "There is time for one place before dark." },
+      "prompt": {
+        "ru": "До темноты успеть можно в одно место.",
+        "en": "There is time for one place before dark."
+      },
       "options": [
         {
           "id": "to_pier",
-          "text": { "ru": "На мостки Слузы.", "en": "To the Sluza boardwalk." },
-          "conditions": { "kind": "not", "of": { "kind": "visited", "scene": "pier_dust" } },
+          "text": {
+            "ru": "На мостки Слузы.",
+            "en": "To the Sluza boardwalk."
+          },
+          "conditions": {
+            "kind": "not",
+            "of": {
+              "kind": "visited",
+              "scene": "pier_dust"
+            }
+          },
           "to": "scene:pier_dust"
         },
         {
           "id": "to_rows",
-          "text": { "ru": "В Мокрые ряды, к Жичке.", "en": "To the Wet Rows, to Zhichka." },
-          "conditions": { "kind": "not", "of": { "kind": "visited", "scene": "wet_rows" } },
+          "text": {
+            "ru": "В Мокрые ряды, к Жичке.",
+            "en": "To the Wet Rows, to Zhichka."
+          },
+          "conditions": {
+            "kind": "not",
+            "of": {
+              "kind": "visited",
+              "scene": "wet_rows"
+            }
+          },
           "to": "scene:wet_rows"
         },
         {
           "id": "to_garden",
-          "text": { "ru": "За реку, на огород Братства.", "en": "Across the river, to the Brotherhood's garden." },
-          "conditions": { "kind": "not", "of": { "kind": "visited", "scene": "other_bank_garden" } },
+          "text": {
+            "ru": "За реку, на огород Братства.",
+            "en": "Across the river, to the Brotherhood's garden."
+          },
+          "conditions": {
+            "kind": "not",
+            "of": {
+              "kind": "visited",
+              "scene": "other_bank_garden"
+            }
+          },
           "to": "scene:other_bank_garden"
         },
         {
           "id": "to_errand",
-          "text": { "ru": "С Клёстом по чёрной лестнице.", "en": "With Crossbill up the back stairs." },
+          "text": {
+            "ru": "С Клёстом по чёрной лестнице.",
+            "en": "With Crossbill up the back stairs."
+          },
           "conditions": {
             "kind": "all",
             "of": [
-              { "kind": "flag", "flag": "klyost_named" },
-              { "kind": "not", "of": { "kind": "visited", "scene": "klyost_errand" } }
+              {
+                "kind": "flag",
+                "flag": "klyost_named"
+              },
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "visited",
+                  "scene": "klyost_errand"
+                }
+              }
             ]
           },
           "to": "scene:klyost_errand"
         },
         {
           "id": "to_reading",
-          "text": { "ru": "В читальню архива.", "en": "To the archive reading room." },
-          "conditions": { "kind": "counter", "counter": "errands_done", "op": "gte", "value": 2 },
+          "text": {
+            "ru": "В читальню архива.",
+            "en": "To the archive reading room."
+          },
+          "conditions": {
+            "kind": "counter",
+            "counter": "errands_done",
+            "op": "gte",
+            "value": 2
+          },
           "to": "scene:reading_room"
         },
         {
+          "id": "to_hire",
+          "text": {
+            "ru": "К стене найма под навесом.",
+            "en": "To the hiring wall under the awning."
+          },
+          "priority": 3,
+          "to": "scene:hire_wall"
+        },
+        {
           "id": "ask_klyost",
-          "text": { "ru": "Спросить мальчишку, где он врёт.", "en": "Ask the boy where he is lying." },
+          "text": {
+            "ru": "Спросить мальчишку, где он врёт.",
+            "en": "Ask the boy where he is lying."
+          },
           "to": "klyost_lie_answer"
         },
         {
           "id": "read_board",
-          "text": { "ru": "Прочитать доску объявлений.", "en": "Read the notice board." },
+          "text": {
+            "ru": "Прочитать доску объявлений.",
+            "en": "Read the notice board."
+          },
           "to": "hub_board"
         }
       ]
@@ -137,7 +227,10 @@
     {
       "kind": "lore",
       "id": "hub_board",
-      "title": { "ru": "Доска у фонаря", "en": "The board by the lamp" },
+      "title": {
+        "ru": "Доска у фонаря",
+        "en": "The board by the lamp"
+      },
       "text": {
         "ru": "«Ревизия. Сверка Учёта начнётся в срок. Гражданам надлежит держать при себе описи имущества, памяти и долгов. Расхождения устраняются на месте». Ниже, мелом и другой рукой: «Никто не знает, что это значит. Спросили у Ломбарда — Ломбард сказал, что готов».",
         "en": "\"The Audit. Reconciliation of the Reckoning will begin on schedule. Citizens are to keep with them inventories of property, memory and debt. Discrepancies are resolved on the spot.\" Below, in chalk and another hand: \"Nobody knows what this means. We asked the Pawnshop; the Pawnshop said it was ready.\""

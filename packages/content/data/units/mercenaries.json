@@ -51,9 +51,9 @@
     "tier": 2,
     "row": "back",
     "stats": {
-      "initiative": 9,
-      "hp": 46,
-      "atk": 18,
+      "initiative": 11,
+      "hp": 45,
+      "atk": 16,
       "def": 6
     },
     "abilities": [
@@ -122,7 +122,7 @@
     "tier": 2,
     "row": "back",
     "stats": {
-      "initiative": 8,
+      "initiative": 11,
       "hp": 45,
       "atk": 14,
       "def": 6
@@ -192,7 +192,7 @@
     "tier": 2,
     "row": "front",
     "stats": {
-      "initiative": 8,
+      "initiative": 9,
       "hp": 51,
       "atk": 18,
       "def": 9
@@ -335,9 +335,9 @@
     "tier": 2,
     "row": "back",
     "stats": {
-      "initiative": 8,
+      "initiative": 10,
       "hp": 45,
-      "atk": 18,
+      "atk": 16,
       "def": 6
     },
     "abilities": [
@@ -371,9 +371,9 @@
     "tier": 1,
     "row": "front",
     "stats": {
-      "initiative": 12,
-      "hp": 41,
-      "atk": 8,
+      "initiative": 11,
+      "hp": 38,
+      "atk": 7,
       "def": 6
     },
     "abilities": [
@@ -406,7 +406,7 @@
     "tier": 2,
     "row": "back",
     "stats": {
-      "initiative": 7,
+      "initiative": 10,
       "hp": 45,
       "atk": 18,
       "def": 7
@@ -444,7 +444,7 @@
     "stats": {
       "initiative": 8,
       "hp": 40,
-      "atk": 12,
+      "atk": 10,
       "def": 9
     },
     "abilities": [
@@ -478,8 +478,8 @@
     "tier": 2,
     "row": "front",
     "stats": {
-      "initiative": 10,
-      "hp": 70,
+      "initiative": 9,
+      "hp": 72,
       "atk": 18,
       "def": 12
     },
@@ -514,7 +514,7 @@
     "tier": 1,
     "row": "front",
     "stats": {
-      "initiative": 11,
+      "initiative": 10,
       "hp": 43,
       "atk": 9,
       "def": 7
@@ -550,8 +550,8 @@
     "row": "front",
     "stats": {
       "initiative": 10,
-      "hp": 58,
-      "atk": 17,
+      "hp": 72,
+      "atk": 18,
       "def": 12
     },
     "abilities": [
