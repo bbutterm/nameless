@@ -14,10 +14,30 @@
 Файлы: `packages/content/assets/fonts/*.woff2`, подключение — в
 `packages/content/assets/palette.css`.
 
-## Графика
+## Заимствованная графика
 
-**Вся графика проекта на сегодня — процедурная, авторская, сгенерирована кодом.**
-Внешних изображений в репозитории нет.
+| Что | Источник | Лицензия | Где лежит |
+|---|---|---|---|
+| 24 иконки способностей и намерений | game-icons.net (авторы Lorc, Delapouite) | **CC BY 3.0 — атрибуция обязательна** | `packages/content/assets/icons/*.svg` |
+| 700 RPG-иконок | Lorc, через OpenGameArt | **CC BY 3.0 — атрибуция обязательна** | `packages/content/assets/icons/oga-700-rpg-icons/` |
+| Fantasy UI Borders | Kenney | CC0 | `packages/content/assets/ui/fantasy-ui-borders/` |
+| UI Pack (RPG Expansion) | Kenney | CC0 | `packages/content/assets/ui/ui-pack-rpg-expansion/` |
+| UI Pack — Adventure | Kenney | CC0 | `packages/content/assets/ui/ui-pack-adventure/` |
+
+**Обязательная строка атрибуции для сборки, которую видит игрок:**
+
+> Иконки: game-icons.net — Lorc, Delapouite (CC BY 3.0).
+> RPG-иконки: Lorc, OpenGameArt (CC BY 3.0).
+> Интерфейс: Kenney (CC0).
+
+Ссылки: https://game-icons.net/ · https://opengameart.org/content/700-rpg-icons ·
+https://kenney.nl/assets/fantasy-ui-borders · https://kenney.nl/assets/ui-pack-rpg-expansion ·
+https://kenney.nl/assets/ui-pack-adventure
+
+## Процедурная графика
+
+Всё, что не перечислено выше, сгенерировано кодом — портреты, карточки юнитов,
+фоны сцен, иконки PWA. Внешних изображений для них нет.
 
 | Что | Где | Как устроено |
 |---|---|---|
