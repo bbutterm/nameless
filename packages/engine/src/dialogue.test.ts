@@ -7,6 +7,7 @@ import {
   parseRef,
   rawPassingOptions,
   resolve,
+  normalizeEntry,
   MAX_OPTIONS,
   MIN_OPTIONS,
 } from './dialogue.js';
@@ -301,5 +302,19 @@ describe('advance и choose', () => {
   it('choose с неизвестным вариантом — no-op', () => {
     const s = st('hall', 'pick');
     expect(choose(idx, s, 'net')).toEqual(s);
+  });
+});
+
+describe('синхронизация главы', () => {
+  it('номер главы берётся из сцены при переходе', () => {
+    const idx = indexContent(
+      bundle([
+        { id: 's1', chapter: 1, title: t('а'), entry: 'n1', nodes: [{ kind: 'end', id: 'n1' }] },
+        { id: 's2', chapter: 2, title: t('б'), entry: 'n1', nodes: [{ kind: 'end', id: 'n1' }] },
+      ]),
+    );
+    expect(normalizeEntry(idx, st('s2', '@entry', { chapter: 1 })).chapter).toBe(2);
+    // Уже развёрнутый узел тоже подтягивает главу: игрок мог войти по прямой ссылке.
+    expect(normalizeEntry(idx, st('s2', 'n1', { chapter: 1 })).chapter).toBe(2);
   });
 });

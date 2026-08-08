@@ -1,13 +1,26 @@
 {
   "id": "zhichka_slip",
   "chapter": 2,
-  "title": { "ru": "Сорок вторая склянка", "en": "The Forty-Second Jar" },
-  "tags": ["guild", "zhichka", "no_combat"],
+  "title": {
+    "ru": "Сорок вторая склянка",
+    "en": "The Forty-Second Jar"
+  },
+  "tags": [
+    "guild",
+    "zhichka",
+    "no_combat"
+  ],
   "available": {
     "kind": "any",
     "of": [
-      { "kind": "flag", "flag": "zhichka_promise" },
-      { "kind": "flag", "flag": "zhichka_deal" }
+      {
+        "kind": "flag",
+        "flag": "zhichka_promise"
+      },
+      {
+        "kind": "flag",
+        "flag": "zhichka_deal"
+      }
     ]
   },
   "entry": "slip_in",
@@ -39,7 +52,15 @@
         "ru": "Ношеное надо проветривать, а эту я не вешаю. Хозяйка у неё была аккуратная, соседи говорили — мельникова вдова, из тех, кто и в декабре подметает крыльцо.",
         "en": "Worn goods want airing, but this one I do not hang up. Its owner was a tidy woman, the neighbours said — the miller's widow, one of those who sweeps the porch even in December."
       },
-      "keywords": [{ "match": { "ru": "мельникова вдова", "en": "the miller's widow" }, "tone": "memory" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "мельникова вдова",
+            "en": "the miller's widow"
+          },
+          "tone": "memory"
+        }
+      ],
       "next": "zh_shift"
     },
     {
@@ -59,7 +80,15 @@
         "ru": "Вы приходили под вечер, и почерк у вас был твёрдый, а голос мягкий. Вы написали мне урожай будущего года целиком, и я до сих пор считаю, что вы не соврали.",
         "en": "You used to come towards evening, and your hand was firm and your voice was soft. You wrote me out next year's harvest, entire, and I still hold that you did not lie to me."
       },
-      "keywords": [{ "match": { "ru": "урожай будущего года", "en": "next year's harvest" }, "tone": "memory" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "урожай будущего года",
+            "en": "next year's harvest"
+          },
+          "tone": "memory"
+        }
+      ],
       "next": "zh_recoil"
     },
     {
@@ -74,7 +103,13 @@
     {
       "kind": "effects",
       "id": "slip_effect",
-      "effects": [{ "kind": "flag", "flag": "zhichka_slip_heard", "value": true }],
+      "effects": [
+        {
+          "kind": "flag",
+          "flag": "zhichka_slip_heard",
+          "value": true
+        }
+      ],
       "next": "press_choice"
     },
     {
@@ -87,79 +122,194 @@
       "options": [
         {
           "id": "who_wrote",
-          "text": { "ru": "Спросить, кто ей это написал.", "en": "Ask who wrote that out for her." },
+          "text": {
+            "ru": "Спросить, кто ей это написал.",
+            "en": "Ask who wrote that out for her."
+          },
           "fallback": true,
           "to": "r_who_wrote"
         },
         {
           "id": "let_go",
-          "text": { "ru": "Сделать вид, что не расслышал.", "en": "Pretend I did not catch it." },
+          "text": {
+            "ru": "Сделать вид, что не расслышал.",
+            "en": "Pretend I did not catch it."
+          },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -5 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": -5
+            }
+          ],
           "to": "r_let_go"
         },
         {
           "id": "say_mine",
-          "text": { "ru": "Сказать: это писал я.", "en": "Say: I wrote that." },
+          "text": {
+            "ru": "Сказать: это писал я.",
+            "en": "Say: I wrote that."
+          },
           "fallback": true,
           "effects": [
-            { "kind": "fragment", "memory": "pervaya_stroka", "amount": 1 },
-            { "kind": "axis", "axis": "honesty_deceit", "delta": 8 }
+            {
+              "kind": "fragment",
+              "memory": "pervaya_stroka",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 8
+            }
           ],
-          "to": "r_say_mine"
+          "to": "r_say_mine",
+          "priority": 8
         },
         {
           "id": "finish_it",
-          "text": { "ru": "Договорить за неё. Слово в слово.", "en": "Finish it for her. Word for word." },
-          "chip": { "icon": "coin", "label": { "ru": "Посульщик", "en": "Posulshchik" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "posulshchik" },
+          "text": {
+            "ru": "Договорить за неё. Слово в слово.",
+            "en": "Finish it for her. Word for word."
+          },
+          "chip": {
+            "icon": "coin",
+            "label": {
+              "ru": "Посульщик",
+              "en": "Posulshchik"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "posulshchik"
+          },
           "effects": [
-            { "kind": "fragment", "memory": "luchshie_gody", "amount": 2 },
-            { "kind": "axis", "axis": "honesty_deceit", "delta": -8 }
+            {
+              "kind": "fragment",
+              "memory": "luchshie_gody",
+              "amount": 2
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": -8
+            }
           ],
           "to": "r_finish",
           "priority": 7
         },
         {
           "id": "write_down",
-          "text": { "ru": "Записать её слова при ней, целиком.", "en": "Write her words down in front of her, entire." },
-          "chip": { "icon": "book", "label": { "ru": "Чистописец", "en": "Chistopisets" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "chistopisets" },
+          "text": {
+            "ru": "Записать её слова при ней, целиком.",
+            "en": "Write her words down in front of her, entire."
+          },
+          "chip": {
+            "icon": "book",
+            "label": {
+              "ru": "Чистописец",
+              "en": "Chistopisets"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "chistopisets"
+          },
           "effects": [
-            { "kind": "fragment", "memory": "khronika_bez_popravok", "amount": 2 },
-            { "kind": "axis", "axis": "honesty_deceit", "delta": 15 }
+            {
+              "kind": "fragment",
+              "memory": "khronika_bez_popravok",
+              "amount": 2
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 15
+            }
           ],
           "to": "r_write_down",
           "priority": 7
         },
         {
           "id": "count_jars",
-          "text": { "ru": "Сосчитать склянки на верёвке вслух.", "en": "Count the jars on the line out loud." },
-          "chip": { "icon": "hourglass", "label": { "ru": "Перечень", "en": "Perechen" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "perechen" },
+          "text": {
+            "ru": "Сосчитать склянки на верёвке вслух.",
+            "en": "Count the jars on the line out loud."
+          },
+          "chip": {
+            "icon": "hourglass",
+            "label": {
+              "ru": "Перечень",
+              "en": "Perechen"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "perechen"
+          },
           "effects": [
-            { "kind": "fragment", "memory": "opis_vsego_sushchego", "amount": 1 },
-            { "kind": "axis", "axis": "reason_obsession", "delta": -8 }
+            {
+              "kind": "fragment",
+              "memory": "opis_vsego_sushchego",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -8
+            }
           ],
           "to": "r_count_jars",
           "priority": 6
         },
         {
           "id": "press_hard",
-          "text": { "ru": "Взять её за запястье и не отпустить.", "en": "Take her by the wrist and not let go." },
-          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -30 },
+          "text": {
+            "ru": "Взять её за запястье и не отпустить.",
+            "en": "Take her by the wrist and not let go."
+          },
+          "conditions": {
+            "kind": "axis",
+            "axis": "mercy_cruelty",
+            "op": "lte",
+            "value": -30
+          },
           "effects": [
-            { "kind": "fragment", "memory": "ples_gorit", "amount": 1 },
-            { "kind": "axis", "axis": "mercy_cruelty", "delta": -8 }
+            {
+              "kind": "fragment",
+              "memory": "ples_gorit",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": -8
+            }
           ],
           "to": "r_press_hard",
           "priority": 6
         },
         {
           "id": "already_read",
-          "text": { "ru": "Показать ей, чей почерк на договоре.", "en": "Show her whose hand is on the deed." },
-          "conditions": { "kind": "flag", "flag": "contract_read" },
-          "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": 5 }],
+          "text": {
+            "ru": "Показать ей, чей почерк на договоре.",
+            "en": "Show her whose hand is on the deed."
+          },
+          "conditions": {
+            "kind": "flag",
+            "flag": "contract_read"
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 5
+            }
+          ],
           "to": "r_show_deed",
           "priority": 5
         }
@@ -261,75 +411,197 @@
       "options": [
         {
           "id": "buy_jar",
-          "text": { "ru": "Купить. Назвать свою цену первым.", "en": "Buy it. Name my price first." },
+          "text": {
+            "ru": "Купить. Назвать свою цену первым.",
+            "en": "Buy it. Name my price first."
+          },
           "fallback": true,
           "effects": [
-            { "kind": "gold", "delta": -22 },
-            { "kind": "axis", "axis": "grasp_release", "delta": 8 },
-            { "kind": "counter", "counter": "lots_held", "delta": 1 }
+            {
+              "kind": "gold",
+              "delta": -22
+            },
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": 8
+            },
+            {
+              "kind": "counter",
+              "counter": "lots_held",
+              "delta": 1
+            }
           ],
           "to": "r_buy_jar"
         },
         {
           "id": "leave_jar",
-          "text": { "ru": "Оставить склянку ей.", "en": "Leave the jar with her." },
+          "text": {
+            "ru": "Оставить склянку ей.",
+            "en": "Leave the jar with her."
+          },
           "fallback": true,
           "effects": [
-            { "kind": "axis", "axis": "grasp_release", "delta": -8 },
-            { "kind": "axis", "axis": "mercy_cruelty", "delta": 5 }
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": -8
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": 5
+            }
           ],
           "to": "r_leave_jar"
         },
         {
           "id": "trade_it",
-          "text": { "ru": "Торговаться, как торговались всегда.", "en": "Haggle, the way we always haggled." },
+          "text": {
+            "ru": "Торговаться, как торговались всегда.",
+            "en": "Haggle, the way we always haggled."
+          },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 5 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": 5
+            }
+          ],
           "to": "r_trade_it"
         },
         {
           "id": "return_to_owner",
-          "text": { "ru": "Отвезти склянку вдове, если она жива.", "en": "Take the jar to the widow, if she is alive." },
-          "chip": { "icon": "heal", "label": { "ru": "Ключарь", "en": "Klyuchar" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "klyuchar" },
+          "text": {
+            "ru": "Отвезти склянку вдове, если она жива.",
+            "en": "Take the jar to the widow, if she is alive."
+          },
+          "chip": {
+            "icon": "heal",
+            "label": {
+              "ru": "Ключарь",
+              "en": "Klyuchar"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "klyuchar"
+          },
           "effects": [
-            { "kind": "fragment", "memory": "poslednyaya_kruzhka", "amount": 2 },
-            { "kind": "axis", "axis": "mercy_cruelty", "delta": 15 },
-            { "kind": "counter", "counter": "debts_forgiven", "delta": 1 }
+            {
+              "kind": "fragment",
+              "memory": "poslednyaya_kruzhka",
+              "amount": 2
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": 15
+            },
+            {
+              "kind": "counter",
+              "counter": "debts_forgiven",
+              "delta": 1
+            }
           ],
           "to": "r_return_owner",
           "priority": 7
         },
         {
           "id": "promise_pay",
-          "text": { "ru": "Выписать ей посул. Как в тот раз.", "en": "Write her a promise note. Like that time." },
-          "chip": { "icon": "coin", "label": { "ru": "Посульщик", "en": "Posulshchik" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "posulshchik" },
+          "text": {
+            "ru": "Выписать ей посул. Как в тот раз.",
+            "en": "Write her a promise note. Like that time."
+          },
+          "chip": {
+            "icon": "coin",
+            "label": {
+              "ru": "Посульщик",
+              "en": "Posulshchik"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "posulshchik"
+          },
           "effects": [
-            { "kind": "fragment", "memory": "zima_bez_khleba", "amount": 2 },
-            { "kind": "axis", "axis": "honesty_deceit", "delta": -15 },
-            { "kind": "counter", "counter": "promises_given", "delta": 1 },
-            { "kind": "counter", "counter": "lots_held", "delta": 1 }
+            {
+              "kind": "fragment",
+              "memory": "zima_bez_khleba",
+              "amount": 2
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": -15
+            },
+            {
+              "kind": "counter",
+              "counter": "promises_given",
+              "delta": 1
+            },
+            {
+              "kind": "counter",
+              "counter": "lots_held",
+              "delta": 1
+            }
           ],
           "to": "r_promise_pay",
           "priority": 7
         },
         {
           "id": "empty_jar",
-          "text": { "ru": "Попросить взамен пустую склянку.", "en": "Ask for an empty jar instead." },
-          "conditions": { "kind": "axis", "axis": "grasp_release", "op": "gte", "value": 30 },
-          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": 5 }],
+          "text": {
+            "ru": "Попросить взамен пустую склянку.",
+            "en": "Ask for an empty jar instead."
+          },
+          "conditions": {
+            "kind": "axis",
+            "axis": "grasp_release",
+            "op": "gte",
+            "value": 30
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": 5
+            }
+          ],
           "to": "r_empty_jar",
           "priority": 5
         },
         {
           "id": "break_jar",
-          "text": { "ru": "Разбить её о прилавок. Обоим легче.", "en": "Break it on the counter. Easier for both." },
-          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -40 },
+          "text": {
+            "ru": "Разбить её о прилавок. Обоим легче.",
+            "en": "Break it on the counter. Easier for both."
+          },
+          "conditions": {
+            "kind": "axis",
+            "axis": "mercy_cruelty",
+            "op": "lte",
+            "value": -40
+          },
           "effects": [
-            { "kind": "fragment", "memory": "schet_za_sezon", "amount": 2 },
-            { "kind": "axis", "axis": "mercy_cruelty", "delta": -15 },
-            { "kind": "flag", "flag": "zhichka_hostile", "value": true }
+            {
+              "kind": "fragment",
+              "memory": "schet_za_sezon",
+              "amount": 2
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": -15
+            },
+            {
+              "kind": "flag",
+              "flag": "zhichka_hostile",
+              "value": true
+            }
           ],
           "to": "r_break_jar",
           "priority": 6

@@ -1,13 +1,28 @@
 {
   "id": "witness_work",
   "chapter": 2,
-  "title": { "ru": "Работа понятым", "en": "Work as a Witness" },
-  "tags": ["lombard", "guard", "no_combat"],
+  "title": {
+    "ru": "Работа понятым",
+    "en": "Work as a Witness"
+  },
+  "tags": [
+    "lombard",
+    "guard",
+    "no_combat"
+  ],
   "available": {
     "kind": "all",
     "of": [
-      { "kind": "flag", "flag": "signed_insolvent" },
-      { "kind": "axis", "axis": "honesty_deceit", "op": "gte", "value": 40 }
+      {
+        "kind": "flag",
+        "flag": "signed_insolvent"
+      },
+      {
+        "kind": "axis",
+        "axis": "honesty_deceit",
+        "op": "gte",
+        "value": 40
+      }
     ]
   },
   "entry": "witness_in",
@@ -77,13 +92,24 @@
         "ru": "Продающая уточняет одно: останется ли она помнить, что он есть. Ей отвечают, что останется — уйдёт только то, отчего он ей нужен. Она кивает и говорит, что это подходит.",
         "en": "The woman selling asks one thing: will she still remember that he exists. She is told that she will — what goes is only the part that makes her need him. She nods and says that will do."
       },
-      "keywords": [{ "match": { "ru": "это подходит", "en": "that will do" }, "tone": "danger" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "это подходит",
+            "en": "that will do"
+          },
+          "tone": "danger"
+        }
+      ],
       "next": "lore_form"
     },
     {
       "kind": "lore",
       "id": "lore_form",
-      "title": { "ru": "Бланк ЗД-4: обязанности понятого", "en": "Form PD-4: duties of the witness" },
+      "title": {
+        "ru": "Бланк ЗД-4: обязанности понятого",
+        "en": "Form PD-4: duties of the witness"
+      },
       "text": {
         "ru": "«Понятой удостоверяет: сторона находилась в своём уме, слышала цену, слышала последствия и после этого не передумала. Понятой не удостоверяет: что цена справедлива. Оценка справедливости в обязанности понятого не входит и в бланке места не имеет». На обороте, приписанное от руки: «Место просили. Отказано».",
         "en": "\"The witness certifies: that the party was in her right mind, heard the price, heard the consequences, and did not change her mind thereafter. The witness does not certify: that the price is fair. Assessment of fairness forms no part of the witness's duties and has no space on this form.\" On the reverse, added by hand: \"Space was requested. Denied.\""
@@ -100,101 +126,275 @@
       "options": [
         {
           "id": "sign_plain",
-          "text": { "ru": "Подписать как есть.", "en": "Sign it as it stands." },
+          "text": {
+            "ru": "Подписать как есть.",
+            "en": "Sign it as it stands."
+          },
           "fallback": true,
           "effects": [
-            { "kind": "gold", "delta": 9 },
-            { "kind": "flag", "flag": "witness_paid", "value": true }
+            {
+              "kind": "gold",
+              "delta": 9
+            },
+            {
+              "kind": "flag",
+              "flag": "witness_paid",
+              "value": true
+            }
           ],
-          "to": "r_sign_plain"
+          "to": "r_sign_plain",
+          "priority": 6
         },
         {
           "id": "sign_note",
-          "text": { "ru": "Подписать и вписать замечание на обороте.", "en": "Sign, and add a remark on the reverse." },
+          "text": {
+            "ru": "Подписать и вписать замечание на обороте.",
+            "en": "Sign, and add a remark on the reverse."
+          },
           "fallback": true,
           "effects": [
-            { "kind": "fragment", "memory": "khronika_bez_popravok", "amount": 2 },
-            { "kind": "axis", "axis": "honesty_deceit", "delta": 8 },
-            { "kind": "gold", "delta": 9 },
-            { "kind": "flag", "flag": "witness_paid", "value": true }
+            {
+              "kind": "fragment",
+              "memory": "khronika_bez_popravok",
+              "amount": 2
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 8
+            },
+            {
+              "kind": "gold",
+              "delta": 9
+            },
+            {
+              "kind": "flag",
+              "flag": "witness_paid",
+              "value": true
+            }
           ],
-          "to": "r_sign_note"
+          "to": "r_sign_note",
+          "priority": 8
         },
         {
           "id": "refuse_sign",
-          "text": { "ru": "Не подписывать. Уйти без денег.", "en": "Not sign. Leave without the money." },
+          "text": {
+            "ru": "Не подписывать. Уйти без денег.",
+            "en": "Not sign. Leave without the money."
+          },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -5 }],
-          "to": "r_refuse_sign"
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": -5
+            }
+          ],
+          "to": "r_refuse_sign",
+          "priority": 6
         },
         {
           "id": "read_aloud_all",
-          "text": { "ru": "Прочитать ей бланк вслух. Весь.", "en": "Read her the whole form aloud." },
-          "chip": { "icon": "book", "label": { "ru": "Чистописец", "en": "Chistopisets" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "chistopisets" },
+          "text": {
+            "ru": "Прочитать ей бланк вслух. Весь.",
+            "en": "Read her the whole form aloud."
+          },
+          "chip": {
+            "icon": "book",
+            "label": {
+              "ru": "Чистописец",
+              "en": "Chistopisets"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "chistopisets"
+          },
           "effects": [
-            { "kind": "fragment", "memory": "god_goloy_pravdy", "amount": 2 },
-            { "kind": "axis", "axis": "honesty_deceit", "delta": 15 },
-            { "kind": "gold", "delta": 9 },
-            { "kind": "flag", "flag": "witness_paid", "value": true }
+            {
+              "kind": "fragment",
+              "memory": "god_goloy_pravdy",
+              "amount": 2
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 15
+            },
+            {
+              "kind": "gold",
+              "delta": 9
+            },
+            {
+              "kind": "flag",
+              "flag": "witness_paid",
+              "value": true
+            }
           ],
           "to": "r_read_aloud",
           "priority": 7
         },
         {
           "id": "pay_instead",
-          "text": { "ru": "Выкупить сделку. Пусть уйдёт с памятью.", "en": "Buy the deal out. Let her keep it." },
-          "chip": { "icon": "heal", "label": { "ru": "Ключарь", "en": "Klyuchar" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "klyuchar" },
+          "text": {
+            "ru": "Выкупить сделку. Пусть уйдёт с памятью.",
+            "en": "Buy the deal out. Let her keep it."
+          },
+          "chip": {
+            "icon": "heal",
+            "label": {
+              "ru": "Ключарь",
+              "en": "Klyuchar"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "klyuchar"
+          },
           "effects": [
-            { "kind": "fragment", "memory": "poslednyaya_kruzhka", "amount": 2 },
-            { "kind": "axis", "axis": "mercy_cruelty", "delta": 15 },
-            { "kind": "counter", "counter": "debts_forgiven", "delta": 1 },
-            { "kind": "gold", "delta": -6 }
+            {
+              "kind": "fragment",
+              "memory": "poslednyaya_kruzhka",
+              "amount": 2
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": 15
+            },
+            {
+              "kind": "counter",
+              "counter": "debts_forgiven",
+              "delta": 1
+            },
+            {
+              "kind": "gold",
+              "delta": -6
+            }
           ],
           "to": "r_pay_instead",
           "priority": 7
         },
         {
           "id": "check_price",
-          "text": { "ru": "Сверить цену с прейскурантом при всех.", "en": "Check the price against the list, in front of everyone." },
-          "chip": { "icon": "hourglass", "label": { "ru": "Перечень", "en": "Perechen" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "perechen" },
+          "text": {
+            "ru": "Сверить цену с прейскурантом при всех.",
+            "en": "Check the price against the list, in front of everyone."
+          },
+          "chip": {
+            "icon": "hourglass",
+            "label": {
+              "ru": "Перечень",
+              "en": "Perechen"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "perechen"
+          },
           "effects": [
-            { "kind": "fragment", "memory": "opis_vsego_sushchego", "amount": 2 },
-            { "kind": "axis", "axis": "reason_obsession", "delta": -8 },
-            { "kind": "gold", "delta": 9 },
-            { "kind": "flag", "flag": "witness_paid", "value": true }
+            {
+              "kind": "fragment",
+              "memory": "opis_vsego_sushchego",
+              "amount": 2
+            },
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -8
+            },
+            {
+              "kind": "gold",
+              "delta": 9
+            },
+            {
+              "kind": "flag",
+              "flag": "witness_paid",
+              "value": true
+            }
           ],
           "to": "r_check_price",
-          "priority": 6
+          "priority": 5
         },
         {
           "id": "promise_her",
-          "text": { "ru": "Пообещать ей выкупить лот к четвергу.", "en": "Promise her I will redeem the lot by Thursday." },
-          "chip": { "icon": "coin", "label": { "ru": "Посульщик", "en": "Posulshchik" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "posulshchik" },
+          "text": {
+            "ru": "Пообещать ей выкупить лот к четвергу.",
+            "en": "Promise her I will redeem the lot by Thursday."
+          },
+          "chip": {
+            "icon": "coin",
+            "label": {
+              "ru": "Посульщик",
+              "en": "Posulshchik"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "posulshchik"
+          },
           "effects": [
-            { "kind": "fragment", "memory": "luchshie_gody", "amount": 2 },
-            { "kind": "axis", "axis": "honesty_deceit", "delta": -15 },
-            { "kind": "counter", "counter": "promises_given", "delta": 1 },
-            { "kind": "gold", "delta": 9 },
-            { "kind": "flag", "flag": "witness_paid", "value": true }
+            {
+              "kind": "fragment",
+              "memory": "luchshie_gody",
+              "amount": 2
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": -15
+            },
+            {
+              "kind": "counter",
+              "counter": "promises_given",
+              "delta": 1
+            },
+            {
+              "kind": "gold",
+              "delta": 9
+            },
+            {
+              "kind": "flag",
+              "flag": "witness_paid",
+              "value": true
+            }
           ],
           "to": "r_promise_her",
           "priority": 6
         },
         {
           "id": "ask_her_name",
-          "text": { "ru": "Спросить у неё имя того, кто живой.", "en": "Ask her the name of the living man." },
-          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "gte", "value": 30 },
+          "text": {
+            "ru": "Спросить у неё имя того, кто живой.",
+            "en": "Ask her the name of the living man."
+          },
+          "conditions": {
+            "kind": "axis",
+            "axis": "mercy_cruelty",
+            "op": "gte",
+            "value": 30
+          },
           "effects": [
-            { "kind": "axis", "axis": "mercy_cruelty", "delta": 5 },
-            { "kind": "gold", "delta": 9 },
-            { "kind": "flag", "flag": "witness_paid", "value": true }
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": 5
+            },
+            {
+              "kind": "gold",
+              "delta": 9
+            },
+            {
+              "kind": "flag",
+              "flag": "witness_paid",
+              "value": true
+            }
           ],
-          "to": "r_ask_name",
-          "priority": 5
+          "to": "r_ask_name"
         }
       ]
     },
@@ -290,7 +490,15 @@
         "ru": "Сверку в этом месяце шлют вниз, к обеспечению, и оттуда возвращают неподписанной. Три раза подряд. Такого не было ни разу, а строка для этого в бланке есть.",
         "en": "This month the reconciliations are sent down to the holdings and come back unsigned. Three times running. That has never happened once, and yet the form has a line for it."
       },
-      "keywords": [{ "match": { "ru": "возвращают неподписанной", "en": "come back unsigned" }, "tone": "danger" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "возвращают неподписанной",
+            "en": "come back unsigned"
+          },
+          "tone": "danger"
+        }
+      ],
       "next": "rumor_dratva"
     },
     {
@@ -313,67 +521,164 @@
       "options": [
         {
           "id": "take_pay",
-          "text": { "ru": "Взять девять и уйти.", "en": "Take the nine and go." },
+          "text": {
+            "ru": "Взять девять и уйти.",
+            "en": "Take the nine and go."
+          },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": 3 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": 3
+            }
+          ],
           "to": "r_take_pay"
         },
         {
           "id": "give_seller",
-          "text": { "ru": "Отдать девять продающей.", "en": "Give the nine to the woman selling." },
+          "text": {
+            "ru": "Отдать девять продающей.",
+            "en": "Give the nine to the woman selling."
+          },
           "fallback": true,
           "effects": [
-            { "kind": "axis", "axis": "mercy_cruelty", "delta": 8 },
-            { "kind": "counter", "counter": "debts_forgiven", "delta": 1 },
-            { "kind": "gold", "delta": -9 }
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": 8
+            },
+            {
+              "kind": "counter",
+              "counter": "debts_forgiven",
+              "delta": 1
+            },
+            {
+              "kind": "gold",
+              "delta": -9
+            }
           ],
           "to": "r_give_seller"
         },
         {
           "id": "ask_more_work",
-          "text": { "ru": "Спросить, будет ли работа завтра.", "en": "Ask whether there is work tomorrow." },
+          "text": {
+            "ru": "Спросить, будет ли работа завтра.",
+            "en": "Ask whether there is work tomorrow."
+          },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 3 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": 3
+            }
+          ],
           "to": "r_more_work"
         },
         {
           "id": "ask_unsigned",
-          "text": { "ru": "Спросить, кто внизу не подписывает сверку.", "en": "Ask who below is not signing the reconciliation." },
-          "conditions": { "kind": "axis", "axis": "reason_obsession", "op": "lte", "value": -20 },
+          "text": {
+            "ru": "Спросить, кто внизу не подписывает сверку.",
+            "en": "Ask who below is not signing the reconciliation."
+          },
+          "conditions": {
+            "kind": "axis",
+            "axis": "reason_obsession",
+            "op": "lte",
+            "value": -20
+          },
           "effects": [
-            { "kind": "fragment", "memory": "opis_vsego_sushchego", "amount": 1 },
-            { "kind": "axis", "axis": "reason_obsession", "delta": -8 }
+            {
+              "kind": "fragment",
+              "memory": "opis_vsego_sushchego",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -8
+            }
           ],
           "to": "r_unsigned",
           "priority": 6
         },
         {
           "id": "ask_line_walks",
-          "text": { "ru": "Спросить Дратву, чья это строка.", "en": "Ask Dratva whose line that is." },
-          "conditions": { "kind": "flag", "flag": "contract_read" },
-          "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": 5 }],
+          "text": {
+            "ru": "Спросить Дратву, чья это строка.",
+            "en": "Ask Dratva whose line that is."
+          },
+          "conditions": {
+            "kind": "flag",
+            "flag": "contract_read"
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 5
+            }
+          ],
           "to": "r_line_walks",
           "priority": 6
         },
         {
           "id": "take_and_note",
-          "text": { "ru": "Взять деньги и записать сегодняшний день.", "en": "Take the money and write the day down." },
-          "conditions": { "kind": "life", "life": "chistopisets" },
-          "chip": { "icon": "book", "label": { "ru": "Чистописец", "en": "Chistopisets" }, "tone": "life" },
+          "text": {
+            "ru": "Взять деньги и записать сегодняшний день.",
+            "en": "Take the money and write the day down."
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "chistopisets"
+          },
+          "chip": {
+            "icon": "book",
+            "label": {
+              "ru": "Чистописец",
+              "en": "Chistopisets"
+            },
+            "tone": "life"
+          },
           "effects": [
-            { "kind": "fragment", "memory": "khronika_bez_popravok", "amount": 1 },
-            { "kind": "axis", "axis": "honesty_deceit", "delta": 5 }
+            {
+              "kind": "fragment",
+              "memory": "khronika_bez_popravok",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 5
+            }
           ],
           "to": "r_take_note",
           "priority": 5
         },
         {
           "id": "buy_her_lot_back",
-          "text": { "ru": "Выкупить лот у Ломбарда за девять.", "en": "Buy the lot back from the Pawnshop for nine." },
-          "conditions": { "kind": "axis", "axis": "grasp_release", "op": "lte", "value": -30 },
+          "text": {
+            "ru": "Выкупить лот у Ломбарда за девять.",
+            "en": "Buy the lot back from the Pawnshop for nine."
+          },
+          "conditions": {
+            "kind": "axis",
+            "axis": "grasp_release",
+            "op": "lte",
+            "value": -30
+          },
           "effects": [
-            { "kind": "axis", "axis": "grasp_release", "delta": -8 },
-            { "kind": "counter", "counter": "debts_forgiven", "delta": 1 }
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": -8
+            },
+            {
+              "kind": "counter",
+              "counter": "debts_forgiven",
+              "delta": 1
+            }
           ],
           "to": "r_buy_back_lot",
           "priority": 5
@@ -427,7 +732,15 @@
         "ru": "Не знаю и знать не полагается. Знаю другое: строка эта у нас проходит по делу номер один, а дел с номером один в журнале не бывает.",
         "en": "I do not know and I am not supposed to. I know something else: that line runs under case number one here, and there are no cases numbered one in the journal."
       },
-      "keywords": [{ "match": { "ru": "делу номер один", "en": "case number one" }, "tone": "danger" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "делу номер один",
+            "en": "case number one"
+          },
+          "tone": "danger"
+        }
+      ],
       "next": "witness_out"
     },
     {

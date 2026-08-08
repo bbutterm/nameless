@@ -1,9 +1,18 @@
 {
   "id": "vault_first_tier",
   "chapter": 2,
-  "title": { "ru": "Первый ярус обеспечения", "en": "The First Holding Tier" },
-  "tags": ["vaults", "battle"],
-  "available": { "kind": "visited", "scene": "vaults_hub" },
+  "title": {
+    "ru": "Первый ярус обеспечения",
+    "en": "The First Holding Tier"
+  },
+  "tags": [
+    "vaults",
+    "battle"
+  ],
+  "available": {
+    "kind": "visited",
+    "scene": "vaults_hub"
+  },
   "entry": "tier_in",
   "nodes": [
     {
@@ -13,7 +22,15 @@
         "ru": "Полок здесь нет. Есть стена, и стена сложена из связок описей вперемежку с камнем: бумага в раствор, склянка в бумагу, ряд за рядом. Обеспечение не лежит на полках, обеспечение держит потолок.",
         "en": "There are no shelves here. There is a wall, and the wall is laid up out of bundled inventories mixed with stone: paper into mortar, jar into paper, course after course. The holdings do not sit on shelves, the holdings hold the ceiling up."
       },
-      "keywords": [{ "match": { "ru": "держит потолок", "en": "hold the ceiling up" }, "tone": "danger" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "держит потолок",
+            "en": "hold the ceiling up"
+          },
+          "tone": "danger"
+        }
+      ],
       "next": "tier_seal"
     },
     {
@@ -23,13 +40,29 @@
         "ru": "Через каждые двадцать шагов в кладку вмазана свинцовая пластина с надписью от руки. Ближняя читается целиком: «Раздел первый. Войны Тихой Воды. Принято оптом».",
         "en": "Every twenty paces a lead plate is set into the masonry with a line written on it by hand. The nearest one can be read entire: \"Section one. The Wars of the Quiet Water. Accepted in bulk.\""
       },
-      "keywords": [{ "match": { "ru": "Принято оптом", "en": "Accepted in bulk" }, "tone": "memory" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "Принято оптом",
+            "en": "Accepted in bulk"
+          },
+          "tone": "memory"
+        }
+      ],
       "next": "copy_router"
     },
     {
       "kind": "branch",
       "id": "copy_router",
-      "branches": [{ "when": { "kind": "flag", "flag": "archive_copied" }, "to": "tier_copied" }],
+      "branches": [
+        {
+          "when": {
+            "kind": "flag",
+            "flag": "archive_copied"
+          },
+          "to": "tier_copied"
+        }
+      ],
       "fallback": "guide_router"
     },
     {
@@ -44,7 +77,15 @@
     {
       "kind": "branch",
       "id": "guide_router",
-      "branches": [{ "when": { "kind": "flag", "flag": "scavenger_spared" }, "to": "guide_marodyor" }],
+      "branches": [
+        {
+          "when": {
+            "kind": "flag",
+            "flag": "scavenger_spared"
+          },
+          "to": "guide_marodyor"
+        }
+      ],
       "fallback": "watch_ahead"
     },
     {
@@ -86,94 +127,223 @@
       "options": [
         {
           "id": "talk_past",
-          "text": { "ru": "Говорить, пока не надоест обоим.", "en": "Keep talking until both sides tire of it." },
+          "text": {
+            "ru": "Говорить, пока не надоест обоим.",
+            "en": "Keep talking until both sides tire of it."
+          },
           "fallback": true,
           "to": "watch_battle"
         },
         {
           "id": "rush",
-          "text": { "ru": "Идти в пролом не останавливаясь.", "en": "Walk into the gap without stopping." },
+          "text": {
+            "ru": "Идти в пролом не останавливаясь.",
+            "en": "Walk into the gap without stopping."
+          },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": -3 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": -3
+            }
+          ],
           "to": "watch_battle"
         },
         {
           "id": "wait_shift",
-          "text": { "ru": "Переждать смену поста в темноте.", "en": "Wait out the changing of the post in the dark." },
+          "text": {
+            "ru": "Переждать смену поста в темноте.",
+            "en": "Wait out the changing of the post in the dark."
+          },
           "fallback": true,
           "effects": [
-            { "kind": "axis", "axis": "reason_obsession", "delta": 5 },
-            { "kind": "counter", "counter": "nights_awake", "delta": 1 }
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": 5
+            },
+            {
+              "kind": "counter",
+              "counter": "nights_awake",
+              "delta": 1
+            }
           ],
-          "to": "tier_wait"
+          "to": "tier_wait",
+          "priority": 7
         },
         {
           "id": "show_order",
-          "text": { "ru": "Предъявить особое распоряжение.", "en": "Present the special order." },
-          "conditions": { "kind": "flag", "flag": "vault_order" },
+          "text": {
+            "ru": "Предъявить особое распоряжение.",
+            "en": "Present the special order."
+          },
+          "conditions": {
+            "kind": "flag",
+            "flag": "vault_order"
+          },
           "to": "tier_order",
           "priority": 8
         },
         {
           "id": "count_post",
-          "text": { "ru": "Назвать им опись их собственного поста.", "en": "Recite the inventory of their own post to them." },
-          "chip": { "icon": "hourglass", "label": { "ru": "Перечень", "en": "Perechen" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "perechen" },
+          "text": {
+            "ru": "Назвать им опись их собственного поста.",
+            "en": "Recite the inventory of their own post to them."
+          },
+          "chip": {
+            "icon": "hourglass",
+            "label": {
+              "ru": "Перечень",
+              "en": "Perechen"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "perechen"
+          },
           "effects": [
-            { "kind": "fragment", "memory": "opis_vsego_sushchego", "amount": 1 },
-            { "kind": "axis", "axis": "reason_obsession", "delta": -5 }
+            {
+              "kind": "fragment",
+              "memory": "opis_vsego_sushchego",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -5
+            }
           ],
           "to": "tier_count",
           "priority": 6
         },
         {
           "id": "promise_post",
-          "text": { "ru": "Выписать посту посул на распоряжение.", "en": "Write the post a promise note for the order." },
-          "chip": { "icon": "coin", "label": { "ru": "Посульщик", "en": "Posulshchik" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "posulshchik" },
+          "text": {
+            "ru": "Выписать посту посул на распоряжение.",
+            "en": "Write the post a promise note for the order."
+          },
+          "chip": {
+            "icon": "coin",
+            "label": {
+              "ru": "Посульщик",
+              "en": "Posulshchik"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "posulshchik"
+          },
           "effects": [
-            { "kind": "fragment", "memory": "zima_bez_khleba", "amount": 1 },
-            { "kind": "axis", "axis": "honesty_deceit", "delta": -8 },
-            { "kind": "counter", "counter": "promises_given", "delta": 1 }
+            {
+              "kind": "fragment",
+              "memory": "zima_bez_khleba",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": -8
+            },
+            {
+              "kind": "counter",
+              "counter": "promises_given",
+              "delta": 1
+            }
           ],
           "to": "tier_promise",
           "priority": 6
         },
         {
           "id": "water_post",
-          "text": { "ru": "Принести им воды сверху. Всем четверым.", "en": "Bring them water from above. All four." },
-          "chip": { "icon": "heal", "label": { "ru": "Ключарь", "en": "Klyuchar" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "klyuchar" },
+          "text": {
+            "ru": "Принести им воды сверху. Всем четверым.",
+            "en": "Bring them water from above. All four."
+          },
+          "chip": {
+            "icon": "heal",
+            "label": {
+              "ru": "Ключарь",
+              "en": "Klyuchar"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "klyuchar"
+          },
           "effects": [
-            { "kind": "fragment", "memory": "ochered_k_kolodtsu", "amount": 1 },
-            { "kind": "axis", "axis": "mercy_cruelty", "delta": 8 }
+            {
+              "kind": "fragment",
+              "memory": "ochered_k_kolodtsu",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": 8
+            }
           ],
           "to": "tier_water",
           "priority": 6
         },
         {
           "id": "smoke_post",
-          "text": { "ru": "Запалить сургуч и войти в дыму.", "en": "Light the sealing wax and go in behind it." },
-          "chip": { "icon": "fire", "label": { "ru": "Смолокур", "en": "Smolokur" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "smolokur" },
+          "text": {
+            "ru": "Запалить сургуч и войти в дыму.",
+            "en": "Light the sealing wax and go in behind it."
+          },
+          "chip": {
+            "icon": "fire",
+            "label": {
+              "ru": "Смолокур",
+              "en": "Smolokur"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "smolokur"
+          },
           "effects": [
-            { "kind": "fragment", "memory": "ples_gorit", "amount": 1 },
-            { "kind": "axis", "axis": "mercy_cruelty", "delta": -8 }
+            {
+              "kind": "fragment",
+              "memory": "ples_gorit",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": -8
+            }
           ],
           "to": "watch_battle",
           "priority": 6
         },
         {
           "id": "guide_way",
-          "text": { "ru": "Пойти ходом, который показал мародёр.", "en": "Take the passage the scavenger pointed out." },
-          "conditions": { "kind": "flag", "flag": "scavenger_spared" },
-          "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": -3 }],
+          "text": {
+            "ru": "Пойти ходом, который показал мародёр.",
+            "en": "Take the passage the scavenger pointed out."
+          },
+          "conditions": {
+            "kind": "flag",
+            "flag": "scavenger_spared"
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": -3
+            }
+          ],
           "to": "tier_guide_pass",
           "priority": 5
         }
       ]
     },
-
     {
       "kind": "battle",
       "id": "watch_battle",
@@ -185,12 +355,36 @@
       "kind": "effects",
       "id": "dying_vault",
       "effects": [
-        { "kind": "flag", "flag": "death_cause_shelf", "value": true },
-        { "kind": "flag", "flag": "death_cause_guard", "value": false },
-        { "kind": "flag", "flag": "death_cause_scavengers", "value": false },
-        { "kind": "flag", "flag": "death_cause_guild", "value": false },
-        { "kind": "flag", "flag": "death_cause_sluza", "value": false },
-        { "kind": "flag", "flag": "death_cause_vytsvet", "value": false }
+        {
+          "kind": "flag",
+          "flag": "death_cause_shelf",
+          "value": true
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_guard",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_scavengers",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_guild",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_sluza",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_vytsvet",
+          "value": false
+        }
       ],
       "next": "dying_vault_text"
     },
@@ -203,7 +397,6 @@
       },
       "next": "scene:silver_counter#queue_entry"
     },
-
     {
       "kind": "say",
       "id": "tier_order",
@@ -263,7 +456,6 @@
       },
       "next": "after_watch"
     },
-
     {
       "kind": "narration",
       "id": "after_watch",
@@ -293,7 +485,15 @@
         "ru": "Свинцовая пластина на этой стене подписана дважды. Верхняя строка казённая, печатная. Нижняя выцарапана гвоздём, и в слове «которого» рука экономит тремя знаками с точкой посередине.",
         "en": "The lead plate on this wall is signed twice. The upper line is official and printed. The lower is scratched in with a nail, and in the word \"whereof\" the hand economises with three strokes and a dot in the middle."
       },
-      "keywords": [{ "match": { "ru": "рука экономит", "en": "the hand economises" }, "tone": "memory" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "рука экономит",
+            "en": "the hand economises"
+          },
+          "tone": "memory"
+        }
+      ],
       "next": "shelf_choice"
     },
     {
@@ -306,82 +506,210 @@
       "options": [
         {
           "id": "leave_plate",
-          "text": { "ru": "Оставить пластину в стене.", "en": "Leave the plate in the wall." },
+          "text": {
+            "ru": "Оставить пластину в стене.",
+            "en": "Leave the plate in the wall."
+          },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -5 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": -5
+            }
+          ],
           "to": "r_left_plate"
         },
         {
           "id": "take_plate",
-          "text": { "ru": "Выковырять пластину и забрать.", "en": "Prise the plate out and take it." },
+          "text": {
+            "ru": "Выковырять пластину и забрать.",
+            "en": "Prise the plate out and take it."
+          },
           "fallback": true,
           "effects": [
-            { "kind": "axis", "axis": "grasp_release", "delta": 8 },
-            { "kind": "counter", "counter": "lots_held", "delta": 1 }
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": 8
+            },
+            {
+              "kind": "counter",
+              "counter": "lots_held",
+              "delta": 1
+            }
           ],
           "to": "r_took_plate"
         },
         {
           "id": "copy_plate",
-          "text": { "ru": "Переписать надпись слово в слово.", "en": "Copy the inscription word for word." },
+          "text": {
+            "ru": "Переписать надпись слово в слово.",
+            "en": "Copy the inscription word for word."
+          },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": 5 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 5
+            }
+          ],
           "to": "r_copied_plate"
         },
         {
           "id": "copy_all_plates",
-          "text": { "ru": "Обойти ярус и переписать все пластины.", "en": "Walk the tier and copy every plate." },
-          "chip": { "icon": "hourglass", "label": { "ru": "Перечень", "en": "Perechen" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "perechen" },
+          "text": {
+            "ru": "Обойти ярус и переписать все пластины.",
+            "en": "Walk the tier and copy every plate."
+          },
+          "chip": {
+            "icon": "hourglass",
+            "label": {
+              "ru": "Перечень",
+              "en": "Perechen"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "perechen"
+          },
           "effects": [
-            { "kind": "fragment", "memory": "eda_ne_vnesena", "amount": 2 },
-            { "kind": "axis", "axis": "reason_obsession", "delta": -15 },
-            { "kind": "counter", "counter": "nights_awake", "delta": 1 }
+            {
+              "kind": "fragment",
+              "memory": "eda_ne_vnesena",
+              "amount": 2
+            },
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -15
+            },
+            {
+              "kind": "counter",
+              "counter": "nights_awake",
+              "delta": 1
+            }
           ],
           "to": "r_all_plates",
           "priority": 7
         },
         {
           "id": "read_aloud_plate",
-          "text": { "ru": "Прочитать вслух обе строки, при свидетеле.", "en": "Read both lines aloud, with a witness." },
-          "chip": { "icon": "book", "label": { "ru": "Чистописец", "en": "Chistopisets" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "chistopisets" },
+          "text": {
+            "ru": "Прочитать вслух обе строки, при свидетеле.",
+            "en": "Read both lines aloud, with a witness."
+          },
+          "chip": {
+            "icon": "book",
+            "label": {
+              "ru": "Чистописец",
+              "en": "Chistopisets"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "chistopisets"
+          },
           "effects": [
-            { "kind": "fragment", "memory": "khronika_bez_popravok", "amount": 2 },
-            { "kind": "axis", "axis": "honesty_deceit", "delta": 15 }
+            {
+              "kind": "fragment",
+              "memory": "khronika_bez_popravok",
+              "amount": 2
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 15
+            }
           ],
           "to": "r_aloud_plate",
           "priority": 7
         },
         {
           "id": "burn_bundle",
-          "text": { "ru": "Выжечь связку описей из кладки.", "en": "Burn a bundle of inventories out of the wall." },
-          "chip": { "icon": "fire", "label": { "ru": "Смолокур", "en": "Smolokur" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "smolokur" },
+          "text": {
+            "ru": "Выжечь связку описей из кладки.",
+            "en": "Burn a bundle of inventories out of the wall."
+          },
+          "chip": {
+            "icon": "fire",
+            "label": {
+              "ru": "Смолокур",
+              "en": "Smolokur"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "smolokur"
+          },
           "effects": [
-            { "kind": "fragment", "memory": "schet_za_sezon", "amount": 2 },
-            { "kind": "axis", "axis": "mercy_cruelty", "delta": -15 }
+            {
+              "kind": "fragment",
+              "memory": "schet_za_sezon",
+              "amount": 2
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": -15
+            }
           ],
           "to": "r_burn_bundle",
           "priority": 7
         },
         {
           "id": "hand_to_boy",
-          "text": { "ru": "Отдать пластину мальчику на вынос.", "en": "Give the plate to the boy to carry out." },
-          "conditions": { "kind": "flag", "flag": "klyost_named" },
+          "text": {
+            "ru": "Отдать пластину мальчику на вынос.",
+            "en": "Give the plate to the boy to carry out."
+          },
+          "conditions": {
+            "kind": "flag",
+            "flag": "klyost_named"
+          },
           "effects": [
-            { "kind": "axis", "axis": "grasp_release", "delta": 3 },
-            { "kind": "counter", "counter": "lots_held", "delta": 1 },
-            { "kind": "counter", "counter": "klyost_seen", "delta": 1 }
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": 3
+            },
+            {
+              "kind": "counter",
+              "counter": "lots_held",
+              "delta": 1
+            },
+            {
+              "kind": "counter",
+              "counter": "klyost_seen",
+              "delta": 1
+            }
           ],
           "to": "r_boy_plate",
           "priority": 5
         },
         {
           "id": "mortar_back",
-          "text": { "ru": "Замазать пластину раствором обратно.", "en": "Seal the plate back under fresh mortar." },
-          "conditions": { "kind": "axis", "axis": "grasp_release", "op": "lte", "value": -30 },
-          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -8 }],
+          "text": {
+            "ru": "Замазать пластину раствором обратно.",
+            "en": "Seal the plate back under fresh mortar."
+          },
+          "conditions": {
+            "kind": "axis",
+            "axis": "grasp_release",
+            "op": "lte",
+            "value": -30
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": -8
+            }
+          ],
           "to": "r_mortar",
           "priority": 5
         }
@@ -463,7 +791,13 @@
     {
       "kind": "effects",
       "id": "depth_up",
-      "effects": [{ "kind": "counter", "counter": "vault_depth", "delta": 1 }],
+      "effects": [
+        {
+          "kind": "counter",
+          "counter": "vault_depth",
+          "delta": 1
+        }
+      ],
       "next": "tier_exit"
     },
     {

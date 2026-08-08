@@ -122,12 +122,20 @@ export function goTo(state: GameState, to: string): GameState {
   return { ...state, scene: ref.scene, node: ref.node ?? '@entry' };
 }
 
-/** Переход по 'scene:id' без указания узла — подставляет entry сцены. */
+/**
+ * Переход по 'scene:id' без указания узла — подставляет entry сцены.
+ * Заодно синхронизирует номер главы: он живёт в сцене, а условия
+ * `{kind:'chapter'}` читают его из состояния, и без синхронизации игрок
+ * навсегда оставался бы в первой главе с точки зрения проверок.
+ */
 export function normalizeEntry(idx: ContentIndex, state: GameState): GameState {
-  if (state.node !== '@entry') return state;
   const scene = idx.scenes.get(state.scene);
   if (!scene) return state;
-  return { ...state, node: scene.entry };
+  const chapter = scene.chapter > 0 ? scene.chapter : state.chapter;
+  if (state.node !== '@entry') {
+    return chapter === state.chapter ? state : { ...state, chapter };
+  }
+  return { ...state, node: scene.entry, chapter };
 }
 
 /**
