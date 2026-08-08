@@ -1,0 +1,386 @@
+{
+  "id": "osoka_book",
+  "chapter": 3,
+  "title": { "ru": "Книга наследования", "en": "The Book of Inheritance" },
+  "tags": ["story", "chapter3", "no_combat"],
+  "available": { "kind": "visited", "scene": "ledger_hub" },
+  "entry": "office",
+  "nodes": [
+    {
+      "kind": "narration",
+      "id": "office",
+      "text": {
+        "ru": "Приёмная наследования — комната в один шаг шириной, окошко и полка. На полке лежит книга, и цепь от неё уходит в стену: книгу не выносят, потому что выносить её некуда.",
+        "en": "The inheritance office is a room one pace wide, a window hatch and a shelf. On the shelf lies a book, and its chain goes into the wall: the book is not carried out, because there is nowhere to carry it."
+      },
+      "next": "pisar_1"
+    },
+    {
+      "kind": "say",
+      "id": "pisar_1",
+      "speaker": "pisar_chitalni",
+      "text": {
+        "ru": "Книга наследования, экземпляр второй. Первый ведут не здесь и не мы. Смотреть можно, графу заполнять обязательно.",
+        "en": "The book of inheritance, copy two. Copy one is kept elsewhere and not by us. Looking is allowed, filling in the column is required."
+      },
+      "next": "form_n1"
+    },
+    {
+      "kind": "lore",
+      "id": "form_n1",
+      "title": { "ru": "Бланк Н-1, шапка", "en": "Form H-1, heading" },
+      "text": {
+        "ru": "«Наследование вклада. Графа первая: вкладчик. Графа вторая: наследник. Графа третья: степень родства». Третья графа отпечатана во всех бланках города, потому что она была в самом первом листе, а печатали по нему. За четыреста лет её не заполнили ни разу: наследуют тут не по родству, а по описи.",
+        "en": "\"Inheritance of a deposit. Column one: depositor. Column two: heir. Column three: degree of kinship.\" The third column is printed on every form in the city, because it was on the very first sheet and the plates were made from that. In four hundred years it has never once been filled in: inheritance here goes by inventory, not by kin."
+      },
+      "next": "book_open"
+    },
+    {
+      "kind": "narration",
+      "id": "book_open",
+      "text": {
+        "ru": "Книга открыта на середине и заложена лентой. Записи идут в два столбца, по одной строке на явку, и почерк во всех строках один: мелкий, быстрый, без нажима на концах.",
+        "en": "The book lies open at the middle with a ribbon in it. The entries run in two columns, one line to an appearance, and the hand is the same in every line: small, quick, no pressure at the ends."
+      },
+      "next": "her_hand"
+    },
+    {
+      "kind": "narration",
+      "id": "her_hand",
+      "text": {
+        "ru": "Слово «которого» эта рука сокращает тремя знаками с точкой посередине. Хвост у «у» недотянут, потому что рука уже пошла к следующему слову. Ни в одной инструкции приёмщика так писать не велено.",
+        "en": "This hand puts the word \"whereof\" in three strokes with a dot in the middle. The tail of the \"y\" is left short because the hand has already set off for the next word. No receiving officer's instruction anywhere tells them to write like that."
+      },
+      "keywords": [
+        { "match": { "ru": "тремя знаками с точкой посередине", "en": "three strokes with a dot in the middle" }, "tone": "memory" }
+      ],
+      "next": "pisar_2"
+    },
+    {
+      "kind": "say",
+      "id": "pisar_2",
+      "speaker": "pisar_chitalni",
+      "text": {
+        "ru": "Приёмщица одна, и сменить её некем. Я подавал в двух видах: письменно и устно. Мне ответили, что должность закрыта наследованием.",
+        "en": "There is one receiving officer, and nobody to relieve her. I applied in two forms, written and spoken. I was told the post is closed by inheritance."
+      },
+      "next": "book_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "book_choice",
+      "prompt": {
+        "ru": "Книга лежит открытой. Писарь смотрит в окошко, а не на тебя.",
+        "en": "The book lies open. The scribe is looking out of the hatch, not at you."
+      },
+      "options": [
+        {
+          "id": "read_entries",
+          "text": { "ru": "Читать явки подряд, от закладки.", "en": "Read the appearances in order, from the ribbon." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": -3 }],
+          "to": "r_entries"
+        },
+        {
+          "id": "find_own_line",
+          "text": { "ru": "Искать свою строку.", "en": "Look for my own line." },
+          "fallback": true,
+          "to": "r_own_line"
+        },
+        {
+          "id": "ask_scribe",
+          "text": { "ru": "Спросить, кто эту книгу переплетал.", "en": "Ask who bound this book." },
+          "fallback": true,
+          "to": "r_binder"
+        },
+        {
+          "id": "copy_hand",
+          "chip": { "icon": "book", "label": { "ru": "Чистописец", "en": "Chistopisets" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "chistopisets" },
+          "text": { "ru": "Списать её почерк на свой лист.", "en": "Copy her hand onto a sheet of my own." },
+          "effects": [
+            { "kind": "fragment", "memory": "god_goloy_pravdy", "amount": 3 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": 8 }
+          ],
+          "to": "r_copy_hand",
+          "priority": 6
+        },
+        {
+          "id": "count_visits",
+          "chip": { "icon": "hourglass", "label": { "ru": "Перечень", "en": "Perechen" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "perechen" },
+          "text": { "ru": "Сосчитать все явки по своей строке.", "en": "Count every appearance on my line." },
+          "effects": [
+            { "kind": "fragment", "memory": "eda_ne_vnesena", "amount": 3 },
+            { "kind": "axis", "axis": "reason_obsession", "delta": -15 }
+          ],
+          "to": "r_counted",
+          "priority": 6
+        },
+        {
+          "id": "tear_page",
+          "conditions": { "kind": "axis", "axis": "grasp_release", "op": "gte", "value": 40 },
+          "text": { "ru": "Вырвать лист с моей строкой.", "en": "Tear out the leaf with my line on it." },
+          "effects": [
+            { "kind": "counter", "counter": "lots_held", "delta": 1 },
+            { "kind": "axis", "axis": "grasp_release", "delta": 8 }
+          ],
+          "to": "r_torn",
+          "priority": 5
+        },
+        {
+          "id": "close_book",
+          "conditions": { "kind": "axis", "axis": "grasp_release", "op": "lte", "value": -30 },
+          "text": { "ru": "Закрыть книгу. Это не моё чтение.", "en": "Shut the book. This is not mine to read." },
+          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -8 }],
+          "to": "r_closed",
+          "priority": 5
+        },
+        {
+          "id": "ask_marks",
+          "conditions": { "kind": "flag", "flag": "osoka_mark" },
+          "text": { "ru": "Найти пометки против своей строки.", "en": "Find the marks against my line." },
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": -8 }],
+          "to": "r_marks",
+          "priority": 6
+        }
+      ]
+    },
+    {
+      "kind": "narration",
+      "id": "r_entries",
+      "text": {
+        "ru": "«Явка. Расчёт принят. Сдачи нет». Так двести раз подряд, и на двести первой то же самое. В конце каждой строки — время, и время всегда стоит на четверть часа позже, чем открывается приём.",
+        "en": "\"Appearance. Payment accepted. No change given.\" Two hundred times running, and on the two hundred and first the same. At the end of every line, the time, and the time is always a quarter of an hour later than the office opens."
+      },
+      "next": "heir_line"
+    },
+    {
+      "kind": "narration",
+      "id": "r_own_line",
+      "text": {
+        "ru": "Твоя строка идёт через всю книгу поперёк остальных: она не закрыта. Против неё в графе «расчёт» вместо суммы стоит отсылка, и отсылка одна и та же на каждой явке.",
+        "en": "Your line runs across the whole book, athwart the others: it is not closed. Against it, in the column for \"payment\", instead of a sum there stands a reference, and the reference is the same at every appearance."
+      },
+      "next": "heir_line"
+    },
+    {
+      "kind": "say",
+      "id": "r_binder",
+      "speaker": "pisar_chitalni",
+      "text": {
+        "ru": "Переплетал не переплётчик: шов изнутри, нитка суровая, узлы через два листа. Так шьют дома. Кто именно — в книге не сказано, а спрашивать я не обязан.",
+        "en": "It was not a binder who bound it: the seam is inside, the thread is coarse, the knots come every second leaf. That is how it is done at home. Who exactly, the book does not say, and I am not obliged to ask."
+      },
+      "next": "heir_line"
+    },
+    {
+      "kind": "narration",
+      "id": "r_copy_hand",
+      "text": {
+        "ru": "Ты выводишь её строку у себя на обороте описи, слово в слово, и на «которого» рука делает три знака с точкой посередине раньше, чем ты успеваешь решить, как их делать.",
+        "en": "You write out her line on the back of your inventory, word for word, and at \"whereof\" your hand makes three strokes with a dot in the middle before you have decided how to make them."
+      },
+      "next": "heir_line"
+    },
+    {
+      "kind": "narration",
+      "id": "r_counted",
+      "text": {
+        "ru": "Явок по твоей строке столько же, сколько раз ты собирался из трухи в чулане. Ты пересчитываешь дважды, потому что первый раз не поверил, и оба раза выходит поровну.",
+        "en": "There are as many appearances on your line as there have been times you gathered yourself out of the dust in the storeroom. You count twice, because the first time you did not believe it, and both times it comes out even."
+      },
+      "next": "heir_line"
+    },
+    {
+      "kind": "narration",
+      "id": "r_torn",
+      "text": {
+        "ru": "Лист выходит по шву чисто, без бахромы. Под ним лежит следующий, и на нём твоя строка идёт дальше тем же почерком: в книге наследования листы дублируют, и дублируют вручную, вечерами.",
+        "en": "The leaf comes away cleanly along the seam, without a fringe. Under it lies the next one, and on it your line goes on in the same hand: in the book of inheritance the leaves are duplicated, and duplicated by hand, of an evening."
+      },
+      "next": "heir_line"
+    },
+    {
+      "kind": "say",
+      "id": "r_closed",
+      "speaker": "pisar_chitalni",
+      "text": {
+        "ru": "Закрыли — и хорошо. Только графу всё равно заполните: за верность графы отвечает не книга, а вы.",
+        "en": "Shut it, and well done. Only fill in the column all the same: it is not the book that answers for that column, it is you."
+      },
+      "next": "heir_line"
+    },
+    {
+      "kind": "narration",
+      "id": "r_marks",
+      "text": {
+        "ru": "Пометок четыре, все одним знаком, все на полях, где графы уже нет. Знак похож на птичку с недотянутым левым хвостом, и он не значит ни «принято», ни «отказано»: таких знаков в инструкции нет.",
+        "en": "There are four marks, all the same sign, all in the margin where the columns have run out. The sign is like a tick with the left tail left short, and it means neither \"accepted\" nor \"refused\": there is no such sign in the instructions."
+      },
+      "next": "heir_line"
+    },
+    {
+      "kind": "narration",
+      "id": "heir_line",
+      "text": {
+        "ru": "Графа «наследник вклада» по твоей строке заполнена. В ней не имя, а отсылка: «см. лист первый; хранится на нижней полке; выдаче не подлежит; выкуп разрешён продавцу».",
+        "en": "The column \"heir to the deposit\" on your line is filled in. It holds no name but a reference: \"see sheet one; kept on the lowest shelf; not for issue; redemption permitted to the seller\"."
+      },
+      "keywords": [
+        { "match": { "ru": "выкуп разрешён продавцу", "en": "redemption permitted to the seller" }, "tone": "danger" }
+      ],
+      "next": "pisar_3"
+    },
+    {
+      "kind": "say",
+      "id": "pisar_3",
+      "speaker": "pisar_chitalni",
+      "text": {
+        "ru": "Отсылки в этой книге кончаются под зданием. Я туда не хожу: у меня графа, а внизу графы нет.",
+        "en": "The references in this book end up under the building. I do not go there: I have a column, and down there there is no column."
+      },
+      "next": "kinship_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "kinship_choice",
+      "prompt": {
+        "ru": "Третья графа. Писарь придвигает чернильницу и отворачивается: в этой графе отвечает тот, кто пишет.",
+        "en": "The third column. The scribe pushes the inkwell across and turns away: in this column the one who writes is the one who answers."
+      },
+      "options": [
+        {
+          "id": "dash",
+          "text": { "ru": "Поставить прочерк.", "en": "Enter a dash." },
+          "fallback": true,
+          "to": "r_dash"
+        },
+        {
+          "id": "depositor",
+          "text": { "ru": "Написать: «вкладчик».", "en": "Write: \"depositor\"." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": 3 }],
+          "to": "r_depositor"
+        },
+        {
+          "id": "unknown",
+          "text": { "ru": "Написать: «неизвестно, спросить у наследника».", "en": "Write: \"unknown, ask the heir\"." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": 8 }],
+          "to": "r_unknown"
+        },
+        {
+          "id": "invent",
+          "conditions": { "kind": "axis", "axis": "honesty_deceit", "op": "lte", "value": -30 },
+          "text": { "ru": "Написать что-нибудь достойное. Проверять некому.", "en": "Write something respectable. Nobody will check." },
+          "effects": [
+            { "kind": "fragment", "memory": "luchshie_gody", "amount": 2 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": -8 }
+          ],
+          "to": "r_invented",
+          "priority": 6
+        },
+        {
+          "id": "keep_blank",
+          "conditions": { "kind": "axis", "axis": "grasp_release", "op": "lte", "value": -30 },
+          "text": { "ru": "Оставить пустой. Пусть заполнит другой.", "en": "Leave it blank. Let somebody else fill it in." },
+          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -8 }],
+          "to": "r_blank",
+          "priority": 5
+        },
+        {
+          "id": "debtor",
+          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -30 },
+          "text": { "ru": "Написать: «должник». Это точнее.", "en": "Write: \"debtor\". That is more exact." },
+          "effects": [
+            { "kind": "fragment", "memory": "schet_za_sezon", "amount": 2 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": -3 }
+          ],
+          "to": "r_debtor",
+          "priority": 5
+        }
+      ]
+    },
+    {
+      "kind": "narration",
+      "id": "r_dash",
+      "text": {
+        "ru": "Прочерк выходит длинный, во всю графу: короткий здесь читают как единицу. Писарь смотрит на него сбоку и ставит в углу своё «принято».",
+        "en": "The dash comes out long, the full width of the column: a short one is read here as a one. The scribe looks at it sideways and puts his \"accepted\" in the corner."
+      },
+      "next": "after_column"
+    },
+    {
+      "kind": "narration",
+      "id": "r_depositor",
+      "text": {
+        "ru": "Слово ложится ровно и ничего не объясняет: вкладчик — это про Ломбард, а графа спрашивает не про Ломбард. Писарь принимает, потому что графа заполнена.",
+        "en": "The word sits square and explains nothing: \"depositor\" is about the Pawnshop, and the column is not asking about the Pawnshop. The scribe accepts it, because the column is filled in."
+      },
+      "next": "after_column"
+    },
+    {
+      "kind": "say",
+      "id": "r_unknown",
+      "speaker": "pisar_chitalni",
+      "text": {
+        "ru": "«Спросить у наследника» — это не ответ, это поручение. Приму: поручения тут исполняются реже, чем ответы, зато дольше живут.",
+        "en": "\"Ask the heir\" is not an answer, it is an instruction. I shall accept it: instructions here are carried out less often than answers, but they live longer."
+      },
+      "next": "after_column"
+    },
+    {
+      "kind": "narration",
+      "id": "r_invented",
+      "text": {
+        "ru": "Ты пишешь «опекун по завещанию» и ставишь ссылку на завещание, которого нет. Писарь принимает и подшивает: ссылка на несуществующее считается действительной, пока её никто не проверил.",
+        "en": "You write \"guardian under a will\" and add a reference to a will that does not exist. The scribe accepts it and files it: a reference to something that does not exist counts as valid until somebody checks it."
+      },
+      "next": "after_column"
+    },
+    {
+      "kind": "say",
+      "id": "r_blank",
+      "speaker": "pisar_chitalni",
+      "text": {
+        "ru": "Пустую не приму, но и переписывать не стану. Так и уйдёт: незаполненной с вашей стороны и незакрытой с моей.",
+        "en": "I will not accept an empty one, and I will not copy it out either. It goes as it is: unfilled on your side and unclosed on mine."
+      },
+      "next": "after_column"
+    },
+    {
+      "kind": "narration",
+      "id": "r_debtor",
+      "text": {
+        "ru": "Слово короткое и в графу входит с запасом. Писарь принимает и, не поднимая глаз, дописывает сбоку: «должник по отношению к кому — не указано».",
+        "en": "The word is short and fits the column with room to spare. Without looking up the scribe adds in the margin: \"debtor in relation to whom — not stated\"."
+      },
+      "next": "after_column"
+    },
+    {
+      "kind": "narration",
+      "id": "after_column",
+      "text": {
+        "ru": "Он закрывает книгу и накидывает цепь на скобу. Между обложек остаётся лента, и лента лежит на той же странице, что и до тебя.",
+        "en": "He shuts the book and drops the chain over the staple. The ribbon stays between the covers, and it lies on the same page as it did before you came."
+      },
+      "next": "book_depth"
+    },
+    {
+      "kind": "effects",
+      "id": "book_depth",
+      "effects": [{ "kind": "counter", "counter": "ledger_depth", "delta": 1 }],
+      "next": "book_exit"
+    },
+    {
+      "kind": "narration",
+      "id": "book_exit",
+      "text": {
+        "ru": "В коридоре сводчик отмечает у себя: сверка со стороны книги закончена. Он ставит галочку и рядом, помельче, пишет: «отсылка не закрыта, ведёт вниз».",
+        "en": "In the corridor the reconciler notes it down: reconciliation from the book's side is complete. He puts a tick and, smaller, beside it: \"reference not closed, leads downward\"."
+      },
+      "next": "scene:ledger_hub"
+    }
+  ]
+}
