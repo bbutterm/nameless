@@ -58,8 +58,8 @@
       "id": "marks_read",
       "speaker": "revizor",
       "text": {
-        "ru": "Пометки приёмщицы против вашей строки: четыре. Читаю с датами. Все четыре — одним знаком.",
-        "en": "Marks by the receiving officer against your line: four. I read them with dates. All four are the same sign."
+        "ru": "Пометки приёмщицы против вашей строки: четыре. Оглашаются с датами, все.",
+        "en": "Marks by the receiving officer against your line: four. Read out with dates, all of them."
       },
       "next": "marks_read_2"
     },
@@ -263,7 +263,7 @@
       "speaker": "revizor",
       "text": {
         "ru": "Даты: три расхождения. Ложь: учтена. Учтённая ложь тоже сходится, вы напрасно.",
-        "en": "Dates: three discrepancies. The lie: entered. An entered lie tallies too. You need not have bothered."
+        "en": "Dates: three discrepancies. The lie: entered. An entered lie tallies too, you need not have bothered."
       },
       "next": "offer_intro"
     },

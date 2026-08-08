@@ -807,7 +807,7 @@
       "id": "archive_empty_wait",
       "speaker": "osoka",
       "text": { "ru": "Подождите здесь.", "en": "Wait here." },
-      "next": "osoka_reactions"
+      "next": "scene:counter_last"
     },
     {
       "kind": "narration",

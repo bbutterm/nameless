@@ -212,8 +212,8 @@
       "id": "hub_tminny_2",
       "speaker": "tminny",
       "text": {
-        "ru": "Мой вступительный взнос стоил девятнадцать грошей. Я помню цифру и не помню человека, и вот это, позвольте-с, теперь тоже сверяют.",
-        "en": "My entrance contribution cost nineteen groschen. I remember the figure and do not remember the person, and that, if you please, is now being reconciled too."
+        "ru": "Мой вступительный взнос стоил... девятнадцать грошей. Я помню цифру и не помню человека, и вот это, позвольте-с, теперь тоже сверяют.",
+        "en": "My entrance contribution cost... nineteen groschen. I remember the figure and do not remember the person, and that, if you please, is now being reconciled too."
       },
       "next": "hub_choice"
     },
