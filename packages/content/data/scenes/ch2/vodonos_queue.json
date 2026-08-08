@@ -1,0 +1,403 @@
+{
+  "id": "vodonos_queue",
+  "chapter": 2,
+  "title": { "ru": "Очередь за Водоносом", "en": "The Queue Behind the Water Carrier" },
+  "tags": ["insert", "life", "no_combat"],
+  "available": { "kind": "life", "life": "klyuchar" },
+  "entry": "the_tail",
+  "nodes": [
+    {
+      "kind": "narration",
+      "id": "the_tail",
+      "text": {
+        "ru": "Ты замечаешь их на третьем повороте. Идут в десяти шагах, не догоняют и не отстают, и когда ты останавливаешься у водокачки, они останавливаются тоже и становятся в очередь.",
+        "en": "You notice them at the third turning. They keep ten paces back, neither closing nor falling behind, and when you stop at the pump they stop too and form a queue."
+      },
+      "next": "echo_rises"
+    },
+    {
+      "kind": "narration",
+      "id": "echo_rises",
+      "text": {
+        "ru": "Отголосок поднимается сам, без боя и без приказа: у колонки становится человек с ведром, и его видно хуже, чем колонку. Он качает и подаёт, качает и подаёт, и очередь пьёт.",
+        "en": "The echo comes up by itself, with no battle and no order: a man with a bucket takes his place at the pump, and he is harder to see than the pump is. He works the handle and hands it out, works and hands it out, and the queue drinks."
+      },
+      "keywords": [{ "match": { "ru": "Отголосок", "en": "The echo" }, "tone": "memory" }],
+      "next": "beggar_here"
+    },
+    {
+      "kind": "say",
+      "id": "beggar_here",
+      "speaker": "poproshayka",
+      "text": {
+        "ru": "Я не за водой. Расписка при мне, вот, разгладил. Я не помню, за что она, но я стою... я стою.",
+        "en": "I am not here for water. I have my receipt, look, I smoothed it out. I do not remember what it is for, but I am standing... I am standing."
+      },
+      "next": "lore_tariff"
+    },
+    {
+      "kind": "lore",
+      "id": "lore_tariff",
+      "title": { "ru": "Прейскурант, лист девятый: надбавки", "en": "Price list, sheet nine: surcharges" },
+      "text": {
+        "ru": "«Доброта, подтверждённая свидетелями, — коэффициент 1,4 к базовому тарифу вкладчика». Обоснование в примечании: раздающий бесплатно располагает избытком, а избыток — признак платёжеспособности. Пункт введён давно и ни разу не оспорен: оспаривать его приходили только те, кому он начислен, и они, как правило, приходили не за себя.",
+        "en": "\"Kindness, attested by witnesses — coefficient 1.4 on the depositor's base rate.\" The note gives the grounds: one who gives away free of charge has a surplus, and a surplus indicates ability to pay. The clause was introduced long ago and never once contested: only those charged under it ever came to contest it, and they generally came on somebody else's behalf."
+      },
+      "next": "appraiser_here"
+    },
+    {
+      "kind": "say",
+      "id": "appraiser_here",
+      "speaker": "otsenshchik",
+      "text": {
+        "ru": "Пункт девятый, надбавка учтена со вчерашнего дня. Свидетелей девятнадцать, все стоят вон там и пьют. Оспаривание — через окошко.",
+        "en": "Item nine, the surcharge has been applied since yesterday. Nineteen witnesses, all standing over there drinking. Contest it at the window."
+      },
+      "next": "the_nineteen"
+    },
+    {
+      "kind": "narration",
+      "id": "the_nineteen",
+      "text": {
+        "ru": "Их девятнадцать, и никому из них ничего не нужно. Они уже напились. Они стоят, потому что стоять рядом — единственное, чем можно отблагодарить, когда больше нечем.",
+        "en": "There are nineteen of them and not one of them needs anything. They have drunk already. They stand because standing near is the only way to say thank you when there is nothing else left to say it with."
+      },
+      "next": "queue_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "queue_choice",
+      "prompt": {
+        "ru": "Ведро полное. Отголосок ждёт, кому подать следующему.",
+        "en": "The bucket is full. The echo is waiting to be told who is next."
+      },
+      "options": [
+        {
+          "id": "keep_pouring",
+          "text": { "ru": "Поить дальше. По кружке в руки.", "en": "Keep pouring. A cup to each pair of hands." },
+          "fallback": true,
+          "effects": [
+            { "kind": "fragment", "memory": "ochered_k_kolodtsu", "amount": 1 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": 8 }
+          ],
+          "to": "r_pouring"
+        },
+        {
+          "id": "send_to_brothers",
+          "text": { "ru": "Отправить их на Тот берег. Там кормят.", "en": "Send them to the Other Bank. They feed people there." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -8 }],
+          "to": "r_sent"
+        },
+        {
+          "id": "ask_them",
+          "text": { "ru": "Спросить, чего они ждут.", "en": "Ask them what they are waiting for." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": 3 }],
+          "to": "r_asked"
+        },
+        {
+          "id": "charge_them",
+          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -20 },
+          "text": { "ru": "Брать по грошу за кружку.", "en": "Charge a groschen a cup." },
+          "effects": [
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": -12 },
+            { "kind": "gold", "delta": 9 }
+          ],
+          "to": "r_charged",
+          "priority": 5
+        },
+        {
+          "id": "count_queue",
+          "chip": { "icon": "hourglass", "label": { "ru": "Перечень", "en": "Perechen" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "perechen" },
+          "text": { "ru": "Переписать очередь. По головам и по долгам.", "en": "List the queue. By heads and by debts." },
+          "effects": [
+            { "kind": "fragment", "memory": "opis_vsego_sushchego", "amount": 1 },
+            { "kind": "axis", "axis": "reason_obsession", "delta": -8 }
+          ],
+          "to": "r_counted",
+          "priority": 6
+        },
+        {
+          "id": "the_truth",
+          "conditions": { "kind": "axis", "axis": "honesty_deceit", "op": "gte", "value": 25 },
+          "text": { "ru": "Сказать им, что поит не я.", "en": "Tell them it is not me pouring." },
+          "effects": [
+            { "kind": "fragment", "memory": "khronika_bez_popravok", "amount": 1 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": 8 }
+          ],
+          "to": "r_truth",
+          "priority": 5
+        },
+        {
+          "id": "promise_well",
+          "chip": { "icon": "coin", "label": { "ru": "Посульщик", "en": "Posulshchik" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "posulshchik" },
+          "text": { "ru": "Пообещать им колодец. К четвергу.", "en": "Promise them a well. By Thursday." },
+          "effects": [
+            { "kind": "fragment", "memory": "zima_bez_khleba", "amount": 1 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": -12 },
+            { "kind": "counter", "counter": "promises_given", "delta": 1 }
+          ],
+          "to": "r_promised_well",
+          "priority": 6
+        },
+        {
+          "id": "redeem_receipt",
+          "conditions": { "kind": "flag", "flag": "beggar_helped" },
+          "text": { "ru": "Выкупить расписку у того, от ворот.", "en": "Redeem the receipt from the man from the gate." },
+          "effects": [
+            { "kind": "counter", "counter": "debts_forgiven", "delta": 1 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": 8 },
+            { "kind": "gold", "delta": -6 }
+          ],
+          "to": "r_receipt",
+          "priority": 6
+        }
+      ]
+    },
+    {
+      "kind": "narration",
+      "id": "r_pouring",
+      "text": {
+        "ru": "Отголосок подаёт по кружке в руки и не делает разницы. К девятому кругу к очереди пристраивается младший оценщик, выпивает и записывает себя в свидетели, потому что так положено.",
+        "en": "The echo hands out a cup per pair of hands and makes no distinction. By the ninth round the junior appraiser joins the queue, drinks, and enters himself as a witness, because that is the procedure."
+      },
+      "next": "guard_comes"
+    },
+    {
+      "kind": "narration",
+      "id": "r_sent",
+      "text": {
+        "ru": "На Тот берег уходят четверо, остальные остаются: там кормят, а стоять надо здесь. Перевозчик берёт с четверых один грош на всех и в этот раз не спрашивает вовсе.",
+        "en": "Four of them go to the Other Bank, the rest stay: they feed you over there, but the standing has to be done here. The ferryman takes one groschen for all four and this time asks nothing at all."
+      },
+      "next": "guard_comes"
+    },
+    {
+      "kind": "narration",
+      "id": "r_asked",
+      "text": {
+        "ru": "Ждут они ничего. Двое говорят «мы за вами», один — «пока не разгонят», остальные пожимают плечами и остаются стоять точно там же, где стояли.",
+        "en": "They are waiting for nothing. Two of them say \"we are with you\", one says \"until they move us on\", the rest shrug and stay standing exactly where they were standing."
+      },
+      "next": "guard_comes"
+    },
+    {
+      "kind": "narration",
+      "id": "r_charged",
+      "text": {
+        "ru": "Платят все девятнадцать и не спорят: у восьмерых грош последний, и все восемь достают его первыми. Отголосок продолжает качать и подавать: денег он не берёт и брать не умеет.",
+        "en": "All nineteen pay and none of them argues: for eight of them it is their last groschen, and all eight get it out first. The echo goes on working the handle and handing out: it takes no money and does not know how."
+      },
+      "next": "guard_comes"
+    },
+    {
+      "kind": "narration",
+      "id": "r_counted",
+      "text": {
+        "ru": "Девятнадцать голов, четырнадцать долгов, из них одиннадцать — тебе. Ты выписываешь это столбиком и обнаруживаешь, что сумма чужих благодарностей считается ровно так же, как сумма чужих недоимок.",
+        "en": "Nineteen heads, fourteen debts, eleven of them owed to you. You set it out in a column and find that a total of other people's gratitude adds up exactly the way a total of other people's arrears does."
+      },
+      "next": "guard_comes"
+    },
+    {
+      "kind": "narration",
+      "id": "r_truth",
+      "text": {
+        "ru": "Ты говоришь, что поит не ты, а вынутая память человека, который однажды не отказал никому и сжёг этим город. Тебя выслушивают до конца, кивают и остаются стоять: они пришли не за объяснением.",
+        "en": "You tell them it is not you pouring but the extracted memory of a man who once refused nobody and burned down a town by it. They hear you out, nod, and stay standing: they did not come for an explanation."
+      },
+      "next": "guard_comes"
+    },
+    {
+      "kind": "narration",
+      "id": "r_promised_well",
+      "text": {
+        "ru": "Колодец ты обещаешь на предъявителя и к четвергу, голосом твёрдым и с местом на выбор. Двое уходят готовить место. Четверг здесь у многих всякий день, так что ждать будут долго и хорошо.",
+        "en": "You promise the well to the bearer and by Thursday, in a firm voice and with a choice of site. Two of them go off to prepare the site. Thursday is every day for a good many here, so the waiting will be long and comfortable."
+      },
+      "next": "guard_comes"
+    },
+    {
+      "kind": "say",
+      "id": "r_receipt",
+      "speaker": "poproshayka",
+      "text": {
+        "ru": "Выкупили? Тогда мне... тогда мне нечего разглаживать. Спасибо. Спасибо, я теперь просто...",
+        "en": "You redeemed it? Then I have... then I have nothing to smooth out. Thank you. Thank you, now I just..."
+      },
+      "next": "guard_comes"
+    },
+    {
+      "kind": "say",
+      "id": "guard_comes",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Скопление у водоразборной колонки. Статья четырнадцатая. Пункт грустный: расходиться им некуда, а стоять не положено.",
+        "en": "Assembly at a water standpipe. Article fourteen. The sad clause: they have nowhere to disperse to, and standing is not permitted."
+      },
+      "next": "guard_drinks"
+    },
+    {
+      "kind": "narration",
+      "id": "guard_drinks",
+      "text": {
+        "ru": "Отголосок подаёт кружку и ей — не разбирая, кто пришёл и зачем. Капрал берёт, пьёт до дна и возвращает кружку ручкой вперёд, как возвращают казённое.",
+        "en": "The echo hands her a cup as well, making no distinction as to who has come or why. The corporal takes it, drinks it dry and gives the cup back handle first, the way government property is returned."
+      },
+      "next": "disperse_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "disperse_choice",
+      "prompt": {
+        "ru": "Она держит кружку и не отдаёт распоряжения. Наряда с ней нет.",
+        "en": "She holds the cup and gives no order. She has no detail with her."
+      },
+      "options": [
+        {
+          "id": "let_her",
+          "text": { "ru": "Дать ей разогнать. Так им спокойнее.", "en": "Let her move them on. Easier for them." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": -3 }],
+          "to": "r_let_her"
+        },
+        {
+          "id": "stand_between",
+          "text": { "ru": "Встать между ней и очередью.", "en": "Stand between her and the queue." },
+          "fallback": true,
+          "effects": [
+            { "kind": "fragment", "memory": "poslednyaya_kruzhka", "amount": 1 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": 8 }
+          ],
+          "to": "r_between"
+        },
+        {
+          "id": "walk_off",
+          "text": { "ru": "Уйти быстро. Хвост отстанет.", "en": "Walk off fast. The tail will drop away." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": 3 }],
+          "to": "r_walked_off"
+        },
+        {
+          "id": "pour_for_her",
+          "chip": { "icon": "heal", "label": { "ru": "Ключарь", "en": "Klyuchar" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "klyuchar" },
+          "text": { "ru": "Налить ей вторую. И третью.", "en": "Pour her a second. And a third." },
+          "effects": [
+            { "kind": "fragment", "memory": "poslednyaya_kruzhka", "amount": 2 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": 12 }
+          ],
+          "to": "r_poured_her",
+          "priority": 6
+        },
+        {
+          "id": "take_them_along",
+          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "gte", "value": 50 },
+          "text": { "ru": "Увести всех за собой. Все девятнадцать.", "en": "Take the whole lot with you. All nineteen." },
+          "effects": [
+            { "kind": "fragment", "memory": "ochered_k_kolodtsu", "amount": 2 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": 12 }
+          ],
+          "to": "r_took_along",
+          "priority": 5
+        },
+        {
+          "id": "remind_boardwalk",
+          "conditions": { "kind": "flag", "flag": "dratva_debt" },
+          "text": { "ru": "Напомнить, чем она обязана за мостки.", "en": "Remind her what she owes for the boardwalk." },
+          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": 3 }],
+          "to": "r_reminded",
+          "priority": 5
+        },
+        {
+          "id": "explain_rate",
+          "conditions": { "kind": "axis", "axis": "reason_obsession", "op": "gte", "value": 25 },
+          "text": { "ru": "Объяснить ей про надбавку. С листом.", "en": "Explain the surcharge to her. With the sheet." },
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 3 }],
+          "to": "r_explained",
+          "priority": 5
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "r_let_her",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Разошлись. Они всегда расходятся: у них нет статьи, по которой можно не расходиться. Через час соберутся у второй колонки.",
+        "en": "Dispersed. They always disperse: they have no article that lets them not to. In an hour they will gather at the second standpipe."
+      },
+      "next": "queue_exit"
+    },
+    {
+      "kind": "say",
+      "id": "r_between",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Между собой и мной вы поставили девятнадцать свидетелей. Плохой расчёт. Оформлю по грустному пункту, идите.",
+        "en": "You have put nineteen witnesses between yourself and me. Poor reckoning. I will file it under the sad clause, go on."
+      },
+      "next": "queue_exit"
+    },
+    {
+      "kind": "narration",
+      "id": "r_walked_off",
+      "text": {
+        "ru": "Хвост отстаёт через два квартала, и последним отстаёт тот, с распиской: он идёт медленнее всех и оборачивается реже всех. Отголосок гаснет у колонки, не докачав.",
+        "en": "The tail drops away after two blocks, and the last to fall behind is the one with the receipt: he walks slowest of them all and looks back least. The echo goes out at the pump with the handle half-lifted."
+      },
+      "next": "queue_exit"
+    },
+    {
+      "kind": "say",
+      "id": "r_poured_her",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Третью не надо. Статья двадцать вторая, содействие. Я вас записала в содействующие, и это, к сожалению, надолго.",
+        "en": "No third one. Article twenty-two, assistance. I have entered you as assisting, and that, unfortunately, is a long-term entry."
+      },
+      "next": "queue_exit"
+    },
+    {
+      "kind": "narration",
+      "id": "r_took_along",
+      "text": {
+        "ru": "Ты уходишь, и они идут за тобой, все девятнадцать, и на приёмном дворе Ломбарда их считают дважды, потому что с первого раза не поверили. Тариф тебе поднимают ещё раз, при них.",
+        "en": "You walk off and they come after you, all nineteen, and in the Pawnshop's intake yard they are counted twice, because nobody believed the first count. Your rate is raised again, in front of them."
+      },
+      "next": "queue_exit"
+    },
+    {
+      "kind": "say",
+      "id": "r_reminded",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Помню. Долг закрою один раз и не сегодня. Сегодня я вам его напоминаю в ответ: пейте и расходитесь.",
+        "en": "I remember. I will settle that debt once and not today. Today I remind you of it back: drink and disperse."
+      },
+      "next": "queue_exit"
+    },
+    {
+      "kind": "say",
+      "id": "r_explained",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Коэффициент один и четыре. То есть за доброту с вас берут дороже. Устав такого не предусматривает, а прейскурант, значит, предусматривает.",
+        "en": "Coefficient one point four. So they charge you more for kindness. The regulations do not provide for that, and the price list, apparently, does."
+      },
+      "next": "queue_exit"
+    },
+    {
+      "kind": "narration",
+      "id": "queue_exit",
+      "text": {
+        "ru": "Ведро остаётся у колонки, полное. К вечеру его унесут, и Ломбард выпишет за него убыток в две строки: ведро и вода. Вода дороже.",
+        "en": "The bucket stays at the pump, full. By evening it will be taken, and the Pawnshop will draw up the loss in two lines: bucket and water. The water costs more."
+      },
+      "next": "scene:vaults_hub"
+    }
+  ]
+}

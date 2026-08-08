@@ -1,0 +1,30 @@
+[
+  {
+    "id": "mercy_cruelty",
+    "positive": { "ru": "Милосердие", "en": "Mercy" },
+    "negative": { "ru": "Жестокость", "en": "Cruelty" },
+    "extreme": 60,
+    "start": 0
+  },
+  {
+    "id": "honesty_deceit",
+    "positive": { "ru": "Честность", "en": "Honesty" },
+    "negative": { "ru": "Обман", "en": "Deceit" },
+    "extreme": 60,
+    "start": 0
+  },
+  {
+    "id": "reason_obsession",
+    "positive": { "ru": "Рассудок", "en": "Reason" },
+    "negative": { "ru": "Одержимость", "en": "Obsession" },
+    "extreme": 60,
+    "start": 0
+  },
+  {
+    "id": "grasp_release",
+    "positive": { "ru": "Цепкость", "en": "Grasp" },
+    "negative": { "ru": "Отпускание", "en": "Release" },
+    "extreme": 60,
+    "start": 0
+  }
+]

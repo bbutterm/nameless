@@ -1,0 +1,280 @@
+{
+  "id": "last_death",
+  "chapter": 3,
+  "title": { "ru": "Графа «способ»", "en": "The Column for \"Method\"" },
+  "tags": ["story", "chapter3", "death", "no_combat"],
+  "available": { "kind": "visited", "scene": "first_lot" },
+  "entry": "back_upstairs",
+  "nodes": [
+    {
+      "kind": "narration",
+      "id": "back_upstairs",
+      "text": {
+        "ru": "Наверху в зале Учёта осталось девять свечей и один стул. Стул стоит там же, где стоял утром: его тогда принесли и не унесли, потому что сказали, что пригодится.",
+        "en": "Upstairs in the Ledger Hall there are nine candles left and one chair. The chair stands where it stood in the morning: it was brought in then and not taken away, because they said it would come in useful."
+      },
+      "next": "form_out"
+    },
+    {
+      "kind": "say",
+      "id": "form_out",
+      "speaker": "svodchik",
+      "text": {
+        "ru": "Бланк Я-1: явка вкладчика к Прилавку. Заполнено всё, кроме одной графы. Графа называется «способ».",
+        "en": "Form AP-1: appearance of a depositor at the Counter. Everything is filled in but one column. The column is called \"method\"."
+      },
+      "next": "form_lore"
+    },
+    {
+      "kind": "lore",
+      "id": "form_lore",
+      "title": { "ru": "Бланк Я-1, примечание к графе «способ»", "en": "Form AP-1, note to the column \"method\"" },
+      "text": {
+        "ru": "«Графу заполняет вкладчик собственноручно. При невозможности собственноручного заполнения графу заполняет свидетель, и явка считается недобровольной, с надбавкой к сроку». Надбавка составляет сутки. Никто в городе не знает, к чему эти сутки прибавляются.",
+        "en": "\"The column is filled in by the depositor in his own hand. Where filling it in personally is impossible, a witness fills it in and the appearance counts as involuntary, with a supplement to the term.\" The supplement is one day. Nobody in the city knows what that day is added to."
+      },
+      "next": "naryad_stands"
+    },
+    {
+      "kind": "narration",
+      "id": "naryad_stands",
+      "text": {
+        "ru": "Наряд стоит у дверей и в зал не входит: сегодня у них нет бланка, а без бланка они тут никто. Старший держит руки за спиной и смотрит в пол ровно так, как смотрят на похоронах чужой родни.",
+        "en": "The detail stands at the doors and does not come into the hall: today they have no form, and without a form they are nobody here. The sergeant keeps his hands behind his back and looks at the floor exactly the way people look at a stranger's family funeral."
+      },
+      "next": "boy_router"
+    },
+    {
+      "kind": "branch",
+      "id": "boy_router",
+      "branches": [{ "when": { "kind": "flag", "flag": "klyost_named" }, "to": "boy_ledge" }],
+      "fallback": "revizor_last"
+    },
+    {
+      "kind": "say",
+      "id": "boy_ledge",
+      "speaker": "klyost",
+      "text": {
+        "ru": "Пуговица, я тут посижу. Я мигом не буду, я долго. Мне некуда мигом.",
+        "en": "Button, I'll sit here. I won't be quick this time, I'll be long. I've nowhere to be quick to."
+      },
+      "next": "revizor_last"
+    },
+    {
+      "kind": "say",
+      "id": "revizor_last",
+      "speaker": "revizor",
+      "text": {
+        "ru": "Способ: на ваше усмотрение. Впервые за сверку: на ваше усмотрение.",
+        "en": "Method: at your discretion. For the first time in this reconciliation: at your discretion."
+      },
+      "next": "method_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "method_choice",
+      "prompt": {
+        "ru": "Перо, чернильница и графа шириной в четыре слова.",
+        "en": "A pen, an inkwell, and a column four words wide."
+      },
+      "options": [
+        {
+          "id": "the_river",
+          "text": { "ru": "«Слуза». Она внизу и всегда открыта.", "en": "\"The Sluza.\" It is below and always open." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -3 }],
+          "to": "m_river"
+        },
+        {
+          "id": "the_chair",
+          "text": { "ru": "«Сидя». Стул всё равно принесли.", "en": "\"Seated.\" They brought the chair anyway." },
+          "fallback": true,
+          "to": "m_chair"
+        },
+        {
+          "id": "the_pumps",
+          "text": { "ru": "«Остановить насосы на четверть часа».", "en": "\"Stop the pumps for a quarter of an hour.\"" },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": -3 }],
+          "to": "m_pumps"
+        },
+        {
+          "id": "by_the_detail",
+          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -30 },
+          "text": { "ru": "«Наряд». Пусть отработают бланк.", "en": "\"The detail.\" Let them earn their form." },
+          "effects": [
+            { "kind": "fragment", "memory": "schet_za_sezon", "amount": 3 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": -8 }
+          ],
+          "to": "m_detail",
+          "priority": 6
+        },
+        {
+          "id": "in_full",
+          "chip": { "icon": "book", "label": { "ru": "Чистописец", "en": "Chistopisets" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "chistopisets" },
+          "text": { "ru": "Заполнить графу подробно, как было.", "en": "Fill the column in fully, as it happened." },
+          "effects": [
+            { "kind": "fragment", "memory": "god_goloy_pravdy", "amount": 3 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": 15 }
+          ],
+          "to": "m_full",
+          "priority": 6
+        },
+        {
+          "id": "the_tar",
+          "chip": { "icon": "fire", "label": { "ru": "Смолокур", "en": "Smolokur" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "smolokur" },
+          "text": { "ru": "«Смола». Быстрое милосерднее долгого.", "en": "\"Tar.\" Quick is kinder than long." },
+          "effects": [
+            { "kind": "fragment", "memory": "schet_za_sezon", "amount": 3 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": -8 }
+          ],
+          "to": "m_tar",
+          "priority": 6
+        },
+        {
+          "id": "the_cup",
+          "chip": { "icon": "heal", "label": { "ru": "Ключарь", "en": "Klyuchar" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "klyuchar" },
+          "text": { "ru": "«Кружка воды». Я никому не отказывал.", "en": "\"A cup of water.\" I never refused anyone." },
+          "effects": [
+            { "kind": "fragment", "memory": "poslednyaya_kruzhka", "amount": 3 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": 8 }
+          ],
+          "to": "m_cup",
+          "priority": 6
+        },
+        {
+          "id": "promise_method",
+          "chip": { "icon": "coin", "label": { "ru": "Посульщик", "en": "Posulshchik" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "posulshchik" },
+          "text": { "ru": "Вписать способ, которого не бывает.", "en": "Enter a method that does not exist." },
+          "effects": [
+            { "kind": "fragment", "memory": "luchshie_gody", "amount": 3 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": -8 }
+          ],
+          "to": "m_promise",
+          "priority": 6
+        }
+      ]
+    },
+    {
+      "kind": "narration",
+      "id": "m_river",
+      "text": {
+        "ru": "Слово входит в графу без переноса. Слузу видно из окна зала, и до воды от дверей Ломбарда сорок два шага: их считают перевозчики, и они не ошибаются.",
+        "en": "The word fits the column without a break. The Sluza can be seen from the hall window, and it is forty-two paces from the Pawnshop doors to the water: the ferrymen count them and they do not get it wrong."
+      },
+      "next": "sit_down"
+    },
+    {
+      "kind": "narration",
+      "id": "m_chair",
+      "text": {
+        "ru": "Ты пишешь одно слово и подчёркиваешь, как подчёркивают итог. Сводчик читает и молча придвигает стул ближе к столу — так, чтобы бланк был под рукой.",
+        "en": "You write one word and underline it the way a total is underlined. The reconciler reads it and silently pushes the chair closer to the table, so the form is within reach."
+      },
+      "next": "sit_down"
+    },
+    {
+      "kind": "narration",
+      "id": "m_pumps",
+      "text": {
+        "ru": "Приказ об остановке насосов подписывают трое, и подписывают быстро: за четыреста лет такого приказа не подавали, и никто не знает, кому в нём отказывать.",
+        "en": "The order to stop the pumps is signed by three men, and signed quickly: no such order has been submitted in four hundred years, and nobody knows who is supposed to refuse it."
+      },
+      "next": "sit_down"
+    },
+    {
+      "kind": "narration",
+      "id": "m_detail",
+      "text": {
+        "ru": "Старший наряда читает графу дважды и выходит выписывать себе бланк на её исполнение. Возвращается он с бланком двадцать семь и с тем же выражением, с каким стоял у дверей.",
+        "en": "The sergeant reads the column twice and goes out to write himself a form for carrying it out. He comes back with form twenty-seven and the same expression he wore at the doors."
+      },
+      "next": "sit_down"
+    },
+    {
+      "kind": "narration",
+      "id": "m_full",
+      "text": {
+        "ru": "Ты вписываешь способ, час, свидетелей и причину явки — без прибавления и убавления, включая то, что записывать не просили. Графа кончается на середине фразы, и ты дописываешь на полях.",
+        "en": "You enter the method, the hour, the witnesses and the reason for the appearance, without addition or subtraction, including what nobody asked to be recorded. The column runs out mid-sentence and you finish in the margin."
+      },
+      "next": "sit_down"
+    },
+    {
+      "kind": "narration",
+      "id": "m_tar",
+      "text": {
+        "ru": "Смолу приносят из-под насоса, в ведре, разведённую на четверть жиже, чем для крыш. Ты проверяешь пальцем и киваешь: развели правильно.",
+        "en": "The tar is brought up from beside the pump, in a bucket, thinned a quarter more than for roofing. You check it with a finger and nod: they thinned it right."
+      },
+      "next": "sit_down"
+    },
+    {
+      "kind": "narration",
+      "id": "m_cup",
+      "text": {
+        "ru": "Кружку приносит сводчик и ставит на стол не глядя, потому что смотреть при этом не полагается. Вода в ней речная, отстоянная: другой в Ломбарде нет.",
+        "en": "The reconciler brings the cup and sets it on the table without looking, because looking is not done at this point. The water in it is river water, left to stand: there is no other kind in the Pawnshop."
+      },
+      "next": "sit_down"
+    },
+    {
+      "kind": "narration",
+      "id": "m_promise",
+      "text": {
+        "ru": "Ты вписываешь: «по предъявлении». Сводчик перечитывает трижды, не находит запрета и принимает: способа такого нет, а графа заполнена собственноручно, и это главное.",
+        "en": "You write: \"upon presentation\". The reconciler reads it three times, finds no prohibition and accepts it: there is no such method, but the column has been filled in personally, and that is what matters."
+      },
+      "next": "sit_down"
+    },
+    {
+      "kind": "narration",
+      "id": "sit_down",
+      "text": {
+        "ru": "Сводчик ставит время и отходит на два шага, как отходят от свежих чернил. Ревизор остаётся стоять на месте и не называет ни одного числа.",
+        "en": "The reconciler enters the time and steps back two paces, the way you step back from wet ink. The Auditor stays where he is and does not name a single figure."
+      },
+      "next": "fade_1"
+    },
+    {
+      "kind": "narration",
+      "id": "fade_1",
+      "text": {
+        "ru": "Сначала уходит цвет: с тыльной стороны рук, потом с рукавов, потом с пола вокруг. Ты видел это со стороны один раз, на мостках, и там оно заняло шесть часов.",
+        "en": "The colour goes first: from the backs of your hands, then from your sleeves, then from the floor around you. You saw it from outside once, on the boardwalk, and there it took six hours."
+      },
+      "next": "fade_2"
+    },
+    {
+      "kind": "narration",
+      "id": "fade_2",
+      "text": {
+        "ru": "Потом уходит вес. Стул под тобой перестаёт скрипеть раньше, чем ты перестаёшь на нём сидеть, и сводчик отмечает это в бланке отдельной строкой, потому что строка отпечатана.",
+        "en": "Then the weight goes. The chair stops creaking under you before you stop sitting on it, and the reconciler notes that on the form in a separate line, because the line is printed there."
+      },
+      "next": "fade_3"
+    },
+    {
+      "kind": "narration",
+      "id": "fade_3",
+      "text": {
+        "ru": "Труха остаётся лежать, где лежала. Свечи гасят с дальнего конца, медленно, и последнюю оставляют гореть над столом — она в смету не входит, её ставит писарь от себя.",
+        "en": "The dust stays lying where it lay. The candles are put out from the far end, slowly, and the last one is left burning over the table: it is not in the estimate, the scribe puts it there out of his own pocket."
+      },
+      "next": "to_counter_last"
+    },
+    {
+      "kind": "narration",
+      "id": "to_counter_last",
+      "text": {
+        "ru": "Очередь ты знаешь наизусть: где встать, куда смотреть, как держат лот. Сегодня ничего этого не понадобится.",
+        "en": "You know the queue by heart: where to stand, where to look, how a lot is held. None of that will be needed today."
+      },
+      "next": "scene:counter_last"
+    }
+  ]
+}

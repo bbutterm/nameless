@@ -1,0 +1,373 @@
+{
+  "id": "lowest_shelf",
+  "chapter": 3,
+  "title": { "ru": "Самая нижняя полка", "en": "The Lowest Shelf" },
+  "tags": ["story", "chapter3", "vaults"],
+  "available": { "kind": "visited", "scene": "ledger_hub" },
+  "entry": "below_wall",
+  "nodes": [
+    {
+      "kind": "narration",
+      "id": "below_wall",
+      "text": {
+        "ru": "Ниже несущей стены ступени не кончаются. Они идут ещё пролёт, и на этом пролёте перила приделаны с одной стороны: со стороны, где не полка.",
+        "en": "Below the bearing wall the steps do not stop. They go one flight further, and on that flight the handrail is fixed to one side only: the side where there is no shelving."
+      },
+      "next": "patch"
+    },
+    {
+      "kind": "narration",
+      "id": "patch",
+      "text": {
+        "ru": "Трещину над вынутым коробом заделали, пока ты собирался в чулане. В шов вмазаны шесть свежих склянок, бирки наружу, и на бирках стоит сегодняшнее число.",
+        "en": "The crack above the crate that was taken out has been made good while you were gathering yourself in the storeroom. Six fresh jars are set into the seam, tags outward, and the tags carry today's date."
+      },
+      "keywords": [{ "match": { "ru": "сегодняшнее число", "en": "today's date" }, "tone": "danger" }],
+      "next": "patch_lore"
+    },
+    {
+      "kind": "lore",
+      "id": "patch_lore",
+      "title": { "ru": "Смета на ремонт обеспечения", "en": "Estimate for repair of holdings" },
+      "text": {
+        "ru": "«Заделка шва производится однородным материалом. Однородным считается свежепринятое, не старше суток». Ниже приписка от руки: «Шесть штук взято из приёма за вторник; вторник закрыт досрочно, приём остановлен, вкладчикам объявлено об отсрочке». Отсрочку объявили тем, у кого уже приняли.",
+        "en": "\"Sealing of a seam is performed with homogeneous material. Homogeneous means freshly accepted, not older than one day.\" Below, in hand: \"Six taken from Tuesday's intake; Tuesday closed early, intake halted, depositors informed of a deferral.\" The deferral was announced to the ones whose deposits had already been taken."
+      },
+      "next": "storozh_here"
+    },
+    {
+      "kind": "say",
+      "id": "storozh_here",
+      "speaker": "storozh_arkhiva",
+      "text": {
+        "ru": "Дальше я не считаю. Там полки без номеров, а без номера я собьюсь и начну с начала, а начало отсюда далеко.",
+        "en": "Past that I do not count. The shelves there have no numbers, and without a number I lose my place and start from the beginning, and the beginning is a long way from here."
+      },
+      "next": "numbers"
+    },
+    {
+      "kind": "narration",
+      "id": "numbers",
+      "text": {
+        "ru": "Полки считают снизу вверх, и счёт начинается с двойки. Самая нижняя номера не имеет: номер полке даёт опись, а описи на неё не заводили.",
+        "en": "The shelves are counted from the bottom up, and the count starts at two. The lowest has no number: a shelf is given its number by an inventory, and no inventory was ever opened for that one."
+      },
+      "next": "descent_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "descent_choice",
+      "prompt": {
+        "ru": "Пролёт узкий, и по нему ходят по одному. Фонарь один на всех, и он твой.",
+        "en": "The flight is narrow and taken one at a time. There is one lantern between everybody, and it is yours."
+      },
+      "options": [
+        {
+          "id": "go_slow",
+          "text": { "ru": "Идти медленно, считая ступени.", "en": "Go slowly, counting the steps." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 3 }],
+          "to": "r_slow"
+        },
+        {
+          "id": "go_dark",
+          "text": { "ru": "Загасить фонарь и идти на слух.", "en": "Put out the lantern and go by ear." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": -3 }],
+          "to": "r_dark"
+        },
+        {
+          "id": "go_leave_lantern",
+          "text": { "ru": "Оставить фонарь сторожу. Ему считать.", "en": "Leave the lantern with the watchman. He counts." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": 3 }],
+          "to": "r_left_lantern"
+        },
+        {
+          "id": "with_guide",
+          "conditions": { "kind": "flag", "flag": "scavenger_spared" },
+          "text": { "ru": "Пустить проводника вперёд.", "en": "Let the guide go in front." },
+          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -3 }],
+          "to": "r_guide",
+          "priority": 6
+        },
+        {
+          "id": "with_rats",
+          "conditions": {
+            "kind": "any",
+            "of": [
+              { "kind": "axis", "axis": "reason_obsession", "op": "lte", "value": -40 },
+              { "kind": "flag", "flag": "archive_copied" }
+            ]
+          },
+          "text": { "ru": "Идти за крысами. Они знают короче.", "en": "Follow the rats. They know a shorter way." },
+          "effects": [
+            { "kind": "fragment", "memory": "eda_ne_vnesena", "amount": 2 },
+            { "kind": "axis", "axis": "reason_obsession", "delta": -8 }
+          ],
+          "to": "r_rats",
+          "priority": 6
+        },
+        {
+          "id": "with_key",
+          "conditions": { "kind": "flag", "flag": "guild_key" },
+          "text": { "ru": "Служебным ходом, мимо поста.", "en": "By the service passage, past the post." },
+          "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": -3 }],
+          "to": "r_service",
+          "priority": 5
+        },
+        {
+          "id": "burn_way",
+          "chip": { "icon": "fire", "label": { "ru": "Смолокур", "en": "Smolokur" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "smolokur" },
+          "text": { "ru": "Смочить ветошь в смоле. На всякий случай.", "en": "Soak a rag in tar. Just in case." },
+          "effects": [
+            { "kind": "fragment", "memory": "schet_za_sezon", "amount": 2 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": -3 }
+          ],
+          "to": "r_tar",
+          "priority": 5
+        }
+      ]
+    },
+    {
+      "kind": "narration",
+      "id": "r_slow",
+      "text": {
+        "ru": "Сорок одна ступень до площадки и ещё девять после неё. Девять — это не марш, это доделка: кто-то дорубал их позже, уже в готовой кладке, и рубил в одиночку.",
+        "en": "Forty-one steps to the landing and nine more after it. Nine is not a flight, it is an afterthought: somebody cut them later, into finished masonry, and cut them alone."
+      },
+      "next": "water_line"
+    },
+    {
+      "kind": "narration",
+      "id": "r_dark",
+      "text": {
+        "ru": "В темноте слышно, как работают насосы и как за стеной идёт Слуза. Между двумя этими звуками есть третий, тихий: где-то капает в подставленное, и подставленное почти полное.",
+        "en": "In the dark you can hear the pumps working and the Sluza going past behind the wall. Between those two sounds there is a third, quiet one: somewhere water is dripping into something set to catch it, and the thing set to catch it is nearly full."
+      },
+      "next": "water_line"
+    },
+    {
+      "kind": "say",
+      "id": "r_left_lantern",
+      "speaker": "storozh_arkhiva",
+      "text": {
+        "ru": "Возьму. Со светом считать легче, хотя считаю я не глазами. Шестьдесят четыре.",
+        "en": "I will take it. Counting is easier with a light, though I do not count with my eyes. Sixty-four."
+      },
+      "next": "water_line"
+    },
+    {
+      "kind": "say",
+      "id": "r_guide",
+      "speaker": "marodyor",
+      "text": {
+        "ru": "Я не провожаю, я иду впереди. Разница в том, что за провожатого платят, а впереди идут задаром и первым.",
+        "en": "I am not guiding, I am walking in front. The difference is that a guide gets paid, and the man in front goes for nothing and goes first."
+      },
+      "next": "water_line"
+    },
+    {
+      "kind": "narration",
+      "id": "r_rats",
+      "text": {
+        "ru": "Крысы идут вдоль стены цепочкой и в одном месте сворачивают в кладку. Там дыра в две ладони, и за дырой слышно то же, что за поворотом лестницы: значит, лестница делает крюк, а крысы нет.",
+        "en": "The rats run along the wall in a file and at one point turn into the masonry. There is a hole two palms wide there, and behind the hole you hear what you hear round the turn of the stairs: so the stairs take a detour and the rats do not."
+      },
+      "next": "water_line"
+    },
+    {
+      "kind": "narration",
+      "id": "r_service",
+      "text": {
+        "ru": "Служебная дверь открывается тем же ключом, что и наверху: замки внизу не меняли, потому что менять их дороже, чем поставить человека. Человека на этом посту сегодня нет — он в сверке.",
+        "en": "The service door opens with the same key as the ones upstairs: the locks down here were never changed, because changing them costs more than posting a man. There is no man at the post today: he is in the reconciliation."
+      },
+      "next": "water_line"
+    },
+    {
+      "kind": "narration",
+      "id": "r_tar",
+      "text": {
+        "ru": "Смолу для ветоши берёшь из ведра у насоса, и она разведена жиже, чем для крыш, — на четверть. Ты замечаешь это раньше, чем вспоминаешь, откуда знаешь про четверть.",
+        "en": "You take tar for the rag from the bucket by the pump, and it is thinned a quarter more than for roofing. You notice that before you remember how you know about the quarter."
+      },
+      "next": "water_line"
+    },
+    {
+      "kind": "narration",
+      "id": "water_line",
+      "text": {
+        "ru": "На стене видна полоса, докуда вода поднималась, и полоса выше твоей головы. Насосы держат её ниже, и держат уже четыреста лет, и всё это время расход на них равен всей выручке верхних ярусов.",
+        "en": "There is a line on the wall marking how high the water came, and the line is above your head. The pumps hold it lower, and have held it for four hundred years, and all that time their cost has equalled the entire takings of the upper tiers."
+      },
+      "next": "the_shelf"
+    },
+    {
+      "kind": "narration",
+      "id": "the_shelf",
+      "text": {
+        "ru": "Полка одна и стоит на сухом. Она короткая, в две доски, и на ней ничего нет, кроме одного свёртка на дальнем конце. Пыль на досках лежит везде, а вокруг свёртка её нет: пыль сюда не садится.",
+        "en": "There is one shelf and it stands on dry ground. It is short, two boards wide, and there is nothing on it but a single wrapped bundle at the far end. Dust lies on the boards everywhere, and around the bundle there is none: dust does not settle here."
+      },
+      "keywords": [{ "match": { "ru": "одного свёртка", "en": "a single wrapped bundle" }, "tone": "memory" }],
+      "next": "grate"
+    },
+    {
+      "kind": "narration",
+      "id": "grate",
+      "text": {
+        "ru": "Между тобой и полкой решётка от пола до свода, и на ней висит бирка: «выдаче не подлежит. Выкуп разрешён продавцу. Открывать при сведённой сверке, в присутствии Ревизии».",
+        "en": "Between you and the shelf is a grating from floor to vault, and on it hangs a tag: \"not for issue. Redemption permitted to the seller. To be opened when the reconciliation is closed, in the presence of the Audit\"."
+      },
+      "next": "guards_wake"
+    },
+    {
+      "kind": "narration",
+      "id": "guards_wake",
+      "text": {
+        "ru": "Замок на решётке размером с человека и с человеком же и обходится: он поворачивается к свету раньше, чем ты подходишь. За ним из бокового хода выступают приставы, а с ними оценщик — оценщик обязан присутствовать при попытке изъятия.",
+        "en": "The lock on the grating is the size of a man and deals with men accordingly: it turns towards the light before you come near. Behind it bailiffs step out of a side passage, and an appraiser with them: an appraiser must be present at an attempted seizure."
+      },
+      "next": "guard_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "guard_choice",
+      "prompt": {
+        "ru": "Решётка за ними, полка за решёткой, свёрток на полке.",
+        "en": "The grating behind them, the shelf behind the grating, the bundle on the shelf."
+      },
+      "options": [
+        {
+          "id": "fight_through",
+          "text": { "ru": "Пройти. Другого хода нет.", "en": "Go through. There is no other way." },
+          "fallback": true,
+          "to": "descent_battle"
+        },
+        {
+          "id": "fight_lock",
+          "text": { "ru": "Бить по замку, не по людям.", "en": "Strike the lock, not the men." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": 3 }],
+          "to": "descent_battle"
+        },
+        {
+          "id": "fight_hard",
+          "text": { "ru": "Начать с оценщика. Он ведёт опись.", "en": "Start with the appraiser. He keeps the record." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": -3 }],
+          "to": "descent_battle"
+        },
+        {
+          "id": "posul_first",
+          "chip": { "icon": "coin", "label": { "ru": "Посульщик", "en": "Posulshchik" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "posulshchik" },
+          "text": { "ru": "Выставить Посул вперёд. Пусть считают его.", "en": "Put the Promise out front. Let them count that." },
+          "effects": [
+            { "kind": "fragment", "memory": "luchshie_gody", "amount": 3 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": -8 }
+          ],
+          "to": "descent_battle",
+          "priority": 6
+        },
+        {
+          "id": "water_them",
+          "chip": { "icon": "heal", "label": { "ru": "Ключарь", "en": "Klyuchar" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "klyuchar" },
+          "text": { "ru": "Поставить Водоноса за спину. Всем хватит.", "en": "Put the Water Carrier behind me. Enough for everyone." },
+          "effects": [
+            { "kind": "fragment", "memory": "poslednyaya_kruzhka", "amount": 3 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": 8 }
+          ],
+          "to": "descent_battle",
+          "priority": 6
+        },
+        {
+          "id": "read_tag_aloud",
+          "conditions": { "kind": "axis", "axis": "honesty_deceit", "op": "gte", "value": 30 },
+          "text": { "ru": "Прочитать им бирку вслух. Всю.", "en": "Read them the tag out loud. All of it." },
+          "effects": [
+            { "kind": "fragment", "memory": "god_goloy_pravdy", "amount": 2 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": 8 }
+          ],
+          "to": "tag_aloud",
+          "priority": 6
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "tag_aloud",
+      "speaker": "naryad_revizii",
+      "text": {
+        "ru": "Слышали. «Выкуп разрешён продавцу» — а продавец у нас числится по описи, а не по голосу. Предъявите опись.",
+        "en": "We heard. \"Redemption permitted to the seller\" — and our seller is entered by record, not by voice. Produce the record."
+      },
+      "next": "descent_battle"
+    },
+    {
+      "kind": "battle",
+      "id": "descent_battle",
+      "battle": "battle_last_descent",
+      "onWin": "after_descent",
+      "onLose": "dying_shelf"
+    },
+    {
+      "kind": "effects",
+      "id": "dying_shelf",
+      "effects": [
+        { "kind": "flag", "flag": "death_cause_shelf", "value": true },
+        { "kind": "flag", "flag": "death_cause_guard", "value": false },
+        { "kind": "flag", "flag": "death_cause_scavengers", "value": false },
+        { "kind": "flag", "flag": "death_cause_guild", "value": false },
+        { "kind": "flag", "flag": "death_cause_sluza", "value": false },
+        { "kind": "flag", "flag": "death_cause_vytsvet", "value": false }
+      ],
+      "next": "dying_shelf_text"
+    },
+    {
+      "kind": "narration",
+      "id": "dying_shelf_text",
+      "text": {
+        "ru": "Замок разворачивается всей массой и садится на тебя, как садится потолок на стену. Последним ты слышишь, как оценщик просит подождать с уборкой: до описи трогать нельзя.",
+        "en": "The lock swings its whole weight round and settles on you the way a ceiling settles on a wall. The last thing you hear is the appraiser asking them to hold off clearing up: nothing may be touched before the record is made."
+      },
+      "next": "scene:silver_counter#queue_entry"
+    },
+    {
+      "kind": "narration",
+      "id": "after_descent",
+      "text": {
+        "ru": "Замок стоит криво и больше не поворачивается. Решётку это не открывает: она держится не на замке, а на бирке, а бирку снимает Ревизия.",
+        "en": "The lock stands askew and no longer turns. That does not open the grating: the grating is held not by the lock but by the tag, and the tag comes off by the Audit's hand."
+      },
+      "next": "through_grate"
+    },
+    {
+      "kind": "narration",
+      "id": "through_grate",
+      "text": {
+        "ru": "Сквозь прутья видно свёрток целиком. Он перевязан крест-накрест, узел домашний, и на узле висит вторая бирка, поменьше, обращённая к стене.",
+        "en": "Through the bars you can see the whole bundle. It is tied crosswise with a household knot, and on the knot hangs a second, smaller tag, turned to face the wall."
+      },
+      "next": "shelf_depth"
+    },
+    {
+      "kind": "effects",
+      "id": "shelf_depth",
+      "effects": [{ "kind": "counter", "counter": "ledger_depth", "delta": 1 }],
+      "next": "shelf_exit"
+    },
+    {
+      "kind": "narration",
+      "id": "shelf_exit",
+      "text": {
+        "ru": "Наверх ты идёшь те же пятьдесят ступеней и считаешь их снова, потому что вниз и вверх они считаются по-разному. Насосы бьют четыре удара в минуту и в ногу не попадают.",
+        "en": "You go back up the same fifty steps and count them again, because up and down they count differently. The pumps beat four times to the minute and never once fall into step with you."
+      },
+      "next": "scene:ledger_hub"
+    }
+  ]
+}

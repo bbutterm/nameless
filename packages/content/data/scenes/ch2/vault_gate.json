@@ -1,0 +1,498 @@
+{
+  "id": "vault_gate",
+  "chapter": 2,
+  "title": { "ru": "Решётка нижних хранилищ", "en": "The Grate of the Lower Vaults" },
+  "tags": ["chapter_gate", "vaults", "mandatory"],
+  "entry": "tag_on_wrist",
+  "nodes": [
+    {
+      "kind": "narration",
+      "id": "tag_on_wrist",
+      "text": {
+        "ru": "На запястье осталась казённая бирка с номером дела: 1. Не «дело первое» и не «дело № 1» — просто единица, продавленная в жесть так давно, что края успели затупиться.",
+        "en": "A government tag is still on your wrist with the case number on it: 1. Not \"case one\", not \"case no. 1\" — just a one, punched into the tin so long ago that the edges have gone blunt."
+      },
+      "keywords": [{ "match": { "ru": "номером дела", "en": "case number" }, "tone": "memory" }],
+      "next": "going_down"
+    },
+    {
+      "kind": "narration",
+      "id": "going_down",
+      "text": {
+        "ru": "Лестница вниз начинается за приёмным двором и идёт мимо ярусов, которые тебе уже знакомы, а потом мимо тех, у которых нет номеров. Считать их ты бросаешь на девятом.",
+        "en": "The stairway down starts behind the intake yard and passes the tiers you already know, and then the ones that have no numbers. You give up counting them at the ninth."
+      },
+      "next": "the_grate"
+    },
+    {
+      "kind": "narration",
+      "id": "the_grate",
+      "text": {
+        "ru": "Решётка перегораживает лестницу целиком: прутья в руку, кладка вокруг них старше кладки наверху. Табличка одна: «Нижние хранилища. Обеспечение. Вход по особому распоряжению».",
+        "en": "The grate blocks the whole stairway: bars as thick as an arm, the masonry around them older than the masonry above. There is one plate: \"Lower Vaults. Security holdings. Entry by special order only.\""
+      },
+      "keywords": [{ "match": { "ru": "Обеспечение", "en": "Security holdings" }, "tone": "lore" }],
+      "next": "key_router"
+    },
+    {
+      "kind": "branch",
+      "id": "key_router",
+      "branches": [{ "when": { "kind": "flag", "flag": "guild_key" }, "to": "key_useless" }],
+      "fallback": "no_lock"
+    },
+    {
+      "kind": "narration",
+      "id": "key_useless",
+      "text": {
+        "ru": "Служебный ключ ты достаёшь по привычке и держишь в руке дольше, чем нужно. Ключи здесь ни при чём: скважины в решётке нет вовсе.",
+        "en": "You take out the service key from habit and hold it longer than there is any point in holding it. Keys have nothing to do with this: the grate has no keyhole at all."
+      },
+      "next": "cold_from_below"
+    },
+    {
+      "kind": "narration",
+      "id": "no_lock",
+      "text": {
+        "ru": "Замка нет. Ни скважины, ни петель, ни щели под засов — решётку не запирали, её ставили один раз и навсегда, изнутри.",
+        "en": "There is no lock. No keyhole, no hinges, no slot for a bolt — the grate was never locked, it was set in place once and for good, from the inside."
+      },
+      "next": "cold_from_below"
+    },
+    {
+      "kind": "narration",
+      "id": "cold_from_below",
+      "text": {
+        "ru": "Снизу тянет холодом и бумажной пылью. Пыль поднимается ровно, без сквозняка, будто там внизу что-то большое дышит описью.",
+        "en": "Cold air and paper dust come up from below. The dust rises evenly, with no draught behind it, as if something large down there were breathing in inventory."
+      },
+      "next": "guard_stool"
+    },
+    {
+      "kind": "narration",
+      "id": "guard_stool",
+      "text": {
+        "ru": "У решётки стоит табурет, на табурете лампа, при лампе стражник и журнал спусков. Графы две: кто спустился и когда поднялся. Вторая графа за сегодня пустая.",
+        "en": "By the grate stands a stool, on the stool a lamp, at the lamp a guard and a descent journal. There are two columns: who went down and when he came back up. The second column is empty for today."
+      },
+      "keywords": [{ "match": { "ru": "журнал спусков", "en": "descent journal" }, "tone": "lore" }],
+      "next": "strazhnik_1"
+    },
+    {
+      "kind": "say",
+      "id": "strazhnik_1",
+      "speaker": "strazhnik",
+      "text": {
+        "ru": "Спуск не воспрещён. Проход воспрещён. Разница оформляется бланком двадцать семь.",
+        "en": "Descent is not prohibited. Passage is prohibited. The difference is processed on form twenty-seven."
+      },
+      "next": "strazhnik_2"
+    },
+    {
+      "kind": "say",
+      "id": "strazhnik_2",
+      "speaker": "strazhnik",
+      "text": {
+        "ru": "Фамилию в журнал. Без фамилии пишу «предъявитель», и тогда вас не найдут даже мы.",
+        "en": "Surname for the journal. Without a surname I write \"the bearer\", and then not even we will find you."
+      },
+      "next": "klyost_arrives"
+    },
+    {
+      "kind": "say",
+      "id": "klyost_arrives",
+      "speaker": "klyost",
+      "text": {
+        "ru": "Пуговица! Я мигом сюда, короче: внизу вас не ждут, а наверху уже спрашивали.",
+        "en": "Button! I came straight down, so: nobody's waiting for you below, and upstairs they've already been asking."
+      },
+      "next": "ustav_obespecheniya"
+    },
+    {
+      "kind": "lore",
+      "id": "ustav_obespecheniya",
+      "title": {
+        "ru": "Устав хранения обеспечения, лист первый",
+        "en": "Regulations on the Keeping of Security Holdings, sheet one"
+      },
+      "text": {
+        "ru": "«Обеспечением именуется память, которой обеспечена монета. Обеспечение хранится ниже уровня воды и ниже уровня спроса. Обеспечение не выдаётся на руки ни при каких обстоятельствах, включая обстоятельство „предъявитель есть вкладчик“. Сумма обеспечения на листе не указывается: лист один, а сумма не помещается».",
+        "en": "\"Security holdings means the memory by which the coin is secured. Holdings are kept below the level of the water and below the level of demand. Holdings are released into no one's hands under any circumstances, including the circumstance 'the bearer is the depositor'. The amount of the holdings is not entered on this sheet: the sheet is one and the amount does not fit.\""
+      },
+      "next": "grate_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "grate_choice",
+      "prompt": {
+        "ru": "Стражник обмакнул перо и держит его над графой.",
+        "en": "The guard has dipped his pen and holds it over the column."
+      },
+      "options": [
+        {
+          "id": "knock_tag",
+          "text": { "ru": "Постучать биркой по прутьям.", "en": "Knock on the bars with the tag." },
+          "fallback": true,
+          "to": "r_knock"
+        },
+        {
+          "id": "ask_last",
+          "text": { "ru": "Спросить, кто проходил последним.", "en": "Ask who passed through last." },
+          "fallback": true,
+          "to": "r_last"
+        },
+        {
+          "id": "give_name",
+          "text": { "ru": "Назваться в журнал: Неоплатный.", "en": "Give the journal a name: Insolvent." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": 3 }],
+          "to": "r_name"
+        },
+        {
+          "id": "count_courses",
+          "text": { "ru": "Сосчитать ряды кладки до воды.", "en": "Count the courses of masonry down to the water." },
+          "chip": { "icon": "hourglass", "label": { "ru": "Перечень", "en": "Perechen" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "perechen" },
+          "effects": [
+            { "kind": "fragment", "memory": "opis_vsego_sushchego", "amount": 1 },
+            { "kind": "axis", "axis": "reason_obsession", "delta": -3 }
+          ],
+          "to": "r_count",
+          "priority": 6
+        },
+        {
+          "id": "test_dust",
+          "text": { "ru": "Проверить, горит ли бумажная пыль.", "en": "Check whether paper dust burns." },
+          "chip": { "icon": "fire", "label": { "ru": "Смолокур", "en": "Smolokur" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "smolokur" },
+          "effects": [
+            { "kind": "fragment", "memory": "ples_gorit", "amount": 1 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": -3 }
+          ],
+          "to": "r_dust",
+          "priority": 6
+        },
+        {
+          "id": "write_exact",
+          "text": { "ru": "Вписать всё, включая отказ стражника.", "en": "Enter everything, the guard's refusal included." },
+          "chip": { "icon": "book", "label": { "ru": "Чистописец", "en": "Chistopisets" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "chistopisets" },
+          "effects": [
+            { "kind": "fragment", "memory": "khronika_bez_popravok", "amount": 1 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": 3 }
+          ],
+          "to": "r_exact",
+          "priority": 6
+        },
+        {
+          "id": "show_key",
+          "text": { "ru": "Показать ношеный служебный ключ.", "en": "Show him the worn service key." },
+          "conditions": { "kind": "flag", "flag": "guild_key" },
+          "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": -3 }],
+          "to": "r_key",
+          "priority": 5
+        },
+        {
+          "id": "ask_boy",
+          "text": { "ru": "Спросить мальчишку про чёрную лестницу.", "en": "Ask the boy about the back stairs." },
+          "conditions": { "kind": "flag", "flag": "klyost_named" },
+          "effects": [{ "kind": "counter", "counter": "klyost_seen", "delta": 1 }],
+          "to": "r_boy",
+          "priority": 5
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "r_knock",
+      "speaker": "strazhnik",
+      "text": {
+        "ru": "Не звенит. Прутья литые, внутри такие же. Стучать разрешено: в бланке двадцать семь стука нет.",
+        "en": "No ring to it. The bars are cast solid, the same all the way through. Knocking is permitted: form twenty-seven does not mention knocking."
+      },
+      "next": "after_grate"
+    },
+    {
+      "kind": "say",
+      "id": "r_last",
+      "speaker": "strazhnik",
+      "text": {
+        "ru": "Предъявитель, третьего числа, по особому распоряжению. Обратно графа не заполнена. Заполняю её я, а не он.",
+        "en": "The bearer, on the third, by special order. The return column is not filled in. I am the one who fills it in, not him."
+      },
+      "next": "after_grate"
+    },
+    {
+      "kind": "say",
+      "id": "r_name",
+      "speaker": "strazhnik",
+      "text": {
+        "ru": "«Неоплатный» — это не фамилия, это состояние счёта. Пишу как продиктовано: за верность записи отвечаете вы.",
+        "en": "\"Insolvent\" is not a surname, it is a state of account. I write it as dictated: you answer for the accuracy of the entry."
+      },
+      "next": "after_grate"
+    },
+    {
+      "kind": "narration",
+      "id": "r_count",
+      "text": {
+        "ru": "Двести сорок один ряд кладки от таблички до воды, и на сто девятом ряду камень другой — крупнее, темнее, тёсан иначе. С этого ряда и ниже стена сложена под одну руку, а не под артель.",
+        "en": "Two hundred and forty-one courses of masonry from the plate down to the water, and at the hundred and ninth the stone changes: bigger, darker, dressed differently. From that course down the wall is laid to suit one pair of hands, not a work gang."
+      },
+      "keywords": [{ "match": { "ru": "под одну руку", "en": "one pair of hands" }, "tone": "memory" }],
+      "next": "after_grate"
+    },
+    {
+      "kind": "narration",
+      "id": "r_dust",
+      "text": {
+        "ru": "Пыль над лампой вспыхивает и гаснет быстрее, чем успевает пахнуть, — так горит бумага, из которой уже вынули всё, что стоило денег. Стражник отодвигает лампу и ничего не записывает.",
+        "en": "The dust above the lamp flares and dies faster than it can smell of anything: that is how paper burns once everything worth money has been taken out of it. The guard moves the lamp aside and writes nothing down."
+      },
+      "next": "after_grate"
+    },
+    {
+      "kind": "say",
+      "id": "r_exact",
+      "speaker": "strazhnik",
+      "text": {
+        "ru": "«Отказано в проходе, основание не названо». Вы это вписали, вы и подписали. Такой строки в журнале за четыре года не было.",
+        "en": "\"Passage refused, grounds not stated.\" You entered it and you signed it. There has been no line like that in the journal in four years."
+      },
+      "next": "after_grate"
+    },
+    {
+      "kind": "say",
+      "id": "r_key",
+      "speaker": "strazhnik",
+      "text": {
+        "ru": "Ключ ношеный, бирка стёрта. Такие у нас изымают, но вниз он всё равно не годится: там дверей нет, там кладка.",
+        "en": "Worn key, tag rubbed off. We confiscate those, though it is no use below in any case: there are no doors down there, there is masonry."
+      },
+      "next": "after_grate"
+    },
+    {
+      "kind": "say",
+      "id": "r_boy",
+      "speaker": "klyost",
+      "text": {
+        "ru": "Чёрных лестниц туда нет. Я все знаю, а туда нет, и я даже не помню, кто мне это сказал.",
+        "en": "There aren't any back stairs down there. I know all of them and there aren't any, and I don't even remember who told me that."
+      },
+      "next": "after_grate"
+    },
+    {
+      "kind": "say",
+      "id": "after_grate",
+      "speaker": "klyost",
+      "text": {
+        "ru": "Вам записка. От оценщика, который с «-с». Он велел отдать в руки и не читать, я и не читал, честно, только начало.",
+        "en": "There's a note for you. From the appraiser who talks with the \"if you please\". He said hand it over and don't read it, so I didn't, honest, only the start."
+      },
+      "next": "note_text"
+    },
+    {
+      "kind": "narration",
+      "id": "note_text",
+      "text": {
+        "ru": "На обороте расписки, торопливо: «Особое распоряжение выписывается наверху, а не внизу. Цену назову при встрече; прошу не спрашивать её через мальчика».",
+        "en": "On the back of a receipt, in a hurry: \"The special order is issued upstairs, not down here. I shall name the price in person; kindly do not ask it through the boy.\""
+      },
+      "keywords": [{ "match": { "ru": "Особое распоряжение", "en": "The special order" }, "tone": "lore" }],
+      "next": "landing_above"
+    },
+    {
+      "kind": "narration",
+      "id": "landing_above",
+      "text": {
+        "ru": "Одним пролётом выше лестница расширяется в пересыльную площадку: длинный стол, подъёмник в полу и очередь ящиков с сургучом. Всё, что уходит вниз, проходит через этот стол; вниз уходит не по лестнице.",
+        "en": "One flight higher the stairway widens into a transit landing: a long table, a hoist set into the floor, and a queue of wax-sealed crates. Everything that goes down passes over that table; and it does not go down by the stairs."
+      },
+      "keywords": [{ "match": { "ru": "подъёмник", "en": "hoist" }, "tone": "lore" }],
+      "next": "tag_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "tag_choice",
+      "prompt": {
+        "ru": "Бирка номер один нагрелась от запястья. Журнал внизу открыт на сегодняшней странице.",
+        "en": "Tag number one has gone warm against your wrist. Below, the journal lies open at today's page."
+      },
+      "options": [
+        {
+          "id": "keep_tag",
+          "text": { "ru": "Оставить бирку на запястье.", "en": "Leave the tag on my wrist." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": 3 }],
+          "to": "r_keep"
+        },
+        {
+          "id": "hang_tag",
+          "text": { "ru": "Снять и повесить бирку на решётку.", "en": "Take it off and hang it on the grate." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -3 }],
+          "to": "r_hang"
+        },
+        {
+          "id": "show_journal",
+          "text": { "ru": "Показать бирку и потребовать сверки.", "en": "Show the tag and demand a check." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": 3 }],
+          "to": "r_show"
+        },
+        {
+          "id": "last_case",
+          "text": { "ru": "Спросить номер последнего заведённого дела.", "en": "Ask the number of the last case opened." },
+          "chip": { "icon": "hourglass", "label": { "ru": "Перечень", "en": "Perechen" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "perechen" },
+          "effects": [
+            { "kind": "fragment", "memory": "opis_vsego_sushchego", "amount": 1 },
+            { "kind": "axis", "axis": "reason_obsession", "delta": -3 }
+          ],
+          "to": "r_last_case",
+          "priority": 6
+        },
+        {
+          "id": "promise_paper",
+          "text": { "ru": "Пообещать, что вернусь с бумагой к четвергу.", "en": "Promise to come back with paper by Thursday." },
+          "chip": { "icon": "coin", "label": { "ru": "Посульщик", "en": "Posulshchik" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "posulshchik" },
+          "effects": [
+            { "kind": "fragment", "memory": "zima_bez_khleba", "amount": 1 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": -3 },
+            { "kind": "counter", "counter": "promises_given", "delta": 1 }
+          ],
+          "to": "r_promise",
+          "priority": 6
+        },
+        {
+          "id": "give_boy_tag",
+          "text": { "ru": "Отдать бирку мальчишке. Ему нечем.", "en": "Give the tag to the boy. He has nothing." },
+          "chip": { "icon": "heal", "label": { "ru": "Ключарь", "en": "Klyuchar" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "klyuchar" },
+          "effects": [
+            { "kind": "fragment", "memory": "ochered_k_kolodtsu", "amount": 1 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": 3 },
+            { "kind": "counter", "counter": "klyost_seen", "delta": 1 }
+          ],
+          "to": "r_give_boy",
+          "priority": 6
+        },
+        {
+          "id": "ask_window",
+          "text": { "ru": "Спросить, как теперь проходят через окошко.", "en": "Ask how one gets served through the window now." },
+          "conditions": { "kind": "flag", "flag": "tminny_blacklist" },
+          "to": "r_window",
+          "priority": 5
+        },
+        {
+          "id": "copy_journal",
+          "text": { "ru": "Переписать журнал спусков за неделю.", "en": "Copy out a week of the descent journal." },
+          "conditions": { "kind": "axis", "axis": "reason_obsession", "op": "lte", "value": -40 },
+          "effects": [
+            { "kind": "axis", "axis": "reason_obsession", "delta": -5 },
+            { "kind": "counter", "counter": "nights_awake", "delta": 1 }
+          ],
+          "to": "r_copy",
+          "priority": 5
+        }
+      ]
+    },
+    {
+      "kind": "narration",
+      "id": "r_keep",
+      "text": {
+        "ru": "Бирка сидит плотно, шнурок казённый, узел казённый. Снять её можно только вместе с делом, а дело пока не закрыто.",
+        "en": "The tag sits tight, government cord, government knot. It comes off only together with the case, and the case is not closed yet."
+      },
+      "next": "after_tag"
+    },
+    {
+      "kind": "narration",
+      "id": "r_hang",
+      "text": {
+        "ru": "Ты вешаешь бирку на прут и отходишь. К вечеру её снимут, опишут как найденное имущество и заведут на неё дело — второе за сегодня.",
+        "en": "You hang the tag on a bar and step away. By evening it will be taken down, entered as found property, and a case will be opened on it — the second one today."
+      },
+      "next": "after_tag"
+    },
+    {
+      "kind": "say",
+      "id": "r_show",
+      "speaker": "strazhnik",
+      "text": {
+        "ru": "Дело номер один в журнале не заводится. Журнал начинается с двойки, и так заведено до меня.",
+        "en": "Case number one is not opened in the journal. The journal begins at two, and it was set up that way before my time."
+      },
+      "next": "after_tag"
+    },
+    {
+      "kind": "say",
+      "id": "r_last_case",
+      "speaker": "strazhnik",
+      "text": {
+        "ru": "Сорок одна тысяча девятьсот восемь, заведено вчера. А первого нет, и никто не спрашивал за четыре года.",
+        "en": "Forty-one thousand nine hundred and eight, opened yesterday. And there is no first one, and nobody has asked in four years."
+      },
+      "next": "after_tag"
+    },
+    {
+      "kind": "say",
+      "id": "r_promise",
+      "speaker": "strazhnik",
+      "text": {
+        "ru": "Записал: «обещал бумагу». Обещания идут в третью графу, третью графу читают раз в год и никого по ней не ищут.",
+        "en": "Entered: \"promised paper\". Promises go in the third column, the third column is read once a year, and nobody is ever looked for by it."
+      },
+      "next": "after_tag"
+    },
+    {
+      "kind": "say",
+      "id": "r_give_boy",
+      "speaker": "klyost",
+      "text": {
+        "ru": "Мне? С номером? Короче, я её носить буду, а если спросят — скажу, что это моё дело.",
+        "en": "For me? With a number on it? So, I'll wear it, and if anyone asks I'll say it's my case."
+      },
+      "next": "after_tag"
+    },
+    {
+      "kind": "say",
+      "id": "r_window",
+      "speaker": "strazhnik",
+      "text": {
+        "ru": "Через окошко — по вторникам и прописью. Цену вам прокричат в форточку, и торг в форточку не проходит.",
+        "en": "Through the window, on Tuesdays and in words. They will call the price at you through the pane, and haggling does not fit through a pane."
+      },
+      "next": "after_tag"
+    },
+    {
+      "kind": "narration",
+      "id": "r_copy",
+      "text": {
+        "ru": "За неделю вниз спускались одиннадцать человек, поднялись девять, и обе недостачи проходят по графе «остались при обеспечении». Графа предусмотрена бланком, значит, случай не первый.",
+        "en": "In one week eleven people went down and nine came up, and both shortfalls are booked under the column \"remained with the holdings\". The column is provided for on the form, so the case is not the first."
+      },
+      "keywords": [{ "match": { "ru": "остались при обеспечении", "en": "remained with the holdings" }, "tone": "danger" }],
+      "next": "after_tag"
+    },
+    {
+      "kind": "narration",
+      "id": "after_tag",
+      "text": {
+        "ru": "Подъёмник в полу площадки уходит вниз без каната: канат намотан на барабан внизу, и барабан тянет к себе. Наверх он поднимает только пустые ящики и опись.",
+        "en": "The hoist in the landing floor goes down without a rope above it: the rope is wound on a drum below, and the drum pulls towards itself. It brings back up only empty crates and an inventory."
+      },
+      "next": "gate_exit"
+    },
+    {
+      "kind": "narration",
+      "id": "gate_exit",
+      "text": {
+        "ru": "Подвалы Ломбарда глубже, чем башня высока: это знает в Закладе каждый ребёнок и никто не спрашивает почему. Ты стоишь у стола с биркой номер один и уже знаешь, чей почерк ждёт внизу.",
+        "en": "The Pawnshop's cellars run deeper than its tower is tall: every child in Zaklad knows it and nobody asks why. You stand at the table with tag number one, and you already know whose handwriting is waiting down there."
+      },
+      "keywords": [{ "match": { "ru": "почерк", "en": "handwriting" }, "tone": "memory" }],
+      "next": "scene:vaults_hub"
+    }
+  ]
+}

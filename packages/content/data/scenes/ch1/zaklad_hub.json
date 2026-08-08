@@ -1,0 +1,241 @@
+{
+  "id": "zaklad_hub",
+  "chapter": 1,
+  "title": {
+    "ru": "Закладная сторона под вечер",
+    "en": "The Pledge Side Towards Evening"
+  },
+  "tags": [
+    "hub"
+  ],
+  "available": {
+    "kind": "visited",
+    "scene": "appraiser_hall"
+  },
+  "entry": "hub_router",
+  "nodes": [
+    {
+      "kind": "branch",
+      "id": "hub_router",
+      "branches": [
+        {
+          "when": {
+            "kind": "deaths",
+            "op": "gte",
+            "value": 1
+          },
+          "to": "hub_after_death"
+        }
+      ],
+      "fallback": "hub_in"
+    },
+    {
+      "kind": "say",
+      "id": "hub_after_death",
+      "speaker": "klyost",
+      "text": {
+        "ru": "Вы вчера рассыпались. Я стоял рядом, пока вас не смели в мешок.",
+        "en": "You came apart yesterday. I stood there until they swept you into a sack."
+      },
+      "next": "hub_after_death2"
+    },
+    {
+      "kind": "say",
+      "id": "hub_after_death2",
+      "speaker": "klyost",
+      "text": {
+        "ru": "Короче, я никому не сказал. Всё равно бы не поверили: меня же не помнят.",
+        "en": "So anyway, I told nobody. They wouldn't believe me: nobody remembers me."
+      },
+      "next": "hub_in"
+    },
+    {
+      "kind": "narration",
+      "id": "hub_in",
+      "text": {
+        "ru": "Закладная сторона к вечеру пустеет: конторы закрываются по одной, и каждая вывешивает свой курс на завтра. Курсы разные — договориться они не успевают никогда.",
+        "en": "The Pledge Side empties towards evening: the offices shut one by one, each posting its rate for tomorrow. The rates differ — they never manage to agree in time."
+      },
+      "next": "hub_klyost_seat"
+    },
+    {
+      "kind": "narration",
+      "id": "hub_klyost_seat",
+      "text": {
+        "ru": "Клёст сидит на тумбе у водостока и болтает ногами в такт чужим шагам. Мимо проходят четверо, и никто из них его не обходит — обходят тумбу.",
+        "en": "Crossbill sits on a bollard by the drain, swinging his legs in time with other people's steps. Four of them go by, and not one walks around him — they walk around the bollard."
+      },
+      "next": "klyost_tips"
+    },
+    {
+      "kind": "say",
+      "id": "klyost_tips",
+      "speaker": "klyost",
+      "text": {
+        "ru": "Пуговица! Короче: на мостках с утра труха, стража уже там. У Жички новый товар, тёплый.",
+        "en": "Button! So: there's dust on the boardwalk since morning, the watch is already there. Zhichka's got new stock, still warm."
+      },
+      "keywords": [
+        {
+          "match": {
+            "ru": "труха",
+            "en": "dust"
+          },
+          "tone": "danger"
+        }
+      ],
+      "next": "klyost_tips2"
+    },
+    {
+      "kind": "say",
+      "id": "klyost_tips2",
+      "speaker": "klyost",
+      "text": {
+        "ru": "А на Том берегу хоронят чайник, сегодня в три. Я сам слышал. Или в четверг.",
+        "en": "And on the Other Bank they're burying a teapot, three o'clock today. I heard it myself. Or Thursday."
+      },
+      "next": "hub_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "hub_choice",
+      "prompt": {
+        "ru": "До темноты успеть можно в одно место.",
+        "en": "There is time for one place before dark."
+      },
+      "options": [
+        {
+          "id": "to_pier",
+          "text": {
+            "ru": "На мостки Слузы.",
+            "en": "To the Sluza boardwalk."
+          },
+          "conditions": {
+            "kind": "not",
+            "of": {
+              "kind": "visited",
+              "scene": "pier_dust"
+            }
+          },
+          "to": "scene:pier_dust"
+        },
+        {
+          "id": "to_rows",
+          "text": {
+            "ru": "В Мокрые ряды, к Жичке.",
+            "en": "To the Wet Rows, to Zhichka."
+          },
+          "conditions": {
+            "kind": "not",
+            "of": {
+              "kind": "visited",
+              "scene": "wet_rows"
+            }
+          },
+          "to": "scene:wet_rows"
+        },
+        {
+          "id": "to_garden",
+          "text": {
+            "ru": "За реку, на огород Братства.",
+            "en": "Across the river, to the Brotherhood's garden."
+          },
+          "conditions": {
+            "kind": "not",
+            "of": {
+              "kind": "visited",
+              "scene": "other_bank_garden"
+            }
+          },
+          "to": "scene:other_bank_garden"
+        },
+        {
+          "id": "to_errand",
+          "text": {
+            "ru": "С Клёстом по чёрной лестнице.",
+            "en": "With Crossbill up the back stairs."
+          },
+          "conditions": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "flag",
+                "flag": "klyost_named"
+              },
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "visited",
+                  "scene": "klyost_errand"
+                }
+              }
+            ]
+          },
+          "to": "scene:klyost_errand"
+        },
+        {
+          "id": "to_reading",
+          "text": {
+            "ru": "В читальню архива.",
+            "en": "To the archive reading room."
+          },
+          "conditions": {
+            "kind": "counter",
+            "counter": "errands_done",
+            "op": "gte",
+            "value": 2
+          },
+          "to": "scene:reading_room"
+        },
+        {
+          "id": "to_hire",
+          "text": {
+            "ru": "К стене найма под навесом.",
+            "en": "To the hiring wall under the awning."
+          },
+          "priority": 3,
+          "to": "scene:hire_wall"
+        },
+        {
+          "id": "ask_klyost",
+          "text": {
+            "ru": "Спросить мальчишку, где он врёт.",
+            "en": "Ask the boy where he is lying."
+          },
+          "to": "klyost_lie_answer"
+        },
+        {
+          "id": "read_board",
+          "text": {
+            "ru": "Прочитать доску объявлений.",
+            "en": "Read the notice board."
+          },
+          "to": "hub_board"
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "klyost_lie_answer",
+      "speaker": "klyost",
+      "text": {
+        "ru": "Я не вру. Я из трёх раз один раз ошибаюсь и сам не знаю какой.",
+        "en": "I'm not lying. One time in three I get it wrong and I don't know which one."
+      },
+      "next": "hub_choice"
+    },
+    {
+      "kind": "lore",
+      "id": "hub_board",
+      "title": {
+        "ru": "Доска у фонаря",
+        "en": "The board by the lamp"
+      },
+      "text": {
+        "ru": "«Ревизия. Сверка Учёта начнётся в срок. Гражданам надлежит держать при себе описи имущества, памяти и долгов. Расхождения устраняются на месте». Ниже, мелом и другой рукой: «Никто не знает, что это значит. Спросили у Ломбарда — Ломбард сказал, что готов».",
+        "en": "\"The Audit. Reconciliation of the Reckoning will begin on schedule. Citizens are to keep with them inventories of property, memory and debt. Discrepancies are resolved on the spot.\" Below, in chalk and another hand: \"Nobody knows what this means. We asked the Pawnshop; the Pawnshop said it was ready.\""
+      },
+      "next": "hub_choice"
+    }
+  ]
+}

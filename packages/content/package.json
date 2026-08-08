@@ -1,0 +1,29 @@
+{
+  "name": "@nameless/content",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./schema": "./src/schema.ts",
+    "./procedural": "./assets/procedural/procedural.ts",
+    "./palette.css": "./assets/palette.css"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "gen": "tsx src/gen-index.ts",
+    "validate": "pnpm gen && tsx src/cli-validate.ts",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@nameless/engine": "workspace:*",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3",
+    "tsx": "^4.19.2",
+    "vitest": "^3.0.5"
+  }
+}

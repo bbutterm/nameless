@@ -1,0 +1,775 @@
+{
+  "id": "witness_work",
+  "chapter": 2,
+  "title": {
+    "ru": "Работа понятым",
+    "en": "Work as a Witness"
+  },
+  "tags": [
+    "lombard",
+    "guard",
+    "no_combat"
+  ],
+  "available": {
+    "kind": "all",
+    "of": [
+      {
+        "kind": "flag",
+        "flag": "signed_insolvent"
+      },
+      {
+        "kind": "axis",
+        "axis": "honesty_deceit",
+        "op": "gte",
+        "value": 40
+      }
+    ]
+  },
+  "entry": "witness_in",
+  "nodes": [
+    {
+      "kind": "narration",
+      "id": "witness_in",
+      "text": {
+        "ru": "Понятых берут по книге посетителей: писарь листает, стража тычет пальцем. Твоя строка стоит в книге читальни одна такая — без фамилии, но с занятием.",
+        "en": "Witnesses are taken from the visitors' book: the scribe turns the pages, the guard puts a finger on a line. Your line in the reading-room book is the only one of its kind — no surname, but an occupation."
+      },
+      "next": "dratva_hire"
+    },
+    {
+      "kind": "say",
+      "id": "dratva_hire",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Сделка добровольная, стороны две, понятых нужно двое. Второй у меня есть, второй всегда есть. Первого ищут неделю.",
+        "en": "The deal is voluntary, there are two parties, and two witnesses are required. I have the second, there is always a second. It is the first that takes a week to find."
+      },
+      "next": "dratva_hire2"
+    },
+    {
+      "kind": "say",
+      "id": "dratva_hire2",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Оплата девять грошей и обед. Обед сегодня не привезли, статья про обозы. Девять грошей на месте.",
+        "en": "Payment is nine groschen and a meal. The meal did not arrive today, the article about wagon trains. The nine groschen are here."
+      },
+      "next": "room_narr"
+    },
+    {
+      "kind": "narration",
+      "id": "room_narr",
+      "text": {
+        "ru": "Комната приёма маленькая, стол один, стулья привинчены. Продающая сидит прямо и держит руки на коленях, как держат в конторе, где нельзя ничего трогать.",
+        "en": "The intake room is small, one table, the chairs bolted down. The woman selling sits upright with her hands on her knees, the way people sit in an office where nothing may be touched."
+      },
+      "next": "otsen_1"
+    },
+    {
+      "kind": "say",
+      "id": "otsen_1",
+      "speaker": "otsenshchik",
+      "text": {
+        "ru": "Пункт девятнадцатый: привязанность к живущему, полная, двадцать два года носки. Шесть грошей, и это не мало, это ношеное.",
+        "en": "Clause nineteen: attachment to a living person, complete, twenty-two years of wear. Six groschen, and that is not little, that is second-hand."
+      },
+      "next": "otsen_2"
+    },
+    {
+      "kind": "say",
+      "id": "otsen_2",
+      "speaker": "otsenshchik",
+      "text": {
+        "ru": "Свежая пошла бы за одиннадцать. Свежих в этой графе не бывает: пока привязанность свежая, её не продают.",
+        "en": "A fresh one would fetch eleven. There are never fresh ones in this column: while the attachment is fresh, it is not sold."
+      },
+      "next": "seller_line"
+    },
+    {
+      "kind": "narration",
+      "id": "seller_line",
+      "text": {
+        "ru": "Продающая уточняет одно: останется ли она помнить, что он есть. Ей отвечают, что останется — уйдёт только то, отчего он ей нужен. Она кивает и говорит, что это подходит.",
+        "en": "The woman selling asks one thing: will she still remember that he exists. She is told that she will — what goes is only the part that makes her need him. She nods and says that will do."
+      },
+      "keywords": [
+        {
+          "match": {
+            "ru": "это подходит",
+            "en": "that will do"
+          },
+          "tone": "danger"
+        }
+      ],
+      "next": "lore_form"
+    },
+    {
+      "kind": "lore",
+      "id": "lore_form",
+      "title": {
+        "ru": "Бланк ЗД-4: обязанности понятого",
+        "en": "Form PD-4: duties of the witness"
+      },
+      "text": {
+        "ru": "«Понятой удостоверяет: сторона находилась в своём уме, слышала цену, слышала последствия и после этого не передумала. Понятой не удостоверяет: что цена справедлива. Оценка справедливости в обязанности понятого не входит и в бланке места не имеет». На обороте, приписанное от руки: «Место просили. Отказано».",
+        "en": "\"The witness certifies: that the party was in her right mind, heard the price, heard the consequences, and did not change her mind thereafter. The witness does not certify: that the price is fair. Assessment of fairness forms no part of the witness's duties and has no space on this form.\" On the reverse, added by hand: \"Space was requested. Denied.\""
+      },
+      "next": "sign_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "sign_choice",
+      "prompt": {
+        "ru": "Перо кладут перед тобой первым: первый понятой подписывает раньше сторон.",
+        "en": "The pen is set before you first: the first witness signs before the parties do."
+      },
+      "options": [
+        {
+          "id": "sign_plain",
+          "text": {
+            "ru": "Подписать как есть.",
+            "en": "Sign it as it stands."
+          },
+          "fallback": true,
+          "effects": [
+            {
+              "kind": "gold",
+              "delta": 9
+            },
+            {
+              "kind": "flag",
+              "flag": "witness_paid",
+              "value": true
+            }
+          ],
+          "to": "r_sign_plain",
+          "priority": 6
+        },
+        {
+          "id": "sign_note",
+          "text": {
+            "ru": "Подписать и вписать замечание на обороте.",
+            "en": "Sign, and add a remark on the reverse."
+          },
+          "fallback": true,
+          "effects": [
+            {
+              "kind": "fragment",
+              "memory": "khronika_bez_popravok",
+              "amount": 2
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 8
+            },
+            {
+              "kind": "gold",
+              "delta": 9
+            },
+            {
+              "kind": "flag",
+              "flag": "witness_paid",
+              "value": true
+            }
+          ],
+          "to": "r_sign_note",
+          "priority": 8
+        },
+        {
+          "id": "refuse_sign",
+          "text": {
+            "ru": "Не подписывать. Уйти без денег.",
+            "en": "Not sign. Leave without the money."
+          },
+          "fallback": true,
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": -5
+            }
+          ],
+          "to": "r_refuse_sign",
+          "priority": 6
+        },
+        {
+          "id": "read_aloud_all",
+          "text": {
+            "ru": "Прочитать ей бланк вслух. Весь.",
+            "en": "Read her the whole form aloud."
+          },
+          "chip": {
+            "icon": "book",
+            "label": {
+              "ru": "Чистописец",
+              "en": "Chistopisets"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "chistopisets"
+          },
+          "effects": [
+            {
+              "kind": "fragment",
+              "memory": "god_goloy_pravdy",
+              "amount": 2
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 15
+            },
+            {
+              "kind": "gold",
+              "delta": 9
+            },
+            {
+              "kind": "flag",
+              "flag": "witness_paid",
+              "value": true
+            }
+          ],
+          "to": "r_read_aloud",
+          "priority": 7
+        },
+        {
+          "id": "pay_instead",
+          "text": {
+            "ru": "Выкупить сделку. Пусть уйдёт с памятью.",
+            "en": "Buy the deal out. Let her keep it."
+          },
+          "chip": {
+            "icon": "heal",
+            "label": {
+              "ru": "Ключарь",
+              "en": "Klyuchar"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "klyuchar"
+          },
+          "effects": [
+            {
+              "kind": "fragment",
+              "memory": "poslednyaya_kruzhka",
+              "amount": 2
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": 15
+            },
+            {
+              "kind": "counter",
+              "counter": "debts_forgiven",
+              "delta": 1
+            },
+            {
+              "kind": "gold",
+              "delta": -6
+            }
+          ],
+          "to": "r_pay_instead",
+          "priority": 7
+        },
+        {
+          "id": "check_price",
+          "text": {
+            "ru": "Сверить цену с прейскурантом при всех.",
+            "en": "Check the price against the list, in front of everyone."
+          },
+          "chip": {
+            "icon": "hourglass",
+            "label": {
+              "ru": "Перечень",
+              "en": "Perechen"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "perechen"
+          },
+          "effects": [
+            {
+              "kind": "fragment",
+              "memory": "opis_vsego_sushchego",
+              "amount": 2
+            },
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -8
+            },
+            {
+              "kind": "gold",
+              "delta": 9
+            },
+            {
+              "kind": "flag",
+              "flag": "witness_paid",
+              "value": true
+            }
+          ],
+          "to": "r_check_price",
+          "priority": 5
+        },
+        {
+          "id": "promise_her",
+          "text": {
+            "ru": "Пообещать ей выкупить лот к четвергу.",
+            "en": "Promise her I will redeem the lot by Thursday."
+          },
+          "chip": {
+            "icon": "coin",
+            "label": {
+              "ru": "Посульщик",
+              "en": "Posulshchik"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "posulshchik"
+          },
+          "effects": [
+            {
+              "kind": "fragment",
+              "memory": "luchshie_gody",
+              "amount": 2
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": -15
+            },
+            {
+              "kind": "counter",
+              "counter": "promises_given",
+              "delta": 1
+            },
+            {
+              "kind": "gold",
+              "delta": 9
+            },
+            {
+              "kind": "flag",
+              "flag": "witness_paid",
+              "value": true
+            }
+          ],
+          "to": "r_promise_her",
+          "priority": 6
+        },
+        {
+          "id": "ask_her_name",
+          "text": {
+            "ru": "Спросить у неё имя того, кто живой.",
+            "en": "Ask her the name of the living man."
+          },
+          "conditions": {
+            "kind": "axis",
+            "axis": "mercy_cruelty",
+            "op": "gte",
+            "value": 30
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": 5
+            },
+            {
+              "kind": "gold",
+              "delta": 9
+            },
+            {
+              "kind": "flag",
+              "flag": "witness_paid",
+              "value": true
+            }
+          ],
+          "to": "r_ask_name"
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "r_sign_plain",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Подпись понятого, время, номер. Быстро и без разговоров — так и надо, разговоры тут удлиняют только одну сторону.",
+        "en": "Witness's signature, time, number. Fast and without conversation — as it should be; conversation here only draws out one of the parties."
+      },
+      "next": "rumor_bridge"
+    },
+    {
+      "kind": "narration",
+      "id": "r_sign_note",
+      "text": {
+        "ru": "На обороте ты пишешь: «цена названа один раз; сторона переспросила про мужа дважды». Оценщик читает, пожимает плечами и подшивает: замечание бланком не запрещено, а значит, подшивается.",
+        "en": "On the reverse you write: \"the price was stated once; the party asked twice about her husband\". The appraiser reads it, shrugs and files it: a remark is not forbidden by the form, and therefore it is filed."
+      },
+      "next": "rumor_bridge"
+    },
+    {
+      "kind": "say",
+      "id": "r_refuse_sign",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Отказ понятого заносится и ничего не меняет: возьмут следующего из книги. Заношу. Вы теперь в третьей графе, а третью графу читают в конце года.",
+        "en": "A witness's refusal is entered and changes nothing: they will take the next one from the book. Entering it. You are in the third column now, and the third column gets read at the end of the year."
+      },
+      "next": "rumor_bridge"
+    },
+    {
+      "kind": "narration",
+      "id": "r_read_aloud",
+      "text": {
+        "ru": "Ты читаешь бланк целиком, включая приписку «место просили, отказано». На словах про справедливость продающая впервые поднимает глаза, и оценщик ждёт, потому что перебивать чтение бланка не положено.",
+        "en": "You read the form entire, including the note \"space was requested, denied\". At the words about fairness the woman selling looks up for the first time, and the appraiser waits, because interrupting the reading of a form is not permitted."
+      },
+      "next": "rumor_bridge"
+    },
+    {
+      "kind": "narration",
+      "id": "r_pay_instead",
+      "text": {
+        "ru": "Шесть грошей ты кладёшь на стол сам, и сделка закрывается как несостоявшаяся. Женщина уходит, дважды обернувшись, и вторая сторона в тот же вечер приходит с той же привязанностью и продаёт её за пять.",
+        "en": "You put the six groschen on the table yourself and the deal closes as not concluded. The woman leaves, looking back twice, and that same evening the other party comes in with the same attachment and sells it for five."
+      },
+      "next": "rumor_bridge"
+    },
+    {
+      "kind": "say",
+      "id": "r_check_price",
+      "speaker": "otsenshchik",
+      "text": {
+        "ru": "Пункт девятнадцатый, столбец «двадцать лет и выше» — семь, а не шесть. Минус грош я взял за пятно на манжете, и пятно к делу не относится. Исправляю.",
+        "en": "Clause nineteen, column \"twenty years and over\" — seven, not six. I took a groschen off for the stain on her cuff, and the stain is not material. Correcting it."
+      },
+      "next": "rumor_bridge"
+    },
+    {
+      "kind": "narration",
+      "id": "r_promise_her",
+      "text": {
+        "ru": "Ты обещаешь выкупить лот к четвергу, и она записывает четверг на ладони химическим карандашом. К четвергу лот уйдёт в общую партию, а ладонь она вымоет в среду вечером.",
+        "en": "You promise to redeem the lot by Thursday, and she writes Thursday on her palm in indelible pencil. By Thursday the lot will have gone into the general consignment, and she will wash her palm on Wednesday evening."
+      },
+      "next": "rumor_bridge"
+    },
+    {
+      "kind": "narration",
+      "id": "r_ask_name",
+      "text": {
+        "ru": "Имя она называет охотно и по слогам, будто рада, что спросили не про цену. Оценщик записывает имя в графу «объект» и просит больше при клиенте таких вопросов не задавать.",
+        "en": "She gives the name readily and syllable by syllable, as if glad to be asked about something other than the price. The appraiser enters the name in the column \"object\" and asks that such questions not be put in front of a client again."
+      },
+      "next": "rumor_bridge"
+    },
+    {
+      "kind": "narration",
+      "id": "rumor_bridge",
+      "text": {
+        "ru": "Пока сушат подписи, оценщик и Дратва говорят между собой о своём, не понижая голоса: понятой считается частью мебели, пока не встал со стула.",
+        "en": "While the signatures dry, the appraiser and Dratva talk among themselves without lowering their voices: a witness counts as part of the furniture until he gets up from his chair."
+      },
+      "next": "rumor_otsen"
+    },
+    {
+      "kind": "say",
+      "id": "rumor_otsen",
+      "speaker": "otsenshchik",
+      "text": {
+        "ru": "Сверку в этом месяце шлют вниз, к обеспечению, и оттуда возвращают неподписанной. Три раза подряд. Такого не было ни разу, а строка для этого в бланке есть.",
+        "en": "This month the reconciliations are sent down to the holdings and come back unsigned. Three times running. That has never happened once, and yet the form has a line for it."
+      },
+      "keywords": [
+        {
+          "match": {
+            "ru": "возвращают неподписанной",
+            "en": "come back unsigned"
+          },
+          "tone": "danger"
+        }
+      ],
+      "next": "rumor_dratva"
+    },
+    {
+      "kind": "say",
+      "id": "rumor_dratva",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Ревизия сверяет не город. Ревизия сверяет одну строку, и строка эта ходит. Статья про подвижное имущество, пункт грустный.",
+        "en": "The Audit is not reconciling the city. The Audit is reconciling one line, and that line walks about. The article on movable property, the sad clause."
+      },
+      "next": "pay_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "pay_choice",
+      "prompt": {
+        "ru": "Девять грошей лежат столбиком, отсчитанные заранее.",
+        "en": "Nine groschen lie in a stack, counted out in advance."
+      },
+      "options": [
+        {
+          "id": "take_pay",
+          "text": {
+            "ru": "Взять девять и уйти.",
+            "en": "Take the nine and go."
+          },
+          "fallback": true,
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": 3
+            }
+          ],
+          "to": "r_take_pay"
+        },
+        {
+          "id": "give_seller",
+          "text": {
+            "ru": "Отдать девять продающей.",
+            "en": "Give the nine to the woman selling."
+          },
+          "fallback": true,
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": 8
+            },
+            {
+              "kind": "counter",
+              "counter": "debts_forgiven",
+              "delta": 1
+            },
+            {
+              "kind": "gold",
+              "delta": -9
+            }
+          ],
+          "to": "r_give_seller"
+        },
+        {
+          "id": "ask_more_work",
+          "text": {
+            "ru": "Спросить, будет ли работа завтра.",
+            "en": "Ask whether there is work tomorrow."
+          },
+          "fallback": true,
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": 3
+            }
+          ],
+          "to": "r_more_work"
+        },
+        {
+          "id": "ask_unsigned",
+          "text": {
+            "ru": "Спросить, кто внизу не подписывает сверку.",
+            "en": "Ask who below is not signing the reconciliation."
+          },
+          "conditions": {
+            "kind": "axis",
+            "axis": "reason_obsession",
+            "op": "lte",
+            "value": -20
+          },
+          "effects": [
+            {
+              "kind": "fragment",
+              "memory": "opis_vsego_sushchego",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -8
+            }
+          ],
+          "to": "r_unsigned",
+          "priority": 6
+        },
+        {
+          "id": "ask_line_walks",
+          "text": {
+            "ru": "Спросить Дратву, чья это строка.",
+            "en": "Ask Dratva whose line that is."
+          },
+          "conditions": {
+            "kind": "flag",
+            "flag": "contract_read"
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 5
+            }
+          ],
+          "to": "r_line_walks",
+          "priority": 6
+        },
+        {
+          "id": "take_and_note",
+          "text": {
+            "ru": "Взять деньги и записать сегодняшний день.",
+            "en": "Take the money and write the day down."
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "chistopisets"
+          },
+          "chip": {
+            "icon": "book",
+            "label": {
+              "ru": "Чистописец",
+              "en": "Chistopisets"
+            },
+            "tone": "life"
+          },
+          "effects": [
+            {
+              "kind": "fragment",
+              "memory": "khronika_bez_popravok",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 5
+            }
+          ],
+          "to": "r_take_note",
+          "priority": 5
+        },
+        {
+          "id": "buy_her_lot_back",
+          "text": {
+            "ru": "Выкупить лот у Ломбарда за девять.",
+            "en": "Buy the lot back from the Pawnshop for nine."
+          },
+          "conditions": {
+            "kind": "axis",
+            "axis": "grasp_release",
+            "op": "lte",
+            "value": -30
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": -8
+            },
+            {
+              "kind": "counter",
+              "counter": "debts_forgiven",
+              "delta": 1
+            }
+          ],
+          "to": "r_buy_back_lot",
+          "priority": 5
+        }
+      ]
+    },
+    {
+      "kind": "narration",
+      "id": "r_take_pay",
+      "text": {
+        "ru": "Девять грошей, отсчитанные заранее, — единственные деньги в этом городе, которые тебе достались за то, что ты просто смотрел и не отводил глаз.",
+        "en": "Nine groschen, counted out in advance: the only money in this city you have ever been given for simply looking and not looking away."
+      },
+      "next": "witness_out"
+    },
+    {
+      "kind": "say",
+      "id": "r_give_seller",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Передача оплаты понятого стороне сделки уставом не предусмотрена. Оформлю как утерю. Она их не пересчитает, я смотрела.",
+        "en": "The transfer of a witness's pay to a party to the deal is not provided for in the regulations. I shall file it as a loss. She will not count them, I was watching."
+      },
+      "next": "witness_out"
+    },
+    {
+      "kind": "say",
+      "id": "r_more_work",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Завтра четыре сделки, послезавтра одиннадцать. Перед Ревизией все спешат продать то, что при сверке пришлось бы объяснять.",
+        "en": "Four deals tomorrow, eleven the day after. Ahead of the Audit everyone hurries to sell whatever they would have to explain at the reconciliation."
+      },
+      "next": "witness_out"
+    },
+    {
+      "kind": "say",
+      "id": "r_unsigned",
+      "speaker": "otsenshchik",
+      "text": {
+        "ru": "Внизу подписывает ответственный за обеспечение. Кто это — в штате не значится, жалованья не получает, и на моей памяти вниз спускали только бумаги.",
+        "en": "Below, it is signed by the party responsible for the holdings. Who that is does not appear on the staff list, draws no salary, and in my time only papers have ever gone down there."
+      },
+      "next": "witness_out"
+    },
+    {
+      "kind": "say",
+      "id": "r_line_walks",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Не знаю и знать не полагается. Знаю другое: строка эта у нас проходит по делу номер один, а дел с номером один в журнале не бывает.",
+        "en": "I do not know and I am not supposed to. I know something else: that line runs under case number one here, and there are no cases numbered one in the journal."
+      },
+      "keywords": [
+        {
+          "match": {
+            "ru": "делу номер один",
+            "en": "case number one"
+          },
+          "tone": "danger"
+        }
+      ],
+      "next": "witness_out"
+    },
+    {
+      "kind": "narration",
+      "id": "r_take_note",
+      "text": {
+        "ru": "Ты записываешь день на обороте описи: комната, цена, два вопроса про мужа, время подписи. Пишешь, пока помнишь точно, и на этом останавливаешься.",
+        "en": "You write the day down on the back of the inventory: the room, the price, two questions about the husband, the time of signing. You write while you still remember it exactly, and there you stop."
+      },
+      "next": "witness_out"
+    },
+    {
+      "kind": "say",
+      "id": "r_buy_back_lot",
+      "speaker": "otsenshchik",
+      "text": {
+        "ru": "Обратный выкуп в тот же день — двойная цена, пункт двадцать второй. За девять я вам отдам половину, а половину привязанности не носят, её только хранят.",
+        "en": "Repurchase on the same day is double price, clause twenty-two. For nine I can let you have half, and half an attachment is not worn, it is only stored."
+      },
+      "next": "witness_out"
+    },
+    {
+      "kind": "narration",
+      "id": "witness_out",
+      "text": {
+        "ru": "Стулья тут привинчены, чтобы никто не отодвинулся от стола. Ты встаёшь первым, и это единственное, что понятому разрешено делать по своему усмотрению.",
+        "en": "The chairs here are bolted down so that nobody can push back from the table. You stand up first, and that is the only thing a witness is permitted to do at his own discretion."
+      },
+      "next": "scene:vaults_hub"
+    }
+  ]
+}

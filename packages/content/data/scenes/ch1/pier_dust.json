@@ -1,0 +1,674 @@
+{
+  "id": "pier_dust",
+  "chapter": 1,
+  "title": { "ru": "Труха на мостках", "en": "Dust on the Boardwalk" },
+  "tags": ["errand", "combat"],
+  "available": {
+    "kind": "all",
+    "of": [
+      { "kind": "visited", "scene": "appraiser_hall" },
+      { "kind": "not", "of": { "kind": "visited", "scene": "pier_dust" } }
+    ]
+  },
+  "entry": "pier_in",
+  "nodes": [
+    {
+      "kind": "narration",
+      "id": "pier_in",
+      "text": {
+        "ru": "На мостках лежит одежда, набитая серым. Пальто застёгнуто на все пуговицы, и это единственное, что о покойном ещё известно точно.",
+        "en": "On the boardwalk lies a set of clothes packed with grey. The coat is buttoned to the top, and that is the only thing still known for certain about the dead man."
+      },
+      "keywords": [{ "match": { "ru": "серым", "en": "grey" }, "tone": "memory" }],
+      "next": "dratva_1"
+    },
+    {
+      "kind": "say",
+      "id": "dratva_1",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Труха мужская, при одежде. Седьмое дело за неделю. Оцепить.",
+        "en": "Male dust, clothed. Seventh case this week. Cordon it."
+      },
+      "next": "dratva_2"
+    },
+    {
+      "kind": "say",
+      "id": "dratva_2",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Статья восьмая, пункт грустный. Виновных нет, ответственный есть, и он лежит.",
+        "en": "Article eight, the sad clause. There are no guilty parties, there is a responsible party, and he is lying down."
+      },
+      "next": "pier_article"
+    },
+    {
+      "kind": "lore",
+      "id": "pier_article",
+      "title": { "ru": "Устав стражи залоговых споров, ст. 8", "en": "Charter of the Pledge-Dispute Watch, art. 8" },
+      "text": {
+        "ru": "«Если выцветший не оставил описи, имущество его считается ничьим по истечении шести часов. До истечения шести часов имущество считается его, но взыскивать некому». Пункт «грустный» внесён капралом Дратвой в позапрошлом году. В типографском издании устава его нет. На это никто не жалуется: пункт удобный.",
+        "en": "\"Where the faded left no inventory, his property is deemed nobody's after six hours have passed. Before six hours have passed the property is deemed his, but there is nobody to claim from.\" The \"sad clause\" was entered by Corporal Dratva the year before last. It does not appear in the printed charter. Nobody complains: the clause is convenient."
+      },
+      "next": "pier_marauders"
+    },
+    {
+      "kind": "narration",
+      "id": "pier_marauders",
+      "text": {
+        "ru": "Двое из Цеха работают в четырёх шагах от оцепления, не торопясь. У одного на поясе весы, у второго — список того, что берут.",
+        "en": "Two men of the Guild are working four paces from the cordon, unhurried. One has a scale on his belt, the other a list of what they take."
+      },
+      "next": "marodyor_1"
+    },
+    {
+      "kind": "say",
+      "id": "marodyor_1",
+      "speaker": "marodyor",
+      "text": {
+        "ru": "Я не граблю. Я опережаю опись. Через шесть часов это ничьё и стоит вдвое дешевле.",
+        "en": "I am not robbing. I am outrunning the inventory. In six hours this is nobody's and worth half."
+      },
+      "next": "klyost_pier"
+    },
+    {
+      "kind": "say",
+      "id": "klyost_pier",
+      "speaker": "klyost",
+      "text": {
+        "ru": "Пуговица, я тут ничего не трогал. Я вообще не был. Меня тут даже не видели.",
+        "en": "Button, I didn't touch anything here. I wasn't even here. Nobody even saw me here."
+      },
+      "next": "voice_2"
+    },
+    {
+      "kind": "narration",
+      "id": "voice_2",
+      "text": {
+        "ru": "На бухте каната сидит свидетельница. Пальцы у неё уже не отбрасывают тени, и говорит она быстрее обычного — чтобы успеть.",
+        "en": "A witness sits on a coil of rope. Her fingers cast no shadow any more, and she talks faster than people talk — to get it out in time."
+      },
+      "next": "voice_1"
+    },
+    {
+      "kind": "say",
+      "id": "voice_1",
+      "speaker": "golos_iz_trukhi",
+      "text": {
+        "ru": "Он шёл с мешком. В мешке было... было... Я помню, что помнила. Это тоже считается?",
+        "en": "He was walking with a sack. In the sack there was... there was... I remember that I remembered. Does that count too?"
+      },
+      "next": "voice_3"
+    },
+    {
+      "kind": "narration",
+      "id": "voice_3",
+      "text": {
+        "ru": "У неё на шнурке пустая склянка. Шнурок соскальзывает с руки, которая уже не совсем рука, и склянка уходит между досок в Слузу.",
+        "en": "An empty flask hangs from a cord at her wrist. The cord slips off a hand that is no longer entirely a hand, and the flask goes down between the boards into the Sluza."
+      },
+      "next": "toll_choice"
+    },
+
+    {
+      "kind": "choice",
+      "id": "toll_choice",
+      "prompt": { "ru": "Она смотрит туда, где склянки уже нет.", "en": "She looks at the place where the flask no longer is." },
+      "options": [
+        {
+          "id": "free_help",
+          "text": { "ru": "Достать багром. Бесплатно.", "en": "Fish it out with a hook. For nothing." },
+          "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": 8 }],
+          "to": "r_toll_free"
+        },
+        {
+          "id": "take_payment",
+          "text": { "ru": "Достать. За плату.", "en": "Fish it out. For a fee." },
+          "effects": [
+            { "kind": "fragment", "memory": "smola_na_vode", "amount": 1 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": -10 },
+            { "kind": "gold", "delta": 6 }
+          ],
+          "to": "r_toll_paid"
+        },
+        {
+          "id": "into_water",
+          "text": { "ru": "Лезть за склянкой в Слузу.", "en": "Go into the Sluza after the flask." },
+          "to": "sluza_under"
+        },
+        {
+          "id": "walk_past",
+          "text": { "ru": "Не вмешиваться.", "en": "Stay out of it." },
+          "to": "r_toll_past"
+        },
+        {
+          "id": "sit_with_her",
+          "text": { "ru": "Сесть рядом и досидеть с ней.", "en": "Sit down beside her and stay." },
+          "chip": { "icon": "heal", "label": { "ru": "Ключарь", "en": "Klyuchar" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "klyuchar" },
+          "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": 8 }],
+          "to": "r_toll_free"
+        },
+        {
+          "id": "promise_flask",
+          "text": { "ru": "Пообещать вернуть склянку к четвергу.", "en": "Promise the flask back by Thursday." },
+          "chip": { "icon": "coin", "label": { "ru": "Посульщик", "en": "Posulshchik" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "posulshchik" },
+          "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": -8 }],
+          "to": "r_toll_promise"
+        },
+        {
+          "id": "write_her_down",
+          "text": { "ru": "Записать всё, что она ещё помнит.", "en": "Write down everything she still remembers." },
+          "chip": { "icon": "hourglass", "label": { "ru": "Перечень", "en": "Perechen" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "perechen" },
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": -5 }],
+          "to": "r_toll_write"
+        },
+        {
+          "id": "what_else",
+          "text": { "ru": "Спросить, что у неё осталось ценного.", "en": "Ask what she has left that is worth anything." },
+          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -25 },
+          "effects": [
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": -5 },
+            { "kind": "gold", "delta": 4 }
+          ],
+          "to": "r_toll_paid"
+        },
+        {
+          "id": "tell_her_truth",
+          "text": { "ru": "Сказать прямо: вас уже забыли.", "en": "Tell her plainly: you have been forgotten." },
+          "conditions": { "kind": "axis", "axis": "honesty_deceit", "op": "gte", "value": 25 },
+          "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": 5 }],
+          "to": "r_toll_truth"
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "r_toll_free",
+      "speaker": "golos_iz_trukhi",
+      "text": {
+        "ru": "Она пустая, я знаю. Я в неё двадцать лет ничего не клала — берегла.",
+        "en": "It is empty, I know. For twenty years I put nothing in it — I was saving it."
+      },
+      "next": "pier_turn"
+    },
+    {
+      "kind": "say",
+      "id": "r_toll_paid",
+      "speaker": "golos_iz_trukhi",
+      "text": {
+        "ru": "Возьмите с левого рукава, там ещё зашито. Правый я уже отдала.",
+        "en": "Take it from my left sleeve, there is still something sewn in. The right one I have given already."
+      },
+      "next": "pier_turn"
+    },
+    {
+      "kind": "narration",
+      "id": "r_toll_past",
+      "text": {
+        "ru": "Ты отходишь. Через минуту она перестаёт смотреть на воду и начинает смотреть на свои руки — их видно уже хуже, чем канат под ними.",
+        "en": "You step away. A minute later she stops looking at the water and starts looking at her hands — they show up worse now than the rope beneath them."
+      },
+      "next": "pier_turn"
+    },
+    {
+      "kind": "say",
+      "id": "r_toll_promise",
+      "speaker": "golos_iz_trukhi",
+      "text": {
+        "ru": "К четвергу. Хорошо. Я запишу на руке, пока рука пишется.",
+        "en": "By Thursday. Good. I will write it on my hand while my hand still writes."
+      },
+      "next": "pier_turn"
+    },
+    {
+      "kind": "say",
+      "id": "r_toll_write",
+      "speaker": "golos_iz_trukhi",
+      "text": {
+        "ru": "Пишите: колодец во дворе, брат Сеня, вода по средам. Всё, дальше пусто.",
+        "en": "Write: well in the yard, brother Senya, water on Wednesdays. That is all, after that it is empty."
+      },
+      "next": "pier_turn"
+    },
+    {
+      "kind": "say",
+      "id": "r_toll_truth",
+      "speaker": "golos_iz_trukhi",
+      "text": {
+        "ru": "Да. Я потому и тороплюсь. Спасибо, что не соврали, — врут все.",
+        "en": "Yes. That is why I am hurrying. Thank you for not lying — everyone lies."
+      },
+      "next": "pier_turn"
+    },
+    {
+      "kind": "narration",
+      "id": "sluza_under",
+      "text": {
+        "ru": "Слуза не холодная и не глубокая. Она просто мутная, и в ней ровно на один вдох больше ила, чем нужно человеку, который лезет за пустой склянкой.",
+        "en": "The Sluza is neither cold nor deep. It is merely thick, and it holds exactly one breath more silt than a man needs who is climbing in after an empty flask."
+      },
+      "next": "dying_sluza"
+    },
+    {
+      "kind": "effects",
+      "id": "dying_sluza",
+      "effects": [
+        { "kind": "flag", "flag": "death_cause_sluza", "value": true },
+        { "kind": "flag", "flag": "death_cause_scavengers", "value": false },
+        { "kind": "flag", "flag": "death_cause_guild", "value": false },
+        { "kind": "flag", "flag": "death_cause_guard", "value": false },
+        { "kind": "flag", "flag": "death_cause_shelf", "value": false },
+        { "kind": "flag", "flag": "death_cause_vytsvet", "value": false },
+        { "kind": "counter", "counter": "errands_done", "delta": 1 }
+      ],
+      "next": "scene:silver_counter#queue_entry"
+    },
+
+    {
+      "kind": "narration",
+      "id": "pier_turn",
+      "text": {
+        "ru": "Мародёры добрались до карманов. Один вытряхивает на доски склянку с чужим лотом и смотрит на просвет, как смотрят на яйцо.",
+        "en": "The scavengers have reached the pockets. One shakes out a flask holding somebody's lot and holds it to the light, the way one holds an egg."
+      },
+      "keywords": [{ "match": { "ru": "лотом", "en": "lot" }, "tone": "lore" }],
+      "next": "dust_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "dust_choice",
+      "prompt": { "ru": "Шесть часов идут. Осталось около четырёх.", "en": "The six hours are running. About four are left." },
+      "options": [
+        {
+          "id": "bury",
+          "text": { "ru": "Похоронить труху по обряду Того берега.", "en": "Bury the dust by the Other Bank's rite." },
+          "effects": [
+            { "kind": "fragment", "memory": "pervoye_vedro", "amount": 1 },
+            { "kind": "axis", "axis": "grasp_release", "delta": -10 },
+            { "kind": "flag", "flag": "dust_buried", "value": true }
+          ],
+          "to": "bury_block"
+        },
+        {
+          "id": "take_lot",
+          "text": { "ru": "Забрать чужой лот себе.", "en": "Take the stranger's lot for myself." },
+          "effects": [
+            { "kind": "fragment", "memory": "pervyy_posul", "amount": 1 },
+            { "kind": "axis", "axis": "grasp_release", "delta": 12 },
+            { "kind": "counter", "counter": "lots_held", "delta": 1 }
+          ],
+          "to": "lot_grab"
+        },
+        {
+          "id": "side_with",
+          "text": { "ru": "Помочь им выгрести и взять долю.", "en": "Help them clean it out and take a share." },
+          "effects": [
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": -8 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": -5 },
+            { "kind": "gold", "delta": 9 }
+          ],
+          "to": "pier_no_fight"
+        },
+        {
+          "id": "leave_as_is",
+          "text": { "ru": "Оставить как есть.", "en": "Leave it as it is." },
+          "to": "pier_no_fight"
+        },
+        {
+          "id": "burn_it",
+          "text": { "ru": "Спалить труху прямо тут.", "en": "Burn the dust right here." },
+          "chip": { "icon": "fire", "label": { "ru": "Смолокур", "en": "Smolokur" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "smolokur" },
+          "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": -8 }],
+          "to": "bury_block"
+        },
+        {
+          "id": "cover_him",
+          "text": { "ru": "Накрыть труху курткой и сесть рядом.", "en": "Cover the dust with a coat and sit down." },
+          "chip": { "icon": "heal", "label": { "ru": "Ключарь", "en": "Klyuchar" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "klyuchar" },
+          "effects": [
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": 8 },
+            { "kind": "flag", "flag": "dust_buried", "value": true }
+          ],
+          "to": "bury_block"
+        },
+        {
+          "id": "write_pockets",
+          "text": { "ru": "Переписать содержимое карманов при свидетелях.", "en": "Record the pocket contents before witnesses." },
+          "chip": { "icon": "book", "label": { "ru": "Чистописец", "en": "Chistopisets" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "chistopisets" },
+          "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": 8 }],
+          "to": "bury_block"
+        },
+        {
+          "id": "rob_the_robbers",
+          "text": { "ru": "Отобрать у них выгребленное.", "en": "Take from them what they have taken." },
+          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -25 },
+          "effects": [
+            { "kind": "axis", "axis": "grasp_release", "delta": 8 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": -5 }
+          ],
+          "to": "lot_grab"
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "bury_block",
+      "speaker": "marodyor",
+      "text": {
+        "ru": "Стой. Он наш до шести часов. Мы за него платили ожиданием.",
+        "en": "Stop. He is ours until the six hours are up. We paid for him with waiting."
+      },
+      "next": "fight_scavengers"
+    },
+    {
+      "kind": "say",
+      "id": "lot_grab",
+      "speaker": "marodyor",
+      "text": {
+        "ru": "Из рук берёшь? Из рук — это уже не опись, это разговор.",
+        "en": "Out of my hands? Out of the hands is not an inventory any more, that is a conversation."
+      },
+      "next": "fight_scavengers"
+    },
+    {
+      "kind": "battle",
+      "id": "fight_scavengers",
+      "battle": "battle_scavengers",
+      "onWin": "pier_after_fight",
+      "onLose": "dying_pier"
+    },
+    {
+      "kind": "effects",
+      "id": "dying_pier",
+      "effects": [
+        { "kind": "flag", "flag": "death_cause_scavengers", "value": true },
+        { "kind": "flag", "flag": "death_cause_sluza", "value": false },
+        { "kind": "flag", "flag": "death_cause_guild", "value": false },
+        { "kind": "flag", "flag": "death_cause_guard", "value": false },
+        { "kind": "flag", "flag": "death_cause_shelf", "value": false },
+        { "kind": "flag", "flag": "death_cause_vytsvet", "value": false },
+        { "kind": "counter", "counter": "errands_done", "delta": 1 }
+      ],
+      "next": "pier_falling"
+    },
+    {
+      "kind": "narration",
+      "id": "pier_falling",
+      "text": {
+        "ru": "Багор входит под ребро. Дратва говорит: «Второе дело за час», и это последнее, что ты слышишь с этих мостков.",
+        "en": "The boat hook goes in under the ribs. Dratva says, \"Second case within the hour\", and that is the last thing you hear from this boardwalk."
+      },
+      "next": "scene:silver_counter#queue_entry"
+    },
+    {
+      "kind": "narration",
+      "id": "pier_after_fight",
+      "text": {
+        "ru": "Один лежит и держится за колено. Второй ушёл по мосткам и по дороге не оглянулся ни разу — считал шаги.",
+        "en": "One of them is down, holding his knee. The other went off along the boardwalk and never once looked back — he was counting his steps."
+      },
+      "next": "scavenger_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "scavenger_choice",
+      "prompt": { "ru": "Оцепление в четырёх шагах. Дратва не торопится.", "en": "The cordon is four paces away. Dratva is in no hurry." },
+      "options": [
+        {
+          "id": "finish",
+          "text": { "ru": "Добить.", "en": "Finish him." },
+          "effects": [
+            { "kind": "fragment", "memory": "smola_na_vode", "amount": 1 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": -12 },
+            { "kind": "flag", "flag": "scavenger_finished", "value": true }
+          ],
+          "to": "r_finished"
+        },
+        {
+          "id": "spare",
+          "text": { "ru": "Отпустить.", "en": "Let him go." },
+          "effects": [
+            { "kind": "fragment", "memory": "pervoye_vedro", "amount": 1 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": 10 },
+            { "kind": "flag", "flag": "scavenger_spared", "value": true }
+          ],
+          "to": "r_spared"
+        },
+        {
+          "id": "rob_him",
+          "text": { "ru": "Обобрать его и уйти.", "en": "Pick him clean and go." },
+          "effects": [
+            { "kind": "axis", "axis": "grasp_release", "delta": 5 },
+            { "kind": "gold", "delta": 8 },
+            { "kind": "flag", "flag": "scavenger_spared", "value": true }
+          ],
+          "to": "r_spared"
+        },
+        {
+          "id": "count_and_finish",
+          "text": { "ru": "Добить и пересчитать. Так быстрее.", "en": "Finish him and count. It is faster." },
+          "chip": { "icon": "fire", "label": { "ru": "Смолокур", "en": "Smolokur" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "smolokur" },
+          "effects": [
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": -10 },
+            { "kind": "flag", "flag": "scavenger_finished", "value": true }
+          ],
+          "to": "r_finished"
+        },
+        {
+          "id": "bind_wound",
+          "text": { "ru": "Перевязать. Не спрашивая, кто он.", "en": "Bind the wound. Without asking who he is." },
+          "chip": { "icon": "heal", "label": { "ru": "Ключарь", "en": "Klyuchar" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "klyuchar" },
+          "effects": [
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": 8 },
+            { "kind": "flag", "flag": "scavenger_spared", "value": true }
+          ],
+          "to": "r_spared"
+        },
+        {
+          "id": "hand_over",
+          "text": { "ru": "Сдать его Дратве по форме.", "en": "Hand him to Dratva, by the form." },
+          "conditions": { "kind": "axis", "axis": "honesty_deceit", "op": "gte", "value": 25 },
+          "effects": [
+            { "kind": "axis", "axis": "honesty_deceit", "delta": 5 },
+            { "kind": "flag", "flag": "scavenger_spared", "value": true }
+          ],
+          "to": "r_spared"
+        },
+        {
+          "id": "ask_who_else",
+          "text": { "ru": "Спросить, кто ещё был с ним.", "en": "Ask who else was with him." },
+          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -40 },
+          "effects": [
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": -5 },
+            { "kind": "flag", "flag": "scavenger_finished", "value": true }
+          ],
+          "to": "r_finished"
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "r_finished",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Вторая труха. Оформлю по тому же пункту: бумаги меньше, а грустно одинаково.",
+        "en": "A second lot of dust. I will file it under the same clause: less paperwork, equally sad."
+      },
+      "next": "pier_no_fight"
+    },
+    {
+      "kind": "say",
+      "id": "r_spared",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Ушёл на своих. Значит, придёт ещё раз, и уже с людьми. Это статья про весну.",
+        "en": "He left on his own legs. So he will be back, and with company. That is the article about spring."
+      },
+      "next": "pier_no_fight"
+    },
+    {
+      "kind": "branch",
+      "id": "pier_no_fight",
+      "branches": [{ "when": { "kind": "flag", "flag": "beggar_helped" }, "to": "dratva_knows" }],
+      "fallback": "dratva_asks"
+    },
+    {
+      "kind": "say",
+      "id": "dratva_knows",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Вас видели утром у задних ворот. Кормили должника по бланку двенадцать-бис. Показания давать умеете?",
+        "en": "You were seen at the rear gate this morning. Feeding a debtor on form twelve-bis. Do you know how to give a statement?"
+      },
+      "next": "testimony_choice"
+    },
+    {
+      "kind": "say",
+      "id": "dratva_asks",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Вы на мостках, значит вы свидетель. Свидетель не должность, а неудача. Диктуйте.",
+        "en": "You are on the boardwalk, so you are a witness. A witness is not a post, it is bad luck. Dictate."
+      },
+      "next": "testimony_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "testimony_choice",
+      "prompt": { "ru": "Она держит протокол на весу и пишет стоя.", "en": "She holds the report in the air and writes standing up." },
+      "options": [
+        {
+          "id": "as_it_was",
+          "text": { "ru": "Как было. Включая себя.", "en": "As it happened. Myself included." },
+          "effects": [
+            { "kind": "fragment", "memory": "pervaya_stroka", "amount": 1 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": 12 },
+            { "kind": "flag", "flag": "dratva_debt", "value": true }
+          ],
+          "to": "r_test_true"
+        },
+        {
+          "id": "convenient",
+          "text": { "ru": "Подписать удобную версию.", "en": "Sign the convenient version." },
+          "effects": [
+            { "kind": "fragment", "memory": "pervyy_posul", "amount": 1 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": -12 },
+            { "kind": "flag", "flag": "dratva_warned", "value": true }
+          ],
+          "to": "r_test_lie"
+        },
+        {
+          "id": "refuse",
+          "text": { "ru": "Отказаться говорить.", "en": "Refuse to speak." },
+          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": 3 }],
+          "to": "r_test_silent"
+        },
+        {
+          "id": "dictate_verbatim",
+          "text": { "ru": "Продиктовать протокол дословно.", "en": "Dictate the report word for word." },
+          "chip": { "icon": "book", "label": { "ru": "Чистописец", "en": "Chistopisets" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "chistopisets" },
+          "effects": [
+            { "kind": "axis", "axis": "honesty_deceit", "delta": 10 },
+            { "kind": "flag", "flag": "dratva_debt", "value": true }
+          ],
+          "to": "r_test_true"
+        },
+        {
+          "id": "sign_false",
+          "text": { "ru": "Подписаться чужим именем.", "en": "Sign with someone else's name." },
+          "chip": { "icon": "coin", "label": { "ru": "Посульщик", "en": "Posulshchik" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "posulshchik" },
+          "effects": [
+            { "kind": "axis", "axis": "honesty_deceit", "delta": -10 },
+            { "kind": "flag", "flag": "dratva_warned", "value": true }
+          ],
+          "to": "r_test_lie"
+        },
+        {
+          "id": "point_second",
+          "text": { "ru": "Показать, где лежит второй.", "en": "Show her where the second one lies." },
+          "conditions": { "kind": "flag", "flag": "scavenger_finished" },
+          "effects": [
+            { "kind": "axis", "axis": "honesty_deceit", "delta": 5 },
+            { "kind": "flag", "flag": "dratva_debt", "value": true }
+          ],
+          "to": "r_test_true"
+        },
+        {
+          "id": "remind_gate",
+          "text": { "ru": "Напомнить, что я помогаю не впервые.", "en": "Remind her this is not my first help." },
+          "conditions": { "kind": "flag", "flag": "beggar_helped" },
+          "effects": [
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": 3 },
+            { "kind": "flag", "flag": "dratva_debt", "value": true }
+          ],
+          "to": "r_test_true"
+        },
+        {
+          "id": "blame_them",
+          "text": { "ru": "Сказать, что мародёры напали первыми.", "en": "Say the scavengers went first." },
+          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -25 },
+          "effects": [
+            { "kind": "axis", "axis": "honesty_deceit", "delta": -5 },
+            { "kind": "flag", "flag": "dratva_warned", "value": true }
+          ],
+          "to": "r_test_lie"
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "r_test_true",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Сходится с досками и с водой. Записала как есть, включая вас. За вами теперь моя услуга, и я её отдаю только по описи.",
+        "en": "It agrees with the boards and with the water. Written down as it stands, you included. I owe you a favour now, and I pay those only by inventory."
+      },
+      "next": "leave_pier"
+    },
+    {
+      "kind": "say",
+      "id": "r_test_lie",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Статья о посулах. Пункт: не при мне. Предупреждаю один раз. Один.",
+        "en": "The article on promise notes. Clause: not in front of me. I warn once. Once."
+      },
+      "next": "leave_pier"
+    },
+    {
+      "kind": "say",
+      "id": "r_test_silent",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Молчание в протокол не заносится. Заносится «отказался», и это длиннее.",
+        "en": "Silence does not go into the report. \"Refused\" goes in, and that is longer."
+      },
+      "next": "leave_pier"
+    },
+    {
+      "kind": "effects",
+      "id": "leave_pier",
+      "effects": [{ "kind": "counter", "counter": "errands_done", "delta": 1 }],
+      "next": "pier_exit"
+    },
+    {
+      "kind": "narration",
+      "id": "pier_exit",
+      "text": {
+        "ru": "Оцепление снимают через шесть часов, минута в минуту. Труху сметают в мешок и уносят в кладовую — до востребования, которого не будет.",
+        "en": "The cordon comes down after six hours, to the minute. The dust is swept into a sack and carried to the store room — to be claimed, which it will not be."
+      },
+      "next": "scene:zaklad_hub"
+    }
+  ]
+}

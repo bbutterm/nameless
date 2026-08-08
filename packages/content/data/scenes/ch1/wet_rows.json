@@ -1,0 +1,658 @@
+{
+  "id": "wet_rows",
+  "chapter": 1,
+  "title": { "ru": "Мокрые ряды, лавка Жички", "en": "The Wet Rows, Zhichka's Stall" },
+  "tags": ["errand", "combat", "guild"],
+  "available": {
+    "kind": "all",
+    "of": [
+      { "kind": "visited", "scene": "appraiser_hall" },
+      { "kind": "not", "of": { "kind": "visited", "scene": "wet_rows" } }
+    ]
+  },
+  "entry": "rows_in",
+  "nodes": [
+    {
+      "kind": "narration",
+      "id": "rows_in",
+      "text": {
+        "ru": "Мокрые ряды пахнут рыбой и притворяются, что рыбой торгуют. Под навесом у Жички на верёвке висят склянки — на просвет и по росту, как бельё.",
+        "en": "The Wet Rows smell of fish and pretend that fish is what they sell. Under Zhichka's awning, flasks hang on a line, held to the light and sorted by height, like laundry."
+      },
+      "keywords": [{ "match": { "ru": "склянки", "en": "flasks" }, "tone": "lore" }],
+      "next": "zh_1"
+    },
+    {
+      "kind": "say",
+      "id": "zh_1",
+      "speaker": "zhichka",
+      "text": {
+        "ru": "Заходи, не топчись. У меня сухо, а у тебя карманы описаны — я по швам вижу.",
+        "en": "Come in, do not hover. It is dry here, and your pockets have been inventoried — I can tell by the seams."
+      },
+      "next": "rows_duel"
+    },
+    {
+      "kind": "narration",
+      "id": "rows_duel",
+      "text": {
+        "ru": "В соседнем ряду двое выясняют, чьё детство подлиннее. Считают по зимам: у кого зим больше, тот и прав. Обе стороны купили свои зимы здесь же, в прошлом месяце.",
+        "en": "In the next row two men are settling whose childhood is the more authentic. They count it in winters: more winters, more right. Both sides bought their winters here, last month."
+      },
+      "next": "zh_1b"
+    },
+    {
+      "kind": "say",
+      "id": "zh_1b",
+      "speaker": "zhichka",
+      "text": {
+        "ru": "Не смотри туда. В среду я была тремя вдовами и таможенником, и все четверо мне должны.",
+        "en": "Do not look over there. On Wednesday I was three widows and a customs officer, and all four of them owe me."
+      },
+      "next": "rows_label"
+    },
+    {
+      "kind": "lore",
+      "id": "rows_label",
+      "title": { "ru": "Ярлык на склянке, второй ряд", "en": "Label on a flask, second row" },
+      "text": {
+        "ru": "«Первая любовь. Мужская, деревенская, 40-х годов. Ношена дважды. Внимание покупателю: при ношении в неподходящий момент вырывается чужое имя — Настя. Замена имени не производится, скидка два гроша учтена в цене». Ниже, той же рукой: «Настя жива. Не искать».",
+        "en": "\"First love. Male, village, of the forties. Worn twice. Buyer beware: when worn, at the wrong moment it lets out a name not yours — Nastya. The name cannot be replaced; the two-groschen discount is already in the price.\" Below, in the same hand: \"Nastya is alive. Do not look for her.\""
+      },
+      "next": "zh_2"
+    },
+    {
+      "kind": "say",
+      "id": "zh_2",
+      "speaker": "zhichka",
+      "text": {
+        "ru": "Опись нижних ярусов в этом месяце заказывали трое. Одного продам, второго не продам, третий сам к тебе придёт.",
+        "en": "Three people ordered an inventory of the lower tiers this month. One I will sell you, one I will not, and the third will come to you himself."
+      },
+      "next": "zh_3"
+    },
+    {
+      "kind": "say",
+      "id": "zh_3",
+      "speaker": "zhichka",
+      "text": {
+        "ru": "Сеня, ты руки-то мыл?.. Не моё. Это у меня с четверга вдова живёт, она всех Сеней зовёт.",
+        "en": "Senya, have you washed your hands?.. Not mine. There is a widow living in me since Thursday, and she calls everyone Senya."
+      },
+      "next": "zh_4"
+    },
+    {
+      "kind": "say",
+      "id": "zh_4",
+      "speaker": "zhichka",
+      "text": {
+        "ru": "Не моя тоска, она мне велика. Но ты посмотри, какой крой. Примерь, пока сухая.",
+        "en": "Not my sorrow, it is too big for me. But look at the cut on it. Try it on while it is dry."
+      },
+      "next": "try_on_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "try_on_choice",
+      "prompt": { "ru": "Склянка тёплая с той стороны, где её держали.", "en": "The flask is warm on the side where it was held." },
+      "options": [
+        {
+          "id": "try_on",
+          "text": { "ru": "Надеть чужую первую любовь на минуту.", "en": "Wear someone's first love for a minute." },
+          "effects": [
+            { "kind": "axis", "axis": "reason_obsession", "delta": -8 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": -3 }
+          ],
+          "to": "r_tried"
+        },
+        {
+          "id": "decline",
+          "text": { "ru": "Отказаться.", "en": "Decline." },
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 5 }],
+          "to": "r_declined"
+        },
+        {
+          "id": "ask_whose",
+          "text": { "ru": "Спросить, чьё это было.", "en": "Ask whose it was." },
+          "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": 3 }],
+          "to": "r_whose"
+        },
+        {
+          "id": "ask_alive",
+          "text": { "ru": "Спросить, жив ли хозяин.", "en": "Ask whether the owner is alive." },
+          "chip": { "icon": "heal", "label": { "ru": "Ключарь", "en": "Klyuchar" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "klyuchar" },
+          "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": 5 }],
+          "to": "r_whose"
+        },
+        {
+          "id": "with_screams",
+          "text": { "ru": "Спросить, есть ли что-нибудь с криками.", "en": "Ask if she has anything with screaming." },
+          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -25 },
+          "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": -5 }],
+          "to": "r_screams"
+        },
+        {
+          "id": "buy_empty",
+          "text": { "ru": "Купить пустую склянку про запас.", "en": "Buy an empty flask, just in case." },
+          "conditions": { "kind": "axis", "axis": "grasp_release", "op": "gte", "value": 25 },
+          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": 5 }],
+          "to": "r_empty"
+        },
+        {
+          "id": "count_stock",
+          "text": { "ru": "Пересчитать всё, что висит на верёвке.", "en": "Count everything hanging on the line." },
+          "chip": { "icon": "hourglass", "label": { "ru": "Перечень", "en": "Perechen" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "perechen" },
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": -5 }],
+          "to": "r_counted"
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "r_tried",
+      "speaker": "zhichka",
+      "text": {
+        "ru": "Ну? Тепло, да? Через минуту снимешь и будешь скучать по чужой деревне. Все скучают.",
+        "en": "Well? Warm, is it not? In a minute you will take it off and miss a village that is not yours. Everyone does."
+      },
+      "next": "zh_price"
+    },
+    {
+      "kind": "say",
+      "id": "r_declined",
+      "speaker": "zhichka",
+      "text": {
+        "ru": "Подлинник, значит. Скучный ты. Скучные хорошо платят, ладно.",
+        "en": "A genuine article, then. You are dull. Dull ones pay well, fine."
+      },
+      "next": "zh_price"
+    },
+    {
+      "kind": "say",
+      "id": "r_whose",
+      "speaker": "zhichka",
+      "text": {
+        "ru": "Хозяин продал и живёт. Он теперь по четвергам ходит мимо её дома и не знает зачем.",
+        "en": "The owner sold it and lives. He walks past her house on Thursdays now and does not know why."
+      },
+      "next": "zh_price"
+    },
+    {
+      "kind": "say",
+      "id": "r_screams",
+      "speaker": "zhichka",
+      "text": {
+        "ru": "Есть. Дорого, и я его не вешаю на верёвку — соседи жалуются, что бельё темнеет.",
+        "en": "I have one. Dear, and I do not hang it on the line — the neighbours complain the laundry goes dark."
+      },
+      "next": "zh_price"
+    },
+    {
+      "kind": "say",
+      "id": "r_empty",
+      "speaker": "zhichka",
+      "text": {
+        "ru": "Пустую — бери так. Под самое-самое. Вдруг найдёшь.",
+        "en": "An empty one, take it as it is. For the very thing. In case you find it."
+      },
+      "next": "zh_price"
+    },
+    {
+      "kind": "say",
+      "id": "r_counted",
+      "speaker": "zhichka",
+      "text": {
+        "ru": "Сорок одна. Сорок вторая на мне, но она не продаётся, и не спрашивай.",
+        "en": "Forty-one. The forty-second is on me, and it is not for sale, and do not ask."
+      },
+      "next": "zh_price"
+    },
+    {
+      "kind": "say",
+      "id": "zh_price",
+      "speaker": "zhichka",
+      "text": {
+        "ru": "Имя заказчика — двадцать два гроша. Или один твой вчерашний день, он у тебя всё равно пустой.",
+        "en": "The name of the man who ordered it: twenty-two groschen. Or one yesterday of yours — it is empty anyway."
+      },
+      "keywords": [{ "match": { "ru": "двадцать два гроша", "en": "twenty-two groschen" }, "tone": "lore" }],
+      "next": "payment_choice"
+    },
+
+    {
+      "kind": "choice",
+      "id": "payment_choice",
+      "prompt": { "ru": "Она уже протянула руку. Торг для неё — часть вежливости.", "en": "Her hand is already out. To her, haggling is a form of politeness." },
+      "options": [
+        {
+          "id": "pay_full",
+          "text": { "ru": "Заплатить сколько просит.", "en": "Pay what she asks." },
+          "effects": [
+            { "kind": "fragment", "memory": "punkt_pervyy", "amount": 1 },
+            { "kind": "axis", "axis": "reason_obsession", "delta": -10 },
+            { "kind": "flag", "flag": "zhichka_deal", "value": true }
+          ],
+          "to": "r_pay_full"
+        },
+        {
+          "id": "haggle",
+          "text": { "ru": "Торговаться.", "en": "Haggle." },
+          "effects": [
+            { "kind": "axis", "axis": "reason_obsession", "delta": 8 },
+            { "kind": "flag", "flag": "zhichka_deal", "value": true }
+          ],
+          "to": "r_haggle"
+        },
+        {
+          "id": "promise",
+          "text": { "ru": "Расплатиться посулом.", "en": "Pay with a promise note." },
+          "effects": [
+            { "kind": "fragment", "memory": "pervyy_posul", "amount": 2 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": -15 },
+            { "kind": "flag", "flag": "zhichka_promise", "value": true },
+            { "kind": "counter", "counter": "promises_given", "delta": 1 }
+          ],
+          "to": "r_promise"
+        },
+        {
+          "id": "smash",
+          "text": { "ru": "Прижать её и разбить склянку.", "en": "Pin her down and smash the flask." },
+          "effects": [
+            { "kind": "fragment", "memory": "smola_na_vode", "amount": 1 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": -12 },
+            { "kind": "flag", "flag": "zhichka_hostile", "value": true }
+          ],
+          "to": "r_smash"
+        },
+        {
+          "id": "buy_back",
+          "text": { "ru": "Выкупить чужой лот и вернуть владельцу.", "en": "Buy the stranger's lot back and return it." },
+          "effects": [
+            { "kind": "fragment", "memory": "pervoye_vedro", "amount": 1 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": 10 },
+            { "kind": "counter", "counter": "debts_forgiven", "delta": 1 }
+          ],
+          "to": "r_buy_back"
+        },
+        {
+          "id": "write_promise_note",
+          "text": { "ru": "Выписать посул на предъявителя.", "en": "Write out a promise note to bearer." },
+          "chip": { "icon": "coin", "label": { "ru": "Посульщик", "en": "Posulshchik" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "posulshchik" },
+          "effects": [
+            { "kind": "axis", "axis": "honesty_deceit", "delta": -10 },
+            { "kind": "flag", "flag": "zhichka_promise", "value": true },
+            { "kind": "counter", "counter": "promises_given", "delta": 1 }
+          ],
+          "to": "r_promise"
+        },
+        {
+          "id": "quiet_pay",
+          "text": { "ru": "Заплатить, пока Дратва не смотрит.", "en": "Pay while Dratva is not looking." },
+          "conditions": { "kind": "flag", "flag": "dratva_warned" },
+          "effects": [
+            { "kind": "axis", "axis": "honesty_deceit", "delta": -5 },
+            { "kind": "flag", "flag": "zhichka_deal", "value": true }
+          ],
+          "to": "r_haggle"
+        },
+        {
+          "id": "name_spared",
+          "text": { "ru": "Сослаться на того, кого я отпустил.", "en": "Name the one I let go." },
+          "conditions": { "kind": "flag", "flag": "scavenger_spared" },
+          "effects": [
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": 3 },
+            { "kind": "flag", "flag": "zhichka_deal", "value": true }
+          ],
+          "to": "r_haggle"
+        },
+        {
+          "id": "name_finished",
+          "text": { "ru": "Сослаться на того, кого я добил.", "en": "Name the one I finished." },
+          "conditions": { "kind": "flag", "flag": "scavenger_finished" },
+          "effects": [
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": -3 },
+            { "kind": "flag", "flag": "zhichka_deal", "value": true }
+          ],
+          "to": "r_haggle"
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "r_pay_full",
+      "speaker": "zhichka",
+      "text": {
+        "ru": "Заказчик — Тминный, старший оценщик. Заказ на своё же хранилище, третьего числа, за свои деньги.",
+        "en": "The man who ordered it is Tminny, senior appraiser. An order on his own vault, on the third, out of his own pocket."
+      },
+      "keywords": [{ "match": { "ru": "Тминный", "en": "Tminny" }, "tone": "name" }],
+      "next": "klyost_rows"
+    },
+    {
+      "kind": "say",
+      "id": "r_haggle",
+      "speaker": "zhichka",
+      "text": {
+        "ru": "Ох, хорош. Ладно: заказчик из Ломбарда, из старших, и он платил за опись своего же хранилища. Имя — ещё восемь грошей, и это уже не торг.",
+        "en": "Oh, you are good. Fine: the buyer is Pawnshop, senior grade, and he paid for an inventory of his own vault. The name is eight groschen more, and that is not haggling any more."
+      },
+      "next": "klyost_rows"
+    },
+    {
+      "kind": "say",
+      "id": "r_promise",
+      "speaker": "zhichka",
+      "text": {
+        "ru": "Бумажка на предъявителя. Родня! Держи имя: старший оценщик. Только знай — посул я не порву, я его перепродам.",
+        "en": "Paper to bearer. Kin! Take the name: senior appraiser. Only know this — I will not tear your note up, I will sell it on."
+      },
+      "next": "klyost_rows"
+    },
+    {
+      "kind": "say",
+      "id": "r_buy_back",
+      "speaker": "zhichka",
+      "text": {
+        "ru": "Вернуть? У нас не возвращают. Ладно, бери, отнеси. Имя я тебе скажу так, из брезгливости.",
+        "en": "Return it? We do not return things. Fine, take it, carry it over. I will tell you the name for free, out of squeamishness."
+      },
+      "next": "klyost_rows"
+    },
+    {
+      "kind": "say",
+      "id": "r_smash",
+      "speaker": "zhichka",
+      "text": {
+        "ru": "Это было чужое детство! Оно ничьё теперь, оно на досках! Сборщики, сюда!",
+        "en": "That was somebody's childhood! It is nobody's now, it is on the boards! Collectors, here!"
+      },
+      "next": "fight_guild"
+    },
+    {
+      "kind": "battle",
+      "id": "fight_guild",
+      "battle": "battle_guild_collectors",
+      "onWin": "rows_after_fight",
+      "onLose": "dying_rows"
+    },
+    {
+      "kind": "effects",
+      "id": "dying_rows",
+      "effects": [
+        { "kind": "flag", "flag": "death_cause_guild", "value": true },
+        { "kind": "flag", "flag": "death_cause_scavengers", "value": false },
+        { "kind": "flag", "flag": "death_cause_sluza", "value": false },
+        { "kind": "flag", "flag": "death_cause_guard", "value": false },
+        { "kind": "flag", "flag": "death_cause_shelf", "value": false },
+        { "kind": "flag", "flag": "death_cause_vytsvet", "value": false },
+        { "kind": "counter", "counter": "errands_done", "delta": 1 }
+      ],
+      "next": "rows_falling"
+    },
+    {
+      "kind": "narration",
+      "id": "rows_falling",
+      "text": {
+        "ru": "Сборщики работают молча и по описи: сначала руки, потом всё остальное. Последнее, что видно, — как кто-то подставляет под тебя пустую склянку. На всякий случай.",
+        "en": "The collectors work in silence and by the list: the hands first, then the rest. The last thing you see is someone holding an empty flask under you. Just in case."
+      },
+      "next": "scene:silver_counter#queue_entry"
+    },
+    {
+      "kind": "narration",
+      "id": "rows_after_fight",
+      "text": {
+        "ru": "Сборщики уносят своих под навес. На досках сохнет чужое детство, и по нему уже прошли четыре пары ног.",
+        "en": "The collectors carry their own back under the awning. Somebody's childhood is drying on the boards, and four pairs of feet have already walked through it."
+      },
+      "next": "klyost_rows"
+    },
+
+    {
+      "kind": "say",
+      "id": "klyost_rows",
+      "speaker": "klyost",
+      "text": {
+        "ru": "Пуговица, я всё слышал. Научите так говорить, а? Мне бы разок и на весь день хватило.",
+        "en": "Button, I heard all of it. Teach me to talk like that, eh? One go would do me the whole day."
+      },
+      "next": "klyost_lesson"
+    },
+    {
+      "kind": "choice",
+      "id": "klyost_lesson",
+      "prompt": { "ru": "Он стоит так, будто ответ можно унести в кармане.", "en": "He stands as though the answer could be carried off in a pocket." },
+      "options": [
+        {
+          "id": "teach",
+          "text": { "ru": "Научить врать.", "en": "Teach him to lie." },
+          "effects": [
+            { "kind": "flag", "flag": "klyost_taught_lie", "value": true },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": -5 }
+          ],
+          "to": "r_taught"
+        },
+        {
+          "id": "refuse_teach",
+          "text": { "ru": "Отказать.", "en": "Refuse." },
+          "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": 5 }],
+          "to": "r_refused"
+        },
+        {
+          "id": "dodge_teach",
+          "text": { "ru": "Перевести разговор.", "en": "Change the subject." },
+          "to": "r_dodged"
+        },
+        {
+          "id": "teach_truth",
+          "text": { "ru": "Продиктовать ему правду о себе.", "en": "Dictate him the truth about myself." },
+          "chip": { "icon": "book", "label": { "ru": "Чистописец", "en": "Chistopisets" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "chistopisets" },
+          "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": 8 }],
+          "to": "r_refused"
+        },
+        {
+          "id": "teach_and_task",
+          "text": { "ru": "Научить и дать первое поручение.", "en": "Teach him and give him a first errand." },
+          "chip": { "icon": "coin", "label": { "ru": "Посульщик", "en": "Posulshchik" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "posulshchik" },
+          "effects": [
+            { "kind": "flag", "flag": "klyost_taught_lie", "value": true },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": -8 }
+          ],
+          "to": "r_taught"
+        },
+        {
+          "id": "no_need",
+          "text": { "ru": "Сказать, что ему врать незачем.", "en": "Tell him he has no need to lie." },
+          "conditions": { "kind": "flag", "flag": "klyost_named" },
+          "effects": [
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": 5 },
+            { "kind": "counter", "counter": "klyost_seen", "delta": 1 }
+          ],
+          "to": "r_no_need"
+        },
+        {
+          "id": "teach_for_share",
+          "text": { "ru": "Научить и взять долю.", "en": "Teach him and take a cut." },
+          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -25 },
+          "effects": [
+            { "kind": "flag", "flag": "klyost_taught_lie", "value": true },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": -5 },
+            { "kind": "gold", "delta": 3 }
+          ],
+          "to": "r_taught"
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "r_taught",
+      "speaker": "klyost",
+      "text": {
+        "ru": "Понял. Короче: не врать про большое, врать про мелкое, а большое просто не говорить.",
+        "en": "Got it. So: don't lie about the big thing, lie about the small ones, and just don't say the big one."
+      },
+      "next": "key_choice"
+    },
+    {
+      "kind": "say",
+      "id": "r_refused",
+      "speaker": "klyost",
+      "text": {
+        "ru": "Ну и ладно. Я всё равно забываю, что говорил, к вечеру.",
+        "en": "Fine, then. I forget what I said by evening anyway."
+      },
+      "next": "key_choice"
+    },
+    {
+      "kind": "narration",
+      "id": "r_dodged",
+      "text": {
+        "ru": "Он не спорит. Он вообще редко спорит: спор надо помнить хотя бы до конца спора.",
+        "en": "He does not argue. He rarely argues: an argument has to be remembered at least until it ends."
+      },
+      "next": "key_choice"
+    },
+    {
+      "kind": "say",
+      "id": "r_no_need",
+      "speaker": "klyost",
+      "text": {
+        "ru": "Мне-то? Мне как раз и надо. Меня иначе не запоминают.",
+        "en": "Me? Me most of all. Otherwise nobody keeps me."
+      },
+      "next": "key_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "key_choice",
+      "prompt": { "ru": "На гвозде у входа висит ключ с деревянной биркой.", "en": "A key with a wooden tag hangs on a nail by the entrance." },
+      "options": [
+        {
+          "id": "buy_key",
+          "text": { "ru": "Купить ключ от чёрной лестницы.", "en": "Buy the key to the back stairs." },
+          "conditions": {
+            "kind": "any",
+            "of": [
+              { "kind": "flag", "flag": "zhichka_deal" },
+              { "kind": "flag", "flag": "zhichka_promise" }
+            ]
+          },
+          "effects": [
+            { "kind": "flag", "flag": "guild_key", "value": true },
+            { "kind": "axis", "axis": "grasp_release", "delta": 5 }
+          ],
+          "to": "r_key_bought"
+        },
+        {
+          "id": "refuse_key",
+          "text": { "ru": "Обойтись без ключа.", "en": "Do without the key." },
+          "to": "r_key_none"
+        },
+        {
+          "id": "ask_key_price",
+          "text": { "ru": "Спросить, что это за ключ.", "en": "Ask what the key is." },
+          "to": "r_key_ask"
+        },
+        {
+          "id": "ask_tier",
+          "text": { "ru": "Спросить номер двери и ярус.", "en": "Ask for the door number and tier." },
+          "chip": { "icon": "hourglass", "label": { "ru": "Перечень", "en": "Perechen" }, "tone": "life" },
+          "conditions": {
+            "kind": "all",
+            "of": [
+              { "kind": "life", "life": "perechen" },
+              {
+                "kind": "any",
+                "of": [
+                  { "kind": "flag", "flag": "zhichka_deal" },
+                  { "kind": "flag", "flag": "zhichka_promise" }
+                ]
+              }
+            ]
+          },
+          "effects": [
+            { "kind": "flag", "flag": "guild_key", "value": true },
+            { "kind": "axis", "axis": "reason_obsession", "delta": -5 }
+          ],
+          "to": "r_key_bought"
+        },
+        {
+          "id": "take_key_free",
+          "text": { "ru": "Снять ключ и не заплатить.", "en": "Take the key and not pay." },
+          "conditions": { "kind": "axis", "axis": "honesty_deceit", "op": "lte", "value": -25 },
+          "effects": [
+            { "kind": "flag", "flag": "guild_key", "value": true },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": -8 }
+          ],
+          "to": "r_key_stolen"
+        },
+        {
+          "id": "leave_hostile",
+          "text": { "ru": "Уйти, пока не пересчитали склянки.", "en": "Leave before they count the flasks." },
+          "conditions": { "kind": "flag", "flag": "zhichka_hostile" },
+          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -3 }],
+          "to": "r_key_none"
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "r_key_ask",
+      "speaker": "zhichka",
+      "text": {
+        "ru": "Служебная дверь хранилища, ярус третий. Ключ ношеный, как всё у меня.",
+        "en": "Service door to the vault, third tier. The key is second-hand, like everything of mine."
+      },
+      "next": "key_choice"
+    },
+    {
+      "kind": "say",
+      "id": "r_key_bought",
+      "speaker": "zhichka",
+      "text": {
+        "ru": "Бирка деревянная, номер стёрт. Стирала я — привычка. Дверь третья слева, считай от воды.",
+        "en": "Wooden tag, number rubbed off. I rubbed it off, out of habit. Third door on the left, counting from the water."
+      },
+      "next": "leave_rows"
+    },
+    {
+      "kind": "say",
+      "id": "r_key_stolen",
+      "speaker": "zhichka",
+      "text": {
+        "ru": "Взял и не заплатил. Родня. Только запомни: у нас не возвращают, но у нас и не забывают.",
+        "en": "Took it and did not pay. Kin. Only remember: we do not give things back, and we do not forget either."
+      },
+      "next": "leave_rows"
+    },
+    {
+      "kind": "narration",
+      "id": "r_key_none",
+      "text": {
+        "ru": "Ключ остаётся на гвозде. К утру он будет висеть на другом гвозде и стоить на четыре гроша дороже.",
+        "en": "The key stays on its nail. By morning it will hang on a different nail and cost four groschen more."
+      },
+      "next": "leave_rows"
+    },
+    {
+      "kind": "effects",
+      "id": "leave_rows",
+      "effects": [{ "kind": "counter", "counter": "errands_done", "delta": 1 }],
+      "next": "rows_exit"
+    },
+    {
+      "kind": "narration",
+      "id": "rows_exit",
+      "text": {
+        "ru": "Ряды сворачиваются с темнотой. Склянки снимают с верёвки и укладывают в ящик по росту, чтобы утром повесить в том же порядке.",
+        "en": "The Rows fold up with the dark. The flasks come off the line and go into a crate by height, to be hung tomorrow in the same order."
+      },
+      "next": "scene:zaklad_hub"
+    }
+  ]
+}

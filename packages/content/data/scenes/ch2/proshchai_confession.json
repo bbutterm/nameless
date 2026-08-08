@@ -1,0 +1,388 @@
+{
+  "id": "proshchai_confession",
+  "chapter": 2,
+  "title": { "ru": "Двадцать шесть дворов", "en": "Twenty-Six Households" },
+  "tags": ["story", "brotherhood", "no_combat"],
+  "available": {
+    "kind": "any",
+    "of": [
+      { "kind": "counter", "counter": "debts_forgiven", "op": "gte", "value": 2 },
+      { "kind": "flag", "flag": "proshchai_question" }
+    ]
+  },
+  "entry": "two_spades",
+  "nodes": [
+    {
+      "kind": "narration",
+      "id": "two_spades",
+      "text": {
+        "ru": "Вторая лопата уже воткнута в край гряды, черенком к тебе. Настоятель копает третий ряд и не оборачивается, чтобы проверить, взял ли ты её.",
+        "en": "The second spade is already stuck into the edge of the bed, handle towards you. The abbot is digging the third row and does not turn to check whether you have taken it."
+      },
+      "next": "grasp_router"
+    },
+    {
+      "kind": "branch",
+      "id": "grasp_router",
+      "branches": [
+        { "when": { "kind": "axis", "axis": "grasp_release", "op": "gte", "value": 40 }, "to": "no_tell_1" }
+      ],
+      "fallback": "dig_1"
+    },
+    {
+      "kind": "say",
+      "id": "no_tell_1",
+      "speaker": "proshchai",
+      "text": {
+        "ru": "Копай неглубоко, тут корень. Репа в этом году крупная, а на вкус хуже прошлогодней, и никто не знает почему.",
+        "en": "Do not dig deep here, there is a root. The turnips came out big this year and taste worse than last year's, and nobody knows why."
+      },
+      "next": "no_tell_2"
+    },
+    {
+      "kind": "narration",
+      "id": "no_tell_2",
+      "text": {
+        "ru": "Он говорит про репу двадцать минут и ни разу не сбивается посреди фразы. Ты ждёшь обрыва, потому что обрыв у него всегда падает на самое важное слово, а сегодня падать нечему.",
+        "en": "He talks about turnips for twenty minutes and does not once break off mid-sentence. You keep waiting for the break, because his break always falls on the most important word, and today there is nothing for it to fall on."
+      },
+      "next": "no_tell_3"
+    },
+    {
+      "kind": "say",
+      "id": "no_tell_3",
+      "speaker": "proshchai",
+      "text": {
+        "ru": "Всё своё носишь с собой, серый человек. Шея-то как? Тебе я ничего не скажу: тебе некуда положить.",
+        "en": "You carry all of yours about with you, grey man. How is the neck? I will not be telling you anything: you have nowhere to put it."
+      },
+      "keywords": [{ "match": { "ru": "тебе некуда положить", "en": "nowhere to put it" }, "tone": "danger" }],
+      "next": "not_told_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "not_told_choice",
+      "prompt": {
+        "ru": "Он копает ровно и ждёт, когда ты перестанешь стоять.",
+        "en": "He digs evenly and waits for you to stop standing there."
+      },
+      "options": [
+        {
+          "id": "keep_digging",
+          "text": { "ru": "Копать молча до конца ряда.", "en": "Dig in silence to the row's end." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -3 }],
+          "to": "r_dug_anyway"
+        },
+        {
+          "id": "press_him",
+          "text": { "ru": "Настоять. Я всё равно узнаю.", "en": "Press him. I will find out anyway." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": 3 }],
+          "to": "r_pressed"
+        },
+        {
+          "id": "empty_pockets",
+          "text": { "ru": "Выложить карманы на гряду.", "en": "Empty your pockets onto the bed." },
+          "fallback": true,
+          "effects": [
+            { "kind": "axis", "axis": "grasp_release", "delta": -15 },
+            { "kind": "counter", "counter": "lots_held", "delta": -1 }
+          ],
+          "to": "r_emptied"
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "r_dug_anyway",
+      "speaker": "proshchai",
+      "text": {
+        "ru": "Ряд кончился. Спасибо, друг мой. Приходи ещё, я тебе опять ничего не скажу.",
+        "en": "The row is done. Thank you, my friend. Come again and I will tell you nothing again."
+      },
+      "next": "garden_exit"
+    },
+    {
+      "kind": "say",
+      "id": "r_pressed",
+      "speaker": "proshchai",
+      "text": {
+        "ru": "Узнаешь — и понесёшь. Ты и так носишь три чужие пуговицы, а они, между прочим, ничьи.",
+        "en": "Find out and you will carry it. You already carry three other men's buttons, and those, by the way, are nobody's."
+      },
+      "next": "garden_exit"
+    },
+    {
+      "kind": "narration",
+      "id": "r_emptied",
+      "text": {
+        "ru": "Ты выкладываешь всё на землю: опись, бирку, чужое. Он смотрит на кучку дольше, чем смотрел на тебя за всё знакомство, и всё равно ничего не говорит — только отдаёт свою флягу.",
+        "en": "You lay it all out on the ground: the inventory, the tag, the things that are not yours. He looks at the little heap longer than he has looked at you in all your acquaintance, and still says nothing — he only hands over his flask."
+      },
+      "next": "garden_exit"
+    },
+    {
+      "kind": "say",
+      "id": "dig_1",
+      "speaker": "proshchai",
+      "text": {
+        "ru": "Копай неглубоко, тут корень. И встань спиной к реке, так легче говорить.",
+        "en": "Do not dig deep here, there is a root. And stand with your back to the river, it is easier to talk that way."
+      },
+      "next": "dig_2"
+    },
+    {
+      "kind": "narration",
+      "id": "dig_2",
+      "text": {
+        "ru": "Он копает и говорит ровно, не обрываясь ни разу. Обрывы у него всегда падали на самое важное слово; сегодня важных слов будет много, и ни одно он не уронит.",
+        "en": "He digs and speaks evenly, without breaking off once. His breaks always fell on the most important word; today there will be a great many important words, and he will not drop one of them."
+      },
+      "next": "dig_3"
+    },
+    {
+      "kind": "say",
+      "id": "dig_3",
+      "speaker": "proshchai",
+      "text": {
+        "ru": "Я из Косья. Это было за Выцветью, а теперь это и есть Выцветь: двадцать шесть дворов, водокачка, кривая берёза у третьего.",
+        "en": "I am from Kosye. It used to be beyond the Vytsvet, and now it is the Vytsvet: twenty-six households, a pump, a crooked birch by the third one."
+      },
+      "keywords": [{ "match": { "ru": "двадцать шесть дворов", "en": "twenty-six households" }, "tone": "name" }],
+      "next": "dig_4"
+    },
+    {
+      "kind": "say",
+      "id": "dig_4",
+      "speaker": "proshchai",
+      "text": {
+        "ru": "Их никто не помнит, кроме меня. Пока я помню забор — забор стоит. Я проверял: год не вспоминал третий двор, и третьего двора не стало.",
+        "en": "Nobody remembers them but me. As long as I remember the fence, the fence stands. I tested it: for a year I did not think about the third household, and the third household went."
+      },
+      "next": "lore_holding"
+    },
+    {
+      "kind": "lore",
+      "id": "lore_holding",
+      "title": { "ru": "О местах, которых не помнят", "en": "On places nobody remembers" },
+      "text": {
+        "ru": "Забытое выцветает: сперва цвет, потом вес, потом очертания — с домами, песнями и дорогами так же, как с людьми. Оценщики знают из этого одно следствие и считают его смешным: место, которое помнит хотя бы один человек, держится целиком, включая заборы. Второго следствия они не выводят, потому что для этого пришлось бы спросить, каково этому человеку.",
+        "en": "What is forgotten fades: first the colour, then the weight, then the outline — the same for houses, songs and roads as for people. The appraisers draw one corollary from this and find it comical: a place remembered by even one person holds entire, fences included. They do not draw the second corollary, because to draw it they would have to ask what that is like for the person."
+      },
+      "next": "dig_5"
+    },
+    {
+      "kind": "say",
+      "id": "dig_5",
+      "speaker": "proshchai",
+      "text": {
+        "ru": "Поехать я не могу. Приеду — они меня не узнают, я это увижу и разлюблю их за один вечер. А как разлюблю, так они и осыплются, все двадцать шесть.",
+        "en": "I cannot go there. If I go, they will not know me, I will see it and I will stop loving them in a single evening. And the moment I do, they will crumble, all twenty-six."
+      },
+      "next": "dig_6"
+    },
+    {
+      "kind": "say",
+      "id": "dig_6",
+      "speaker": "proshchai",
+      "text": {
+        "ru": "И вот я тут сорок лет учу людей отпускать. Учу хорошо, друг мой. У меня половина берега спит спокойно.",
+        "en": "And so here I am, forty years teaching people to let go. I teach it well, my friend. Half this bank sleeps easy because of me."
+      },
+      "keywords": [{ "match": { "ru": "учу людей отпускать", "en": "teaching people to let go" }, "tone": "memory" }],
+      "next": "confession_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "confession_choice",
+      "prompt": {
+        "ru": "Ряд кончился. Он стоит на лопате и не начинает следующий.",
+        "en": "The row is finished. He leans on the spade and does not start the next one."
+      },
+      "options": [
+        {
+          "id": "say_nothing_dig",
+          "text": { "ru": "Ничего не отвечать. Начать следующий ряд.", "en": "Answer nothing. Start the next row." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -8 }],
+          "to": "r_next_row"
+        },
+        {
+          "id": "go_for_him",
+          "text": { "ru": "Съездить вместо него. Посмотреть.", "en": "Go there instead of him. Look." },
+          "fallback": true,
+          "effects": [
+            { "kind": "fragment", "memory": "poslednyaya_kruzhka", "amount": 1 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": 8 }
+          ],
+          "to": "r_go_for_him"
+        },
+        {
+          "id": "tell_let_go",
+          "text": { "ru": "Сказать ему: отпусти. Своими словами.", "en": "Tell him to let go. His own words." },
+          "fallback": true,
+          "effects": [
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": -8 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": 3 }
+          ],
+          "to": "r_told_let_go"
+        },
+        {
+          "id": "was_there",
+          "conditions": { "kind": "visited", "scene": "vytsvet_road" },
+          "text": { "ru": "Я был на той дороге. Скажу как есть.", "en": "I was on that road. I will say it plainly." },
+          "effects": [
+            { "kind": "fragment", "memory": "god_goloy_pravdy", "amount": 1 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": 12 }
+          ],
+          "to": "r_was_there",
+          "priority": 6
+        },
+        {
+          "id": "remember_with_him",
+          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "gte", "value": 25 },
+          "text": { "ru": "Запомнить Косье вместе с ним. Все дворы.", "en": "Remember Kosye with him. Every household." },
+          "effects": [
+            { "kind": "fragment", "memory": "ochered_k_kolodtsu", "amount": 2 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": 12 }
+          ],
+          "to": "r_remember_with",
+          "priority": 6
+        },
+        {
+          "id": "write_them",
+          "chip": { "icon": "book", "label": { "ru": "Чистописец", "en": "Chistopisets" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "chistopisets" },
+          "text": { "ru": "Записать все двадцать шесть дворов. По порядку.", "en": "Write down all twenty-six households. In order." },
+          "effects": [
+            { "kind": "fragment", "memory": "khronika_bez_popravok", "amount": 2 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": 8 }
+          ],
+          "to": "r_wrote_them",
+          "priority": 6
+        },
+        {
+          "id": "promise_village",
+          "chip": { "icon": "coin", "label": { "ru": "Посульщик", "en": "Posulshchik" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "posulshchik" },
+          "text": { "ru": "Пообещать, что Косье стоит целиком.", "en": "Promise him Kosye is standing entire." },
+          "effects": [
+            { "kind": "fragment", "memory": "luchshie_gody", "amount": 1 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": -12 },
+            { "kind": "counter", "counter": "promises_given", "delta": 1 }
+          ],
+          "to": "r_promised_village",
+          "priority": 6
+        },
+        {
+          "id": "bring_water",
+          "chip": { "icon": "heal", "label": { "ru": "Ключарь", "en": "Klyuchar" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "klyuchar" },
+          "text": { "ru": "Отвезти туда воды. Один раз, всем.", "en": "Take water there. Once, to everyone." },
+          "effects": [
+            { "kind": "fragment", "memory": "poslednyaya_kruzhka", "amount": 2 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": 12 }
+          ],
+          "to": "r_water_there",
+          "priority": 6
+        }
+      ]
+    },
+    {
+      "kind": "narration",
+      "id": "r_next_row",
+      "text": {
+        "ru": "Ты берёшь лопату и начинаешь четвёртый ряд с того конца, чтобы идти навстречу. Он догоняет тебя на середине, и дальше вы копаете вдвоём и молчите, и это единственный ответ, который ему годится.",
+        "en": "You take the spade and start the fourth row from the far end, so as to work towards him. He meets you in the middle, and after that you dig together and say nothing, and that is the only answer that will do for him."
+      },
+      "next": "last_word"
+    },
+    {
+      "kind": "say",
+      "id": "r_go_for_him",
+      "speaker": "proshchai",
+      "text": {
+        "ru": "Не надо. Ты приедешь и запомнишь их, а тебя убивают чаще, чем ты думаешь. Хотя... поезжай. Кривая берёза у третьего двора.",
+        "en": "Do not. You will go and remember them, and you get killed more often than you think. Although... go. The crooked birch by the third household."
+      },
+      "next": "last_word"
+    },
+    {
+      "kind": "say",
+      "id": "r_told_let_go",
+      "speaker": "proshchai",
+      "text": {
+        "ru": "Отпустить. Да. Я это говорю по три раза в неделю, друг мой, и ни разу не проверял на себе.",
+        "en": "Let go. Yes. I say that three times a week, my friend, and I have never once tried it on myself."
+      },
+      "next": "last_word"
+    },
+    {
+      "kind": "say",
+      "id": "r_was_there",
+      "speaker": "proshchai",
+      "text": {
+        "ru": "Говори. Всё говори, и про столбы тоже. Стой... нет, говори. Я потом сам разберу, что из этого Косье.",
+        "en": "Speak. Tell me all of it, the mileposts too. Wait... no, speak. I will sort out afterwards which of it is Kosye."
+      },
+      "next": "last_word"
+    },
+    {
+      "kind": "narration",
+      "id": "r_remember_with",
+      "text": {
+        "ru": "Он называет дворы по порядку, от водокачки посолонь, и ты повторяешь за ним вслух. На двенадцатом он проверяет, не сбился ли ты, на двадцать первом перестаёт проверять.",
+        "en": "He names the households in order, sunwise from the pump, and you repeat after him out loud. At the twelfth he checks whether you have lost your place; at the twenty-first he stops checking."
+      },
+      "next": "last_word"
+    },
+    {
+      "kind": "narration",
+      "id": "r_wrote_them",
+      "text": {
+        "ru": "Он диктует, ты пишешь на обороте описи, и дворы идут не по номерам, а по тому, кто с кем не разговаривал. Двадцать шестым он называет свой и добавляет: «этот можешь не писать», и ты пишешь.",
+        "en": "He dictates, you write on the back of the inventory, and the households come not by number but by who was not speaking to whom. The twenty-sixth he names as his own and adds, \"you need not write that one down\", and you write it down."
+      },
+      "next": "last_word"
+    },
+    {
+      "kind": "say",
+      "id": "r_promised_village",
+      "speaker": "proshchai",
+      "text": {
+        "ru": "Стоит целиком. Хорошо сказано, твёрдо. Я тебе на секунду поверил, а секунда — это много, спасибо.",
+        "en": "Standing entire. Well said, firmly said. I believed you for a second, and a second is a great deal, thank you."
+      },
+      "next": "last_word"
+    },
+    {
+      "kind": "narration",
+      "id": "r_water_there",
+      "text": {
+        "ru": "Бочку ты берёшь у братьев, подводу — у заставы, и поишь всех подряд, не спрашивая, кто откуда. Двадцать шестой двор от воды отказывается вежливо и трижды, и все три раза как в первый.",
+        "en": "You get the barrel from the brothers and the cart from the toll gate, and you water everyone in turn without asking who is from where. The twenty-sixth household politely refuses, three times, and all three times as if for the first."
+      },
+      "next": "last_word"
+    },
+    {
+      "kind": "say",
+      "id": "last_word",
+      "speaker": "proshchai",
+      "text": {
+        "ru": "Ты теперь не забудешь. Это плохо, друг мой, и я всё равно рад: их стало двое, кто помнит.",
+        "en": "You will not forget now. That is a bad thing, my friend, and I am glad all the same: there are two of us remembering them."
+      },
+      "next": "garden_exit"
+    },
+    {
+      "kind": "narration",
+      "id": "garden_exit",
+      "text": {
+        "ru": "У калитки очередь к водокачке стоит как всегда, и брат-огородник, проходя, считает её по головам одними губами. Число у него сегодня то же, что вчера, и люди в нём другие.",
+        "en": "At the gate the queue for the pump stands as it always does, and the brother gardener counts it off with his lips as he passes. His number today is the same as yesterday's, and the people in it are different."
+      },
+      "next": "scene:vaults_hub"
+    }
+  ]
+}

@@ -1,0 +1,509 @@
+{
+  "id": "appraiser_hall",
+  "chapter": 1,
+  "title": { "ru": "Зал оценщиков", "en": "The Appraisers' Hall" },
+  "tags": ["lombard", "mandatory"],
+  "available": { "kind": "visited", "scene": "lombard_yard" },
+  "entry": "hall_in",
+  "nodes": [
+    {
+      "kind": "narration",
+      "id": "hall_in",
+      "text": {
+        "ru": "Зал длинный, столов девять, занято три. Над каждым столом висит табличка с фамилией оценщика и рядом — вторая, поменьше, с его собственным взносом.",
+        "en": "A long hall, nine desks, three of them manned. Over each desk hangs a plate with the appraiser's name and beside it a smaller one, with what he paid to get in."
+      },
+      "keywords": [{ "match": { "ru": "взносом", "en": "what he paid" }, "tone": "lore" }],
+      "next": "otsen_1"
+    },
+    {
+      "kind": "say",
+      "id": "otsen_1",
+      "speaker": "otsenshchik",
+      "text": {
+        "ru": "Пункт четырнадцатый: беспокойство бытовое, повторяющееся. Два гроша, сударыня.",
+        "en": "Clause fourteen: household anxiety, recurrent. Two groschen, madam."
+      },
+      "next": "otsen_2"
+    },
+    {
+      "kind": "say",
+      "id": "otsen_2",
+      "speaker": "otsenshchik",
+      "text": {
+        "ru": "Двенадцать лет носки — это минус грош, а не плюс. Свежий утюг я бы взял за пять.",
+        "en": "Twelve years of wear is minus a groschen, not plus. A fresh iron I would take at five."
+      },
+      "next": "otsen_3"
+    },
+    {
+      "kind": "narration",
+      "id": "otsen_3",
+      "text": {
+        "ru": "Они торгуются сорок минут. Женщина уходит с двумя грошами и всю дорогу до дверей проверяет, при ней ли ключи.",
+        "en": "They haggle for forty minutes. The woman leaves with two groschen and checks all the way to the door whether she still has her keys."
+      },
+      "next": "price_list"
+    },
+    {
+      "kind": "lore",
+      "id": "price_list",
+      "title": { "ru": "Прейскурант, лист второй", "en": "Price list, sheet two" },
+      "text": {
+        "ru": "Стыд детский, невыношенный — девять грошей. Стыд взрослый, выношенный — четыре (ношеное дешевле, это правило без исключений). Первый поцелуй: к четвергу — шесть, к вторнику — четыре; вторник помнят хуже, и курс это учитывает. Беспокойство про утюг — два. Радость чужая, подслушанная, приёму не подлежит: не отделяется от того, кто радовался.",
+        "en": "Childhood shame, unripened — nine groschen. Adult shame, ripened — four (worn goods are cheaper, a rule without exceptions). First kiss: six by Thursday, four by Tuesday; Tuesdays are remembered worse and the rate reflects it. Anxiety about an iron — two. Another's joy, overheard, is not accepted for intake: it will not separate from the one who was glad."
+      },
+      "next": "tminny_1"
+    },
+    {
+      "kind": "say",
+      "id": "tminny_1",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Позвольте-с. Ломбард вернул вам из карманов одну вещь, и вещь эта, к моему профессиональному удовольствию, не пуговица.",
+        "en": "If you will permit. The Pawnshop returned one item from your pockets, and that item, to my professional pleasure, is not a button."
+      },
+      "next": "glove_narr"
+    },
+    {
+      "kind": "narration",
+      "id": "glove_narr",
+      "text": {
+        "ru": "На сукне лежит перчатка. Правая, зимняя, с обмётанной дырой на большом пальце — обмётывал кто-то торопливый и левша.",
+        "en": "A glove lies on the baize. Right hand, winter, a darned hole at the thumb — darned by someone in a hurry, and left-handed."
+      },
+      "next": "tminny_2"
+    },
+    {
+      "kind": "say",
+      "id": "tminny_2",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Ношена одной рукой семь зим, последние две — не своей. Оценено... в одиннадцать грошей. Левая стоила бы девять: правые теряют чаще, а ищут дольше.",
+        "en": "Worn on one hand for seven winters, the last two not its own. Valued... at eleven groschen. The left would fetch nine: right ones are lost more often and hunted for longer."
+      },
+      "keywords": [{ "match": { "ru": "одиннадцать грошей", "en": "eleven groschen" }, "tone": "lore" }],
+      "next": "tminny_3"
+    },
+    {
+      "kind": "say",
+      "id": "tminny_3",
+      "speaker": "tminny",
+      "text": {
+        "ru": "И прежде чем вы соврёте: откуда она у вас? Происхождение поднимает цену вдвое, а выдуманное происхождение — вчетверо, пока не вскроется.",
+        "en": "And before you lie to me: where did you get it? Provenance doubles the price, and invented provenance quadruples it, until it comes apart."
+      },
+      "next": "origin_choice"
+    },
+
+    {
+      "kind": "choice",
+      "id": "origin_choice",
+      "prompt": { "ru": "Он держит перо и не макает его. Ждёт.", "en": "He holds the pen and does not dip it. He waits." },
+      "options": [
+        {
+          "id": "dont_remember",
+          "text": { "ru": "Как есть: не помню.", "en": "Straight out: I do not remember." },
+          "effects": [
+            { "kind": "fragment", "memory": "pervaya_stroka", "amount": 1 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": 10 },
+            { "kind": "flag", "flag": "tminny_trust", "value": true }
+          ],
+          "to": "r_origin_true"
+        },
+        {
+          "id": "invent",
+          "text": { "ru": "Выдумать историю подороже.", "en": "Invent a story worth more." },
+          "effects": [
+            { "kind": "fragment", "memory": "pervyy_posul", "amount": 1 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": -10 },
+            { "kind": "flag", "flag": "tminny_blacklist", "value": true }
+          ],
+          "to": "r_origin_lie"
+        },
+        {
+          "id": "silent",
+          "text": { "ru": "Промолчать.", "en": "Say nothing." },
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 3 }],
+          "to": "r_origin_silent"
+        },
+        {
+          "id": "dictate_all",
+          "text": { "ru": "Продиктовать всё, что помню за сутки.", "en": "Dictate everything I remember of the last day." },
+          "chip": { "icon": "book", "label": { "ru": "Чистописец", "en": "Chistopisets" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "chistopisets" },
+          "effects": [
+            { "kind": "axis", "axis": "honesty_deceit", "delta": 8 },
+            { "kind": "flag", "flag": "tminny_trust", "value": true }
+          ],
+          "to": "r_origin_true"
+        },
+        {
+          "id": "call_it_genuine",
+          "text": { "ru": "Назвать перчатку подлинником.", "en": "Call the glove a genuine article." },
+          "chip": { "icon": "coin", "label": { "ru": "Посульщик", "en": "Posulshchik" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "posulshchik" },
+          "effects": [
+            { "kind": "axis", "axis": "honesty_deceit", "delta": -8 },
+            { "kind": "flag", "flag": "tminny_blacklist", "value": true }
+          ],
+          "to": "r_origin_lie"
+        },
+        {
+          "id": "off_a_corpse",
+          "text": { "ru": "Сказать, что снял с покойника.", "en": "Say I took it off a dead man." },
+          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -25 },
+          "effects": [
+            { "kind": "axis", "axis": "honesty_deceit", "delta": -3 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": -3 }
+          ],
+          "to": "r_origin_corpse"
+        },
+        {
+          "id": "by_inventory",
+          "text": { "ru": "Она в описи. Значит, моя.", "en": "It is in the inventory. So it is mine." },
+          "conditions": { "kind": "flag", "flag": "opis_taken_all" },
+          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": 3 }],
+          "to": "r_origin_silent"
+        },
+        {
+          "id": "ask_where_kept",
+          "text": { "ru": "Спросить, где хранится опись моих карманов.", "en": "Ask where the inventory of my pockets is kept." },
+          "conditions": { "kind": "axis", "axis": "reason_obsession", "op": "lte", "value": -25 },
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": -5 }],
+          "to": "r_origin_where"
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "r_origin_true",
+      "speaker": "tminny",
+      "text": {
+        "ru": "«Происхождение неизвестно, со слов вкладчика». Пишу это раз в год и каждый раз с удовольствием: неизвестное дешевле, зато не разваливается при проверке.",
+        "en": "\"Provenance unknown, per the depositor.\" I write that once a year and enjoy it every time: the unknown is cheaper, but it does not fall apart under checking."
+      },
+      "next": "tminny_money"
+    },
+    {
+      "kind": "say",
+      "id": "r_origin_lie",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Прекрасно. Записываю дословно и ставлю пометку: «со слов». Пометка эта, позвольте-с, живёт дольше вас.",
+        "en": "Splendid. I take it down word for word and add a note: \"per the client\". That note, if you will permit, outlives you."
+      },
+      "keywords": [{ "match": { "ru": "«со слов»", "en": "\"per the client\"" }, "tone": "lie" }],
+      "next": "tminny_money"
+    },
+    {
+      "kind": "say",
+      "id": "r_origin_silent",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Молчание — тоже сведение, только неоплачиваемое. Ставлю прочерк.",
+        "en": "Silence is information too, merely unpaid for. I enter a dash."
+      },
+      "next": "tminny_money"
+    },
+    {
+      "kind": "say",
+      "id": "r_origin_corpse",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Тогда двенадцать. Снятое с покойника идёт дороже: у него уже не спросят, а спросят у вас, и вы ответите то же самое.",
+        "en": "Twelve, then. Taken off the dead runs dearer: nobody will ask him, they will ask you, and you will say the same thing."
+      },
+      "next": "tminny_money"
+    },
+    {
+      "kind": "say",
+      "id": "r_origin_where",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Ниже. Всё, что про вас, хранится ниже, чем то, что для вас. Это не тайна, это планировка.",
+        "en": "Below. Everything about you is kept lower than everything for you. That is not a secret, that is the floor plan."
+      },
+      "next": "tminny_money"
+    },
+
+    {
+      "kind": "say",
+      "id": "tminny_money",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Монета Заклада — расписка на чужое воспоминание, которое лежит у нас в подвале и не портится. Вы держите в руке разменянную чужую свадьбу.",
+        "en": "A Zaklad coin is a receipt for someone else's memory, which lies in our cellar and does not spoil. What you hold in your hand is somebody's wedding, broken into change."
+      },
+      "keywords": [{ "match": { "ru": "расписка", "en": "receipt" }, "tone": "lore" }],
+      "next": "pocket_lot_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "pocket_lot_choice",
+      "prompt": { "ru": "Перчатка лежит между вами. Одиннадцать грошей — тоже.", "en": "The glove lies between you. So do eleven groschen." },
+      "options": [
+        {
+          "id": "sell",
+          "text": { "ru": "Продать за одиннадцать.", "en": "Sell it for eleven." },
+          "effects": [
+            { "kind": "flag", "flag": "pocket_lot_sold", "value": true },
+            { "kind": "gold", "delta": 11 },
+            { "kind": "axis", "axis": "grasp_release", "delta": -5 }
+          ],
+          "to": "r_sold"
+        },
+        {
+          "id": "keep",
+          "text": { "ru": "Оставить себе.", "en": "Keep it." },
+          "effects": [
+            { "kind": "flag", "flag": "pocket_lot_kept", "value": true },
+            { "kind": "axis", "axis": "grasp_release", "delta": 5 }
+          ],
+          "to": "r_kept"
+        },
+        {
+          "id": "demand_written",
+          "text": { "ru": "Потребовать оценку прописью, по пунктам.", "en": "Demand the valuation in words, by clauses." },
+          "chip": { "icon": "hourglass", "label": { "ru": "Перечень", "en": "Perechen" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "perechen" },
+          "effects": [
+            { "kind": "flag", "flag": "pocket_lot_kept", "value": true },
+            { "kind": "axis", "axis": "reason_obsession", "delta": -5 }
+          ],
+          "to": "r_kept"
+        },
+        {
+          "id": "leave_for_cold",
+          "text": { "ru": "Оставить её тому, кто мёрзнет.", "en": "Leave it for whoever is cold." },
+          "chip": { "icon": "heal", "label": { "ru": "Ключарь", "en": "Klyuchar" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "klyuchar" },
+          "effects": [
+            { "kind": "flag", "flag": "pocket_lot_sold", "value": true },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": 8 },
+            { "kind": "axis", "axis": "grasp_release", "delta": -5 }
+          ],
+          "to": "r_gift"
+        },
+        {
+          "id": "sell_give_away",
+          "text": { "ru": "Продать и отдать деньги мальчишке.", "en": "Sell it and give the money to the boy." },
+          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "gte", "value": 25 },
+          "effects": [
+            { "kind": "flag", "flag": "pocket_lot_sold", "value": true },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": 8 },
+            { "kind": "axis", "axis": "grasp_release", "delta": -5 }
+          ],
+          "to": "r_sold"
+        },
+        {
+          "id": "sell_keep_receipt",
+          "text": { "ru": "Продать, а квитанцию оставить себе.", "en": "Sell it and keep the receipt myself." },
+          "conditions": { "kind": "axis", "axis": "honesty_deceit", "op": "lte", "value": -25 },
+          "effects": [
+            { "kind": "flag", "flag": "pocket_lot_sold", "value": true },
+            { "kind": "gold", "delta": 13 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": -3 }
+          ],
+          "to": "r_sold"
+        },
+        {
+          "id": "mine_by_paper",
+          "text": { "ru": "Не отдам. Она моя по описи.", "en": "No. It is mine by the inventory." },
+          "conditions": { "kind": "axis", "axis": "grasp_release", "op": "gte", "value": 40 },
+          "effects": [
+            { "kind": "flag", "flag": "pocket_lot_kept", "value": true },
+            { "kind": "axis", "axis": "grasp_release", "delta": 5 }
+          ],
+          "to": "r_kept"
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "r_sold",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Одиннадцать. Перчатка уйдёт на лоток к четвергу и вернётся к нам зимой, ношеная ещё одной рукой. Так они и ходят по кругу, вещи.",
+        "en": "Eleven. The glove goes to the stall by Thursday and comes back to us in winter, worn by one more hand. That is how things go round."
+      },
+      "next": "tminny_inquiry"
+    },
+    {
+      "kind": "say",
+      "id": "r_kept",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Держите. Вы бы вышли в оценщики: у нас тут все начинали с того, что чего-нибудь не отдали.",
+        "en": "Keep it, then. You would make an appraiser: every one of us began by not handing something over."
+      },
+      "next": "tminny_inquiry"
+    },
+    {
+      "kind": "say",
+      "id": "r_gift",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Оформим как дар. Дары мы продаём по вторникам, но оформим как дар — так вам будет приятнее, а сумма та же.",
+        "en": "We shall file it as a gift. Gifts we sell on Tuesdays, but we shall file it as a gift — it will please you more, and the sum is the same."
+      },
+      "next": "tminny_inquiry"
+    },
+
+    {
+      "kind": "say",
+      "id": "tminny_inquiry",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Вы всё поглядываете на дверь под лестницей. Справка о нижних ярусах не по прейскуранту: цену ей назначают на месте.",
+        "en": "You keep glancing at the door under the stairs. A note on the lower tiers is not on the price list: its price is set on the spot."
+      },
+      "next": "inquiry_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "inquiry_choice",
+      "prompt": { "ru": "Он называет цену и делает паузу перед числом.", "en": "He names a price and pauses before the number." },
+      "options": [
+        {
+          "id": "pay_any",
+          "text": { "ru": "Заплатить сколько сказано.", "en": "Pay whatever he named." },
+          "effects": [
+            { "kind": "fragment", "memory": "punkt_pervyy", "amount": 1 },
+            { "kind": "axis", "axis": "reason_obsession", "delta": -10 }
+          ],
+          "to": "r_paid_any"
+        },
+        {
+          "id": "haggle",
+          "text": { "ru": "Торговаться.", "en": "Haggle." },
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 8 }],
+          "to": "r_haggled"
+        },
+        {
+          "id": "walk_off",
+          "text": { "ru": "Уйти без справки.", "en": "Leave without the note." },
+          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -3 }],
+          "to": "r_no_note"
+        },
+        {
+          "id": "by_clauses",
+          "text": { "ru": "Попросить справку по пунктам, с номерами полок.", "en": "Ask for it by clauses, with shelf numbers." },
+          "chip": { "icon": "hourglass", "label": { "ru": "Перечень", "en": "Perechen" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "perechen" },
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": -8 }],
+          "to": "r_paid_any"
+        },
+        {
+          "id": "pay_by_promise",
+          "text": { "ru": "Расплатиться посулом на четверг.", "en": "Pay with a promise note for Thursday." },
+          "chip": { "icon": "coin", "label": { "ru": "Посульщик", "en": "Posulshchik" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "posulshchik" },
+          "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": -8 }],
+          "to": "r_promised"
+        },
+        {
+          "id": "over_tea",
+          "text": { "ru": "Спросить по-приятельски, за чаем.", "en": "Ask as a friend, over tea." },
+          "conditions": { "kind": "flag", "flag": "tminny_trust" },
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 3 }],
+          "to": "r_tea"
+        },
+        {
+          "id": "shout_price",
+          "text": { "ru": "Назвать свою цену в окошко.", "en": "Shout my own price through the window." },
+          "conditions": { "kind": "flag", "flag": "tminny_blacklist" },
+          "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": -3 }],
+          "to": "r_window"
+        },
+        {
+          "id": "threaten",
+          "text": { "ru": "Спросить, что бывает с оценщиками без справок.", "en": "Ask what happens to appraisers without their notes." },
+          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -25 },
+          "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": -5 }],
+          "to": "r_threat"
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "r_paid_any",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Третий ярус, полки с «В». Читальня работает до темноты, ночью там сторожа и опись. Сдачи с такой цены не бывает, вы понимаете.",
+        "en": "Third tier, the shelves under \"D\". The reading room is open until dark; at night there are watchmen and an inventory. There is no change from a price like that, as you understand."
+      },
+      "next": "hall_exit"
+    },
+    {
+      "kind": "say",
+      "id": "r_haggled",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Сошлись на половине. Половина справки — это третий ярус без номера полки, и вам придётся считать самому.",
+        "en": "We settle at half. Half a note means the third tier without a shelf number, and you will have to count it out yourself."
+      },
+      "next": "hall_exit"
+    },
+    {
+      "kind": "say",
+      "id": "r_no_note",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Как угодно-с. Цена на неё к вечеру не упадёт: справки не ношеный товар, они одинаково новы, пока не сбудутся.",
+        "en": "As you wish. The price will not drop by evening: notes are not worn goods, they stay equally new until they come true."
+      },
+      "next": "hall_exit"
+    },
+    {
+      "kind": "say",
+      "id": "r_promised",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Принимаю к четвергу. Посулы я беру не по глупости, а по опыту: невыполненный посул через год стоит дороже выполненного.",
+        "en": "Accepted for Thursday. I take promise notes not from foolishness but from experience: in a year, a broken one is worth more than a kept one."
+      },
+      "next": "hall_exit"
+    },
+    {
+      "kind": "say",
+      "id": "r_tea",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Чай остыл, а вы мне нравитесь. Третий ярус, полки с «В», и не спрашивайте, отчего в описи там одна карточка без суммы.",
+        "en": "The tea has gone cold and I like you. Third tier, the shelves under \"D\", and do not ask why one card there carries no sum."
+      },
+      "keywords": [{ "match": { "ru": "без суммы", "en": "no sum" }, "tone": "memory" }],
+      "next": "hall_exit"
+    },
+    {
+      "kind": "say",
+      "id": "r_window",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Через окошко цены называются прописью. Прописью ваша цена звучит длиннее и оттого честнее.",
+        "en": "Through the window, prices are given in words. In words your price sounds longer, and therefore more honest."
+      },
+      "next": "hall_exit"
+    },
+    {
+      "kind": "say",
+      "id": "r_threat",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Их переводят на приём стыда. Я там был четыре года и оцениваю свою тогдашнюю трусость в шесть грошей — она была свежая.",
+        "en": "They are transferred to shame intake. I served there four years, and I value my cowardice of that time at six groschen — it was fresh."
+      },
+      "next": "hall_exit"
+    },
+    {
+      "kind": "narration",
+      "id": "hall_exit",
+      "text": {
+        "ru": "На улице темнеет по расписанию: фонарщик Ломбарда зажигает двор в шесть, город — когда успеет.",
+        "en": "Outside it gets dark on schedule: the Pawnshop's lamplighter lights the yard at six, and the city whenever he gets to it."
+      },
+      "next": "scene:zaklad_hub"
+    }
+  ]
+}

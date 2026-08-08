@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400" width="300" height="400" role="img" aria-label="unit card memory_thief_orsa">
+  <defs>
+    <linearGradient id="ug-memory_thief_orsa" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="hsl(265 24% 14%)"/>
+      <stop offset="100%" stop-color="hsl(265 30% 6%)"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="400" fill="url(#ug-memory_thief_orsa)"/>
+  <circle cx="150" cy="119.14150151573122" r="76.87415788024664" fill="#e6c15c" opacity="0.12"/>
+  <path d="
+    M 104.15016349239994 340.29556369176134
+    C 104.15016349239994 207.1573271919042, 79.08630154794082 187.1573271919042, 79.08630154794082 177.1573271919042
+    C 79.08630154794082 125.5476813390851 , 117.96910088323057 125.5476813390851, 117.64819684438407 115.93841160405427
+    A 32.03089911676943 32.03089911676943 0 0 1 181.70999507792294 115.93841160405427
+    C 182.03089911676943 125.5476813390851, 219.30917825782672 125.5476813390851, 219.30917825782672 177.1573271919042
+    C 219.30917825782672 187.1573271919042, 192.64079611913513 207.1573271919042, 192.64079611913513 340.29556369176134
+    Z
+  " fill="#0f1014" stroke="#0b0b0e" stroke-width="1"/>
+  
+  
+  <rect x="6" y="6" width="288" height="388" rx="6" fill="none" stroke="#e6c15c" stroke-width="3"/>
+  <rect x="12" y="12" width="276" height="376" fill="none" stroke="#e6c15c" stroke-width="1" opacity="0.5"/>
+  <g transform="translate(6 6) rotate(0)">
+      <path d="M0 18 V0 H18" fill="none" stroke="#e6c15c" stroke-width="3"/>
+      <circle cx="4" cy="4" r="2.2" fill="#e6c15c"/>
+    </g>
+  <g transform="translate(294 6) rotate(90)">
+      <path d="M0 18 V0 H18" fill="none" stroke="#e6c15c" stroke-width="3"/>
+      <circle cx="4" cy="4" r="2.2" fill="#e6c15c"/>
+    </g>
+  <g transform="translate(294 394) rotate(180)">
+      <path d="M0 18 V0 H18" fill="none" stroke="#e6c15c" stroke-width="3"/>
+      <circle cx="4" cy="4" r="2.2" fill="#e6c15c"/>
+    </g>
+  <g transform="translate(6 394) rotate(270)">
+      <path d="M0 18 V0 H18" fill="none" stroke="#e6c15c" stroke-width="3"/>
+      <circle cx="4" cy="4" r="2.2" fill="#e6c15c"/>
+    </g>
+  <circle cx="150" cy="9" r="3.4" fill="#e6c15c"/><circle cx="150" cy="391" r="3.4" fill="#e6c15c"/>
+
+</svg>

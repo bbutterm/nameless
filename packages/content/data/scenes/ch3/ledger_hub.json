@@ -1,0 +1,281 @@
+{
+  "id": "ledger_hub",
+  "chapter": 3,
+  "title": { "ru": "Зал Учёта, дальний конец", "en": "The Ledger Hall, Far End" },
+  "tags": ["hub", "chapter3"],
+  "available": { "kind": "visited", "scene": "audit_arrives" },
+  "entry": "hub_router",
+  "nodes": [
+    {
+      "kind": "branch",
+      "id": "hub_router",
+      "branches": [
+        {
+          "when": { "kind": "counter", "counter": "ledger_depth", "op": "gte", "value": 3 },
+          "to": "hub_deep"
+        },
+        {
+          "when": { "kind": "counter", "counter": "ledger_depth", "op": "gte", "value": 1 },
+          "to": "hub_again"
+        }
+      ],
+      "fallback": "hub_first"
+    },
+    {
+      "kind": "narration",
+      "id": "hub_first",
+      "text": {
+        "ru": "Дальний конец зала отгорожен канатом, и канат сегодня лежит на полу: отгораживать некого. Столы сдвинуты в один длинный, на нём разложена сверка, и разложена она по разделам, а не по годам.",
+        "en": "The far end of the hall is roped off, and today the rope lies on the floor: there is nobody to rope out. The tables have been pushed into one long one, and the reconciliation is laid out on it by sections, not by years."
+      },
+      "next": "hub_first2"
+    },
+    {
+      "kind": "narration",
+      "id": "hub_first2",
+      "text": {
+        "ru": "Разделов пять, и напротив каждого стоит галочка. Шестой строки нет, а место под неё оставлено — ровно в палец шириной, как оставляют, когда знают, что придётся дописывать.",
+        "en": "There are five sections, and against each of them a tick. There is no sixth line, but the space for one has been left, exactly a finger wide, the way it is left when you know you will have to add something."
+      },
+      "keywords": [{ "match": { "ru": "Шестой строки нет", "en": "There is no sixth line" }, "tone": "danger" }],
+      "next": "hub_svodchik_1"
+    },
+    {
+      "kind": "say",
+      "id": "hub_svodchik_1",
+      "speaker": "svodchik",
+      "text": {
+        "ru": "Сверка идёт с трёх сторон: зал Учёта, книга наследования, нижняя полка. Сойтись должно в одной точке.",
+        "en": "The reconciliation runs from three sides: the Ledger Hall, the book of inheritance, the lowest shelf. It is to meet at one point."
+      },
+      "next": "hub_svodchik_2"
+    },
+    {
+      "kind": "say",
+      "id": "hub_svodchik_2",
+      "speaker": "svodchik",
+      "text": {
+        "ru": "Пока сошлось с двух — точка выходит одна и та же. С третьей стороны мы не ходили: там ступени.",
+        "en": "So far it has met from two, and the point comes out the same. From the third side we have not gone: there are steps down there."
+      },
+      "next": "hub_choice"
+    },
+    {
+      "kind": "narration",
+      "id": "hub_again",
+      "text": {
+        "ru": "Свечей на столе стало меньше на треть: их гасят с дальнего конца, как гасят лампы в читальне. Сводчик считает оставшиеся и записывает число рядом с числом позиций, чтобы не путать.",
+        "en": "There are a third fewer candles on the table: they are put out from the far end, the way lamps are put out in the reading room. The reconciler counts what is left and writes the figure beside the figure for the entries, so as not to confuse the two."
+      },
+      "next": "hub_again_2"
+    },
+    {
+      "kind": "say",
+      "id": "hub_again_2",
+      "speaker": "svodchik",
+      "text": {
+        "ru": "Позиций осталось: одна. Свечей осталось: девять. Сходятся эти два числа только у нас в смете.",
+        "en": "Entries left: one. Candles left: nine. Those two figures tally only in our estimate."
+      },
+      "next": "hub_choice"
+    },
+    {
+      "kind": "narration",
+      "id": "hub_deep",
+      "text": {
+        "ru": "Сверку со стола убрали и свернули в трубку. На столе остались три листа, придавленные бирками, и все три сходятся в одной строке — той, что уходит вниз, под здание.",
+        "en": "The reconciliation has been cleared off the table and rolled up. Three sheets are left, weighted down with tags, and all three come together on one line: the one that goes down, under the building."
+      },
+      "next": "hub_deep_2"
+    },
+    {
+      "kind": "say",
+      "id": "hub_deep_2",
+      "speaker": "revizor",
+      "text": {
+        "ru": "Сошлось. Осталось: спуститься и посмотреть. Спускаться придётся вам.",
+        "en": "It tallies. What remains: to go down and look. You are the one who will go down."
+      },
+      "next": "hub_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "hub_choice",
+      "prompt": {
+        "ru": "Три двери из зала: вбок, наверх и вниз.",
+        "en": "Three ways out of the hall: sideways, up, and down."
+      },
+      "options": [
+        {
+          "id": "read_board",
+          "text": { "ru": "Прочитать доску сверки.", "en": "Read the reconciliation board." },
+          "fallback": true,
+          "to": "hub_board"
+        },
+        {
+          "id": "ask_svodchik",
+          "text": { "ru": "Спросить сводчика, чем всё кончится.", "en": "Ask the reconciler how this ends." },
+          "fallback": true,
+          "to": "hub_ask"
+        },
+        {
+          "id": "to_reckoning",
+          "text": { "ru": "К Ревизору, на сверку лицом к лицу.", "en": "To the Auditor, to be reconciled face to face." },
+          "conditions": { "kind": "not", "of": { "kind": "visited", "scene": "reckoning_hall" } },
+          "to": "scene:reckoning_hall",
+          "priority": 7
+        },
+        {
+          "id": "to_book",
+          "text": { "ru": "В приёмную наследования, к книге.", "en": "To the inheritance office, to the book." },
+          "conditions": { "kind": "not", "of": { "kind": "visited", "scene": "osoka_book" } },
+          "to": "scene:osoka_book",
+          "priority": 7
+        },
+        {
+          "id": "to_shelf",
+          "text": { "ru": "Вниз, к самой нижней полке.", "en": "Down, to the lowest shelf." },
+          "conditions": { "kind": "not", "of": { "kind": "visited", "scene": "lowest_shelf" } },
+          "to": "scene:lowest_shelf",
+          "priority": 7
+        },
+        {
+          "id": "to_first_lot",
+          "text": { "ru": "Туда, где сошлись все три листа.", "en": "To where all three sheets meet." },
+          "conditions": { "kind": "counter", "counter": "ledger_depth", "op": "gte", "value": 3 },
+          "to": "scene:first_lot",
+          "priority": 9
+        },
+        {
+          "id": "to_klyost",
+          "text": { "ru": "К мальчишке на подоконнике.", "en": "To the boy on the window ledge." },
+          "conditions": { "kind": "flag", "flag": "klyost_named" },
+          "to": "klyost_fades",
+          "priority": 5
+        },
+        {
+          "id": "to_tminny",
+          "text": { "ru": "К оценщику, который сегодня без прейскуранта.", "en": "To the appraiser, who has no price list today." },
+          "conditions": {
+            "kind": "any",
+            "of": [
+              { "kind": "flag", "flag": "tminny_trust" },
+              { "kind": "flag", "flag": "tminny_blacklist" }
+            ]
+          },
+          "to": "hub_tminny",
+          "priority": 4
+        },
+        {
+          "id": "count_candles",
+          "chip": { "icon": "hourglass", "label": { "ru": "Перечень", "en": "Perechen" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "perechen" },
+          "text": { "ru": "Пересчитать свечи вместе со сводчиком.", "en": "Recount the candles with the reconciler." },
+          "effects": [{ "kind": "fragment", "memory": "eda_ne_vnesena", "amount": 2 }],
+          "to": "hub_candles",
+          "priority": 5
+        }
+      ]
+    },
+    {
+      "kind": "lore",
+      "id": "hub_board",
+      "title": { "ru": "Доска сверки, зал Учёта", "en": "Reconciliation board, Ledger Hall" },
+      "text": {
+        "ru": "«Сверено разделов: пять из пяти. Расхождений: одно. Сумма расхождения: см. обеспечение. Ответственный: см. обеспечение. Обеспечение: см. вкладчика». Ниже, карандашом: «Круг замкнулся на третьей строке. Сверщики просят указаний». Ещё ниже, чернилами: «Указание: продолжайте».",
+        "en": "\"Sections reconciled: five of five. Discrepancies: one. Amount of the discrepancy: see holdings. Party responsible: see holdings. Holdings: see depositor.\" Below, in pencil: \"The circle closed on the third line. The reconcilers request instructions.\" Below that, in ink: \"Instruction: continue.\""
+      },
+      "next": "hub_choice"
+    },
+    {
+      "kind": "say",
+      "id": "hub_ask",
+      "speaker": "svodchik",
+      "text": {
+        "ru": "Кончится актом. Акт подписывают двое: Ревизия и вкладчик. Второй подписи в природе ещё не было.",
+        "en": "It ends with a certificate. A certificate is signed by two: the Audit and the depositor. The second signature has never yet existed in nature."
+      },
+      "next": "hub_choice"
+    },
+    {
+      "kind": "say",
+      "id": "hub_tminny",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Прейскуранты сняты со стен, позвольте-с. Цена сегодня одна на всё, и она мне не нравится: цена сегодня — «см. обеспечение».",
+        "en": "The price lists have been taken off the walls, if you please. Today there is one price for everything, and I do not care for it: today the price is \"see holdings\"."
+      },
+      "next": "hub_tminny_2"
+    },
+    {
+      "kind": "say",
+      "id": "hub_tminny_2",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Мой вступительный взнос стоил... девятнадцать грошей. Я помню цифру и не помню человека, и вот это, позвольте-с, теперь тоже сверяют.",
+        "en": "My entrance contribution cost... nineteen groschen. I remember the figure and do not remember the person, and that, if you please, is now being reconciled too."
+      },
+      "next": "hub_choice"
+    },
+    {
+      "kind": "say",
+      "id": "klyost_fades",
+      "speaker": "klyost",
+      "text": {
+        "ru": "Короче, меня тут вписали в довольствие. Свечка, полкружки, лист бумаги. Я лист съем, а бумагу оставлю.",
+        "en": "So, they put me on the ration list here. A candle, half a cup, a sheet of paper. I'll eat the sheet and keep the paper."
+      },
+      "next": "klyost_router"
+    },
+    {
+      "kind": "branch",
+      "id": "klyost_router",
+      "branches": [
+        {
+          "when": { "kind": "counter", "counter": "klyost_seen", "op": "gte", "value": 3 },
+          "to": "klyost_colour"
+        },
+        { "when": { "kind": "flag", "flag": "klyost_taught_lie" }, "to": "klyost_lie" }
+      ],
+      "fallback": "klyost_grey"
+    },
+    {
+      "kind": "narration",
+      "id": "klyost_colour",
+      "text": {
+        "ru": "На свету видно, что рукава у него синие. Раньше они были того же цвета, что стена за ним, и ты помнишь, какого именно, потому что запоминал нарочно.",
+        "en": "In the light you can see that his sleeves are blue. They used to be the colour of the wall behind him, and you remember exactly which colour, because you made a point of remembering."
+      },
+      "next": "hub_choice"
+    },
+    {
+      "kind": "say",
+      "id": "klyost_lie",
+      "speaker": "klyost",
+      "text": {
+        "ru": "Я сводчику наврал, что видел вас вчера у ворот. Он записал. Теперь оно как будто и было.",
+        "en": "I told the reconciler a lie, that I saw you at the gates yesterday. He wrote it down. Now it's as good as having happened."
+      },
+      "next": "hub_choice"
+    },
+    {
+      "kind": "narration",
+      "id": "klyost_grey",
+      "text": {
+        "ru": "Он сидит на подоконнике, и подоконник виден сквозь него не насквозь, а как через воду в стакане. Сводчики проходят мимо и не здороваются, потому что здороваться не с кем.",
+        "en": "He sits on the window ledge, and the ledge shows through him not clean through, but as through water in a glass. The reconcilers pass by without greeting him, because there is nobody to greet."
+      },
+      "next": "hub_choice"
+    },
+    {
+      "kind": "say",
+      "id": "hub_candles",
+      "speaker": "svodchik",
+      "text": {
+        "ru": "У вас девять, у меня девять. Хорошо. Считать вдвоём быстрее только тогда, когда сходится, а сходится у нас с вами всё, кроме одного.",
+        "en": "Nine for you, nine for me. Good. Counting in pairs is faster only when it tallies, and everything tallies between us but one thing."
+      },
+      "next": "hub_choice"
+    }
+  ]
+}

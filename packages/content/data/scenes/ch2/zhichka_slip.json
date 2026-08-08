@@ -1,0 +1,689 @@
+{
+  "id": "zhichka_slip",
+  "chapter": 2,
+  "title": {
+    "ru": "Сорок вторая склянка",
+    "en": "The Forty-Second Jar"
+  },
+  "tags": [
+    "guild",
+    "zhichka",
+    "no_combat"
+  ],
+  "available": {
+    "kind": "any",
+    "of": [
+      {
+        "kind": "flag",
+        "flag": "zhichka_promise"
+      },
+      {
+        "kind": "flag",
+        "flag": "zhichka_deal"
+      }
+    ]
+  },
+  "entry": "slip_in",
+  "nodes": [
+    {
+      "kind": "narration",
+      "id": "slip_in",
+      "text": {
+        "ru": "В лавке сушится верёвка со склянками, и капает с них на пол ровно, как из плохо закрытого крана. Жичка считает их с конца и на сорок первой останавливается.",
+        "en": "A line of jars is drying in the shop, and they drip onto the floor as steadily as a badly closed tap. Zhichka counts them from the end and stops at forty-one."
+      },
+      "next": "zh_1"
+    },
+    {
+      "kind": "say",
+      "id": "zh_1",
+      "speaker": "zhichka",
+      "text": {
+        "ru": "Сорок одна на верёвке. Сорок вторая на мне, и она сегодня тяжелее обычного — я в ней с утра, и снять не выходит.",
+        "en": "Forty-one on the line. The forty-second is on me, and it is heavier than usual today — I have been in it since morning and it will not come off."
+      },
+      "next": "zh_2"
+    },
+    {
+      "kind": "say",
+      "id": "zh_2",
+      "speaker": "zhichka",
+      "text": {
+        "ru": "Ношеное надо проветривать, а эту я не вешаю. Хозяйка у неё была аккуратная, соседи говорили — мельникова вдова, из тех, кто и в декабре подметает крыльцо.",
+        "en": "Worn goods want airing, but this one I do not hang up. Its owner was a tidy woman, the neighbours said — the miller's widow, one of those who sweeps the porch even in December."
+      },
+      "keywords": [
+        {
+          "match": {
+            "ru": "мельникова вдова",
+            "en": "the miller's widow"
+          },
+          "tone": "memory"
+        }
+      ],
+      "next": "zh_shift"
+    },
+    {
+      "kind": "narration",
+      "id": "zh_shift",
+      "text": {
+        "ru": "На слове «декабрь» её речь меняет ход: становится длиннее, ровнее, с чужими окончаниями. Так говорят люди, которые никуда не торопятся, потому что у них ещё будет год.",
+        "en": "On the word \"December\" her speech changes its gait: it grows longer, evener, with somebody else's endings on the words. That is how people talk who are in no hurry, because they still have a year ahead."
+      },
+      "next": "zh_borrowed"
+    },
+    {
+      "kind": "say",
+      "id": "zh_borrowed",
+      "speaker": "zhichka",
+      "text": {
+        "ru": "Вы приходили под вечер, и почерк у вас был твёрдый, а голос мягкий. Вы написали мне урожай будущего года целиком, и я до сих пор считаю, что вы не соврали.",
+        "en": "You used to come towards evening, and your hand was firm and your voice was soft. You wrote me out next year's harvest, entire, and I still hold that you did not lie to me."
+      },
+      "keywords": [
+        {
+          "match": {
+            "ru": "урожай будущего года",
+            "en": "next year's harvest"
+          },
+          "tone": "memory"
+        }
+      ],
+      "next": "zh_recoil"
+    },
+    {
+      "kind": "narration",
+      "id": "zh_recoil",
+      "text": {
+        "ru": "Она замолкает на полуслове и отводит запястье за спину — движение быстрое и отработанное, как у человека, который прячет не склянку, а руку.",
+        "en": "She stops mid-word and puts her wrist behind her back — a quick, practised movement, of the sort made by someone hiding not a jar but a hand."
+      },
+      "next": "slip_effect"
+    },
+    {
+      "kind": "effects",
+      "id": "slip_effect",
+      "effects": [
+        {
+          "kind": "flag",
+          "flag": "zhichka_slip_heard",
+          "value": true
+        }
+      ],
+      "next": "press_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "press_choice",
+      "prompt": {
+        "ru": "Капает с верёвки. Она считает капли, чтобы не считать другое.",
+        "en": "The line drips. She counts the drops so as not to count anything else."
+      },
+      "options": [
+        {
+          "id": "who_wrote",
+          "text": {
+            "ru": "Спросить, кто ей это написал.",
+            "en": "Ask who wrote that out for her."
+          },
+          "fallback": true,
+          "to": "r_who_wrote"
+        },
+        {
+          "id": "let_go",
+          "text": {
+            "ru": "Сделать вид, что не расслышал.",
+            "en": "Pretend I did not catch it."
+          },
+          "fallback": true,
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": -5
+            }
+          ],
+          "to": "r_let_go"
+        },
+        {
+          "id": "say_mine",
+          "text": {
+            "ru": "Сказать: это писал я.",
+            "en": "Say: I wrote that."
+          },
+          "fallback": true,
+          "effects": [
+            {
+              "kind": "fragment",
+              "memory": "pervaya_stroka",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 8
+            }
+          ],
+          "to": "r_say_mine",
+          "priority": 8
+        },
+        {
+          "id": "finish_it",
+          "text": {
+            "ru": "Договорить за неё. Слово в слово.",
+            "en": "Finish it for her. Word for word."
+          },
+          "chip": {
+            "icon": "coin",
+            "label": {
+              "ru": "Посульщик",
+              "en": "Posulshchik"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "posulshchik"
+          },
+          "effects": [
+            {
+              "kind": "fragment",
+              "memory": "luchshie_gody",
+              "amount": 2
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": -8
+            }
+          ],
+          "to": "r_finish",
+          "priority": 7
+        },
+        {
+          "id": "write_down",
+          "text": {
+            "ru": "Записать её слова при ней, целиком.",
+            "en": "Write her words down in front of her, entire."
+          },
+          "chip": {
+            "icon": "book",
+            "label": {
+              "ru": "Чистописец",
+              "en": "Chistopisets"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "chistopisets"
+          },
+          "effects": [
+            {
+              "kind": "fragment",
+              "memory": "khronika_bez_popravok",
+              "amount": 2
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 15
+            }
+          ],
+          "to": "r_write_down",
+          "priority": 7
+        },
+        {
+          "id": "count_jars",
+          "text": {
+            "ru": "Сосчитать склянки на верёвке вслух.",
+            "en": "Count the jars on the line out loud."
+          },
+          "chip": {
+            "icon": "hourglass",
+            "label": {
+              "ru": "Перечень",
+              "en": "Perechen"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "perechen"
+          },
+          "effects": [
+            {
+              "kind": "fragment",
+              "memory": "opis_vsego_sushchego",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -8
+            }
+          ],
+          "to": "r_count_jars",
+          "priority": 6
+        },
+        {
+          "id": "press_hard",
+          "text": {
+            "ru": "Взять её за запястье и не отпустить.",
+            "en": "Take her by the wrist and not let go."
+          },
+          "conditions": {
+            "kind": "axis",
+            "axis": "mercy_cruelty",
+            "op": "lte",
+            "value": -30
+          },
+          "effects": [
+            {
+              "kind": "fragment",
+              "memory": "ples_gorit",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": -8
+            }
+          ],
+          "to": "r_press_hard",
+          "priority": 6
+        },
+        {
+          "id": "already_read",
+          "text": {
+            "ru": "Показать ей, чей почерк на договоре.",
+            "en": "Show her whose hand is on the deed."
+          },
+          "conditions": {
+            "kind": "flag",
+            "flag": "contract_read"
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 5
+            }
+          ],
+          "to": "r_show_deed",
+          "priority": 5
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "r_who_wrote",
+      "speaker": "zhichka",
+      "text": {
+        "ru": "Не знаю и не спрашивала. Я купила её у перекупщика за два горя, и в описи стояло «происхождение не указано». Мне так удобнее.",
+        "en": "I do not know and I did not ask. I bought her off a middleman for two sorrows, and the record said \"provenance not stated\". It suits me better that way."
+      },
+      "next": "after_press"
+    },
+    {
+      "kind": "narration",
+      "id": "r_let_go",
+      "text": {
+        "ru": "Ты переводишь разговор на цену верёвки, и она подхватывает с облегчением, слишком быстрым для торговки. Верёвка стоит грош, и об этом вы говорите четыре минуты.",
+        "en": "You turn the talk to the price of the line, and she picks it up with a relief too quick for a trader. The line costs a groschen and you talk about it for four minutes."
+      },
+      "next": "after_press"
+    },
+    {
+      "kind": "say",
+      "id": "r_say_mine",
+      "speaker": "zhichka",
+      "text": {
+        "ru": "Ты? Тогда молчи. Если это ты, то я четыре года скучаю по тебе чужой скукой, и я за это себя не уважаю.",
+        "en": "You? Then keep quiet. If it is you, then for four years I have been missing you with somebody else's missing, and I do not respect myself for it."
+      },
+      "next": "after_press"
+    },
+    {
+      "kind": "narration",
+      "id": "r_finish",
+      "text": {
+        "ru": "Ты договариваешь фразу до конца, и конец у неё оказывается про мельницу, которую перебрали к весне. Жичка слушает свой собственный рот и впервые за всё знакомство молчит две фразы подряд.",
+        "en": "You finish the sentence for her, and the end of it turns out to be about a mill that was rebuilt by spring. Zhichka listens to her own mouth and, for the first time since you met, goes two sentences without speaking."
+      },
+      "next": "after_press"
+    },
+    {
+      "kind": "narration",
+      "id": "r_write_down",
+      "text": {
+        "ru": "Ты пишешь на обороте описи: «декабрь», «крыльцо», «урожай будущего года целиком». Она читает через плечо и просит вычеркнуть третье, а ты объясняешь, отчего это невозможно.",
+        "en": "You write on the back of the inventory: \"December\", \"the porch\", \"next year's harvest, entire\". She reads over your shoulder and asks you to strike the third, and you explain why that is impossible."
+      },
+      "next": "after_press"
+    },
+    {
+      "kind": "say",
+      "id": "r_count_jars",
+      "speaker": "zhichka",
+      "text": {
+        "ru": "Сорок одна, я же сказала. Ты пересчитал и получил сорок одну, и тебе от этого легче, а мне нет.",
+        "en": "Forty-one, I told you. You counted them over and got forty-one, and that makes it easier for you, and it does not for me."
+      },
+      "next": "after_press"
+    },
+    {
+      "kind": "say",
+      "id": "r_press_hard",
+      "speaker": "zhichka",
+      "text": {
+        "ru": "Отпусти. У нас за руку берут только на весах, и я тебе не товар. Скажу и без руки: там про тебя, и я это знала раньше тебя.",
+        "en": "Let go. In our trade you are taken by the hand only on the scales, and I am not goods. I will tell you without the hand: it is about you, and I knew it before you did."
+      },
+      "next": "after_press"
+    },
+    {
+      "kind": "say",
+      "id": "r_show_deed",
+      "speaker": "zhichka",
+      "text": {
+        "ru": "Тот же нажим, тот же хвост у «у». Значит, ты и в мельницу, и в ломбард, и в подпись — один. Я торгую чужим, а тут чужого нет вовсе.",
+        "en": "Same pressure, same short tail on the letter. So the mill and the pawnshop and the signature are all one man. I trade in what belongs to others, and here there is nothing that belongs to others at all."
+      },
+      "next": "after_press"
+    },
+    {
+      "kind": "narration",
+      "id": "after_press",
+      "text": {
+        "ru": "Она снимает сорок вторую с запястья и кладёт на прилавок между вами. Склянка мутная по нижнему краю: так мутнеют те, которые надевали чаще, чем проветривали.",
+        "en": "She takes the forty-second off her wrist and lays it on the counter between you. The jar is clouded along the bottom edge: they cloud like that when they have been worn more often than they have been aired."
+      },
+      "next": "jar_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "jar_choice",
+      "prompt": {
+        "ru": "Цену она не называет, и это у неё впервые.",
+        "en": "She does not name a price, and that is a first for her."
+      },
+      "options": [
+        {
+          "id": "buy_jar",
+          "text": {
+            "ru": "Купить. Назвать свою цену первым.",
+            "en": "Buy it. Name my price first."
+          },
+          "fallback": true,
+          "effects": [
+            {
+              "kind": "gold",
+              "delta": -22
+            },
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": 8
+            },
+            {
+              "kind": "counter",
+              "counter": "lots_held",
+              "delta": 1
+            }
+          ],
+          "to": "r_buy_jar"
+        },
+        {
+          "id": "leave_jar",
+          "text": {
+            "ru": "Оставить склянку ей.",
+            "en": "Leave the jar with her."
+          },
+          "fallback": true,
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": -8
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": 5
+            }
+          ],
+          "to": "r_leave_jar"
+        },
+        {
+          "id": "trade_it",
+          "text": {
+            "ru": "Торговаться, как торговались всегда.",
+            "en": "Haggle, the way we always haggled."
+          },
+          "fallback": true,
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": 5
+            }
+          ],
+          "to": "r_trade_it"
+        },
+        {
+          "id": "return_to_owner",
+          "text": {
+            "ru": "Отвезти склянку вдове, если она жива.",
+            "en": "Take the jar to the widow, if she is alive."
+          },
+          "chip": {
+            "icon": "heal",
+            "label": {
+              "ru": "Ключарь",
+              "en": "Klyuchar"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "klyuchar"
+          },
+          "effects": [
+            {
+              "kind": "fragment",
+              "memory": "poslednyaya_kruzhka",
+              "amount": 2
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": 15
+            },
+            {
+              "kind": "counter",
+              "counter": "debts_forgiven",
+              "delta": 1
+            }
+          ],
+          "to": "r_return_owner",
+          "priority": 7
+        },
+        {
+          "id": "promise_pay",
+          "text": {
+            "ru": "Выписать ей посул. Как в тот раз.",
+            "en": "Write her a promise note. Like that time."
+          },
+          "chip": {
+            "icon": "coin",
+            "label": {
+              "ru": "Посульщик",
+              "en": "Posulshchik"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "posulshchik"
+          },
+          "effects": [
+            {
+              "kind": "fragment",
+              "memory": "zima_bez_khleba",
+              "amount": 2
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": -15
+            },
+            {
+              "kind": "counter",
+              "counter": "promises_given",
+              "delta": 1
+            },
+            {
+              "kind": "counter",
+              "counter": "lots_held",
+              "delta": 1
+            }
+          ],
+          "to": "r_promise_pay",
+          "priority": 7
+        },
+        {
+          "id": "empty_jar",
+          "text": {
+            "ru": "Попросить взамен пустую склянку.",
+            "en": "Ask for an empty jar instead."
+          },
+          "conditions": {
+            "kind": "axis",
+            "axis": "grasp_release",
+            "op": "gte",
+            "value": 30
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": 5
+            }
+          ],
+          "to": "r_empty_jar",
+          "priority": 5
+        },
+        {
+          "id": "break_jar",
+          "text": {
+            "ru": "Разбить её о прилавок. Обоим легче.",
+            "en": "Break it on the counter. Easier for both."
+          },
+          "conditions": {
+            "kind": "axis",
+            "axis": "mercy_cruelty",
+            "op": "lte",
+            "value": -40
+          },
+          "effects": [
+            {
+              "kind": "fragment",
+              "memory": "schet_za_sezon",
+              "amount": 2
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": -15
+            },
+            {
+              "kind": "flag",
+              "flag": "zhichka_hostile",
+              "value": true
+            }
+          ],
+          "to": "r_break_jar",
+          "priority": 6
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "r_buy_jar",
+      "speaker": "zhichka",
+      "text": {
+        "ru": "Двадцать два. Ты назвал ровно ту цену, за которую я её брала, и это самое обидное за сегодня.",
+        "en": "Twenty-two. You named the exact price I paid for her, and that is the most galling thing today."
+      },
+      "next": "slip_out"
+    },
+    {
+      "kind": "say",
+      "id": "r_leave_jar",
+      "speaker": "zhichka",
+      "text": {
+        "ru": "Оставляешь? Тогда я её всё-таки повешу проветрить. Первый раз за четыре года, и то из вредности.",
+        "en": "Leaving her? Then I shall hang her out to air after all. First time in four years, and only out of spite."
+      },
+      "next": "slip_out"
+    },
+    {
+      "kind": "say",
+      "id": "r_trade_it",
+      "speaker": "zhichka",
+      "text": {
+        "ru": "Вот. Вот так и надо было сразу. Торгуйся, и я перестану слышать её и начну слышать тебя.",
+        "en": "There. That is how it should have gone from the start. Haggle, and I will stop hearing her and start hearing you."
+      },
+      "next": "slip_out"
+    },
+    {
+      "kind": "narration",
+      "id": "r_return_owner",
+      "text": {
+        "ru": "Вдова жива, живёт на Том берегу и держит две козы. Склянку она берёт, ставит на полку и говорит, что откроет зимой, когда будет время; зимой у неё времени как раз нет.",
+        "en": "The widow is alive, lives on the Other Bank and keeps two goats. She takes the jar, sets it on a shelf and says she will open it in winter, when there is time; in winter is exactly when she has none."
+      },
+      "next": "slip_out"
+    },
+    {
+      "kind": "say",
+      "id": "r_promise_pay",
+      "speaker": "zhichka",
+      "text": {
+        "ru": "Ту же бумагу и тем же почерком. Я её не порву и не перепродам: подошью и буду доставать, когда сама себе надоем.",
+        "en": "The same paper in the same hand. I will not tear it up and I will not sell it on: I will file it and take it out whenever I am sick of myself."
+      },
+      "next": "slip_out"
+    },
+    {
+      "kind": "say",
+      "id": "r_empty_jar",
+      "speaker": "zhichka",
+      "text": {
+        "ru": "Пустую — бери так, я тебе одну уже давала. Под самое-самое. Вторую даю потому, что первую ты, похоже, не наполнил.",
+        "en": "An empty one, take it as it is, I gave you one already. For the very thing. I am giving you a second because it looks as though you never filled the first."
+      },
+      "next": "slip_out"
+    },
+    {
+      "kind": "narration",
+      "id": "r_break_jar",
+      "text": {
+        "ru": "Стекло идёт мелко, и запах стоит недолго: декабрь, метёное крыльцо, мука. Жичка не кричит и не бьёт в ответ — она вытирает прилавок и с этой минуты для тебя закрыта весь Цех.",
+        "en": "The glass goes fine, and the smell does not stand long: December, a swept porch, flour. Zhichka does not scream and does not hit back — she wipes the counter down, and from that minute the whole Guild is shut to you."
+      },
+      "next": "slip_out"
+    },
+    {
+      "kind": "narration",
+      "id": "slip_out",
+      "text": {
+        "ru": "На улице над Мокрыми рядами вешают ночные ставни. Верёвка в лавке всё ещё капает, и капли считает теперь только пол.",
+        "en": "Outside, the night shutters are going up over the Wet Rows. The line in the shop is still dripping, and the only thing counting the drops now is the floor."
+      },
+      "next": "scene:vaults_hub"
+    }
+  ]
+}

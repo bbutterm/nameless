@@ -1,0 +1,112 @@
+[
+  {
+    "id": "battle_vault_watch",
+    "name": {
+      "ru": "Пост охраны обеспечения",
+      "en": "The Holdings Guard Post"
+    },
+    "tags": [
+      "great_pawnshop",
+      "vaults"
+    ],
+    "enemies": [
+      {
+        "unit": "hollow_sergeant",
+        "row": "front",
+        "index": 0,
+        "level": 4
+      },
+      {
+        "unit": "debt_bailiff",
+        "row": "front",
+        "index": 1,
+        "level": 5
+      },
+      {
+        "unit": "hollow_sergeant",
+        "row": "front",
+        "index": 2,
+        "level": 4
+      },
+      {
+        "unit": "pawn_appraiser_dusk",
+        "row": "back",
+        "index": 0,
+        "level": 5
+      },
+      {
+        "unit": "pawn_appraiser_dusk",
+        "row": "back",
+        "index": 1,
+        "level": 4
+      }
+    ],
+    "turnLimit": 0,
+    "background": "vault_first_tier",
+    "rewards": [
+      {
+        "kind": "gold",
+        "delta": 18
+      },
+      {
+        "kind": "xp",
+        "amount": 40
+      }
+    ]
+  },
+  {
+    "id": "battle_guild_auction",
+    "name": {
+      "ru": "Охрана закрытого торга",
+      "en": "Security of the Closed Sale"
+    },
+    "tags": [
+      "greedy_memory_guild",
+      "auction"
+    ],
+    "enemies": [
+      {
+        "unit": "borrowed_face",
+        "row": "front",
+        "index": 0,
+        "level": 3
+      },
+      {
+        "unit": "pledge_holder",
+        "row": "front",
+        "index": 1,
+        "level": 3
+      },
+      {
+        "unit": "guild_hoarder_vey",
+        "row": "back",
+        "index": 0,
+        "level": 3
+      },
+      {
+        "unit": "flask_hoarder",
+        "row": "back",
+        "index": 1,
+        "level": 3
+      },
+      {
+        "unit": "cold_reckoner",
+        "row": "back",
+        "index": 2,
+        "level": 2
+      }
+    ],
+    "turnLimit": 0,
+    "background": "wet_rows",
+    "rewards": [
+      {
+        "kind": "gold",
+        "delta": 26
+      },
+      {
+        "kind": "xp",
+        "amount": 45
+      }
+    ]
+  }
+]

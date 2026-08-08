@@ -1,0 +1,345 @@
+{
+  "id": "gar_debt",
+  "chapter": 2,
+  "title": { "ru": "Гарь поднимается раньше приказа", "en": "The Smoke Rises Before the Order" },
+  "tags": ["vaults", "life", "no_combat"],
+  "available": { "kind": "life", "life": "smolokur" },
+  "entry": "gar_in",
+  "nodes": [
+    {
+      "kind": "narration",
+      "id": "gar_in",
+      "text": {
+        "ru": "В боковой галерее первого яруса пахнет разведённой смолой — той, что на четверть жиже кровельной. Здесь нечему так пахнуть: тут камень, бумага и вода на два вершка ниже пола.",
+        "en": "The side gallery of the first tier smells of thinned tar — the kind cut a quarter thinner than roofing tar. There is nothing here to smell like that: only stone, paper, and water two inches below the floor."
+      },
+      "keywords": [{ "match": { "ru": "разведённой смолой", "en": "thinned tar" }, "tone": "memory" }],
+      "next": "gar_stands"
+    },
+    {
+      "kind": "narration",
+      "id": "gar_stands",
+      "text": {
+        "ru": "Гарь стоит за твоим плечом, хотя ты её не звал. Отголоски поднимаются по приказу и держатся заднего ряда; этот вышел вперёд и смотрит туда же, куда смотрел бы ты, если бы решал не думая.",
+        "en": "The Smoke is standing at your shoulder, though you did not call it. Echoes rise on command and keep to the back rank; this one has stepped forward and is looking where you would look if you decided without thinking."
+      },
+      "next": "gar_klyost"
+    },
+    {
+      "kind": "say",
+      "id": "gar_klyost",
+      "speaker": "klyost",
+      "text": {
+        "ru": "Оно тёплое. Я рядом постою, ладно? Мне бояться нечем, у меня закладывать нечего.",
+        "en": "It's warm. I'll stand next to it, all right? I've nothing to be scared with, I've nothing to pledge."
+      },
+      "next": "gar_detail"
+    },
+    {
+      "kind": "narration",
+      "id": "gar_detail",
+      "text": {
+        "ru": "По галерее идут трое с ящиком: двое несут, третий светит и считает шаги вслух, чтобы не сбить счёт партии. Ящик мокрый снизу, и мокрое пятно на нём растёт.",
+        "en": "Three men are coming along the gallery with a crate: two carry it, the third holds the light and counts the paces out loud so as not to lose the count of the consignment. The crate is wet underneath, and the wet patch on it is growing."
+      },
+      "next": "gar_lean"
+    },
+    {
+      "kind": "narration",
+      "id": "gar_lean",
+      "text": {
+        "ru": "Гарь подаётся к ним на полшага раньше, чем ты успеваешь решить, надо ли. Смола на воде занималась с опозданием на два вдоха; здесь опоздания нет вовсе.",
+        "en": "The Smoke leans towards them half a step before you have got as far as deciding whether it should. Tar on water used to catch two breaths late; here there is no lateness at all."
+      },
+      "next": "leash_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "leash_choice",
+      "prompt": {
+        "ru": "Двое несут, третий считает. До них восемь шагов.",
+        "en": "Two carry, the third counts. Eight paces to them."
+      },
+      "options": [
+        {
+          "id": "hold_it",
+          "text": { "ru": "Одёрнуть. Вслух, по имени.", "en": "Pull it back. Out loud, by name." },
+          "fallback": true,
+          "effects": [
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": 8 },
+            { "kind": "flag", "flag": "gar_leashed", "value": true }
+          ],
+          "to": "r_hold"
+        },
+        {
+          "id": "step_aside",
+          "text": { "ru": "Отойти к стене и дать пройти.", "en": "Step to the wall and let them pass." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -3 }],
+          "to": "r_aside"
+        },
+        {
+          "id": "let_it",
+          "text": { "ru": "Не мешать. Работа так работа.", "en": "Not interfere. Work is work." },
+          "fallback": true,
+          "effects": [
+            { "kind": "fragment", "memory": "ples_gorit", "amount": 2 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": -15 },
+            { "kind": "flag", "flag": "gar_loosed", "value": true }
+          ],
+          "to": "r_let"
+        },
+        {
+          "id": "count_with_it",
+          "text": { "ru": "Считать вместе с ним: сколько и почём.", "en": "Count along with it: how many and at what price." },
+          "chip": { "icon": "hourglass", "label": { "ru": "Перечень", "en": "Perechen" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "perechen" },
+          "effects": [
+            { "kind": "fragment", "memory": "opis_vsego_sushchego", "amount": 2 },
+            { "kind": "axis", "axis": "reason_obsession", "delta": -8 }
+          ],
+          "to": "r_count",
+          "priority": 6
+        },
+        {
+          "id": "water_them",
+          "text": { "ru": "Окликнуть носильщиков и предупредить.", "en": "Call out to the carriers and warn them." },
+          "chip": { "icon": "heal", "label": { "ru": "Ключарь", "en": "Klyuchar" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "klyuchar" },
+          "effects": [
+            { "kind": "fragment", "memory": "ochered_k_kolodtsu", "amount": 2 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": 15 },
+            { "kind": "flag", "flag": "gar_leashed", "value": true }
+          ],
+          "to": "r_warn",
+          "priority": 6
+        },
+        {
+          "id": "name_it_aloud",
+          "text": { "ru": "Назвать вслух, чей это отголосок.", "en": "Say out loud whose echo this is." },
+          "chip": { "icon": "book", "label": { "ru": "Чистописец", "en": "Chistopisets" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "chistopisets" },
+          "effects": [
+            { "kind": "fragment", "memory": "khronika_bez_popravok", "amount": 2 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": 15 }
+          ],
+          "to": "r_name_it",
+          "priority": 6
+        },
+        {
+          "id": "send_boy_off",
+          "text": { "ru": "Отправить мальчишку наверх. Сейчас же.", "en": "Send the boy upstairs. Right now." },
+          "conditions": { "kind": "flag", "flag": "klyost_named" },
+          "effects": [
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": 5 },
+            { "kind": "counter", "counter": "klyost_seen", "delta": 1 }
+          ],
+          "to": "r_send_boy",
+          "priority": 5
+        }
+      ]
+    },
+    {
+      "kind": "narration",
+      "id": "r_hold",
+      "text": {
+        "ru": "Ты называешь его вслух, и оно возвращается за плечо ровно, без спора. Отголосок слушается имени, а не приказа: имя у него твоё.",
+        "en": "You call it by name out loud and it goes back to your shoulder evenly, without argument. An echo obeys a name, not an order: and the name it has is yours."
+      },
+      "next": "aftermath"
+    },
+    {
+      "kind": "narration",
+      "id": "r_aside",
+      "text": {
+        "ru": "Трое проходят мимо, и третий на середине сбивается со счёта — не от страха, а от жары, которой в галерее взяться неоткуда. Он начинает с начала и уходит, считая.",
+        "en": "The three go past, and halfway along the third loses his count — not from fear but from a warmth the gallery has no source for. He starts again from the top and walks off counting."
+      },
+      "next": "aftermath"
+    },
+    {
+      "kind": "narration",
+      "id": "r_let",
+      "text": {
+        "ru": "Занимается не человек и не ящик — занимается вода под полом, тонким слоем, ровно как учили. Носильщики выходят наверх все трое, и все трое до утра будут искать, где обожглись.",
+        "en": "It is not a man that catches and not the crate — it is the water under the floor, in a thin layer, exactly as taught. All three carriers get out to the top, and all three will spend the night looking for where they were burned."
+      },
+      "next": "aftermath"
+    },
+    {
+      "kind": "narration",
+      "id": "r_count",
+      "text": {
+        "ru": "Ящиков за смену восемнадцать, в каждом по описи двенадцать склянок, и на круг это выходит по восемь грошей на двор. Ты замечаешь, что посчитал в дворах, и останавливаешься.",
+        "en": "Eighteen crates a shift, twelve jars to a crate by the inventory, which comes out at eight groschen a household. You notice that you have counted it in households, and you stop."
+      },
+      "keywords": [{ "match": { "ru": "по восемь грошей на двор", "en": "eight groschen a household" }, "tone": "memory" }],
+      "next": "aftermath"
+    },
+    {
+      "kind": "say",
+      "id": "r_warn",
+      "speaker": "strazhnik",
+      "text": {
+        "ru": "Предъявитель, отойдите от партии. Что горит — в описи нет, значит, не горит. Ящик мы всё равно донесём.",
+        "en": "Bearer, step away from the consignment. Whatever is burning is not on the inventory, therefore it is not burning. We will get the crate through regardless."
+      },
+      "next": "aftermath"
+    },
+    {
+      "kind": "narration",
+      "id": "r_name_it",
+      "text": {
+        "ru": "Ты называешь эпоху, реку и город на воде, и Гарь на этих словах становится ровнее и тише. Третий носильщик слышит половину, записывает половину и сдаёт рапорт, в котором нет ни одного глагола.",
+        "en": "You name the age, the river and the town upon the water, and at those words the Smoke goes steadier and quieter. The third carrier hears half of it, writes half of it down, and files a report with not one verb in it."
+      },
+      "next": "aftermath"
+    },
+    {
+      "kind": "say",
+      "id": "r_send_boy",
+      "speaker": "klyost",
+      "text": {
+        "ru": "Ага, я мигом. Только вы его тоже наверх заберите, а то оно тут одно останется, а тут никого.",
+        "en": "Right, I'll be quick. Only take it up with you as well, or it'll be left down here on its own, and there's nobody down here."
+      },
+      "next": "aftermath"
+    },
+    {
+      "kind": "narration",
+      "id": "aftermath",
+      "text": {
+        "ru": "Гарь стоит за плечом и не гаснет. Ты помнишь, что за ту работу тебе заплатили по зимней ставке, и помнишь сумму, а лиц гребцов, подсказавших расчёт, не помнишь до сих пор.",
+        "en": "The Smoke stands at your shoulder and does not go out. You remember that the work was paid at the winter rate, and you remember the sum, and you still cannot remember the faces of the oarsmen who gave you the calculation."
+      },
+      "next": "debt_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "debt_choice",
+      "prompt": {
+        "ru": "Оно ждёт следующего приказа и, судя по всему, дождётся.",
+        "en": "It is waiting for the next order and, by the look of it, will get one."
+      },
+      "options": [
+        {
+          "id": "keep_it_close",
+          "text": { "ru": "Держать его при себе. Пригодится.", "en": "Keep it close. It will come in useful." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": 8 }],
+          "to": "r_keep_close"
+        },
+        {
+          "id": "ask_what_wants",
+          "text": { "ru": "Спросить у него, чего оно хочет.", "en": "Ask it what it wants." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 5 }],
+          "to": "r_ask_wants"
+        },
+        {
+          "id": "send_it_back",
+          "text": { "ru": "Отправить его обратно в задний ряд.", "en": "Send it back to the rear rank." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -8 }],
+          "to": "r_send_back"
+        },
+        {
+          "id": "pay_the_bill",
+          "text": { "ru": "Пересчитать счёт за сезон ещё раз.", "en": "Count the bill for the season through again." },
+          "chip": { "icon": "fire", "label": { "ru": "Смолокур", "en": "Smolokur" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "smolokur" },
+          "effects": [
+            { "kind": "fragment", "memory": "schet_za_sezon", "amount": 3 },
+            { "kind": "axis", "axis": "reason_obsession", "delta": -8 }
+          ],
+          "to": "r_pay_bill",
+          "priority": 7
+        },
+        {
+          "id": "promise_it",
+          "text": { "ru": "Пообещать ему войну покороче.", "en": "Promise it a shorter war." },
+          "chip": { "icon": "coin", "label": { "ru": "Посульщик", "en": "Posulshchik" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "posulshchik" },
+          "effects": [
+            { "kind": "fragment", "memory": "zima_bez_khleba", "amount": 2 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": -8 },
+            { "kind": "counter", "counter": "promises_given", "delta": 1 }
+          ],
+          "to": "r_promise_it",
+          "priority": 6
+        },
+        {
+          "id": "leave_it_here",
+          "text": { "ru": "Оставить его в галерее и не звать.", "en": "Leave it in the gallery and not call it." },
+          "conditions": { "kind": "axis", "axis": "grasp_release", "op": "lte", "value": -30 },
+          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -15 }],
+          "to": "r_leave_here",
+          "priority": 5
+        }
+      ]
+    },
+    {
+      "kind": "narration",
+      "id": "r_keep_close",
+      "text": {
+        "ru": "Оно идёт за тобой на полшага сзади и не отстаёт на лестницах. К третьему пролёту ты ловишь себя на том, что подбираешь для него работу заранее.",
+        "en": "It follows half a step behind you and does not fall behind on the stairs. By the third flight you catch yourself picking out work for it in advance."
+      },
+      "next": "gar_out"
+    },
+    {
+      "kind": "narration",
+      "id": "r_ask_wants",
+      "text": {
+        "ru": "Отголоски не отвечают: отвечать нечем, у них нет ничего, кроме того дня. Оно поворачивается к воде под полом и ждёт, и ответ этот довольно ясный.",
+        "en": "Echoes do not answer: there is nothing to answer with, they have nothing but that one day. It turns towards the water under the floor and waits, and as answers go that one is fairly clear."
+      },
+      "next": "gar_out"
+    },
+    {
+      "kind": "narration",
+      "id": "r_send_back",
+      "text": {
+        "ru": "Задний ряд — это две сажени за спиной и ни шагом ближе. Оно уходит туда и оттуда смотрит ровно так же, как смотрело с полушага.",
+        "en": "The rear rank is twelve feet behind you and not a step closer. It goes there, and from there it looks at exactly the same thing it was looking at from half a step."
+      },
+      "next": "gar_out"
+    },
+    {
+      "kind": "narration",
+      "id": "r_pay_bill",
+      "text": {
+        "ru": "Ты делишь сумму на число дворов Плёса в третий раз за четыреста лет и получаешь то же самое. Считать при лампе оказалось не легче, чем при свече.",
+        "en": "You divide the sum by the number of households in Ples for the third time in four hundred years and get the same figure. Counting by lamplight turns out to be no easier than counting by candlelight."
+      },
+      "next": "gar_out"
+    },
+    {
+      "kind": "narration",
+      "id": "r_promise_it",
+      "text": {
+        "ru": "Ты обещаешь ему войну на сезон короче, и это первый посул, выписанный самому себе. Отголосок принимает его так же, как принимали в лавке: без расписки и без сомнений.",
+        "en": "You promise it a war a season shorter, and it is the first promise note you have ever made out to yourself. The echo takes it the way they took them in the shop: with no receipt and no doubts."
+      },
+      "next": "gar_out"
+    },
+    {
+      "kind": "narration",
+      "id": "r_leave_here",
+      "text": {
+        "ru": "Ты уходишь, не оборачиваясь, и оно остаётся в галерее над водой. К утру в этом крыле пахнуть перестаёт, и никто в Ломбарде не запишет, что перестало.",
+        "en": "You leave without turning round, and it stays in the gallery above the water. By morning this wing has stopped smelling of anything, and nobody in the Pawnshop will record that it stopped."
+      },
+      "next": "gar_out"
+    },
+    {
+      "kind": "narration",
+      "id": "gar_out",
+      "text": {
+        "ru": "Наверху, на площадке, сторож пересчитывает партию и получает восемнадцать. Ящик с мокрым пятном стоит первым, и пятно на нём высохло по краю ровным горелым ободком.",
+        "en": "Up on the landing the watchman recounts the consignment and gets eighteen. The crate with the wet patch stands first in the row, and the patch has dried along its edge into a neat scorched rim."
+      },
+      "next": "scene:vaults_hub"
+    }
+  ]
+}

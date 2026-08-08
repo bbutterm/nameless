@@ -1,0 +1,104 @@
+[
+  {
+    "id": "battle_scavengers",
+    "name": {
+      "ru": "Падальщики на мостках",
+      "en": "Scavengers on the Boardwalk"
+    },
+    "enemies": [
+      {
+        "unit": "pocket_cutter",
+        "row": "front",
+        "index": 0,
+        "level": 1
+      },
+      {
+        "unit": "wandering_debtor",
+        "row": "front",
+        "index": 1,
+        "level": 1
+      },
+      {
+        "unit": "hook_man",
+        "row": "back",
+        "index": 0,
+        "level": 1
+      },
+      {
+        "unit": "hook_man",
+        "row": "back",
+        "index": 1,
+        "level": 1
+      },
+      {
+        "unit": "pocket_cutter",
+        "row": "front",
+        "index": 2,
+        "level": 1
+      },
+      {
+        "unit": "hook_man",
+        "row": "back",
+        "index": 2,
+        "level": 1
+      }
+    ],
+    "turnLimit": 0,
+    "background": "pier",
+    "rewards": [
+      {
+        "kind": "gold",
+        "delta": 15
+      },
+      {
+        "kind": "xp",
+        "amount": 25
+      }
+    ]
+  },
+  {
+    "id": "battle_guild_collectors",
+    "name": {
+      "ru": "Сборщики Цеха",
+      "en": "Collectors of the Guild"
+    },
+    "enemies": [
+      {
+        "unit": "debt_bailiff",
+        "row": "front",
+        "index": 0,
+        "level": 1
+      },
+      {
+        "unit": "pocket_cutter",
+        "row": "front",
+        "index": 1,
+        "level": 1
+      },
+      {
+        "unit": "borrowed_face",
+        "row": "front",
+        "index": 2,
+        "level": 1
+      },
+      {
+        "unit": "guild_hoarder_vey",
+        "row": "back",
+        "index": 1,
+        "level": 2
+      }
+    ],
+    "turnLimit": 0,
+    "background": "wet_rows",
+    "rewards": [
+      {
+        "kind": "gold",
+        "delta": 22
+      },
+      {
+        "kind": "xp",
+        "amount": 35
+      }
+    ]
+  }
+]

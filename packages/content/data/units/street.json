@@ -1,0 +1,67 @@
+[
+  {
+    "id": "wandering_debtor",
+    "name": {
+      "ru": "Бродячий должник",
+      "en": "Wandering Debtor"
+    },
+    "blurb": {
+      "ru": "Забыл, кому должен. Долг помнит лучше.",
+      "en": "Forgot whom he owes. The debt remembers better."
+    },
+    "art": "",
+    "faction": "street",
+    "tier": 1,
+    "row": "front",
+    "stats": {
+      "hp": 38,
+      "atk": 11,
+      "def": 6,
+      "initiative": 9
+    },
+    "abilities": [
+      "plain_strike",
+      "barefoot_rush"
+    ],
+    "recruitable": {
+      "kind": "never"
+    },
+    "traits": [
+      "fighter"
+    ]
+  },
+  {
+    "id": "hook_man",
+    "name": {
+      "ru": "Багорщик",
+      "en": "Hook Man"
+    },
+    "blurb": {
+      "ru": "Достаёт из воды всё, за что платят.",
+      "en": "Fishes out of the water whatever pays."
+    },
+    "art": "",
+    "faction": "street",
+    "tier": 1,
+    "row": "back",
+    "stats": {
+      "hp": 34,
+      "atk": 11,
+      "def": 3,
+      "initiative": 11
+    },
+    "abilities": [
+      "hook_shot",
+      "pick_the_pocket"
+    ],
+    "recruitable": {
+      "kind": "axis",
+      "axis": "honesty_deceit",
+      "op": "lte",
+      "value": -40
+    },
+    "traits": [
+      "shooter"
+    ]
+  }
+]

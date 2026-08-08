@@ -1,0 +1,397 @@
+{
+  "id": "quiet_together",
+  "chapter": 2,
+  "title": { "ru": "Помолчать вместе", "en": "To Be Quiet Together" },
+  "tags": ["rest", "brotherhood", "no_combat"],
+  "available": {
+    "kind": "all",
+    "of": [
+      { "kind": "axis", "axis": "reason_obsession", "op": "gte", "value": 40 },
+      { "kind": "not", "of": { "kind": "flag", "flag": "brotherhood_gate_shut" } }
+    ]
+  },
+  "entry": "called_over",
+  "nodes": [
+    {
+      "kind": "narration",
+      "id": "called_over",
+      "text": {
+        "ru": "Он машет тебе с лавки у сарая и не встаёт. Лавка на двоих, один край нагрет солнцем, и он сидит на холодном.",
+        "en": "He waves to you from the bench by the shed and does not get up. The bench takes two, one end is warm from the sun, and he is sitting on the cold one."
+      },
+      "next": "invite"
+    },
+    {
+      "kind": "say",
+      "id": "invite",
+      "speaker": "proshchai",
+      "text": {
+        "ru": "Садись, серый человек. Говорить не будем: у нас тут за это ничего не берут.",
+        "en": "Sit down, grey man. We will not be talking: they charge nothing for it here."
+      },
+      "next": "two_cups"
+    },
+    {
+      "kind": "narration",
+      "id": "two_cups",
+      "text": {
+        "ru": "Брат-огородник ставит на лавку две кружки с дождевой водой и уходит, не сказав числа. Он вернётся через час и унесёт их, и тоже ничего не скажет.",
+        "en": "The brother gardener sets two cups of rainwater on the bench and leaves without giving a number. He will come back in an hour and take them away, and will say nothing then either."
+      },
+      "next": "the_shadow"
+    },
+    {
+      "kind": "narration",
+      "id": "the_shadow",
+      "text": {
+        "ru": "Тень от бочки лежит поперёк первой грядки. Она движется, но заметить движение не выходит: выходит только заметить, что она уже дальше.",
+        "en": "The shadow of the barrel lies across the first bed. It moves, but catching the movement does not work: what works is noticing that it is already further along."
+      },
+      "next": "first_quiet"
+    },
+    {
+      "kind": "choice",
+      "id": "first_quiet",
+      "prompt": {
+        "ru": "Никто ничего не ждёт. Это первое, к чему приходится привыкнуть.",
+        "en": "Nobody is waiting for anything. That is the first thing to get used to."
+      },
+      "options": [
+        {
+          "id": "just_sit",
+          "text": { "ru": "Молчать.", "en": "Say nothing." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -3 }],
+          "to": "r_sit"
+        },
+        {
+          "id": "watch_shadow",
+          "text": { "ru": "Смотреть, как идёт тень.", "en": "Watch the shadow go." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -3 }],
+          "to": "r_shadow"
+        },
+        {
+          "id": "ask_why",
+          "text": { "ru": "Спросить, зачем он позвал.", "en": "Ask why he called you over." },
+          "fallback": true,
+          "to": "r_why"
+        },
+        {
+          "id": "count_shadow",
+          "chip": { "icon": "hourglass", "label": { "ru": "Перечень", "en": "Perechen" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "perechen" },
+          "text": { "ru": "Считать, на сколько тень прошла.", "en": "Count how far the shadow has gone." },
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": -3 }],
+          "to": "r_count",
+          "priority": 6
+        },
+        {
+          "id": "refill",
+          "chip": { "icon": "heal", "label": { "ru": "Ключарь", "en": "Klyuchar" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "klyuchar" },
+          "text": { "ru": "Долить ему из бочки.", "en": "Top his cup up from the barrel." },
+          "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": 3 }],
+          "to": "r_refill",
+          "priority": 6
+        },
+        {
+          "id": "give_sun",
+          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "gte", "value": 25 },
+          "text": { "ru": "Подвинуться. Пусть сидит на тёплом.", "en": "Shift over. Let him have the warm end." },
+          "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": 3 }],
+          "to": "r_warm",
+          "priority": 5
+        },
+        {
+          "id": "check_pockets",
+          "conditions": { "kind": "axis", "axis": "grasp_release", "op": "gte", "value": 40 },
+          "text": { "ru": "Проверить, всё ли на месте в карманах.", "en": "Check that your pockets are all there." },
+          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": 3 }],
+          "to": "r_pockets",
+          "priority": 5
+        },
+        {
+          "id": "close_eyes",
+          "conditions": { "kind": "axis", "axis": "reason_obsession", "op": "gte", "value": 60 },
+          "text": { "ru": "Закрыть глаза.", "en": "Close your eyes." },
+          "effects": [{ "kind": "heal", "amount": 20 }],
+          "to": "r_eyes",
+          "priority": 5
+        }
+      ]
+    },
+    {
+      "kind": "narration",
+      "id": "r_sit",
+      "text": {
+        "ru": "Первые минуты уходят на то, чтобы перестать придумывать, что сказать. Потом перестаёшь, и оказывается, что слышно водокачку, лопату через два двора и как в бочке оседает вода.",
+        "en": "The first few minutes go on stopping yourself thinking up something to say. Then you stop, and it turns out you can hear the pump, a spade two households away, and the water settling in the barrel."
+      },
+      "next": "hour_passes"
+    },
+    {
+      "kind": "narration",
+      "id": "r_shadow",
+      "text": {
+        "ru": "Тень доходит до второй грядки и залезает на репу с краю. Репа на краю всегда мельче, и это никого тут не расстраивает.",
+        "en": "The shadow reaches the second bed and climbs onto the turnips at the edge. Edge turnips always come out smaller, and nobody here is upset by it."
+      },
+      "next": "hour_passes"
+    },
+    {
+      "kind": "say",
+      "id": "r_why",
+      "speaker": "proshchai",
+      "text": {
+        "ru": "Позвал? Не помню. Сиди, раз пришёл, — оно и без причины держится.",
+        "en": "Called you? I do not remember. Stay, since you came — it holds up without a reason."
+      },
+      "next": "hour_passes"
+    },
+    {
+      "kind": "narration",
+      "id": "r_count",
+      "text": {
+        "ru": "Тень идёт на ширину ладони за столько, за сколько остывает кружка. Ты пересчитываешь дважды, сходится, и считать больше нечего.",
+        "en": "The shadow goes a hand's width in the time it takes the cup to go cold. You check it twice, it tallies, and there is nothing else to count."
+      },
+      "next": "hour_passes"
+    },
+    {
+      "kind": "say",
+      "id": "r_refill",
+      "speaker": "proshchai",
+      "text": {
+        "ru": "Спасибо. Дождевая тут вкуснее колодезной, и никто не знает почему.",
+        "en": "Thank you. The rainwater tastes better here than the well water, and nobody knows why."
+      },
+      "next": "hour_passes"
+    },
+    {
+      "kind": "narration",
+      "id": "r_warm",
+      "text": {
+        "ru": "Он пересаживается охотно и через минуту сдвигается обратно на холодный край, не заметив этого. Ты подвигаешься следом, и так вы едете по лавке до самого конца.",
+        "en": "He moves over willingly and a minute later slides back to the cold end without noticing. You follow him along, and so the two of you travel the length of the bench."
+      },
+      "next": "hour_passes"
+    },
+    {
+      "kind": "narration",
+      "id": "r_pockets",
+      "text": {
+        "ru": "Всё на месте: три чужие пуговицы, опись, бирка. Ты проверяешь второй раз через минуту, потому что первый уже не помнишь, и он смотрит на это без осуждения.",
+        "en": "Everything is there: three other men's buttons, the inventory, the tag. You check a second time a minute later, because you no longer remember the first, and he watches without judgement."
+      },
+      "next": "hour_passes"
+    },
+    {
+      "kind": "narration",
+      "id": "r_eyes",
+      "text": {
+        "ru": "С закрытыми глазами берег слышно целиком: вода, лопата, чей-то кашель у калитки, шмель у самой кружки. Шмель улетает. Это всё, что здесь произошло.",
+        "en": "With your eyes shut you hear the whole bank: water, a spade, somebody coughing at the gate, a bumblebee right by the cup. The bumblebee flies off. That is everything that happened here."
+      },
+      "next": "hour_passes"
+    },
+    {
+      "kind": "narration",
+      "id": "hour_passes",
+      "text": {
+        "ru": "На той стороне бьют к закрытию приёма. Здесь это ничего не меняет: тут не принимают и не выдают, тут кончилась репа второго ряда и завтра начнут третий.",
+        "en": "Across the water they ring the end of intake. Here it changes nothing: nothing is taken in or given out here, the second row of turnips has run out and tomorrow they start the third."
+      },
+      "next": "no_price"
+    },
+    {
+      "kind": "narration",
+      "id": "no_price",
+      "text": {
+        "ru": "В прейскуранте Ломбарда есть строка на стыд, на храбрость, на четверг и на чувство, что забыл выключить утюг. На молчание строки нет.",
+        "en": "The Pawnshop's price list has a line for shame, for courage, for Thursdays and for the feeling that you left the iron on. There is no line for silence."
+      },
+      "keywords": [{ "match": { "ru": "На молчание строки нет", "en": "no line for silence" }, "tone": "lore" }],
+      "next": "slava"
+    },
+    {
+      "kind": "say",
+      "id": "slava",
+      "speaker": "proshchai",
+      "text": {
+        "ru": "Ну и слава.",
+        "en": "Well, thank goodness."
+      },
+      "next": "second_quiet"
+    },
+    {
+      "kind": "choice",
+      "id": "second_quiet",
+      "prompt": {
+        "ru": "Кружки пустые. Брат-огородник за ними ещё не пришёл.",
+        "en": "The cups are empty. The brother gardener has not come for them yet."
+      },
+      "options": [
+        {
+          "id": "stay_longer",
+          "text": { "ru": "Сидеть дальше.", "en": "Go on sitting." },
+          "fallback": true,
+          "effects": [
+            { "kind": "axis", "axis": "grasp_release", "delta": -8 },
+            { "kind": "heal", "amount": 30 }
+          ],
+          "to": "r_stayed"
+        },
+        {
+          "id": "thank_and_go",
+          "text": { "ru": "Поблагодарить и встать.", "en": "Say thank you and get up." },
+          "fallback": true,
+          "effects": [{ "kind": "heal", "amount": 20 }],
+          "to": "r_thanked"
+        },
+        {
+          "id": "leave_quiet",
+          "text": { "ru": "Уйти, не прощаясь.", "en": "Leave without saying goodbye." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -3 }],
+          "to": "r_left"
+        },
+        {
+          "id": "ask_again",
+          "conditions": { "kind": "flag", "flag": "proshchai_question" },
+          "text": { "ru": "Спросить снова о том, чего он не помнит.", "en": "Ask again about what he does not remember." },
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": -3 }],
+          "to": "r_asked_again",
+          "priority": 5
+        },
+        {
+          "id": "say_exact",
+          "chip": { "icon": "book", "label": { "ru": "Чистописец", "en": "Chistopisets" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "chistopisets" },
+          "text": { "ru": "Сказать, сколько именно мы молчали.", "en": "Tell him exactly how long we were quiet." },
+          "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": 3 }],
+          "to": "r_exact",
+          "priority": 6
+        },
+        {
+          "id": "leave_cup",
+          "conditions": { "kind": "axis", "axis": "grasp_release", "op": "lte", "value": -25 },
+          "text": { "ru": "Оставить ему свою кружку.", "en": "Leave him your cup." },
+          "effects": [
+            { "kind": "axis", "axis": "grasp_release", "delta": -8 },
+            { "kind": "counter", "counter": "debts_forgiven", "delta": 1 }
+          ],
+          "to": "r_left_cup",
+          "priority": 5
+        },
+        {
+          "id": "say_died",
+          "conditions": { "kind": "deaths", "op": "gte", "value": 2 },
+          "text": { "ru": "Сказать, что уже умирал. Дважды.", "en": "Tell him you have died. Twice." },
+          "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": 8 }],
+          "to": "r_died",
+          "priority": 5
+        }
+      ]
+    },
+    {
+      "kind": "narration",
+      "id": "r_stayed",
+      "text": {
+        "ru": "Вы сидите до тех пор, пока тень не доходит до тына и не кончается вовсе. Он за это время сказал два слова, ты — ни одного, и это самый длинный разговор, который у тебя был в этом городе.",
+        "en": "You sit until the shadow reaches the fence and stops being a shadow at all. In that time he has said two words and you none, and it is the longest conversation you have had in this city."
+      },
+      "next": "the_crack"
+    },
+    {
+      "kind": "say",
+      "id": "r_thanked",
+      "speaker": "proshchai",
+      "text": {
+        "ru": "За что? А, за лавку. Лавку не я делал, я только сижу.",
+        "en": "For what? Ah, for the bench. I did not make the bench, I only sit on it."
+      },
+      "next": "the_crack"
+    },
+    {
+      "kind": "narration",
+      "id": "r_left",
+      "text": {
+        "ru": "Ты встаёшь, и он не оборачивается — он уже смотрит на грядки. У калитки ты всё-таки оборачиваешься сам.",
+        "en": "You get up and he does not turn round; he is already looking at the beds. At the gate you turn round anyway."
+      },
+      "next": "the_crack"
+    },
+    {
+      "kind": "say",
+      "id": "r_asked_again",
+      "speaker": "proshchai",
+      "text": {
+        "ru": "Опять? Хорошо, что спросил сегодня. Сегодня я тебе всё равно не... Ну и слава.",
+        "en": "Again? Good that you asked today. Today I am not going to tell you anyway... Well, thank goodness."
+      },
+      "next": "the_crack"
+    },
+    {
+      "kind": "say",
+      "id": "r_exact",
+      "speaker": "proshchai",
+      "text": {
+        "ru": "Час и двадцать минут. Я знаю, я тоже считал, и это, друг мой, самое неудачное, что я сегодня сказал.",
+        "en": "An hour and twenty minutes. I know, I was counting too, and that, my friend, is the worst thing I have said today."
+      },
+      "keywords": [{ "match": { "ru": "я тоже считал", "en": "I was counting too" }, "tone": "memory" }],
+      "next": "the_crack"
+    },
+    {
+      "kind": "say",
+      "id": "r_left_cup",
+      "speaker": "proshchai",
+      "text": {
+        "ru": "Кружку возьму. У нас их девять на всех, будет десять, и брату придётся пересчитывать полку.",
+        "en": "I will take the cup. We have nine of them for everybody, now there will be ten, and the brother will have to recount the shelf."
+      },
+      "next": "the_crack"
+    },
+    {
+      "kind": "say",
+      "id": "r_died",
+      "speaker": "proshchai",
+      "text": {
+        "ru": "Знаю. Ты и в тот раз пришёл сюда наутро, и рубаха была зашита казённой ниткой. Садись, чего вскочил.",
+        "en": "I know. You came here the morning after that time too, and your shirt was darned with government thread. Sit down, what are you jumping up for."
+      },
+      "next": "the_crack"
+    },
+    {
+      "kind": "say",
+      "id": "the_crack",
+      "speaker": "proshchai",
+      "text": {
+        "ru": "В прошлый раз ты сидел с того края. Тень тогда доходила до второй грядки, не до тына.",
+        "en": "Last time you sat on the other end. The shadow reached the second bed then, not the fence."
+      },
+      "keywords": [{ "match": { "ru": "В прошлый раз", "en": "Last time" }, "tone": "danger" }],
+      "next": "forget_it"
+    },
+    {
+      "kind": "say",
+      "id": "forget_it",
+      "speaker": "proshchai",
+      "text": {
+        "ru": "Забудь. Это я так, ерунда. Иди уже, тебе вниз.",
+        "en": "Forget that. It is nothing, never mind. Go on now, you have a way down to go."
+      },
+      "next": "quiet_exit"
+    },
+    {
+      "kind": "narration",
+      "id": "quiet_exit",
+      "text": {
+        "ru": "Он смеётся первым и коротко, как смеются, чтобы что-нибудь не проснулось. На реке холодно, и ты замечаешь, что за весь час ни разу не подумал про стену.",
+        "en": "He laughs first and briefly, the way you laugh so that something does not wake up. It is cold on the river, and you notice that for the whole hour you did not once think about the wall."
+      },
+      "next": "scene:vaults_hub"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400" width="300" height="400" role="img" aria-label="unit card pale_deacon">
+  <defs>
+    <linearGradient id="ug-pale_deacon" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="hsl(48 24% 14%)"/>
+      <stop offset="100%" stop-color="hsl(48 30% 6%)"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="400" fill="url(#ug-pale_deacon)"/>
+  
+  <path d="
+    M 96.59075727387727 330.6121029006317
+    C 96.59075727387727 189.03162925317883, 75.04632871598005 169.03162925317883, 75.04632871598005 159.03162925317883
+    C 75.04632871598005 114.85959947109222 , 122.47739273309708 114.85959947109222, 121.96939184330404 106.60281729102135
+    A 27.522607266902924 27.522607266902924 0 0 1 177.01460637710989 106.60281729102135
+    C 177.52260726690292 114.85959947109222, 222.41366683505476 114.85959947109222, 222.41366683505476 159.03162925317883
+    C 222.41366683505476 169.03162925317883, 198.32923382819234 189.03162925317883, 198.32923382819234 330.6121029006317
+    Z
+  " fill="#0f1014" stroke="#0b0b0e" stroke-width="1"/>
+  
+  
+  <rect x="6" y="6" width="288" height="388" rx="6" fill="none" stroke="#4f8fb0" stroke-width="2.5"/>
+  <rect x="12" y="12" width="276" height="376" fill="none" stroke="#4f8fb0" stroke-width="1" opacity="0.5"/>
+  <g transform="translate(6 6) rotate(0)">
+      <path d="M0 14 V0 H14" fill="none" stroke="#4f8fb0" stroke-width="2.5"/>
+      <circle cx="4" cy="4" r="2.2" fill="#4f8fb0"/>
+    </g>
+  <g transform="translate(294 6) rotate(90)">
+      <path d="M0 14 V0 H14" fill="none" stroke="#4f8fb0" stroke-width="2.5"/>
+      <circle cx="4" cy="4" r="2.2" fill="#4f8fb0"/>
+    </g>
+  <g transform="translate(294 394) rotate(180)">
+      <path d="M0 14 V0 H14" fill="none" stroke="#4f8fb0" stroke-width="2.5"/>
+      <circle cx="4" cy="4" r="2.2" fill="#4f8fb0"/>
+    </g>
+  <g transform="translate(6 394) rotate(270)">
+      <path d="M0 14 V0 H14" fill="none" stroke="#4f8fb0" stroke-width="2.5"/>
+      <circle cx="4" cy="4" r="2.2" fill="#4f8fb0"/>
+    </g>
+  
+
+</svg>

@@ -1,0 +1,103 @@
+[
+  {
+    "id": "battle_vytsvet_night",
+    "name": {
+      "ru": "Ночь на краю Выцвети",
+      "en": "Night at the Edge of the Vytsvet"
+    },
+    "tags": [
+      "lethal"
+    ],
+    "enemies": [
+      {
+        "unit": "wandering_debtor",
+        "row": "front",
+        "index": 0,
+        "level": 3
+      },
+      {
+        "unit": "unclaimed_pledge",
+        "row": "front",
+        "index": 1,
+        "level": 3
+      },
+      {
+        "unit": "wandering_debtor",
+        "row": "front",
+        "index": 2,
+        "level": 2
+      },
+      {
+        "unit": "pawn_appraiser_dusk",
+        "row": "back",
+        "index": 0,
+        "level": 3
+      },
+      {
+        "unit": "flask_hoarder",
+        "row": "back",
+        "index": 1,
+        "level": 2
+      }
+    ],
+    "turnLimit": 8,
+    "background": "vytsvet_road",
+    "rewards": [
+      {
+        "kind": "xp",
+        "amount": 20
+      }
+    ]
+  },
+  {
+    "id": "battle_dratva_squad",
+    "name": {
+      "ru": "Наряд капрала Дратвы",
+      "en": "Corporal Dratva's Detail"
+    },
+    "enemies": [
+      {
+        "unit": "debt_bailiff",
+        "row": "front",
+        "index": 0,
+        "level": 5
+      },
+      {
+        "unit": "debt_bailiff",
+        "row": "front",
+        "index": 1,
+        "level": 5
+      },
+      {
+        "unit": "hollow_sergeant",
+        "row": "front",
+        "index": 2,
+        "level": 5
+      },
+      {
+        "unit": "pawn_appraiser_dusk",
+        "row": "back",
+        "index": 0,
+        "level": 5
+      },
+      {
+        "unit": "ledger_clerk",
+        "row": "back",
+        "index": 1,
+        "level": 4
+      }
+    ],
+    "turnLimit": 0,
+    "background": "other_bank_garden",
+    "rewards": [
+      {
+        "kind": "gold",
+        "delta": 26
+      },
+      {
+        "kind": "xp",
+        "amount": 40
+      }
+    ]
+  }
+]

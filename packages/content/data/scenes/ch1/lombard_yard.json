@@ -1,0 +1,714 @@
+{
+  "id": "lombard_yard",
+  "chapter": 1,
+  "title": {
+    "ru": "Задний двор Великого Ломбарда",
+    "en": "Back Yard of the Great Pawnshop"
+  },
+  "tags": [
+    "street",
+    "mandatory"
+  ],
+  "available": {
+    "kind": "visited",
+    "scene": "chulan_wake"
+  },
+  "entry": "yard_in",
+  "nodes": [
+    {
+      "kind": "narration",
+      "id": "yard_in",
+      "text": {
+        "ru": "Задний двор: весы для тяжёлого, тачка, лужа. В луже помещается семь этажей Ломбарда и не помещается башня целиком.",
+        "en": "The back yard: a scale for heavy goods, a barrow, a puddle. The puddle fits seven storeys of the Pawnshop and does not fit the tower."
+      },
+      "next": "guard_out"
+    },
+    {
+      "kind": "say",
+      "id": "guard_out",
+      "speaker": "strazhnik",
+      "text": {
+        "ru": "Приём окончен. Бланк двенадцать-бис выдан на руки. Двор не приёмная.",
+        "en": "Intake is closed. Form twelve-bis has been issued to you. The yard is not a waiting room."
+      },
+      "keywords": [
+        {
+          "match": {
+            "ru": "Бланк двенадцать-бис",
+            "en": "Form twelve-bis"
+          },
+          "tone": "lore"
+        }
+      ],
+      "next": "beggar_1"
+    },
+    {
+      "kind": "say",
+      "id": "beggar_1",
+      "speaker": "poproshayka",
+      "text": {
+        "ru": "У меня расписка. Я не помню, за что расписка.",
+        "en": "I have a receipt. I do not remember what the receipt is for."
+      },
+      "next": "guard_out2"
+    },
+    {
+      "kind": "say",
+      "id": "guard_out2",
+      "speaker": "strazhnik",
+      "text": {
+        "ru": "За верхнюю треть. Так и записано: треть верхняя, годы с прошлой зимы и выше.",
+        "en": "For the upper third. It says so: upper third, the years from last winter and above."
+      },
+      "next": "yard_board"
+    },
+    {
+      "kind": "lore",
+      "id": "yard_board",
+      "title": {
+        "ru": "Доска у задних ворот",
+        "en": "The board by the rear gate"
+      },
+      "text": {
+        "ru": "«Приём горя — с шести до полудня, в порядке живой очереди. Горе свежее принимается только с сопровождающим. Стыд детский, невыношенный, — по прейскуранту листа второго. Плакать в очереди разрешается: слёзы к приёму не принимаются и цены не сбивают».",
+        "en": "\"Grief received from six until noon, in order of the queue. Fresh grief accepted only with an escort. Childhood shame, unripened — per the price list, sheet two. Weeping in the queue is permitted: tears are not accepted for intake and do not affect the price.\""
+      },
+      "next": "beggar_2"
+    },
+    {
+      "kind": "narration",
+      "id": "beggar_2",
+      "text": {
+        "ru": "Попрошайка садится у стены и разглаживает расписку на колене. Он делает это очень аккуратно, как делают с тем, что придётся показывать.",
+        "en": "The beggar sits by the wall and smooths the receipt on his knee. He does it very carefully, the way one handles a thing that will have to be shown."
+      },
+      "next": "beggar_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "beggar_choice",
+      "prompt": {
+        "ru": "Стражник берётся за воротник. Ворота открыты в твою сторону.",
+        "en": "The guard takes hold of his collar. The gate opens your way."
+      },
+      "options": [
+        {
+          "id": "give_own",
+          "text": {
+            "ru": "Отдать ему что-нибудь из своей описи.",
+            "en": "Give him something from my own inventory."
+          },
+          "effects": [
+            {
+              "kind": "fragment",
+              "memory": "pervoye_vedro",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": 10
+            },
+            {
+              "kind": "flag",
+              "flag": "beggar_helped",
+              "value": true
+            }
+          ],
+          "to": "r_beggar_gave"
+        },
+        {
+          "id": "help_push",
+          "text": {
+            "ru": "Помочь стражнику вытолкать.",
+            "en": "Help the guard shove him out."
+          },
+          "effects": [
+            {
+              "kind": "fragment",
+              "memory": "smola_na_vode",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": -10
+            }
+          ],
+          "to": "r_beggar_pushed"
+        },
+        {
+          "id": "pass_by",
+          "text": {
+            "ru": "Пройти мимо.",
+            "en": "Walk past."
+          },
+          "to": "r_beggar_past"
+        },
+        {
+          "id": "klyuchar_water",
+          "text": {
+            "ru": "Напоить его. Не спрашивая, кто он.",
+            "en": "Give him a drink. Without asking who he is."
+          },
+          "chip": {
+            "icon": "heal",
+            "label": {
+              "ru": "Ключарь",
+              "en": "Klyuchar"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "klyuchar"
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": 8
+            },
+            {
+              "kind": "flag",
+              "flag": "beggar_helped",
+              "value": true
+            }
+          ],
+          "to": "r_beggar_gave"
+        },
+        {
+          "id": "smolokur_fast",
+          "text": {
+            "ru": "Показать стражнику, где короче.",
+            "en": "Show the guard the shorter way."
+          },
+          "chip": {
+            "icon": "fire",
+            "label": {
+              "ru": "Смолокур",
+              "en": "Smolokur"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "smolokur"
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": -8
+            }
+          ],
+          "to": "r_beggar_pushed"
+        },
+        {
+          "id": "posul_thursday",
+          "text": {
+            "ru": "Пообещать ему выкуп к четвергу.",
+            "en": "Promise him a redemption by Thursday."
+          },
+          "chip": {
+            "icon": "coin",
+            "label": {
+              "ru": "Посульщик",
+              "en": "Posulshchik"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "posulshchik"
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": -8
+            }
+          ],
+          "to": "r_beggar_promised"
+        },
+        {
+          "id": "pay_his_form",
+          "text": {
+            "ru": "Оплатить ему обратный бланк.",
+            "en": "Pay for his return form."
+          },
+          "conditions": {
+            "kind": "axis",
+            "axis": "mercy_cruelty",
+            "op": "gte",
+            "value": 25
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": 8
+            },
+            {
+              "kind": "flag",
+              "flag": "beggar_helped",
+              "value": true
+            }
+          ],
+          "to": "r_beggar_gave"
+        },
+        {
+          "id": "ask_article",
+          "text": {
+            "ru": "Спросить стражника, по какой статье.",
+            "en": "Ask the guard under which article."
+          },
+          "conditions": {
+            "kind": "axis",
+            "axis": "reason_obsession",
+            "op": "gte",
+            "value": 25
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": 3
+            }
+          ],
+          "to": "r_beggar_article"
+        },
+        {
+          "id": "take_receipt",
+          "text": {
+            "ru": "Забрать у него расписку.",
+            "en": "Take the receipt off him."
+          },
+          "conditions": {
+            "kind": "axis",
+            "axis": "mercy_cruelty",
+            "op": "lte",
+            "value": -25
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": 5
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": -5
+            }
+          ],
+          "to": "r_beggar_pushed"
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "r_beggar_gave",
+      "speaker": "poproshayka",
+      "text": {
+        "ru": "Спасибо. Я запомню.",
+        "en": "Thank you. I will remember."
+      },
+      "next": "r_beggar_gave2"
+    },
+    {
+      "kind": "narration",
+      "id": "r_beggar_gave2",
+      "text": {
+        "ru": "Он говорит это и сам замолкает на середине. Запоминать ему нечем: верхнюю треть приняли по бланку сегодня утром.",
+        "en": "He says it and stops himself halfway. He has nothing to remember with: the upper third was taken in on a form this morning."
+      },
+      "next": "klyost_bump"
+    },
+    {
+      "kind": "say",
+      "id": "r_beggar_pushed",
+      "speaker": "strazhnik",
+      "text": {
+        "ru": "Двое — это уже наряд. Наряд оформляется. Спасибо за содействие.",
+        "en": "Two of us makes a detail. A detail gets filed. Thank you for assisting."
+      },
+      "next": "klyost_bump"
+    },
+    {
+      "kind": "narration",
+      "id": "r_beggar_past",
+      "text": {
+        "ru": "Ты проходишь. За спиной хлопают ворота — один раз, коротко, как ставят печать.",
+        "en": "You walk on. Behind you the gate claps shut — once, briefly, the way a stamp comes down."
+      },
+      "next": "klyost_bump"
+    },
+    {
+      "kind": "say",
+      "id": "r_beggar_promised",
+      "speaker": "poproshayka",
+      "text": {
+        "ru": "К четвергу. Я буду тут в четверг. Я тут во все дни.",
+        "en": "By Thursday. I will be here on Thursday. I am here on all the days."
+      },
+      "next": "klyost_bump"
+    },
+    {
+      "kind": "say",
+      "id": "r_beggar_article",
+      "speaker": "strazhnik",
+      "text": {
+        "ru": "Восьмая, пункт грустный. По нему у нас всё, что нельзя оформить иначе.",
+        "en": "Article eight, the sad clause. Everything we cannot file otherwise goes under it."
+      },
+      "next": "klyost_bump"
+    },
+    {
+      "kind": "narration",
+      "id": "klyost_bump",
+      "text": {
+        "ru": "В тебя на ходу врезается мальчишка с чужой запиской в зубах. Записка остаётся сухой, мальчишка — нет.",
+        "en": "A boy runs straight into you with someone else's note between his teeth. The note stays dry; the boy does not."
+      },
+      "next": "klyost_1"
+    },
+    {
+      "kind": "say",
+      "id": "klyost_1",
+      "speaker": "klyost",
+      "text": {
+        "ru": "Ой. Короче — вы меня видели?",
+        "en": "Oops. So — have you seen me?"
+      },
+      "next": "klyost_2"
+    },
+    {
+      "kind": "say",
+      "id": "klyost_2",
+      "speaker": "klyost",
+      "text": {
+        "ru": "Не сейчас видели. Вчера. Я тут вчера три раза бегал.",
+        "en": "Not now, seen. Yesterday. I ran through here three times yesterday."
+      },
+      "next": "klyost_3"
+    },
+    {
+      "kind": "narration",
+      "id": "klyost_3",
+      "text": {
+        "ru": "Он свистит — коротко, на два тона вниз. Так свистят птицы, которых в городе не осталось, и так у него выходит само.",
+        "en": "He whistles — short, two tones down. That is how birds whistle that the city no longer has, and it comes out of him by itself."
+      },
+      "next": "klyost_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "klyost_choice",
+      "prompt": {
+        "ru": "Мальчишка ждёт ответа так, будто ответов не бывает.",
+        "en": "The boy waits for an answer as though answers did not happen."
+      },
+      "options": [
+        {
+          "id": "name_him",
+          "text": {
+            "ru": "Клёст. За свист.",
+            "en": "Crossbill. For the whistle."
+          },
+          "effects": [
+            {
+              "kind": "flag",
+              "flag": "klyost_named",
+              "value": true
+            },
+            {
+              "kind": "counter",
+              "counter": "klyost_seen",
+              "delta": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": 3
+            }
+          ],
+          "to": "r_named"
+        },
+        {
+          "id": "wave_off",
+          "text": {
+            "ru": "Отмахнуться.",
+            "en": "Wave him off."
+          },
+          "to": "r_waved"
+        },
+        {
+          "id": "ask_note",
+          "text": {
+            "ru": "Спросить, что за записка.",
+            "en": "Ask what the note says."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": 3
+            }
+          ],
+          "to": "r_note"
+        },
+        {
+          "id": "honest_no",
+          "text": {
+            "ru": "Сказать честно: не помню.",
+            "en": "Say it straight: I do not remember."
+          },
+          "conditions": {
+            "kind": "axis",
+            "axis": "honesty_deceit",
+            "op": "gte",
+            "value": 25
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 5
+            }
+          ],
+          "to": "r_honest"
+        },
+        {
+          "id": "write_marks",
+          "text": {
+            "ru": "Записать его приметы. Точно.",
+            "en": "Write down his description. Exactly."
+          },
+          "chip": {
+            "icon": "book",
+            "label": {
+              "ru": "Чистописец",
+              "en": "Chistopisets"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "chistopisets"
+          },
+          "effects": [
+            {
+              "kind": "flag",
+              "flag": "klyost_named",
+              "value": true
+            },
+            {
+              "kind": "counter",
+              "counter": "klyost_seen",
+              "delta": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 5
+            }
+          ],
+          "to": "r_named"
+        },
+        {
+          "id": "enter_in_list",
+          "text": {
+            "ru": "Внести мальчишку в опись.",
+            "en": "Enter the boy into the inventory."
+          },
+          "chip": {
+            "icon": "hourglass",
+            "label": {
+              "ru": "Перечень",
+              "en": "Perechen"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "perechen"
+          },
+          "effects": [
+            {
+              "kind": "flag",
+              "flag": "klyost_named",
+              "value": true
+            },
+            {
+              "kind": "counter",
+              "counter": "klyost_seen",
+              "delta": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -5
+            }
+          ],
+          "to": "r_named"
+        },
+        {
+          "id": "take_note",
+          "text": {
+            "ru": "Отобрать записку и прочесть.",
+            "en": "Take the note and read it."
+          },
+          "conditions": {
+            "kind": "axis",
+            "axis": "mercy_cruelty",
+            "op": "lte",
+            "value": -25
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": -5
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": -3
+            }
+          ],
+          "to": "r_note"
+        },
+        {
+          "id": "name_twice",
+          "text": {
+            "ru": "Назвать имя и повторить дважды.",
+            "en": "Give him a name and say it twice."
+          },
+          "conditions": {
+            "kind": "axis",
+            "axis": "mercy_cruelty",
+            "op": "gte",
+            "value": 25
+          },
+          "effects": [
+            {
+              "kind": "flag",
+              "flag": "klyost_named",
+              "value": true
+            },
+            {
+              "kind": "counter",
+              "counter": "klyost_seen",
+              "delta": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": 3
+            }
+          ],
+          "to": "r_named"
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "r_named",
+      "speaker": "klyost",
+      "text": {
+        "ru": "Клёст. Ага. А вы тогда Пуговица — у вас их три и все не свои.",
+        "en": "Crossbill. Right. Then you're Button — you've got three and none of them yours."
+      },
+      "keywords": [
+        {
+          "match": {
+            "ru": "Клёст",
+            "en": "Crossbill"
+          },
+          "tone": "name"
+        }
+      ],
+      "next": "errand_boy"
+    },
+    {
+      "kind": "say",
+      "id": "r_waved",
+      "speaker": "klyost",
+      "text": {
+        "ru": "Ага. Ладно. Я мигом.",
+        "en": "Right. Fine. Back in a flash."
+      },
+      "next": "errand_boy"
+    },
+    {
+      "kind": "say",
+      "id": "r_note",
+      "speaker": "klyost",
+      "text": {
+        "ru": "Не моя записка, я только ноги. Там про четверг и про какой-то ярус.",
+        "en": "Not my note, I'm only the legs. It's about Thursday and some tier or other."
+      },
+      "keywords": [
+        {
+          "match": {
+            "ru": "ярус",
+            "en": "tier"
+          },
+          "tone": "lore"
+        }
+      ],
+      "next": "errand_boy"
+    },
+    {
+      "kind": "say",
+      "id": "r_honest",
+      "speaker": "klyost",
+      "text": {
+        "ru": "Ну хоть не соврали. Мне вчера четверо соврали, что видели.",
+        "en": "At least you didn't lie. Four people lied yesterday that they'd seen me."
+      },
+      "next": "errand_boy"
+    },
+    {
+      "kind": "narration",
+      "id": "yard_exit",
+      "text": {
+        "ru": "Он уносится в проулок. Дверь в зал оценщиков открыта, и оттуда пахнет чернилами и чем-то сладким, чего в чернилах не бывает.",
+        "en": "He tears off into the alley. The door to the appraisers' hall stands open, smelling of ink and of something sweet that ink does not contain."
+      },
+      "next": "scene:appraiser_hall"
+    },
+    {
+      "kind": "narration",
+      "id": "errand_boy",
+      "text": {
+        "ru": "У ворот тебя догоняет пыльный мальчишка с чужой сумкой через плечо. Не Клёст: этот моложе и глупее.",
+        "en": "A dusty boy with someone else's satchel catches you at the gate. Not Crossbill: this one is younger and dimmer."
+      },
+      "next": "errand_boy_2"
+    },
+    {
+      "kind": "say",
+      "id": "errand_boy_2",
+      "speaker": "klyost",
+      "text": {
+        "ru": "Он за вами всё утро. Возьмите, а? Ему платить не надо, он за компанию.",
+        "en": "He's been on your heels all morning. Take him, will you? He costs nothing, he comes for company."
+      },
+      "next": "errand_boy_join"
+    },
+    {
+      "kind": "effects",
+      "id": "errand_boy_join",
+      "effects": [
+        {
+          "kind": "recruit",
+          "unit": "dusty_errand_boy"
+        }
+      ],
+      "next": "yard_exit"
+    }
+  ]
+}

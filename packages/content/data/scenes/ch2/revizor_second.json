@@ -1,0 +1,505 @@
+{
+  "id": "revizor_second",
+  "chapter": 2,
+  "title": { "ru": "Сверка на четвёртой ступени", "en": "Reconciliation on the Fourth Step" },
+  "tags": ["story", "revizor", "vaults", "no_combat"],
+  "available": { "kind": "always" },
+  "entry": "water_stair",
+  "nodes": [
+    {
+      "kind": "narration",
+      "id": "water_stair",
+      "text": {
+        "ru": "Лестница уходит в воду на четвёртой ступени. Сквозь воду видно ещё пять ступеней, дальше муть. Человек в сером пальто стоит на шестой, и вода доходит ему до колена, а пальто сухое до самого подола.",
+        "en": "The stairway goes into the water at the fourth step. Five more steps show through the water, then silt. The man in the grey coat stands on the sixth, the water at his knee, and the coat is dry to the hem."
+      },
+      "next": "opening_router"
+    },
+    {
+      "kind": "branch",
+      "id": "opening_router",
+      "branches": [
+        {
+          "when": { "kind": "axis", "axis": "reason_obsession", "op": "lte", "value": -40 },
+          "to": "open_obsession"
+        },
+        {
+          "when": { "kind": "axis", "axis": "reason_obsession", "op": "gte", "value": 40 },
+          "to": "open_reason"
+        }
+      ],
+      "fallback": "open_plain"
+    },
+    {
+      "kind": "say",
+      "id": "open_obsession",
+      "speaker": "revizor",
+      "text": {
+        "ru": "Узнаю почерк. Вклад Пятый писал так же: сначала опись, потом еда.",
+        "en": "The Audit knows this hand. Deposit Five wrote the same way: inventory first, food afterwards."
+      },
+      "keywords": [{ "match": { "ru": "Вклад Пятый", "en": "Deposit Five" }, "tone": "danger" }],
+      "next": "contract_router"
+    },
+    {
+      "kind": "say",
+      "id": "open_reason",
+      "speaker": "revizor",
+      "text": {
+        "ru": "Собеседник: пригоден. Отмечено вторично. Вторично — это уже не наблюдение, это графа.",
+        "en": "Interlocutor: serviceable. Noted a second time. A second time is no longer an observation, it is a column."
+      },
+      "keywords": [{ "match": { "ru": "пригоден", "en": "serviceable" }, "tone": "lore" }],
+      "next": "contract_router"
+    },
+    {
+      "kind": "say",
+      "id": "open_plain",
+      "speaker": "revizor",
+      "text": {
+        "ru": "Ступеней под водой: девять. Считаны на слух. Присаживайтесь.",
+        "en": "Steps under the water: nine. Counted by ear. Do sit down."
+      },
+      "next": "contract_router"
+    },
+    {
+      "kind": "branch",
+      "id": "contract_router",
+      "branches": [{ "when": { "kind": "flag", "flag": "contract_taken" }, "to": "carried" }],
+      "fallback": "filed"
+    },
+    {
+      "kind": "say",
+      "id": "filed",
+      "speaker": "revizor",
+      "text": {
+        "ru": "Лист шестнадцатый: подшит. Кем найден: не вами. Дата находки: раньше вашей на сутки.",
+        "en": "Sheet sixteen: filed. Found by: not you. Date of finding: one day earlier than yours."
+      },
+      "next": "filed_2"
+    },
+    {
+      "kind": "narration",
+      "id": "filed_2",
+      "text": {
+        "ru": "Портфель он открывает впервые. Дело тонкое, в картонной обложке, номер один, и связка внутри лежит в том же порядке, в каком ты её оставил: шестнадцатый лист сверху, шнур на два узла.",
+        "en": "He opens the briefcase for the first time. The case is thin, in a cardboard cover, number one, and the bundle inside lies in the same order you left it in: sheet sixteen on top, the lacing in two knots."
+      },
+      "next": "face_now"
+    },
+    {
+      "kind": "say",
+      "id": "carried",
+      "speaker": "revizor",
+      "text": {
+        "ru": "Лист при вас. Носится под рубахой. Температура листа: не поднялась. Ревизия проверяла.",
+        "en": "The sheet is on you. Carried under the shirt. Temperature of the sheet: has not risen. The Audit checked."
+      },
+      "next": "face_now"
+    },
+    {
+      "kind": "narration",
+      "id": "face_now",
+      "text": {
+        "ru": "В прошлый раз описать его не выходило — выходило пальто, портфель, сухие ботинки. Сегодня выходит подбородок и то, как он держит голову, когда слушает. Дальше по-прежнему не выходит, но эти две вещи ты теперь не забудешь.",
+        "en": "Last time describing him did not work; what worked was the coat, the briefcase, the dry shoes. Today the chin works, and the way he holds his head while listening. Beyond that it still does not work, but those two you will not forget now."
+      },
+      "keywords": [{ "match": { "ru": "подбородок", "en": "the chin" }, "tone": "memory" }],
+      "next": "lore_sheet"
+    },
+    {
+      "kind": "lore",
+      "id": "lore_sheet",
+      "title": { "ru": "Сводка Ревизии, лист текущий", "en": "Audit summary, current sheet" },
+      "text": {
+        "ru": "«Сведено ярусов: одиннадцать из неустановленного числа. Склянок: сорок одна тысяча двести. Расхождение: одно. Возраст расхождения: весь. Место расхождения: перемещается». Последняя строка вписана позже остальных и другим нажимом, как вписывают то, чего в бланке не предусмотрено.",
+        "en": "\"Tiers reconciled: eleven out of an undetermined number. Jars: forty-one thousand two hundred. Discrepancy: one. Age of discrepancy: all of it. Location of discrepancy: moves about.\" The last line was entered later than the rest and with a different pressure, the way one enters what the form does not provide for."
+      },
+      "next": "rev_security"
+    },
+    {
+      "kind": "say",
+      "id": "rev_security",
+      "speaker": "revizor",
+      "text": {
+        "ru": "Обеспечение: не проверялось ни разу за четыреста лет. Причина: проверять нечем. Инструмент проверки: один. Вы.",
+        "en": "Security holdings: never once verified in four hundred years. Reason: nothing to verify them with. Instrument of verification: one. You."
+      },
+      "mood": "flat",
+      "next": "audit2_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "audit2_choice",
+      "prompt": {
+        "ru": "Вода стоит ровно. Вокруг его колена нет ни одного круга.",
+        "en": "The water is still. There is not one ring around his knee."
+      },
+      "options": [
+        {
+          "id": "answer_all",
+          "text": { "ru": "Отвечать по описи. Все одиннадцать ярусов.", "en": "Answer by the inventory. All eleven tiers." },
+          "fallback": true,
+          "effects": [
+            { "kind": "fragment", "memory": "khronika_bez_popravok", "amount": 1 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": 10 }
+          ],
+          "to": "rev_tally"
+        },
+        {
+          "id": "ask_city",
+          "text": { "ru": "Спросить, что будет с городом.", "en": "Ask what becomes of the city." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 3 }],
+          "to": "rev_city"
+        },
+        {
+          "id": "refuse",
+          "text": { "ru": "Не отвечать. Спускаться дальше.", "en": "Not answer. Go on down." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": 3 }],
+          "to": "rev_refused"
+        },
+        {
+          "id": "by_copy",
+          "conditions": { "kind": "flag", "flag": "archive_copied" },
+          "text": { "ru": "У меня переписан ящик. Сверяйтесь по нему.", "en": "I copied the drawer. Reconcile against mine." },
+          "effects": [
+            { "kind": "fragment", "memory": "opis_vsego_sushchego", "amount": 2 },
+            { "kind": "axis", "axis": "reason_obsession", "delta": -12 }
+          ],
+          "to": "rev_copy",
+          "priority": 6
+        },
+        {
+          "id": "nights",
+          "conditions": { "kind": "counter", "counter": "nights_awake", "op": "gte", "value": 3 },
+          "text": { "ru": "Я не сплю четвёртую ночь. Считайте это содействием.", "en": "Fourth night without sleep. Count that as assistance." },
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": -8 }],
+          "to": "rev_nights",
+          "priority": 5
+        },
+        {
+          "id": "dictate",
+          "chip": { "icon": "book", "label": { "ru": "Чистописец", "en": "Chistopisets" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "chistopisets" },
+          "text": { "ru": "Диктуйте. Запишу вместе с собственным участием.", "en": "Dictate. I will record my own part too." },
+          "effects": [
+            { "kind": "fragment", "memory": "god_goloy_pravdy", "amount": 1 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": 12 }
+          ],
+          "to": "rev_dictate",
+          "priority": 6
+        },
+        {
+          "id": "promise_close",
+          "chip": { "icon": "coin", "label": { "ru": "Посульщик", "en": "Posulshchik" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "posulshchik" },
+          "text": { "ru": "Расхождение закроется к четвергу. Дайте бланк.", "en": "The discrepancy closes by Thursday. Give me a form." },
+          "effects": [
+            { "kind": "fragment", "memory": "luchshie_gody", "amount": 1 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": -12 },
+            { "kind": "counter", "counter": "promises_given", "delta": 1 }
+          ],
+          "to": "rev_promise",
+          "priority": 6
+        },
+        {
+          "id": "fast_way",
+          "chip": { "icon": "fire", "label": { "ru": "Смолокур", "en": "Smolokur" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "smolokur" },
+          "text": { "ru": "Расхождение закрывается быстро. Один раз.", "en": "A discrepancy closes quickly. Once." },
+          "effects": [
+            { "kind": "fragment", "memory": "ples_gorit", "amount": 1 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": -12 }
+          ],
+          "to": "rev_fast",
+          "priority": 6
+        },
+        {
+          "id": "lied_before",
+          "conditions": { "kind": "flag", "flag": "revizor_lied_to" },
+          "text": { "ru": "В прошлый раз я соврал. Поправьте.", "en": "Last time I lied. Correct the entry." },
+          "effects": [
+            { "kind": "fragment", "memory": "khronika_bez_popravok", "amount": 1 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": 8 }
+          ],
+          "to": "rev_correction",
+          "priority": 5
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "rev_tally",
+      "speaker": "revizor",
+      "text": {
+        "ru": "Сходится десять из одиннадцати. Одиннадцатый: вы там были и не помните. Ревизия тоже.",
+        "en": "Ten of eleven tally. The eleventh: you were there and do not remember. Neither does the Audit."
+      },
+      "next": "rev_close2"
+    },
+    {
+      "kind": "say",
+      "id": "rev_city",
+      "speaker": "revizor",
+      "text": {
+        "ru": "С городом: ничего. Город — надстройка. Списывают не надстройку, списывают статью, на которой она стоит.",
+        "en": "With the city: nothing. The city is superstructure. What is written off is not the superstructure but the entry it stands on."
+      },
+      "keywords": [{ "match": { "ru": "надстройка", "en": "superstructure" }, "tone": "danger" }],
+      "next": "rev_close2"
+    },
+    {
+      "kind": "say",
+      "id": "rev_refused",
+      "speaker": "revizor",
+      "text": {
+        "ru": "Метод: понятен. Метод: не мешает. Ревизия спускается тем же путём и не спешит.",
+        "en": "Method: understood. Method: no obstacle. The Audit goes down by the same way and is not in a hurry."
+      },
+      "next": "rev_close2"
+    },
+    {
+      "kind": "say",
+      "id": "rev_copy",
+      "speaker": "revizor",
+      "text": {
+        "ru": "Копия сходится с подлинником на девяносто девять сотых. Расхождение: одна карточка. Ваша.",
+        "en": "The copy tallies with the original to ninety-nine hundredths. Discrepancy: one card. Yours."
+      },
+      "next": "rev_close2"
+    },
+    {
+      "kind": "say",
+      "id": "rev_nights",
+      "speaker": "revizor",
+      "text": {
+        "ru": "Ночей без сна: четыре. Ревизия не спит: всего. Сходство отмечено. Ревизия предпочла бы его не отмечать.",
+        "en": "Nights without sleep: four. The Audit does not sleep: all of them. The resemblance is noted. The Audit would rather it were not."
+      },
+      "next": "rev_close2"
+    },
+    {
+      "kind": "say",
+      "id": "rev_dictate",
+      "speaker": "revizor",
+      "text": {
+        "ru": "Диктую: спускался, читал, уносил. Записано вами, при вас, о вас. Такой протокол Учёт принимает без свидетелей.",
+        "en": "Dictating: descended, read, carried off. Written by you, before you, about you. The Reckoning accepts such a record without witnesses."
+      },
+      "next": "rev_close2"
+    },
+    {
+      "kind": "say",
+      "id": "rev_promise",
+      "speaker": "revizor",
+      "text": {
+        "ru": "Бланка нет. Форма Р-2 не отпечатана. Обещаний в Учёте: девять тысяч. Закрытых: ноль.",
+        "en": "There is no form. Form A-2 has not been printed. Promises in the Reckoning: nine thousand. Closed: none."
+      },
+      "next": "rev_close2"
+    },
+    {
+      "kind": "say",
+      "id": "rev_fast",
+      "speaker": "revizor",
+      "text": {
+        "ru": "Метод: понятен. Метод: применялся. Плёс, восемь часов, сезон закрыт досрочно. Расхождение осталось.",
+        "en": "Method: understood. Method: has been applied. Ples, eight hours, season closed ahead of time. The discrepancy remained."
+      },
+      "next": "rev_close2"
+    },
+    {
+      "kind": "say",
+      "id": "rev_correction",
+      "speaker": "revizor",
+      "text": {
+        "ru": "Поправка внесена. Строка не вычёркивается: вычеркнутое остаётся в описи как вычеркнутое. Теперь их две.",
+        "en": "The correction is entered. The line is not struck out: what is struck out stays in the inventory as struck out. Now there are two of them."
+      },
+      "next": "rev_close2"
+    },
+    {
+      "kind": "say",
+      "id": "rev_close2",
+      "speaker": "revizor",
+      "text": {
+        "ru": "Ниже воды: сухо. Причина: водоотлив. Плательщик водоотлива: город. Получатель: неизвестен Ревизии.",
+        "en": "Below the water: dry. Cause: pumping. Payer for the pumping: the city. Beneficiary: unknown to the Audit."
+      },
+      "keywords": [{ "match": { "ru": "Ниже воды: сухо", "en": "Below the water: dry" }, "tone": "lore" }],
+      "next": "step_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "step_choice",
+      "prompt": {
+        "ru": "Он стоит на шестой ступени и не отступает в сторону.",
+        "en": "He stands on the sixth step and does not move aside."
+      },
+      "options": [
+        {
+          "id": "wade_past",
+          "text": { "ru": "Пройти мимо по воде.", "en": "Wade past him." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": 3 }],
+          "to": "rev_past"
+        },
+        {
+          "id": "ask_after",
+          "text": { "ru": "Спросить, что он сделает, когда сведёт.", "en": "Ask what he does once it tallies." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": -3 }],
+          "to": "rev_after"
+        },
+        {
+          "id": "wait_him",
+          "text": { "ru": "Стоять и ждать, пока он посторонится.", "en": "Stand and wait for him to move." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 3 }],
+          "to": "rev_wait"
+        },
+        {
+          "id": "hand_bundle",
+          "conditions": { "kind": "flag", "flag": "contract_taken" },
+          "text": { "ru": "Отдать ему связку. Пусть подошьёт.", "en": "Hand him the bundle. Let him file it." },
+          "effects": [
+            { "kind": "flag", "flag": "contract_taken", "value": false },
+            { "kind": "counter", "counter": "lots_held", "delta": -1 },
+            { "kind": "axis", "axis": "grasp_release", "delta": -8 }
+          ],
+          "to": "rev_bundle",
+          "priority": 5
+        },
+        {
+          "id": "recite_seven",
+          "conditions": { "kind": "flag", "flag": "contract_read" },
+          "text": { "ru": "Прочесть ему пункт седьмой наизусть.", "en": "Recite item seven to him from memory." },
+          "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": 8 }],
+          "to": "rev_seven",
+          "priority": 5
+        },
+        {
+          "id": "ask_card",
+          "conditions": { "kind": "flag", "flag": "catalog_card_read" },
+          "text": { "ru": "Спросить, что значит «см. фундамент».", "en": "Ask what \"see foundation\" means." },
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": -8 }],
+          "to": "rev_card",
+          "priority": 5
+        },
+        {
+          "id": "push_him",
+          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -30 },
+          "text": { "ru": "Столкнуть его со ступени.", "en": "Push him off the step." },
+          "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": -8 }],
+          "to": "rev_push",
+          "priority": 5
+        },
+        {
+          "id": "let_release",
+          "conditions": { "kind": "axis", "axis": "grasp_release", "op": "lte", "value": -30 },
+          "text": { "ru": "Сказать, что расхождение можно просто отпустить.", "en": "Say the discrepancy could simply be let go." },
+          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -8 }],
+          "to": "rev_release",
+          "priority": 5
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "rev_past",
+      "speaker": "revizor",
+      "text": {
+        "ru": "Расхождение: перемещается вниз. Скорость: ваша. Ревизия отмечает удобство.",
+        "en": "The discrepancy: moving downward. Speed: yours. The Audit notes the convenience."
+      },
+      "next": "deeper3"
+    },
+    {
+      "kind": "say",
+      "id": "rev_after",
+      "speaker": "revizor",
+      "text": {
+        "ru": "После сведения: закрытие. Закрытие чего: сверки. Дальше в предписании пусто, и это единственная пустая графа в предписании.",
+        "en": "After reconciliation: closure. Closure of what: of the reconciliation. Beyond that the order is blank, and it is the only blank column in the order."
+      },
+      "next": "deeper3"
+    },
+    {
+      "kind": "say",
+      "id": "rev_wait",
+      "speaker": "revizor",
+      "text": {
+        "ru": "Ждать можно. Сроки: не установлены. У Ревизии их нет, у вас, судя по описи, тоже.",
+        "en": "Waiting is permitted. Duration: not established. The Audit has none, and by the inventory neither have you."
+      },
+      "next": "deeper3"
+    },
+    {
+      "kind": "say",
+      "id": "rev_bundle",
+      "speaker": "revizor",
+      "text": {
+        "ru": "Принято. Подошью вторым экземпляром. Ревизия отмечает: вернул сам, дважды. Дважды — это уже поведение.",
+        "en": "Accepted. It will be filed as a second copy. The Audit notes: returned voluntarily, twice. Twice is already conduct."
+      },
+      "next": "deeper3"
+    },
+    {
+      "kind": "say",
+      "id": "rev_seven",
+      "speaker": "revizor",
+      "text": {
+        "ru": "Слово в слово. Пункт седьмой Ревизия считает ошибкой сто десятый раз. Ошибку вписал тот, кто её же и подписал.",
+        "en": "Word for word. For the hundred and tenth time the Audit considers item seven an error. The error was entered by the man who also signed it."
+      },
+      "next": "deeper3"
+    },
+    {
+      "kind": "say",
+      "id": "rev_card",
+      "speaker": "revizor",
+      "text": {
+        "ru": "Помета «см. фундамент» ставится, когда сумма не помещается ни в одну графу. Таких помет в каталоге: одна.",
+        "en": "The note \"see foundation\" is entered when a sum fits in no column at all. Such notes in the catalogue: one."
+      },
+      "keywords": [{ "match": { "ru": "см. фундамент", "en": "see foundation" }, "tone": "danger" }],
+      "next": "deeper3"
+    },
+    {
+      "kind": "narration",
+      "id": "rev_push",
+      "text": {
+        "ru": "Он сходит со ступени ровно тогда, когда ты его толкаешь, и на полшага раньше, чем толчок доходит. Воды под ним не прибавляется. Портфель он держит на весу, как держат то, что мокнуть не должно.",
+        "en": "He steps off exactly as you push him, and half a pace before the push arrives. The water beneath him does not rise. He holds the briefcase clear of it, the way one holds what must not get wet."
+      },
+      "next": "deeper3"
+    },
+    {
+      "kind": "say",
+      "id": "rev_release",
+      "speaker": "revizor",
+      "text": {
+        "ru": "Отпустить. Пункт: отсутствует. Ревизия... Ступеней вниз: девять.",
+        "en": "Let it go. Clause: absent. The Audit... Steps down: nine."
+      },
+      "next": "deeper3"
+    },
+    {
+      "kind": "effects",
+      "id": "deeper3",
+      "effects": [{ "kind": "counter", "counter": "vault_depth", "delta": 1 }],
+      "next": "rev_exit"
+    },
+    {
+      "kind": "narration",
+      "id": "rev_exit",
+      "text": {
+        "ru": "Наверху воздух теплее на два яруса, и это единственное, чем меряют здесь глубину. За спиной на воде так и нет ни одного круга.",
+        "en": "Two tiers up the air is warmer, and that is the only way depth is measured down here. Behind you there is still not one ring on the water."
+      },
+      "next": "scene:vaults_hub"
+    }
+  ]
+}

@@ -1,0 +1,144 @@
+[
+  {
+    "id": "hollow_sergeant",
+    "name": {
+      "ru": "Полый сержант",
+      "en": "Hollow Sergeant"
+    },
+    "blurb": {
+      "ru": "Сдал страх в среду. Служит уставом.",
+      "en": "Pledged his fear on Wednesday. Serves by regulation."
+    },
+    "art": "",
+    "faction": "great_pawnshop",
+    "tier": 1,
+    "row": "front",
+    "stats": {
+      "hp": 38,
+      "atk": 11,
+      "def": 7,
+      "initiative": 9
+    },
+    "abilities": [
+      "plain_strike",
+      "debt_collection",
+      "chain_of_debt"
+    ],
+    "evolvesTo": "debt_bailiff",
+    "evolveAt": 250,
+    "recruitable": {
+      "kind": "never"
+    },
+    "traits": [
+      "fighter",
+      "guard"
+    ]
+  },
+  {
+    "id": "debt_bailiff",
+    "name": {
+      "ru": "Пристав по залогам",
+      "en": "Pledge Bailiff"
+    },
+    "blurb": {
+      "ru": "Приходит с описью и молотком.",
+      "en": "Arrives with an inventory and a hammer."
+    },
+    "art": "",
+    "faction": "great_pawnshop",
+    "tier": 2,
+    "row": "front",
+    "stats": {
+      "initiative": 10,
+      "hp": 60,
+      "atk": 15,
+      "def": 11
+    },
+    "abilities": [
+      "debt_collection",
+      "article_eight",
+      "plain_strike"
+    ],
+    "evolvesTo": "vault_lock",
+    "evolveAt": 700,
+    "recruitable": {
+      "kind": "axis",
+      "axis": "reason_obsession",
+      "op": "gte",
+      "value": 40
+    },
+    "traits": [
+      "fighter",
+      "guard"
+    ]
+  },
+  {
+    "id": "vault_lock",
+    "name": {
+      "ru": "Подвальный замок",
+      "en": "Vault Lock"
+    },
+    "blurb": {
+      "ru": "Человек на должности двери. Должность победила.",
+      "en": "A man in the post of a door. The post won."
+    },
+    "art": "",
+    "faction": "great_pawnshop",
+    "tier": 3,
+    "row": "front",
+    "stats": {
+      "hp": 96,
+      "atk": 19,
+      "def": 16,
+      "initiative": 8
+    },
+    "abilities": [
+      "key_in_the_lock",
+      "stand_in_the_doorway",
+      "write_off",
+      "plain_strike"
+    ],
+    "recruitable": {
+      "kind": "never"
+    },
+    "traits": [
+      "shield",
+      "guard"
+    ]
+  },
+  {
+    "id": "pawn_appraiser_dusk",
+    "name": {
+      "ru": "Оценщик Сумерк",
+      "en": "Appraiser Dusk"
+    },
+    "blurb": {
+      "ru": "Безошибочен в чужом. Своего не осталось.",
+      "en": "Faultless with others'. Has nothing of his own."
+    },
+    "art": "",
+    "faction": "great_pawnshop",
+    "tier": 2,
+    "row": "back",
+    "stats": {
+      "initiative": 11,
+      "hp": 45,
+      "atk": 15,
+      "def": 6
+    },
+    "abilities": [
+      "appraisal",
+      "fading",
+      "coin_sling"
+    ],
+    "recruitable": {
+      "kind": "axis",
+      "axis": "honesty_deceit",
+      "op": "gte",
+      "value": 40
+    },
+    "traits": [
+      "breaker"
+    ]
+  }
+]
