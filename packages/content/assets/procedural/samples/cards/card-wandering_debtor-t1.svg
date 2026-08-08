@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400" width="300" height="400" role="img" aria-label="unit card wandering_debtor">
+  <defs>
+    <linearGradient id="ug-wandering_debtor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="hsl(42 24% 14%)"/>
+      <stop offset="100%" stop-color="hsl(42 30% 6%)"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="400" fill="url(#ug-wandering_debtor)"/>
+  
+  <path d="
+    M 112.86580898750032 348.4095440991223
+    C 112.86580898750032 206.04353998228908, 85.70158173679374 186.04353998228908, 85.70158173679374 176.04353998228908
+    C 85.70158173679374 127.57394979707897 , 122.6617185100913 127.57394979707897, 123.55975568201393 119.37246535010635
+    A 27.338281489908695 27.338281489908695 0 0 1 178.23631866183132 119.37246535010635
+    C 177.3382814899087 127.57394979707897, 218.78860412281938 127.57394979707897, 218.78860412281938 176.04353998228908
+    C 218.78860412281938 186.04353998228908, 196.11456273172593 206.04353998228908, 196.11456273172593 348.4095440991223
+    Z
+  " fill="#0f1014" stroke="#0b0b0e" stroke-width="1"/>
+  <line x1="212.33958553685807" y1="116.63863720111549" x2="212.33958553685807" y2="358.4095440991223" stroke="#d2cdc2" stroke-width="3" stroke-linecap="round" opacity="0.85"/>
+       <g transform="translate(200.33958553685807 94.63863720111549) scale(1.1)" color="#e9e4d8" opacity="0.9"><path d="M5.5 18.5 16 8"/><path d="M13.2 5.2 18.8 10.8"/><path d="M11 7.4 16.6 13"/><path d="M4 20l1.8-1.8"/><path d="M17.5 4.5l2 2"/></g>
+  
+  <rect x="6" y="6" width="288" height="388" rx="6" fill="none" stroke="#7a8290" stroke-width="2"/>
+  
+  <g transform="translate(6 6) rotate(0)">
+      <path d="M0 10 V0 H10" fill="none" stroke="#7a8290" stroke-width="2"/>
+      
+    </g>
+  <g transform="translate(294 6) rotate(90)">
+      <path d="M0 10 V0 H10" fill="none" stroke="#7a8290" stroke-width="2"/>
+      
+    </g>
+  <g transform="translate(294 394) rotate(180)">
+      <path d="M0 10 V0 H10" fill="none" stroke="#7a8290" stroke-width="2"/>
+      
+    </g>
+  <g transform="translate(6 394) rotate(270)">
+      <path d="M0 10 V0 H10" fill="none" stroke="#7a8290" stroke-width="2"/>
+      
+    </g>
+  
+
+</svg>

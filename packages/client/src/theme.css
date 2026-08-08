@@ -1,0 +1,124 @@
+/*
+ * Тема «Заклад»: свет как в ломбарде под вечер — потемневшее серебро,
+ * усталое золото, зола. Тёмная по умолчанию и единственная: игра про
+ * выцветание, светлая тема ей противопоказана.
+ */
+
+:root {
+  --bg-0: #0d0b0e;
+  --bg-1: #151219;
+  --bg-2: #1e1a22;
+  --surface: #241f29;
+  --surface-hi: #2e2734;
+  --line: #372f3d;
+
+  --text: #e8e2ea;
+  --text-dim: #9a90a0;
+  --text-faint: #6b6470;
+
+  --accent: #c9a227; /* золото Ломбарда */
+  --accent-dim: #8a6f1c;
+  --memory: #7fd3d0; /* цвет закреплённой памяти */
+  --lie: #b06fd0; /* цвет посула */
+  --danger: #c1483f;
+  --gold: #d8b34a;
+
+  --hp-ally: #6fbf73;
+  --hp-enemy: #b8574e;
+  --shield: #7aa7d8;
+
+  --tier-1: #6b6470;
+  --tier-2: #a8935c;
+  --tier-3: #8fd6d1;
+
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 16px;
+
+  --tap: 48px; /* минимальная тапабельная цель */
+
+  --font-display: 'Alegreya', 'PT Serif', Georgia, 'Times New Roman', serif;
+  --font-text: 'PT Sans', 'Noto Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg-0);
+  color: var(--text);
+  font-family: var(--font-text);
+  font-size: 17px;
+  line-height: 1.45;
+  /* Native-feel: ни выделения текста, ни контекстного меню по долгому тапу,
+     ни резинового скролла всей страницы. */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+#root {
+  height: 100dvh;
+  height: 100svh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Скролл только там, где он осмыслен — в ленте диалога. */
+.scroll {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.screen {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding-top: var(--safe-top);
+  padding-bottom: var(--safe-bottom);
+  padding-left: var(--safe-left);
+  padding-right: var(--safe-right);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

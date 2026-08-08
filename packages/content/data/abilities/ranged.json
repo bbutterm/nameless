@@ -1,0 +1,46 @@
+[
+  {
+    "id": "hook_shot",
+    "name": { "ru": "Багор", "en": "Boat Hook" },
+    "description": { "ru": "Достаёт со дна и из заднего ряда.", "en": "Reaches the river bottom and the back row." },
+    "icon": "bow",
+    "target": "enemy_any",
+    "power": 1.2,
+    "cooldown": 0,
+    "anim": "shot"
+  },
+  {
+    "id": "coin_sling",
+    "name": { "ru": "Горсть грошей", "en": "Handful of Groshes" },
+    "description": { "ru": "Монеты Заклада тяжелы: они чужая память.", "en": "Zaklad coins weigh much: they are borrowed memory." },
+    "icon": "coin",
+    "target": "enemy_any",
+    "power": 1.45,
+    "cooldown": 1,
+    "anim": "shot"
+  },
+  {
+    "id": "pick_the_pocket",
+    "name": { "ru": "Обчистить", "en": "Pickpocket" },
+    "description": { "ru": "Уносит немного крови и немного уверенности.", "en": "Takes a little blood and some confidence." },
+    "icon": "dagger",
+    "target": "enemy_any",
+    "power": 1.1,
+    "cooldown": 1,
+    "effects": [
+      { "kind": "damage", "power": 1.1 },
+      { "kind": "debuff", "stat": "atk", "amount": 2, "turns": 2 }
+    ],
+    "anim": "shot"
+  },
+  {
+    "id": "ember_spit",
+    "name": { "ru": "Плевок углём", "en": "Ember Spit" },
+    "description": { "ru": "Смола помнит, как горела вода.", "en": "Tar remembers the day water burned." },
+    "icon": "fire",
+    "target": "enemy_any",
+    "power": 1.15,
+    "cooldown": 0,
+    "anim": "shot"
+  }
+]
