@@ -271,7 +271,7 @@
       "kind": "narration",
       "id": "stood",
       "text": {
-        "ru": "Ты стоишь так неподвижно, что первый сторож проходит мимо и сбивается уже на тебе: «сорок три»,  — говорит он, и второй его поправляет.",
+        "ru": "Ты стоишь так неподвижно, что первый сторож проходит мимо и сбивается уже на тебе: «сорок три», — говорит он, и второй его поправляет.",
         "en": "You stand so still that the first watchman walks past and loses his count on you instead: \"forty-three,\" he says, and the second one corrects him."
       },
       "next": "grab_bundle"

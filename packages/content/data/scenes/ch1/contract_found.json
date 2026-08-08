@@ -1,0 +1,398 @@
+{
+  "id": "contract_found",
+  "chapter": 1,
+  "title": { "ru": "Закладной договор", "en": "The Deed of Pledge" },
+  "tags": ["story", "key", "no_combat"],
+  "available": { "kind": "visited", "scene": "archive_night" },
+  "entry": "bundle",
+  "nodes": [
+    {
+      "kind": "narration",
+      "id": "bundle",
+      "text": {
+        "ru": "Связка ложится на пол сама, как ложится всё, что долго стояло стоймя. Сургуч на шнуре целый, оттиск на нём — башня без окон, и такой печати в Ломбарде не ставят уже очень давно.",
+        "en": "The bundle lies down on the floor by itself, the way everything does that has stood upright too long. The wax on the lacing is whole, and the seal on it is a tower without windows, a stamp the Pawnshop has not used for a very long time."
+      },
+      "next": "sixteen"
+    },
+    {
+      "kind": "narration",
+      "id": "sixteen",
+      "text": {
+        "ru": "Листов шестнадцать. Пятнадцать — опись по разделам, по одному разделу на лист, и на каждом сверху проставлено имя, а имена все разные. Шестнадцатый лист — договор.",
+        "en": "Sixteen sheets. Fifteen are inventories by section, one section to a sheet, each with a name written across the top, and the names are all different. The sixteenth sheet is the deed."
+      },
+      "next": "lore_form"
+    },
+    {
+      "kind": "lore",
+      "id": "lore_form",
+      "title": {
+        "ru": "Бланк ЗД-1, оборот: порядок приёма вклада оптом",
+        "en": "Form PD-1, reverse: procedure for accepting a deposit in bulk"
+      },
+      "text": {
+        "ru": "«Приём оптом производится, если вкладчик сдаёт память целиком и отказывается от поштучной оценки. Поштучная оценка выгоднее вкладчику в среднем на треть; отказ фиксируется отдельной строкой. Приёмщик обязан трижды предложить поштучный приём и трижды получить отказ. Четвёртого предложения не предусмотрено».",
+        "en": "\"Bulk acceptance is performed where the depositor surrenders his memory entire and declines itemised appraisal. Itemised appraisal favours the depositor by about a third; the refusal is recorded on a separate line. The receiving officer is obliged to offer itemised acceptance three times and to be refused three times. A fourth offer is not provided for.\""
+      },
+      "next": "terms"
+    },
+    {
+      "kind": "narration",
+      "id": "terms",
+      "text": {
+        "ru": "«Вклад принят оптом». Ниже — та самая отдельная строка: отказ от поштучной оценки, трижды, и против каждого раза стоит галочка приёмщика. Фамилия приёмщика стёрта до бумаги: не вычеркнута, а именно стёрта, аккуратно, с двух сторон листа.",
+        "en": "\"Deposit accepted in bulk.\" Below is that separate line: refusal of itemised appraisal, three times, with the receiving officer's tick against each one. The officer's surname has been rubbed away down to the paper: not struck out, rubbed out, carefully, from both sides of the sheet."
+      },
+      "keywords": [
+        { "match": { "ru": "Вклад принят оптом", "en": "Deposit accepted in bulk" }, "tone": "lore" }
+      ],
+      "next": "sum"
+    },
+    {
+      "kind": "narration",
+      "id": "sum",
+      "text": {
+        "ru": "Сумма прописью занимает полторы строки. Графа для цифр перечёркнута крест-накрест, на полях помечено: «цифрами не поместилось». В самом конце приписка другим нажимом: «и ещё половина, каковую вкладчик просил не округлять».",
+        "en": "The sum written out in words takes a line and a half. The column for figures is crossed through, with a note in the margin: \"would not fit in figures\". At the very end, in a different pressure of the pen: \"and one half more, which the depositor asked not to be rounded off\"."
+      },
+      "next": "record_price"
+    },
+    {
+      "kind": "narration",
+      "id": "record_price",
+      "text": {
+        "ru": "Эту сумму в зале оценщиков спрашивают на выпускном экзамене. Никто из них не доводит её до конца вслух: сбиваются на второй строке и извиняются перед комиссией, а комиссия кивает, потому что сама сбивалась.",
+        "en": "In the appraisers' hall they ask for this sum at the final examination. None of them gets to the end of it out loud: they lose their place on the second line and apologise to the board, and the board nods, because the board lost its place too."
+      },
+      "next": "whisper_router"
+    },
+    {
+      "kind": "branch",
+      "id": "whisper_router",
+      "branches": [{ "when": { "kind": "flag", "flag": "tminny_trust" }, "to": "tminny_above" }],
+      "fallback": "signature"
+    },
+    {
+      "kind": "say",
+      "id": "tminny_above",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Позвольте-с, не разворачивайте лист до конца. Некоторые подлинники дешевеют от одного того, что их развернули, и я говорю это... как заинтересованное лицо.",
+        "en": "If you please, do not unfold that sheet all the way. Some originals lose value from being unfolded at all, and I say that... as an interested party."
+      },
+      "next": "signature"
+    },
+    {
+      "kind": "narration",
+      "id": "signature",
+      "text": {
+        "ru": "Внизу две подписи. Правая — приёмщика, и она смыта вместе с фамилией. Левая стоит в графе «вкладчик» и никуда не делась.",
+        "en": "Two signatures at the bottom. The right one is the receiving officer's, and it went the way the surname went. The left one stands in the column marked \"depositor\" and has gone nowhere."
+      },
+      "next": "notes"
+    },
+    {
+      "kind": "narration",
+      "id": "notes",
+      "text": {
+        "ru": "В кармане у тебя лежит опись, которую тебе вручили в чулане, и три строки на её обороте ты дописал сам, чтобы не забыть номера. Ты кладёшь оборот рядом с договором.",
+        "en": "In your pocket lies the inventory they handed you in the storeroom, and three lines on the back of it you wrote yourself so as not to forget the numbers. You lay the back of it beside the deed."
+      },
+      "next": "handwriting"
+    },
+    {
+      "kind": "narration",
+      "id": "handwriting",
+      "text": {
+        "ru": "Сличать буквы бессмысленно, буквы подделывают за два гроша. Ты сличаешь, как рука экономит на слове «которого» — тремя знаками и точкой посередине, — и как она недотягивает хвост у «у», потому что уже пошла к следующему слову. На обороте описи то же самое. На договоре то же самое.",
+        "en": "Matching letters is pointless, letters are forged for two pennies. You match how the hand economises on the word \"whereof\" — three strokes and a dot in the middle — and how it leaves the tail of the \"y\" short because it has already set off for the next word. On the back of the inventory, the same. On the deed, the same."
+      },
+      "keywords": [{ "match": { "ru": "рука", "en": "hand" }, "tone": "memory" }],
+      "next": "recognition"
+    },
+    {
+      "kind": "narration",
+      "id": "recognition",
+      "text": {
+        "ru": "Тебя никто не обкрадывал. Тебя приняли: по описи, оптом, с тремя отказами от поштучной оценки и с просьбой не округлять. Вопрос, с которым ты сюда шёл, начинался с «кто», и на него отвечено — он расписался. Остаётся «зачем», и на «зачем» бланка нет.",
+        "en": "Nobody robbed you. You were accepted: by inventory, in bulk, with three refusals of itemised appraisal and a request not to round off. The question you came here with began with \"who\", and it has been answered — he signed for it. What is left is \"why\", and there is no form for \"why\"."
+      },
+      "keywords": [{ "match": { "ru": "оптом", "en": "in bulk" }, "tone": "danger" }],
+      "next": "punkt_seven"
+    },
+    {
+      "kind": "narration",
+      "id": "punkt_seven",
+      "text": {
+        "ru": "Пункт седьмой: «вкладчик не подлежит списанию, пока вклад не выкуплен полностью». Строка вписана от руки поверх типографской, и типографскую видно снизу: там было «вкладчик подлежит списанию на общих основаниях». Чернила разные. Рука одна.",
+        "en": "Item seven: \"the depositor is not subject to write-off until the deposit is redeemed in full\". The line is entered by hand over the printed one, and the printed one shows through beneath: it said \"the depositor is subject to write-off on general grounds\". Different inks. One hand."
+      },
+      "keywords": [
+        { "match": { "ru": "Пункт седьмой", "en": "Item seven" }, "tone": "danger" },
+        { "match": { "ru": "Рука одна", "en": "One hand" }, "tone": "memory" }
+      ],
+      "next": "boy_offers"
+    },
+    {
+      "kind": "say",
+      "id": "boy_offers",
+      "speaker": "klyost",
+      "text": {
+        "ru": "Читайте вслух, а? Я запомню. Я чужое хорошо помню, у меня своего мало.",
+        "en": "Read it out loud, will you? I will remember it. I am good at remembering other people's things, I have not got many of my own."
+      },
+      "next": "reading_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "reading_choice",
+      "prompt": {
+        "ru": "Лист держится на сгибе. Разогнётся один раз.",
+        "en": "The sheet holds along the fold. It will unfold once."
+      },
+      "options": [
+        {
+          "id": "aloud",
+          "text": { "ru": "Читать вслух. С первой строки.", "en": "Read it aloud. From the first line." },
+          "fallback": true,
+          "effects": [
+            { "kind": "fragment", "memory": "pervaya_stroka", "amount": 2 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": 15 },
+            { "kind": "flag", "flag": "contract_read", "value": true }
+          ],
+          "to": "read_aloud"
+        },
+        {
+          "id": "silent",
+          "text": { "ru": "Читать про себя. Дважды.", "en": "Read it to yourself. Twice." },
+          "fallback": true,
+          "effects": [{ "kind": "flag", "flag": "contract_read", "value": true }],
+          "to": "read_silent"
+        },
+        {
+          "id": "seventh_only",
+          "text": { "ru": "Прочитать только пункт седьмой.", "en": "Read item seven and nothing else." },
+          "fallback": true,
+          "effects": [
+            { "kind": "flag", "flag": "contract_read", "value": true },
+            { "kind": "axis", "axis": "grasp_release", "delta": 3 }
+          ],
+          "to": "read_silent"
+        },
+        {
+          "id": "penman",
+          "chip": { "icon": "book", "label": { "ru": "Чистописец", "en": "Penman" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "chistopisets" },
+          "text": {
+            "ru": "Вслух. Без прибавления и убавления.",
+            "en": "Aloud. Without addition or subtraction."
+          },
+          "effects": [
+            { "kind": "fragment", "memory": "pervaya_stroka", "amount": 2 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": 15 },
+            { "kind": "flag", "flag": "contract_read", "value": true }
+          ],
+          "to": "read_aloud"
+        },
+        {
+          "id": "call_appraiser",
+          "conditions": { "kind": "flag", "flag": "tminny_trust" },
+          "text": {
+            "ru": "Позвать оценщика вниз. Пусть заверит.",
+            "en": "Call the appraiser down. Let him certify it."
+          },
+          "effects": [
+            { "kind": "flag", "flag": "contract_read", "value": true },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": 8 }
+          ],
+          "to": "read_tminny"
+        },
+        {
+          "id": "all_sixteen",
+          "conditions": { "kind": "axis", "axis": "reason_obsession", "op": "lte", "value": -30 },
+          "text": {
+            "ru": "Вслух все шестнадцать листов, по разделам.",
+            "en": "All sixteen sheets aloud, section by section."
+          },
+          "effects": [
+            { "kind": "fragment", "memory": "pervaya_stroka", "amount": 2 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": 15 },
+            { "kind": "flag", "flag": "contract_read", "value": true }
+          ],
+          "to": "read_aloud"
+        },
+        {
+          "id": "deny",
+          "conditions": { "kind": "axis", "axis": "honesty_deceit", "op": "lte", "value": -30 },
+          "text": { "ru": "Читать не буду. Почерк не мой.", "en": "I will not read it. Not my hand." },
+          "effects": [
+            { "kind": "flag", "flag": "contract_read", "value": true },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": -8 }
+          ],
+          "to": "read_deny"
+        }
+      ]
+    },
+    {
+      "kind": "narration",
+      "id": "read_aloud",
+      "text": {
+        "ru": "Ты читаешь, и на слове «оптом» голос садится, а мальчик за стеллажом повторяет за тобой одними губами, чтобы точнее. Он дослушивает до конца и не спрашивает ни одного слова.",
+        "en": "You read, and on the word \"bulk\" your voice gives, and behind the rack the boy repeats after you with his lips only, to get it right. He hears it to the end and does not ask about a single word."
+      },
+      "next": "after_reading"
+    },
+    {
+      "kind": "narration",
+      "id": "read_silent",
+      "text": {
+        "ru": "Ты читаешь второй раз, чтобы поймать место, где ошибся. Место не находится. Мальчик за стеллажом ждёт и не подходит.",
+        "en": "You read it a second time to catch the place where you got it wrong. The place does not turn up. Behind the rack the boy waits and does not come closer."
+      },
+      "next": "after_reading"
+    },
+    {
+      "kind": "say",
+      "id": "read_tminny",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Подлинник. Заверять не стану — заверенный он станет предметом пересмотра, а пересмотр у нас один на все цены сразу. Позвольте-с откланяться.",
+        "en": "An original. I shall not certify it: certified, it becomes subject to review, and review here means one review of every price at once. Permit me to take my leave."
+      },
+      "next": "after_reading"
+    },
+    {
+      "kind": "narration",
+      "id": "read_deny",
+      "text": {
+        "ru": "Ты говоришь это вслух, твёрдо, и рука на договоре в это время сокращает слово «которого» тремя знаками с точкой посередине, на обороте описи, где ты дописываешь номер связки.",
+        "en": "You say it out loud and firmly, and while you say it your hand, on the back of the inventory where you are adding the bundle's number, economises on the word \"whereof\" with three strokes and a dot in the middle."
+      },
+      "next": "after_reading"
+    },
+    {
+      "kind": "narration",
+      "id": "after_reading",
+      "text": {
+        "ru": "Наверху, на четвёртом ярусе, кто-то роняет связку ключей и долго её ищет. Времени у тебя примерно столько, сколько он будет искать.",
+        "en": "Up on the fourth tier somebody drops a ring of keys and spends a while looking for it. You have about as much time as he takes looking."
+      },
+      "next": "keep_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "keep_choice",
+      "prompt": {
+        "ru": "Шнур перетёрся. Связка держится на сургуче и привычке.",
+        "en": "The lacing is worn through. The bundle holds by wax and habit."
+      },
+      "options": [
+        {
+          "id": "take",
+          "text": { "ru": "Забрать связку. Всю, целиком.", "en": "Take the bundle. All of it, entire." },
+          "fallback": true,
+          "effects": [
+            { "kind": "flag", "flag": "contract_taken", "value": true },
+            { "kind": "counter", "counter": "lots_held", "delta": 1 },
+            { "kind": "axis", "axis": "grasp_release", "delta": 8 }
+          ],
+          "to": "taken"
+        },
+        {
+          "id": "leave",
+          "text": { "ru": "Оставить на месте и завязать шнур.", "en": "Leave it in place and tie the lacing." },
+          "fallback": true,
+          "effects": [
+            { "kind": "flag", "flag": "contract_taken", "value": false },
+            { "kind": "flag", "flag": "contract_left", "value": true },
+            { "kind": "axis", "axis": "grasp_release", "delta": -8 }
+          ],
+          "to": "left"
+        },
+        {
+          "id": "one_sheet",
+          "text": { "ru": "Взять один лист. Шестнадцатый.", "en": "Take one sheet. The sixteenth." },
+          "fallback": true,
+          "effects": [
+            { "kind": "flag", "flag": "contract_taken", "value": true },
+            { "kind": "counter", "counter": "lots_held", "delta": 1 },
+            { "kind": "axis", "axis": "grasp_release", "delta": 3 }
+          ],
+          "to": "taken"
+        },
+        {
+          "id": "copied_already",
+          "conditions": { "kind": "flag", "flag": "archive_copied" },
+          "text": {
+            "ru": "У меня всё переписано. Подлинник останется.",
+            "en": "I have it all copied. The original stays."
+          },
+          "effects": [
+            { "kind": "flag", "flag": "contract_taken", "value": false },
+            { "kind": "flag", "flag": "contract_left", "value": true },
+            { "kind": "axis", "axis": "reason_obsession", "delta": -3 }
+          ],
+          "to": "left"
+        },
+        {
+          "id": "register",
+          "chip": { "icon": "hourglass", "label": { "ru": "Перечень", "en": "Register" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "perechen" },
+          "text": {
+            "ru": "Внести связку в свою опись и забрать.",
+            "en": "Enter the bundle in my own inventory and take it."
+          },
+          "effects": [
+            { "kind": "flag", "flag": "contract_taken", "value": true },
+            { "kind": "counter", "counter": "lots_held", "delta": 1 },
+            { "kind": "axis", "axis": "reason_obsession", "delta": -3 }
+          ],
+          "to": "taken"
+        },
+        {
+          "id": "give_boy",
+          "conditions": { "kind": "flag", "flag": "klyost_named" },
+          "text": {
+            "ru": "Отдать мальчику. Его никто не обыскивает.",
+            "en": "Give it to the boy. Nobody searches him."
+          },
+          "effects": [
+            { "kind": "flag", "flag": "contract_taken", "value": true },
+            { "kind": "counter", "counter": "lots_held", "delta": 1 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": -3 }
+          ],
+          "to": "taken_boy"
+        }
+      ]
+    },
+    {
+      "kind": "narration",
+      "id": "taken",
+      "text": {
+        "ru": "Бумага под рубахой холодная и остаётся холодной все восемь пролётов вверх. Согреться ей нечем: в ней нет ни одного лота, только их перечень.",
+        "en": "The paper under your shirt is cold and stays cold for all eight flights up. It has nothing to warm itself with: there is not one lot in it, only the list of them."
+      },
+      "next": "scene:revizor_first"
+    },
+    {
+      "kind": "narration",
+      "id": "left",
+      "text": {
+        "ru": "Ты завязываешь шнур на два узла, как было, и ставишь связку на место корешком наружу. Полка принимает её точно в свой след: за это время след не затянулся.",
+        "en": "You tie the lacing in two knots, the way it was, and set the bundle back spine-out. The shelf takes it exactly into its own mark: the mark has not closed over in all that time."
+      },
+      "next": "scene:revizor_first"
+    },
+    {
+      "kind": "say",
+      "id": "taken_boy",
+      "speaker": "klyost",
+      "text": {
+        "ru": "Спрячу под рубаху и вынесу. У меня спрашивают только имя, а с именем у меня всё в порядке: его нет.",
+        "en": "I will put it under my shirt and carry it out. They only ever ask me for a name, and my name is fine: there is not one."
+      },
+      "next": "scene:revizor_first"
+    }
+  ]
+}

@@ -39,6 +39,15 @@
         "ru": "Закладная сторона к вечеру пустеет: конторы закрываются по одной, и каждая вывешивает свой курс на завтра. Курсы разные — договориться они не успевают никогда.",
         "en": "The Pledge Side empties towards evening: the offices shut one by one, each posting its rate for tomorrow. The rates differ — they never manage to agree in time."
       },
+      "next": "hub_klyost_seat"
+    },
+    {
+      "kind": "narration",
+      "id": "hub_klyost_seat",
+      "text": {
+        "ru": "Клёст сидит на тумбе у водостока и болтает ногами в такт чужим шагам. Мимо проходят четверо, и никто из них его не обходит — обходят тумбу.",
+        "en": "Crossbill sits on a bollard by the drain, swinging his legs in time with other people's steps. Four of them go by, and not one walks around him — they walk around the bollard."
+      },
       "next": "klyost_tips"
     },
     {

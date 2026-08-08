@@ -30,6 +30,25 @@
         "ru": "Заходи, не топчись. У меня сухо, а у тебя карманы описаны — я по швам вижу.",
         "en": "Come in, do not hover. It is dry here, and your pockets have been inventoried — I can tell by the seams."
       },
+      "next": "rows_duel"
+    },
+    {
+      "kind": "narration",
+      "id": "rows_duel",
+      "text": {
+        "ru": "В соседнем ряду двое выясняют, чьё детство подлиннее. Считают по зимам: у кого зим больше, тот и прав. Обе стороны купили свои зимы здесь же, в прошлом месяце.",
+        "en": "In the next row two men are settling whose childhood is the more authentic. They count it in winters: more winters, more right. Both sides bought their winters here, last month."
+      },
+      "next": "zh_1b"
+    },
+    {
+      "kind": "say",
+      "id": "zh_1b",
+      "speaker": "zhichka",
+      "text": {
+        "ru": "Не смотри туда. В среду я была тремя вдовами и таможенником, и все четверо мне должны.",
+        "en": "Do not look over there. On Wednesday I was three widows and a customs officer, and all four of them owe me."
+      },
       "next": "rows_label"
     },
     {

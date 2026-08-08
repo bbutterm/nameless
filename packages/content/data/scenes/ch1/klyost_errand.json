@@ -360,8 +360,8 @@
       "id": "farewell",
       "speaker": "klyost",
       "text": {
-        "ru": "Я мигом. Наверху направо, потом всё время вниз.",
-        "en": "Back in a blink. Right at the top, then down all the way."
+        "ru": "Я мигом, Пуговица. Наверху направо, потом всё время вниз.",
+        "en": "Back in a blink, Button. Right at the top, then down all the way."
       },
       "next": "scene:zaklad_hub"
     }

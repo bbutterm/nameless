@@ -70,8 +70,8 @@
       "id": "boy_here",
       "speaker": "klyost",
       "text": {
-        "ru": "Я тут. Я за ящиками. Скажете куда — побегу.",
-        "en": "I am here. Behind the crates. Say where and I run."
+        "ru": "Пуговица, я тут. Я за ящиками. Скажете куда — побегу.",
+        "en": "Button, I am here. Behind the crates. Say where and I run."
       },
       "next": "cover_choice"
     },

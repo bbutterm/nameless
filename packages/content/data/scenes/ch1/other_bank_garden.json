@@ -19,6 +19,15 @@
         "ru": "Перевозчик берёт грош и не спрашивает зачем. На Том берегу тихо: тут ничего не оценивают, и от этого сперва неловко.",
         "en": "The ferryman takes a groschen and asks no reason. It is quiet on the Other Bank: nothing here is appraised, and at first that is awkward."
       },
+      "next": "garden_beds"
+    },
+    {
+      "kind": "narration",
+      "id": "garden_beds",
+      "text": {
+        "ru": "Грядки в шесть рядов, репа, репа, репа и полоса лука для разнообразия. Табличек с сортами нет: сорт всё равно забудут, а репа вырастет.",
+        "en": "Six rows of beds: turnip, turnip, turnip, and a strip of onion for variety. There are no labels with varieties: the variety will be forgotten anyway, and the turnip will come up."
+      },
       "next": "burial_1"
     },
     {
@@ -39,6 +48,16 @@
         "ru": "Четыре года хранения, восемь месяцев просрочки. Хозяин не пришёл. Значит, хороним по полному обряду.",
         "en": "Four years of storage, eight months overdue. The owner never came. So it is the full rite."
       },
+      "next": "ogorodnik_2"
+    },
+    {
+      "kind": "say",
+      "id": "ogorodnik_2",
+      "speaker": "brat_ogorodnik",
+      "text": {
+        "ru": "Полный обряд — это когда называют по имени. Имени у чайника нет, назовём по номеру бирки: две тысячи девятьсот шесть.",
+        "en": "The full rite means it is called by name. The teapot has no name, so we call it by its tag number: two thousand nine hundred and six."
+      },
       "next": "proshchai_1"
     },
     {
@@ -58,6 +77,15 @@
       "text": {
         "ru": "Читаем страницу. «И отпустит, и станет...» Станет — и вот тут слово, а я его... Ну и слава.",
         "en": "We read the page. «And he shall let go, and he shall become...» Become — and here comes the word, and I have... Well, thank goodness."
+      },
+      "next": "proshchai_laugh"
+    },
+    {
+      "kind": "narration",
+      "id": "proshchai_laugh",
+      "text": {
+        "ru": "Он смеётся первым и коротко. Братья подхватывают уже спокойно: служба вышла новой, а новая служба у них считается настоящей.",
+        "en": "He laughs first and briefly. The brothers take it up unhurriedly: the service came out new, and a new service is the one they count as true."
       },
       "next": "white_book"
     },
