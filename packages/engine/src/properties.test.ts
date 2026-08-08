@@ -525,6 +525,25 @@ describe('свойство: сериализация ↔ десериализа�
     }
   });
 
+  it('снимок Rng переживает JSON: продолжение последовательности не расходится', () => {
+    // RngState лежит внутри GameState, а `& 0xffffffff` в JS даёт ЗНАКОВОЕ
+    // число: сид в сейве может оказаться отрицательным. Восстановление обязано
+    // продолжать ту же последовательность, иначе бой после загрузки пойдёт
+    // иначе, чем шёл до неё.
+    for (let i = 0; i < 500; i++) {
+      const src = new Rng(`rng-save:${i}`);
+      for (let k = 0; k < i % 17; k++) src.next();
+      const snapshot = JSON.parse(JSON.stringify(src.snapshot())) as ReturnType<Rng['snapshot']>;
+      const restored = Rng.restore(snapshot);
+      const a = [...Array(6)].map(() => src.next());
+      const b = [...Array(6)].map(() => restored.next());
+      expect(b, `сид rng-save:${i} (seed ${snapshot.seed})`).toEqual(a);
+      expect(restored.snapshot(), `сид rng-save:${i}: счётчик вызовов разошёлся`).toEqual(
+        src.snapshot(),
+      );
+    }
+  });
+
   it('двойной круг стабилен: save(load(save(s))) === save(s)', () => {
     for (let i = 0; i < 300; i++) {
       const rng = new Rng(`save2:${i}`);

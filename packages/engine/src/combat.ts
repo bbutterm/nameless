@@ -641,7 +641,11 @@ export function rollIntents(idx: CombatIndex, state: BattleState): BattleState {
 /** Ход бота (враг или обе стороны в симуляции). */
 export function autoAct(idx: CombatIndex, state: BattleState): BattleState {
   const actor = currentActor(state);
-  if (!actor) return state;
+  // Очередь указывает в пустоту (юнит пал вне очереди хода, состояние пришло
+  // из сейва или было поправлено эффектом) — раньше autoAct возвращал ТО ЖЕ
+  // состояние, и runAuto молча крутил холостые итерации до maxSteps, отдавая
+  // симулятору «ongoing». Передаём ход дальше — этим занимается act.
+  if (!actor) return act(idx, state, { ability: '__pass__' });
   const plan = actor.side === 'enemy' && actor.intent
     ? { ability: actor.intent.ability, targetUid: actor.intent.targetUid }
     : planAction(idx, state, actor);

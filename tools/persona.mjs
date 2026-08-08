@@ -146,6 +146,8 @@ let stuck = 0;
 let lastSig = '';
 let bubbles = 0;
 let step;
+const seenOptions = new Map();
+const loops = new Map();
 
 for (step = 0; step < maxSteps; step++) {
   const mode = await page.evaluate(() => {
@@ -262,10 +264,22 @@ for (step = 0; step < maxSteps; step++) {
           text: b.querySelector('.choice-text')?.textContent ?? b.textContent,
         })),
       );
-      const scores = opts.map((o) => score(o.chip + ' ' + o.text));
+      // Живой игрок не жмёт в хабе одну и ту же кнопку по кругу: уже взятые
+      // в этом узле варианты штрафуются, иначе бот вечно перечитывает доску.
+      const key = `${s?.scene}#${s?.node}`;
+      const taken = seenOptions.get(key) ?? new Set();
+      const scores = opts.map((o) => score(o.chip + ' ' + o.text) - (taken.has(o.text) ? 100 : 0));
       const top = Math.max(...scores);
       const ties = scores.map((v, i) => (v === top ? i : -1)).filter((i) => i >= 0);
       const best = ties.length > 1 ? ties[Math.min(ties.length - 1, tieBreak(ties.length))] : ties[0];
+      taken.add(opts[best].text);
+      seenOptions.set(key, taken);
+      loops.set(key, (loops.get(key) ?? 0) + 1);
+      if ((loops.get(key) ?? 0) > 12) {
+        trace.notes.push(`ЦИКЛ: узел ${key} пройден ${loops.get(key)} раз`);
+        await page.screenshot({ path: `${outDir}/${persona}-loop.png` });
+        break;
+      }
       const prompt = await page.evaluate(
         () => document.querySelector('.choice-prompt')?.textContent ?? '',
       );

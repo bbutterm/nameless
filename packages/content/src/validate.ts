@@ -82,6 +82,39 @@ function noteRecruits(effects: Effect[] | undefined, out: Set<string>): void {
 }
 
 /**
+ * Сколько осколков каждого воспоминания вообще существует в игре. Меньше
+ * `cost` — воспоминание не закрепить никаким прохождением.
+ */
+function noteFragments(effects: Effect[] | undefined, out: Map<string, number>): void {
+  for (const e of effects ?? []) {
+    if (e.kind === 'fragment') out.set(e.memory, (out.get(e.memory) ?? 0) + (e.amount ?? 1));
+  }
+}
+
+/** Эффекты, которые записаны, но не делают ничего. */
+function noteNoOps(where: string, effects: Effect[] | undefined, issues: Issue[]): void {
+  for (const e of effects ?? []) {
+    if (e.kind === 'heal' && e.amount <= 0) {
+      issues.push({
+        level: 'warn',
+        where,
+        message: `heal с amount=${e.amount} ничего не делает: лечение никогда не снижает hp`,
+      });
+    }
+    if (e.kind === 'fragment' && (e.amount ?? 1) <= 0) {
+      issues.push({
+        level: 'warn',
+        where,
+        message: `fragment с amount=${e.amount} не приближает воспоминание к закреплению`,
+      });
+    }
+    if (e.kind === 'xp' && e.amount < 0) {
+      issues.push({ level: 'warn', where, message: `xp с amount=${e.amount} отнимает опыт — уровень пересчитается вниз` });
+    }
+  }
+}
+
+/**
  * Условие, которое не выполнится НИ ПРИ КАКОМ состоянии: never в цепочке all,
  * сравнение оси за пределами [-100, 100] и т.п. Такой вариант/ветка — мёртвый текст.
  */
@@ -133,6 +166,128 @@ function staticallyAlways(cond: Condition): boolean {
   }
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Противоречие между условием перехода и `available` целевой сцены
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Разбирает условие в список конъюнктов (то, что обязано выполняться разом).
+ * `any`/`not` дальше не раскладываются — проверка сознательно консервативна:
+ * лучше промолчать, чем выдать ложное предупреждение сценаристу.
+ */
+function conjuncts(cond: Condition | undefined): Condition[] {
+  if (!cond) return [];
+  if (cond.kind === 'all') return cond.of.flatMap((c) => conjuncts(c));
+  return [cond];
+}
+
+/** Числовое условие → ключ, по которому его можно сравнивать с другим. */
+function numericKey(c: Condition): string | undefined {
+  switch (c.kind) {
+    case 'axis':
+      return `axis:${c.axis}`;
+    case 'counter':
+      return `counter:${c.counter}`;
+    case 'deaths':
+      return 'deaths';
+    case 'chapter':
+      return 'chapter';
+    case 'partySize':
+      return 'partySize';
+    default:
+      return undefined;
+  }
+}
+
+interface Interval {
+  lo: number;
+  hi: number;
+}
+
+/**
+ * Пересечение числовых ограничений. Все сравниваемые величины целые
+ * (оси округляются clampAxis, остальное — счётчики и размеры), поэтому
+ * `gt v` честно превращается в `>= v+1`.
+ */
+function narrow(iv: Interval, c: Condition & { op: string; value: number }): Interval {
+  switch (c.op) {
+    case 'gte':
+      return { lo: Math.max(iv.lo, c.value), hi: iv.hi };
+    case 'gt':
+      return { lo: Math.max(iv.lo, c.value + 1), hi: iv.hi };
+    case 'lte':
+      return { lo: iv.lo, hi: Math.min(iv.hi, c.value) };
+    case 'lt':
+      return { lo: iv.lo, hi: Math.min(iv.hi, c.value - 1) };
+    case 'eq':
+      return { lo: Math.max(iv.lo, c.value), hi: Math.min(iv.hi, c.value) };
+    default:
+      return iv;
+  }
+}
+
+/**
+ * Могут ли два набора условий выполниться ОДНОВРЕМЕННО? `false` — только когда
+ * противоречие доказано: конфликт по флагу или пустой числовой интервал.
+ */
+function jointlyImpossible(a: Condition[], b: Condition[]): string | undefined {
+  const all = [...a, ...b];
+
+  const flagWanted = new Map<string, boolean>();
+  for (const c of all) {
+    if (c.kind !== 'flag') continue;
+    const want = c.value ?? true;
+    const prev = flagWanted.get(c.flag);
+    if (prev !== undefined && prev !== want) return `флаг «${c.flag}» требуется и true, и false`;
+    flagWanted.set(c.flag, want);
+  }
+
+  const ranges = new Map<string, Interval>();
+  for (const c of all) {
+    const key = numericKey(c);
+    if (!key) continue;
+    const start = ranges.get(key) ?? {
+      lo: key.startsWith('axis:') ? -100 : Number.NEGATIVE_INFINITY,
+      hi: key.startsWith('axis:') ? 100 : Number.POSITIVE_INFINITY,
+    };
+    const next = narrow(start, c as Condition & { op: string; value: number });
+    if (next.lo > next.hi) return `${key} не может быть одновременно ≥${next.lo} и ≤${next.hi}`;
+    ranges.set(key, next);
+  }
+
+  // never на любой стороне — противоречие само по себе (ловится и отдельно).
+  if (all.some((c) => c.kind === 'never')) return 'условие содержит never';
+  return undefined;
+}
+
+/**
+ * Условия перехода за вычетом того, что сам переход переписывает: вариант
+ * вида «показывать, пока флага нет» → «поставить флаг» → «уйти в сцену,
+ * которая флага требует» абсолютно законен, и путать его с противоречием
+ * нельзя.
+ */
+function conditionsAtArrival(cond: Condition | undefined, effects: Effect[] | undefined): Condition[] {
+  const written = new Set<string>();
+  const setFlags: Condition[] = [];
+  for (const e of effects ?? []) {
+    if (e.kind === 'flag') {
+      written.add(`flag:${e.flag}`);
+      setFlags.push({ kind: 'flag', flag: e.flag, value: e.value });
+    }
+    if (e.kind === 'axis') written.add(`axis:${e.axis}`);
+    if (e.kind === 'counter') written.add(`counter:${e.counter}`);
+    if (e.kind === 'recruit' || e.kind === 'dismiss') written.add('partySize');
+  }
+  const kept = conjuncts(cond).filter((c) => {
+    if (c.kind === 'flag') return !written.has(`flag:${c.flag}`);
+    if (c.kind === 'axis') return !written.has(`axis:${c.axis}`);
+    if (c.kind === 'counter') return !written.has(`counter:${c.counter}`);
+    if (c.kind === 'partySize') return !written.has('partySize');
+    return true;
+  });
+  return [...kept, ...setFlags];
+}
+
 /**
  * Ссылочная целостность: битые переходы, неизвестные id, недостижимые узлы,
  * флаги, которые читают, но никогда не пишут.
@@ -180,6 +335,8 @@ export function validateBundle(bundle: ContentBundle): Issue[] {
   const writes = emptyRefs();
   /** Юниты, которых игрок может получить recruit-эффектом. */
   const recruitTargets = new Set<string>();
+  /** Сколько осколков каждого воспоминания существует во всём контенте. */
+  const fragmentTotals = new Map<string, number>();
 
   // Узлы, на которые ссылаются из других сцен через "scene:id#node", —
   // законные точки входа: без этого учёта они ложно значились бы недостижимыми.
@@ -275,6 +432,8 @@ export function validateBundle(bundle: ContentBundle): Issue[] {
       if (n.kind === 'effects') {
         effectWrites(n.effects, writes);
         noteRecruits(n.effects, recruitTargets);
+        noteFragments(n.effects, fragmentTotals);
+        noteNoOps(`${scene.id}#${n.id}`, n.effects, issues);
       }
       if (n.kind === 'branch') {
         n.branches.forEach((b) => collectRefs(b.when as Condition, reads));
@@ -298,6 +457,8 @@ export function validateBundle(bundle: ContentBundle): Issue[] {
           collectRefs(o.conditions as Condition | undefined, reads);
           effectWrites(o.effects, writes);
           noteRecruits(o.effects, recruitTargets);
+          noteFragments(o.effects, fragmentTotals);
+          noteNoOps(`${scene.id}#${n.id}/${o.id}`, o.effects, issues);
           if (!o.fallback && staticallyImpossible(o.conditions as Condition | undefined)) {
             issues.push({
               level: 'warn',
@@ -362,6 +523,8 @@ export function validateBundle(bundle: ContentBundle): Issue[] {
     }
     effectWrites(b.rewards, writes);
     noteRecruits(b.rewards, recruitTargets);
+    noteFragments(b.rewards, fragmentTotals);
+    noteNoOps(`battle:${b.id}`, b.rewards, issues);
   }
 
   const lifeByMemory = new Map<string, string[]>();
@@ -384,6 +547,8 @@ export function validateBundle(bundle: ContentBundle): Issue[] {
     }
     effectWrites(m.grants, writes);
     noteRecruits(m.grants, recruitTargets);
+    noteFragments(m.grants, fragmentTotals);
+    noteNoOps(`memory:${m.id}`, m.grants, issues);
   }
   for (const l of bundle.lives) {
     if (!axisIds.has(l.axis)) {
@@ -396,6 +561,8 @@ export function validateBundle(bundle: ContentBundle): Issue[] {
     }
     effectWrites(l.grants, writes);
     noteRecruits(l.grants, recruitTargets);
+    noteFragments(l.grants, fragmentTotals);
+    noteNoOps(`life:${l.id}`, l.grants, issues);
   }
   for (const d of bundle.deaths) {
     if (!sceneIds.has(d.wakeScene)) {
@@ -467,12 +634,21 @@ export function validateBundle(bundle: ContentBundle): Issue[] {
   }
 
   // Воспоминание, которому ни один эффект не даёт осколков, закрепить нельзя.
+  // Мало и того, что осколки есть: их должно хватать на cost, иначе
+  // воспоминание — мёртвый контент, недостижимый ни одной жизнью игрока.
   for (const m of bundle.memories) {
-    if (!writes.memories.has(m.id)) {
+    const total = fragmentTotals.get(m.id) ?? 0;
+    if (total === 0) {
       issues.push({
         level: 'warn',
         where: `memory:${m.id}`,
         message: 'Осколков не даёт ни один эффект — воспоминание не закрепить',
+      });
+    } else if (total < m.cost) {
+      issues.push({
+        level: 'warn',
+        where: `memory:${m.id}`,
+        message: `Осколков во всей игре ${total}, а нужно ${m.cost} — воспоминание не закрепить ни одной жизнью`,
       });
     }
   }
@@ -524,6 +700,153 @@ export function validateBundle(bundle: ContentBundle): Issue[] {
   for (const s of bundle.scenes) {
     if (!linkedScenes.has(s.id)) {
       issues.push({ level: 'warn', where: `scene:${s.id}`, message: 'В сцену не ведёт ни один переход' });
+    }
+  }
+
+  // ── Достижимость по-настоящему ────────────────────────────────────────────
+  // Проверка выше признаёт сцену «связанной», если на неё хоть кто-то
+  // ссылается — даже если сам ссылающийся недостижим, и даже если это
+  // wakeScene смерти, до которой игрок никогда не доходит. Здесь честный обход
+  // от entry глав: рёбра — переходы `scene:` и пробуждения ТЕХ смертей,
+  // до чьих узлов игрок добирается.
+  const sceneById = new Map(bundle.scenes.map((s) => [s.id, s]));
+  const deathById = new Map(bundle.deaths.map((d) => [d.id, d]));
+  const reachedScenes = new Set<string>();
+  const reachedDeaths = new Set<string>();
+  const reachedBattles = new Set<string>();
+  const walk: string[] = [];
+  const visit = (id: string): void => {
+    if (!reachedScenes.has(id)) {
+      reachedScenes.add(id);
+      walk.push(id);
+    }
+  };
+  for (const c of bundle.chapters) visit(c.entryScene);
+  while (walk.length > 0) {
+    const sid = walk.shift() as string;
+    const scene = sceneById.get(sid);
+    if (!scene) continue;
+    for (const { to } of sceneTargets(scene)) {
+      if (to.startsWith('scene:')) visit(to.slice(6).split('#')[0] as string);
+    }
+    for (const n of scene.nodes) {
+      if (n.kind === 'battle') reachedBattles.add(n.battle);
+      if (n.kind === 'death') {
+        reachedDeaths.add(n.death);
+        const d = deathById.get(n.death);
+        if (d) visit(d.wakeScene);
+      }
+    }
+  }
+  for (const s of bundle.scenes) {
+    if (linkedScenes.has(s.id) && !reachedScenes.has(s.id)) {
+      issues.push({
+        level: 'warn',
+        where: `scene:${s.id}`,
+        message: 'Сцена недостижима от entry ни одной главы: ссылки на неё есть, пути нет',
+      });
+    }
+  }
+
+  // Бой, до которого игрок не дойдёт, — мёртвый контент: его никто не тестирует
+  // и не балансирует, а симулятор всё равно считает по нему цифры.
+  const battleNodes = new Set<string>();
+  for (const s of bundle.scenes) for (const n of s.nodes) if (n.kind === 'battle') battleNodes.add(n.battle);
+  for (const b of bundle.battles) {
+    if (!battleNodes.has(b.id)) {
+      issues.push({ level: 'warn', where: `battle:${b.id}`, message: 'На бой не ссылается ни один узел battle' });
+    } else if (!reachedBattles.has(b.id)) {
+      issues.push({
+        level: 'warn',
+        where: `battle:${b.id}`,
+        message: 'Узел с этим боем есть, но лежит в недостижимой сцене',
+      });
+    }
+  }
+
+  // Смерть без узла — это ещё и недостижимая сцена пробуждения: игрок
+  // никогда не увидит ни текст смерти, ни то, что за ней написано.
+  const deathNodes = new Set<string>();
+  for (const s of bundle.scenes) for (const n of s.nodes) if (n.kind === 'death') deathNodes.add(n.death);
+  for (const d of bundle.deaths) {
+    if (!deathNodes.has(d.id)) {
+      issues.push({
+        level: 'warn',
+        where: `death:${d.id}`,
+        message: `На смерть не ссылается ни один узел death — сцена пробуждения «${d.wakeScene}» недостижима через неё`,
+      });
+    } else if (!reachedDeaths.has(d.id)) {
+      issues.push({
+        level: 'warn',
+        where: `death:${d.id}`,
+        message: 'Узел этой смерти лежит в недостижимой сцене',
+      });
+    }
+  }
+
+  // ── available против условия перехода ─────────────────────────────────────
+  // Хаб предлагает вариант, а сцена на том конце отказывается открываться:
+  // игрок жмёт кнопку и не попадает никуда. Ловим только доказанные
+  // противоречия (флаг требуется и true и false, пустой числовой интервал).
+  for (const scene of bundle.scenes) {
+    for (const n of scene.nodes) {
+      const links: { where: string; cond: Condition | undefined; effects: Effect[] | undefined; to: string }[] = [];
+      if (n.kind === 'choice') {
+        for (const o of n.options) {
+          links.push({ where: `${scene.id}#${n.id}/${o.id}`, cond: o.conditions as Condition | undefined, effects: o.effects, to: o.to });
+        }
+      }
+      if (n.kind === 'branch') {
+        for (const b of n.branches) {
+          links.push({ where: `${scene.id}#${n.id}`, cond: b.when as Condition, effects: undefined, to: b.to });
+        }
+      }
+      for (const link of links) {
+        if (!link.to.startsWith('scene:')) continue;
+        const targetId = link.to.slice(6).split('#')[0] as string;
+        if (targetId === scene.id) continue;
+        const target = sceneById.get(targetId);
+        if (!target?.available) continue;
+        const clash = jointlyImpossible(
+          conditionsAtArrival(link.cond, link.effects),
+          conjuncts(target.available as Condition),
+        );
+        if (clash) {
+          issues.push({
+            level: 'warn',
+            where: link.where,
+            message: `Переход в «${targetId}» противоречит её available: ${clash}`,
+          });
+        }
+      }
+    }
+  }
+
+  // ── Бой без лимита ходов, который некому закончить ────────────────────────
+  // turnLimit: 0 означает «без лимита». Если ни один враг не может нанести
+  // урон, то бой держится только на способности отряда убивать: отряд из
+  // одних лекарей зациклит движок навсегда.
+  const abilityById = new Map(bundle.abilities.map((a) => [a.id, a]));
+  const unitById = new Map(bundle.units.map((u) => [u.id, u]));
+  const canDealDamage = (unitId: string): boolean => {
+    const u = unitById.get(unitId);
+    if (!u) return false;
+    return u.abilities.some((id) => {
+      const a = abilityById.get(id);
+      if (!a) return false;
+      // Способность без явных эффектов бьёт по ability.power — а урон
+      // всегда минимум единица (computeDamage), так что это тоже урон.
+      return !a.effects || a.effects.length === 0 || a.effects.some((e) => e.kind === 'damage');
+    });
+  };
+  for (const b of bundle.battles) {
+    if (b.turnLimit !== 0) continue;
+    if (!b.enemies.some((e) => canDealDamage(e.unit))) {
+      issues.push({
+        level: 'warn',
+        where: `battle:${b.id}`,
+        message: 'Бой без лимита ходов, и ни один враг не наносит урона — бой может не закончиться никогда',
+      });
     }
   }
 
