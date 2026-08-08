@@ -15,6 +15,16 @@ import {
 
 export const WINRATE_MIN = 0.42;
 export const WINRATE_MAX = 0.58;
+/**
+ * Полуширина коридора вокруг ИЗМЕРЕННОЙ нулевой точки турнира.
+ *
+ * Нулевая точка не равна 50%: враги телеграфируют намерения в начале раунда
+ * (`rollIntents`), а сторона игрока переприцеливается в момент хода — и потому
+ * зеркало самого себя выигрывает примерно в 55% случаев. Это не баг, а
+ * геймплейное решение (иконки намерений), поэтому симулятор не выправляет
+ * асимметрию, а честно калибруется по ней.
+ */
+export const CORRIDOR_HALF_WIDTH = 0.08;
 /** Бой короче — не успевает стать тактикой, длиннее — надоедает на телефоне. */
 export const ROUNDS_MIN = 6;
 export const ROUNDS_MAX = 14;
@@ -25,6 +35,8 @@ export interface UnitWinrate {
   battles: number;
   wins: number;
   winrate: number;
+  /** Измеренная нулевая точка турнира для этого тира. */
+  neutral: number;
   avgRounds: number;
   inCorridor: boolean;
   /** В тире меньше четырёх соседей: цифра справочная, коридор к ней неприменим. */
@@ -95,6 +107,28 @@ export function unitWinrates(content: ContentBundle, runsPerUnit = 60): UnitWinr
     byTier.set(u.tier, list);
   }
 
+  // Калибровка: одинаковые составы с обеих сторон. Всё, что заметно выше или
+  // ниже этого числа, — вклад самого юнита, а не перекос харнесса.
+  const neutralByTier = new Map<number, number>();
+  for (const tier of new Set(content.units.map((u) => u.tier))) {
+    const pool = content.units.filter((u) => u.tier === tier);
+    const wide = pool.length >= 4 ? pool : content.units;
+    let wins = 0;
+    let played = 0;
+    // Калибровка гоняется щедро: это одно число на весь тир, и его дрожание
+    // ±7 пунктов между прогонами делало вердикт по юнитам случайным.
+    const calibrationRuns = Math.max(300, runsPerUnit * 3);
+    for (let i = 0; i < calibrationRuns; i++) {
+      const rng = new Rng(`calib:${tier}:${i}`);
+      const team = rng.shuffle(wide.concat(wide, wide)).slice(0, 6);
+      if (team.length < 2) continue;
+      const st = runAuto(idx, startBattle(idx, adHocBattle(`calib:${tier}:${i}`, team), fillSlots(team), `calib:${tier}:${i}`));
+      played++;
+      if (st.outcome === 'win') wins++;
+    }
+    neutralByTier.set(tier, played > 0 ? wins / played : 0.5);
+  }
+
   const out: UnitWinrate[] = [];
   for (const unit of content.units) {
     // Эталон набирается из своего тира; если соседей мало, турнир вырождается,
@@ -108,10 +142,21 @@ export function unitWinrates(content: ContentBundle, runsPerUnit = 60): UnitWinr
       pool = [...pool, ...neighbours];
     }
     if (pool.length === 0) {
-      out.push({ unit: unit.id, tier: unit.tier, battles: 0, wins: 0, winrate: 0.5, avgRounds: 0, inCorridor: true, thinSample });
+      out.push({
+        unit: unit.id,
+        tier: unit.tier,
+        battles: 0,
+        wins: 0,
+        winrate: 0.5,
+        neutral: neutralByTier.get(unit.tier) ?? 0.5,
+        avgRounds: 0,
+        inCorridor: true,
+        thinSample,
+      });
       continue;
     }
 
+    const neutral = neutralByTier.get(unit.tier) ?? 0.5;
     let wins = 0;
     let rounds = 0;
     let played = 0;
@@ -140,7 +185,8 @@ export function unitWinrates(content: ContentBundle, runsPerUnit = 60): UnitWinr
       wins,
       winrate,
       avgRounds: played > 0 ? rounds / played : 0,
-      inCorridor: thinSample || (winrate >= WINRATE_MIN && winrate <= WINRATE_MAX),
+      neutral,
+      inCorridor: thinSample || Math.abs(winrate - neutral) <= CORRIDOR_HALF_WIDTH,
       thinSample,
     });
   }
@@ -154,12 +200,13 @@ export function unitWinrates(content: ContentBundle, runsPerUnit = 60): UnitWinr
  */
 export function scriptedBattles(
   content: ContentBundle,
-  party: PartyUnit[],
+  partyForBattle: (battleId: string) => PartyUnit[],
   runs = 40,
 ): BattleReport[] {
   const idx = indexCombat(content);
   const out: BattleReport[] = [];
   for (const b of content.battles) {
+    const party = partyForBattle(b.id);
     let wins = 0;
     let rounds = 0;
     let survivors = 0;

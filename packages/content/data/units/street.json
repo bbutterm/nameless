@@ -17,7 +17,7 @@
       "hp": 38,
       "atk": 11,
       "def": 6,
-      "initiative": 10
+      "initiative": 9
     },
     "abilities": [
       "plain_strike",

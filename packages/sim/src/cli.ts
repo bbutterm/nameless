@@ -4,12 +4,11 @@ import { content, validateBundle } from '@nameless/content';
 import type { PartyUnit, UnitDef } from '@nameless/engine';
 import {
   determinismCheck,
+  CORRIDOR_HALF_WIDTH,
   ROUNDS_MAX,
   ROUNDS_MIN,
   scriptedBattles,
   unitWinrates,
-  WINRATE_MAX,
-  WINRATE_MIN,
 } from './battle-sim.js';
 import { fuzzDialogue } from './dialogue-fuzz.js';
 
@@ -48,11 +47,13 @@ if (!only || only === 'battles') {
       const mark = w.thinSample ? '~~' : w.inCorridor ? '  ' : '!!';
       console.log(
         `${mark} ${w.unit.padEnd(24)} t${w.tier}  ${(w.winrate * 100).toFixed(1)}%  ` +
-          `раундов ${w.avgRounds.toFixed(1)}${w.thinSample ? '  (тонкая выборка тира)' : ''}`,
+          `(норма ${(w.neutral * 100).toFixed(0)}%)  раундов ${w.avgRounds.toFixed(1)}` +
+          `${w.thinSample ? '  тонкая выборка тира' : ''}`,
       );
     }
     console.log(
-      `Вне коридора ${(WINRATE_MIN * 100).toFixed(0)}–${(WINRATE_MAX * 100).toFixed(0)}%: ${out.length} из ${wr.length}`,
+      `Вне коридора ±${(CORRIDOR_HALF_WIDTH * 100).toFixed(0)} пунктов от измеренной нормы: ` +
+        `${out.length} из ${wr.length}`,
     );
     const avgRounds = wr.reduce((a, w) => a + w.avgRounds, 0) / Math.max(1, wr.length);
     const roundsOk = avgRounds >= ROUNDS_MIN && avgRounds <= ROUNDS_MAX;
@@ -66,8 +67,20 @@ if (!only || only === 'battles') {
     if (out.length > 0) failed = true;
 
     head('Сюжетные бои');
-    const party = defaultParty(content.units);
-    const rep = scriptedBattles(content, party, Math.max(20, Math.floor(runs / 2)));
+    // Отряд подбирается под главу боя: к главе 2 игрок приходит с прокачанными
+    // спутниками, и мерить её бои отрядом первого уровня — мерить не то.
+    const battleChapter = new Map<string, number>();
+    for (const sc of content.scenes) {
+      for (const n of sc.nodes) {
+        if (n.kind === 'battle') battleChapter.set(n.battle, sc.chapter);
+      }
+    }
+    const party = defaultParty(content.units, 1);
+    const rep = scriptedBattles(
+      content,
+      (id) => defaultParty(content.units, Math.max(1, (battleChapter.get(id) ?? 1) * 2 - 1)),
+      Math.max(20, Math.floor(runs / 2)),
+    );
     for (const r of rep) {
       const def = content.battles.find((b) => b.id === r.battle);
       // Бой, помеченный `lethal`, игрок по сюжету не переживает — коридор к нему неприменим.
@@ -153,17 +166,22 @@ function dedupe(items: string[]): string[] {
   return [...new Set(items)];
 }
 
-/** Отряд «среднего игрока» для проверки сюжетных боёв: тир 1, три спереди, три сзади. */
-function defaultParty(units: UnitDef[]): PartyUnit[] {
+/** Отряд «среднего игрока»: тир 1, три спереди, три сзади, заданного уровня. */
+function defaultParty(units: UnitDef[], level: number): PartyUnit[] {
   const t1 = units.filter((u) => u.tier === 1);
   const front = t1.filter((u) => u.row === 'front').slice(0, 3);
   const back = t1.filter((u) => u.row === 'back').slice(0, 3);
   const out: PartyUnit[] = [];
-  front.forEach((u, i) =>
-    out.push({ uid: `d${out.length}`, defId: u.id, hp: u.stats.hp, xp: 0, level: 1, slot: { row: 'front', index: i } }),
-  );
-  back.forEach((u, i) =>
-    out.push({ uid: `d${out.length}`, defId: u.id, hp: u.stats.hp, xp: 0, level: 1, slot: { row: 'back', index: i } }),
-  );
+  const push = (u: UnitDef, row: 'front' | 'back', i: number) =>
+    out.push({
+      uid: `d${out.length}`,
+      defId: u.id,
+      hp: Math.round(u.stats.hp * (1 + 0.12 * (level - 1))),
+      xp: 0,
+      level,
+      slot: { row, index: i },
+    });
+  front.forEach((u, i) => push(u, 'front', i));
+  back.forEach((u, i) => push(u, 'back', i));
   return out;
 }

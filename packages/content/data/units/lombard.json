@@ -16,7 +16,7 @@
     "stats": {
       "hp": 38,
       "atk": 11,
-      "def": 8,
+      "def": 7,
       "initiative": 9
     },
     "abilities": [
@@ -50,7 +50,7 @@
     "row": "front",
     "stats": {
       "initiative": 10,
-      "hp": 64,
+      "hp": 60,
       "atk": 15,
       "def": 11
     },
@@ -122,7 +122,7 @@
     "row": "back",
     "stats": {
       "initiative": 11,
-      "hp": 46,
+      "hp": 45,
       "atk": 15,
       "def": 6
     },

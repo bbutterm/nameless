@@ -1,0 +1,535 @@
+{
+  "id": "tminny_price",
+  "chapter": 2,
+  "title": { "ru": "Цена особого распоряжения", "en": "The Price of the Special Order" },
+  "tags": ["lombard", "vaults", "tminny"],
+  "available": { "kind": "visited", "scene": "vault_gate" },
+  "entry": "price_router",
+  "nodes": [
+    {
+      "kind": "branch",
+      "id": "price_router",
+      "branches": [
+        { "when": { "kind": "flag", "flag": "tminny_blacklist" }, "to": "window_1" },
+        { "when": { "kind": "flag", "flag": "tminny_trust" }, "to": "tea_1" }
+      ],
+      "fallback": "desk_1"
+    },
+
+    {
+      "kind": "narration",
+      "id": "tea_1",
+      "text": {
+        "ru": "В читальне два стакана, и второй налит заранее. Тминный успел остудить свой дважды: один раз, пока ждал, второй — пока решал, говорить ли.",
+        "en": "There are two glasses in the reading room and the second one has been poured in advance. Tminny has let his go cold twice: once while waiting, once while deciding whether to speak."
+      },
+      "next": "tminny_tea_1"
+    },
+    {
+      "kind": "say",
+      "id": "tminny_tea_1",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Позвольте-с, сяду спиной к двери: у меня к вам разговор, который дороже слушать, чем вести.",
+        "en": "If you will permit, I shall sit with my back to the door: I have a conversation for you that costs more to hear than to hold."
+      },
+      "next": "tminny_tea_2"
+    },
+    {
+      "kind": "say",
+      "id": "tminny_tea_2",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Обеспечение у нас одно на всю монету, и лежит оно в пяти разделах. Пять — это мало. Пять — это, позвольте-с, один вкладчик.",
+        "en": "We have one body of holdings for the whole coinage, and it lies in five sections. Five is few. Five is, if you will permit, one depositor."
+      },
+      "keywords": [{ "match": { "ru": "пяти разделах", "en": "five sections" }, "tone": "danger" }],
+      "next": "tea_slip"
+    },
+    {
+      "kind": "effects",
+      "id": "tea_slip",
+      "effects": [{ "kind": "flag", "flag": "tminny_slip", "value": true }],
+      "next": "tminny_tea_3"
+    },
+    {
+      "kind": "say",
+      "id": "tminny_tea_3",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Я это произнёс вслух впервые за одиннадцать лет и сразу оценил. Оценка... в четыре гроша. Дешевле молчания, но молчание я уже носил.",
+        "en": "I have said that out loud for the first time in eleven years, and I valued it at once. Valuation... four groschen. Cheaper than silence, but I have worn the silence already."
+      },
+      "next": "burn_router"
+    },
+
+    {
+      "kind": "narration",
+      "id": "window_1",
+      "text": {
+        "ru": "Окошко выдачи справок открывается в форточку шириной в ладонь. Перед тобой в очереди двое, и оба стоят боком: в форточку слышно только того, кто говорит в неё щекой.",
+        "en": "The enquiries window opens through a pane the width of a hand. There are two people ahead of you and both stand sideways: through that pane you can only hear a man who speaks into it cheek-first."
+      },
+      "next": "window_otsen"
+    },
+    {
+      "kind": "say",
+      "id": "window_otsen",
+      "speaker": "otsenshchik",
+      "text": {
+        "ru": "Пункт двадцатый: особое распоряжение на нижние ярусы. Цена прописью, торг не через форточку.",
+        "en": "Clause twenty: special order for the lower tiers. Price in words, no haggling through the pane."
+      },
+      "next": "window_2"
+    },
+    {
+      "kind": "narration",
+      "id": "window_2",
+      "text": {
+        "ru": "Цену тебе называют прописью, и она занимает три строки. В конце приписано «и ещё половина», а половину прописью в этом городе пишут одинаково давно и одной формулой.",
+        "en": "The price is given to you in words and takes three lines. At the end it says \"and one half more\", and in this city the half has been written out in words the same way, in the same formula, for a very long time."
+      },
+      "keywords": [{ "match": { "ru": "и ещё половина", "en": "and one half more" }, "tone": "memory" }],
+      "next": "tminny_pane"
+    },
+    {
+      "kind": "say",
+      "id": "tminny_pane",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Позвольте-с не подходить. Через форточку я называю только цифры; всё, что дороже цифр, у нас передают лично, а вы в списке.",
+        "en": "Permit me not to come closer. Through the pane I give figures only; anything dearer than a figure is passed on in person here, and you are on the list."
+      },
+      "next": "burn_router"
+    },
+
+    {
+      "kind": "narration",
+      "id": "desk_1",
+      "text": {
+        "ru": "Стол под лампой пуст, кроме промокашки и одного бланка на две подписи. Бланк лежит лицом вниз, и Тминный не переворачивает его, пока смотрит на тебя.",
+        "en": "The desk under the lamp is bare except for a blotter and a single form with room for two signatures. The form lies face down, and Tminny does not turn it over while he is looking at you."
+      },
+      "next": "tminny_desk_1"
+    },
+    {
+      "kind": "say",
+      "id": "tminny_desk_1",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Вы стали серее на два тона и держитесь ровнее. Оценено... в шесть грошей: ровность в наше время дороже цвета.",
+        "en": "You have gone two shades greyer and you carry yourself steadier. Valued... at six groschen: steadiness these days runs dearer than colour."
+      },
+      "next": "tminny_desk_2"
+    },
+    {
+      "kind": "say",
+      "id": "tminny_desk_2",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Особое распоряжение — бумага на две подписи: моя и того, кто отвечает за обеспечение. Вторая подпись, позвольте-с, не ставилась при мне ни разу.",
+        "en": "A special order is a paper for two signatures: mine, and that of whoever answers for the holdings. The second signature, if you will permit, has never once been put there in my time."
+      },
+      "next": "burn_router"
+    },
+
+    {
+      "kind": "branch",
+      "id": "burn_router",
+      "branches": [{ "when": { "kind": "flag", "flag": "archive_burned" }, "to": "tminny_burn" }],
+      "fallback": "grasp_router"
+    },
+    {
+      "kind": "say",
+      "id": "tminny_burn",
+      "speaker": "tminny",
+      "text": {
+        "ru": "За дым на третьем ярусе вам выставлено четырнадцать строк, и одиннадцатая — про уборку. Убыток я подписал не глядя: горелые лоты дорожают, у них появляется происхождение.",
+        "en": "For the smoke on the third tier you have been billed fourteen lines, and the eleventh is for the cleaning. I signed off the loss without looking: scorched lots go up in price, they acquire a provenance."
+      },
+      "next": "grasp_router"
+    },
+    {
+      "kind": "branch",
+      "id": "grasp_router",
+      "branches": [
+        { "when": { "kind": "axis", "axis": "grasp_release", "op": "lte", "value": -40 }, "to": "tminny_threat" }
+      ],
+      "fallback": "price_choice"
+    },
+    {
+      "kind": "say",
+      "id": "tminny_threat",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Вы третий месяц прощаете долги, и в нашей конторе о вас говорят тише, чем о Ревизии. Прощённый долг цены не имеет, а всё, что цены не имеет, нас разоряет.",
+        "en": "You have been forgiving debts for three months, and in our office you are spoken of more quietly than the Audit is. A forgiven debt carries no price, and everything that carries no price ruins us."
+      },
+      "next": "price_choice"
+    },
+
+    {
+      "kind": "choice",
+      "id": "price_choice",
+      "prompt": {
+        "ru": "Он делает паузу перед числом. Пауза у него всегда одной длины.",
+        "en": "He pauses before the number. His pause is always the same length."
+      },
+      "options": [
+        {
+          "id": "pay_named",
+          "text": { "ru": "Заплатить названное, не переспрашивая.", "en": "Pay what he named, without asking again." },
+          "fallback": true,
+          "effects": [
+            { "kind": "fragment", "memory": "opis_vsego_sushchego", "amount": 1 },
+            { "kind": "axis", "axis": "reason_obsession", "delta": -8 },
+            { "kind": "gold", "delta": -18 },
+            { "kind": "flag", "flag": "vault_order", "value": true }
+          ],
+          "to": "r_paid"
+        },
+        {
+          "id": "haggle",
+          "text": { "ru": "Торговаться по пунктам.", "en": "Haggle clause by clause." },
+          "fallback": true,
+          "effects": [
+            { "kind": "axis", "axis": "reason_obsession", "delta": 8 },
+            { "kind": "gold", "delta": -9 },
+            { "kind": "flag", "flag": "vault_order", "value": true }
+          ],
+          "to": "r_haggle"
+        },
+        {
+          "id": "refuse",
+          "text": { "ru": "Уйти без бумаги.", "en": "Leave without the paper." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -3 }],
+          "to": "r_refuse"
+        },
+        {
+          "id": "pay_promise",
+          "text": { "ru": "Выписать ему посул на четверг.", "en": "Write him a promise note for Thursday." },
+          "chip": { "icon": "coin", "label": { "ru": "Посульщик", "en": "Posulshchik" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "posulshchik" },
+          "effects": [
+            { "kind": "fragment", "memory": "zima_bez_khleba", "amount": 1 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": -8 },
+            { "kind": "counter", "counter": "promises_given", "delta": 1 },
+            { "kind": "flag", "flag": "vault_order", "value": true }
+          ],
+          "to": "r_promise",
+          "priority": 6
+        },
+        {
+          "id": "pay_truth",
+          "text": { "ru": "Сказать, зачем мне вниз. Целиком.", "en": "Tell him why I need to go down. Entire." },
+          "chip": { "icon": "book", "label": { "ru": "Чистописец", "en": "Chistopisets" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "chistopisets" },
+          "effects": [
+            { "kind": "fragment", "memory": "khronika_bez_popravok", "amount": 1 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": 8 },
+            { "kind": "flag", "flag": "vault_order", "value": true },
+            { "kind": "flag", "flag": "tminny_slip", "value": true }
+          ],
+          "to": "r_truth",
+          "priority": 6
+        },
+        {
+          "id": "pay_threat",
+          "text": { "ru": "Назвать вслух цену его собственного взноса.", "en": "Say out loud what his own entry fee cost." },
+          "chip": { "icon": "fire", "label": { "ru": "Смолокур", "en": "Smolokur" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "smolokur" },
+          "effects": [
+            { "kind": "fragment", "memory": "ples_gorit", "amount": 1 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": -8 },
+            { "kind": "flag", "flag": "vault_order", "value": true }
+          ],
+          "to": "r_threat",
+          "priority": 6
+        },
+        {
+          "id": "bypass_key",
+          "text": { "ru": "Обойтись без бумаги: ключ у меня есть.", "en": "Do without the paper: I have a key." },
+          "conditions": { "kind": "flag", "flag": "guild_key" },
+          "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": -3 }],
+          "to": "r_bypass",
+          "priority": 5
+        },
+        {
+          "id": "bypass_boy",
+          "text": { "ru": "Пусть бумагу вынесет мальчик.", "en": "Let the boy carry the paper out." },
+          "conditions": { "kind": "flag", "flag": "klyost_named" },
+          "effects": [
+            { "kind": "axis", "axis": "honesty_deceit", "delta": -3 },
+            { "kind": "counter", "counter": "klyost_seen", "delta": 1 }
+          ],
+          "to": "r_bypass_boy",
+          "priority": 5
+        },
+        {
+          "id": "offset_burn",
+          "text": { "ru": "Зачесть распоряжение в счёт убытка за дым.", "en": "Set the order against the bill for the smoke." },
+          "conditions": { "kind": "flag", "flag": "archive_burned" },
+          "effects": [
+            { "kind": "axis", "axis": "reason_obsession", "delta": 3 },
+            { "kind": "flag", "flag": "vault_order", "value": true }
+          ],
+          "to": "r_offset",
+          "priority": 5
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "r_paid",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Принято без сдачи. Люди, которые не переспрашивают цену, у нас проходят по отдельной графе, и графа эта короткая.",
+        "en": "Accepted, no change given. People who do not ask the price twice go in a separate column here, and that column is a short one."
+      },
+      "next": "after_price"
+    },
+    {
+      "kind": "say",
+      "id": "r_haggle",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Сошлись на половине, и половина распоряжения — это ярус первый без второго. Дальше первого вас пропустят разве что по недосмотру, а недосмотр у нас в описи есть.",
+        "en": "We settle at half, and half an order is the first tier without the second. Beyond the first they will let you through only by oversight, and oversight is a line we do have in the inventory."
+      },
+      "next": "after_price"
+    },
+    {
+      "kind": "say",
+      "id": "r_refuse",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Как угодно-с. Бумага полежит до вечера в ящике, а после вечера в этом ящике вообще ничего не лежит: я его вытряхиваю сам.",
+        "en": "As you wish. The paper will lie in the drawer until evening, and after evening nothing lies in that drawer at all: I empty it myself."
+      },
+      "next": "after_price"
+    },
+    {
+      "kind": "say",
+      "id": "r_promise",
+      "speaker": "tminny",
+      "text": {
+        "ru": "К четвергу. Ваш посул я подошью к делу, а не в карман: подшитый посул через год предъявляют вместе с делом, и тогда он дороже.",
+        "en": "By Thursday. Your note I shall file with the case, not in my pocket: a filed note is produced a year later together with the case, and then it is worth more."
+      },
+      "next": "after_price"
+    },
+    {
+      "kind": "say",
+      "id": "r_truth",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Вы сказали больше, чем стоила бумага, и я вам её отдаю. Оценка затруднена: у меня нет пункта на человека, который платит правдой о себе.",
+        "en": "You said more than the paper was worth, so I am giving it to you. Valuation is impeded: I have no clause for a man who pays in the truth about himself."
+      },
+      "next": "after_price"
+    },
+    {
+      "kind": "say",
+      "id": "r_threat",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Мой взнос стоил девятнадцать грошей, и я помню только эту цифру, а не того, за кого её платили. Держите бумагу и не повторяйте цифру в зале.",
+        "en": "My entry fee came to nineteen groschen, and the figure is all I remember of it, not the person it was paid for. Take the paper and do not repeat that figure in the hall."
+      },
+      "next": "after_price"
+    },
+    {
+      "kind": "say",
+      "id": "r_bypass",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Ключи там ни к чему, но ход, к которому он подходит, существует, и это уже полдела. Второй половиной будет стража, и с ней я вам не помогу.",
+        "en": "Keys are of no use down there, but the passage that key fits does exist, and that is half the business. The other half will be the watch, and there I cannot help you."
+      },
+      "next": "after_price"
+    },
+    {
+      "kind": "say",
+      "id": "r_bypass_boy",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Мальчика у нас на выходе не обыскивают, потому что в наряде его не значится. Я об этом молчу третий год и, позвольте-с, помолчу ещё.",
+        "en": "The boy is not searched at the door, because he does not appear on the detail sheet. I have kept quiet about that for three years and shall, if you permit, keep quiet a while longer."
+      },
+      "next": "after_price"
+    },
+    {
+      "kind": "say",
+      "id": "r_offset",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Зачёт оформим строкой «взаимное погашение, без движения монеты». Строка эта в Ломбарде любимая: по ней ничего не происходит, а бумаги закрыты.",
+        "en": "We shall record the set-off in the line \"mutual discharge, no movement of coin\". That line is a favourite here: nothing whatever happens under it, and the paperwork closes."
+      },
+      "next": "after_price"
+    },
+
+    {
+      "kind": "narration",
+      "id": "after_price",
+      "text": {
+        "ru": "Бланк он всё-таки переворачивает. Первая подпись стоит, вторая графа пуста, а под ней мелким шрифтом: «в отсутствие ответственного за обеспечение подписывает вкладчик».",
+        "en": "He turns the form over after all. The first signature is there, the second column is empty, and beneath it in small type: \"in the absence of the party responsible for the holdings, the depositor signs\"."
+      },
+      "keywords": [{ "match": { "ru": "подписывает вкладчик", "en": "the depositor signs" }, "tone": "danger" }],
+      "next": "foundation_talk"
+    },
+    {
+      "kind": "choice",
+      "id": "foundation_talk",
+      "prompt": {
+        "ru": "Перо лежит между вами, и он его не берёт.",
+        "en": "The pen lies between you and he does not pick it up."
+      },
+      "options": [
+        {
+          "id": "ask_five",
+          "text": { "ru": "Сколько разделов в обеспечении?", "en": "How many sections are in the holdings?" },
+          "fallback": true,
+          "to": "r_five"
+        },
+        {
+          "id": "ask_who",
+          "text": { "ru": "Кто отвечает за обеспечение?", "en": "Who answers for the holdings?" },
+          "fallback": true,
+          "to": "r_who"
+        },
+        {
+          "id": "ask_nothing",
+          "text": { "ru": "Ничего не спрашивать. Взять бумагу.", "en": "Ask nothing. Take the paper." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": 3 }],
+          "to": "r_nothing"
+        },
+        {
+          "id": "ask_list",
+          "text": { "ru": "Попросить разделы по пунктам, с номерами.", "en": "Ask for the sections by clause, with numbers." },
+          "chip": { "icon": "hourglass", "label": { "ru": "Перечень", "en": "Perechen" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "perechen" },
+          "effects": [
+            { "kind": "fragment", "memory": "opis_vsego_sushchego", "amount": 1 },
+            { "kind": "axis", "axis": "reason_obsession", "delta": -5 }
+          ],
+          "to": "r_list",
+          "priority": 6
+        },
+        {
+          "id": "ask_contract",
+          "text": { "ru": "Сказать, что договор я читал.", "en": "Say that I have read the deed." },
+          "conditions": { "kind": "flag", "flag": "contract_read" },
+          "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": 3 }],
+          "to": "r_contract",
+          "priority": 5
+        },
+        {
+          "id": "ask_his_fee",
+          "text": { "ru": "Спросить, кого он забыл за девятнадцать грошей.", "en": "Ask whom he forgot for nineteen groschen." },
+          "conditions": { "kind": "flag", "flag": "tminny_trust" },
+          "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": 3 }],
+          "to": "r_his_fee",
+          "priority": 5
+        },
+        {
+          "id": "ask_pane",
+          "text": { "ru": "Прокричать вопрос в форточку.", "en": "Shout the question through the pane." },
+          "conditions": { "kind": "flag", "flag": "tminny_blacklist" },
+          "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": -3 }],
+          "to": "r_pane",
+          "priority": 5
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "r_five",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Пять. Их так и зовут, по разделам, а не по номерам: разделу с номером можно назначить цену, а этим — оценка затруднена.",
+        "en": "Five. They are called by section and not by number: a numbered section can be given a price, and for these, valuation is impeded."
+      },
+      "next": "price_exit"
+    },
+    {
+      "kind": "say",
+      "id": "r_who",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Вкладчик. Так и напечатано, и типография эта закрылась при позапрошлом Учёте. Больше я вам сегодня, позвольте-с, не скажу ничего.",
+        "en": "The depositor. That is how it is printed, and that printing house shut down two Reckonings ago. Beyond this, if you will permit, I shall tell you nothing today."
+      },
+      "keywords": [{ "match": { "ru": "Вкладчик", "en": "The depositor" }, "tone": "memory" }],
+      "next": "price_exit"
+    },
+    {
+      "kind": "narration",
+      "id": "r_nothing",
+      "text": {
+        "ru": "Ты берёшь бумагу и складываешь её вчетверо. Тминный смотрит, как складываешь, и молчит несоразмерно долго: сгиб выходит ровно по старым сгибам, а бумага новая.",
+        "en": "You take the paper and fold it in four. Tminny watches the folding and stays silent out of all proportion: the creases come out exactly along old creases, and the paper is new."
+      },
+      "next": "price_exit"
+    },
+    {
+      "kind": "say",
+      "id": "r_list",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Раздел первый — война, второй — засуха, третий — бумага, четвёртый — хроника, пятый — Учёт. Пять эпох города, и все пять, позвольте-с, оплачены с одного счёта.",
+        "en": "Section one, a war; two, a drought; three, paper; four, a chronicle; five, the Reckoning. Five ages of the city, and all five, if you will permit, paid out of one account."
+      },
+      "keywords": [{ "match": { "ru": "с одного счёта", "en": "out of one account" }, "tone": "danger" }],
+      "next": "price_exit"
+    },
+    {
+      "kind": "say",
+      "id": "r_contract",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Знаю. У нас в зале с того утра говорят вполголоса, а младший оценщик пересчитал прейскурант дважды и оба раза сошёлся. Его это утешило.",
+        "en": "I know. Since that morning the hall has been speaking at half voice, and the junior appraiser has counted the price list through twice and it came out right both times. That comforted him."
+      },
+      "next": "price_exit"
+    },
+    {
+      "kind": "say",
+      "id": "r_his_fee",
+      "speaker": "tminny",
+      "text": {
+        "ru": "Не знаю. То есть оценка затруднена: у меня осталась только цифра и привычка ходить мимо одного окна. Окно чужое, и я это проверял.",
+        "en": "I do not know. That is to say, valuation is impeded: all I have left is the figure and a habit of walking past one particular window. The window belongs to strangers, and I have checked."
+      },
+      "next": "price_exit"
+    },
+    {
+      "kind": "say",
+      "id": "r_pane",
+      "speaker": "otsenshchik",
+      "text": {
+        "ru": "Ответ через форточку не выдаётся. Минус грош за беспокойство, пункт четырнадцатый, и очередь за вами уже две головы.",
+        "en": "Answers are not issued through the pane. Minus one groschen for the disturbance, clause fourteen, and the queue behind you is already two heads long."
+      },
+      "next": "price_exit"
+    },
+    {
+      "kind": "effects",
+      "id": "price_exit",
+      "effects": [{ "kind": "counter", "counter": "vault_depth", "delta": 1 }],
+      "next": "price_out"
+    },
+    {
+      "kind": "narration",
+      "id": "price_out",
+      "text": {
+        "ru": "На лестнице вниз холоднее, чем было утром, и бумажная пыль теперь оседает на рукаве. Стряхнуть её удаётся не всю: часть уже вписалась в ткань.",
+        "en": "The stairway down is colder than it was this morning, and the paper dust settles on your sleeve now. Not all of it brushes off: some has already worked itself into the cloth."
+      },
+      "next": "scene:vaults_hub"
+    }
+  ]
+}

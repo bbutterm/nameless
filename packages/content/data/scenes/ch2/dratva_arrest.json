@@ -1,0 +1,484 @@
+{
+  "id": "dratva_arrest",
+  "chapter": 2,
+  "title": { "ru": "Изъятие до выяснения", "en": "Seized Pending Clarification" },
+  "tags": ["guard", "dratva", "no_combat"],
+  "available": {
+    "kind": "any",
+    "of": [
+      { "kind": "counter", "counter": "lots_held", "op": "gte", "value": 3 },
+      { "kind": "flag", "flag": "contract_taken" }
+    ]
+  },
+  "entry": "arrest_in",
+  "nodes": [
+    {
+      "kind": "narration",
+      "id": "arrest_in",
+      "text": {
+        "ru": "Стойка залоговых споров стоит под навесом между воротами и весами. На стойке лоток, в лотке чужие карманы, разложенные по описи, и над каждой кучкой бумажка с номером дела.",
+        "en": "The pledge-dispute desk stands under an awning between the gates and the scales. On the desk is a tray, in the tray other people's pockets laid out by inventory, and over each little heap a slip with a case number."
+      },
+      "keywords": [{ "match": { "ru": "номером дела", "en": "case number" }, "tone": "lore" }],
+      "next": "dratva_open"
+    },
+    {
+      "kind": "say",
+      "id": "dratva_open",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Статья одиннадцатая: имущество при себе. Пункт: если его больше, чем помещается в опись, опись переписывают под имущество. Выкладывайте.",
+        "en": "Article eleven: property carried on the person. Clause: where there is more of it than fits the inventory, the inventory is rewritten to fit the property. Put it out."
+      },
+      "next": "debt_router"
+    },
+    {
+      "kind": "branch",
+      "id": "debt_router",
+      "branches": [
+        { "when": { "kind": "flag", "flag": "dratva_debt" }, "to": "dratva_owes" },
+        { "when": { "kind": "flag", "flag": "dratva_warned" }, "to": "dratva_reminds" }
+      ],
+      "fallback": "dratva_cold"
+    },
+    {
+      "kind": "say",
+      "id": "dratva_owes",
+      "speaker": "dratva",
+      "text": {
+        "ru": "За мной услуга с мостков, и я её отдаю сейчас: изымаю сама, а не наряд. Наряд изымает быстрее и возвращает никогда.",
+        "en": "I owe you a favour from the boardwalk and I am paying it now: I seize this myself, not the detail. A detail seizes faster and returns never."
+      },
+      "next": "dratva_procedure"
+    },
+    {
+      "kind": "say",
+      "id": "dratva_reminds",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Статья о посулах. Я предупреждала один раз, и один раз — это было. Сегодня не предупреждаю, сегодня описываю.",
+        "en": "The article on promise notes. I gave one warning, and the one has been given. Today I am not warning, today I am recording."
+      },
+      "next": "dratva_procedure"
+    },
+    {
+      "kind": "say",
+      "id": "dratva_cold",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Вы у меня третий по этому делу. Дело о нижних ярусах, если вам интересно, из чего вас достают.",
+        "en": "You are the third I have had on this case. The case of the lower tiers, in case you are curious what you are being pulled out of."
+      },
+      "next": "dratva_procedure"
+    },
+    {
+      "kind": "say",
+      "id": "dratva_procedure",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Изъятие до выяснения. Выяснение бессрочно: статья четвёртая, пункт про терпение. Я выясняю честно, и это дольше ареста.",
+        "en": "Seizure pending clarification. Clarification has no term: article four, the clause about patience. I clarify honestly, and that takes longer than an arrest."
+      },
+      "keywords": [{ "match": { "ru": "пункт про терпение", "en": "the clause about patience" }, "tone": "lore" }],
+      "next": "lore_ustav"
+    },
+    {
+      "kind": "lore",
+      "id": "lore_ustav",
+      "title": {
+        "ru": "Устав стражи залоговых споров, лист изъятий",
+        "en": "Regulations of the Pledge-Dispute Guard, seizure sheet"
+      },
+      "text": {
+        "ru": "«Опись изъятого составляется в трёх экземплярах. Первый — в дело, второй — в Ломбард, третий вручается изъятому. Изъятым именуется имущество, не лицо». Внизу бланка, мелко: «Срок хранения изъятого — до выяснения. Срок выяснения — см. срок хранения».",
+        "en": "\"An inventory of seized items is drawn up in three copies. The first goes to the case, the second to the Pawnshop, the third is handed to the seized. 'The seized' means the property, not the person.\" At the foot of the form, in small type: \"Seized items are held until clarified. Term of clarification: see term of holding.\""
+      },
+      "next": "seizure_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "seizure_choice",
+      "prompt": {
+        "ru": "Она кладёт на стойку пустой лоток и разглаживает бланк ладонью.",
+        "en": "She sets an empty tray on the desk and smooths the form flat with her palm."
+      },
+      "options": [
+        {
+          "id": "hand_all",
+          "text": { "ru": "Выложить всё до последней бумажки.", "en": "Put out everything, down to the last slip." },
+          "fallback": true,
+          "effects": [
+            { "kind": "axis", "axis": "grasp_release", "delta": -8 },
+            { "kind": "counter", "counter": "lots_held", "delta": -2 },
+            { "kind": "flag", "flag": "dratva_seized", "value": true }
+          ],
+          "to": "r_all"
+        },
+        {
+          "id": "hold_one",
+          "text": { "ru": "Придержать один лот в рукаве.", "en": "Keep one lot back in my sleeve." },
+          "fallback": true,
+          "effects": [
+            { "kind": "axis", "axis": "honesty_deceit", "delta": -8 },
+            { "kind": "counter", "counter": "lots_held", "delta": -1 },
+            { "kind": "flag", "flag": "dratva_seized", "value": true }
+          ],
+          "to": "r_sleeve"
+        },
+        {
+          "id": "demand_form",
+          "text": { "ru": "Потребовать третий экземпляр описи.", "en": "Demand the third copy of the inventory." },
+          "fallback": true,
+          "effects": [
+            { "kind": "axis", "axis": "reason_obsession", "delta": 5 },
+            { "kind": "counter", "counter": "lots_held", "delta": -1 },
+            { "kind": "flag", "flag": "dratva_seized", "value": true }
+          ],
+          "to": "r_form"
+        },
+        {
+          "id": "dictate_by_clause",
+          "text": { "ru": "Продиктовать опись самому, по пунктам.", "en": "Dictate the inventory myself, clause by clause." },
+          "chip": { "icon": "hourglass", "label": { "ru": "Перечень", "en": "Perechen" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "perechen" },
+          "effects": [
+            { "kind": "fragment", "memory": "opis_vsego_sushchego", "amount": 2 },
+            { "kind": "axis", "axis": "reason_obsession", "delta": -8 },
+            { "kind": "counter", "counter": "lots_held", "delta": -1 },
+            { "kind": "flag", "flag": "dratva_seized", "value": true }
+          ],
+          "to": "r_dictate",
+          "priority": 7
+        },
+        {
+          "id": "swap_promise",
+          "text": { "ru": "Подложить в лоток посул вместо лота.", "en": "Slip a promise note into the tray instead." },
+          "chip": { "icon": "coin", "label": { "ru": "Посульщик", "en": "Posulshchik" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "posulshchik" },
+          "effects": [
+            { "kind": "fragment", "memory": "zima_bez_khleba", "amount": 2 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": -15 },
+            { "kind": "counter", "counter": "promises_given", "delta": 1 }
+          ],
+          "to": "r_swap",
+          "priority": 7
+        },
+        {
+          "id": "pay_others",
+          "text": { "ru": "Выкупить чужую кучку из лотка.", "en": "Redeem somebody else's heap out of the tray." },
+          "chip": { "icon": "heal", "label": { "ru": "Ключарь", "en": "Klyuchar" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "klyuchar" },
+          "effects": [
+            { "kind": "fragment", "memory": "ochered_k_kolodtsu", "amount": 2 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": 8 },
+            { "kind": "counter", "counter": "debts_forgiven", "delta": 1 },
+            { "kind": "gold", "delta": -6 }
+          ],
+          "to": "r_pay_others",
+          "priority": 7
+        },
+        {
+          "id": "by_inventory_mine",
+          "text": { "ru": "Оно моё по описи из чулана.", "en": "It is mine by the storeroom inventory." },
+          "conditions": { "kind": "flag", "flag": "opis_taken_all" },
+          "effects": [
+            { "kind": "axis", "axis": "grasp_release", "delta": 5 },
+            { "kind": "flag", "flag": "dratva_seized", "value": true }
+          ],
+          "to": "r_by_opis",
+          "priority": 5
+        },
+        {
+          "id": "refuse_flat",
+          "text": { "ru": "Отказать. Пусть отбирают руками.", "en": "Refuse. Let them take it by hand." },
+          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -30 },
+          "effects": [
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": -5 },
+            { "kind": "counter", "counter": "lots_held", "delta": -1 },
+            { "kind": "flag", "flag": "dratva_seized", "value": true }
+          ],
+          "to": "r_refuse",
+          "priority": 5
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "r_all",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Всё — это редко. Обычно оставляют одно, и одно потом стоит человеку дела. Расписываюсь за приём.",
+        "en": "Everything is rare. Usually one thing is kept back, and that one thing later costs the man a case. I sign for receipt."
+      },
+      "next": "contract_router"
+    },
+    {
+      "kind": "say",
+      "id": "r_sleeve",
+      "speaker": "dratva",
+      "text": {
+        "ru": "В рукаве у вас что-то есть, и я это вижу. Обыск при изъятии не положен, статья седьмая: обыскивают при задержании, а вас я не задерживаю.",
+        "en": "There is something in your sleeve and I can see it. A search is not permitted at seizure, article seven: they search at detention, and I am not detaining you."
+      },
+      "next": "contract_router"
+    },
+    {
+      "kind": "say",
+      "id": "r_form",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Третий экземпляр. Держите. За четыре года его потребовали дважды, и оба раза потом искали меня, а не имущество.",
+        "en": "The third copy. Take it. In four years it has been asked for twice, and both times it was me they came looking for afterwards, not the property."
+      },
+      "next": "contract_router"
+    },
+    {
+      "kind": "say",
+      "id": "r_dictate",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Диктуете вы лучше, чем пишет мой писарь. Пункт девятый, «происхождение» — вы единственный, кто его заполнил.",
+        "en": "You dictate better than my clerk writes. Clause nine, \"provenance\" — you are the only person who has ever filled it in."
+      },
+      "next": "contract_router"
+    },
+    {
+      "kind": "say",
+      "id": "r_swap",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Бумага на предъявителя, в лотке, среди чужих карманов. Я её опишу как бумагу. Когда предъявят — предъявят мне, и это будет разговор о вас.",
+        "en": "Paper to bearer, in the tray, among other people's pockets. I shall record it as paper. When it is presented, it will be presented to me, and that will be a conversation about you."
+      },
+      "next": "contract_router"
+    },
+    {
+      "kind": "say",
+      "id": "r_pay_others",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Выкуп чужого изъятого статьёй не предусмотрен и не запрещён. Оформлю по грустному пункту. Хозяин придёт в среду и не поймёт, за что.",
+        "en": "Redeeming another man's seized property is neither provided for nor forbidden by the articles. I shall file it under the sad clause. The owner will come on Wednesday and will not understand what for."
+      },
+      "next": "contract_router"
+    },
+    {
+      "kind": "say",
+      "id": "r_by_opis",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Опись чулана — документ Ломбарда, а мы стража. Документ приму, спорить не стану: спорят с людьми, а не с бумагой.",
+        "en": "The storeroom inventory is a Pawnshop document, and we are the guard. I shall accept the document and shall not argue: one argues with people, not with paper."
+      },
+      "next": "contract_router"
+    },
+    {
+      "kind": "say",
+      "id": "r_refuse",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Руками не будем. Руками — это уже задержание, а задержание оформляется на вас, и тогда описывать придётся вас.",
+        "en": "We will not do it by hand. By hand is detention, and detention is filed against you, and then it is you who has to be inventoried."
+      },
+      "next": "contract_router"
+    },
+    {
+      "kind": "branch",
+      "id": "contract_router",
+      "branches": [{ "when": { "kind": "flag", "flag": "contract_taken" }, "to": "deed_found" }],
+      "fallback": "no_deed"
+    },
+    {
+      "kind": "narration",
+      "id": "deed_found",
+      "text": {
+        "ru": "Связка из шестнадцати листов ложится на стойку последней. Дратва разворачивает её на шестнадцатом листе сразу, будто знала, какой из них главный, и держит лист за края, как держат чужое.",
+        "en": "The bundle of sixteen sheets goes onto the desk last. Dratva opens it straight at the sixteenth sheet, as if she had known which one mattered, and holds it by the edges, the way one holds what belongs to somebody else."
+      },
+      "next": "dratva_deed"
+    },
+    {
+      "kind": "say",
+      "id": "dratva_deed",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Вклад принят оптом. Приёмщик стёрт. Вкладчик расписался. Дело заводить не на что: обе стороны — одна.",
+        "en": "Deposit accepted in bulk. Receiving officer rubbed out. Depositor signed. There is nothing here to open a case on: both parties are one."
+      },
+      "keywords": [{ "match": { "ru": "обе стороны — одна", "en": "both parties are one" }, "tone": "danger" }],
+      "next": "statement_choice"
+    },
+    {
+      "kind": "narration",
+      "id": "no_deed",
+      "text": {
+        "ru": "Она пересчитывает лоток дважды и второй раз медленнее. Чужих карманов на стойке одиннадцать кучек, и три из них лежат тут с позапрошлой недели без движения.",
+        "en": "She counts the tray through twice and the second time more slowly. There are eleven little heaps of other people's pockets on the desk, and three of them have lain there untouched since the week before last."
+      },
+      "next": "dratva_no_deed"
+    },
+    {
+      "kind": "say",
+      "id": "dratva_no_deed",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Носите вы много, а принадлежит вам ничего. Такое дело в уставе называется «имущество при отсутствии лица». Пункт грустный.",
+        "en": "You carry a great deal and none of it belongs to you. In the regulations a case like that is called \"property in the absence of a person\". The sad clause."
+      },
+      "next": "statement_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "statement_choice",
+      "prompt": {
+        "ru": "Перо у неё казённое, а промокашку она носит свою.",
+        "en": "Her pen is government issue; the blotter she carries is her own."
+      },
+      "options": [
+        {
+          "id": "tell_straight",
+          "text": { "ru": "Рассказать как есть. Включая нижние ярусы.", "en": "Tell it as it stands. The lower tiers included." },
+          "fallback": true,
+          "effects": [
+            { "kind": "fragment", "memory": "khronika_bez_popravok", "amount": 2 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": 15 }
+          ],
+          "to": "r_straight"
+        },
+        {
+          "id": "tell_short",
+          "text": { "ru": "Отвечать только на заданные вопросы.", "en": "Answer only the questions asked." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 5 }],
+          "to": "r_short"
+        },
+        {
+          "id": "say_nothing",
+          "text": { "ru": "Молчать и ждать, когда отпустят.", "en": "Say nothing and wait to be let go." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": 3 }],
+          "to": "r_silent"
+        },
+        {
+          "id": "blame_ledger",
+          "text": { "ru": "Свалить на Учёт: он и завёл это дело.", "en": "Put it on the Reckoning: it opened this case." },
+          "chip": { "icon": "coin", "label": { "ru": "Посульщик", "en": "Posulshchik" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "posulshchik" },
+          "effects": [
+            { "kind": "fragment", "memory": "luchshie_gody", "amount": 2 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": -15 }
+          ],
+          "to": "r_blame",
+          "priority": 7
+        },
+        {
+          "id": "ask_her_fear",
+          "text": { "ru": "Спросить, чего боится она.", "en": "Ask what she is afraid of." },
+          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "gte", "value": 30 },
+          "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": 5 }],
+          "to": "r_her_fear",
+          "priority": 5
+        },
+        {
+          "id": "count_promises",
+          "text": { "ru": "Спросить, сколько посулов на меня подшито.", "en": "Ask how many notes are filed against me." },
+          "conditions": { "kind": "counter", "counter": "promises_given", "op": "gte", "value": 2 },
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": -5 }],
+          "to": "r_count_promises",
+          "priority": 5
+        },
+        {
+          "id": "offer_deed",
+          "text": { "ru": "Предложить ей забрать договор в дело.", "en": "Offer to let her take the deed into the case." },
+          "conditions": { "kind": "flag", "flag": "contract_taken" },
+          "effects": [
+            { "kind": "axis", "axis": "grasp_release", "delta": -15 },
+            { "kind": "counter", "counter": "lots_held", "delta": -1 },
+            { "kind": "flag", "flag": "contract_taken", "value": false }
+          ],
+          "to": "r_offer_deed",
+          "priority": 6
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "r_straight",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Записала целиком, включая то, что мне мешает. Сходится с площадкой и с журналом спусков. Свидетель из вас неудобный и потому годный.",
+        "en": "Written down entire, the parts that get in my way included. It agrees with the landing and with the descent journal. You make an inconvenient witness and therefore a usable one."
+      },
+      "next": "arrest_out"
+    },
+    {
+      "kind": "say",
+      "id": "r_short",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Шесть вопросов, шесть ответов, ни одного лишнего слова. Так отвечают те, кому есть что не сказать. Это не статья, это опыт.",
+        "en": "Six questions, six answers, not one word over. That is how men answer who have something to leave out. That is not an article, that is experience."
+      },
+      "next": "arrest_out"
+    },
+    {
+      "kind": "say",
+      "id": "r_silent",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Молчание в протокол не заносится. Заносится «отказался», и это длиннее. Идите, пока я не дописала.",
+        "en": "Silence does not go into the report. \"Refused\" goes in, and that is longer. Go, before I finish writing it."
+      },
+      "next": "arrest_out"
+    },
+    {
+      "kind": "say",
+      "id": "r_blame",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Учёт в свидетели не вызывают: у него нет ни адреса, ни спины. Записала как вашу версию. Версия ваша хорошая, и это её единственный недостаток.",
+        "en": "The Reckoning is not called as a witness: it has neither an address nor a back. Recorded as your version. Your version is a good one, and that is its only fault."
+      },
+      "next": "arrest_out"
+    },
+    {
+      "kind": "say",
+      "id": "r_her_fear",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Ничего. Это не храбрость, это отсутствие графы. Устав я ношу с собой по той же причине, по которой вы носите чужие карманы.",
+        "en": "Nothing. That is not courage, that is a missing column. I carry the regulations about with me for the same reason you carry other people's pockets."
+      },
+      "next": "arrest_out"
+    },
+    {
+      "kind": "say",
+      "id": "r_count_promises",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Четыре, и два из них на четверг. Четвергов в неделе один, а посулов на него в городе триста. Считать это я не обязана и всё равно считаю.",
+        "en": "Four, and two of them for Thursday. There is one Thursday in a week and three hundred notes in this city drawn on it. Counting that is not my duty, and I count it anyway."
+      },
+      "next": "arrest_out"
+    },
+    {
+      "kind": "say",
+      "id": "r_offer_deed",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Подшиваю в дело. В деле его никто не прочтёт, дела читают раз в год, а через год этого дела не будет. Так безопаснее, чем у вас за пазухой.",
+        "en": "Filed with the case. Nobody reads it in the case, cases are read once a year, and in a year this case will not exist. That is safer than inside your shirt."
+      },
+      "next": "arrest_out"
+    },
+    {
+      "kind": "narration",
+      "id": "arrest_out",
+      "text": {
+        "ru": "Опись изъятого она дописывает при тебе и ставит время: четверть седьмого. Ниже, в графе «когда вернуть», стоит прочерк — не потому что не вернут, а потому что графу заполняет выяснение.",
+        "en": "She finishes the seizure inventory in front of you and enters the time: a quarter past six. Below, in the column \"when to return\", stands a dash — not because it will not be returned, but because that column is filled in by the clarification."
+      },
+      "next": "scene:vaults_hub"
+    }
+  ]
+}

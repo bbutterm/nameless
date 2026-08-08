@@ -1,0 +1,531 @@
+{
+  "id": "vytsvet_road",
+  "chapter": 2,
+  "title": { "ru": "Дорога в Выцветь", "en": "The Road into the Vytsvet" },
+  "tags": ["errand", "vytsvet", "combat"],
+  "available": { "kind": "always" },
+  "entry": "cart_yard",
+  "nodes": [
+    {
+      "kind": "narration",
+      "id": "cart_yard",
+      "text": {
+        "ru": "У заставы стоит обоз из Выцвети: шесть подвод, на каждой короба с одинаковой биркой — «обеспечение, к оценке не подлежит». Разгружаться будут утром, а сегодня возчик едет обратно порожняком.",
+        "en": "A convoy from the Vytsvet stands at the toll gate: six carts, each loaded with crates carrying the same tag, \"security holdings, not for appraisal\". Unloading is tomorrow; today the carter drives back empty."
+      },
+      "keywords": [{ "match": { "ru": "обеспечение", "en": "security holdings" }, "tone": "lore" }],
+      "next": "vozchik_1"
+    },
+    {
+      "kind": "say",
+      "id": "vozchik_1",
+      "speaker": "vozchik",
+      "text": {
+        "ru": "Порожняком поедем — это хорошо, порожняк лёгкий. Садись, только не разговаривай со мной первые полверсты, я вспоминаю дорогу.",
+        "en": "Empty is good, empty rides light. Get up, only do not talk to me for the first half-mile, I am remembering the road."
+      },
+      "next": "bumazhka"
+    },
+    {
+      "kind": "narration",
+      "id": "bumazhka",
+      "text": {
+        "ru": "На груди у него на шнурке бумажка: «Тебя зовут Пятой. Ты возишь короба в Заклад. Лошадь зовут Лошадь». Почерк его собственный, и последняя строка переписана трижды.",
+        "en": "A slip of paper hangs on a cord on his chest: \"Your name is Fifth. You carry crates to Zaklad. The horse is called Horse.\" The hand is his own, and the last line has been rewritten three times."
+      },
+      "next": "lore_convoy"
+    },
+    {
+      "kind": "lore",
+      "id": "lore_convoy",
+      "title": { "ru": "Путевой лист обоза, оборот", "en": "Convoy waybill, reverse" },
+      "text": {
+        "ru": "«Обоз обязан войти в город до темноты. Ночёвка в пути настоящим листом не запрещается». Не запрещается, потому что случаев ночёвки в отчётность ни разу не поступало: отчитываться о них некому и нечем. Внизу приписка канцелярской рукой: «возчику выдать вторую бумажку, первую он теряет».",
+        "en": "\"The convoy is obliged to enter the city before dark. Passing the night on the road is not forbidden by this waybill.\" It is not forbidden because no instance of it has ever reached the returns: there is nobody left to file them and nothing left to file. Below, in a clerk's hand: \"issue the carter a second slip, he loses the first\"."
+      },
+      "next": "why_going"
+    },
+    {
+      "kind": "say",
+      "id": "vozchik_2",
+      "speaker": "vozchik",
+      "text": {
+        "ru": "Грузимся мы всегда на одном месте, у столба. Столб с цифрой, цифра одна. Дальше столбов нет, дальше и цифр нет.",
+        "en": "We always load at the same place, by a milepost. A post with a number on it, and the number is one. Past that there are no posts, and past that there are no numbers either."
+      },
+      "next": "road_out"
+    },
+    {
+      "kind": "narration",
+      "id": "why_going",
+      "text": {
+        "ru": "Короба грузят там, откуда возят «обеспечение», а на решётке нижних хранилищ стоит то же слово тем же шрифтом. Возчик соглашается показать место за грош и половину репы.",
+        "en": "The crates are loaded where the \"security holdings\" come from, and the grate of the lower vaults carries the same word in the same type. The carter agrees to show you the place for a groschen and half a turnip."
+      },
+      "next": "vozchik_2"
+    },
+    {
+      "kind": "narration",
+      "id": "road_out",
+      "text": {
+        "ru": "За третьей верстой пропадает зелёный. Не выгорает — именно пропадает: трава остаётся травой, и её по-прежнему видно, просто в ней больше нет ни одного цвета, который можно назвать.",
+        "en": "Past the third mile the green goes. It does not burn out, it goes: the grass stays grass and you still see it, only there is no longer any colour in it that you could name."
+      },
+      "next": "villages"
+    },
+    {
+      "kind": "narration",
+      "id": "villages",
+      "text": {
+        "ru": "У колодца стоят четверо и вежливо здороваются друг с другом по третьему разу. Один держит грабли и ждёт, когда вспомнит, за чем шёл; ждёт он, судя по натоптанному, с обеда.",
+        "en": "Four people stand at a well greeting one another politely for the third time. One holds a rake and is waiting to remember what he came for; by the look of the ground under him he has been waiting since noon."
+      },
+      "next": "road_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "road_choice",
+      "prompt": {
+        "ru": "Солнце стоит низко. Возчик считает не вёрсты, а забывки.",
+        "en": "The sun is low. The carter counts not miles but forgettings."
+      },
+      "options": [
+        {
+          "id": "hurry",
+          "text": { "ru": "Гнать. Успеть до темноты.", "en": "Push the horse. Beat the dark." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 3 }],
+          "to": "r_hurry"
+        },
+        {
+          "id": "walk_beside",
+          "text": { "ru": "Идти рядом. Лошади легче.", "en": "Walk alongside. Easier on the horse." },
+          "fallback": true,
+          "effects": [
+            { "kind": "fragment", "memory": "ochered_k_kolodtsu", "amount": 1 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": 8 }
+          ],
+          "to": "r_walk"
+        },
+        {
+          "id": "write_him_down",
+          "text": { "ru": "Записывать за ним, пока он помнит.", "en": "Write down what he says while he remembers." },
+          "fallback": true,
+          "effects": [
+            { "kind": "fragment", "memory": "khronika_bez_popravok", "amount": 1 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": 8 }
+          ],
+          "to": "r_write"
+        },
+        {
+          "id": "copy_posts",
+          "chip": { "icon": "hourglass", "label": { "ru": "Перечень", "en": "Perechen" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "perechen" },
+          "text": { "ru": "Переписать столбы. Все, включая стёртые.", "en": "Copy the mileposts. All of them, rubbed ones included." },
+          "effects": [
+            { "kind": "fragment", "memory": "opis_vsego_sushchego", "amount": 1 },
+            { "kind": "axis", "axis": "reason_obsession", "delta": -8 }
+          ],
+          "to": "r_posts",
+          "priority": 6
+        },
+        {
+          "id": "promise_return",
+          "conditions": { "kind": "axis", "axis": "honesty_deceit", "op": "lte", "value": -20 },
+          "text": { "ru": "Пообещать ему, что за ним вернутся.", "en": "Promise him that somebody will come back for him." },
+          "effects": [
+            { "kind": "fragment", "memory": "zima_bez_khleba", "amount": 1 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": -8 },
+            { "kind": "counter", "counter": "promises_given", "delta": 1 }
+          ],
+          "to": "r_promise",
+          "priority": 5
+        },
+        {
+          "id": "open_crate",
+          "conditions": { "kind": "axis", "axis": "grasp_release", "op": "gte", "value": 25 },
+          "text": { "ru": "Вскрыть короб. Посмотреть, что возят.", "en": "Open a crate. See what they haul." },
+          "effects": [
+            { "kind": "counter", "counter": "lots_held", "delta": 1 },
+            { "kind": "axis", "axis": "grasp_release", "delta": 8 }
+          ],
+          "to": "r_crate",
+          "priority": 5
+        },
+        {
+          "id": "ask_names",
+          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "gte", "value": 25 },
+          "text": { "ru": "Спросить у четверых, как их зовут.", "en": "Ask the four of them their names." },
+          "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": 3 }],
+          "to": "r_names",
+          "priority": 5
+        },
+        {
+          "id": "turn_them_home",
+          "chip": { "icon": "heal", "label": { "ru": "Ключарь", "en": "Klyuchar" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "klyuchar" },
+          "text": { "ru": "Напоить четверых из фляги. Всех.", "en": "Give the four of them the flask. All four." },
+          "effects": [
+            { "kind": "fragment", "memory": "ochered_k_kolodtsu", "amount": 1 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": 8 }
+          ],
+          "to": "r_names",
+          "priority": 6
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "r_hurry",
+      "speaker": "vozchik",
+      "text": {
+        "ru": "Гнать можно, только лошадь тут не устаёт, а забывает. Забудет — станет и будет стоять, и ничего ей не сделаешь.",
+        "en": "Push if you like, only out here a horse does not tire, it forgets. Once it forgets it stops and stands, and there is nothing to be done with it."
+      },
+      "next": "milestone"
+    },
+    {
+      "kind": "say",
+      "id": "r_walk",
+      "speaker": "vozchik",
+      "text": {
+        "ru": "Спасибо, добрый. Я запомню... нет, не запомню. Ну ты хоть знай, что я хотел.",
+        "en": "Thank you, kind one. I will remember... no, I will not. Well, you at least know that I meant to."
+      },
+      "next": "milestone"
+    },
+    {
+      "kind": "narration",
+      "id": "r_write",
+      "text": {
+        "ru": "Он говорит охотно и по делу: где брод, где яма, сколько дворов было в Косье до Сушьих годов. На третьей странице он начинает повторяться, и повторяется слово в слово, включая паузы.",
+        "en": "He talks readily and to the point: where the ford is, where the pit is, how many households Kosye had before the drought years. By the third page he starts repeating himself, and repeats word for word, pauses included."
+      },
+      "next": "milestone"
+    },
+    {
+      "kind": "narration",
+      "id": "r_posts",
+      "text": {
+        "ru": "Столбов двадцать два. На девятнадцати числа стёрты не рукой и не дождём: камень цел, а цифры на нём больше нет, как её и не резали.",
+        "en": "There are twenty-two posts. On nineteen of them the numbers are gone, and not by hand or by rain: the stone is whole and the figure is simply no longer on it, as if it had never been cut."
+      },
+      "next": "milestone"
+    },
+    {
+      "kind": "say",
+      "id": "r_promise",
+      "speaker": "vozchik",
+      "text": {
+        "ru": "Вернутся? Хорошо. Я это на бумажку не запишу, тут места нет. Значит, буду просто так знать, пока помню.",
+        "en": "They will come back? Good. I will not put it on the slip, there is no room. So I will just know it for as long as I remember."
+      },
+      "next": "milestone"
+    },
+    {
+      "kind": "narration",
+      "id": "r_crate",
+      "text": {
+        "ru": "В коробе солома и восемь склянок, залитых воском. На каждой ярлык: «раздел второй, лот без наименования, изъят при отсутствии владельца». Владельцев в этих местах не осталось, а разделов, судя по цифре, больше одного.",
+        "en": "Straw in the crate, and eight jars sealed with wax. Each carries a label: \"section two, lot without description, taken in absence of owner\". No owners are left in these parts, and by the look of the figure there is more than one section."
+      },
+      "keywords": [{ "match": { "ru": "раздел второй", "en": "section two" }, "tone": "danger" }],
+      "next": "milestone"
+    },
+    {
+      "kind": "narration",
+      "id": "r_names",
+      "text": {
+        "ru": "Все четверо называются охотно и одинаково: «а как же, конечно, я». Тот, что с граблями, вспоминает, зачем шёл, благодарит и идёт в другую сторону.",
+        "en": "All four give their names readily and identically: \"why, of course, me\". The one with the rake remembers what he came for, thanks you, and sets off the other way."
+      },
+      "next": "milestone"
+    },
+    {
+      "kind": "narration",
+      "id": "milestone",
+      "text": {
+        "ru": "Столб стоит на развилке, и цифра на нём одна: единица. Резана глубоко, с нажимом на конце, и хвост у неё недотянут — рука уже пошла к следующему слову, которого на камне нет.",
+        "en": "The post stands at the fork and carries one figure: a one. Cut deep, with pressure at the end, and its tail is short — the hand had already set off for the next word, and there is no next word on the stone."
+      },
+      "keywords": [{ "match": { "ru": "хвост у неё недотянут", "en": "its tail is short" }, "tone": "memory" }],
+      "next": "deeper"
+    },
+    {
+      "kind": "effects",
+      "id": "deeper",
+      "effects": [{ "kind": "counter", "counter": "vault_depth", "delta": 1 }],
+      "next": "dark_falls"
+    },
+    {
+      "kind": "narration",
+      "id": "dark_falls",
+      "text": {
+        "ru": "Обратно выходит дольше: у развилки возчик дважды выбирает не ту сторону и оба раза извиняется. Солнце садится за третьей верстой от города — не успели.",
+        "en": "The way back takes longer: at the fork the carter twice takes the wrong side and twice apologises. The sun goes down three miles short of the city — you did not make it."
+      },
+      "next": "vozchik_3"
+    },
+    {
+      "kind": "say",
+      "id": "vozchik_3",
+      "speaker": "vozchik",
+      "text": {
+        "ru": "Не успели до темноты. Ну, значит, ночуем. Ночевать тут нельзя, и ехать нельзя, так что ночуем.",
+        "en": "We did not beat the dark. Well then, we spend the night. You cannot spend the night here, and you cannot drive on either, so we spend the night."
+      },
+      "keywords": [{ "match": { "ru": "Не успели до темноты", "en": "did not beat the dark" }, "tone": "danger" }],
+      "next": "fire_made"
+    },
+    {
+      "kind": "narration",
+      "id": "fire_made",
+      "text": {
+        "ru": "Костёр он кладёт неохотно и низкий: огонь тут видно далеко, а видно, по его словам, только тем, кому не надо. Бумажку с груди он на ночь снимает и кладёт под щёку.",
+        "en": "He lays the fire grudgingly and low: fire carries far out here, and it carries, he says, only to the ones you would rather it did not. For the night he takes the slip off his chest and tucks it under his cheek."
+      },
+      "next": "dark_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "dark_choice",
+      "prompt": {
+        "ru": "За кругом света трава стоит ровно. Ветра нет уже час.",
+        "en": "Beyond the ring of firelight the grass stands still. There has been no wind for an hour."
+      },
+      "options": [
+        {
+          "id": "stay_fire",
+          "text": { "ru": "Остаться у костра. Подбрасывать.", "en": "Stay by the fire. Keep feeding it." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -3 }],
+          "to": "r_stay"
+        },
+        {
+          "id": "drive_on",
+          "text": { "ru": "Ехать дальше в темноте.", "en": "Drive on in the dark." },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 3 }],
+          "to": "r_drive"
+        },
+        {
+          "id": "leave_alone",
+          "text": { "ru": "Уходить пешком одному. Сейчас.", "en": "Set off on foot alone. Now." },
+          "fallback": true,
+          "effects": [
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": -8 },
+            { "kind": "axis", "axis": "grasp_release", "delta": 3 }
+          ],
+          "to": "r_left_him"
+        },
+        {
+          "id": "give_coat",
+          "chip": { "icon": "heal", "label": { "ru": "Ключарь", "en": "Klyuchar" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "klyuchar" },
+          "text": { "ru": "Отдать ему рубаху и флягу.", "en": "Give him your shirt and the flask." },
+          "effects": [
+            { "kind": "fragment", "memory": "poslednyaya_kruzhka", "amount": 2 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": 12 }
+          ],
+          "to": "r_gave",
+          "priority": 6
+        },
+        {
+          "id": "burn_carts",
+          "chip": { "icon": "fire", "label": { "ru": "Смолокур", "en": "Smolokur" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "smolokur" },
+          "text": { "ru": "Пустить смолу с подводы вокруг круга.", "en": "Run tar from the cart around the ring." },
+          "effects": [
+            { "kind": "fragment", "memory": "schet_za_sezon", "amount": 2 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": -12 }
+          ],
+          "to": "r_tar",
+          "priority": 6
+        },
+        {
+          "id": "count_them",
+          "conditions": { "kind": "axis", "axis": "reason_obsession", "op": "lte", "value": -25 },
+          "text": { "ru": "Считать тех, кто подходит из темноты.", "en": "Count the ones coming out of the dark." },
+          "effects": [
+            { "kind": "fragment", "memory": "eda_ne_vnesena", "amount": 1 },
+            { "kind": "axis", "axis": "reason_obsession", "delta": -12 }
+          ],
+          "to": "r_counted",
+          "priority": 5
+        },
+        {
+          "id": "write_names",
+          "conditions": { "kind": "axis", "axis": "honesty_deceit", "op": "gte", "value": 25 },
+          "text": { "ru": "Записать их имена, пока они помнят.", "en": "Write their names down while they remember." },
+          "effects": [
+            { "kind": "fragment", "memory": "god_goloy_pravdy", "amount": 1 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": 12 }
+          ],
+          "to": "r_wrote_names",
+          "priority": 5
+        },
+        {
+          "id": "promise_dawn",
+          "chip": { "icon": "coin", "label": { "ru": "Посульщик", "en": "Posulshchik" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "posulshchik" },
+          "text": { "ru": "Пообещать им утро. Твёрдым голосом.", "en": "Promise them morning. In a firm voice." },
+          "effects": [
+            { "kind": "fragment", "memory": "luchshie_gody", "amount": 2 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": -12 },
+            { "kind": "counter", "counter": "promises_given", "delta": 1 }
+          ],
+          "to": "r_promised_dawn",
+          "priority": 6
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "r_stay",
+      "speaker": "vozchik",
+      "text": {
+        "ru": "Подбрасывай реже. Дров хватит до середины ночи, а середина ночи тут и есть самое неудобное время.",
+        "en": "Feed it less often. The wood lasts to the middle of the night, and the middle of the night is the inconvenient part out here."
+      },
+      "next": "they_come"
+    },
+    {
+      "kind": "narration",
+      "id": "r_drive",
+      "text": {
+        "ru": "Лошадь идёт двести шагов и останавливается сама, ровно и без испуга, как останавливаются, когда забыли, куда шли. Возчик слезает и начинает разводить костёр прямо на дороге.",
+        "en": "The horse walks two hundred paces and stops of its own accord, evenly and without fright, the way you stop when you have forgotten where you were going. The carter climbs down and starts laying a fire right on the road."
+      },
+      "next": "they_come"
+    },
+    {
+      "kind": "say",
+      "id": "r_gave",
+      "speaker": "vozchik",
+      "text": {
+        "ru": "Рубаха тёплая. Слушай, добрый, ты запиши себе на руку, что ты мне её отдал. Я-то не удержу, а так хоть у одного из нас будет.",
+        "en": "Warm shirt. Listen, kind one, write on your hand that you gave it to me. I will not hold on to it, and this way at least one of us will have it."
+      },
+      "next": "they_come"
+    },
+    {
+      "kind": "narration",
+      "id": "r_tar",
+      "text": {
+        "ru": "Смолы на подводе полведра, и она разводится на четверть жиже, чем для крыш. Круг занимается ровно и держится, и внутри круга светло так, что видно, сколько их стоит снаружи.",
+        "en": "There is half a bucket of tar on the cart, and it is thinned a quarter more than for roofing. The ring takes evenly and holds, and inside the ring it is bright enough to see how many of them are standing outside it."
+      },
+      "next": "they_come"
+    },
+    {
+      "kind": "narration",
+      "id": "r_counted",
+      "text": {
+        "ru": "Одиннадцать. Потом четырнадцать, потом снова одиннадцать: троих ты, видимо, посчитал дважды, а может, трое ушли. Считать в темноте ты не любишь ровно с тех пор, как считал при свече.",
+        "en": "Eleven. Then fourteen, then eleven again: three you must have counted twice, or else three went away. You have disliked counting in the dark ever since you counted by candlelight."
+      },
+      "next": "they_come"
+    },
+    {
+      "kind": "narration",
+      "id": "r_wrote_names",
+      "text": {
+        "ru": "Имена они называют охотно и подробно, и половина имён — чужие: они помнят, что имя было, и подставляют любое. Ты записываешь и это, потому что так и было.",
+        "en": "They give their names readily and at length, and half the names are other people's: they remember that there was a name and supply any one at all. You write that down too, because that is how it was."
+      },
+      "next": "they_come"
+    },
+    {
+      "kind": "narration",
+      "id": "r_promised_dawn",
+      "text": {
+        "ru": "Голос у тебя твёрдый, и они останавливаются послушать — не всё сразу, а по одному, как останавливаются у прилавка. Утро ты обещаешь на предъявителя, и предъявителей набирается больше, чем утр.",
+        "en": "Your voice is firm and they stop to listen, not all at once but one by one, the way people stop at a counter. You promise the morning to the bearer, and there turn out to be more bearers than mornings."
+      },
+      "next": "they_come"
+    },
+    {
+      "kind": "narration",
+      "id": "r_left_him",
+      "text": {
+        "ru": "Ты уходишь по дороге на город, и костёр за спиной становится точкой, а потом перестаёт быть и точкой. Возчик остаётся: обоз не бросают, это единственное, что у него записано не на бумажке.",
+        "en": "You set off along the road towards the city, and the fire behind you shrinks to a point and then stops being a point. The carter stays: you do not leave a convoy, and that is the one thing of his not written on the slip."
+      },
+      "next": "walk_back"
+    },
+    {
+      "kind": "narration",
+      "id": "walk_back",
+      "text": {
+        "ru": "К заставе ты выходишь под утро, и застава долго не может понять, кого записывать: пришедший в опись обоза не входит. За спиной со стороны дороги никто не приезжает ни к полудню, ни к вечеру.",
+        "en": "You reach the toll gate towards morning, and the gate takes a long while working out whom to enter: an arrival on foot is not part of the convoy's inventory. From the road behind you nobody arrives, not by noon and not by evening."
+      },
+      "next": "road_exit"
+    },
+    {
+      "kind": "narration",
+      "id": "they_come",
+      "text": {
+        "ru": "Они выходят к свету не спеша и здороваются — вежливо, по второму и третьему разу. Ближний протягивает руку не за горлом, а за именем: он спрашивает, как тебя зовут, и ждёт ответа всерьёз.",
+        "en": "They come to the light unhurried and greet you politely, for the second and the third time. The nearest one reaches out not for your throat but for your name: he asks what you are called and waits for the answer in earnest."
+      },
+      "next": "night_battle"
+    },
+    {
+      "kind": "battle",
+      "id": "night_battle",
+      "battle": "battle_vytsvet_night",
+      "onWin": "r_held_out",
+      "onLose": "dying_vytsvet"
+    },
+    {
+      "kind": "narration",
+      "id": "r_held_out",
+      "text": {
+        "ru": "К четвёртому часу они расходятся сами: не отогнаны, а потеряли, зачем шли. Возчик спит, бумажка под щекой. Ты садишься к костру и обнаруживаешь, что не можешь вспомнить, с какой стороны город.",
+        "en": "By the fourth hour they drift apart on their own: not driven off, they have lost track of what they came for. The carter sleeps with the slip under his cheek. You sit down by the fire and find that you cannot recall which way the city is."
+      },
+      "next": "morning_short"
+    },
+    {
+      "kind": "narration",
+      "id": "morning_short",
+      "text": {
+        "ru": "Утром возчик будит тебя и спрашивает, кто ты. Он спрашивает по-хорошему, он спрашивает всех. Руки у тебя к этому часу того же цвета, что трава, и трава не возражает.",
+        "en": "In the morning the carter wakes you and asks who you are. He asks kindly, he asks everyone. By that hour your hands are the same colour as the grass, and the grass does not object."
+      },
+      "next": "dying_vytsvet"
+    },
+    {
+      "kind": "effects",
+      "id": "dying_vytsvet",
+      "effects": [
+        { "kind": "flag", "flag": "death_cause_vytsvet", "value": true },
+        { "kind": "flag", "flag": "death_cause_guard", "value": false },
+        { "kind": "flag", "flag": "death_cause_shelf", "value": false },
+        { "kind": "flag", "flag": "death_cause_scavengers", "value": false },
+        { "kind": "flag", "flag": "death_cause_guild", "value": false },
+        { "kind": "flag", "flag": "death_cause_sluza", "value": false }
+      ],
+      "next": "vytsvet_dust"
+    },
+    {
+      "kind": "narration",
+      "id": "vytsvet_dust",
+      "text": {
+        "ru": "Цвет уходит быстрее обычного: здесь его и брать особо не надо, здесь он и так лежит плохо. Возчик утром находит на месте гостя серую кучу, вздыхает и объезжает её, потому что объехать — вежливее.",
+        "en": "The colour goes faster than usual: out here it hardly needs taking, out here it sits loosely anyway. In the morning the carter finds a grey heap where his passenger was, sighs, and drives around it, because driving around is the polite thing."
+      },
+      "next": "scene:silver_counter#queue_entry"
+    },
+    {
+      "kind": "narration",
+      "id": "road_exit",
+      "text": {
+        "ru": "Пошлину с тебя берут как с порожнего. В городе всё ещё есть цвета, и первые полчаса это заметно до неприличия: красная вывеска над лавкой кажется криком.",
+        "en": "They charge you toll as an empty load. The city still has colours in it, and for the first half-hour that is indecently noticeable: a red shop sign reads like shouting."
+      },
+      "next": "scene:vaults_hub"
+    }
+  ]
+}
