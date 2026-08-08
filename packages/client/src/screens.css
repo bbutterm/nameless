@@ -33,7 +33,7 @@
   text-align: center;
   background: radial-gradient(120% 80% at 50% 0%, var(--bg-2), var(--bg-0) 70%);
 }
-.title-art { height: 130px; display: flex; align-items: flex-end; }
+.title-art { height: 130px; display: flex; align-items: flex-end; margin-top: auto; }
 .tower {
   width: 54px;
   height: 118px;
@@ -68,7 +68,15 @@
   padding: 10px 14px;
 }
 .title-actions { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 320px; margin-top: 8px; }
-.title-settings { margin-top: auto; width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 8px; }
+.title-settings {
+  margin-top: auto;
+  padding-top: 28px;
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 .setting { display: flex; align-items: center; justify-content: space-between; color: var(--text-dim); font-size: 15px; }
 .seg { display: flex; border: 1px solid var(--line); border-radius: var(--r-sm); overflow: hidden; }
 .seg button { min-width: 52px; min-height: 36px; padding: 0 10px; color: var(--text-dim); font-size: 14px; }
