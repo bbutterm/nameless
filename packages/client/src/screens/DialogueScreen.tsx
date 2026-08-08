@@ -43,16 +43,18 @@ export function DialogueScreen() {
     <div className="screen dialogue" onClick={isChoice ? undefined : tap}>
       <img className="scene-bg" src={bg} alt="" draggable={false} />
 
-      <button
-        className="archive-button"
-        aria-label={t(lang, 'memories')}
-        onClick={(e) => {
-          e.stopPropagation();
-          setArchive(true);
-        }}
-      >
-        <Icon name="book" size={20} color="var(--text-dim)" />
-      </button>
+      <div className="top-bar">
+        <button
+          className="archive-button"
+          aria-label={t(lang, 'memories')}
+          onClick={(e) => {
+            e.stopPropagation();
+            setArchive(true);
+          }}
+        >
+          <Icon name="book" size={20} color="var(--text-dim)" />
+        </button>
+      </div>
 
       <div className="feed scroll" ref={feedRef}>
         {log.map((entry, i) => {

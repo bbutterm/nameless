@@ -124,10 +124,23 @@
   min-height: 0;
   position: relative;
   z-index: 1;
-  padding: 16px 14px 8px;
+  padding: 8px 14px 8px;
   display: flex;
   flex-direction: column;
+  /* Лента ведёт себя как чат: свежая реплика всегда у нижнего края,
+     под большим пальцем, а не висит в пустоте посреди экрана. */
+  justify-content: flex-end;
   gap: 12px;
+}
+.feed > * { flex-shrink: 0; }
+
+/* Полоска сверху: держит кнопку описи в потоке, иначе она наезжала на текст. */
+.top-bar {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  justify-content: flex-end;
+  padding: 4px 8px 0;
 }
 
 .bubble-row { display: flex; gap: 10px; align-items: flex-start; animation: rise 240ms ease-out; }
@@ -580,10 +593,6 @@
 
 /* ── Опись: отряд и мозаика памяти ───────────────────────────────────────── */
 .archive-button {
-  position: absolute;
-  top: calc(6px + var(--safe-top));
-  right: 10px;
-  z-index: 3;
   width: var(--tap);
   height: var(--tap);
   display: flex;

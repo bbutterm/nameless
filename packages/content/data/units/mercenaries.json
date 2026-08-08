@@ -90,7 +90,7 @@
       "hp": 38,
       "atk": 8,
       "def": 5,
-      "initiative": 12
+      "initiative": 10
     },
     "abilities": [
       "plain_strike",
@@ -228,10 +228,10 @@
     "tier": 1,
     "row": "back",
     "stats": {
-      "hp": 33,
+      "initiative": 12,
+      "hp": 34,
       "atk": 8,
-      "def": 3,
-      "initiative": 12
+      "def": 3
     },
     "abilities": [
       "promise_note",
@@ -407,8 +407,8 @@
     "row": "back",
     "stats": {
       "initiative": 10,
-      "hp": 45,
-      "atk": 18,
+      "hp": 46,
+      "atk": 16,
       "def": 7
     },
     "abilities": [
