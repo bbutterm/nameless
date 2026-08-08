@@ -29,6 +29,30 @@ const PATHS: Record<string, string> = {
   heart: 'M12 20s-8-4.5-8-10a4.5 4.5 0 018-2.8A4.5 4.5 0 0120 10c0 5.5-8 10-8 10z',
 };
 
+/**
+ * Настоящие иконки game-icons, если файл с таким именем лежит в
+ * `packages/content/assets/icons/`. Формат оттуда — чёрный круг, белое кольцо
+ * и белый глиф; фон и кольцо выбрасываются, остаётся глиф, который красится
+ * в currentColor и потому подчиняется палитре игры.
+ */
+const rawIcons = import.meta.glob('../../../content/assets/icons/*.svg', {
+  eager: true,
+  query: '?raw',
+  import: 'default',
+}) as Record<string, string>;
+
+const GLYPHS = new Map<string, string>();
+for (const [path, raw] of Object.entries(rawIcons)) {
+  const name = (path.split('/').pop() ?? '').replace(/\.svg$/, '');
+  const inner = raw
+    .replace(/<\/?svg[^>]*>/g, '')
+    .replace(/<circle[^>]*\/>/g, '')
+    .replace(/fill="#fff"/g, 'fill="currentColor"')
+    .replace(/stroke="#fff"/g, 'stroke="currentColor"')
+    .trim();
+  if (inner) GLYPHS.set(name, inner);
+}
+
 export function Icon({
   name,
   size = 20,
@@ -40,6 +64,21 @@ export function Icon({
   color?: string;
   strokeWidth?: number;
 }) {
+  const glyph = GLYPHS.get(name);
+  if (glyph) {
+    return (
+      <svg
+        viewBox="0 0 256 256"
+        width={size}
+        height={size}
+        fill={color}
+        aria-hidden="true"
+        focusable="false"
+        dangerouslySetInnerHTML={{ __html: glyph }}
+      />
+    );
+  }
+
   const d = PATHS[name] ?? PATHS['sword'];
   return (
     <svg

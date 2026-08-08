@@ -321,6 +321,10 @@
   height: 100%;
   aspect-ratio: 3 / 4;
   max-width: calc((100% - 12px) / 3);
+  /* Без min-width:0 карточка не могла стать уже своего самого длинного слова:
+     «Невостребованный залог» раздувал карту с 75 до 92px, и ряд переставал
+     быть сеткой — соседние слоты уезжали. */
+  min-width: 0;
   position: relative;
   border-radius: var(--r-sm);
   border: 1.5px solid var(--tier-1);
@@ -357,6 +361,9 @@
   padding: 2px 3px;
   color: var(--text);
   text-shadow: 0 1px 3px #000, 0 0 8px #000;
+  /* Длинные имена переносим по буквам: карточка узкая, и «Невостребованный»
+     в неё целиком не влезает ни при каком кегле. */
+  overflow-wrap: anywhere;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
