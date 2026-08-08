@@ -225,10 +225,26 @@ for (step = 0; step < maxSteps; step++) {
       await page.waitForTimeout(500);
       continue;
     }
+    // Осмысленный ход: лечим, только если кто-то реально просел, иначе бьём
+    // и добиваем самого слабого доступного врага.
+    const info = await page.evaluate(() => ({
+      mine: [...document.querySelectorAll('.card:not(.empty)')]
+        .filter((c) => !c.className.includes('enemy'))
+        .map((c) => c.querySelector('.card-hp')?.textContent ?? ''),
+      ab: [...document.querySelectorAll('.ability')].map((a) => a.textContent.toLowerCase()),
+    }));
+    const HEALS = ['ветошь и вода', 'колодец не спрашивает', 'милосердие без разбора', 'перевязка'];
+    const hurt = info.mine.some((h) => {
+      const [a, b] = h.split('/').map(Number);
+      return b && a / b < 0.55;
+    });
     const ab = page.locator('.ability');
     const n = await ab.count();
     if (n > 0) {
-      await ab.nth(n - 1).click();
+      const healIdx = info.ab.findIndex((t) => HEALS.some((x) => t.includes(x)));
+      const atkIdx = info.ab.findIndex((t) => !HEALS.some((x) => t.includes(x)));
+      const pick = hurt && healIdx >= 0 ? healIdx : atkIdx >= 0 ? atkIdx : 0;
+      await ab.nth(Math.min(pick, n - 1)).click();
       await page.waitForTimeout(90);
       let tgt = page.locator('.card.targetable');
       if ((await tgt.count()) === 0) {
@@ -236,8 +252,18 @@ for (step = 0; step < maxSteps; step++) {
         await page.waitForTimeout(90);
         tgt = page.locator('.card.targetable');
       }
-      if (await tgt.count()) {
-        await tgt.first().click();
+      const cnt = await tgt.count();
+      if (cnt) {
+        const hps = await page.evaluate(() =>
+          [...document.querySelectorAll('.card.targetable')].map(
+            (c) => +(c.querySelector('.card-hp')?.textContent ?? '0/0').split('/')[0],
+          ),
+        );
+        let bestT = 0;
+        hps.forEach((h, i) => {
+          if (h < hps[bestT]) bestT = i;
+        });
+        await tgt.nth(bestT).click();
         await page.waitForTimeout(280);
         continue;
       }
@@ -267,15 +293,17 @@ for (step = 0; step < maxSteps; step++) {
       // Живой игрок не жмёт в хабе одну и ту же кнопку по кругу: уже взятые
       // в этом узле варианты штрафуются, иначе бот вечно перечитывает доску.
       const key = `${s?.scene}#${s?.node}`;
-      const taken = seenOptions.get(key) ?? new Set();
-      const scores = opts.map((o) => score(o.chip + ' ' + o.text) - (taken.has(o.text) ? 100 : 0));
+      const taken = seenOptions.get(key) ?? new Map();
+      const scores = opts.map(
+        (o) => score(o.chip + ' ' + o.text) - 3 * (taken.get(o.text) ?? 0),
+      );
       const top = Math.max(...scores);
       const ties = scores.map((v, i) => (v === top ? i : -1)).filter((i) => i >= 0);
       const best = ties.length > 1 ? ties[Math.min(ties.length - 1, tieBreak(ties.length))] : ties[0];
-      taken.add(opts[best].text);
+      taken.set(opts[best].text, (taken.get(opts[best].text) ?? 0) + 1);
       seenOptions.set(key, taken);
       loops.set(key, (loops.get(key) ?? 0) + 1);
-      if ((loops.get(key) ?? 0) > 12) {
+      if ((loops.get(key) ?? 0) > 40) {
         trace.notes.push(`ЦИКЛ: узел ${key} пройден ${loops.get(key)} раз`);
         await page.screenshot({ path: `${outDir}/${persona}-loop.png` });
         break;

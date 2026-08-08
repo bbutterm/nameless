@@ -41,16 +41,27 @@ const rawIcons = import.meta.glob('../../../content/assets/icons/*.svg', {
   import: 'default',
 }) as Record<string, string>;
 
-const GLYPHS = new Map<string, string>();
+interface Glyph {
+  inner: string;
+  viewBox: string;
+}
+
+const GLYPHS = new Map<string, Glyph>();
 for (const [path, raw] of Object.entries(rawIcons)) {
   const name = (path.split('/').pop() ?? '').replace(/\.svg$/, '');
+  const viewBox = /viewBox="([^"]+)"/.exec(raw)?.[1] ?? '0 0 512 512';
   const inner = raw
     .replace(/<\/?svg[^>]*>/g, '')
-    .replace(/<circle[^>]*\/>/g, '')
+    // Фон у game-icons бывает двух видов — залитый круг и залитый прямоугольник
+    // во весь холст. И то и другое выбрасываем: нам нужен только глиф,
+    // чтобы он красился в currentColor и подчинялся палитре игры.
+    .replace(/<circle(?![^>]*stroke)[^>]*\/>/g, '')
+    .replace(/<circle[^>]*stroke="#fff"[^>]*\/>/g, '')
+    .replace(/<path\s+d="M0 0h\d+v\d+H0z"\s*\/>/g, '')
     .replace(/fill="#fff"/g, 'fill="currentColor"')
     .replace(/stroke="#fff"/g, 'stroke="currentColor"')
     .trim();
-  if (inner) GLYPHS.set(name, inner);
+  if (inner) GLYPHS.set(name, { inner, viewBox });
 }
 
 export function Icon({
@@ -68,13 +79,13 @@ export function Icon({
   if (glyph) {
     return (
       <svg
-        viewBox="0 0 256 256"
+        viewBox={glyph.viewBox}
         width={size}
         height={size}
         fill={color}
         aria-hidden="true"
         focusable="false"
-        dangerouslySetInnerHTML={{ __html: glyph }}
+        dangerouslySetInnerHTML={{ __html: glyph.inner }}
       />
     );
   }

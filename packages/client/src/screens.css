@@ -232,6 +232,8 @@
   animation: rise 200ms ease-out;
 }
 
+/* Полоса под лентой: обучающая подсказка и «коснись, чтобы продолжить». */
+.tap-area { position: relative; z-index: 2; flex-shrink: 0; padding: 0 12px; }
 .tap-hint {
   position: relative;
   z-index: 1;
@@ -341,6 +343,16 @@
 .card.tier-3 { border-color: var(--tier-3); border-width: 2px; }
 .card.selected { box-shadow: 0 0 0 2px var(--accent); transform: translateY(-4px); }
 .card.targetable { box-shadow: 0 0 0 2px var(--danger); }
+/* Цель лечения — своя карта, и красная (опасная) рамка на ней читалась как
+   «сейчас его ударят». Свои цели подсвечиваем цветом союзника. */
+.card.targetable.player { box-shadow: 0 0 0 2px var(--hp-ally); }
+/* Пока выбирается цель, закрытые прикрытием враги гасятся: раньше недоступная
+   карта отличалась от доступной только отсутствием рамки, и правило строя
+   («передний ряд прикрывает задний») на экране ничем не объяснялось. */
+.field.targeting .card:not(.targetable):not(.empty):not(.selected) {
+  opacity: 0.42;
+  filter: grayscale(0.5);
+}
 .card.dead { opacity: 0; pointer-events: none; }
 
 .card-art {
@@ -592,7 +604,24 @@
 .life-name { font-family: var(--font-display); font-size: 20px; margin-top: 6px; }
 .life-flavor { font-size: 15.5px; font-style: italic; color: var(--text-dim); margin-top: 6px; }
 
-.death-footer { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 10px; align-items: center; }
+/* Липкий низ: церемония смерти выше экрана (922px против 844 на 390×844 и
+   909 против 640 на 360×640), и единственная кнопка «Дальше» оказывалась
+   ниже сгиба — игрок упирался в экран без выхода и не знал, что надо
+   прокрутить. Кнопка теперь всегда на виду, текст уезжает под неё. */
+.death-footer {
+  position: sticky;
+  bottom: calc(-1 * var(--safe-bottom));
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+  padding: 12px 0 calc(8px + var(--safe-bottom));
+  margin-top: auto;
+  background: linear-gradient(180deg, transparent 0, var(--bg-0) 22px);
+  backdrop-filter: blur(3px);
+}
 .death-count { font-size: 13px; color: var(--text-faint); letter-spacing: 0.1em; }
 
 /* ── Узкие и низкие экраны ───────────────────────────────────────────────── */
@@ -655,7 +684,9 @@
 .sheet-empty { color: var(--text-faint); font-style: italic; text-align: center; padding: 28px 0; }
 .sheet-close { width: 100%; }
 
-.party-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+/* minmax(0,1fr), а не 1fr: колонка с «Невостребованным залогом» раздувалась по
+   самому длинному слову, и три карточки описи получались разной ширины. */
+.party-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .party-item {
   border: 1px solid var(--tier-1);
   border-radius: var(--r-sm);
@@ -665,7 +696,7 @@
 .party-item.tier-2 { border-color: var(--tier-2); }
 .party-item.tier-3 { border-color: var(--tier-3); }
 .party-item img { width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 4px; }
-.party-name { font-size: 12px; margin-top: 3px; line-height: 1.2; }
+.party-name { font-size: 12px; margin-top: 3px; line-height: 1.2; overflow-wrap: anywhere; }
 .party-blurb { font-size: 10.5px; color: var(--text-faint); line-height: 1.2; }
 .party-meta { font-size: 10.5px; color: var(--text-dim); margin-top: 2px; }
 
