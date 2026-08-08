@@ -311,7 +311,9 @@ function walkGame(
 ): void {
   const rng = new Rng(seed);
   let st = start;
-  for (let steps = 0; steps < 400; steps++) {
+  // Шагов с запасом: честное прохождение должно успеть дойти до второй главы,
+  // а туда ведёт только полная первая — с обязательной смертью в конце.
+  for (let steps = 0; steps < 1500; steps++) {
     const r = resolve(idx, st);
     st = r.state;
     for (const key of st.seenNodes) reached.add(key);
