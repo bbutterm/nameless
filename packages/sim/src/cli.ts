@@ -45,10 +45,10 @@ if (!only || only === 'battles') {
     const wr = unitWinrates(content, runs);
     const out = wr.filter((w) => !w.inCorridor);
     for (const w of wr) {
-      const mark = w.inCorridor ? '  ' : '!!';
+      const mark = w.thinSample ? '~~' : w.inCorridor ? '  ' : '!!';
       console.log(
         `${mark} ${w.unit.padEnd(24)} t${w.tier}  ${(w.winrate * 100).toFixed(1)}%  ` +
-          `раундов ${w.avgRounds.toFixed(1)}`,
+          `раундов ${w.avgRounds.toFixed(1)}${w.thinSample ? '  (тонкая выборка тира)' : ''}`,
       );
     }
     console.log(
@@ -69,11 +69,16 @@ if (!only || only === 'battles') {
     const party = defaultParty(content.units);
     const rep = scriptedBattles(content, party, Math.max(20, Math.floor(runs / 2)));
     for (const r of rep) {
-      const ok = r.winrate >= 0.6 && r.winrate <= 0.85;
+      const def = content.battles.find((b) => b.id === r.battle);
+      // Бой, помеченный `lethal`, игрок по сюжету не переживает — коридор к нему неприменим.
+      const lethal = def?.tags?.includes('lethal') ?? false;
+      const ok = lethal || (r.winrate >= 0.6 && r.winrate <= 0.85);
       console.log(
-        `${ok ? '  ' : '!!'} ${r.battle.padEnd(24)} побед ${(r.winrate * 100).toFixed(0)}%  ` +
-          `раундов ${r.avgRounds.toFixed(1)}  выжило ${(r.avgSurvivors * 100).toFixed(0)}%`,
+        `${lethal ? '~~' : ok ? '  ' : '!!'} ${r.battle.padEnd(24)} побед ${(r.winrate * 100).toFixed(0)}%  ` +
+          `раундов ${r.avgRounds.toFixed(1)}  выжило ${(r.avgSurvivors * 100).toFixed(0)}%` +
+          `${lethal ? '  (сюжетно летальный)' : ''}`,
       );
+      if (!ok) failed = true;
     }
     summary['scriptedBattles'] = rep;
 

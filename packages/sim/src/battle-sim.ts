@@ -27,6 +27,8 @@ export interface UnitWinrate {
   winrate: number;
   avgRounds: number;
   inCorridor: boolean;
+  /** В тире меньше четырёх соседей: цифра справочная, коридор к ней неприменим. */
+  thinSample: boolean;
 }
 
 export interface BattleReport {
@@ -38,9 +40,20 @@ export interface BattleReport {
   avgSurvivors: number;
 }
 
-function partyFrom(units: UnitDef[]): PartyUnit[] {
-  const front = units.filter((u) => u.row === 'front').slice(0, 3);
-  const back = units.filter((u) => u.row === 'back').slice(0, 3);
+/**
+ * Раскладка отряда по клеткам. Предпочтение ряда уважается, но строй
+ * заполняется целиком: иначе отряд из пяти «передних» юнитов выходил бы вчетвером
+ * против шестерых, и симулятор мерил бы размер отряда, а не силу юнита.
+ */
+function fillSlots(units: readonly UnitDef[]): PartyUnit[] {
+  const front: UnitDef[] = [];
+  const back: UnitDef[] = [];
+  for (const u of units) {
+    const prefer = u.row === 'front' ? front : back;
+    const other = u.row === 'front' ? back : front;
+    if (prefer.length < 3) prefer.push(u);
+    else if (other.length < 3) other.push(u);
+  }
   const out: PartyUnit[] = [];
   front.forEach((u, i) =>
     out.push({ uid: `p${out.length}:${u.id}`, defId: u.id, hp: u.stats.hp, xp: 0, level: 1, slot: { row: 'front', index: i } }),
@@ -51,22 +64,27 @@ function partyFrom(units: UnitDef[]): PartyUnit[] {
   return out;
 }
 
-function adHocBattle(id: string, units: UnitDef[]): BattleDef {
-  const front = units.filter((u) => u.row === 'front').slice(0, 3);
-  const back = units.filter((u) => u.row === 'back').slice(0, 3);
+function partyFrom(units: readonly UnitDef[]): PartyUnit[] {
+  return fillSlots(units);
+}
+
+function adHocBattle(id: string, units: readonly UnitDef[]): BattleDef {
+  const placed = fillSlots(units);
   return {
     id,
     name: { ru: id, en: id },
-    enemies: [
-      ...front.map((u, i) => ({ unit: u.id, row: 'front' as const, index: i })),
-      ...back.map((u, i) => ({ unit: u.id, row: 'back' as const, index: i })),
-    ],
+    enemies: placed.map((p) => ({ unit: p.defId, row: p.slot.row, index: p.slot.index })),
   };
 }
 
 /**
- * Зеркальный турнир: каждый юнит встаёт в отряд из трёх своих копий
- * против случайного отряда того же тира. Так изолируется вклад самого юнита.
+ * Зеркальный турнир методом замены одного слота.
+ *
+ * Обе стороны получают ОДИН И ТОТ ЖЕ эталонный отряд из пула, после чего у
+ * испытуемого одна клетка заменяется на проверяемого юнита. Винрейт 50% читается
+ * буквально: «юнит ровно настолько же полезен, насколько тот, кого он вытеснил».
+ * Прежняя схема (три копии юнита против случайного отряда) мерила везение
+ * жеребьёвки и давала разброс, не связанный со статами.
  */
 export function unitWinrates(content: ContentBundle, runsPerUnit = 60): UnitWinrate[] {
   const idx = indexCombat(content);
@@ -79,32 +97,37 @@ export function unitWinrates(content: ContentBundle, runsPerUnit = 60): UnitWinr
 
   const out: UnitWinrate[] = [];
   for (const unit of content.units) {
-    // Зеркалим внутри тира. Если в тире меньше четырёх соседей, турнир вырождается
-    // (каждый дерётся с одними и теми же двумя), поэтому добираем соседний тир —
-    // иначе винрейт тира 3 говорит не о балансе, а о размере выборки.
+    // Эталон набирается из своего тира; если соседей мало, турнир вырождается,
+    // и мы добираем соседние тиры — иначе цифра говорит о размере выборки.
     let pool = (byTier.get(unit.tier) ?? []).filter((u) => u.id !== unit.id);
-    if (pool.length < 4) {
+    const thinSample = pool.length < 4;
+    if (thinSample) {
       const neighbours = [unit.tier - 1, unit.tier + 1]
         .flatMap((t) => byTier.get(t) ?? [])
         .filter((u) => u.id !== unit.id);
       pool = [...pool, ...neighbours];
     }
     if (pool.length === 0) {
-      out.push({ unit: unit.id, tier: unit.tier, battles: 0, wins: 0, winrate: 0.5, avgRounds: 0, inCorridor: true });
+      out.push({ unit: unit.id, tier: unit.tier, battles: 0, wins: 0, winrate: 0.5, avgRounds: 0, inCorridor: true, thinSample });
       continue;
     }
+
     let wins = 0;
     let rounds = 0;
     let played = 0;
     for (let i = 0; i < runsPerUnit; i++) {
       const rng = new Rng(`wr:${unit.id}:${i}`);
-      const mine: UnitDef[] = [unit, unit, unit].map((u) => u);
-      const support = rng.shuffle(pool).slice(0, 3);
-      const team = [...mine, ...support].slice(0, 6);
-      const foes = rng.shuffle(pool.concat(pool)).slice(0, 6);
-      if (foes.length === 0) continue;
-      const battle = adHocBattle(`sim:${unit.id}:${i}`, foes);
-      const st = runAuto(idx, startBattle(idx, battle, partyFrom(team), `wr:${unit.id}:${i}`));
+      const baseline = rng.shuffle(pool.concat(pool, pool)).slice(0, 6);
+      if (baseline.length < 2) continue;
+
+      // Вытесняем юнита того же ряда — иначе замена меняет ещё и строй.
+      let victim = baseline.findIndex((u) => u.row === unit.row);
+      if (victim === -1) victim = 0;
+      const challenger = baseline.slice();
+      challenger[victim] = unit;
+
+      const battle = adHocBattle(`sim:${unit.id}:${i}`, baseline);
+      const st = runAuto(idx, startBattle(idx, battle, fillSlots(challenger), `wr:${unit.id}:${i}`));
       played++;
       rounds += st.round;
       if (st.outcome === 'win') wins++;
@@ -117,7 +140,8 @@ export function unitWinrates(content: ContentBundle, runsPerUnit = 60): UnitWinr
       wins,
       winrate,
       avgRounds: played > 0 ? rounds / played : 0,
-      inCorridor: winrate >= WINRATE_MIN && winrate <= WINRATE_MAX,
+      inCorridor: thinSample || (winrate >= WINRATE_MIN && winrate <= WINRATE_MAX),
+      thinSample,
     });
   }
   return out.sort((a, b) => a.winrate - b.winrate);

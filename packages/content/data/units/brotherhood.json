@@ -7,7 +7,7 @@
     "faction": "clear_head_brotherhood",
     "tier": 1,
     "row": "front",
-    "stats": { "hp": 45, "atk": 12, "def": 7, "initiative": 11 },
+    "stats": { "hp": 47, "atk": 12, "def": 7, "initiative": 11 },
     "abilities": ["barefoot_rush", "plain_strike"],
     "evolvesTo": "pale_deacon",
     "evolveAt": 250,

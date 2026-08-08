@@ -283,6 +283,11 @@ export interface Intent {
 export interface BattleDef {
   id: BattleId;
   name: LocalizedText;
+  /**
+   * Метки боя. `lethal` — бой, который игрок по сюжету не переживает
+   * (смерть наступает и при победе): балансовые коридоры к нему неприменимы.
+   */
+  tags?: string[];
   enemies: { unit: UnitId; row: Row; index: number; level?: number }[];
   /** Сколько ходов до поражения (0 = без лимита). */
   turnLimit?: number;

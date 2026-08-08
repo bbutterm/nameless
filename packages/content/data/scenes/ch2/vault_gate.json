@@ -1,0 +1,82 @@
+{
+  "id": "vault_gate",
+  "chapter": 2,
+  "title": { "ru": "Решётка нижних хранилищ", "en": "The Grate of the Lower Vaults" },
+  "tags": ["chapter_gate", "vaults"],
+  "entry": "tag_on_wrist",
+  "nodes": [
+    {
+      "kind": "narration",
+      "id": "tag_on_wrist",
+      "text": {
+        "ru": "На запястье осталась казённая бирка с номером дела: 1. Не «дело первое» и не «дело № 1» — просто единица, продавленная в жесть так давно, что края успели затупиться.",
+        "en": "A government tag is still on your wrist with the case number on it: 1. Not \"case one\", not \"case no. 1\" — just a one, punched into the tin so long ago that the edges have gone blunt."
+      },
+      "keywords": [{ "match": { "ru": "номером дела", "en": "case number" }, "tone": "memory" }],
+      "next": "going_down"
+    },
+    {
+      "kind": "narration",
+      "id": "going_down",
+      "text": {
+        "ru": "Лестница вниз начинается за приёмным двором и идёт мимо ярусов, которые тебе уже знакомы, а потом мимо тех, у которых нет номеров. Считать их ты бросаешь на девятом.",
+        "en": "The stairway down starts behind the intake yard and passes the tiers you already know, and then the ones that have no numbers. You give up counting them at the ninth."
+      },
+      "next": "the_grate"
+    },
+    {
+      "kind": "narration",
+      "id": "the_grate",
+      "text": {
+        "ru": "Решётка перегораживает лестницу целиком: прутья в руку, кладка вокруг них старше кладки наверху. Табличка одна: «Нижние хранилища. Обеспечение. Вход по особому распоряжению».",
+        "en": "The grate blocks the whole stairway: bars as thick as an arm, the masonry around them older than the masonry above. There is one plate: \"Lower Vaults. Security holdings. Entry by special order only.\""
+      },
+      "keywords": [{ "match": { "ru": "Обеспечение", "en": "Security holdings" }, "tone": "lore" }],
+      "next": "key_router"
+    },
+    {
+      "kind": "branch",
+      "id": "key_router",
+      "branches": [{ "when": { "kind": "flag", "flag": "guild_key" }, "to": "key_useless" }],
+      "fallback": "no_lock"
+    },
+    {
+      "kind": "narration",
+      "id": "key_useless",
+      "text": {
+        "ru": "Служебный ключ ты достаёшь по привычке и держишь в руке дольше, чем нужно. Ключи здесь ни при чём: скважины в решётке нет вовсе.",
+        "en": "You take out the service key from habit and hold it longer than there is any point in holding it. Keys have nothing to do with this: the grate has no keyhole at all."
+      },
+      "next": "cold_from_below"
+    },
+    {
+      "kind": "narration",
+      "id": "no_lock",
+      "text": {
+        "ru": "Замка нет. Ни скважины, ни петель, ни щели под засов — решётку не запирали, её ставили один раз и навсегда, изнутри.",
+        "en": "There is no lock. No keyhole, no hinges, no slot for a bolt — the grate was never locked, it was set in place once and for good, from the inside."
+      },
+      "next": "cold_from_below"
+    },
+    {
+      "kind": "narration",
+      "id": "cold_from_below",
+      "text": {
+        "ru": "Снизу тянет холодом и бумажной пылью. Пыль поднимается ровно, без сквозняка, будто там внизу что-то большое дышит описью.",
+        "en": "Cold air and paper dust come up from below. The dust rises evenly, with no draught behind it, as if something large down there were breathing in inventory."
+      },
+      "next": "last_line"
+    },
+    {
+      "kind": "narration",
+      "id": "last_line",
+      "text": {
+        "ru": "Подвалы Ломбарда глубже, чем башня высока: это знает в Закладе каждый ребёнок и никто не спрашивает почему. Ты стоишь у решётки с биркой номер один на запястье и уже знаешь, чей почерк ждёт внизу.",
+        "en": "The Pawnshop's cellars run deeper than its tower is tall: every child in Zaklad knows it and nobody asks why. You stand at the grate with tag number one on your wrist, and you already know whose handwriting is waiting down there."
+      },
+      "keywords": [{ "match": { "ru": "почерк", "en": "handwriting" }, "tone": "memory" }],
+      "next": "gate_end"
+    },
+    { "kind": "end", "id": "gate_end" }
+  ]
+}

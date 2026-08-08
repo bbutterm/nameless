@@ -22,7 +22,7 @@
     "faction": "greedy_memory_guild",
     "tier": 2,
     "row": "back",
-    "stats": { "hp": 50, "atk": 15, "def": 8, "initiative": 12 },
+    "stats": { "hp": 52, "atk": 16, "def": 8, "initiative": 12 },
     "abilities": ["borrowed_grief", "coin_sling", "raise_the_rate"],
     "evolvesTo": "memory_thief_orsa",
     "evolveAt": 700,

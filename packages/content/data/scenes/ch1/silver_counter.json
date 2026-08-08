@@ -1,0 +1,938 @@
+{
+  "id": "silver_counter",
+  "chapter": 1,
+  "title": { "ru": "Серебряный Прилавок", "en": "The Silver Counter" },
+  "tags": ["death", "ceremony", "osoka"],
+  "entry": "queue_entry",
+  "nodes": [
+    {
+      "kind": "branch",
+      "id": "queue_entry",
+      "branches": [{ "when": { "kind": "deaths", "op": "gte", "value": 1 }, "to": "queue_repeat" }],
+      "fallback": "queue_hall"
+    },
+
+    {
+      "kind": "narration",
+      "id": "queue_hall",
+      "text": {
+        "ru": "Стойка длинная, серебряная, потемневшая по краю от локтей. Стен нет — свет просто кончается на четвёртом шаге в сторону, как в ломбарде под вечер, когда лампы гасят с дальнего конца.",
+        "en": "The counter is long and silver, darkened along the edge by elbows. There are no walls — the light simply ends four paces to either side, the way it does in a pawnshop towards evening, when the lamps are put out from the far end."
+      },
+      "keywords": [{ "match": { "ru": "Стойка", "en": "counter" }, "tone": "lore" }],
+      "next": "queue_people"
+    },
+    {
+      "kind": "narration",
+      "id": "queue_people",
+      "text": {
+        "ru": "Очередь стоит с лотами наготове. Купец впереди держит свою память двумя руками снизу, как торт, и боится наклонить.",
+        "en": "The queue stands with its lots ready. The merchant ahead holds his memory from underneath with both hands, like a cake, and is afraid to tilt it."
+      },
+      "next": "queue_dead"
+    },
+    {
+      "kind": "say",
+      "id": "queue_dead",
+      "speaker": "mertvyy_v_ocheredi",
+      "text": {
+        "ru": "Я всё принёс. Всё до последнего. Скажите, этого хватит? У меня больше нет, и не будет уже.",
+        "en": "I brought everything. Everything, down to the last of it. Tell me, will it be enough? I have nothing else, and there will not be anything else."
+      },
+      "mood": "afraid",
+      "next": "queue_murmur"
+    },
+    {
+      "kind": "say",
+      "id": "queue_murmur",
+      "speaker": "ochered",
+      "text": {
+        "ru": "Хватит, хватит, всем хватало. Не задерживайте, тут за вами люди.",
+        "en": "It will be enough, it always has been. Do not hold things up, there are people behind you."
+      },
+      "next": "queue_turn"
+    },
+    {
+      "kind": "narration",
+      "id": "queue_turn",
+      "text": {
+        "ru": "Для каждого в этой очереди сегодня худший день. Для тебя это вторник, и ты единственный, кто помнит, что уже стоял тут вчера ровно так же.",
+        "en": "For everyone in this queue today is the worst day there is. For you it is a Tuesday, and you are the only one who remembers standing here exactly like this before."
+      },
+      "next": "book_open"
+    },
+
+    {
+      "kind": "narration",
+      "id": "queue_repeat",
+      "text": {
+        "ru": "Ты встаёшь куда надо сам, не считая шагов. Очередь та же и другая: те же лоты в руках, другие руки.",
+        "en": "You take your place yourself, without counting the steps. The queue is the same and not the same: the same lots in the hands, different hands."
+      },
+      "next": "queue_repeat_dead"
+    },
+    {
+      "kind": "say",
+      "id": "queue_repeat_dead",
+      "speaker": "mertvyy_v_ocheredi",
+      "text": {
+        "ru": "Вы тут не первый раз, я вижу. Скажите, а что дальше-то? Мне сегодня в первый.",
+        "en": "You have been here before, I can see it. Tell me, what comes after? Today is my first time."
+      },
+      "mood": "afraid",
+      "next": "queue_repeat_turn"
+    },
+    {
+      "kind": "narration",
+      "id": "queue_repeat_turn",
+      "text": {
+        "ru": "Ответить нечего: за прилавком ты бывал, за прилавок не проходил ни разу. Очередь двигается на два человека, и один из них — ты.",
+        "en": "There is nothing to answer: you have been at the counter, you have never been past it. The queue moves on by two people, and one of them is you."
+      },
+      "next": "book_open"
+    },
+
+    {
+      "kind": "narration",
+      "id": "book_open",
+      "text": {
+        "ru": "Осока кладёт перед собой вкладную книгу и открывает на твоей странице сразу, не ища. Страница пустая, и следующая тоже.",
+        "en": "Osoka lays the deposit book in front of her and opens it at your page at once, without searching. The page is blank, and so is the next one."
+      },
+      "next": "osoka_pages"
+    },
+    {
+      "kind": "say",
+      "id": "osoka_pages",
+      "speaker": "osoka",
+      "text": {
+        "ru": "Вкладная книга. Страницы пустые. Гасить нечем.",
+        "en": "Deposit book. Pages blank. Nothing to settle with."
+      },
+      "next": "osoka_rule"
+    },
+    {
+      "kind": "say",
+      "id": "osoka_rule",
+      "speaker": "osoka",
+      "text": {
+        "ru": "Не расплатился — не прошёл. Правило старше прилавка.",
+        "en": "No payment, no passage. That rule predates the counter."
+      },
+      "keywords": [
+        { "match": { "ru": "Не расплатился — не прошёл", "en": "No payment, no passage" }, "tone": "lore" }
+      ],
+      "next": "rule_router"
+    },
+    {
+      "kind": "branch",
+      "id": "rule_router",
+      "branches": [{ "when": { "kind": "flag", "flag": "contract_read" }, "to": "osoka_seven" }],
+      "fallback": "osoka_plain_clause"
+    },
+    {
+      "kind": "say",
+      "id": "osoka_seven",
+      "speaker": "osoka",
+      "text": {
+        "ru": "Списанию не подлежите. Пункт седьмой.",
+        "en": "Not subject to write-off. Item seven."
+      },
+      "keywords": [{ "match": { "ru": "Пункт седьмой", "en": "Item seven" }, "tone": "memory" }],
+      "next": "osoka_send"
+    },
+    {
+      "kind": "say",
+      "id": "osoka_plain_clause",
+      "speaker": "osoka",
+      "text": {
+        "ru": "Списанию не подлежите. По договору.",
+        "en": "Not subject to write-off. Per contract."
+      },
+      "next": "osoka_send"
+    },
+    {
+      "kind": "say",
+      "id": "osoka_send",
+      "speaker": "osoka",
+      "text": {
+        "ru": "Направляетесь на доработку. Срок — сутки.",
+        "en": "You are returned for completion. Term: one day."
+      },
+      "next": "counter_choice"
+    },
+
+    {
+      "kind": "choice",
+      "id": "counter_choice",
+      "prompt": {
+        "ru": "Перо у неё уже поднято над следующей строкой.",
+        "en": "Her pen is already raised over the next line."
+      },
+      "options": [
+        {
+          "id": "beyond",
+          "text": {
+            "ru": "Что там, за прилавком?",
+            "en": "What is there, past the counter?"
+          },
+          "fallback": true,
+          "to": "r_beyond"
+        },
+        {
+          "id": "signature",
+          "text": {
+            "ru": "Кто подписывал мой договор?",
+            "en": "Who signed my contract?"
+          },
+          "fallback": true,
+          "to": "r_signature"
+        },
+        {
+          "id": "silence",
+          "text": { "ru": "Промолчать.", "en": "Say nothing." },
+          "fallback": true,
+          "to": "r_silent"
+        },
+        {
+          "id": "count",
+          "conditions": { "kind": "axis", "axis": "reason_obsession", "op": "lte", "value": -20 },
+          "text": {
+            "ru": "Сколько человек прошло сегодня до меня?",
+            "en": "How many went through ahead of me?"
+          },
+          "to": "r_count"
+        },
+        {
+          "id": "mercy",
+          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "gte", "value": 20 },
+          "text": {
+            "ru": "Пропустите тех, кто плачет, вперёд.",
+            "en": "Let the ones who are crying go first."
+          },
+          "to": "r_mercy"
+        },
+        {
+          "id": "punkt",
+          "conditions": { "kind": "flag", "flag": "contract_read" },
+          "text": {
+            "ru": "Пункт седьмой писан моей рукой.",
+            "en": "Item seven is in my own hand."
+          },
+          "to": "r_signature"
+        },
+        {
+          "id": "cold",
+          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -30 },
+          "text": { "ru": "Оформляйте. Мне некогда.", "en": "Process it. I am short of time." },
+          "to": "r_silent"
+        }
+      ]
+    },
+
+    {
+      "kind": "branch",
+      "id": "r_beyond",
+      "branches": [{ "when": { "kind": "deaths", "op": "gte", "value": 1 }, "to": "r_beyond_again" }],
+      "fallback": "r_beyond_first"
+    },
+    {
+      "kind": "say",
+      "id": "r_beyond_first",
+      "speaker": "osoka",
+      "text": {
+        "ru": "Не положено, и я не знаю. Я тоже туда не смотрела ни разу.",
+        "en": "Not permitted, and I do not know. I have never looked in there either."
+      },
+      "next": "issue_lot"
+    },
+    {
+      "kind": "say",
+      "id": "r_beyond_again",
+      "speaker": "osoka",
+      "text": { "ru": "Не положено. По описи такого нет.", "en": "Not permitted. No such line in the inventory." },
+      "next": "issue_lot"
+    },
+    {
+      "kind": "branch",
+      "id": "r_signature",
+      "branches": [{ "when": { "kind": "deaths", "op": "gte", "value": 1 }, "to": "r_signature_again" }],
+      "fallback": "r_signature_first"
+    },
+    {
+      "kind": "say",
+      "id": "r_signature_first",
+      "speaker": "osoka",
+      "text": {
+        "ru": "Не положено. Ваша строка длиннее прочих, я её сразу нахожу.",
+        "en": "Not permitted. Your line is longer than the rest, I find it straight away."
+      },
+      "next": "issue_lot"
+    },
+    {
+      "kind": "say",
+      "id": "r_signature_again",
+      "speaker": "osoka",
+      "text": { "ru": "Не положено. Спрашивайте у Учёта.", "en": "Not permitted. Ask the Reckoning." },
+      "next": "issue_lot"
+    },
+    {
+      "kind": "branch",
+      "id": "r_silent",
+      "branches": [{ "when": { "kind": "deaths", "op": "gte", "value": 1 }, "to": "r_silent_again" }],
+      "fallback": "r_silent_first"
+    },
+    {
+      "kind": "say",
+      "id": "r_silent_first",
+      "speaker": "osoka",
+      "text": {
+        "ru": "Принято. Молчите вы правильно: я реже сбиваюсь.",
+        "en": "Noted. You keep silence correctly: I lose my place less often."
+      },
+      "next": "issue_lot"
+    },
+    {
+      "kind": "say",
+      "id": "r_silent_again",
+      "speaker": "osoka",
+      "text": { "ru": "Принято. Продолжаем по порядку.", "en": "Noted. We continue in order." },
+      "next": "issue_lot"
+    },
+    {
+      "kind": "branch",
+      "id": "r_count",
+      "branches": [{ "when": { "kind": "deaths", "op": "gte", "value": 1 }, "to": "r_count_again" }],
+      "fallback": "r_count_first"
+    },
+    {
+      "kind": "say",
+      "id": "r_count_first",
+      "speaker": "osoka",
+      "text": {
+        "ru": "Двести одиннадцать. Считаете и вы. Здесь это редкость.",
+        "en": "Two hundred eleven. You count as well. That is rare here."
+      },
+      "next": "issue_lot"
+    },
+    {
+      "kind": "say",
+      "id": "r_count_again",
+      "speaker": "osoka",
+      "text": { "ru": "Двести восемьдесят четыре. Следующий — вы.", "en": "Two hundred eighty-four. You are next." },
+      "next": "issue_lot"
+    },
+    {
+      "kind": "branch",
+      "id": "r_mercy",
+      "branches": [{ "when": { "kind": "deaths", "op": "gte", "value": 1 }, "to": "r_mercy_again" }],
+      "fallback": "r_mercy_first"
+    },
+    {
+      "kind": "say",
+      "id": "r_mercy_first",
+      "speaker": "osoka",
+      "text": {
+        "ru": "Очередь по поступлению. У вас хвост из должников до самой Слузы. Приняла.",
+        "en": "The queue goes by arrival. You have a tail of debtors trailing to the Sluza. Noted."
+      },
+      "next": "issue_lot"
+    },
+    {
+      "kind": "say",
+      "id": "r_mercy_again",
+      "speaker": "osoka",
+      "text": { "ru": "Очередь по поступлению. Не положено.", "en": "The queue goes by arrival. Not permitted." },
+      "next": "issue_lot"
+    },
+
+    {
+      "kind": "narration",
+      "id": "issue_lot",
+      "text": {
+        "ru": "Она переворачивает страницу и находит нужный бланк с третьей попытки: бланки на неустойку лежат отдельно, потому что нужны один раз в четыреста лет.",
+        "en": "She turns the page and finds the right form on the third try: the penalty forms are kept apart, because they are needed once in four hundred years."
+      },
+      "next": "osoka_penalty"
+    },
+    {
+      "kind": "say",
+      "id": "osoka_penalty",
+      "speaker": "osoka",
+      "text": {
+        "ru": "Неустойка за беспокойство: один лот. Из вашего архива, по резонансу.",
+        "en": "Penalty for inconvenience: one lot. From your own archive, by resonance."
+      },
+      "keywords": [{ "match": { "ru": "резонансу", "en": "resonance" }, "tone": "memory" }],
+      "next": "resonance"
+    },
+
+    {
+      "kind": "branch",
+      "id": "resonance",
+      "branches": [
+        { "when": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -60 }, "to": "res_smolokur" },
+        { "when": { "kind": "axis", "axis": "mercy_cruelty", "op": "gte", "value": 60 }, "to": "res_klyuchar" },
+        { "when": { "kind": "axis", "axis": "honesty_deceit", "op": "lte", "value": -60 }, "to": "res_posulshchik" },
+        { "when": { "kind": "axis", "axis": "honesty_deceit", "op": "gte", "value": 60 }, "to": "res_chistopisets" },
+        { "when": { "kind": "axis", "axis": "reason_obsession", "op": "lte", "value": -60 }, "to": "res_perechen" },
+
+        { "when": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -40 }, "to": "res_smolokur" },
+        { "when": { "kind": "axis", "axis": "mercy_cruelty", "op": "gte", "value": 40 }, "to": "res_klyuchar" },
+        { "when": { "kind": "axis", "axis": "honesty_deceit", "op": "lte", "value": -40 }, "to": "res_posulshchik" },
+        { "when": { "kind": "axis", "axis": "honesty_deceit", "op": "gte", "value": 40 }, "to": "res_chistopisets" },
+        { "when": { "kind": "axis", "axis": "reason_obsession", "op": "lte", "value": -40 }, "to": "res_perechen" },
+
+        { "when": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -20 }, "to": "res_smolokur" },
+        { "when": { "kind": "axis", "axis": "mercy_cruelty", "op": "gte", "value": 20 }, "to": "res_klyuchar" },
+        { "when": { "kind": "axis", "axis": "honesty_deceit", "op": "lte", "value": -20 }, "to": "res_posulshchik" },
+        { "when": { "kind": "axis", "axis": "honesty_deceit", "op": "gte", "value": 20 }, "to": "res_chistopisets" },
+        { "when": { "kind": "axis", "axis": "reason_obsession", "op": "lte", "value": -20 }, "to": "res_perechen" }
+      ],
+      "fallback": "res_chistopisets"
+    },
+
+    {
+      "kind": "branch",
+      "id": "res_smolokur",
+      "branches": [{ "when": { "kind": "memory", "memory": "smola_na_vode" }, "to": "res_smolokur_2" }],
+      "fallback": "res_frag_smolokur_1"
+    },
+    {
+      "kind": "effects",
+      "id": "res_frag_smolokur_1",
+      "effects": [{ "kind": "fragment", "memory": "smola_na_vode", "amount": 2 }],
+      "next": "lot_rises"
+    },
+    {
+      "kind": "branch",
+      "id": "res_smolokur_2",
+      "branches": [{ "when": { "kind": "memory", "memory": "ples_gorit" }, "to": "res_smolokur_3" }],
+      "fallback": "res_frag_smolokur_2"
+    },
+    {
+      "kind": "effects",
+      "id": "res_frag_smolokur_2",
+      "effects": [{ "kind": "fragment", "memory": "ples_gorit", "amount": 3 }],
+      "next": "lot_rises"
+    },
+    {
+      "kind": "branch",
+      "id": "res_smolokur_3",
+      "branches": [{ "when": { "kind": "memory", "memory": "schet_za_sezon" }, "to": "res_next_axis" }],
+      "fallback": "res_frag_smolokur_3"
+    },
+    {
+      "kind": "effects",
+      "id": "res_frag_smolokur_3",
+      "effects": [{ "kind": "fragment", "memory": "schet_za_sezon", "amount": 4 }],
+      "next": "lot_rises"
+    },
+
+    {
+      "kind": "branch",
+      "id": "res_klyuchar",
+      "branches": [{ "when": { "kind": "memory", "memory": "pervoye_vedro" }, "to": "res_klyuchar_2" }],
+      "fallback": "res_frag_klyuchar_1"
+    },
+    {
+      "kind": "effects",
+      "id": "res_frag_klyuchar_1",
+      "effects": [{ "kind": "fragment", "memory": "pervoye_vedro", "amount": 2 }],
+      "next": "lot_rises"
+    },
+    {
+      "kind": "branch",
+      "id": "res_klyuchar_2",
+      "branches": [{ "when": { "kind": "memory", "memory": "ochered_k_kolodtsu" }, "to": "res_klyuchar_3" }],
+      "fallback": "res_frag_klyuchar_2"
+    },
+    {
+      "kind": "effects",
+      "id": "res_frag_klyuchar_2",
+      "effects": [{ "kind": "fragment", "memory": "ochered_k_kolodtsu", "amount": 3 }],
+      "next": "lot_rises"
+    },
+    {
+      "kind": "branch",
+      "id": "res_klyuchar_3",
+      "branches": [{ "when": { "kind": "memory", "memory": "poslednyaya_kruzhka" }, "to": "res_next_axis" }],
+      "fallback": "res_frag_klyuchar_3"
+    },
+    {
+      "kind": "effects",
+      "id": "res_frag_klyuchar_3",
+      "effects": [{ "kind": "fragment", "memory": "poslednyaya_kruzhka", "amount": 4 }],
+      "next": "lot_rises"
+    },
+
+    {
+      "kind": "branch",
+      "id": "res_posulshchik",
+      "branches": [{ "when": { "kind": "memory", "memory": "pervyy_posul" }, "to": "res_posulshchik_2" }],
+      "fallback": "res_frag_posulshchik_1"
+    },
+    {
+      "kind": "effects",
+      "id": "res_frag_posulshchik_1",
+      "effects": [{ "kind": "fragment", "memory": "pervyy_posul", "amount": 2 }],
+      "next": "lot_rises"
+    },
+    {
+      "kind": "branch",
+      "id": "res_posulshchik_2",
+      "branches": [{ "when": { "kind": "memory", "memory": "zima_bez_khleba" }, "to": "res_posulshchik_3" }],
+      "fallback": "res_frag_posulshchik_2"
+    },
+    {
+      "kind": "effects",
+      "id": "res_frag_posulshchik_2",
+      "effects": [{ "kind": "fragment", "memory": "zima_bez_khleba", "amount": 3 }],
+      "next": "lot_rises"
+    },
+    {
+      "kind": "branch",
+      "id": "res_posulshchik_3",
+      "branches": [{ "when": { "kind": "memory", "memory": "luchshie_gody" }, "to": "res_next_axis" }],
+      "fallback": "res_frag_posulshchik_3"
+    },
+    {
+      "kind": "effects",
+      "id": "res_frag_posulshchik_3",
+      "effects": [{ "kind": "fragment", "memory": "luchshie_gody", "amount": 4 }],
+      "next": "lot_rises"
+    },
+
+    {
+      "kind": "branch",
+      "id": "res_chistopisets",
+      "branches": [{ "when": { "kind": "memory", "memory": "pervaya_stroka" }, "to": "res_chistopisets_2" }],
+      "fallback": "res_frag_chistopisets_1"
+    },
+    {
+      "kind": "effects",
+      "id": "res_frag_chistopisets_1",
+      "effects": [{ "kind": "fragment", "memory": "pervaya_stroka", "amount": 2 }],
+      "next": "lot_rises"
+    },
+    {
+      "kind": "branch",
+      "id": "res_chistopisets_2",
+      "branches": [
+        { "when": { "kind": "memory", "memory": "khronika_bez_popravok" }, "to": "res_chistopisets_3" }
+      ],
+      "fallback": "res_frag_chistopisets_2"
+    },
+    {
+      "kind": "effects",
+      "id": "res_frag_chistopisets_2",
+      "effects": [{ "kind": "fragment", "memory": "khronika_bez_popravok", "amount": 3 }],
+      "next": "lot_rises"
+    },
+    {
+      "kind": "branch",
+      "id": "res_chistopisets_3",
+      "branches": [{ "when": { "kind": "memory", "memory": "god_goloy_pravdy" }, "to": "res_next_axis" }],
+      "fallback": "res_frag_chistopisets_3"
+    },
+    {
+      "kind": "effects",
+      "id": "res_frag_chistopisets_3",
+      "effects": [{ "kind": "fragment", "memory": "god_goloy_pravdy", "amount": 4 }],
+      "next": "lot_rises"
+    },
+
+    {
+      "kind": "branch",
+      "id": "res_perechen",
+      "branches": [{ "when": { "kind": "memory", "memory": "punkt_pervyy" }, "to": "res_perechen_2" }],
+      "fallback": "res_frag_perechen_1"
+    },
+    {
+      "kind": "effects",
+      "id": "res_frag_perechen_1",
+      "effects": [{ "kind": "fragment", "memory": "punkt_pervyy", "amount": 2 }],
+      "next": "lot_rises"
+    },
+    {
+      "kind": "branch",
+      "id": "res_perechen_2",
+      "branches": [
+        { "when": { "kind": "memory", "memory": "opis_vsego_sushchego" }, "to": "res_perechen_3" }
+      ],
+      "fallback": "res_frag_perechen_2"
+    },
+    {
+      "kind": "effects",
+      "id": "res_frag_perechen_2",
+      "effects": [{ "kind": "fragment", "memory": "opis_vsego_sushchego", "amount": 3 }],
+      "next": "lot_rises"
+    },
+    {
+      "kind": "branch",
+      "id": "res_perechen_3",
+      "branches": [{ "when": { "kind": "memory", "memory": "eda_ne_vnesena" }, "to": "res_next_axis" }],
+      "fallback": "res_frag_perechen_3"
+    },
+    {
+      "kind": "effects",
+      "id": "res_frag_perechen_3",
+      "effects": [{ "kind": "fragment", "memory": "eda_ne_vnesena", "amount": 4 }],
+      "next": "lot_rises"
+    },
+
+    {
+      "kind": "branch",
+      "id": "res_next_axis",
+      "branches": [
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              { "kind": "not", "of": { "kind": "memory", "memory": "schet_za_sezon" } },
+              { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -20 }
+            ]
+          },
+          "to": "res_smolokur"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              { "kind": "not", "of": { "kind": "memory", "memory": "poslednyaya_kruzhka" } },
+              { "kind": "axis", "axis": "mercy_cruelty", "op": "gte", "value": 20 }
+            ]
+          },
+          "to": "res_klyuchar"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              { "kind": "not", "of": { "kind": "memory", "memory": "luchshie_gody" } },
+              { "kind": "axis", "axis": "honesty_deceit", "op": "lte", "value": -20 }
+            ]
+          },
+          "to": "res_posulshchik"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              { "kind": "not", "of": { "kind": "memory", "memory": "god_goloy_pravdy" } },
+              { "kind": "axis", "axis": "honesty_deceit", "op": "gte", "value": 20 }
+            ]
+          },
+          "to": "res_chistopisets"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              { "kind": "not", "of": { "kind": "memory", "memory": "eda_ne_vnesena" } },
+              { "kind": "axis", "axis": "reason_obsession", "op": "lte", "value": -20 }
+            ]
+          },
+          "to": "res_perechen"
+        },
+
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              { "kind": "not", "of": { "kind": "memory", "memory": "schet_za_sezon" } },
+              { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": 0 }
+            ]
+          },
+          "to": "res_smolokur"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              { "kind": "not", "of": { "kind": "memory", "memory": "poslednyaya_kruzhka" } },
+              { "kind": "axis", "axis": "mercy_cruelty", "op": "gt", "value": 0 }
+            ]
+          },
+          "to": "res_klyuchar"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              { "kind": "not", "of": { "kind": "memory", "memory": "luchshie_gody" } },
+              { "kind": "axis", "axis": "honesty_deceit", "op": "lte", "value": 0 }
+            ]
+          },
+          "to": "res_posulshchik"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              { "kind": "not", "of": { "kind": "memory", "memory": "god_goloy_pravdy" } },
+              { "kind": "axis", "axis": "honesty_deceit", "op": "gt", "value": 0 }
+            ]
+          },
+          "to": "res_chistopisets"
+        },
+        {
+          "when": { "kind": "not", "of": { "kind": "memory", "memory": "eda_ne_vnesena" } },
+          "to": "res_perechen"
+        },
+        {
+          "when": { "kind": "not", "of": { "kind": "memory", "memory": "schet_za_sezon" } },
+          "to": "res_smolokur"
+        },
+        {
+          "when": { "kind": "not", "of": { "kind": "memory", "memory": "poslednyaya_kruzhka" } },
+          "to": "res_klyuchar"
+        },
+        {
+          "when": { "kind": "not", "of": { "kind": "memory", "memory": "luchshie_gody" } },
+          "to": "res_posulshchik"
+        },
+        {
+          "when": { "kind": "not", "of": { "kind": "memory", "memory": "god_goloy_pravdy" } },
+          "to": "res_chistopisets"
+        }
+      ],
+      "fallback": "archive_empty"
+    },
+
+    {
+      "kind": "say",
+      "id": "archive_empty",
+      "speaker": "osoka",
+      "text": {
+        "ru": "Архив вкладчика пуст. Вклад выкуплен полностью.",
+        "en": "Depositor's archive empty. Deposit redeemed in full."
+      },
+      "keywords": [
+        { "match": { "ru": "выкуплен полностью", "en": "redeemed in full" }, "tone": "memory" }
+      ],
+      "next": "archive_empty_look"
+    },
+    {
+      "kind": "narration",
+      "id": "archive_empty_look",
+      "text": {
+        "ru": "Она поднимает глаза от книги. Раньше она этого не делала ни разу, и очередь позади замолкает раньше, чем успевает понять почему.",
+        "en": "She raises her eyes from the book. She has never once done that before, and the queue behind falls silent before it works out why."
+      },
+      "next": "archive_empty_wait"
+    },
+    {
+      "kind": "say",
+      "id": "archive_empty_wait",
+      "speaker": "osoka",
+      "text": { "ru": "Подождите здесь.", "en": "Wait here." },
+      "next": "osoka_reactions"
+    },
+
+    {
+      "kind": "narration",
+      "id": "lot_rises",
+      "text": {
+        "ru": "Из-под стойки поднимается склянка на подъёмнике: где-то очень глубоко её сняли с полки и отправили наверх, и дорога заняла ровно столько, сколько занимает у неё дорога.",
+        "en": "A jar comes up from under the counter on a hoist: somewhere very deep down it was taken off a shelf and sent up, and the journey took exactly as long as that journey takes."
+      },
+      "keywords": [{ "match": { "ru": "склянка", "en": "jar" }, "tone": "memory" }],
+      "next": "osoka_blink"
+    },
+    {
+      "kind": "say",
+      "id": "osoka_blink",
+      "speaker": "osoka",
+      "text": {
+        "ru": "Один лот, закреплено. Расписываться нечем и негде, поэтому просто моргните.",
+        "en": "One lot, made permanent. There is nothing and nowhere to sign with, so just blink."
+      },
+      "next": "osoka_reactions"
+    },
+
+    {
+      "kind": "branch",
+      "id": "osoka_reactions",
+      "branches": [
+        { "when": { "kind": "counter", "counter": "nights_awake", "op": "gte", "value": 3 }, "to": "react_nights" },
+        { "when": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -60 }, "to": "react_cruel" },
+        { "when": { "kind": "axis", "axis": "honesty_deceit", "op": "lte", "value": -60 }, "to": "react_deceit" },
+        { "when": { "kind": "axis", "axis": "grasp_release", "op": "lte", "value": -60 }, "to": "react_release" },
+        { "when": { "kind": "axis", "axis": "grasp_release", "op": "gte", "value": 60 }, "to": "react_grasp" }
+      ],
+      "fallback": "react_plain"
+    },
+    {
+      "kind": "say",
+      "id": "react_nights",
+      "speaker": "osoka",
+      "text": {
+        "ru": "Вы спрашиваете про архив чаще, чем про себя.",
+        "en": "You ask about the archive more often than about yourself."
+      },
+      "next": "react_nights_step"
+    },
+    {
+      "kind": "narration",
+      "id": "react_nights_step",
+      "text": {
+        "ru": "И отодвигается на полшага. Полшага у прилавка — это много: за ним стоят вплотную к дереву, иначе не слышно.",
+        "en": "And she moves half a step back. Half a step at that counter is a great deal: they stand pressed to the wood there, or nothing can be heard."
+      },
+      "next": "set_chapter_flag"
+    },
+    {
+      "kind": "narration",
+      "id": "react_cruel",
+      "text": {
+        "ru": "Ни одного лишнего слова: только бланк, номер, штемпель. Обслуживают тебя быстрее всех в очереди, и это единственное, что она может тебе сказать.",
+        "en": "Not one word beyond the form: just the slip, the number, the stamp. You are served faster than anyone in the queue, and that is the only thing she has to say to you."
+      },
+      "next": "set_chapter_flag"
+    },
+    {
+      "kind": "effects",
+      "id": "react_deceit",
+      "effects": [{ "kind": "flag", "flag": "osoka_mark", "value": true }],
+      "next": "react_deceit_text"
+    },
+    {
+      "kind": "narration",
+      "id": "react_deceit_text",
+      "text": {
+        "ru": "Против твоей строки она молча ставит короткую пометку, второй раз обмакнув перо. Что за пометка — не сказано, а спрашивать не положено.",
+        "en": "Against your line she silently enters a short mark, dipping the pen a second time. What the mark means is not said, and asking is not permitted."
+      },
+      "next": "set_chapter_flag"
+    },
+    {
+      "kind": "effects",
+      "id": "react_release",
+      "effects": [{ "kind": "flag", "flag": "osoka_touch", "value": true }],
+      "next": "react_release_text"
+    },
+    {
+      "kind": "narration",
+      "id": "react_release_text",
+      "text": {
+        "ru": "Передавая склянку, она задевает твою руку и держит на полсекунды дольше, чем нужно, чтобы передать склянку. Формуляр этого не предусматривает; она ничего не поясняет и переходит к следующему.",
+        "en": "Handing the jar over, she touches your hand and holds it half a second longer than handing a jar requires. The form makes no provision for it; she explains nothing and moves on to the next in line."
+      },
+      "next": "set_chapter_flag"
+    },
+    {
+      "kind": "narration",
+      "id": "react_grasp",
+      "text": {
+        "ru": "Она смотрит на тебя на секунду дольше положенного — ровно на ту секунду, которой нет в формуляре, — и не знает, почему смотрит.",
+        "en": "She looks at you a second longer than required — exactly the second the form does not allow for — and does not know why she is looking."
+      },
+      "next": "set_chapter_flag"
+    },
+    {
+      "kind": "narration",
+      "id": "react_plain",
+      "text": {
+        "ru": "Штемпель, номер, следующая строка. За тобой уже переступает купец со своим тортом, и она смотрит уже на него.",
+        "en": "Stamp, number, next line. Behind you the merchant is already shuffling forward with his cake, and she is already looking at him."
+      },
+      "next": "set_chapter_flag"
+    },
+
+    {
+      "kind": "branch",
+      "id": "set_chapter_flag",
+      "branches": [
+        { "when": { "kind": "flag", "flag": "death_cause_guard" }, "to": "set_first_death" }
+      ],
+      "fallback": "death_router"
+    },
+    {
+      "kind": "effects",
+      "id": "set_first_death",
+      "effects": [{ "kind": "flag", "flag": "first_death_done", "value": true }],
+      "next": "death_router"
+    },
+
+    {
+      "kind": "branch",
+      "id": "death_router",
+      "branches": [
+        { "when": { "kind": "flag", "flag": "death_cause_shelf" }, "to": "cause_shelf" },
+        { "when": { "kind": "flag", "flag": "death_cause_scavengers" }, "to": "cause_scavengers" },
+        { "when": { "kind": "flag", "flag": "death_cause_guild" }, "to": "cause_guild" },
+        { "when": { "kind": "flag", "flag": "death_cause_sluza" }, "to": "cause_sluza" },
+        { "when": { "kind": "flag", "flag": "death_cause_vytsvet" }, "to": "cause_vytsvet" }
+      ],
+      "fallback": "cause_guard"
+    },
+    {
+      "kind": "say",
+      "id": "cause_guard",
+      "speaker": "osoka",
+      "text": {
+        "ru": "Причина: древко, под ребро, слева. Оформлено.",
+        "en": "Cause: shaft, under the rib, left side. Recorded."
+      },
+      "next": "death_guard_pike"
+    },
+    {
+      "kind": "say",
+      "id": "cause_shelf",
+      "speaker": "osoka",
+      "text": {
+        "ru": "Причина: стеллаж, ярус третий. Убыток посчитают отдельно.",
+        "en": "Cause: shelving, tier three. Damages will be counted separately."
+      },
+      "next": "death_shelf"
+    },
+    {
+      "kind": "say",
+      "id": "cause_scavengers",
+      "speaker": "osoka",
+      "text": {
+        "ru": "Причина: карманы, пристань. Содержимое к возврату не заявлено.",
+        "en": "Cause: pockets, the pier. Contents not claimed for return."
+      },
+      "next": "death_scavengers"
+    },
+    {
+      "kind": "say",
+      "id": "cause_guild",
+      "speaker": "osoka",
+      "text": {
+        "ru": "Причина: взыскание на месте. Взыскатель в описи не назван.",
+        "en": "Cause: collection on the spot. The collector is not named in the record."
+      },
+      "next": "death_guild_debt"
+    },
+    {
+      "kind": "say",
+      "id": "cause_sluza",
+      "speaker": "osoka",
+      "text": {
+        "ru": "Причина: река. Воду в счёт не берём.",
+        "en": "Cause: the river. Water is not entered as payment."
+      },
+      "next": "death_sluza"
+    },
+    {
+      "kind": "say",
+      "id": "cause_vytsvet",
+      "speaker": "osoka",
+      "text": {
+        "ru": "Причина: край Выцвети, ночь. Одна строка утрачена.",
+        "en": "Cause: the edge of the Vytsvet, night. One line lost."
+      },
+      "next": "death_vytsvet_night"
+    },
+
+    { "kind": "death", "id": "death_guard_pike", "death": "death_guard_pike" },
+    { "kind": "death", "id": "death_shelf", "death": "death_shelf" },
+    { "kind": "death", "id": "death_scavengers", "death": "death_scavengers" },
+    { "kind": "death", "id": "death_guild_debt", "death": "death_guild_debt" },
+    { "kind": "death", "id": "death_sluza", "death": "death_sluza" },
+    { "kind": "death", "id": "death_vytsvet_night", "death": "death_vytsvet_night" }
+  ]
+}
