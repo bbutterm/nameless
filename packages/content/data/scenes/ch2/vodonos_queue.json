@@ -50,8 +50,8 @@
       "id": "appraiser_here",
       "speaker": "otsenshchik",
       "text": {
-        "ru": "Пункт девятый, надбавка учтена со вчерашнего дня. Свидетелей девятнадцать, все стоят вон там и пьют. Спорить будете?",
-        "en": "Item nine, the surcharge has been applied since yesterday. Nineteen witnesses, all standing over there drinking. Will you be contesting it?"
+        "ru": "Пункт девятый, надбавка учтена со вчерашнего дня. Свидетелей девятнадцать, все стоят вон там и пьют. Оспаривание — через окошко.",
+        "en": "Item nine, the surcharge has been applied since yesterday. Nineteen witnesses, all standing over there drinking. Contest it at the window."
       },
       "next": "the_nineteen"
     },

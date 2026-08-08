@@ -93,8 +93,8 @@
       "kind": "narration",
       "id": "coin_back",
       "text": {
-        "ru": "У каждой расписки Заклада есть оборот, и на обороте стоит цифра от одного до пяти. Ты платил ими весь месяц: перевозчику, за репу, за справку. Ни разу не перевернул.",
-        "en": "Every note of Zaklad has a reverse, and on the reverse stands a figure from one to five. You have been paying with them all month: the ferryman, the turnips, the certificate. Not once did you turn one over."
+        "ru": "У каждой расписки Заклада есть оборот, и на обороте стоит цифра от одного до пяти. Разделы в городе номеров не имеют: номер есть только здесь, на пилонах, и у тебя в кармане. Ты платил этими расписками весь месяц и ни разу не перевернул.",
+        "en": "Every note of Zaklad has a reverse, and on the reverse stands a figure from one to five. Up in the city the sections carry no numbers: the number exists only here, on the pilasters, and in your pocket. You have been paying with these notes all month and never once turned one over."
       },
       "keywords": [{ "match": { "ru": "цифра от одного до пяти", "en": "a figure from one to five" }, "tone": "danger" }],
       "next": "storozh_2"
@@ -196,8 +196,8 @@
       "kind": "narration",
       "id": "r_first",
       "text": {
-        "ru": "«Раздел первый. Смолокур. Обеспечение эпохи Войн Тихой Воды. Принято оптом, к выдаче не подлежит». Ниже, мелко: «обеспечивает свайное поле, две трети». Город стоит на сваях. Сваи оплачены плавучим городом, который горел восемь часов.",
-        "en": "\"Section one. Smolokur. Security for the age of the Quiet Water Wars. Accepted in bulk, not for issue.\" Below, in small type: \"secures the pile field, two thirds\". The city stands on piles. The piles were paid for with a floating town that burned for eight hours."
+        "ru": "«Раздел первый. Смолокур. Войны Тихой Воды, годы с первого по восемьдесят четвёртый. Принято оптом, к выдаче не подлежит». Ниже, мелко: «обеспечивает свайное поле, две трети». Город стоит на сваях. Сваи оплачены плавучим городом, который горел восемь часов.",
+        "en": "\"Section one. Smolokur. The Quiet Water Wars, years one through eighty-four. Accepted in bulk, not for issue.\" Below, in small type: \"secures the pile field, two thirds\". The city stands on piles. The piles were paid for with a floating town that burned for eight hours."
       },
       "next": "same_hand"
     },

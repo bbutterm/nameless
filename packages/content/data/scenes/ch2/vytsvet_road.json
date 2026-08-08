@@ -1,18 +1,9 @@
 {
   "id": "vytsvet_road",
   "chapter": 2,
-  "title": {
-    "ru": "Дорога в Выцветь",
-    "en": "The Road into the Vytsvet"
-  },
-  "tags": [
-    "errand",
-    "vytsvet",
-    "combat"
-  ],
-  "available": {
-    "kind": "always"
-  },
+  "title": { "ru": "Дорога в Выцветь", "en": "The Road into the Vytsvet" },
+  "tags": ["errand", "vytsvet", "combat"],
+  "available": { "kind": "always" },
   "entry": "cart_yard",
   "nodes": [
     {
@@ -22,15 +13,7 @@
         "ru": "У заставы стоит обоз из Выцвети: шесть подвод, на каждой короба с одинаковой биркой — «обеспечение, к оценке не подлежит». Разгружаться будут утром, а сегодня возчик едет обратно порожняком.",
         "en": "A convoy from the Vytsvet stands at the toll gate: six carts, each loaded with crates carrying the same tag, \"security holdings, not for appraisal\". Unloading is tomorrow; today the carter drives back empty."
       },
-      "keywords": [
-        {
-          "match": {
-            "ru": "обеспечение",
-            "en": "security holdings"
-          },
-          "tone": "lore"
-        }
-      ],
+      "keywords": [{ "match": { "ru": "обеспечение", "en": "security holdings" }, "tone": "lore" }],
       "next": "vozchik_1"
     },
     {
@@ -54,24 +37,12 @@
     {
       "kind": "lore",
       "id": "lore_convoy",
-      "title": {
-        "ru": "Путевой лист обоза, оборот",
-        "en": "Convoy waybill, reverse"
-      },
+      "title": { "ru": "Путевой лист обоза, оборот", "en": "Convoy waybill, reverse" },
       "text": {
         "ru": "«Обоз обязан войти в город до темноты. Ночёвка в пути настоящим листом не запрещается». Не запрещается, потому что случаев ночёвки в отчётность ни разу не поступало: отчитываться о них некому и нечем. Внизу приписка канцелярской рукой: «возчику выдать вторую бумажку, первую он теряет».",
         "en": "\"The convoy is obliged to enter the city before dark. Passing the night on the road is not forbidden by this waybill.\" It is not forbidden because no instance of it has ever reached the returns: there is nobody left to file them and nothing left to file. Below, in a clerk's hand: \"issue the carter a second slip, he loses the first\"."
       },
       "next": "why_going"
-    },
-    {
-      "kind": "narration",
-      "id": "vozchik_2",
-      "text": {
-        "ru": "«Грузимся мы всегда на одном месте, у столба», — говорит он, не оборачиваясь. «Столб с цифрой, цифра одна. Дальше столбов нет, дальше и цифр нет».",
-        "en": "\"We always load at the same place, by a milepost,\" he says without turning round. \"A post with a number on it, and the number is one. Past that there are no posts, and past that there are no numbers either.\""
-      },
-      "next": "road_out"
     },
     {
       "kind": "narration",
@@ -81,6 +52,15 @@
         "en": "The crates are loaded where the \"security holdings\" come from, and the grate of the lower vaults carries the same word in the same type. The carter agrees to show you the place for a groschen and half a turnip."
       },
       "next": "vozchik_2"
+    },
+    {
+      "kind": "narration",
+      "id": "vozchik_2",
+      "text": {
+        "ru": "«Грузимся мы всегда на одном месте, у столба», — говорит он, не оборачиваясь. «Столб с цифрой, цифра одна. Дальше столбов нет, дальше и цифр нет».",
+        "en": "\"We always load at the same place, by a milepost,\" he says without turning round. \"A post with a number on it, and the number is one. Past that there are no posts, and past that there are no numbers either.\""
+      },
+      "next": "road_out"
     },
     {
       "kind": "narration",
@@ -110,38 +90,18 @@
       "options": [
         {
           "id": "hurry",
-          "text": {
-            "ru": "Гнать. Успеть до темноты.",
-            "en": "Push the horse. Beat the dark."
-          },
+          "text": { "ru": "Гнать. Успеть до темноты.", "en": "Push the horse. Beat the dark." },
           "fallback": true,
-          "effects": [
-            {
-              "kind": "axis",
-              "axis": "reason_obsession",
-              "delta": 3
-            }
-          ],
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 3 }],
           "to": "r_hurry"
         },
         {
           "id": "walk_beside",
-          "text": {
-            "ru": "Идти рядом. Лошади легче.",
-            "en": "Walk alongside. Easier on the horse."
-          },
+          "text": { "ru": "Идти рядом. Лошади легче.", "en": "Walk alongside. Easier on the horse." },
           "fallback": true,
           "effects": [
-            {
-              "kind": "fragment",
-              "memory": "ochered_k_kolodtsu",
-              "amount": 1
-            },
-            {
-              "kind": "axis",
-              "axis": "mercy_cruelty",
-              "delta": 8
-            }
+            { "kind": "fragment", "memory": "ochered_k_kolodtsu", "amount": 1 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": 8 }
           ],
           "to": "r_walk"
         },
@@ -153,162 +113,68 @@
           },
           "fallback": true,
           "effects": [
-            {
-              "kind": "fragment",
-              "memory": "khronika_bez_popravok",
-              "amount": 1
-            },
-            {
-              "kind": "axis",
-              "axis": "honesty_deceit",
-              "delta": 8
-            }
+            { "kind": "fragment", "memory": "khronika_bez_popravok", "amount": 1 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": 8 }
           ],
           "to": "r_write"
         },
         {
           "id": "copy_posts",
-          "chip": {
-            "icon": "hourglass",
-            "label": {
-              "ru": "Перечень",
-              "en": "Perechen"
-            },
-            "tone": "life"
-          },
-          "conditions": {
-            "kind": "life",
-            "life": "perechen"
-          },
+          "chip": { "icon": "hourglass", "label": { "ru": "Перечень", "en": "Perechen" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "perechen" },
           "text": {
             "ru": "Переписать столбы. Все, включая стёртые.",
             "en": "Copy the mileposts. All of them, rubbed ones included."
           },
           "effects": [
-            {
-              "kind": "fragment",
-              "memory": "opis_vsego_sushchego",
-              "amount": 1
-            },
-            {
-              "kind": "axis",
-              "axis": "reason_obsession",
-              "delta": -8
-            }
+            { "kind": "fragment", "memory": "opis_vsego_sushchego", "amount": 1 },
+            { "kind": "axis", "axis": "reason_obsession", "delta": -8 }
           ],
           "to": "r_posts",
           "priority": 6
         },
         {
           "id": "promise_return",
-          "conditions": {
-            "kind": "axis",
-            "axis": "honesty_deceit",
-            "op": "lte",
-            "value": -20
-          },
+          "conditions": { "kind": "axis", "axis": "honesty_deceit", "op": "lte", "value": -20 },
           "text": {
             "ru": "Пообещать ему, что за ним вернутся.",
-            "en": "Promise him that somebody will come back for him."
+            "en": "Promise him that somebody will come back."
           },
           "effects": [
-            {
-              "kind": "fragment",
-              "memory": "zima_bez_khleba",
-              "amount": 1
-            },
-            {
-              "kind": "axis",
-              "axis": "honesty_deceit",
-              "delta": -8
-            },
-            {
-              "kind": "counter",
-              "counter": "promises_given",
-              "delta": 1
-            }
+            { "kind": "fragment", "memory": "zima_bez_khleba", "amount": 1 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": -8 },
+            { "kind": "counter", "counter": "promises_given", "delta": 1 }
           ],
           "to": "r_promise",
           "priority": 5
         },
         {
           "id": "open_crate",
-          "conditions": {
-            "kind": "axis",
-            "axis": "grasp_release",
-            "op": "gte",
-            "value": 25
-          },
-          "text": {
-            "ru": "Вскрыть короб. Посмотреть, что возят.",
-            "en": "Open a crate. See what they haul."
-          },
+          "conditions": { "kind": "axis", "axis": "grasp_release", "op": "gte", "value": 25 },
+          "text": { "ru": "Вскрыть короб. Посмотреть, что возят.", "en": "Open a crate. See what they haul." },
           "effects": [
-            {
-              "kind": "counter",
-              "counter": "lots_held",
-              "delta": 1
-            },
-            {
-              "kind": "axis",
-              "axis": "grasp_release",
-              "delta": 8
-            }
+            { "kind": "counter", "counter": "lots_held", "delta": 1 },
+            { "kind": "axis", "axis": "grasp_release", "delta": 8 }
           ],
           "to": "r_crate",
           "priority": 5
         },
         {
           "id": "ask_names",
-          "conditions": {
-            "kind": "axis",
-            "axis": "mercy_cruelty",
-            "op": "gte",
-            "value": 25
-          },
-          "text": {
-            "ru": "Спросить у четверых, как их зовут.",
-            "en": "Ask the four of them their names."
-          },
-          "effects": [
-            {
-              "kind": "axis",
-              "axis": "mercy_cruelty",
-              "delta": 3
-            }
-          ],
+          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "gte", "value": 25 },
+          "text": { "ru": "Спросить у четверых, как их зовут.", "en": "Ask the four of them their names." },
+          "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": 3 }],
           "to": "r_names",
           "priority": 5
         },
         {
-          "id": "turn_them_home",
-          "chip": {
-            "icon": "heal",
-            "label": {
-              "ru": "Ключарь",
-              "en": "Klyuchar"
-            },
-            "tone": "life"
-          },
-          "conditions": {
-            "kind": "life",
-            "life": "klyuchar"
-          },
-          "text": {
-            "ru": "Напоить четверых из фляги. Всех.",
-            "en": "Give the four of them the flask. All four."
-          },
+          "id": "give_flask",
+          "chip": { "icon": "heal", "label": { "ru": "Ключарь", "en": "Klyuchar" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "klyuchar" },
+          "text": { "ru": "Напоить четверых из фляги. Всех.", "en": "Give the four of them the flask. All four." },
           "effects": [
-            {
-              "kind": "fragment",
-              "memory": "ochered_k_kolodtsu",
-              "amount": 1
-            },
-            {
-              "kind": "axis",
-              "axis": "mercy_cruelty",
-              "delta": 8
-            }
+            { "kind": "fragment", "memory": "ochered_k_kolodtsu", "amount": 1 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": 8 }
           ],
           "to": "r_names",
           "priority": 6
@@ -328,8 +194,8 @@
       "kind": "narration",
       "id": "r_walk",
       "text": {
-        "ru": "«Спасибо, добрый. Я запомню...» Он замолкает, проверяет бумажку на груди и договаривает уже другим голосом: «Нет, не запомню. Ну ты хоть знай, что я хотел».",
-        "en": "\"Thank you, kind one. I will remember...\" He stops, checks the slip on his chest and finishes in a different voice: \"No, I will not. Well, you at least know that I meant to.\""
+        "ru": "«Спасибо, добрый. Я запомню...» Он замолкает, проверяет бумажку на груди и договаривает уже ровно: «Нет, не запомню. Ну ты хоть знай, что я хотел».",
+        "en": "\"Thank you, kind one. I will remember...\" He stops, checks the slip on his chest and finishes evenly: \"No, I will not. Well, you at least know that I meant to.\""
       },
       "next": "milestone"
     },
@@ -367,15 +233,7 @@
         "ru": "В коробе солома и восемь склянок, залитых воском. На каждой ярлык: «раздел второй, лот без наименования, изъят при отсутствии владельца». Владельцев в этих местах не осталось, а разделов, судя по цифре, больше одного.",
         "en": "Straw in the crate, and eight jars sealed with wax. Each carries a label: \"section two, lot without description, taken in absence of owner\". No owners are left in these parts, and by the look of the figure there is more than one section."
       },
-      "keywords": [
-        {
-          "match": {
-            "ru": "раздел второй",
-            "en": "section two"
-          },
-          "tone": "danger"
-        }
-      ],
+      "keywords": [{ "match": { "ru": "раздел второй", "en": "section two" }, "tone": "danger" }],
       "next": "milestone"
     },
     {
@@ -394,27 +252,13 @@
         "ru": "Столб стоит на развилке, и цифра на нём одна: единица. Резана глубоко, с нажимом на конце, и хвост у неё недотянут — рука уже пошла к следующему слову, которого на камне нет.",
         "en": "The post stands at the fork and carries one figure: a one. Cut deep, with pressure at the end, and its tail is short — the hand had already set off for the next word, and there is no next word on the stone."
       },
-      "keywords": [
-        {
-          "match": {
-            "ru": "хвост у неё недотянут",
-            "en": "its tail is short"
-          },
-          "tone": "memory"
-        }
-      ],
+      "keywords": [{ "match": { "ru": "хвост у неё недотянут", "en": "its tail is short" }, "tone": "memory" }],
       "next": "deeper"
     },
     {
       "kind": "effects",
       "id": "deeper",
-      "effects": [
-        {
-          "kind": "counter",
-          "counter": "vault_depth",
-          "delta": 1
-        }
-      ],
+      "effects": [{ "kind": "counter", "counter": "vault_depth", "delta": 1 }],
       "next": "dark_falls"
     },
     {
@@ -433,15 +277,7 @@
         "ru": "Он останавливает лошадь посреди дороги и слезает. «Не успели до темноты. Ну, значит, ночуем. Ночевать тут нельзя, и ехать нельзя, так что ночуем».",
         "en": "He stops the horse in the middle of the road and climbs down. \"We did not beat the dark. Well then, we spend the night. You cannot spend the night here, and you cannot drive on either, so we spend the night.\""
       },
-      "keywords": [
-        {
-          "match": {
-            "ru": "Не успели до темноты",
-            "en": "did not beat the dark"
-          },
-          "tone": "danger"
-        }
-      ],
+      "keywords": [{ "match": { "ru": "Не успели до темноты", "en": "did not beat the dark" }, "tone": "danger" }],
       "next": "fire_made"
     },
     {
@@ -463,211 +299,89 @@
       "options": [
         {
           "id": "stay_fire",
-          "text": {
-            "ru": "Остаться у костра. Подбрасывать.",
-            "en": "Stay by the fire. Keep feeding it."
-          },
+          "text": { "ru": "Остаться у костра. Подбрасывать.", "en": "Stay by the fire. Keep feeding it." },
           "fallback": true,
-          "effects": [
-            {
-              "kind": "axis",
-              "axis": "grasp_release",
-              "delta": -3
-            }
-          ],
+          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -3 }],
           "to": "r_stay"
         },
         {
           "id": "drive_on",
-          "text": {
-            "ru": "Ехать дальше в темноте.",
-            "en": "Drive on in the dark."
-          },
+          "text": { "ru": "Ехать дальше в темноте.", "en": "Drive on in the dark." },
           "fallback": true,
-          "effects": [
-            {
-              "kind": "axis",
-              "axis": "reason_obsession",
-              "delta": 3
-            }
-          ],
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 3 }],
           "to": "r_drive"
         },
         {
           "id": "leave_alone",
-          "text": {
-            "ru": "Уходить пешком одному. Сейчас.",
-            "en": "Set off on foot alone. Now."
-          },
+          "text": { "ru": "Уходить пешком одному. Сейчас.", "en": "Set off on foot alone. Now." },
           "fallback": true,
           "effects": [
-            {
-              "kind": "axis",
-              "axis": "mercy_cruelty",
-              "delta": -8
-            },
-            {
-              "kind": "axis",
-              "axis": "grasp_release",
-              "delta": 3
-            }
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": -8 },
+            { "kind": "axis", "axis": "grasp_release", "delta": 3 }
           ],
           "to": "r_left_him"
         },
         {
           "id": "give_coat",
-          "chip": {
-            "icon": "heal",
-            "label": {
-              "ru": "Ключарь",
-              "en": "Klyuchar"
-            },
-            "tone": "life"
-          },
-          "conditions": {
-            "kind": "life",
-            "life": "klyuchar"
-          },
-          "text": {
-            "ru": "Отдать ему рубаху и флягу.",
-            "en": "Give him your shirt and the flask."
-          },
+          "chip": { "icon": "heal", "label": { "ru": "Ключарь", "en": "Klyuchar" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "klyuchar" },
+          "text": { "ru": "Отдать ему рубаху и флягу.", "en": "Give him your shirt and the flask." },
           "effects": [
-            {
-              "kind": "fragment",
-              "memory": "poslednyaya_kruzhka",
-              "amount": 2
-            },
-            {
-              "kind": "axis",
-              "axis": "mercy_cruelty",
-              "delta": 12
-            }
+            { "kind": "fragment", "memory": "poslednyaya_kruzhka", "amount": 2 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": 12 }
           ],
           "to": "r_gave",
           "priority": 6
         },
         {
-          "id": "burn_carts",
-          "chip": {
-            "icon": "fire",
-            "label": {
-              "ru": "Смолокур",
-              "en": "Smolokur"
-            },
-            "tone": "life"
-          },
-          "conditions": {
-            "kind": "life",
-            "life": "smolokur"
-          },
-          "text": {
-            "ru": "Пустить смолу с подводы вокруг круга.",
-            "en": "Run tar from the cart around the ring."
-          },
+          "id": "burn_ring",
+          "chip": { "icon": "fire", "label": { "ru": "Смолокур", "en": "Smolokur" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "smolokur" },
+          "text": { "ru": "Пустить смолу с подводы вокруг круга.", "en": "Run tar from the cart around the ring." },
           "effects": [
-            {
-              "kind": "fragment",
-              "memory": "schet_za_sezon",
-              "amount": 2
-            },
-            {
-              "kind": "axis",
-              "axis": "mercy_cruelty",
-              "delta": -12
-            }
+            { "kind": "fragment", "memory": "schet_za_sezon", "amount": 2 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": -12 }
           ],
           "to": "r_tar",
           "priority": 6
         },
         {
           "id": "count_them",
-          "conditions": {
-            "kind": "axis",
-            "axis": "reason_obsession",
-            "op": "lte",
-            "value": -25
-          },
+          "conditions": { "kind": "axis", "axis": "reason_obsession", "op": "lte", "value": -25 },
           "text": {
             "ru": "Считать тех, кто подходит из темноты.",
             "en": "Count the ones coming out of the dark."
           },
           "effects": [
-            {
-              "kind": "fragment",
-              "memory": "eda_ne_vnesena",
-              "amount": 1
-            },
-            {
-              "kind": "axis",
-              "axis": "reason_obsession",
-              "delta": -12
-            }
+            { "kind": "fragment", "memory": "eda_ne_vnesena", "amount": 1 },
+            { "kind": "axis", "axis": "reason_obsession", "delta": -12 }
           ],
           "to": "r_counted",
           "priority": 5
         },
         {
           "id": "write_names",
-          "conditions": {
-            "kind": "axis",
-            "axis": "honesty_deceit",
-            "op": "gte",
-            "value": 25
-          },
+          "conditions": { "kind": "axis", "axis": "honesty_deceit", "op": "gte", "value": 25 },
           "text": {
             "ru": "Записать их имена, пока они помнят.",
             "en": "Write their names down while they remember."
           },
           "effects": [
-            {
-              "kind": "fragment",
-              "memory": "god_goloy_pravdy",
-              "amount": 1
-            },
-            {
-              "kind": "axis",
-              "axis": "honesty_deceit",
-              "delta": 12
-            }
+            { "kind": "fragment", "memory": "god_goloy_pravdy", "amount": 1 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": 12 }
           ],
           "to": "r_wrote_names",
           "priority": 5
         },
         {
           "id": "promise_dawn",
-          "chip": {
-            "icon": "coin",
-            "label": {
-              "ru": "Посульщик",
-              "en": "Posulshchik"
-            },
-            "tone": "life"
-          },
-          "conditions": {
-            "kind": "life",
-            "life": "posulshchik"
-          },
-          "text": {
-            "ru": "Пообещать им утро. Твёрдым голосом.",
-            "en": "Promise them morning. In a firm voice."
-          },
+          "chip": { "icon": "coin", "label": { "ru": "Посульщик", "en": "Posulshchik" }, "tone": "life" },
+          "conditions": { "kind": "life", "life": "posulshchik" },
+          "text": { "ru": "Пообещать им утро. Твёрдым голосом.", "en": "Promise them morning. In a firm voice." },
           "effects": [
-            {
-              "kind": "fragment",
-              "memory": "luchshie_gody",
-              "amount": 2
-            },
-            {
-              "kind": "axis",
-              "axis": "honesty_deceit",
-              "delta": -12
-            },
-            {
-              "kind": "counter",
-              "counter": "promises_given",
-              "delta": 1
-            }
+            { "kind": "fragment", "memory": "luchshie_gody", "amount": 2 },
+            { "kind": "axis", "axis": "honesty_deceit", "delta": -12 },
+            { "kind": "counter", "counter": "promises_given", "delta": 1 }
           ],
           "to": "r_promised_dawn",
           "priority": 6
@@ -732,7 +446,7 @@
       "kind": "narration",
       "id": "r_promised_dawn",
       "text": {
-        "ru": "Голос у тебя твёрдый, и они останавливаются послушать — не всё сразу, а по одному, как останавливаются у прилавка. Утро ты обещаешь на предъявителя, и предъявителей набирается больше, чем утр.",
+        "ru": "Голос у тебя твёрдый, и они останавливаются послушать — не все сразу, а по одному, как останавливаются у прилавка. Утро ты обещаешь на предъявителя, и предъявителей набирается больше, чем утр.",
         "en": "Your voice is firm and they stop to listen, not all at once but one by one, the way people stop at a counter. You promise the morning to the bearer, and there turn out to be more bearers than mornings."
       },
       "next": "they_come"
@@ -750,7 +464,7 @@
       "kind": "narration",
       "id": "walk_back",
       "text": {
-        "ru": "К заставе ты выходишь под утро, и застава долго не может понять, кого записывать: пришедший в опись обоза не входит. За спиной со стороны дороги никто не приезжает ни к полудню, ни к вечеру.",
+        "ru": "К заставе ты выходишь под утро, и застава долго не может понять, кого записывать: пришедший пешком в опись обоза не входит. Со стороны дороги за тобой не приезжает никто ни к полудню, ни к вечеру.",
         "en": "You reach the toll gate towards morning, and the gate takes a long while working out whom to enter: an arrival on foot is not part of the convoy's inventory. From the road behind you nobody arrives, not by noon and not by evening."
       },
       "next": "road_exit"
@@ -759,7 +473,7 @@
       "kind": "narration",
       "id": "they_come",
       "text": {
-        "ru": "Они выходят к свету не спеша и здороваются — вежливо, по второму и третьему разу. Ближний протягивает руку не за горлом, а за именем: он спрашивает, как тебя зовут, и ждёт ответа всерьёз.",
+        "ru": "Они выходят к свету не спеша и здороваются — вежливо, по второму и третьему разу. Ближний тянет руку не к горлу, а за именем: спрашивает, как тебя зовут, и ждёт ответа всерьёз.",
         "en": "They come to the light unhurried and greet you politely, for the second and the third time. The nearest one reaches out not for your throat but for your name: he asks what you are called and waits for the answer in earnest."
       },
       "next": "night_battle"
@@ -784,7 +498,7 @@
       "kind": "narration",
       "id": "morning_short",
       "text": {
-        "ru": "Утром возчик будит тебя и спрашивает, кто ты. Он спрашивает по-хорошему, он спрашивает всех. Руки у тебя к этому часу того же цвета, что трава, и трава не возражает.",
+        "ru": "Утром возчик будит тебя и спрашивает, кто ты. Спрашивает по-хорошему, он спрашивает всех. Руки у тебя к этому часу того же цвета, что трава, и трава не возражает.",
         "en": "In the morning the carter wakes you and asks who you are. He asks kindly, he asks everyone. By that hour your hands are the same colour as the grass, and the grass does not object."
       },
       "next": "dying_vytsvet"
@@ -793,36 +507,12 @@
       "kind": "effects",
       "id": "dying_vytsvet",
       "effects": [
-        {
-          "kind": "flag",
-          "flag": "death_cause_vytsvet",
-          "value": true
-        },
-        {
-          "kind": "flag",
-          "flag": "death_cause_guard",
-          "value": false
-        },
-        {
-          "kind": "flag",
-          "flag": "death_cause_shelf",
-          "value": false
-        },
-        {
-          "kind": "flag",
-          "flag": "death_cause_scavengers",
-          "value": false
-        },
-        {
-          "kind": "flag",
-          "flag": "death_cause_guild",
-          "value": false
-        },
-        {
-          "kind": "flag",
-          "flag": "death_cause_sluza",
-          "value": false
-        }
+        { "kind": "flag", "flag": "death_cause_vytsvet", "value": true },
+        { "kind": "flag", "flag": "death_cause_guard", "value": false },
+        { "kind": "flag", "flag": "death_cause_shelf", "value": false },
+        { "kind": "flag", "flag": "death_cause_scavengers", "value": false },
+        { "kind": "flag", "flag": "death_cause_guild", "value": false },
+        { "kind": "flag", "flag": "death_cause_sluza", "value": false }
       ],
       "next": "vytsvet_dust"
     },
@@ -830,8 +520,8 @@
       "kind": "narration",
       "id": "vytsvet_dust",
       "text": {
-        "ru": "Цвет уходит быстрее обычного: здесь его и брать особо не надо, здесь он и так лежит плохо. Возчик утром находит на месте гостя серую кучу, вздыхает и объезжает её, потому что объехать — вежливее.",
-        "en": "The colour goes faster than usual: out here it hardly needs taking, out here it sits loosely anyway. In the morning the carter finds a grey heap where his passenger was, sighs, and drives around it, because driving around is the polite thing."
+        "ru": "Цвет уходит быстрее обычного: тут его и брать особо не надо, тут он и так лежит плохо. Возчик утром находит на месте гостя серую кучу, вздыхает и объезжает её, потому что объехать вежливее.",
+        "en": "The colour goes faster than usual: out here it hardly needs taking, out here it sits loosely anyway. In the morning the carter finds a grey heap where his passenger was, sighs, and drives around it, because driving around is the politer thing."
       },
       "next": "scene:silver_counter#queue_entry"
     },
