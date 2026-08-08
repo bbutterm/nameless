@@ -34,7 +34,7 @@ export function UnitCard({
   onTap?: () => void;
 }) {
   const hpPct = Math.max(0, Math.min(1, unit.hp / Math.max(1, unit.maxHp)));
-  const art = def ? (cardImage(def.id) ?? svgDataUri(unitCardSvg(def.id, def.tier))) : undefined;
+  const art = def ? (cardImage(def.id) ?? svgDataUri(unitCardSvg(def.id, def.tier, def.faction))) : undefined;
   const shield = unit.statuses.filter((s) => s.kind === 'shield').reduce((a, s) => a + s.amount, 0);
   const stunned = unit.statuses.some((s) => s.kind === 'stun');
 

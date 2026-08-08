@@ -1,17 +1,32 @@
 /* СГЕНЕРИРОВАНО gen-index.ts — не редактировать руками. */
 /* eslint-disable */
 
-import abilities_0_abilities from './../data/abilities/melee.json';
-import abilities_1_abilities from './../data/abilities/ranged.json';
+import units_0_units from './../data/units/brotherhood.json';
+import units_1_units from './../data/units/companions.json';
+import units_2_units from './../data/units/echoes.json';
+import units_3_units from './../data/units/guild.json';
+import units_4_units from './../data/units/lombard.json';
+import units_5_units from './../data/units/mercenaries.json';
+import units_6_units from './../data/units/street.json';
+import abilities_0_abilities from './../data/abilities/curses.json';
+import abilities_1_abilities from './../data/abilities/melee.json';
+import abilities_2_abilities from './../data/abilities/ranged.json';
+import abilities_3_abilities from './../data/abilities/support.json';
+import lives_0_lives from './../data/lives/lives.json';
+import memories_0_memories from './../data/memories/chistopisets.json';
+import memories_1_memories from './../data/memories/klyuchar.json';
+import memories_2_memories from './../data/memories/perechen.json';
+import memories_3_memories from './../data/memories/posulshchik.json';
+import memories_4_memories from './../data/memories/smolokur.json';
 import axes_0_axes from './../data/axes/axes.json';
 
-export const scenes: unknown[] = [].flatMap((x) => (Array.isArray(x) ? x : [x]));
-export const units: unknown[] = [].flatMap((x) => (Array.isArray(x) ? x : [x]));
-export const abilities: unknown[] = [abilities_0_abilities, abilities_1_abilities].flatMap((x) => (Array.isArray(x) ? x : [x]));
-export const battles: unknown[] = [].flatMap((x) => (Array.isArray(x) ? x : [x]));
-export const lives: unknown[] = [].flatMap((x) => (Array.isArray(x) ? x : [x]));
-export const memories: unknown[] = [].flatMap((x) => (Array.isArray(x) ? x : [x]));
-export const deaths: unknown[] = [].flatMap((x) => (Array.isArray(x) ? x : [x]));
-export const chapters: unknown[] = [].flatMap((x) => (Array.isArray(x) ? x : [x]));
-export const axes: unknown[] = [axes_0_axes].flatMap((x) => (Array.isArray(x) ? x : [x]));
-export const speakers: unknown[] = [].flatMap((x) => (Array.isArray(x) ? x : [x]));
+export const scenes: unknown[] = ([] as unknown[]).flatMap((x) => (Array.isArray(x) ? x : [x]));
+export const units: unknown[] = ([units_0_units, units_1_units, units_2_units, units_3_units, units_4_units, units_5_units, units_6_units] as unknown[]).flatMap((x) => (Array.isArray(x) ? x : [x]));
+export const abilities: unknown[] = ([abilities_0_abilities, abilities_1_abilities, abilities_2_abilities, abilities_3_abilities] as unknown[]).flatMap((x) => (Array.isArray(x) ? x : [x]));
+export const battles: unknown[] = ([] as unknown[]).flatMap((x) => (Array.isArray(x) ? x : [x]));
+export const lives: unknown[] = ([lives_0_lives] as unknown[]).flatMap((x) => (Array.isArray(x) ? x : [x]));
+export const memories: unknown[] = ([memories_0_memories, memories_1_memories, memories_2_memories, memories_3_memories, memories_4_memories] as unknown[]).flatMap((x) => (Array.isArray(x) ? x : [x]));
+export const deaths: unknown[] = ([] as unknown[]).flatMap((x) => (Array.isArray(x) ? x : [x]));
+export const chapters: unknown[] = ([] as unknown[]).flatMap((x) => (Array.isArray(x) ? x : [x]));
+export const axes: unknown[] = ([axes_0_axes] as unknown[]).flatMap((x) => (Array.isArray(x) ? x : [x]));
+export const speakers: unknown[] = ([] as unknown[]).flatMap((x) => (Array.isArray(x) ? x : [x]));

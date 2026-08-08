@@ -42,7 +42,7 @@ export function ArchiveSheet({
               <div className="party-grid">
                 {state.party.map((u) => {
                   const def = defs.get(u.defId);
-                  const art = def ? (cardImage(def.id) ?? svgDataUri(unitCardSvg(def.id, def.tier))) : '';
+                  const art = def ? (cardImage(def.id) ?? svgDataUri(unitCardSvg(def.id, def.tier, def.faction))) : '';
                   return (
                     <div key={u.uid} className={`party-item tier-${def?.tier ?? 1}`}>
                       <img src={art} alt="" draggable={false} />

@@ -55,8 +55,10 @@ for (const g of GROUPS) {
     names.push(name);
   });
   // Файл может содержать как один объект, так и массив объектов.
+  // Приведение к unknown[] намеренное: иначе TypeScript пытается вывести
+  // объединение литеральных типов всех JSON сразу и захлёбывается на десятках файлов.
   groupArrays.push(
-    `export const ${g.name}: unknown[] = [${names.join(', ')}].flatMap((x) => (Array.isArray(x) ? x : [x]));`,
+    `export const ${g.name}: unknown[] = ([${names.join(', ')}] as unknown[]).flatMap((x) => (Array.isArray(x) ? x : [x]));`,
   );
 }
 
