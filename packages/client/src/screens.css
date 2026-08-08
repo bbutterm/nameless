@@ -781,3 +781,14 @@
 .swap-hint { font-size: 13px; color: var(--text-faint); font-style: italic; padding: 0 2px 2px; }
 .party-item { text-align: left; }
 .party-item.picked { box-shadow: 0 0 0 2px var(--accent); }
+
+/* Атрибуция CC BY: требование лицензии game-icons, должна быть в самой сборке. */
+.attribution {
+  font-size: 10.5px;
+  line-height: 1.35;
+  color: var(--text-faint);
+  text-align: center;
+  max-width: 330px;
+  padding-top: 10px;
+}
+.attribution b { font-weight: 600; color: var(--text-dim); }

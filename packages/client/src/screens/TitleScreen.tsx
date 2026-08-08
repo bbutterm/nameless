@@ -4,6 +4,7 @@ import { t } from '../i18n';
 import { useGame } from '../store/game';
 import { hapticsEnabled, setHaptics } from '../lib/haptics';
 import { setSound, soundEnabled } from '../lib/sound';
+import { Attribution } from '../components/Attribution';
 
 export function TitleScreen() {
   const { lang, setLang, startNew, resume, hasSave, error } = useGame();
@@ -32,7 +33,7 @@ export function TitleScreen() {
             className={hasSave ? 'ghost-button' : 'big-button'}
             onClick={() => (hasSave ? setConfirm(true) : startNew())}
           >
-            {t(lang, 'newGame')}
+            {t(lang, hasSave ? 'newGame' : 'startGame')}
           </button>
         ) : (
           <div className="confirm">
@@ -107,6 +108,8 @@ export function TitleScreen() {
           </div>
         </div>
       </div>
+
+      <Attribution lang={lang} />
     </div>
   );
 }

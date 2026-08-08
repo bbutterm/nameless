@@ -9,6 +9,8 @@ export const ui = {
     title: 'Безымянный',
     subtitle: 'Вклад Первый',
     continue: 'Продолжить',
+    /* Первый запуск: сейва нет, и «Начать заново» на пустом месте пугает. */
+    startGame: 'Начать',
     newGame: 'Начать заново',
     newGameWarn: 'Прошлое прохождение будет стёрто. Продолжить?',
     yes: 'Да',
@@ -54,6 +56,7 @@ export const ui = {
     title: 'The Nameless',
     subtitle: 'Deposit the First',
     continue: 'Continue',
+    startGame: 'Begin',
     newGame: 'Start over',
     newGameWarn: 'Your previous run will be erased. Continue?',
     yes: 'Yes',
