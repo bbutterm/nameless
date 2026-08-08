@@ -112,7 +112,7 @@
     "effects": [
       {
         "kind": "shield",
-        "amount": 36,
+        "amount": 40,
         "turns": 2
       }
     ],

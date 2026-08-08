@@ -14,10 +14,10 @@
     "tier": 1,
     "row": "front",
     "stats": {
-      "hp": 40,
+      "initiative": 12,
+      "hp": 41,
       "atk": 8,
-      "def": 5,
-      "initiative": 12
+      "def": 5
     },
     "abilities": [
       "barefoot_rush",

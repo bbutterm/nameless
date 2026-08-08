@@ -14,10 +14,10 @@
     "tier": 1,
     "row": "front",
     "stats": {
-      "hp": 41,
+      "initiative": 8,
+      "hp": 40,
       "atk": 11,
-      "def": 9,
-      "initiative": 8
+      "def": 9
     },
     "abilities": [
       "i_will_hold_it",
