@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import type { SceneNode } from '@nameless/engine';
 import { LoreBubble, NarrationBubble, SayBubble } from '../components/Bubble';
 import { ChoiceBar } from '../components/ChoiceBar';
@@ -39,8 +39,20 @@ export function DialogueScreen() {
   const bg = svgDataUri(backgroundSvg(state.scene));
   const isChoice = step?.kind === 'choice';
 
+  /*
+   * Канон: тело выцветает с каждой смертью, а тот, кто умеет отпускать,
+   * сереет заметно медленнее. Числа игроку не показываются — он видит только,
+   * что мир вокруг него теряет цвет. Это единственный видимый счётчик в игре.
+   */
+  const releasing = (state.axes['grasp_release'] ?? 0) <= -40;
+  const greyness = Math.min(0.72, state.deaths * (releasing ? 0.06 : 0.11));
+
   return (
-    <div className="screen dialogue" onClick={isChoice ? undefined : tap}>
+    <div
+      className="screen dialogue"
+      style={{ '--greyness': greyness } as CSSProperties}
+      onClick={isChoice ? undefined : tap}
+    >
       <img className="scene-bg" src={bg} alt="" draggable={false} />
 
       <div className="top-bar">

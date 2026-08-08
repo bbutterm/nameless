@@ -112,12 +112,24 @@ if (!only || only === 'dialogue') {
     console.log(
       `охват реплик: ${(r.lineCoverage * 100).toFixed(1)}% (${r.reachedLines}/${r.totalLines})`,
     );
+    console.log(
+      `охват честным прохождением с нуля: ${(r.cleanCoverage * 100).toFixed(1)}% ` +
+        `(${r.cleanRuns} прогонов)`,
+    );
+    if (r.cleanOnlyUnreachable.length > 0) {
+      console.log(
+        `реплик, до которых честный игрок не доходит: ${r.cleanOnlyUnreachable.length}`,
+      );
+      for (const k of r.cleanOnlyUnreachable.slice(0, 10)) console.log(`  ТОЛЬКО ПОДСТАВНОЙ ${k}`);
+    }
     summary['dialogue'] = {
       deadEnds: r.deadEnds.length,
       neverShown: r.neverShownOptions.length,
       unreachable: r.unreachableNodes.length,
       errors: r.errors.length,
       lineCoverage: r.lineCoverage,
+      cleanCoverage: r.cleanCoverage,
+      cleanOnlyUnreachable: r.cleanOnlyUnreachable.length,
     };
     if (r.deadEnds.length > 0 || r.errors.length > 0) failed = true;
     if (r.lineCoverage < 0.9) {

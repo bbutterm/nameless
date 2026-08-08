@@ -109,6 +109,9 @@
 
 /* ── Диалог ──────────────────────────────────────────────────────────────── */
 .scene-bg {
+  /* Выцветание мира по числу смертей: см. DialogueScreen, переменная --greyness. */
+  filter: grayscale(var(--greyness, 0)) brightness(calc(1 - var(--greyness, 0) * 0.25));
+  transition: filter 900ms ease;
   position: absolute;
   inset: 0;
   width: 100%;
@@ -145,6 +148,7 @@
 
 .bubble-row { display: flex; gap: 10px; align-items: flex-start; animation: rise 240ms ease-out; }
 .portrait {
+  filter: grayscale(calc(var(--greyness, 0) * 0.8));
   width: 44px;
   height: 44px;
   border-radius: var(--r-sm);

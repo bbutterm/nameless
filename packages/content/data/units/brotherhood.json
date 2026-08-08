@@ -52,8 +52,8 @@
     "row": "front",
     "stats": {
       "initiative": 10,
-      "hp": 51,
-      "atk": 18,
+      "hp": 65,
+      "atk": 16,
       "def": 9
     },
     "abilities": [

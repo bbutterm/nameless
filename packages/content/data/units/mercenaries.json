@@ -52,9 +52,9 @@
     "row": "back",
     "stats": {
       "initiative": 11,
-      "hp": 45,
+      "hp": 50,
       "atk": 16,
-      "def": 6
+      "def": 7
     },
     "abilities": [
       "bucket_round",
@@ -123,8 +123,8 @@
     "row": "back",
     "stats": {
       "initiative": 11,
-      "hp": 45,
-      "atk": 14,
+      "hp": 47,
+      "atk": 17,
       "def": 6
     },
     "abilities": [
@@ -192,9 +192,9 @@
     "tier": 2,
     "row": "front",
     "stats": {
-      "initiative": 9,
-      "hp": 51,
-      "atk": 18,
+      "initiative": 10,
+      "hp": 62,
+      "atk": 15,
       "def": 9
     },
     "abilities": [
@@ -263,10 +263,10 @@
     "tier": 2,
     "row": "front",
     "stats": {
-      "hp": 51,
-      "atk": 18,
-      "def": 8,
-      "initiative": 10
+      "initiative": 10,
+      "hp": 58,
+      "atk": 15,
+      "def": 8
     },
     "abilities": [
       "pledge",
@@ -336,9 +336,9 @@
     "row": "back",
     "stats": {
       "initiative": 10,
-      "hp": 45,
+      "hp": 49,
       "atk": 16,
-      "def": 6
+      "def": 7
     },
     "abilities": [
       "inventory",
@@ -407,9 +407,9 @@
     "row": "back",
     "stats": {
       "initiative": 10,
-      "hp": 45,
-      "atk": 18,
-      "def": 7
+      "hp": 49,
+      "atk": 17,
+      "def": 8
     },
     "abilities": [
       "borrowed_grief",
@@ -478,9 +478,9 @@
     "tier": 2,
     "row": "front",
     "stats": {
-      "initiative": 9,
+      "initiative": 8,
       "hp": 72,
-      "atk": 18,
+      "atk": 15,
       "def": 12
     },
     "abilities": [
@@ -515,7 +515,7 @@
     "row": "front",
     "stats": {
       "initiative": 10,
-      "hp": 43,
+      "hp": 44,
       "atk": 9,
       "def": 7
     },
@@ -549,9 +549,9 @@
     "tier": 2,
     "row": "front",
     "stats": {
-      "initiative": 10,
-      "hp": 72,
-      "atk": 18,
+      "initiative": 9,
+      "hp": 71,
+      "atk": 17,
       "def": 12
     },
     "abilities": [

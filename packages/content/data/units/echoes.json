@@ -15,9 +15,9 @@
     "row": "back",
     "stats": {
       "initiative": 10,
-      "hp": 46,
-      "atk": 18,
-      "def": 7
+      "hp": 51,
+      "atk": 17,
+      "def": 6
     },
     "abilities": [
       "smoke_of_ples",
@@ -45,7 +45,7 @@
     "row": "back",
     "stats": {
       "initiative": 13,
-      "hp": 62,
+      "hp": 57,
       "atk": 18,
       "def": 9
     },
@@ -75,7 +75,7 @@
     "row": "front",
     "stats": {
       "initiative": 10,
-      "hp": 72,
+      "hp": 71,
       "atk": 7,
       "def": 12
     },
@@ -106,8 +106,8 @@
     "row": "back",
     "stats": {
       "initiative": 11,
-      "hp": 45,
-      "atk": 18,
+      "hp": 48,
+      "atk": 16,
       "def": 6
     },
     "abilities": [

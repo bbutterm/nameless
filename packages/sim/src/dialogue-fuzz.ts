@@ -170,6 +170,11 @@ export interface FuzzReport {
   lineCoverage: number;
   totalLines: number;
   reachedLines: number;
+  /** Охват при честном прохождении с нуля — без подставленных флагов и памяти. */
+  cleanCoverage: number;
+  cleanRuns: number;
+  /** Реплики, недостижимые в честном прохождении, но достижимые подставленной личностью. */
+  cleanOnlyUnreachable: string[];
 }
 
 /**
@@ -225,55 +230,37 @@ export function fuzzDialogue(content: ContentBundle, personalityCount = 300): Fu
   const reached = new Set<string>();
   for (const p of personalities) {
     for (const chapter of content.chapters) {
-      const rng = new Rng(`walk:${p.id}:${chapter.id}`);
-      let st = normalizeEntry(idx, stateFrom(content, p, chapter.entryScene, '@entry'));
-      for (let steps = 0; steps < 400; steps++) {
-        const r = resolve(idx, st);
-        st = r.state;
-        // Берём seenNodes, а не текущий узел: resolve проходит сквозь effects и
-        // branch, не останавливаясь на них, и без этого служебные узлы вечно
-        // числились бы недостижимыми.
-        for (const key of st.seenNodes) reached.add(key);
-        if (r.step.kind === 'error') {
-          errors.push({ scene: st.scene, node: st.node, message: r.step.message });
-          break;
-        }
-        if (r.step.kind === 'end') break;
-        if (r.step.kind === 'bubble') {
-          st = advance(idx, st);
-          continue;
-        }
-        if (r.step.kind === 'choice') {
-          const pick = rng.pick(r.step.options);
-          if (!pick) break;
-          // Именно choose, а не прыжок по pick.to: живой игрок несёт с собой
-          // эффекты варианта (флаги, оси, осколки), и ветки, открывающиеся
-          // ими же дальше по пути, без этого числились бы недостижимыми.
-          st = choose(idx, st, pick.id);
-          continue;
-        }
-        if (r.step.kind === 'battle') {
-          // Симулируем исход броском: путь поражения тоже должен быть проходим.
-          const battleNode = r.step.node;
-          const won = rng.chance(0.75);
-          const def = content.battles.find((b) => b.id === battleNode.battle);
-          if (won && def?.rewards) st = applyEffects(st, def.rewards, idx.effectCtx);
-          st = normalizeEntry(idx, goTo(st, won ? battleNode.onWin : battleNode.onLose));
-          continue;
-        }
-        if (r.step.kind === 'death') {
-          const deathId = r.step.node.death;
-          const death = content.deaths.find((d) => d.id === deathId);
-          if (!death) {
-            errors.push({ scene: st.scene, node: st.node, message: `Нет смерти ${deathId}` });
-            break;
-          }
-          // Настоящая смерть движка: закрепляет воспоминание из накопленных
-          // осколков, будит жизнь, применяет её гранты — как в игре.
-          st = applyDeath(st, content, death, idx.effectCtx).state;
-          continue;
-        }
-      }
+      const st = normalizeEntry(idx, stateFrom(content, p, chapter.entryScene, '@entry'));
+      walkGame(idx, content, st, `walk:${p.id}:${chapter.id}`, reached, errors);
+    }
+  }
+
+  // Честное прохождение: личность без флагов, счётчиков, посещений и памяти —
+  // ровно то, с чем игрок начинает игру. Ловит класс ошибок, невидимый для
+  // случайной выборки: флаг читается раньше, чем ставится на единственном пути.
+  const cleanReached = new Set<string>();
+  const cleanErrors: FuzzReport['errors'] = [];
+  const firstChapter = [...content.chapters].sort((a, b) => a.index - b.index)[0];
+  const cleanRuns = Math.max(40, Math.floor(personalityCount / 4));
+  if (firstChapter) {
+    for (let i = 0; i < cleanRuns; i++) {
+      const rng = new Rng(`clean:${i}`);
+      const axes: Record<string, number> = {};
+      for (const a of content.axes) axes[a.id] = a.start;
+      const clean: Personality = {
+        id: `c${i}`,
+        axes,
+        flags: {},
+        counters: {},
+        visited: [],
+        lockedMemories: [],
+        awakenedLives: [],
+        units: [],
+        deaths: 0,
+        chapter: firstChapter.index,
+      };
+      const st = normalizeEntry(idx, stateFrom(content, clean, firstChapter.entryScene, '@entry'));
+      walkGame(idx, content, st, `clean:${i}:${rng.int(0, 1_000_000)}`, cleanReached, cleanErrors);
     }
   }
 
@@ -298,7 +285,68 @@ export function fuzzDialogue(content: ContentBundle, personalityCount = 300): Fu
     unreachableNodes,
     errors,
     lineCoverage: lineNodes.length === 0 ? 1 : reachedLines / lineNodes.length,
+    cleanCoverage:
+      lineNodes.length === 0 ? 1 : lineNodes.filter((k) => cleanReached.has(k)).length / lineNodes.length,
+    cleanRuns,
+    cleanOnlyUnreachable: lineNodes.filter((k) => reached.has(k) && !cleanReached.has(k)),
     totalLines: lineNodes.length,
     reachedLines,
   };
+}
+
+/**
+ * Один проход по игре от заданного состояния: тапает пузыри, случайно выбирает
+ * варианты, бросает исход боя, проживает настоящую смерть движка.
+ * Всё через движковые advance/choose/applyDeath — иначе эффекты выборов
+ * не переносятся дальше по пути, и ветки, которые ими открываются, числятся
+ * недостижимыми.
+ */
+function walkGame(
+  idx: ReturnType<typeof indexContent>,
+  content: ContentBundle,
+  start: GameState,
+  seed: string,
+  reached: Set<string>,
+  errors: FuzzReport['errors'],
+): void {
+  const rng = new Rng(seed);
+  let st = start;
+  for (let steps = 0; steps < 400; steps++) {
+    const r = resolve(idx, st);
+    st = r.state;
+    for (const key of st.seenNodes) reached.add(key);
+    if (r.step.kind === 'error') {
+      errors.push({ scene: st.scene, node: st.node, message: r.step.message });
+      return;
+    }
+    if (r.step.kind === 'end') return;
+    if (r.step.kind === 'bubble') {
+      st = advance(idx, st);
+      continue;
+    }
+    if (r.step.kind === 'choice') {
+      const pick = rng.pick(r.step.options);
+      if (!pick) return;
+      st = choose(idx, st, pick.id);
+      continue;
+    }
+    if (r.step.kind === 'battle') {
+      const battleNode = r.step.node;
+      const won = rng.chance(0.75);
+      const def = content.battles.find((b) => b.id === battleNode.battle);
+      if (won && def?.rewards) st = applyEffects(st, def.rewards, idx.effectCtx);
+      st = normalizeEntry(idx, goTo(st, won ? battleNode.onWin : battleNode.onLose));
+      continue;
+    }
+    if (r.step.kind === 'death') {
+      const deathId = r.step.node.death;
+      const death = content.deaths.find((d) => d.id === deathId);
+      if (!death) {
+        errors.push({ scene: st.scene, node: st.node, message: `Нет смерти ${deathId}` });
+        return;
+      }
+      st = applyDeath(st, content, death, idx.effectCtx).state;
+      continue;
+    }
+  }
 }
