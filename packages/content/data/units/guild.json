@@ -7,7 +7,7 @@
     "faction": "greedy_memory_guild",
     "tier": 1,
     "row": "front",
-    "stats": { "hp": 33, "atk": 12, "def": 4, "initiative": 13 },
+    "stats": { "hp": 32, "atk": 11, "def": 4, "initiative": 13 },
     "abilities": ["barefoot_rush", "pick_the_pocket"],
     "evolvesTo": "guild_hoarder_vey",
     "evolveAt": 250,
@@ -22,7 +22,7 @@
     "faction": "greedy_memory_guild",
     "tier": 2,
     "row": "back",
-    "stats": { "hp": 50, "atk": 15, "def": 8, "initiative": 12 },
+    "stats": { "hp": 47, "atk": 13, "def": 8, "initiative": 12 },
     "abilities": ["borrowed_grief", "coin_sling", "raise_the_rate"],
     "evolvesTo": "memory_thief_orsa",
     "evolveAt": 700,
@@ -37,8 +37,8 @@
     "faction": "greedy_memory_guild",
     "tier": 3,
     "row": "back",
-    "stats": { "hp": 76, "atk": 23, "def": 11, "initiative": 15 },
-    "abilities": ["pledge", "borrowed_grief", "grey_dust"],
+    "stats": { "hp": 70, "atk": 18, "def": 10, "initiative": 15 },
+    "abilities": ["pledge", "borrowed_grief", "grey_dust", "plain_strike"],
     "recruitable": { "kind": "axis", "axis": "grasp_release", "op": "gte", "value": 40 },
     "traits": ["mage", "breaker"]
   }
