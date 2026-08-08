@@ -209,7 +209,7 @@
           "id": "still",
           "text": { "ru": "Стоять и ничего не трогать.", "en": "Stand still and touch nothing." },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 8 }],
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 15 }],
           "to": "stood"
         },
         {

@@ -85,6 +85,7 @@
           "id": "find_own_line",
           "text": { "ru": "Искать свою строку.", "en": "Look for my own line." },
           "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 3 }],
           "to": "r_own_line"
         },
         {
@@ -132,7 +133,7 @@
           "id": "close_book",
           "conditions": { "kind": "axis", "axis": "grasp_release", "op": "lte", "value": -30 },
           "text": { "ru": "Закрыть книгу. Это не моё чтение.", "en": "Shut the book. This is not mine to read." },
-          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -8 }],
+          "effects": [ { "kind": "axis", "axis": "reason_obsession", "delta": 8 },{ "kind": "axis", "axis": "grasp_release", "delta": -8 }],
           "to": "r_closed",
           "priority": 5
         },

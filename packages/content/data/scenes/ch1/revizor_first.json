@@ -260,7 +260,7 @@
           "id": "go_down",
           "text": { "ru": "Идти вниз. Пятеро так пятеро.", "en": "Go down. Five is five." },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": 3 }],
+          "effects": [ { "kind": "axis", "axis": "reason_obsession", "delta": 3 },{ "kind": "axis", "axis": "grasp_release", "delta": 3 }],
           "to": "met"
         },
         {

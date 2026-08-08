@@ -27,7 +27,6 @@ DIVIDER = os.path.join(PACK, "Divider Fade")
 
 # Палитра «Заклад» — 1:1 из palette.css. Ключ = имя переменной CSS.
 PALETTE = {
-    "line": "#372f3d",
     "text-faint": "#6b6470",
     "accent-dim": "#8a6f1c",
     "tier-1": "#6b6470",
@@ -75,9 +74,10 @@ if __name__ == "__main__":
     border("015", "tier-1", "frame-tier-1.png")  # голая рамка
     border("001", "tier-2", "frame-tier-2.png")  # + угловые квадраты
     border("002", "tier-3", "frame-tier-3.png")  # + угловые узлы
-    # Панели и кнопки — та же форма 001, три тона по громкости элемента.
-    border("001", "line", "frame-panel.png")  # стопка кнопок выбора: тихо
-    border("001", "text-faint", "frame-panel-lit.png")  # одиночные мелкие цели
+    # Панели и кнопки — та же форма 001, два тона по громкости элемента.
+    # Вариант в --line пробовал и выбросил: на --surface он почти не читался,
+    # угловой орнамент выглядел артефактом рендера, а не решением.
+    border("001", "text-faint", "frame-panel.png")  # обычная тапаемая цель
     border("001", "accent-dim", "frame-accent.png")  # активное/главное
     # Рамка «памяти» на экране смерти — форма тира 3 в цвете --memory.
     border("002", "memory", "frame-memory.png")

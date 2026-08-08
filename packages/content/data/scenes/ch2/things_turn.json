@@ -88,7 +88,7 @@
           "id": "put_back",
           "text": { "ru": "Поставить всё, как стояло.", "en": "Put everything back as it stood." },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -8 }],
+          "effects": [ { "kind": "axis", "axis": "reason_obsession", "delta": 8 },{ "kind": "axis", "axis": "grasp_release", "delta": -8 }],
           "to": "r_put_back"
         },
         {
@@ -118,7 +118,7 @@
           "text": { "ru": "Переписать чулан целиком. По полкам.", "en": "Inventory the whole storeroom. Shelf by shelf." },
           "effects": [
             { "kind": "fragment", "memory": "opis_vsego_sushchego", "amount": 2 },
-            { "kind": "axis", "axis": "reason_obsession", "delta": -12 },
+            { "kind": "axis", "axis": "reason_obsession", "delta": -8 },
             { "kind": "counter", "counter": "nights_awake", "delta": 1 }
           ],
           "to": "r_listed",

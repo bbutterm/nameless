@@ -157,7 +157,7 @@
           "id": "refuse",
           "text": { "ru": "Не отвечать. Спускаться дальше.", "en": "Not answer. Go on down." },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": 3 }],
+          "effects": [ { "kind": "axis", "axis": "reason_obsession", "delta": 3 },{ "kind": "axis", "axis": "grasp_release", "delta": 3 }],
           "to": "rev_refused"
         },
         {
@@ -166,7 +166,7 @@
           "text": { "ru": "У меня переписан ящик. Сверяйтесь по нему.", "en": "I copied the drawer. Reconcile against mine." },
           "effects": [
             { "kind": "fragment", "memory": "opis_vsego_sushchego", "amount": 2 },
-            { "kind": "axis", "axis": "reason_obsession", "delta": -12 }
+            { "kind": "axis", "axis": "reason_obsession", "delta": -8 }
           ],
           "to": "rev_copy",
           "priority": 6
@@ -343,7 +343,7 @@
           "id": "wade_past",
           "text": { "ru": "Пройти мимо по воде.", "en": "Wade past him." },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": 3 }],
+          "effects": [ { "kind": "axis", "axis": "reason_obsession", "delta": 3 },{ "kind": "axis", "axis": "grasp_release", "delta": 3 }],
           "to": "rev_past"
         },
         {

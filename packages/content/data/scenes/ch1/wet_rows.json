@@ -108,7 +108,7 @@
         {
           "id": "decline",
           "text": { "ru": "Отказаться.", "en": "Decline." },
-          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 5 }],
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 8 }],
           "to": "r_declined"
         },
         {
@@ -551,6 +551,7 @@
         {
           "id": "refuse_key",
           "text": { "ru": "Обойтись без ключа.", "en": "Do without the key." },
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 8 }],
           "to": "r_key_none"
         },
         {
@@ -595,7 +596,7 @@
           "id": "leave_hostile",
           "text": { "ru": "Уйти, пока не пересчитали склянки.", "en": "Leave before they count the flasks." },
           "conditions": { "kind": "flag", "flag": "zhichka_hostile" },
-          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -3 }],
+          "effects": [ { "kind": "axis", "axis": "reason_obsession", "delta": 3 },{ "kind": "axis", "axis": "grasp_release", "delta": -3 }],
           "to": "r_key_none"
         }
       ]

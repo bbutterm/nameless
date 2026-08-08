@@ -139,7 +139,7 @@
           "id": "bid_out",
           "text": { "ru": "Не торговаться. Смотреть, кто купит.", "en": "Do not bid. Watch who buys." },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -3 }],
+          "effects": [ { "kind": "axis", "axis": "reason_obsession", "delta": 3 },{ "kind": "axis", "axis": "grasp_release", "delta": -3 }],
           "to": "r_bid_out"
         },
         {
@@ -376,6 +376,7 @@
           "id": "leave_quiet",
           "text": { "ru": "Уйти, пока считают выручку.", "en": "Leave while they are counting the take." },
           "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 8 }],
           "to": "r_leave_quiet"
         },
         {
@@ -402,7 +403,7 @@
           },
           "effects": [
             { "kind": "fragment", "memory": "eda_ne_vnesena", "amount": 2 },
-            { "kind": "axis", "axis": "reason_obsession", "delta": -15 },
+            { "kind": "axis", "axis": "reason_obsession", "delta": -8 },
             { "kind": "counter", "counter": "nights_awake", "delta": 1 }
           ],
           "to": "r_copy_list",

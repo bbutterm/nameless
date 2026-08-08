@@ -411,6 +411,11 @@
           "effects": [
             {
               "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": 3
+            },
+            {
+              "kind": "axis",
               "axis": "mercy_cruelty",
               "delta": 8
             }

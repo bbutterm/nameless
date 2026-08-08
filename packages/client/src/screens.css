@@ -113,20 +113,12 @@
   gap: 8px;
 }
 .setting { display: flex; align-items: center; justify-content: space-between; color: var(--text-dim); font-size: 15px; }
-/* Сегменты настроек — тоже тапабельная плашка, и рамка у неё из той же семьи.
-   overflow:hidden убран: он срезал бы угловой орнамент рамки. */
-.seg { position: relative; display: flex; border: none; border-radius: var(--r-sm); }
-.seg::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  border: 7px solid transparent;
-  border-image: url('../../content/assets/ui/nameless/frame-panel-lit.png') 16 / 7px stretch;
-}
-.seg button:first-child { border-radius: var(--r-sm) 0 0 var(--r-sm); }
-.seg button:last-child { border-radius: 0 var(--r-sm) var(--r-sm) 0; }
+/* Сегменты настроек рамку Kenney НЕ получают — пробовал, откатил.
+   Переключатель 52×36 слишком мелкий: угловой орнамент занимает 7px из 36,
+   а `overflow: hidden` (без него заливка активного сегмента вылезала из-под
+   рамки) орнамент срезает. Плюс рамка вокруг пары сегментов читалась как одна
+   кнопка, а не как переключатель. Тонкая линия здесь честнее. */
+.seg { display: flex; border: 1px solid var(--line); border-radius: var(--r-sm); overflow: hidden; }
 .seg button { min-width: 52px; min-height: 36px; padding: 0 10px; color: var(--text-dim); font-size: 14px; }
 .seg button.on { background: var(--surface-hi); color: var(--accent); }
 
@@ -329,7 +321,7 @@
 }
 .choice::after {
   border-width: 8px;
-  border-image-source: url('../../content/assets/ui/nameless/frame-panel-lit.png');
+  border-image-source: url('../../content/assets/ui/nameless/frame-panel.png');
   border-image-width: 8px;
 }
 /* Нажатие теперь читается не только сжатием, но и цветом рамки: та же форма
@@ -607,7 +599,7 @@
 }
 .ability::after {
   border-width: 7px;
-  border-image-source: url('../../content/assets/ui/nameless/frame-panel-lit.png');
+  border-image-source: url('../../content/assets/ui/nameless/frame-panel.png');
   border-image-width: 7px;
 }
 .ability.active { color: var(--accent); background: var(--surface-hi); }
@@ -772,7 +764,7 @@
 }
 .archive-button::after {
   border-width: 9px;
-  border-image-source: url('../../content/assets/ui/nameless/frame-panel-lit.png');
+  border-image-source: url('../../content/assets/ui/nameless/frame-panel.png');
   border-image-width: 9px;
 }
 .sheet-backdrop {
@@ -821,7 +813,7 @@
 }
 .sheet-tabs button::after {
   border-width: 8px;
-  border-image-source: url('../../content/assets/ui/nameless/frame-panel-lit.png');
+  border-image-source: url('../../content/assets/ui/nameless/frame-panel.png');
   border-image-width: 8px;
 }
 .sheet-tabs button.on { color: var(--accent); background: var(--surface); }
@@ -841,7 +833,9 @@
   position: relative;
   border: none;
   border-radius: var(--r-sm);
-  padding: 6px 6px 4px;
+  /* 7px снизу — под нижнюю грань рамки: строка «зад · Уровень 1» ложилась
+     ровно на линию орнамента. */
+  padding: 6px 7px 7px;
   background: var(--bg-2);
 }
 .party-item::after {

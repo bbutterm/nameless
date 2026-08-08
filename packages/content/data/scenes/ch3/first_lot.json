@@ -64,7 +64,7 @@
           "id": "read_first",
           "text": { "ru": "Сначала прочитать, потом трогать.", "en": "Read first, touch after." },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 3 }],
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 8 }],
           "to": "sheet_one"
         },
         {
@@ -285,7 +285,7 @@
           "id": "leave_bundle",
           "text": { "ru": "Оставить на полке. Как лежало.", "en": "Leave it on the shelf. As it lay." },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -15 }],
+          "effects": [ { "kind": "axis", "axis": "reason_obsession", "delta": 8 },{ "kind": "axis", "axis": "grasp_release", "delta": -15 }],
           "to": "r_left"
         },
         {

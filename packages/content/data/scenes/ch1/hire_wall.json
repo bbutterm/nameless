@@ -996,6 +996,13 @@
           },
           "priority": 10,
           "fallback": true,
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": 3
+            }
+          ],
           "to": "scene:zaklad_hub"
         }
       ]

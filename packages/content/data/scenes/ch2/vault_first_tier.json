@@ -161,7 +161,7 @@
             {
               "kind": "axis",
               "axis": "reason_obsession",
-              "delta": 5
+              "delta": 8
             },
             {
               "kind": "counter",
@@ -514,6 +514,11 @@
           "effects": [
             {
               "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": 3
+            },
+            {
+              "kind": "axis",
               "axis": "grasp_release",
               "delta": -5
             }
@@ -584,7 +589,7 @@
             {
               "kind": "axis",
               "axis": "reason_obsession",
-              "delta": -15
+              "delta": -8
             },
             {
               "kind": "counter",
@@ -704,6 +709,11 @@
             "value": -30
           },
           "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": 3
+            },
             {
               "kind": "axis",
               "axis": "grasp_release",

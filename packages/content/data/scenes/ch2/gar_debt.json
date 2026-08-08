@@ -75,7 +75,7 @@
           "id": "step_aside",
           "text": { "ru": "Отойти к стене и дать пройти.", "en": "Step to the wall and let them pass." },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -3 }],
+          "effects": [ { "kind": "axis", "axis": "reason_obsession", "delta": 3 },{ "kind": "axis", "axis": "grasp_release", "delta": -3 }],
           "to": "r_aside"
         },
         {
@@ -240,7 +240,7 @@
           "id": "send_it_back",
           "text": { "ru": "Отправить его обратно в задний ряд.", "en": "Send it back to the rear rank." },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -8 }],
+          "effects": [ { "kind": "axis", "axis": "reason_obsession", "delta": 3 },{ "kind": "axis", "axis": "grasp_release", "delta": -8 }],
           "to": "r_send_back"
         },
         {

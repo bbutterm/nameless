@@ -133,6 +133,11 @@
           "fallback": true,
           "effects": [
             {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": 3
+            },
+            {
               "kind": "gold",
               "delta": 9
             },
@@ -527,6 +532,11 @@
           },
           "fallback": true,
           "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": 3
+            },
             {
               "kind": "axis",
               "axis": "grasp_release",

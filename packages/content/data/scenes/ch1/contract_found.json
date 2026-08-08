@@ -330,6 +330,7 @@
           },
           "fallback": true,
           "effects": [
+            { "kind": "axis", "axis": "reason_obsession", "delta": 8 },
             { "kind": "flag", "flag": "contract_taken", "value": false },
             { "kind": "flag", "flag": "contract_left", "value": true },
             { "kind": "axis", "axis": "grasp_release", "delta": -8 }

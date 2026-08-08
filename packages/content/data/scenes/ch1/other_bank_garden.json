@@ -379,7 +379,7 @@
           "text": { "ru": "Перекопать захоронение вещей.", "en": "Dig up the burial of things." },
           "effects": [
             { "kind": "fragment", "memory": "punkt_pervyy", "amount": 1 },
-            { "kind": "axis", "axis": "reason_obsession", "delta": -12 },
+            { "kind": "axis", "axis": "reason_obsession", "delta": -8 },
             { "kind": "flag", "flag": "brotherhood_gate_shut", "value": true }
           ],
           "to": "r_dug_up"
@@ -387,7 +387,7 @@
         {
           "id": "leave_it",
           "text": { "ru": "Не трогать.", "en": "Leave it alone." },
-          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -5 }],
+          "effects": [ { "kind": "axis", "axis": "reason_obsession", "delta": 8 },{ "kind": "axis", "axis": "grasp_release", "delta": -5 }],
           "to": "r_left_graves"
         },
         {
@@ -411,7 +411,7 @@
           "id": "leave_while_open",
           "text": { "ru": "Уйти, пока калитка открыта.", "en": "Leave while the gate is open." },
           "conditions": { "kind": "flag", "flag": "brotherhood_welcome" },
-          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -3 }],
+          "effects": [ { "kind": "axis", "axis": "reason_obsession", "delta": 3 },{ "kind": "axis", "axis": "grasp_release", "delta": -3 }],
           "to": "r_left_graves"
         },
         {
