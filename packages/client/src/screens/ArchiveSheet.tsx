@@ -73,7 +73,9 @@ export function ArchiveSheet({
                         }
                       }}
                     >
-                      <img src={art} alt="" draggable={false} />
+                      <div className="party-thumb">
+                        <img src={art} alt="" draggable={false} />
+                      </div>
                       <div className="party-name">{def ? loc(def.name, lang) : u.defId}</div>
                       <div className="party-blurb">{def ? loc(def.blurb, lang) : ''}</div>
                       <div className="party-meta">

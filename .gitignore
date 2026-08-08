@@ -9,3 +9,7 @@ sim-reports/*.json
 !sim-reports/.gitkeep
 .env
 .env.local
+
+# Временные скрипты агентов
+.shotcand.mjs
+.tiershot.mjs

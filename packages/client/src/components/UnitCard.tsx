@@ -58,7 +58,14 @@ export function UnitCard({
       disabled={!unit.alive}
       aria-label={def ? loc(def.name, lang) : unit.defId}
     >
-      {art && <img className="card-art" src={art} alt="" draggable={false} />}
+      {/* Арт лежит в обойме с overflow: hidden — сама карточка обязана
+          оставаться overflow: visible ради цифр урона и значка намерения.
+          Подробности подрезки — в .card-art в screens.css. */}
+      {art && (
+        <div className="card-art-clip">
+          <img className="card-art" src={art} alt="" draggable={false} />
+        </div>
+      )}
       <div className="card-name">{def ? loc(def.name, lang) : unit.defId}</div>
 
       <div className="hp-bar">
