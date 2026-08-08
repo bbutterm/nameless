@@ -10,6 +10,7 @@ import type {
   UnitId,
 } from './types.js';
 import type { RngState } from './rng.js';
+import { levelFromXp } from './levels.js';
 
 /** Версия схемы сейва. Растёт при любом несовместимом изменении GameState. */
 export const SAVE_VERSION = 1;
@@ -168,11 +169,16 @@ export function applyEffect(state: GameState, effect: Effect, ctx?: EffectContex
     case 'gold':
       return { ...state, gold: Math.max(0, state.gold + effect.delta) };
     case 'xp':
+      // Уровень пересчитывается здесь же: иначе опыт, выданный наградой сцены,
+      // копился бы вхолостую — эволюция не срабатывала, а лечение упиралось
+      // в максимум старого уровня.
       return {
         ...state,
-        party: state.party.map((u) =>
-          effect.unit && u.defId !== effect.unit ? u : { ...u, xp: u.xp + effect.amount },
-        ),
+        party: state.party.map((u) => {
+          if (effect.unit && u.defId !== effect.unit) return u;
+          const xp = u.xp + effect.amount;
+          return { ...u, xp, level: levelFromXp(xp) };
+        }),
       };
     default: {
       const _exhaustive: never = effect;

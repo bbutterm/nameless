@@ -152,6 +152,16 @@ export function BattleScreen() {
         <span className="battle-title">{loc(content.battles.find((b) => b.id === battle.battleId)?.name, lang)}</span>
       </div>
 
+      {/* Подсказка боя стоит в потоке, над полем: всплывашка с anchor="top"
+          ложилась ровно на задний ряд врага и на первые 6.5 секунды первого
+          боя прятала и имена, и иконки намерений — то есть ровно то, о чём
+          сама же и рассказывает. */}
+      {!over && (
+        <div className="tutorial-slot">
+          <TutorialHint step="battle" lang={lang} anchor="flow" />
+        </div>
+      )}
+
       <div className="field">
         <div className="side enemy-side">
           {renderRow('enemy', 'back')}

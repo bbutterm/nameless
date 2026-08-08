@@ -44,13 +44,18 @@ export function useTutorial(step: TutorialStep | undefined): {
       setShow(false);
       return;
     }
-    const appear = setTimeout(() => setShow(true), 700);
+    // Отметку «показано» ставим в момент ПОКАЗА, а не в момент угасания.
+    // Раньше она стояла в таймере на 6.5 с, и его чистил размонтаж: игрок,
+    // который доходил до выбора быстрее шести секунд, никогда не «досматривал»
+    // подсказку до конца — и «Коснись экрана» всплывала заново после каждого
+    // выбора (замер: 9 раз за первые 12 выборов).
+    const appear = setTimeout(() => {
+      markSeen(step);
+      setShow(true);
+    }, 700);
     // Подсказка гаснет сама. Кликать по ней нельзя: всплывашка над кнопками
     // выбора и панелью способностей перехватывала бы тапы по самой игре.
-    const vanish = setTimeout(() => {
-      markSeen(step);
-      setShow(false);
-    }, 6500);
+    const vanish = setTimeout(() => setShow(false), 6500);
     return () => {
       clearTimeout(appear);
       clearTimeout(vanish);

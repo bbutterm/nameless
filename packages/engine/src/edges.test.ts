@@ -619,32 +619,42 @@ describe('границы: вырожденные сцены', () => {
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Известное расхождение: xp-эффект и уровень
+// Опыт из награды сцены поднимает уровень наравне с опытом из боя
 // ─────────────────────────────────────────────────────────────────────────────
 
-describe('известное расхождение: эффект xp не поднимает уровень', () => {
+describe('эффект xp поднимает уровень', () => {
   const ctx = { unitStats: () => ({ hp: 20, row: 'front' as const }) };
 
-  it('applyEffect(xp) копит опыт, но уровень остаётся прежним', () => {
+  it('applyEffect(xp) пересчитывает уровень по накопленному опыту', () => {
     const s = baseState({
       party: [{ uid: 'u', defId: 'd', hp: 20, xp: 0, level: 1, slot: { row: 'front', index: 0 } }],
     });
     const after = applyEffect(s, { kind: 'xp', amount: 400 }, ctx);
     expect(after.party[0]?.xp).toBe(400);
-    // Уровень по опыту был бы третьим, но applyEffect его не пересчитывает:
-    // это делает только grantXp после боя. Тест фиксирует текущий контракт —
-    // если поведение меняют, менять надо осознанно (см. docs/TEST_REPORT.md).
     expect(levelFromXp(400)).toBe(3);
-    expect(after.party[0]?.level).toBe(1);
+    // Раньше уровень пересчитывал только grantXp после боя, и опыт из награды
+    // сцены копился вхолостую (см. docs/TEST_REPORT.md, п. 5).
+    expect(after.party[0]?.level).toBe(3);
   });
 
-  it('следствие: лечение после xp-эффекта упирается в максимум СТАРОГО уровня', () => {
+  it('лечение после xp-эффекта видит максимум НОВОГО уровня', () => {
     let s = baseState({
       party: [{ uid: 'u', defId: 'd', hp: 5, xp: 0, level: 1, slot: { row: 'front', index: 0 } }],
     });
     s = applyEffect(s, { kind: 'xp', amount: 400 }, ctx);
     s = applyEffect(s, { kind: 'heal', amount: 999 }, ctx);
-    expect(s.party[0]?.hp).toBe(scaledMaxHp(20, 1));
-    expect(s.party[0]?.hp).toBeLessThan(scaledMaxHp(20, 3));
+    expect(s.party[0]?.hp).toBe(scaledMaxHp(20, 3));
+  });
+
+  it('опыт, выданный точечно по id юнита, чужих не трогает', () => {
+    const s = baseState({
+      party: [
+        { uid: 'a', defId: 'mine', hp: 20, xp: 0, level: 1, slot: { row: 'front', index: 0 } },
+        { uid: 'b', defId: 'other', hp: 20, xp: 0, level: 1, slot: { row: 'back', index: 0 } },
+      ],
+    });
+    const after = applyEffect(s, { kind: 'xp', unit: 'mine', amount: 400 }, ctx);
+    expect(after.party[0]?.level).toBe(3);
+    expect(after.party[1]?.level).toBe(1);
   });
 });

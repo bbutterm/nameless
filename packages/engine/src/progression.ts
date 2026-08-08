@@ -1,16 +1,9 @@
 import type { ContentBundle, DeathDef, Memory, MemoryId, PastLife, UnitDef } from './types.js';
 import { applyEffects, scaledMaxHp, type EffectContext, type GameState } from './state.js';
 
-/** Опыт для следующего уровня: 100, 250, 450, 700… */
-export function xpForLevel(level: number): number {
-  return Math.round(50 * level * (level + 1));
-}
+import { levelFromXp } from './levels.js';
 
-export function levelFromXp(xp: number): number {
-  let lvl = 1;
-  while (lvl < 10 && xp >= xpForLevel(lvl)) lvl++;
-  return lvl;
-}
+export { levelFromXp, xpForLevel, MAX_LEVEL } from './levels.js';
 
 export interface ProgressionResult {
   state: GameState;
