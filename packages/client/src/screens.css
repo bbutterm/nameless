@@ -329,7 +329,7 @@
 }
 .choice::after {
   border-width: 8px;
-  border-image-source: url('../../content/assets/ui/nameless/frame-panel.png');
+  border-image-source: url('../../content/assets/ui/nameless/frame-panel-lit.png');
   border-image-width: 8px;
 }
 /* Нажатие теперь читается не только сжатием, но и цветом рамки: та же форма
