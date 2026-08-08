@@ -37,7 +37,7 @@
     "faction": "great_pawnshop",
     "tier": 3,
     "row": "front",
-    "stats": { "hp": 100, "atk": 19, "def": 17, "initiative": 8 },
+    "stats": { "hp": 96, "atk": 19, "def": 16, "initiative": 8 },
     "abilities": ["key_in_the_lock", "stand_in_the_doorway", "write_off", "plain_strike"],
     "recruitable": { "kind": "never" },
     "traits": ["shield", "guard"]
@@ -50,7 +50,7 @@
     "faction": "great_pawnshop",
     "tier": 2,
     "row": "back",
-    "stats": { "hp": 45, "atk": 13, "def": 7, "initiative": 13 },
+    "stats": { "hp": 45, "atk": 14, "def": 7, "initiative": 13 },
     "abilities": ["appraisal", "fading", "coin_sling"],
     "recruitable": { "kind": "axis", "axis": "honesty_deceit", "op": "gte", "value": 40 },
     "traits": ["breaker"]

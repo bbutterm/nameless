@@ -7,7 +7,7 @@
     "target": "ally_one",
     "power": 0,
     "cooldown": 2,
-    "effects": [{ "kind": "shield", "amount": 14, "turns": 2 }],
+    "effects": [{ "kind": "shield", "amount": 9, "turns": 2 }],
     "anim": "buff"
   },
   {

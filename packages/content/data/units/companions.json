@@ -8,7 +8,7 @@
     "tier": 1,
     "row": "front",
     "stats": { "hp": 45, "atk": 12, "def": 8, "initiative": 8 },
-    "abilities": ["stand_in_the_doorway", "plain_strike", "debt_collection"],
+    "abilities": ["stand_in_the_doorway", "barefoot_rush", "debt_collection"],
     "traits": ["starter", "shield"]
   },
   {

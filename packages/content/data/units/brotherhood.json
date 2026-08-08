@@ -37,7 +37,7 @@
     "faction": "clear_head_brotherhood",
     "tier": 3,
     "row": "front",
-    "stats": { "hp": 90, "atk": 20, "def": 15, "initiative": 9 },
+    "stats": { "hp": 96, "atk": 22, "def": 15, "initiative": 9 },
     "abilities": ["white_book_reading", "stand_in_the_doorway", "barefoot_rush"],
     "recruitable": { "kind": "never" },
     "traits": ["shield", "healer", "no_back_row"]

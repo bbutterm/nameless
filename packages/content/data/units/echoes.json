@@ -7,7 +7,7 @@
     "faction": "echo",
     "tier": 2,
     "row": "back",
-    "stats": { "hp": 46, "atk": 17, "def": 6, "initiative": 12 },
+    "stats": { "hp": 46, "atk": 18, "def": 6, "initiative": 12 },
     "abilities": ["smoke_of_ples", "ember_spit"],
     "traits": ["echo", "life_smolokur", "fear"]
   },
@@ -44,7 +44,7 @@
     "tier": 2,
     "row": "back",
     "stats": { "hp": 52, "atk": 16, "def": 6, "initiative": 13 },
-    "abilities": ["inventory", "appraisal", "coin_sling"],
+    "abilities": ["inventory", "appraisal", "hook_shot"],
     "traits": ["echo", "life_chistopisets", "reveals_intent"]
   }
 ]

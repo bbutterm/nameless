@@ -1,0 +1,58 @@
+{
+  "id": "audit_arrives",
+  "chapter": 3,
+  "title": { "ru": "Ревизия пришла", "en": "The Audit Has Arrived" },
+  "tags": ["stub", "chapter3"],
+  "entry": "a1",
+  "nodes": [
+    {
+      "kind": "narration",
+      "id": "a1",
+      "text": {
+        "ru": "Очереди нет. Впервые за четыреста лет у Великого Ломбарда нет очереди.",
+        "en": "There is no queue. For the first time in four hundred years, the Great Pawnshop has no queue."
+      },
+      "next": "a2"
+    },
+    {
+      "kind": "narration",
+      "id": "a2",
+      "text": {
+        "ru": "В зале Учёта горят все свечи разом. Так делают, когда сверяют, а не когда торгуют.",
+        "en": "Every candle in the Ledger Hall is lit at once. That is done for reckoning, not for trade."
+      },
+      "keywords": [{ "match": { "ru": "сверяют", "en": "reckoning" }, "tone": "danger" }],
+      "next": "a3"
+    },
+    {
+      "kind": "say",
+      "id": "a3",
+      "speaker": "revizor",
+      "text": {
+        "ru": "Расхождение: одно. Возраст расхождения: весь. Виновных: один.",
+        "en": "Discrepancies: one. Age of discrepancy: all of it. Parties at fault: one."
+      },
+      "next": "a4"
+    },
+    {
+      "kind": "say",
+      "id": "a4",
+      "speaker": "revizor",
+      "text": {
+        "ru": "Присаживайтесь. У вас теперь много времени и один вопрос.",
+        "en": "Do sit down. You have a great deal of time now, and a single question."
+      },
+      "next": "a5"
+    },
+    {
+      "kind": "narration",
+      "id": "a5",
+      "text": {
+        "ru": "У него стало больше лица, чем в прошлый раз. На третью главу здесь пока заперто.",
+        "en": "He has more face than last time. The third chapter is still locked from this side."
+      },
+      "next": "a6"
+    },
+    { "kind": "end", "id": "a6" }
+  ]
+}
