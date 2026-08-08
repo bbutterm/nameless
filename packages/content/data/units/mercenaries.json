@@ -14,7 +14,7 @@
     "tier": 1,
     "row": "front",
     "stats": {
-      "hp": 41,
+      "hp": 38,
       "atk": 10,
       "def": 9,
       "initiative": 9
@@ -51,9 +51,9 @@
     "tier": 2,
     "row": "back",
     "stats": {
-      "hp": 50,
-      "atk": 14,
-      "def": 7,
+      "hp": 45,
+      "atk": 17,
+      "def": 6,
       "initiative": 12
     },
     "abilities": [
@@ -88,7 +88,7 @@
     "row": "front",
     "stats": {
       "hp": 38,
-      "atk": 11,
+      "atk": 8,
       "def": 5,
       "initiative": 12
     },
@@ -123,7 +123,7 @@
     "row": "back",
     "stats": {
       "hp": 45,
-      "atk": 15,
+      "atk": 17,
       "def": 6,
       "initiative": 11
     },
@@ -157,10 +157,10 @@
     "tier": 1,
     "row": "back",
     "stats": {
-      "hp": 28,
-      "atk": 7,
+      "hp": 34,
+      "atk": 8,
       "def": 3,
-      "initiative": 13
+      "initiative": 11
     },
     "abilities": [
       "inventory",
@@ -193,7 +193,7 @@
     "row": "front",
     "stats": {
       "hp": 51,
-      "atk": 13,
+      "atk": 18,
       "def": 9,
       "initiative": 10
     },
@@ -228,7 +228,7 @@
     "tier": 1,
     "row": "back",
     "stats": {
-      "hp": 34,
+      "hp": 33,
       "atk": 8,
       "def": 3,
       "initiative": 12
@@ -264,9 +264,9 @@
     "row": "front",
     "stats": {
       "hp": 51,
-      "atk": 12,
+      "atk": 18,
       "def": 8,
-      "initiative": 12
+      "initiative": 10
     },
     "abilities": [
       "pledge",
@@ -336,9 +336,9 @@
     "row": "back",
     "stats": {
       "hp": 45,
-      "atk": 12,
+      "atk": 16,
       "def": 6,
-      "initiative": 13
+      "initiative": 11
     },
     "abilities": [
       "inventory",
@@ -371,10 +371,10 @@
     "tier": 1,
     "row": "front",
     "stats": {
-      "hp": 39,
+      "hp": 42,
       "atk": 9,
       "def": 6,
-      "initiative": 12
+      "initiative": 11
     },
     "abilities": [
       "barefoot_rush",
@@ -406,9 +406,9 @@
     "tier": 2,
     "row": "back",
     "stats": {
-      "hp": 45,
-      "atk": 14,
-      "def": 8,
+      "hp": 46,
+      "atk": 18,
+      "def": 7,
       "initiative": 10
     },
     "abilities": [
@@ -442,7 +442,7 @@
     "tier": 1,
     "row": "front",
     "stats": {
-      "hp": 47,
+      "hp": 41,
       "atk": 12,
       "def": 9,
       "initiative": 8
@@ -478,8 +478,8 @@
     "tier": 2,
     "row": "front",
     "stats": {
-      "hp": 65,
-      "atk": 16,
+      "hp": 72,
+      "atk": 18,
       "def": 12,
       "initiative": 8
     },
@@ -514,8 +514,8 @@
     "tier": 1,
     "row": "front",
     "stats": {
-      "hp": 42,
-      "atk": 12,
+      "hp": 43,
+      "atk": 11,
       "def": 7,
       "initiative": 10
     },
@@ -549,8 +549,8 @@
     "tier": 2,
     "row": "front",
     "stats": {
-      "hp": 59,
-      "atk": 15,
+      "hp": 72,
+      "atk": 18,
       "def": 12,
       "initiative": 9
     },

@@ -670,6 +670,7 @@
 }
 .tutorial-bottom { bottom: calc(84px + var(--safe-bottom)); }
 .tutorial-center { top: 42%; }
+.tutorial-top { top: calc(52px + var(--safe-top)); }
 .tutorial-text { font-size: 16px; line-height: 1.35; }
 .tutorial-skip {
   margin-top: 6px;

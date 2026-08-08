@@ -193,31 +193,22 @@ export function GameProvider({ children }: { children: ReactNode }) {
     [state, step, commit],
   );
 
-  const battleAct = useCallback(
-    (action: Action) => {
-      setBattle((b) => {
-        if (!b || b.outcome !== 'ongoing' || !isPlayerTurn(b)) return b;
-        let next = act(combat, b, action);
-        // Боты ходят сами, пока очередь снова не дойдёт до игрока.
-        let guard = 0;
-        while (next.outcome === 'ongoing' && !isPlayerTurn(next) && guard++ < 64) {
-          next = autoAct(combat, next);
-        }
-        return next;
-      });
-    },
-    [],
-  );
+  const battleAct = useCallback((action: Action) => {
+    setBattle((b) => {
+      if (!b || b.outcome !== 'ongoing' || !isPlayerTurn(b)) return b;
+      return act(combat, b, action);
+    });
+  }, []);
 
+  /**
+   * Один ход бота. Экран боя вызывает это по таймеру, пока очередь не дойдёт до
+   * игрока: прокручивать все вражеские ходы разом нельзя — тогда игрок увидит
+   * только итог, без рывков карт и всплывающих цифр.
+   */
   const battleAuto = useCallback(() => {
     setBattle((b) => {
-      if (!b || b.outcome !== 'ongoing') return b;
-      let next = autoAct(combat, b);
-      let guard = 0;
-      while (next.outcome === 'ongoing' && !isPlayerTurn(next) && guard++ < 64) {
-        next = autoAct(combat, next);
-      }
-      return next;
+      if (!b || b.outcome !== 'ongoing' || isPlayerTurn(b)) return b;
+      return autoAct(combat, b);
     });
   }, []);
 

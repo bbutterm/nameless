@@ -63,6 +63,11 @@ for (let step = 0; step < 1600; step++) {
 
   // Бой.
   if (await page.locator('.screen.battle').count()) {
+    if (await page.locator('.tutorial').count()) {
+      await page.locator('.tutorial').click();
+      await page.waitForTimeout(120);
+      continue;
+    }
     if (battles === 0) {
       battles++;
       await page.waitForTimeout(400);

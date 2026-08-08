@@ -23,7 +23,7 @@ type Anim = Record<string, 'lunge-up' | 'lunge-down' | 'hit' | 'die' | undefined
 let floatId = 0;
 
 export function BattleScreen() {
-  const { battle, lang, battleAct, finishBattle } = useGame();
+  const { battle, lang, battleAct, battleAuto, finishBattle } = useGame();
   const [selectedAbility, setSelectedAbility] = useState<Ability>();
   const [anims, setAnims] = useState<Anim>({});
   const [floats, setFloats] = useState<FloatingNumber[]>([]);
@@ -76,6 +76,15 @@ export function BattleScreen() {
       clearTimeout(clearFloats);
     };
   }, [battle]);
+
+  // Ходы противника прокручиваются по одному, с паузой на анимацию.
+  // Без этого бой замирал: если первым по инициативе идёт враг, ходить было некому.
+  const waitingForBots = !!battle && battle.outcome === 'ongoing' && !isPlayerTurn(battle);
+  useEffect(() => {
+    if (!waitingForBots) return;
+    const timer = setTimeout(battleAuto, 480);
+    return () => clearTimeout(timer);
+  }, [waitingForBots, battle, battleAuto]);
 
   if (!battle) return null;
 
@@ -177,7 +186,7 @@ export function BattleScreen() {
         </div>
       )}
 
-      {!over && <TutorialHint step="battle" lang={lang} />}
+      {!over && <TutorialHint step="battle" lang={lang} anchor="top" />}
 
       {over && (
         <div className="battle-over">

@@ -90,7 +90,30 @@
     "effects": [
       {
         "kind": "heal",
-        "power": 1.0
+        "power": 1.6
+      }
+    ],
+    "anim": "buff"
+  },
+  {
+    "id": "burst_for_him",
+    "name": {
+      "ru": "Лопнуть за него",
+      "en": "Burst in His Stead"
+    },
+    "description": {
+      "ru": "Мираж встаёт под удар и лопается с обидным звуком.",
+      "en": "The mirage steps under the blow and bursts with an insulting sound."
+    },
+    "icon": "shield",
+    "target": "ally_one",
+    "power": 0,
+    "cooldown": 2,
+    "effects": [
+      {
+        "kind": "shield",
+        "amount": 36,
+        "turns": 2
       }
     ],
     "anim": "buff"
@@ -112,7 +135,7 @@
     "effects": [
       {
         "kind": "heal",
-        "power": 0.3
+        "power": 0.25
       }
     ],
     "anim": "cast"

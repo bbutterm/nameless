@@ -14,10 +14,10 @@
     "tier": 2,
     "row": "back",
     "stats": {
-      "hp": 45,
-      "atk": 12,
-      "def": 6,
-      "initiative": 12
+      "hp": 47,
+      "atk": 18,
+      "def": 7,
+      "initiative": 10
     },
     "abilities": [
       "smoke_of_ples",
@@ -80,8 +80,8 @@
       "initiative": 9
     },
     "abilities": [
+      "burst_for_him",
       "promise_note",
-      "i_will_hold_it",
       "paper_slap"
     ],
     "traits": [
@@ -106,9 +106,9 @@
     "row": "back",
     "stats": {
       "hp": 45,
-      "atk": 12,
+      "atk": 18,
       "def": 6,
-      "initiative": 13
+      "initiative": 11
     },
     "abilities": [
       "inventory",
