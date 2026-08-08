@@ -31,6 +31,10 @@ function effectWrites(effects: Effect[] | undefined, out: ReturnType<typeof empt
       case 'dismiss':
         out.units.add(e.unit);
         break;
+      case 'heal':
+      case 'xp':
+        if (e.unit) out.units.add(e.unit);
+        break;
       default:
         break;
     }
@@ -70,6 +74,65 @@ function sceneTargets(scene: Scene): { node: string; to: string }[] {
   return out;
 }
 
+/** Эффекты, дающие юнита в отряд, — для проверки «юнита нельзя получить». */
+function noteRecruits(effects: Effect[] | undefined, out: Set<string>): void {
+  for (const e of effects ?? []) {
+    if (e.kind === 'recruit') out.add(e.unit);
+  }
+}
+
+/**
+ * Условие, которое не выполнится НИ ПРИ КАКОМ состоянии: never в цепочке all,
+ * сравнение оси за пределами [-100, 100] и т.п. Такой вариант/ветка — мёртвый текст.
+ */
+function staticallyImpossible(cond: Condition | undefined): boolean {
+  if (!cond) return false;
+  switch (cond.kind) {
+    case 'never':
+      return true;
+    case 'all':
+      return cond.of.some((c) => staticallyImpossible(c));
+    case 'any':
+      return cond.of.every((c) => staticallyImpossible(c));
+    case 'not':
+      return staticallyAlways(cond.of);
+    case 'axis':
+      // Оси зажаты clampAxis в [-100, 100].
+      return (
+        (cond.op === 'gt' && cond.value >= 100) ||
+        (cond.op === 'gte' && cond.value > 100) ||
+        (cond.op === 'lt' && cond.value <= -100) ||
+        (cond.op === 'lte' && cond.value < -100) ||
+        (cond.op === 'eq' && Math.abs(cond.value) > 100)
+      );
+    default:
+      return false;
+  }
+}
+
+/** Условие, которое выполняется всегда — зеркало для not(...). */
+function staticallyAlways(cond: Condition): boolean {
+  switch (cond.kind) {
+    case 'always':
+      return true;
+    case 'all':
+      return cond.of.every((c) => staticallyAlways(c));
+    case 'any':
+      return cond.of.some((c) => staticallyAlways(c));
+    case 'not':
+      return staticallyImpossible(cond.of);
+    case 'axis':
+      return (
+        (cond.op === 'gte' && cond.value <= -100) ||
+        (cond.op === 'lte' && cond.value >= 100) ||
+        (cond.op === 'gt' && cond.value < -100) ||
+        (cond.op === 'lt' && cond.value > 100)
+      );
+    default:
+      return false;
+  }
+}
+
 /**
  * Ссылочная целостность: битые переходы, неизвестные id, недостижимые узлы,
  * флаги, которые читают, но никогда не пишут.
@@ -105,9 +168,35 @@ export function validateBundle(bundle: ContentBundle): Issue[] {
   dup('units', bundle.units.map((u) => u.id));
   dup('abilities', bundle.abilities.map((a) => a.id));
   dup('memories', bundle.memories.map((m) => m.id));
+  // Контент пишут несколько агентов параллельно — дубликаты возможны в любом реестре.
+  dup('battles', bundle.battles.map((b) => b.id));
+  dup('lives', bundle.lives.map((l) => l.id));
+  dup('deaths', bundle.deaths.map((d) => d.id));
+  dup('chapters', bundle.chapters.map((c) => c.id));
+  dup('axes', bundle.axes.map((a) => a.id));
+  dup('speakers', bundle.speakers.map((s) => s.id));
 
   const reads = emptyRefs();
   const writes = emptyRefs();
+  /** Юниты, которых игрок может получить recruit-эффектом. */
+  const recruitTargets = new Set<string>();
+
+  // Узлы, на которые ссылаются из других сцен через "scene:id#node", —
+  // законные точки входа: без этого учёта они ложно значились бы недостижимыми.
+  const externalEntryNodes = new Map<string, Set<string>>();
+  for (const s of bundle.scenes) {
+    for (const { to } of sceneTargets(s)) {
+      if (!to.startsWith('scene:')) continue;
+      const rest = to.slice(6);
+      const hash = rest.indexOf('#');
+      if (hash === -1) continue;
+      const sid = rest.slice(0, hash);
+      const nid = rest.slice(hash + 1);
+      const set = externalEntryNodes.get(sid) ?? new Set<string>();
+      set.add(nid);
+      externalEntryNodes.set(sid, set);
+    }
+  }
 
   for (const scene of bundle.scenes) {
     const nodeIds = new Set(scene.nodes.map((n) => n.id));
@@ -144,12 +233,17 @@ export function validateBundle(bundle: ContentBundle): Issue[] {
       }
     }
 
-    // Достижимость внутри сцены.
-    const reachable = new Set<string>([scene.entry]);
-    const queue = [scene.entry];
+    // Достижимость внутри сцены: от entry и от узлов, в которые ведут
+    // переходы "scene:id#node" из других сцен.
+    const seeds = [scene.entry, ...(externalEntryNodes.get(scene.id) ?? [])].filter((n) =>
+      nodeIds.has(n),
+    );
+    const reachable = new Set<string>(seeds);
+    const queue = [...seeds];
+    const targets = sceneTargets(scene);
     while (queue.length) {
       const cur = queue.shift() as string;
-      for (const { node, to } of sceneTargets(scene)) {
+      for (const { node, to } of targets) {
         if (node !== cur && !node.startsWith(`${cur}/`)) continue;
         if (to.startsWith('scene:')) continue;
         if (!reachable.has(to) && nodeIds.has(to)) {
@@ -178,8 +272,22 @@ export function validateBundle(bundle: ContentBundle): Issue[] {
       if (n.kind === 'death' && !deathIds.has(n.death)) {
         issues.push({ level: 'error', where: `${scene.id}#${n.id}`, message: `Нет смерти «${n.death}»` });
       }
-      if (n.kind === 'effects') effectWrites(n.effects, writes);
-      if (n.kind === 'branch') n.branches.forEach((b) => collectRefs(b.when as Condition, reads));
+      if (n.kind === 'effects') {
+        effectWrites(n.effects, writes);
+        noteRecruits(n.effects, recruitTargets);
+      }
+      if (n.kind === 'branch') {
+        n.branches.forEach((b) => collectRefs(b.when as Condition, reads));
+        for (const b of n.branches) {
+          if (staticallyImpossible(b.when as Condition)) {
+            issues.push({
+              level: 'warn',
+              where: `${scene.id}#${n.id}`,
+              message: `Ветка «${b.to}» не сработает никогда: условие статически невыполнимо`,
+            });
+          }
+        }
+      }
       if (n.kind === 'choice') {
         const ids = new Set<string>();
         for (const o of n.options) {
@@ -189,6 +297,14 @@ export function validateBundle(bundle: ContentBundle): Issue[] {
           ids.add(o.id);
           collectRefs(o.conditions as Condition | undefined, reads);
           effectWrites(o.effects, writes);
+          noteRecruits(o.effects, recruitTargets);
+          if (!o.fallback && staticallyImpossible(o.conditions as Condition | undefined)) {
+            issues.push({
+              level: 'warn',
+              where: `${scene.id}#${n.id}/${o.id}`,
+              message: 'Вариант не покажется никогда: условие статически невыполнимо',
+            });
+          }
         }
         const unconditional = n.options.filter((o) => !o.conditions || o.fallback).length;
         if (unconditional < 2) {
@@ -210,7 +326,16 @@ export function validateBundle(bundle: ContentBundle): Issue[] {
         message: `${bubbleRun} пузырей подряд без выбора (максимум 15)`,
       });
     }
-    if (scene.available) collectRefs(scene.available as Condition, reads);
+    if (scene.available) {
+      collectRefs(scene.available as Condition, reads);
+      if (staticallyImpossible(scene.available as Condition)) {
+        issues.push({
+          level: 'warn',
+          where: scene.id,
+          message: 'available статически невыполнимо: сцена не откроется никогда',
+        });
+      }
+    }
   }
 
   for (const u of bundle.units) {
@@ -236,6 +361,7 @@ export function validateBundle(bundle: ContentBundle): Issue[] {
       issues.push({ level: 'error', where: `battle:${b.id}`, message: 'Два врага в одной клетке' });
     }
     effectWrites(b.rewards, writes);
+    noteRecruits(b.rewards, recruitTargets);
   }
 
   for (const m of bundle.memories) {

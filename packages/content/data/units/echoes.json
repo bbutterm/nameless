@@ -14,8 +14,8 @@
     "tier": 2,
     "row": "back",
     "stats": {
-      "initiative": 10,
-      "hp": 48,
+      "initiative": 8,
+      "hp": 45,
       "atk": 18,
       "def": 7
     },
@@ -44,10 +44,10 @@
     "tier": 2,
     "row": "back",
     "stats": {
+      "initiative": 13,
       "hp": 62,
       "atk": 18,
-      "def": 9,
-      "initiative": 14
+      "def": 9
     },
     "abilities": [
       "the_well_asks_nothing",
@@ -74,10 +74,10 @@
     "tier": 2,
     "row": "front",
     "stats": {
+      "initiative": 13,
       "hp": 72,
       "atk": 7,
-      "def": 12,
-      "initiative": 9
+      "def": 12
     },
     "abilities": [
       "burst_for_him",
@@ -105,7 +105,7 @@
     "tier": 2,
     "row": "back",
     "stats": {
-      "initiative": 11,
+      "initiative": 9,
       "hp": 46,
       "atk": 18,
       "def": 6

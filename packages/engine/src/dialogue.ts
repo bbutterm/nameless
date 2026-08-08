@@ -212,8 +212,6 @@ export function pushBubble(
 ): GameState {
   const last = state.log[state.log.length - 1];
   if (last && last.nodeId === node.id && last.scene === state.scene) return state;
-  const ru = node.kind === 'lore' ? node.text.ru : node.text.ru;
-  const en = node.kind === 'lore' ? node.text.en : node.text.en;
   return {
     ...state,
     log: [
@@ -223,8 +221,8 @@ export function pushBubble(
         scene: state.scene,
         kind: node.kind,
         speaker: node.kind === 'say' ? node.speaker : undefined,
-        ru,
-        en,
+        ru: node.text.ru,
+        en: node.text.en,
       },
     ],
   };

@@ -109,7 +109,7 @@
       "id": "handwriting",
       "text": {
         "ru": "Сличать буквы бессмысленно, буквы подделывают за два гроша. Ты сличаешь, как рука экономит на слове «которого» — тремя знаками и точкой посередине, — и как она недотягивает хвост у «у», потому что уже пошла к следующему слову. На обороте описи то же самое. На договоре то же самое.",
-        "en": "Matching letters is pointless, letters are forged for two pennies. You match how the hand economises on the word \"whereof\" — three strokes and a dot in the middle — and how it leaves the tail of the \"y\" short because it has already set off for the next word. On the back of the inventory, the same. On the deed, the same."
+        "en": "Matching letters is pointless, letters are forged for two groschen. You match how the hand economises on the word \"whereof\" — three strokes and a dot in the middle — and how it leaves the tail of the \"y\" short because it has already set off for the next word. On the back of the inventory, the same. On the deed, the same."
       },
       "keywords": [{ "match": { "ru": "рука", "en": "hand" }, "tone": "memory" }],
       "next": "recognition"
@@ -193,7 +193,7 @@
           "id": "penman",
           "chip": {
             "icon": "book",
-            "label": { "ru": "Чистописец", "en": "Penman" },
+            "label": { "ru": "Чистописец", "en": "Chistopisets" },
             "tone": "life"
           },
           "conditions": { "kind": "life", "life": "chistopisets" },
@@ -366,7 +366,7 @@
           "id": "register",
           "chip": {
             "icon": "hourglass",
-            "label": { "ru": "Перечень", "en": "Register" },
+            "label": { "ru": "Перечень", "en": "Perechen" },
             "tone": "life"
           },
           "conditions": { "kind": "life", "life": "perechen" },

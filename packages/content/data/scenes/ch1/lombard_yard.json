@@ -72,7 +72,7 @@
       },
       "text": {
         "ru": "«Приём горя — с шести до полудня, в порядке живой очереди. Горе свежее принимается только с сопровождающим. Стыд детский, невыношенный, — по прейскуранту листа второго. Плакать в очереди разрешается: слёзы к приёму не принимаются и цены не сбивают».",
-        "en": "«Grief received from six until noon, in order of the queue. Fresh grief accepted only with an escort. Childhood shame, unripened — per the price list, sheet two. Weeping in the queue is permitted: tears are not accepted for intake and do not affect the price.»"
+        "en": "\"Grief received from six until noon, in order of the queue. Fresh grief accepted only with an escort. Childhood shame, unripened — per the price list, sheet two. Weeping in the queue is permitted: tears are not accepted for intake and do not affect the price.\""
       },
       "next": "beggar_2"
     },
@@ -89,7 +89,7 @@
       "kind": "choice",
       "id": "beggar_choice",
       "prompt": {
-        "ru": "Стражник берётся за воротник. Ворота открыты в вашу сторону.",
+        "ru": "Стражник берётся за воротник. Ворота открыты в твою сторону.",
         "en": "The guard takes hold of his collar. The gate opens your way."
       },
       "options": [
@@ -340,7 +340,7 @@
       "kind": "narration",
       "id": "r_beggar_past",
       "text": {
-        "ru": "Вы проходите. За спиной хлопают ворота — один раз, коротко, как ставят печать.",
+        "ru": "Ты проходишь. За спиной хлопают ворота — один раз, коротко, как ставят печать.",
         "en": "You walk on. Behind you the gate claps shut — once, briefly, the way a stamp comes down."
       },
       "next": "klyost_bump"
@@ -369,7 +369,7 @@
       "kind": "narration",
       "id": "klyost_bump",
       "text": {
-        "ru": "В вас на ходу врезается мальчишка с чужой запиской в зубах. Записка остаётся сухой, мальчишка — нет.",
+        "ru": "В тебя на ходу врезается мальчишка с чужой запиской в зубах. Записка остаётся сухой, мальчишка — нет.",
         "en": "A boy runs straight into you with someone else's note between his teeth. The note stays dry; the boy does not."
       },
       "next": "klyost_1"
@@ -685,7 +685,7 @@
       "id": "errand_boy",
       "text": {
         "ru": "У ворот тебя догоняет пыльный мальчишка с чужой сумкой через плечо. Не Клёст: этот моложе и глупее.",
-        "en": "A dusty boy with someone else’s satchel catches you at the gate. Not Klyost: this one is younger and dimmer."
+        "en": "A dusty boy with someone else's satchel catches you at the gate. Not Crossbill: this one is younger and dimmer."
       },
       "next": "errand_boy_2"
     },
@@ -695,7 +695,7 @@
       "speaker": "klyost",
       "text": {
         "ru": "Он за вами всё утро. Возьмите, а? Ему платить не надо, он за компанию.",
-        "en": "He’s been on your heels all morning. Take him, will you? He costs nothing, he comes for company."
+        "en": "He's been on your heels all morning. Take him, will you? He costs nothing, he comes for company."
       },
       "next": "errand_boy_join"
     },

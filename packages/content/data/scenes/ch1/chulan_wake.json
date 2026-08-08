@@ -37,7 +37,7 @@
       "kind": "narration",
       "id": "wake_first",
       "text": {
-        "ru": "Труха на полу подбирается к своему месту и становится вами. Дольше всего собирается лицо.",
+        "ru": "Труха на полу подбирается к своему месту и становится тобой. Дольше всего собирается лицо.",
         "en": "The dust on the floor creeps back into place and becomes you. The face takes longest."
       },
       "keywords": [
@@ -86,7 +86,7 @@
       "kind": "narration",
       "id": "wake_grey",
       "text": {
-        "ru": "Одежда на вас та же. Карманы вывернуты, содержимое разложено на ящике в четыре кучки.",
+        "ru": "Одежда на тебе та же. Карманы вывернуты, содержимое разложено на ящике в четыре кучки.",
         "en": "Your clothes are the same ones. The pockets are turned out, their contents laid on a crate in four small heaps."
       },
       "next": "osoka_greet"
@@ -162,7 +162,7 @@
       "kind": "choice",
       "id": "opis_choice",
       "prompt": {
-        "ru": "Четыре кучки на ящике. По бумаге всё это ваше.",
+        "ru": "Четыре кучки на ящике. По бумаге всё это твоё.",
         "en": "Four heaps on the crate. By the paper, all of it is yours."
       },
       "options": [
@@ -546,7 +546,7 @@
       "kind": "narration",
       "id": "r_recount",
       "text": {
-        "ru": "Вы считаете вслух. Пуговиц выходит четыре.",
+        "ru": "Ты считаешь вслух. Пуговиц выходит четыре.",
         "en": "You count out loud. The buttons come to four."
       },
       "next": "r_recount2"
@@ -584,7 +584,7 @@
       "kind": "narration",
       "id": "r_silent",
       "text": {
-        "ru": "Вы молчите. Она отсчитывает молчание, как отсчитывают сдачу, и убирает бумагу.",
+        "ru": "Ты молчишь. Она отсчитывает молчание, как отсчитывают сдачу, и убирает бумагу.",
         "en": "You say nothing. She counts the silence out the way one counts change, and puts the paper away."
       },
       "next": "osoka_last"
@@ -613,7 +613,7 @@
       "kind": "narration",
       "id": "wake_exit",
       "text": {
-        "ru": "Следующего в чулане нет. Она уходит первой и оставляет дверь открытой — так положено делать с помещениями, где ничего не хранится ценного.",
+        "ru": "Следующего в чулане нет. Она уходит первой и оставляет дверь открытой — так положено делать с помещениями, где не хранится ничего ценного.",
         "en": "There is no next in the storeroom. She leaves first and leaves the door open, as one is required to do with rooms that hold nothing of value."
       },
       "next": "scene:lombard_yard"
@@ -833,7 +833,7 @@
       "kind": "narration",
       "id": "again_exit",
       "text": {
-        "ru": "Во дворе всё то же: весы, тачка, семь этажей в луже. Город не заметил, что вас сутки не было.",
+        "ru": "Во дворе всё то же: весы, тачка, семь этажей в луже. Город не заметил, что тебя сутки не было.",
         "en": "The yard is as it was: the scale, the barrow, seven storeys in the puddle. The city has not noticed you were gone a day."
       },
       "next": "scene:zaklad_hub"
@@ -852,7 +852,7 @@
       "id": "end_tag",
       "text": {
         "ru": "На полу остаётся бирка с номером дела. Номер — 1. Не «первое за сегодня». Просто 1.",
-        "en": "A case tag stays on the floor. The number is 1. Not «first of the day». Just 1."
+        "en": "A case tag stays on the floor. The number is 1. Not \"first of the day\". Just 1."
       },
       "keywords": [
         {
@@ -883,7 +883,7 @@
       "kind": "narration",
       "id": "end_hand",
       "text": {
-        "ru": "Бумажек в кармане по-прежнему четыре. Почерк на них тот же, что под договором, и это единственное, что у вас не отняли.",
+        "ru": "Бумажек в кармане по-прежнему четыре. Почерк на них тот же, что под договором, и это единственное, что у тебя не отняли.",
         "en": "There are still four papers in your pocket. The hand on them is the hand under the contract, and it is the one thing nobody took."
       },
       "keywords": [
@@ -924,7 +924,7 @@
       },
       "text": {
         "ru": "«Залог невостребованный. Срок хранения истёк четырежды. Предъявителя нет». Ниже, карандашом, чужой рукой: «Не выбрасывать. Оно ходит».",
-        "en": "“Pledge unclaimed. Storage term expired four times over. No claimant.” Below, in pencil, in another hand: “Do not discard. It walks.”"
+        "en": "\"Pledge unclaimed. Storage term expired four times over. No claimant.\" Below, in pencil, in another hand: \"Do not discard. It walks.\""
       },
       "next": "pledge_join"
     },

@@ -10,8 +10,8 @@
       "kind": "narration",
       "id": "landing",
       "text": {
-        "ru": "На площадке между ярусами стоит человек и ждёт так, как ждут поезда: без нетерпения, лицом в нужную сторону, заранее.",
-        "en": "On the landing between tiers a man stands waiting the way people wait for a train: without impatience, already facing the right way."
+        "ru": "На площадке между ярусами стоит человек и ждёт так, как ждут парома: без нетерпения, лицом в нужную сторону, заранее.",
+        "en": "On the landing between tiers a man stands waiting the way people wait for a ferry: without impatience, already facing the right way."
       },
       "next": "rev_hello"
     },
@@ -127,7 +127,7 @@
           "id": "penman",
           "chip": {
             "icon": "book",
-            "label": { "ru": "Чистописец", "en": "Penman" },
+            "label": { "ru": "Чистописец", "en": "Chistopisets" },
             "tone": "life"
           },
           "conditions": { "kind": "life", "life": "chistopisets" },
@@ -146,7 +146,7 @@
           "id": "promiser",
           "chip": {
             "icon": "coin",
-            "label": { "ru": "Посульщик", "en": "Promiser" },
+            "label": { "ru": "Посульщик", "en": "Posulshchik" },
             "tone": "life"
           },
           "conditions": { "kind": "life", "life": "posulshchik" },

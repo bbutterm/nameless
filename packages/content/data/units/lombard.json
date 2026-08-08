@@ -49,10 +49,10 @@
     "tier": 2,
     "row": "front",
     "stats": {
-      "hp": 51,
+      "initiative": 9,
+      "hp": 55,
       "atk": 18,
-      "def": 9,
-      "initiative": 10
+      "def": 9
     },
     "abilities": [
       "debt_collection",
@@ -121,9 +121,9 @@
     "tier": 2,
     "row": "back",
     "stats": {
-      "initiative": 11,
-      "hp": 45,
-      "atk": 16,
+      "initiative": 9,
+      "hp": 46,
+      "atk": 15,
       "def": 6
     },
     "abilities": [

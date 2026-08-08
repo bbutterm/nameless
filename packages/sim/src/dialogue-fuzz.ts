@@ -4,7 +4,12 @@
  * сироты-флаги и зацикливания.
  */
 import {
+  advance,
+  applyDeath,
+  applyEffects,
+  choose,
   createInitialState,
+  goTo,
   indexContent,
   normalizeEntry,
   rawPassingOptions,
@@ -104,7 +109,10 @@ export function makePersonalities(content: ContentBundle, count: number): Person
       visited,
       lockedMemories,
       awakenedLives,
-      units: unitIds.filter(() => rng.chance(0.25)).slice(0, 6),
+      // Перемешать, потом резать: filter().slice(0, 6) всегда благоволил
+      // юнитам из начала реестра, и hasUnit-условия «поздних» юнитов
+      // почти не выпадали ни одной личности.
+      units: rng.shuffle(unitIds).slice(0, rng.int(0, Math.min(6, unitIds.length))),
       deaths: rng.int(0, 4),
       chapter: rng.int(1, maxChapter),
     });
@@ -232,21 +240,25 @@ export function fuzzDialogue(content: ContentBundle, personalityCount = 300): Fu
         }
         if (r.step.kind === 'end') break;
         if (r.step.kind === 'bubble') {
-          st = { ...st, scene: st.scene, node: st.node };
-          const node = r.step.node;
-          st = normalizeEntry(idx, { ...st, ...jump(st, node.next) });
+          st = advance(idx, st);
           continue;
         }
         if (r.step.kind === 'choice') {
           const pick = rng.pick(r.step.options);
           if (!pick) break;
-          st = normalizeEntry(idx, { ...st, ...jump(st, pick.to) });
+          // Именно choose, а не прыжок по pick.to: живой игрок несёт с собой
+          // эффекты варианта (флаги, оси, осколки), и ветки, открывающиеся
+          // ими же дальше по пути, без этого числились бы недостижимыми.
+          st = choose(idx, st, pick.id);
           continue;
         }
         if (r.step.kind === 'battle') {
           // Симулируем исход броском: путь поражения тоже должен быть проходим.
-          const to = rng.chance(0.75) ? r.step.node.onWin : r.step.node.onLose;
-          st = normalizeEntry(idx, { ...st, ...jump(st, to) });
+          const battleNode = r.step.node;
+          const won = rng.chance(0.75);
+          const def = content.battles.find((b) => b.id === battleNode.battle);
+          if (won && def?.rewards) st = applyEffects(st, def.rewards, idx.effectCtx);
+          st = normalizeEntry(idx, goTo(st, won ? battleNode.onWin : battleNode.onLose));
           continue;
         }
         if (r.step.kind === 'death') {
@@ -256,7 +268,9 @@ export function fuzzDialogue(content: ContentBundle, personalityCount = 300): Fu
             errors.push({ scene: st.scene, node: st.node, message: `Нет смерти ${deathId}` });
             break;
           }
-          st = normalizeEntry(idx, { ...st, scene: death.wakeScene, node: '@entry', deaths: st.deaths + 1 });
+          // Настоящая смерть движка: закрепляет воспоминание из накопленных
+          // осколков, будит жизнь, применяет её гранты — как в игре.
+          st = applyDeath(st, content, death, idx.effectCtx).state;
           continue;
         }
       }
@@ -287,14 +301,4 @@ export function fuzzDialogue(content: ContentBundle, personalityCount = 300): Fu
     totalLines: lineNodes.length,
     reachedLines,
   };
-}
-
-function jump(st: GameState, to: string): { scene: string; node: string } {
-  if (to.startsWith('scene:')) {
-    const rest = to.slice(6);
-    const hash = rest.indexOf('#');
-    if (hash === -1) return { scene: rest, node: '@entry' };
-    return { scene: rest.slice(0, hash), node: rest.slice(hash + 1) };
-  }
-  return { scene: st.scene, node: to };
 }

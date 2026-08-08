@@ -11,7 +11,7 @@ import {
   xpForLevel,
 } from './progression.js';
 import { evalCondition } from './conditions.js';
-import { createInitialState, type EffectContext, type GameState } from './state.js';
+import { applyEffect, createInitialState, scaledMaxHp, type EffectContext, type GameState } from './state.js';
 import type { ContentBundle, DeathDef, PartyUnit, UnitDef } from './types.js';
 
 const t = (ru: string) => ({ ru, en: ru });
@@ -217,6 +217,11 @@ describe('applyDeath', () => {
     expect(second.state.awakenedLives).toEqual(['klyuchar']);
   });
 
+  it('восстановление после смерти уважает уровень: hp = уровневый максимум', () => {
+    const out = applyDeath(state({ party: [member('gar', 3, 1000, 5)] }), content, death, ctx);
+    expect(out.state.party[0]?.hp).toBe(scaledMaxHp(40, 5)); // 59, а не базовые 40
+  });
+
   it('смерть без готовых осколков всё равно возвращает отряд в чулан', () => {
     const out = applyDeath(state({ party: [member('vodonos', 1)] }), content, death, ctx);
     expect(out.memory).toBeUndefined();
@@ -228,6 +233,21 @@ describe('applyDeath', () => {
   it('грант жизни приводит отголосок в отряд', () => {
     const out = applyDeath(state({ fragments: { ples: 5 } }), content, death, ctx);
     expect(out.state.party.some((u) => u.defId === 'gar')).toBe(true);
+  });
+});
+
+describe('heal-эффект и уровневый максимум', () => {
+  it('лечит до уровневого максимума, а не до базового', () => {
+    // Уровень 5: максимум 59. Раньше max брался из базовых статов (40).
+    const s = state({ party: [member('vodonos', 50, 1000, 5)] });
+    const r = applyEffect(s, { kind: 'heal', amount: 100 }, ctx);
+    expect(r.party[0]?.hp).toBe(scaledMaxHp(40, 5));
+  });
+
+  it('никогда не снижает hp: прокачанный юнит выше базового максимума не режется', () => {
+    const s = state({ party: [member('vodonos', 55, 1000, 5)] });
+    const r = applyEffect(s, { kind: 'heal', amount: 1 }, ctx);
+    expect(r.party[0]?.hp).toBeGreaterThanOrEqual(55);
   });
 });
 

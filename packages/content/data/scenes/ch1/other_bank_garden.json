@@ -76,7 +76,7 @@
       "speaker": "proshchai",
       "text": {
         "ru": "Читаем страницу. «И отпустит, и станет...» Станет — и вот тут слово, а я его... Ну и слава.",
-        "en": "We read the page. «And he shall let go, and he shall become...» Become — and here comes the word, and I have... Well, thank goodness."
+        "en": "We read the page. \"And he shall let go, and he shall become...\" Become — and here comes the word, and I have... Well, thank goodness."
       },
       "next": "proshchai_laugh"
     },
@@ -230,7 +230,7 @@
     {
       "kind": "choice",
       "id": "garden_choice",
-      "prompt": { "ru": "На грядке лежит вторая лопата. Её положили при вас.", "en": "A second spade lies by the bed. It was put there while you watched." },
+      "prompt": { "ru": "На грядке лежит вторая лопата. Её положили при тебе.", "en": "A second spade lies by the bed. It was put there while you watched." },
       "options": [
         {
           "id": "dig_with",
@@ -253,7 +253,7 @@
         },
         {
           "id": "ask_proshchai",
-          "text": { "ru": "Спросить о том, чего он «не помнит».", "en": "Ask about the thing he «does not remember»." },
+          "text": { "ru": "Спросить о том, чего он «не помнит».", "en": "Ask about the thing he \"does not remember\"." },
           "effects": [
             { "kind": "flag", "flag": "proshchai_question", "value": true },
             { "kind": "axis", "axis": "reason_obsession", "delta": -5 }
@@ -372,7 +372,7 @@
     {
       "kind": "choice",
       "id": "dig_choice",
-      "prompt": { "ru": "Братья ушли к столу. Лопата осталась у вас.", "en": "The brothers have gone to the table. The spade stayed with you." },
+      "prompt": { "ru": "Братья ушли к столу. Лопата осталась у тебя.", "en": "The brothers have gone to the table. The spade stayed with you." },
       "options": [
         {
           "id": "dig_up",
@@ -443,7 +443,7 @@
       "kind": "narration",
       "id": "r_left_graves",
       "text": {
-        "ru": "Вы возвращаете лопату на место, черенком к стене, как она и стояла. Никто этого не видел, и оттого это считается.",
+        "ru": "Ты возвращаешь лопату на место, черенком к стене, как она и стояла. Никто этого не видел, и оттого это считается.",
         "en": "You put the spade back, handle to the wall, the way it stood. Nobody saw it, and that is what makes it count."
       },
       "next": "leave_garden"

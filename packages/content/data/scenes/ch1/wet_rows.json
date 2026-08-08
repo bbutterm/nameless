@@ -57,7 +57,7 @@
       "title": { "ru": "Ярлык на склянке, второй ряд", "en": "Label on a flask, second row" },
       "text": {
         "ru": "«Первая любовь. Мужская, деревенская, 40-х годов. Ношена дважды. Внимание покупателю: при ношении в неподходящий момент вырывается чужое имя — Настя. Замена имени не производится, скидка два гроша учтена в цене». Ниже, той же рукой: «Настя жива. Не искать».",
-        "en": "«First love. Male, village, of the forties. Worn twice. Buyer beware: when worn, at the wrong moment it lets out a name not yours — Nastya. The name cannot be replaced; the two-groschen discount is already in the price.» Below, in the same hand: «Nastya is alive. Do not look for her.»"
+        "en": "\"First love. Male, village, of the forties. Worn twice. Buyer beware: when worn, at the wrong moment it lets out a name not yours — Nastya. The name cannot be replaced; the two-groschen discount is already in the price.\" Below, in the same hand: \"Nastya is alive. Do not look for her.\""
       },
       "next": "zh_2"
     },
@@ -396,7 +396,7 @@
       "kind": "narration",
       "id": "rows_falling",
       "text": {
-        "ru": "Сборщики работают молча и по описи: сначала руки, потом всё остальное. Последнее, что видно, — как кто-то подставляет под вас пустую склянку. На всякий случай.",
+        "ru": "Сборщики работают молча и по описи: сначала руки, потом всё остальное. Последнее, что видно, — как кто-то подставляет под тебя пустую склянку. На всякий случай.",
         "en": "The collectors work in silence and by the list: the hands first, then the rest. The last thing you see is someone holding an empty flask under you. Just in case."
       },
       "next": "scene:silver_counter#queue_entry"

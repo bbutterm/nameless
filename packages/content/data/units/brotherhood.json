@@ -51,10 +51,10 @@
     "tier": 2,
     "row": "front",
     "stats": {
-      "hp": 51,
+      "initiative": 9,
+      "hp": 52,
       "atk": 18,
-      "def": 9,
-      "initiative": 11
+      "def": 9
     },
     "abilities": [
       "white_book_reading",

@@ -216,7 +216,7 @@
           "id": "tarburner",
           "chip": {
             "icon": "fire",
-            "label": { "ru": "Смолокур", "en": "Tarburner" },
+            "label": { "ru": "Смолокур", "en": "Smolokur" },
             "tone": "life"
           },
           "conditions": { "kind": "life", "life": "smolokur" },
@@ -367,7 +367,7 @@
           "id": "register_fight",
           "chip": {
             "icon": "hourglass",
-            "label": { "ru": "Перечень", "en": "Register" },
+            "label": { "ru": "Перечень", "en": "Perechen" },
             "tone": "life"
           },
           "conditions": { "kind": "life", "life": "perechen" },

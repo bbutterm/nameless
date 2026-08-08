@@ -177,7 +177,7 @@
           "id": "penman",
           "chip": {
             "icon": "book",
-            "label": { "ru": "Чистописец", "en": "Penman" },
+            "label": { "ru": "Чистописец", "en": "Chistopisets" },
             "tone": "life"
           },
           "conditions": { "kind": "life", "life": "chistopisets" },
@@ -197,7 +197,7 @@
           "id": "promiser",
           "chip": {
             "icon": "coin",
-            "label": { "ru": "Посульщик", "en": "Promiser" },
+            "label": { "ru": "Посульщик", "en": "Posulshchik" },
             "tone": "life"
           },
           "conditions": { "kind": "life", "life": "posulshchik" },
@@ -355,7 +355,7 @@
           "id": "register",
           "chip": {
             "icon": "hourglass",
-            "label": { "ru": "Перечень", "en": "Register" },
+            "label": { "ru": "Перечень", "en": "Perechen" },
             "tone": "life"
           },
           "conditions": { "kind": "life", "life": "perechen" },

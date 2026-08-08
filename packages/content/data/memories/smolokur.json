@@ -28,7 +28,7 @@
     "name": { "ru": "Счёт за сезон", "en": "The Bill for the Season" },
     "revelation": {
       "ru": "Тебе выписали благодарность и оплату по зимней ставке: война кончилась осенью, и казна на этом выгадала вдвое. Ты пересчитал сумму дважды при писаре и в третий раз уже дома, при свече, поделив её на число дворов Плёса. Вышло по восемь грошей на двор. С тех пор ты не любишь считать при свече.",
-      "en": "They wrote you a commendation and paid at the winter rate: the war ended in autumn, and the treasury gained twice over. You counted the sum twice in front of the clerk and a third time at home by candlelight, dividing it by the number of households in Ples. It came to eight pennies a household. You have disliked counting by candlelight ever since."
+      "en": "They wrote you a commendation and paid at the winter rate: the war ended in autumn, and the treasury gained twice over. You counted the sum twice in front of the clerk and a third time at home by candlelight, dividing it by the number of households in Ples. It came to eight groschen a household. You have disliked counting by candlelight ever since."
     },
     "icon": "coin",
     "cost": 4,

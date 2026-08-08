@@ -64,8 +64,8 @@
       "kind": "narration",
       "id": "queue_repeat",
       "text": {
-        "ru": "Ты встаёшь куда надо сам, не считая шагов. Очередь та же и другая: те же лоты в руках, другие руки.",
-        "en": "You take your place yourself, without counting the steps. The queue is the same and not the same: the same lots in the hands, different hands."
+        "ru": "Ты встаёшь куда надо сам, не считая шагов. Очередь сменилась целиком, а лоты держат так же: двумя руками, снизу.",
+        "en": "You take your place yourself, without counting the steps. The queue has changed entirely, but the lots are held the same way: with both hands, from underneath."
       },
       "next": "queue_repeat_dead"
     },
@@ -879,8 +879,8 @@
       "kind": "narration",
       "id": "react_cruel",
       "text": {
-        "ru": "Ни одного лишнего слова: только бланк, номер, штемпель. Обслуживают тебя быстрее всех в очереди, и это единственное, что она может тебе сказать.",
-        "en": "Not one word beyond the form: just the slip, the number, the stamp. You are served faster than anyone in the queue, and that is the only thing she has to say to you."
+        "ru": "Ни одного слова сверх бланка: номер, штемпель, следующий. Никого в очереди сегодня не обслужили быстрее тебя.",
+        "en": "Not one word beyond the form: the number, the stamp, next. Nobody in the queue has been served faster than you today."
       },
       "next": "set_chapter_flag"
     },

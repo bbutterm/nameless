@@ -120,7 +120,7 @@
           "id": "tarburner",
           "chip": {
             "icon": "fire",
-            "label": { "ru": "Смолокур", "en": "Tarburner" },
+            "label": { "ru": "Смолокур", "en": "Smolokur" },
             "tone": "life"
           },
           "conditions": { "kind": "life", "life": "smolokur" },
@@ -139,7 +139,7 @@
           "id": "keyholder",
           "chip": {
             "icon": "heal",
-            "label": { "ru": "Ключарь", "en": "Keyholder" },
+            "label": { "ru": "Ключарь", "en": "Klyuchar" },
             "tone": "life"
           },
           "conditions": { "kind": "life", "life": "klyuchar" },

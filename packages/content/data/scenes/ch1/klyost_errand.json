@@ -17,7 +17,7 @@
       "id": "stairs_start",
       "text": {
         "ru": "Клёст сворачивает в щель между стеной Ломбарда и водосточной трубой, и в щели оказывается дверь. Ступени за ней стоптаны посередине до блеска: по этой лестнице ходят чаще, чем по парадной.",
-        "en": "Klyost turns into the gap between the Pawnshop wall and the drainpipe, and in the gap there is a door. The steps behind it are worn shiny down the middle: this stairway sees more traffic than the front one."
+        "en": "Crossbill turns into the gap between the Pawnshop wall and the drainpipe, and in the gap there is a door. The steps behind it are worn shiny down the middle: this stairway sees more traffic than the front one."
       },
       "next": "klyost_hello"
     },
@@ -49,7 +49,7 @@
       "id": "stairs_dark",
       "text": {
         "ru": "Вместо ламп в нишах стоят склянки с чужими огарками: лоты, списанные с хранения как негодные, догорают тут по казённой цене в полгроша за ночь. Света от них хватает ровно на ступеньку вперёд.",
-        "en": "Instead of lamps the niches hold jars of other people's burnt-down ends: lots written off storage as unfit, left to gutter here at the official rate of half a penny a night. They give exactly one step's worth of light."
+        "en": "Instead of lamps the niches hold jars of other people's burnt-down ends: lots written off storage as unfit, left to gutter here at the official rate of half a groschen a night. They give exactly one step's worth of light."
       },
       "keywords": [{ "match": { "ru": "лоты", "en": "lots" }, "tone": "lore" }],
       "next": "klyost_ask"
@@ -115,7 +115,7 @@
           "id": "penman",
           "chip": {
             "icon": "book",
-            "label": { "ru": "Чистописец", "en": "Penman" },
+            "label": { "ru": "Чистописец", "en": "Chistopisets" },
             "tone": "life"
           },
           "conditions": { "kind": "life", "life": "chistopisets" },
@@ -135,7 +135,7 @@
           "id": "promiser",
           "chip": {
             "icon": "coin",
-            "label": { "ru": "Посульщик", "en": "Promiser" },
+            "label": { "ru": "Посульщик", "en": "Posulshchik" },
             "tone": "life"
           },
           "conditions": { "kind": "life", "life": "posulshchik" },
@@ -329,7 +329,7 @@
           "id": "register",
           "chip": {
             "icon": "hourglass",
-            "label": { "ru": "Перечень", "en": "Register" },
+            "label": { "ru": "Перечень", "en": "Perechen" },
             "tone": "life"
           },
           "conditions": { "kind": "life", "life": "perechen" },

@@ -48,7 +48,7 @@
       "title": { "ru": "Устав стражи залоговых споров, ст. 8", "en": "Charter of the Pledge-Dispute Watch, art. 8" },
       "text": {
         "ru": "«Если выцветший не оставил описи, имущество его считается ничьим по истечении шести часов. До истечения шести часов имущество считается его, но взыскивать некому». Пункт «грустный» внесён капралом Дратвой в позапрошлом году. В типографском издании устава его нет. На это никто не жалуется: пункт удобный.",
-        "en": "«Where the faded left no inventory, his property is deemed nobody's after six hours have passed. Before six hours have passed the property is deemed his, but there is nobody to claim from.» The «sad clause» was entered by Corporal Dratva the year before last. It does not appear in the printed charter. Nobody complains: the clause is convenient."
+        "en": "\"Where the faded left no inventory, his property is deemed nobody's after six hours have passed. Before six hours have passed the property is deemed his, but there is nobody to claim from.\" The \"sad clause\" was entered by Corporal Dratva the year before last. It does not appear in the printed charter. Nobody complains: the clause is convenient."
       },
       "next": "pier_marauders"
     },
@@ -208,7 +208,7 @@
       "kind": "narration",
       "id": "r_toll_past",
       "text": {
-        "ru": "Вы отходите. Через минуту она перестаёт смотреть на воду и начинает смотреть на свои руки — их видно уже хуже, чем канат под ними.",
+        "ru": "Ты отходишь. Через минуту она перестаёт смотреть на воду и начинает смотреть на свои руки — их видно уже хуже, чем канат под ними.",
         "en": "You step away. A minute later she stops looking at the water and starts looking at her hands — they show up worse now than the rope beneath them."
       },
       "next": "pier_turn"
@@ -401,8 +401,8 @@
       "kind": "narration",
       "id": "pier_falling",
       "text": {
-        "ru": "Багор входит под ребро. Дратва говорит: «Второе дело за час», и это последнее, что вы слышите с этих мостков.",
-        "en": "The boat hook goes in under the ribs. Dratva says, «Second case within the hour», and that is the last thing you hear from this boardwalk."
+        "ru": "Багор входит под ребро. Дратва говорит: «Второе дело за час», и это последнее, что ты слышишь с этих мостков.",
+        "en": "The boat hook goes in under the ribs. Dratva says, \"Second case within the hour\", and that is the last thing you hear from this boardwalk."
       },
       "next": "scene:silver_counter#queue_entry"
     },
@@ -651,7 +651,7 @@
       "speaker": "dratva",
       "text": {
         "ru": "Молчание в протокол не заносится. Заносится «отказался», и это длиннее.",
-        "en": "Silence does not go into the report. «Refused» goes in, and that is longer."
+        "en": "Silence does not go into the report. \"Refused\" goes in, and that is longer."
       },
       "next": "leave_pier"
     },

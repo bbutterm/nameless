@@ -67,6 +67,14 @@ export function clampAxis(v: number): number {
   return Math.max(AXIS_MIN, Math.min(AXIS_MAX, Math.round(v)));
 }
 
+/** Прирост hp за уровень (+12%). Единая формула для боя и мета-состояния. */
+export const HP_GROWTH_PER_LEVEL = 0.12;
+
+/** Максимум hp юнита на данном уровне — от базового hp из UnitDef. */
+export function scaledMaxHp(baseHp: number, level: number): number {
+  return Math.round(baseHp * (1 + HP_GROWTH_PER_LEVEL * (Math.max(1, level) - 1)));
+}
+
 export function createInitialState(params: {
   seed: string;
   axes: { id: AxisId; start: number }[];
@@ -150,8 +158,11 @@ export function applyEffect(state: GameState, effect: Effect, ctx?: EffectContex
         ...state,
         party: state.party.map((u) => {
           if (effect.unit && u.defId !== effect.unit) return u;
-          const max = ctx?.unitStats?.(u.defId)?.hp ?? u.hp;
-          return { ...u, hp: Math.min(max, u.hp + effect.amount) };
+          // Максимум масштабируется уровнем: базовый hp из UnitDef занижен для
+          // прокачанных юнитов, и лечение «в базовый максимум» СНИЖАЛО бы их hp.
+          const base = ctx?.unitStats?.(u.defId)?.hp;
+          const max = base === undefined ? u.hp : scaledMaxHp(base, u.level);
+          return { ...u, hp: Math.max(u.hp, Math.min(max, u.hp + effect.amount)) };
         }),
       };
     case 'gold':

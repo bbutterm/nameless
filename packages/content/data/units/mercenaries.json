@@ -51,9 +51,9 @@
     "tier": 2,
     "row": "back",
     "stats": {
-      "initiative": 12,
-      "hp": 45,
-      "atk": 16,
+      "initiative": 9,
+      "hp": 46,
+      "atk": 18,
       "def": 6
     },
     "abilities": [
@@ -90,7 +90,7 @@
       "hp": 38,
       "atk": 8,
       "def": 5,
-      "initiative": 10
+      "initiative": 11
     },
     "abilities": [
       "plain_strike",
@@ -122,9 +122,9 @@
     "tier": 2,
     "row": "back",
     "stats": {
-      "initiative": 11,
+      "initiative": 8,
       "hp": 45,
-      "atk": 17,
+      "atk": 14,
       "def": 6
     },
     "abilities": [
@@ -192,10 +192,10 @@
     "tier": 2,
     "row": "front",
     "stats": {
+      "initiative": 8,
       "hp": 51,
       "atk": 18,
-      "def": 9,
-      "initiative": 10
+      "def": 9
     },
     "abilities": [
       "appraisal",
@@ -335,9 +335,9 @@
     "tier": 2,
     "row": "back",
     "stats": {
-      "initiative": 11,
+      "initiative": 8,
       "hp": 45,
-      "atk": 16,
+      "atk": 18,
       "def": 6
     },
     "abilities": [
@@ -371,9 +371,9 @@
     "tier": 1,
     "row": "front",
     "stats": {
-      "initiative": 11,
-      "hp": 40,
-      "atk": 9,
+      "initiative": 12,
+      "hp": 41,
+      "atk": 8,
       "def": 6
     },
     "abilities": [
@@ -406,9 +406,9 @@
     "tier": 2,
     "row": "back",
     "stats": {
-      "initiative": 10,
-      "hp": 46,
-      "atk": 16,
+      "initiative": 7,
+      "hp": 45,
+      "atk": 18,
       "def": 7
     },
     "abilities": [
@@ -443,7 +443,7 @@
     "row": "front",
     "stats": {
       "initiative": 8,
-      "hp": 41,
+      "hp": 40,
       "atk": 12,
       "def": 9
     },
@@ -478,10 +478,10 @@
     "tier": 2,
     "row": "front",
     "stats": {
-      "hp": 72,
+      "initiative": 10,
+      "hp": 70,
       "atk": 18,
-      "def": 12,
-      "initiative": 8
+      "def": 12
     },
     "abilities": [
       "i_will_hold_it",
@@ -514,9 +514,9 @@
     "tier": 1,
     "row": "front",
     "stats": {
-      "initiative": 10,
-      "hp": 42,
-      "atk": 11,
+      "initiative": 11,
+      "hp": 43,
+      "atk": 9,
       "def": 7
     },
     "abilities": [
@@ -549,10 +549,10 @@
     "tier": 2,
     "row": "front",
     "stats": {
-      "hp": 72,
-      "atk": 18,
-      "def": 12,
-      "initiative": 9
+      "initiative": 10,
+      "hp": 58,
+      "atk": 17,
+      "def": 12
     },
     "abilities": [
       "white_book_reading",

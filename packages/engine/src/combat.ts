@@ -12,6 +12,7 @@ import type {
   UnitDef,
 } from './types.js';
 import { Rng, type RngState } from './rng.js';
+import { scaledMaxHp } from './state.js';
 
 /** Смягчение урона бронёй: dmg = raw * K/(K+def). K подобран симулятором. */
 export const ARMOR_K = 50;
@@ -70,7 +71,7 @@ export function scaleStats(def: UnitDef, level: number): {
 } {
   const l = Math.max(1, level) - 1;
   return {
-    hp: Math.round(def.stats.hp * (1 + 0.12 * l)),
+    hp: scaledMaxHp(def.stats.hp, level),
     atk: Math.round(def.stats.atk * (1 + 0.12 * l)),
     def: Math.round(def.stats.def * (1 + 0.08 * l)),
     initiative: def.stats.initiative,
@@ -205,9 +206,14 @@ export function beginRound(idx: CombatIndex, state: BattleState): BattleState {
     events: [...state.events, ...events],
     rng: rng.snapshot(),
   };
+  // Исход проверяется ДО пропуска ходов: если dot выкосил обе стороны разом,
+  // очередь пуста, и skipDeadOrStunned заводил бы новые раунды рекурсивно —
+  // при turnLimit «без лимита» это переполняло стек, а с лимитом ничья
+  // ошибочно превращалась в поражение по лимиту.
+  next = checkOutcome(next);
+  if (next.outcome !== 'ongoing') return next;
   next = rollIntents(idx, next);
-  next = skipDeadOrStunned(idx, next);
-  return checkOutcome(next);
+  return skipDeadOrStunned(idx, next);
 }
 
 export function effectiveStat(u: BattleUnitState, stat: 'atk' | 'def' | 'initiative'): number {
@@ -292,7 +298,9 @@ export function resolveTargets(
     case 'enemy_all':
       return foes;
     case 'enemy_row':
-      return primary ? foes.filter((u) => u.row === primary.row) : foes;
+      // Без живой первичной цели ряд не определён: пустой список, а не
+      // молчаливое превращение удара по ряду в удар по всем.
+      return primary ? foes.filter((u) => u.row === primary.row) : [];
     default:
       return primary ? [primary] : [];
   }
@@ -335,12 +343,34 @@ export function act(idx: CombatIndex, state: BattleState, action: Action): Battl
   const actor = currentActor(state);
   if (!actor) return advanceTurn(idx, state);
 
+  // Способность должна существовать, принадлежать актору и быть готовой:
+  // без проверки владения кулдаун чужой способности читался как 0,
+  // и любой юнит мог применить что угодно из общего реестра.
   const ability = idx.abilities.get(action.ability);
-  if (!ability || (actor.cooldowns[ability.id] ?? 0) > 0) {
+  const owns = ability ? (idx.units.get(actor.defId)?.abilities.includes(ability.id) ?? false) : false;
+  if (!ability || !owns || (actor.cooldowns[ability.id] ?? 0) > 0) {
     return advanceTurn(idx, {
       ...state,
       events: [...state.events, { type: 'blocked', uid: actor.uid, reason: 'ability' }],
     });
+  }
+
+  // Одноцелевые способности обязаны бить по легальной живой цели. Раньше
+  // мёртвая цель давала «пустой» ход со сгоревшим кулдауном, а прямой uid
+  // заднего ряда обходил правило «передний ряд прикрывает задний».
+  const needsTarget =
+    ability.target === 'enemy_front' ||
+    ability.target === 'enemy_any' ||
+    ability.target === 'enemy_row' ||
+    ability.target === 'ally_one';
+  if (needsTarget) {
+    const legal = legalTargets(state, actor.uid, ability);
+    if (!action.targetUid || !legal.some((t) => t.uid === action.targetUid)) {
+      return advanceTurn(idx, {
+        ...state,
+        events: [...state.events, { type: 'blocked', uid: actor.uid, reason: 'target' }],
+      });
+    }
   }
 
   const rng = Rng.restore(state.rng);

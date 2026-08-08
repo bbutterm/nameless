@@ -181,7 +181,7 @@
       "speaker": "tminny",
       "text": {
         "ru": "«Происхождение неизвестно, со слов вкладчика». Пишу это раз в год и каждый раз с удовольствием: неизвестное дешевле, зато не разваливается при проверке.",
-        "en": "«Provenance unknown, per the depositor.» I write that once a year and enjoy it every time: the unknown is cheaper, but it does not fall apart under checking."
+        "en": "\"Provenance unknown, per the depositor.\" I write that once a year and enjoy it every time: the unknown is cheaper, but it does not fall apart under checking."
       },
       "next": "tminny_money"
     },
@@ -191,9 +191,9 @@
       "speaker": "tminny",
       "text": {
         "ru": "Прекрасно. Записываю дословно и ставлю пометку: «со слов». Пометка эта, позвольте-с, живёт дольше вас.",
-        "en": "Splendid. I take it down word for word and add a note: «per the client». That note, if you will permit, outlives you."
+        "en": "Splendid. I take it down word for word and add a note: \"per the client\". That note, if you will permit, outlives you."
       },
-      "keywords": [{ "match": { "ru": "«со слов»", "en": "«per the client»" }, "tone": "lie" }],
+      "keywords": [{ "match": { "ru": "«со слов»", "en": "\"per the client\"" }, "tone": "lie" }],
       "next": "tminny_money"
     },
     {
@@ -431,7 +431,7 @@
       "speaker": "tminny",
       "text": {
         "ru": "Третий ярус, полки с «В». Читальня работает до темноты, ночью там сторожа и опись. Сдачи с такой цены не бывает, вы понимаете.",
-        "en": "Third tier, the shelves under «D». The reading room is open until dark; at night there are watchmen and an inventory. There is no change from a price like that, as you understand."
+        "en": "Third tier, the shelves under \"D\". The reading room is open until dark; at night there are watchmen and an inventory. There is no change from a price like that, as you understand."
       },
       "next": "hall_exit"
     },
@@ -471,7 +471,7 @@
       "speaker": "tminny",
       "text": {
         "ru": "Чай остыл, а вы мне нравитесь. Третий ярус, полки с «В», и не спрашивайте, отчего в описи там одна карточка без суммы.",
-        "en": "The tea has gone cold and I like you. Third tier, the shelves under «D», and do not ask why one card there carries no sum."
+        "en": "The tea has gone cold and I like you. Third tier, the shelves under \"D\", and do not ask why one card there carries no sum."
       },
       "keywords": [{ "match": { "ru": "без суммы", "en": "no sum" }, "tone": "memory" }],
       "next": "hall_exit"

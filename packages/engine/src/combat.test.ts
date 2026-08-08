@@ -266,6 +266,24 @@ describe('исходы', () => {
     expect(s.round).toBeLessThanOrEqual(3);
   });
 
+  it('обоюдная гибель от dot при бое без лимита — ничья, а не переполнение стека', () => {
+    // turnLimit: 0 означает «без лимита». До починки пустая очередь раунда
+    // заводила beginRound рекурсивно до исчерпания стека.
+    const s0 = startBattle(
+      idx,
+      battle('wipe', [{ unit: 'wall', row: 'front', index: 0 }], 0),
+      party(['glass', 'back', 0]),
+      'wipe',
+    );
+    const doomed: BattleState = {
+      ...s0,
+      units: s0.units.map((u) => ({ ...u, statuses: [{ kind: 'dot' as const, amount: 9999, turns: 3 }] })),
+    };
+    const s = beginRound(idx, doomed);
+    expect(s.outcome).toBe('draw');
+    expect(s.events.at(-1)).toEqual({ type: 'outcome', result: 'draw' });
+  });
+
   it('dot в начале раунда убивает и закрывает бой', () => {
     const s0 = startBattle(idx, battle('dot', [{ unit: 'wall', row: 'front', index: 0 }]), party(['glass', 'back', 0]), 'dot');
     const poisoned: BattleState = {
@@ -338,6 +356,49 @@ describe('статусы и кулдауны', () => {
     const s1 = act(idx, s0, { ability: '__net_takoy__' });
     expect(s1.events.some((e) => e.type === 'blocked' && e.reason === 'ability')).toBe(true);
     expect(s1.outcome).toBe('ongoing');
+  });
+
+  it('чужая способность из общего реестра блокируется', () => {
+    // 'reach' есть в реестре, но bruiser ей не владеет — кулдаун чужой
+    // способности не должен читаться как «готова».
+    const s0 = startBattle(idx, b, party(['bruiser', 'front', 0]), 'foreign');
+    const foe = s0.units.find((u) => u.side === 'enemy');
+    const s1 = act(idx, s0, { ability: 'reach', targetUid: foe?.uid });
+    expect(s1.events.some((e) => e.type === 'blocked' && e.reason === 'ability')).toBe(true);
+    expect(s1.events.some((e) => e.type === 'damage')).toBe(false);
+  });
+
+  it('прямой uid заднего ряда не обходит прикрытие переднего', () => {
+    const cover = battle('cover', [
+      { unit: 'wall', row: 'front', index: 0 },
+      { unit: 'glass', row: 'back', index: 0 },
+    ]);
+    const s0 = startBattle(idx, cover, party(['bruiser', 'front', 0]), 'cover-uid');
+    expect(currentActor(s0)?.side).toBe('player');
+    const back = s0.units.find((u) => u.side === 'enemy' && u.row === 'back');
+    const s1 = act(idx, s0, { ability: 'hit', targetUid: back?.uid });
+    expect(s1.events.some((e) => e.type === 'blocked' && e.reason === 'target')).toBe(true);
+    expect(s1.events.some((e) => e.type === 'damage')).toBe(false);
+  });
+
+  it('мёртвая цель блокирует удар и не сжигает кулдаун', () => {
+    const two = battle('deadt', [
+      { unit: 'wall', row: 'front', index: 0 },
+      { unit: 'glass', row: 'back', index: 0 },
+    ]);
+    const s0 = startBattle(idx, two, party(['bruiser', 'front', 0]), 'dead-target');
+    const glass = s0.units.find((u) => u.defId === 'glass' && u.side === 'enemy');
+    if (!glass) throw new Error('нет цели');
+    const withDead: BattleState = {
+      ...s0,
+      units: s0.units.map((u) => (u.uid === glass.uid ? { ...u, alive: false, hp: 0 } : u)),
+    };
+    expect(currentActor(withDead)?.side).toBe('player');
+    const me = currentActor(withDead);
+    const s1 = act(idx, withDead, { ability: 'burst', targetUid: glass.uid });
+    expect(s1.events.some((e) => e.type === 'blocked' && e.reason === 'target')).toBe(true);
+    const after = s1.units.find((u) => u.uid === me?.uid);
+    expect(after?.cooldowns['burst']).toBe(0);
   });
 
   it('effectiveStat складывает бафы и дебафы и не уходит ниже нуля', () => {

@@ -95,12 +95,12 @@
     },
     "icon": "lock",
     "target": "enemy_any",
-    "power": 0.9,
+    "power": 1.05,
     "cooldown": 3,
     "effects": [
       {
         "kind": "damage",
-        "power": 0.9
+        "power": 1.05
       },
       {
         "kind": "debuff",

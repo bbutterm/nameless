@@ -1,5 +1,5 @@
 import type { ContentBundle, DeathDef, Memory, MemoryId, PastLife, UnitDef } from './types.js';
-import { applyEffects, type EffectContext, type GameState } from './state.js';
+import { applyEffects, scaledMaxHp, type EffectContext, type GameState } from './state.js';
 
 /** Опыт для следующего уровня: 100, 250, 450, 700… */
 export function xpForLevel(level: number): number {
@@ -121,7 +121,9 @@ export function applyDeath(
     ...s,
     party: s.party.map((u) => {
       const def = unitById.get(u.defId);
-      return { ...u, hp: def ? def.stats.hp : u.hp };
+      // Восстановление — до уровневого максимума: базовый hp занизил бы
+      // (а то и срезал бы) здоровье прокачанных юнитов.
+      return { ...u, hp: def ? scaledMaxHp(def.stats.hp, u.level) : u.hp };
     }),
     scene: death.wakeScene,
     node: '@entry',
