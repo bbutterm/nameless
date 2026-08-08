@@ -84,8 +84,8 @@
       "kind": "narration",
       "id": "wall_pylons",
       "text": {
-        "ru": "Стену делят пять пилонов, и на каждом медная табличка в ладонь. Таблички не одинаковые: их ставили в разное время, и последняя новее первой ровно настолько, насколько город старше своей нижней ступени.",
-        "en": "Five pilasters divide the wall, and each carries a copper plate the size of a palm. The plates do not match: they were set up at different times, and the last is newer than the first by exactly as much as the city is older than its lowest step."
+        "ru": "Стену делят пять пилонов, и на каждом медная табличка в ладонь. Таблички не одинаковые: их ставили в разное время. Первая вытерта до гладкого, на пятой медь ещё держит след чекана.",
+        "en": "Five pilasters divide the wall, and each carries a copper plate the size of a palm. The plates do not match: they were set up at different times. The first is worn smooth; on the fifth the copper still holds the marks of the punch."
       },
       "next": "coin_back"
     },

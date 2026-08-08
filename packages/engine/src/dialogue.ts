@@ -165,12 +165,20 @@ export function filterOptions(options: Option[], state: GameState): Option[] {
     }
   }
 
-  if (chosen.length <= MAX_OPTIONS) return chosen;
-  return chosen
-    .slice()
-    .sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0))
-    .slice(0, MAX_OPTIONS)
-    .sort((a, b) => options.indexOf(a) - options.indexOf(b));
+  // Порядок кнопок — всегда порядок объявления в сцене. Ветка добора
+  // (страховочные и priority) дописывала варианты в хвост, и один и тот же
+  // узел выбора показывался разным игрокам в РАЗНОМ порядке — при том, что
+  // ветка обрезки до четырёх порядок как раз восстанавливала.
+  const inDeclarationOrder = (list: Option[]): Option[] =>
+    list.slice().sort((a, b) => options.indexOf(a) - options.indexOf(b));
+
+  if (chosen.length <= MAX_OPTIONS) return inDeclarationOrder(chosen);
+  return inDeclarationOrder(
+    chosen
+      .slice()
+      .sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0))
+      .slice(0, MAX_OPTIONS),
+  );
 }
 
 /** Проверка без страховок — нужна фаззеру, чтобы поймать настоящие тупики. */

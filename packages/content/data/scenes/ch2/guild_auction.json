@@ -486,7 +486,7 @@
       "speaker": "zhichka",
       "text": {
         "ru": "Сорок вторая не продаётся, я говорила. Она про человека, которого я не знаю, и я по нему... Не моё. Уходи, пожалуйста, вот прямо сейчас.",
-        "en": "The forty-second is not for sale, I told you that. It is about a man I have never met, and I miss him... Not mine. Go, please, right now."
+        "en": "The forty-second is not for sale, I told you that. It is about a man I have never met, and I... Not mine. Go, please, right now."
       },
       "keywords": [{ "match": { "ru": "Не моё", "en": "Not mine" }, "tone": "memory" }],
       "next": "auction_depth"

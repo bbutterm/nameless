@@ -1,7 +1,7 @@
 {
   "id": "vodonos_queue",
   "chapter": 2,
-  "title": { "ru": "Очередь за Водоносом", "en": "The Queue Behind the Water-Carrier" },
+  "title": { "ru": "Очередь за Водоносом", "en": "The Queue Behind the Water Carrier" },
   "tags": ["insert", "life", "no_combat"],
   "available": { "kind": "life", "life": "klyuchar" },
   "entry": "the_tail",

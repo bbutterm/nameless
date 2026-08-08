@@ -300,8 +300,8 @@
       "id": "r_hurried",
       "speaker": "revizor",
       "text": {
-        "ru": "Метод: понятен. Метод: не помогает. Наряд ждёт по бланку, бланк действует семь ходов.",
-        "en": "The method: understood. The method: does not help. The detail waits by a form, and the form runs for seven turns."
+        "ru": "Метод: понятен. Метод: не помогает. Наряд ждёт по бланку, бланк действует семь ударов насоса.",
+        "en": "The method: understood. The method: does not help. The detail waits by a form, and the form runs for seven beats of the pump."
       },
       "next": "offer_intro"
     },
@@ -447,8 +447,8 @@
       "id": "guard_reads",
       "speaker": "naryad_revizii",
       "text": {
-        "ru": "Задержание обеспечения до окончания сверки. Бланк двадцать семь, срок действия — семь ходов. Обеспечение, руки перед собой.",
-        "en": "Detention of holdings pending the close of the reconciliation. Form twenty-seven, valid for seven turns. Holdings, hands where I can see them."
+        "ru": "Задержание обеспечения до окончания сверки. Бланк двадцать семь, срок действия — семь ударов насоса. Обеспечение, руки перед собой.",
+        "en": "Detention of holdings pending the close of the reconciliation. Form twenty-seven, valid for seven beats of the pump. Holdings, hands where I can see them."
       },
       "keywords": [{ "match": { "ru": "Обеспечение, руки перед собой", "en": "Holdings, hands where I can see them" }, "tone": "danger" }],
       "next": "guard_choice"
@@ -496,7 +496,7 @@
           "id": "gar_forward",
           "chip": { "icon": "fire", "label": { "ru": "Смолокур", "en": "Smolokur" }, "tone": "life" },
           "conditions": { "kind": "life", "life": "smolokur" },
-          "text": { "ru": "Пустить Гарь вперёд бланка.", "en": "Let Gar go before the form does." },
+          "text": { "ru": "Пустить Гарь вперёд бланка.", "en": "Let the Smoke go before the form does." },
           "effects": [
             { "kind": "fragment", "memory": "schet_za_sezon", "amount": 3 },
             { "kind": "axis", "axis": "mercy_cruelty", "delta": -8 }
@@ -557,8 +557,8 @@
       "kind": "narration",
       "id": "after_win",
       "text": {
-        "ru": "Бланк действует семь ходов, и семь ходов кончаются раньше наряда. Старший сворачивает лист, отмечает время и уводит своих: без бланка они тут никто, и они это знают лучше тебя.",
-        "en": "The form runs for seven turns, and seven turns run out before the detail does. The sergeant rolls up the sheet, notes the time and takes his men away: without the form they are nobody here, and they know it better than you do."
+        "ru": "Бланк действует семь ударов насоса, и седьмой удар приходит раньше, чем наряд успевает кончить дело. Старший сворачивает лист, отмечает время и уводит своих: без бланка они тут никто, и они это знают лучше тебя.",
+        "en": "The form runs for seven beats of the pump, and the seventh beat comes before the detail is done. The sergeant rolls up the sheet, notes the time and takes his men away: without the form they are nobody here, and they know it better than you do."
       },
       "next": "revizor_after"
     },

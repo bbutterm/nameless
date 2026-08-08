@@ -161,10 +161,16 @@ export function beginRound(idx: CombatIndex, state: BattleState): BattleState {
   const round = state.round + 1;
   // Статусы копируются поштучно: щиты убывают мутацией, и общие ссылки
   // на объекты статуса сломали бы воспроизводимость боя по сиду.
+  // Статусы И кулдауны копируются поштучно: и те и другие правятся мутацией
+  // (щиты убывают, кулдауны тикают), а общая ссылка означала бы, что
+  // предыдущее состояние боя задним числом меняется вместе с новым —
+  // ломается и реплей по сиду, и мемоизация на клиенте (ссылка та же —
+  // перерисовки кулдаунов не будет).
   const units = state.units.map((u) => ({
     ...u,
     acted: false,
     statuses: u.statuses.map((st) => ({ ...st })),
+    cooldowns: { ...u.cooldowns },
   }));
 
   // Урон/лечение от статусов, тик длительностей.
@@ -245,6 +251,21 @@ export function readyAbilities(idx: CombatIndex, u: BattleUnitState): Ability[] 
 }
 
 /**
+ * Способность поднимает павших? Тогда её законные цели — наоборот, МЁРТВЫЕ
+ * союзники. Без этого эффект `revive` был недостижим втройне: живых целей
+ * фильтровал legalTargets, мёртвых отбрасывал resolveTargets, а цикл
+ * применения пропускал `!alive`. Эффект существовал в типах, схеме и движке,
+ * но не мог сработать никогда.
+ */
+export function isRevive(ability: Ability): boolean {
+  return ability.effects?.some((e) => e.kind === 'revive') ?? false;
+}
+
+function fallen(state: BattleState, side: Side): BattleUnitState[] {
+  return state.units.filter((u) => !u.alive && u.side === side);
+}
+
+/**
  * Правило строя: ближний бой достаёт только передний ряд противника,
  * пока в нём кто-то жив. Пустой передний ряд открывает задний.
  */
@@ -256,7 +277,7 @@ export function legalTargets(
   const actor = state.units.find((u) => u.uid === actorUid);
   if (!actor || !actor.alive) return [];
   const foes = living(state, actor.side === 'player' ? 'enemy' : 'player');
-  const allies = living(state, actor.side);
+  const allies = isRevive(ability) ? fallen(state, actor.side) : living(state, actor.side);
 
   switch (ability.target) {
     case 'self':
@@ -287,9 +308,10 @@ export function resolveTargets(
   ability: Ability,
   targetUid: string | undefined,
 ): BattleUnitState[] {
-  const primary = state.units.find((u) => u.uid === targetUid && u.alive);
+  const raising = isRevive(ability);
+  const primary = state.units.find((u) => u.uid === targetUid && u.alive !== raising);
   const foes = living(state, actor.side === 'player' ? 'enemy' : 'player');
-  const allies = living(state, actor.side);
+  const allies = raising ? fallen(state, actor.side) : living(state, actor.side);
   switch (ability.target) {
     case 'self':
       return [actor];
@@ -391,7 +413,8 @@ export function act(idx: CombatIndex, state: BattleState, action: Action): Battl
   for (const eff of effects) {
     for (const tRef of targets) {
       const t = units.find((u) => u.uid === tRef.uid);
-      if (!t || !t.alive) continue;
+      // Мёртвая цель пропускается всем, кроме воскрешения: оно ради неё и есть.
+      if (!t || (!t.alive && eff.kind !== 'revive')) continue;
       applyBattleEffect(rng, self, t, eff, events);
       if (t.hp <= 0 && t.alive) {
         t.alive = false;
@@ -551,7 +574,15 @@ export function planAction(
   const rng = Rng.restore(state.rng).fork(`ai:${actor.uid}:${state.round}:${state.turnIndex}`);
 
   const allies = living(state, actor.side);
-  const healer = ready.find((a) => a.effects?.some((e) => e.kind === 'heal') || a.target === 'ally_one');
+  // Поднять павшего важнее, чем долечить раненого.
+  const raiser = ready.find((a) => isRevive(a));
+  if (raiser) {
+    const dead = fallen(state, actor.side).sort((a, b) => b.maxHp - a.maxHp)[0];
+    if (dead) return { ability: raiser.id, targetUid: dead.uid };
+  }
+  const healer = ready.find(
+    (a) => !isRevive(a) && (a.effects?.some((e) => e.kind === 'heal') || a.target === 'ally_one'),
+  );
   if (healer) {
     const hurt = allies
       .filter((u) => u.hp < u.maxHp * 0.55)

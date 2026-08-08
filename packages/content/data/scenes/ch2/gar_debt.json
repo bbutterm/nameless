@@ -1,7 +1,7 @@
 {
   "id": "gar_debt",
   "chapter": 2,
-  "title": { "ru": "Гарь поднимается раньше приказа", "en": "The Char Rises Before the Order" },
+  "title": { "ru": "Гарь поднимается раньше приказа", "en": "The Smoke Rises Before the Order" },
   "tags": ["vaults", "life", "no_combat"],
   "available": { "kind": "life", "life": "smolokur" },
   "entry": "gar_in",
@@ -21,7 +21,7 @@
       "id": "gar_stands",
       "text": {
         "ru": "Гарь стоит за твоим плечом, хотя ты её не звал. Отголоски поднимаются по приказу и держатся заднего ряда; этот вышел вперёд и смотрит туда же, куда смотрел бы ты, если бы решал не думая.",
-        "en": "The Char is standing at your shoulder, though you did not call it. Echoes rise on command and keep to the back rank; this one has stepped forward and is looking where you would look if you decided without thinking."
+        "en": "The Smoke is standing at your shoulder, though you did not call it. Echoes rise on command and keep to the back rank; this one has stepped forward and is looking where you would look if you decided without thinking."
       },
       "next": "gar_klyost"
     },
@@ -49,7 +49,7 @@
       "id": "gar_lean",
       "text": {
         "ru": "Гарь подаётся к ним на полшага раньше, чем ты успеваешь решить, надо ли. Смола на воде занималась с опозданием на два вдоха; здесь опоздания нет вовсе.",
-        "en": "The Char leans towards them half a step before you have got as far as deciding whether it should. Tar on water used to catch two breaths late; here there is no lateness at all."
+        "en": "The Smoke leans towards them half a step before you have got as far as deciding whether it should. Tar on water used to catch two breaths late; here there is no lateness at all."
       },
       "next": "leash_choice"
     },
@@ -191,7 +191,7 @@
       "id": "r_name_it",
       "text": {
         "ru": "Ты называешь эпоху, реку и город на воде, и Гарь на этих словах становится ровнее и тише. Третий носильщик слышит половину, записывает половину и сдаёт рапорт, в котором нет ни одного глагола.",
-        "en": "You name the age, the river and the town upon the water, and at those words the Char goes steadier and quieter. The third carrier hears half of it, writes half of it down, and files a report with not one verb in it."
+        "en": "You name the age, the river and the town upon the water, and at those words the Smoke goes steadier and quieter. The third carrier hears half of it, writes half of it down, and files a report with not one verb in it."
       },
       "next": "aftermath"
     },
@@ -210,7 +210,7 @@
       "id": "aftermath",
       "text": {
         "ru": "Гарь стоит за плечом и не гаснет. Ты помнишь, что за ту работу тебе заплатили по зимней ставке, и помнишь сумму, а лиц гребцов, подсказавших расчёт, не помнишь до сих пор.",
-        "en": "The Char stands at your shoulder and does not go out. You remember that the work was paid at the winter rate, and you remember the sum, and you still cannot remember the faces of the oarsmen who gave you the calculation."
+        "en": "The Smoke stands at your shoulder and does not go out. You remember that the work was paid at the winter rate, and you remember the sum, and you still cannot remember the faces of the oarsmen who gave you the calculation."
       },
       "next": "debt_choice"
     },

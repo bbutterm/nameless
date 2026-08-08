@@ -21,14 +21,14 @@
       "speaker": "svodchik",
       "text": {
         "ru": "Бланк Я-1: явка вкладчика к Прилавку. Заполнено всё, кроме одной графы. Графа называется «способ».",
-        "en": "Form A-1: appearance of a depositor at the Counter. Everything is filled in but one column. The column is called \"method\"."
+        "en": "Form AP-1: appearance of a depositor at the Counter. Everything is filled in but one column. The column is called \"method\"."
       },
       "next": "form_lore"
     },
     {
       "kind": "lore",
       "id": "form_lore",
-      "title": { "ru": "Бланк Я-1, примечание к графе «способ»", "en": "Form A-1, note to the column \"method\"" },
+      "title": { "ru": "Бланк Я-1, примечание к графе «способ»", "en": "Form AP-1, note to the column \"method\"" },
       "text": {
         "ru": "«Графу заполняет вкладчик собственноручно. При невозможности собственноручного заполнения графу заполняет свидетель, и явка считается недобровольной, с надбавкой к сроку». Надбавка составляет сутки. Никто в городе не знает, к чему эти сутки прибавляются.",
         "en": "\"The column is filled in by the depositor in his own hand. Where filling it in personally is impossible, a witness fills it in and the appearance counts as involuntary, with a supplement to the term.\" The supplement is one day. Nobody in the city knows what that day is added to."

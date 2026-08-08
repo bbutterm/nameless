@@ -276,7 +276,7 @@
           "id": "water_them",
           "chip": { "icon": "heal", "label": { "ru": "Ключарь", "en": "Klyuchar" }, "tone": "life" },
           "conditions": { "kind": "life", "life": "klyuchar" },
-          "text": { "ru": "Поставить Водоноса за спину. Всем хватит.", "en": "Put the Watercarrier behind me. There is enough for everyone." },
+          "text": { "ru": "Поставить Водоноса за спину. Всем хватит.", "en": "Put the Water Carrier behind me. Enough for everyone." },
           "effects": [
             { "kind": "fragment", "memory": "poslednyaya_kruzhka", "amount": 3 },
             { "kind": "axis", "axis": "mercy_cruelty", "delta": 8 }
