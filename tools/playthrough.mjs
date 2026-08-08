@@ -121,7 +121,11 @@ for (let step = 0; step < 1600; step++) {
     }
     const scene = await page.evaluate(() => document.querySelectorAll('.feed > *').length);
     seenScenes.add(scene);
-    await page.locator('.feed').click({ position: { x: 195, y: 120 } });
+    // Тапаем по подсказке, а не по ленте: в ленте попадаются раскрывашки лора,
+    // которые гасят всплытие клика, и автопрохождение залипало на них навсегда.
+    const hintEl = page.locator('.tap-hint');
+    if (await hintEl.count()) await hintEl.click();
+    else await page.locator('.screen.dialogue').click({ position: { x: 195, y: 40 } });
     bubbles++;
     await page.waitForTimeout(90);
     continue;

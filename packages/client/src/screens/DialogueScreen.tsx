@@ -5,26 +5,22 @@ import { ChoiceBar } from '../components/ChoiceBar';
 import { Icon } from '../components/Icon';
 import { loc, t } from '../i18n';
 import { useGame } from '../store/game';
-import { idx } from '../store/content';
+import { content, idx } from '../store/content';
 import { backgroundSvg, svgDataUri } from '../lib/art';
 import { ArchiveSheet } from './ArchiveSheet';
 import { TutorialHint } from '../components/Tutorial';
 
-/** Имя говорящего: в контенте оно живёт в сцене, а не в реестре — реестр только про арт. */
+/**
+ * Имя в шапке пузыря берётся из реестра говорящих: там оно двуязычное.
+ * Запасной вариант — читаемый вид id, чтобы новая роль не показывалась
+ * пользователю сырым `golos_iz_trukhi`.
+ */
+const SPEAKER_NAMES = new Map(content.speakers.map((s) => [s.id, s.name]));
+
 function speakerName(id: string, lang: 'ru' | 'en'): string {
-  const NAMES: Record<string, { ru: string; en: string }> = {
-    osoka: { ru: 'Осока', en: 'Osoka' },
-    tminny: { ru: 'Тминный', en: 'Tminny' },
-    proshchai: { ru: 'Брат Прощай', en: 'Brother Farewell' },
-    zhichka: { ru: 'Жичка', en: 'Zhichka' },
-    dratva: { ru: 'Капрал Дратва', en: 'Corporal Dratva' },
-    klyost: { ru: 'Клёст', en: 'Klyost' },
-    revizor: { ru: 'Ревизор', en: 'The Auditor' },
-    player: { ru: 'Ты', en: 'You' },
-  };
-  const known = NAMES[id];
-  if (known) return known[lang];
-  return id.replace(/_/g, ' ');
+  const known = SPEAKER_NAMES.get(id);
+  if (known) return loc(known, lang);
+  return id.replace(/_/g, ' ').replace(/^./, (c) => c.toUpperCase());
 }
 
 export function DialogueScreen() {

@@ -75,12 +75,12 @@
     },
     "icon": "stun",
     "target": "enemy_front",
-    "power": 1.9,
+    "power": 1.5,
     "cooldown": 4,
     "effects": [
       {
         "kind": "damage",
-        "power": 1.1
+        "power": 1.5
       },
       {
         "kind": "stun",
@@ -101,12 +101,12 @@
     },
     "icon": "chain",
     "target": "enemy_front",
-    "power": 1.3,
+    "power": 1.2,
     "cooldown": 2,
     "effects": [
       {
         "kind": "damage",
-        "power": 0.9
+        "power": 1.2
       },
       {
         "kind": "debuff",

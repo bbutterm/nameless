@@ -78,6 +78,8 @@ export type Effect =
 /** Кто говорит. `narrator` рисуется курсивом без портрета. */
 export interface Speaker {
   id: string;
+  /** Имя в шапке пузыря. Без него клиент показал бы сырой id. */
+  name?: LocalizedText;
   /** Путь к портрету или id процедурной заглушки. */
   art?: string;
 }

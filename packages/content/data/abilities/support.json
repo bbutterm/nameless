@@ -16,7 +16,7 @@
     "effects": [
       {
         "kind": "shield",
-        "amount": 20,
+        "amount": 14,
         "turns": 2
       }
     ],
@@ -68,7 +68,7 @@
     "effects": [
       {
         "kind": "heal",
-        "power": 0.75
+        "power": 0.7
       }
     ],
     "anim": "buff"
@@ -90,7 +90,7 @@
     "effects": [
       {
         "kind": "heal",
-        "power": 0.3
+        "power": 0.4
       }
     ],
     "anim": "cast"
@@ -124,8 +124,8 @@
       "en": "Reading the White Book"
     },
     "description": {
-      "ru": "Страницы пусты, и слушать становится легче.",
-      "en": "The pages are blank, and listening gets easier."
+      "ru": "Страницы пусты, и раны слушают внимательнее головы.",
+      "en": "The pages are blank, and wounds listen better than heads."
     },
     "icon": "book",
     "target": "ally_all",
@@ -155,18 +155,41 @@
       "en": "Raise the Rate"
     },
     "description": {
-      "ru": "К вечеру всё подорожало, включая драку.",
-      "en": "By evening everything rose in price, brawls included."
+      "ru": "Одному называют цену повыше — и он дерётся по ней.",
+      "en": "One man is quoted a higher price, and fights up to it."
     },
     "icon": "coin",
-    "target": "ally_all",
+    "target": "ally_one",
     "power": 0,
-    "cooldown": 3,
+    "cooldown": 2,
     "effects": [
       {
         "kind": "buff",
         "stat": "atk",
-        "amount": 3,
+        "amount": 4,
+        "turns": 2
+      }
+    ],
+    "anim": "buff"
+  },
+  {
+    "id": "i_will_hold_it",
+    "name": {
+      "ru": "Подержу",
+      "en": "I'll Hold That"
+    },
+    "description": {
+      "ru": "Берёт чужое на себя. Вещи при нём не теряются, люди тоже.",
+      "en": "Takes another's load. Things do not go missing near him; nor do people."
+    },
+    "icon": "shield",
+    "target": "ally_one",
+    "power": 0,
+    "cooldown": 1,
+    "effects": [
+      {
+        "kind": "shield",
+        "amount": 12,
         "turns": 2
       }
     ],

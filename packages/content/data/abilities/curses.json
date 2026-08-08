@@ -6,22 +6,22 @@
       "en": "Appraise"
     },
     "description": {
-      "ru": "Названная цена унижает: броня дешевеет.",
-      "en": "A named price humiliates: armour gets cheaper."
+      "ru": "Названная вслух цена унижает: броня дешевеет.",
+      "en": "A price said aloud humiliates: armour gets cheaper."
     },
     "icon": "eye",
     "target": "enemy_any",
-    "power": 1.05,
+    "power": 1.1,
     "cooldown": 1,
     "effects": [
       {
         "kind": "damage",
-        "power": 0.8
+        "power": 1.1
       },
       {
         "kind": "debuff",
         "stat": "def",
-        "amount": 8,
+        "amount": 6,
         "turns": 3
       }
     ],
@@ -34,19 +34,17 @@
       "en": "Inventory"
     },
     "description": {
-      "ru": "Внесённый в опись ряд ходит медленнее и бьёт вяло.",
-      "en": "A row entered in the ledger moves slower and strikes limply."
+      "ru": "Внесённый в опись ряд бьёт вяло: всё уже посчитано.",
+      "en": "A row entered in the ledger strikes limply: it is all counted already."
     },
     "icon": "book",
     "target": "enemy_row",
-    "power": 0.8,
+    "power": 0.7,
     "cooldown": 3,
     "effects": [
       {
-        "kind": "debuff",
-        "stat": "initiative",
-        "amount": 3,
-        "turns": 2
+        "kind": "damage",
+        "power": 0.7
       },
       {
         "kind": "debuff",
@@ -69,12 +67,16 @@
     },
     "icon": "candle",
     "target": "enemy_any",
-    "power": 1.1,
+    "power": 1.0,
     "cooldown": 2,
     "effects": [
       {
+        "kind": "damage",
+        "power": 1.0
+      },
+      {
         "kind": "dot",
-        "amount": 6,
+        "amount": 5,
         "turns": 3,
         "tag": "fading"
       }
@@ -121,12 +123,12 @@
     },
     "icon": "key",
     "target": "enemy_front",
-    "power": 1.5,
+    "power": 1.8,
     "cooldown": 5,
     "effects": [
       {
         "kind": "damage",
-        "power": 0.6
+        "power": 1.8
       },
       {
         "kind": "stun",
@@ -163,9 +165,13 @@
     },
     "icon": "fire",
     "target": "enemy_all",
-    "power": 0.6,
+    "power": 0.7,
     "cooldown": 4,
     "effects": [
+      {
+        "kind": "damage",
+        "power": 0.7
+      },
       {
         "kind": "debuff",
         "stat": "atk",
@@ -187,9 +193,13 @@
     },
     "icon": "blood",
     "target": "enemy_all",
-    "power": 0.7,
+    "power": 0.55,
     "cooldown": 4,
     "effects": [
+      {
+        "kind": "damage",
+        "power": 0.55
+      },
       {
         "kind": "dot",
         "amount": 3,

@@ -287,6 +287,7 @@ export const zAxis = z.object({
 
 export const zSpeaker = z.object({
   id: z.string().min(1),
+  name: zLocalized.optional(),
   art: z.string().optional(),
 });
 

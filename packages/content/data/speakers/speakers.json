@@ -1,21 +1,154 @@
 [
-  { "id": "narrator", "art": "" },
-  { "id": "player", "art": "" },
-  { "id": "osoka", "art": "" },
-  { "id": "tminny", "art": "" },
-  { "id": "proshchai", "art": "" },
-  { "id": "zhichka", "art": "" },
-  { "id": "dratva", "art": "" },
-  { "id": "klyost", "art": "" },
-  { "id": "revizor", "art": "" },
-  { "id": "strazhnik", "art": "" },
-  { "id": "otsenshchik", "art": "" },
-  { "id": "poproshayka", "art": "" },
-  { "id": "marodyor", "art": "" },
-  { "id": "golos_iz_trukhi", "art": "" },
-  { "id": "brat_ogorodnik", "art": "" },
-  { "id": "pisar_chitalni", "art": "" },
-  { "id": "storozh_arkhiva", "art": "" },
-  { "id": "ochered", "art": "" },
-  { "id": "mertvyy_v_ocheredi", "art": "" }
+  {
+    "id": "narrator",
+    "art": "",
+    "name": {
+      "ru": "Рассказчик",
+      "en": "Narrator"
+    }
+  },
+  {
+    "id": "player",
+    "art": "",
+    "name": {
+      "ru": "Ты",
+      "en": "You"
+    }
+  },
+  {
+    "id": "osoka",
+    "art": "",
+    "name": {
+      "ru": "Осока",
+      "en": "Osoka"
+    }
+  },
+  {
+    "id": "tminny",
+    "art": "",
+    "name": {
+      "ru": "Тминный",
+      "en": "Tminny"
+    }
+  },
+  {
+    "id": "proshchai",
+    "art": "",
+    "name": {
+      "ru": "Брат Прощай",
+      "en": "Brother Farewell"
+    }
+  },
+  {
+    "id": "zhichka",
+    "art": "",
+    "name": {
+      "ru": "Жичка",
+      "en": "Zhichka"
+    }
+  },
+  {
+    "id": "dratva",
+    "art": "",
+    "name": {
+      "ru": "Капрал Дратва",
+      "en": "Corporal Dratva"
+    }
+  },
+  {
+    "id": "klyost",
+    "art": "",
+    "name": {
+      "ru": "Клёст",
+      "en": "Klyost"
+    }
+  },
+  {
+    "id": "revizor",
+    "art": "",
+    "name": {
+      "ru": "Ревизор",
+      "en": "The Auditor"
+    }
+  },
+  {
+    "id": "strazhnik",
+    "art": "",
+    "name": {
+      "ru": "Стражник",
+      "en": "Guard"
+    }
+  },
+  {
+    "id": "otsenshchik",
+    "art": "",
+    "name": {
+      "ru": "Оценщик",
+      "en": "Appraiser"
+    }
+  },
+  {
+    "id": "poproshayka",
+    "art": "",
+    "name": {
+      "ru": "Попрошайка",
+      "en": "Beggar"
+    }
+  },
+  {
+    "id": "marodyor",
+    "art": "",
+    "name": {
+      "ru": "Мародёр",
+      "en": "Scavenger"
+    }
+  },
+  {
+    "id": "golos_iz_trukhi",
+    "art": "",
+    "name": {
+      "ru": "Голос из трухи",
+      "en": "Voice from the Ash"
+    }
+  },
+  {
+    "id": "brat_ogorodnik",
+    "art": "",
+    "name": {
+      "ru": "Брат-огородник",
+      "en": "Brother Gardener"
+    }
+  },
+  {
+    "id": "pisar_chitalni",
+    "art": "",
+    "name": {
+      "ru": "Писарь читальни",
+      "en": "Reading-Room Scribe"
+    }
+  },
+  {
+    "id": "storozh_arkhiva",
+    "art": "",
+    "name": {
+      "ru": "Сторож архива",
+      "en": "Archive Watchman"
+    }
+  },
+  {
+    "id": "ochered",
+    "art": "",
+    "name": {
+      "ru": "Очередь",
+      "en": "The Queue"
+    }
+  },
+  {
+    "id": "mertvyy_v_ocheredi",
+    "art": "",
+    "name": {
+      "ru": "Мертвец в очереди",
+      "en": "Dead Man in Line"
+    }
+  }
 ]
