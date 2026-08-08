@@ -79,7 +79,7 @@ export function TutorialHint({
 }: {
   step: TutorialStep | undefined;
   lang: Lang;
-  anchor?: 'bottom' | 'center' | 'top';
+  anchor?: 'bottom' | 'center' | 'top' | 'flow';
 }) {
   const { show } = useTutorial(step);
   if (!show || !step) return null;

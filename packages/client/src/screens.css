@@ -484,7 +484,9 @@
 /* ── Смерть ──────────────────────────────────────────────────────────────── */
 .death {
   align-items: center;
-  justify-content: center;
+  /* safe center: при контенте выше экрана обычный center срезает верх, и игрок
+     не видит, как именно он умер. */
+  justify-content: safe center;
   gap: 18px;
   padding: 28px 20px calc(28px + var(--safe-bottom));
   text-align: center;
@@ -673,6 +675,9 @@
 .tutorial-bottom { bottom: calc(84px + var(--safe-bottom)); }
 .tutorial-center { top: 42%; }
 .tutorial-top { top: calc(52px + var(--safe-top)); }
+/* В потоке: подсказка над кнопками выбора, а не поверх них — накрывать
+   собой два варианта из четырёх подсказка не должна. */
+.tutorial-flow { position: static; margin: 0 0 8px; }
 .tutorial-text { font-size: 16px; line-height: 1.35; }
 .tutorial-skip {
   margin-top: 6px;
@@ -682,3 +687,12 @@
   color: var(--accent-dim);
   text-align: right;
 }
+
+/* Зона выбора: подсказка обучения и кнопки в одном потоке. */
+.choice-area {
+  position: relative;
+  z-index: 2;
+  padding: 10px 12px calc(12px + var(--safe-bottom));
+  background: linear-gradient(180deg, transparent, var(--bg-0) 22%);
+}
+.choice-area .choices { padding: 0; background: none; }

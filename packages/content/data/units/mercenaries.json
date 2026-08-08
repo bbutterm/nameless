@@ -371,10 +371,10 @@
     "tier": 1,
     "row": "front",
     "stats": {
-      "hp": 42,
+      "initiative": 11,
+      "hp": 40,
       "atk": 9,
-      "def": 6,
-      "initiative": 11
+      "def": 6
     },
     "abilities": [
       "barefoot_rush",
@@ -443,7 +443,7 @@
     "row": "front",
     "stats": {
       "initiative": 8,
-      "hp": 40,
+      "hp": 41,
       "atk": 12,
       "def": 9
     },
@@ -514,10 +514,10 @@
     "tier": 1,
     "row": "front",
     "stats": {
-      "hp": 43,
+      "initiative": 10,
+      "hp": 42,
       "atk": 11,
-      "def": 7,
-      "initiative": 10
+      "def": 7
     },
     "abilities": [
       "barefoot_rush",

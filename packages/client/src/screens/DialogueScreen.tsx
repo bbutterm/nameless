@@ -95,17 +95,21 @@ export function DialogueScreen() {
       </div>
 
       {isChoice && step.kind === 'choice' ? (
-        <ChoiceBar
-          options={step.options}
-          prompt={step.node.prompt ? loc(step.node.prompt, lang) : undefined}
-          lang={lang}
-          onPick={pick}
-        />
+        <div className="choice-area">
+          <TutorialHint step="choice" lang={lang} anchor="flow" />
+          <ChoiceBar
+            options={step.options}
+            prompt={step.node.prompt ? loc(step.node.prompt, lang) : undefined}
+            lang={lang}
+            onPick={pick}
+          />
+        </div>
       ) : (
-        <div className="tap-hint">{t(lang, 'tapToContinue')}</div>
+        <>
+          <div className="tap-hint">{t(lang, 'tapToContinue')}</div>
+          <TutorialHint step="tap" lang={lang} />
+        </>
       )}
-
-      <TutorialHint step={isChoice ? 'choice' : 'tap'} lang={lang} />
 
       {archive && <ArchiveSheet state={state} lang={lang} onClose={() => setArchive(false)} />}
     </div>
