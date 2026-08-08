@@ -14,8 +14,8 @@
     "tier": 2,
     "row": "back",
     "stats": {
-      "hp": 51,
-      "atk": 17,
+      "hp": 45,
+      "atk": 12,
       "def": 6,
       "initiative": 12
     },
@@ -44,13 +44,13 @@
     "tier": 2,
     "row": "back",
     "stats": {
-      "hp": 89,
-      "atk": 32,
-      "def": 12,
+      "hp": 62,
+      "atk": 18,
+      "def": 9,
       "initiative": 14
     },
     "abilities": [
-      "bucket_round",
+      "the_well_asks_nothing",
       "indiscriminate_mercy"
     ],
     "traits": [
@@ -74,14 +74,14 @@
     "tier": 2,
     "row": "front",
     "stats": {
-      "hp": 102,
-      "atk": 11,
-      "def": 15,
+      "hp": 72,
+      "atk": 7,
+      "def": 12,
       "initiative": 9
     },
     "abilities": [
       "promise_note",
-      "stand_in_the_doorway",
+      "i_will_hold_it",
       "paper_slap"
     ],
     "traits": [
@@ -105,8 +105,8 @@
     "tier": 2,
     "row": "back",
     "stats": {
-      "hp": 63,
-      "atk": 19,
+      "hp": 45,
+      "atk": 12,
       "def": 6,
       "initiative": 13
     },

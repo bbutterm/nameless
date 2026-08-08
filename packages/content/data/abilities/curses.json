@@ -21,7 +21,7 @@
       {
         "kind": "debuff",
         "stat": "def",
-        "amount": 6,
+        "amount": 5,
         "turns": 3
       }
     ],
@@ -67,16 +67,16 @@
     },
     "icon": "candle",
     "target": "enemy_any",
-    "power": 1.0,
+    "power": 0.7,
     "cooldown": 2,
     "effects": [
       {
         "kind": "damage",
-        "power": 1.0
+        "power": 0.7
       },
       {
         "kind": "dot",
-        "amount": 5,
+        "amount": 4,
         "turns": 3,
         "tag": "fading"
       }
@@ -95,17 +95,17 @@
     },
     "icon": "lock",
     "target": "enemy_any",
-    "power": 1.6,
+    "power": 0.9,
     "cooldown": 3,
     "effects": [
       {
         "kind": "damage",
-        "power": 1.1
+        "power": 0.9
       },
       {
         "kind": "debuff",
         "stat": "atk",
-        "amount": 4,
+        "amount": 3,
         "turns": 3
       }
     ],
@@ -165,17 +165,17 @@
     },
     "icon": "fire",
     "target": "enemy_all",
-    "power": 0.7,
+    "power": 0.4,
     "cooldown": 4,
     "effects": [
       {
         "kind": "damage",
-        "power": 0.7
+        "power": 0.4
       },
       {
         "kind": "debuff",
         "stat": "atk",
-        "amount": 3,
+        "amount": 2,
         "turns": 2
       }
     ],

@@ -16,7 +16,7 @@
     "effects": [
       {
         "kind": "shield",
-        "amount": 14,
+        "amount": 12,
         "turns": 2
       }
     ],
@@ -68,7 +68,29 @@
     "effects": [
       {
         "kind": "heal",
-        "power": 0.7
+        "power": 0.6
+      }
+    ],
+    "anim": "buff"
+  },
+  {
+    "id": "the_well_asks_nothing",
+    "name": {
+      "ru": "Колодец не спрашивает",
+      "en": "The Well Asks Nothing"
+    },
+    "description": {
+      "ru": "Глубокая вода на всех. Имён не требуют.",
+      "en": "Deep water for everyone. No names are asked."
+    },
+    "icon": "heal",
+    "target": "ally_all",
+    "power": 0,
+    "cooldown": 1,
+    "effects": [
+      {
+        "kind": "heal",
+        "power": 1.0
       }
     ],
     "anim": "buff"
@@ -90,7 +112,7 @@
     "effects": [
       {
         "kind": "heal",
-        "power": 0.4
+        "power": 0.3
       }
     ],
     "anim": "cast"
@@ -189,7 +211,7 @@
     "effects": [
       {
         "kind": "shield",
-        "amount": 12,
+        "amount": 16,
         "turns": 2
       }
     ],

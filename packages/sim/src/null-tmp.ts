@@ -19,19 +19,19 @@ const idx = indexCombat(scaled as any);
 const byTier = new Map<number, UnitDef[]>();
 for (const u of scaled.units) { const l = byTier.get(u.tier) ?? []; l.push(u); byTier.set(u.tier, l); }
 const runs = Number(process.argv.find((a) => a.startsWith('--runs='))?.split('=')[1] ?? 400);
-let totW = 0, totP = 0, totD = 0;
+const per = new Map<number, [number, number, number]>();
 for (const unit of scaled.units) {
   if (unit.tier === 3) continue;
   const pool = (byTier.get(unit.tier) ?? []).filter((u) => u.id !== unit.id);
-  let wins = 0, played = 0, draws = 0;
+  let wins = 0, played = 0, draws = 0, rounds = 0;
   for (let i = 0; i < runs; i++) {
     const rng = new Rng(`wr:${unit.id}:${i}`);
     const baseline = rng.shuffle(pool.concat(pool, pool)).slice(0, 6);
     if (baseline.length < 2) continue;
     const battle: BattleDef = { id: `sim:${unit.id}:${i}`, name: { ru: 'x', en: 'x' }, enemies: fillSlots(baseline).map((p) => ({ unit: p.defId, row: p.slot.row, index: p.slot.index })) };
     const st = runAuto(idx, startBattle(idx, battle, fillSlots(baseline), `wr:${unit.id}:${i}`));
-    played++; if (st.outcome === 'win') wins++; if (st.outcome === 'draw') draws++;
+    played++; rounds += st.round; if (st.outcome === 'win') wins++; if (st.outcome === 'draw') draws++;
   }
-  totW += wins; totP += played; totD += draws;
+  const c = per.get(unit.tier) ?? [0,0,0]; per.set(unit.tier, [c[0]+wins, c[1]+played, c[2]+rounds]);
 }
-console.log(`hp×${hpMul} НУЛЕВАЯ ГИПОТЕЗА (отряд против самого себя): побед ${(100*totW/totP).toFixed(1)}%, ничьих ${(100*totD/totP).toFixed(1)}%, боёв ${totP}`);
+for (const [t, [w, p, r]] of [...per].sort()) console.log(`hp×${hpMul} тир${t}: сторона-игрок побеждает зеркало в ${(100*w/p).toFixed(1)}% (боёв ${p}, раундов ${(r/p).toFixed(1)})`);

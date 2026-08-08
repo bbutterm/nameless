@@ -1,20 +1,38 @@
 {
   "id": "chulan_wake",
   "chapter": 1,
-  "title": { "ru": "Чулан невостребованного", "en": "The Unclaimed Room" },
-  "tags": ["wake", "chapter_entry"],
+  "title": {
+    "ru": "Чулан невостребованного",
+    "en": "The Unclaimed Room"
+  },
+  "tags": [
+    "wake",
+    "chapter_entry"
+  ],
   "entry": "wake_router",
   "nodes": [
     {
       "kind": "branch",
       "id": "wake_router",
       "branches": [
-        { "when": { "kind": "flag", "flag": "first_death_done" }, "to": "end_of_chapter" },
-        { "when": { "kind": "deaths", "op": "gte", "value": 1 }, "to": "wake_again" }
+        {
+          "when": {
+            "kind": "flag",
+            "flag": "first_death_done"
+          },
+          "to": "end_of_chapter"
+        },
+        {
+          "when": {
+            "kind": "deaths",
+            "op": "gte",
+            "value": 1
+          },
+          "to": "wake_again"
+        }
       ],
       "fallback": "wake_first"
     },
-
     {
       "kind": "narration",
       "id": "wake_first",
@@ -22,7 +40,15 @@
         "ru": "Труха на полу подбирается к своему месту и становится вами. Дольше всего собирается лицо.",
         "en": "The dust on the floor creeps back into place and becomes you. The face takes longest."
       },
-      "keywords": [{ "match": { "ru": "Труха", "en": "dust" }, "tone": "memory" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "Труха",
+            "en": "dust"
+          },
+          "tone": "memory"
+        }
+      ],
       "next": "wake_shelves"
     },
     {
@@ -32,13 +58,24 @@
         "ru": "Вокруг полки невыкупленного: детские санки, свадебное платье, банка с чем-то, что уже не пахнет. На каждой вещи бирка и срок.",
         "en": "Around you, shelves of the unredeemed: a child's sled, a wedding dress, a jar of something that no longer smells. Every item has a tag and a deadline."
       },
-      "keywords": [{ "match": { "ru": "бирка", "en": "tag" }, "tone": "lore" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "бирка",
+            "en": "tag"
+          },
+          "tone": "lore"
+        }
+      ],
       "next": "shelf_tag"
     },
     {
       "kind": "lore",
       "id": "shelf_tag",
-      "title": { "ru": "Бирка на санках, № 4417", "en": "Tag on the sled, no. 4417" },
+      "title": {
+        "ru": "Бирка на санках, № 4417",
+        "en": "Tag on the sled, no. 4417"
+      },
       "text": {
         "ru": "Санки детские, одни. Хранение — три гроша в месяц. Просрочка — четыре года и два месяца. Владелец приходит по средам, платит один грош и уходит. Ломбард считает это долгом и санки не выдаёт. Ломбард прав.",
         "en": "Child's sled, one. Storage: three groschen a month. Overdue: four years and two months. The owner comes on Wednesdays, pays one groschen and leaves. The Pawnshop counts this as a debt and does not release the sled. The Pawnshop is correct."
@@ -58,8 +95,19 @@
       "kind": "say",
       "id": "osoka_greet",
       "speaker": "osoka",
-      "text": { "ru": "Вы собрались. Опись при мне.", "en": "You are assembled. I have the inventory." },
-      "keywords": [{ "match": { "ru": "Опись", "en": "inventory" }, "tone": "lore" }],
+      "text": {
+        "ru": "Вы собрались. Опись при мне.",
+        "en": "You are assembled. I have the inventory."
+      },
+      "keywords": [
+        {
+          "match": {
+            "ru": "Опись",
+            "en": "inventory"
+          },
+          "tone": "lore"
+        }
+      ],
       "next": "osoka_rule"
     },
     {
@@ -89,7 +137,15 @@
         "ru": "Пуговицы — три, не свои. Карандаш — огрызок. Бумажки с записями — четыре.",
         "en": "Buttons: three, none of them yours. Pencil: a stub. Papers with writing: four."
       },
-      "keywords": [{ "match": { "ru": "Бумажки с записями", "en": "Papers with writing" }, "tone": "memory" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "Бумажки с записями",
+            "en": "Papers with writing"
+          },
+          "tone": "memory"
+        }
+      ],
       "next": "opis_list2"
     },
     {
@@ -102,7 +158,6 @@
       },
       "next": "opis_choice"
     },
-
     {
       "kind": "choice",
       "id": "opis_choice",
@@ -113,77 +168,205 @@
       "options": [
         {
           "id": "take_all",
-          "text": { "ru": "Забрать всё до пуговицы.", "en": "Take everything, down to the buttons." },
+          "text": {
+            "ru": "Забрать всё до пуговицы.",
+            "en": "Take everything, down to the buttons."
+          },
           "effects": [
-            { "kind": "flag", "flag": "opis_taken_all", "value": true },
-            { "kind": "axis", "axis": "grasp_release", "delta": 8 }
+            {
+              "kind": "flag",
+              "flag": "opis_taken_all",
+              "value": true
+            },
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": 8
+            }
           ],
           "to": "r_take_all"
         },
         {
           "id": "take_needed",
-          "text": { "ru": "Взять только то, что пригодится.", "en": "Take only what will be of use." },
-          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 3 }],
+          "text": {
+            "ru": "Взять только то, что пригодится.",
+            "en": "Take only what will be of use."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": 3
+            }
+          ],
           "to": "r_take_needed"
         },
         {
           "id": "leave_others",
-          "text": { "ru": "Чужое оставить чужим.", "en": "Leave what is not mine." },
+          "text": {
+            "ru": "Чужое оставить чужим.",
+            "en": "Leave what is not mine."
+          },
           "effects": [
-            { "kind": "flag", "flag": "opis_left_something", "value": true },
-            { "kind": "axis", "axis": "grasp_release", "delta": -8 }
+            {
+              "kind": "flag",
+              "flag": "opis_left_something",
+              "value": true
+            },
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": -8
+            }
           ],
           "to": "r_leave"
         },
         {
           "id": "perechen_recount",
-          "text": { "ru": "Сверить кучки с бумагой по пунктам.", "en": "Check the heaps against the paper, item by item." },
-          "chip": { "icon": "hourglass", "label": { "ru": "Перечень", "en": "Perechen" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "perechen" },
+          "text": {
+            "ru": "Сверить кучки с бумагой по пунктам.",
+            "en": "Check the heaps against the paper, item by item."
+          },
+          "chip": {
+            "icon": "hourglass",
+            "label": {
+              "ru": "Перечень",
+              "en": "Perechen"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "perechen"
+          },
           "effects": [
-            { "kind": "flag", "flag": "opis_taken_all", "value": true },
-            { "kind": "axis", "axis": "reason_obsession", "delta": -5 }
+            {
+              "kind": "flag",
+              "flag": "opis_taken_all",
+              "value": true
+            },
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -5
+            }
           ],
           "to": "r_take_all"
         },
         {
           "id": "klyuchar_leave",
-          "text": { "ru": "Оставить пуговицы следующему.", "en": "Leave the buttons for the next one." },
-          "chip": { "icon": "heal", "label": { "ru": "Ключарь", "en": "Klyuchar" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "klyuchar" },
+          "text": {
+            "ru": "Оставить пуговицы следующему.",
+            "en": "Leave the buttons for the next one."
+          },
+          "chip": {
+            "icon": "heal",
+            "label": {
+              "ru": "Ключарь",
+              "en": "Klyuchar"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "klyuchar"
+          },
           "effects": [
-            { "kind": "flag", "flag": "opis_left_something", "value": true },
-            { "kind": "axis", "axis": "mercy_cruelty", "delta": 5 }
+            {
+              "kind": "flag",
+              "flag": "opis_left_something",
+              "value": true
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": 5
+            }
           ],
           "to": "r_leave"
         },
         {
           "id": "posul_sign",
-          "text": { "ru": "Расписаться за то, чего в описи нет.", "en": "Sign for something the inventory omits." },
-          "chip": { "icon": "coin", "label": { "ru": "Посульщик", "en": "Posulshchik" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "posulshchik" },
+          "text": {
+            "ru": "Расписаться за то, чего в описи нет.",
+            "en": "Sign for something the inventory omits."
+          },
+          "chip": {
+            "icon": "coin",
+            "label": {
+              "ru": "Посульщик",
+              "en": "Posulshchik"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "posulshchik"
+          },
           "effects": [
-            { "kind": "flag", "flag": "opis_taken_all", "value": true },
-            { "kind": "axis", "axis": "honesty_deceit", "delta": -5 }
+            {
+              "kind": "flag",
+              "flag": "opis_taken_all",
+              "value": true
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": -5
+            }
           ],
           "to": "r_take_all"
         },
         {
           "id": "take_shelf_too",
-          "text": { "ru": "Снять с полки ещё и чужой гребень.", "en": "Take someone's comb off the shelf too." },
-          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -25 },
+          "text": {
+            "ru": "Снять с полки ещё и чужой гребень.",
+            "en": "Take someone's comb off the shelf too."
+          },
+          "conditions": {
+            "kind": "axis",
+            "axis": "mercy_cruelty",
+            "op": "lte",
+            "value": -25
+          },
           "effects": [
-            { "kind": "flag", "flag": "opis_taken_all", "value": true },
-            { "kind": "axis", "axis": "honesty_deceit", "delta": -5 },
-            { "kind": "axis", "axis": "grasp_release", "delta": 5 }
+            {
+              "kind": "flag",
+              "flag": "opis_taken_all",
+              "value": true
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": -5
+            },
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": 5
+            }
           ],
           "to": "r_take_all"
         },
         {
           "id": "count_first",
-          "text": { "ru": "Ничего не трогать, пока не сойдётся.", "en": "Touch nothing until the count agrees." },
-          "conditions": { "kind": "axis", "axis": "reason_obsession", "op": "lte", "value": -25 },
-          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": -3 }],
+          "text": {
+            "ru": "Ничего не трогать, пока не сойдётся.",
+            "en": "Touch nothing until the count agrees."
+          },
+          "conditions": {
+            "kind": "axis",
+            "axis": "reason_obsession",
+            "op": "lte",
+            "value": -25
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -3
+            }
+          ],
           "to": "r_take_needed"
         }
       ]
@@ -192,7 +375,10 @@
       "kind": "say",
       "id": "r_take_all",
       "speaker": "osoka",
-      "text": { "ru": "Принято. По описи — всё.", "en": "Accepted. By the inventory, everything." },
+      "text": {
+        "ru": "Принято. По описи — всё.",
+        "en": "Accepted. By the inventory, everything."
+      },
       "next": "recount_choice"
     },
     {
@@ -215,7 +401,6 @@
       },
       "next": "recount_choice"
     },
-
     {
       "kind": "choice",
       "id": "recount_choice",
@@ -226,52 +411,132 @@
       "options": [
         {
           "id": "recount",
-          "text": { "ru": "Пересчитать опись вслух.", "en": "Count the inventory out loud." },
+          "text": {
+            "ru": "Пересчитать опись вслух.",
+            "en": "Count the inventory out loud."
+          },
           "effects": [
-            { "kind": "fragment", "memory": "punkt_pervyy", "amount": 1 },
-            { "kind": "axis", "axis": "reason_obsession", "delta": -8 }
+            {
+              "kind": "fragment",
+              "memory": "punkt_pervyy",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -8
+            }
           ],
           "to": "r_recount"
         },
         {
           "id": "who_wrote",
-          "text": { "ru": "Спросить, кто её составлял.", "en": "Ask who drew it up." },
-          "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": 3 }],
+          "text": {
+            "ru": "Спросить, кто её составлял.",
+            "en": "Ask who drew it up."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 3
+            }
+          ],
           "to": "r_who"
         },
         {
           "id": "silent",
-          "text": { "ru": "Промолчать.", "en": "Say nothing." },
+          "text": {
+            "ru": "Промолчать.",
+            "en": "Say nothing."
+          },
           "to": "r_silent"
         },
         {
           "id": "write_it_myself",
-          "text": { "ru": "Переписать опись своей рукой.", "en": "Copy the inventory in my own hand." },
-          "chip": { "icon": "book", "label": { "ru": "Чистописец", "en": "Chistopisets" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "chistopisets" },
-          "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": 5 }],
+          "text": {
+            "ru": "Переписать опись своей рукой.",
+            "en": "Copy the inventory in my own hand."
+          },
+          "chip": {
+            "icon": "book",
+            "label": {
+              "ru": "Чистописец",
+              "en": "Chistopisets"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "chistopisets"
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 5
+            }
+          ],
           "to": "r_who"
         },
         {
           "id": "demand_rewrite",
-          "text": { "ru": "Велеть переписать заново.", "en": "Order it rewritten from scratch." },
-          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -25 },
-          "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": -3 }],
+          "text": {
+            "ru": "Велеть переписать заново.",
+            "en": "Order it rewritten from scratch."
+          },
+          "conditions": {
+            "kind": "axis",
+            "axis": "mercy_cruelty",
+            "op": "lte",
+            "value": -25
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": -3
+            }
+          ],
           "to": "r_silent"
         },
         {
           "id": "ask_her_post",
-          "text": { "ru": "Спросить, кем она здесь числится.", "en": "Ask what she is listed as here." },
-          "conditions": { "kind": "axis", "axis": "honesty_deceit", "op": "gte", "value": 25 },
+          "text": {
+            "ru": "Спросить, кем она здесь числится.",
+            "en": "Ask what she is listed as here."
+          },
+          "conditions": {
+            "kind": "axis",
+            "axis": "honesty_deceit",
+            "op": "gte",
+            "value": 25
+          },
           "to": "r_post"
         },
         {
           "id": "count_papers",
-          "text": { "ru": "Пересчитать бумажки. Только бумажки.", "en": "Count the papers. Only the papers." },
-          "conditions": { "kind": "axis", "axis": "reason_obsession", "op": "lte", "value": -25 },
+          "text": {
+            "ru": "Пересчитать бумажки. Только бумажки.",
+            "en": "Count the papers. Only the papers."
+          },
+          "conditions": {
+            "kind": "axis",
+            "axis": "reason_obsession",
+            "op": "lte",
+            "value": -25
+          },
           "effects": [
-            { "kind": "fragment", "memory": "punkt_pervyy", "amount": 1 },
-            { "kind": "axis", "axis": "reason_obsession", "delta": -8 }
+            {
+              "kind": "fragment",
+              "memory": "punkt_pervyy",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -8
+            }
           ],
           "to": "r_recount"
         }
@@ -290,15 +555,29 @@
       "kind": "say",
       "id": "r_recount2",
       "speaker": "osoka",
-      "text": { "ru": "По описи — три. Четвёртая ничья.", "en": "By the inventory, three. The fourth is nobody's." },
+      "text": {
+        "ru": "По описи — три. Четвёртая ничья.",
+        "en": "By the inventory, three. The fourth is nobody's."
+      },
       "next": "osoka_last"
     },
     {
       "kind": "say",
       "id": "r_who",
       "speaker": "osoka",
-      "text": { "ru": "Составлял Учёт. Учёт не подписывается.", "en": "The Reckoning drew it up. The Reckoning does not sign." },
-      "keywords": [{ "match": { "ru": "Учёт", "en": "Reckoning" }, "tone": "lore" }],
+      "text": {
+        "ru": "Составлял Учёт. Учёт не подписывается.",
+        "en": "The Reckoning drew it up. The Reckoning does not sign."
+      },
+      "keywords": [
+        {
+          "match": {
+            "ru": "Учёт",
+            "en": "Reckoning"
+          },
+          "tone": "lore"
+        }
+      ],
       "next": "osoka_last"
     },
     {
@@ -314,15 +593,21 @@
       "kind": "say",
       "id": "r_post",
       "speaker": "osoka",
-      "text": { "ru": "Приёмщица. Так и записано.", "en": "Receiving clerk. That is what is written." },
+      "text": {
+        "ru": "Приёмщица. Так и записано.",
+        "en": "Receiving clerk. That is what is written."
+      },
       "next": "osoka_last"
     },
     {
       "kind": "say",
       "id": "osoka_last",
       "speaker": "osoka",
-      "text": { "ru": "Вы сегодня собрались быстрее. Следующий.", "en": "You assembled faster today. Next." },
-      "next": "wake_exit"
+      "text": {
+        "ru": "Вы сегодня собрались быстрее. Следующий.",
+        "en": "You assembled faster today. Next."
+      },
+      "next": "pledge_stirs"
     },
     {
       "kind": "narration",
@@ -333,7 +618,6 @@
       },
       "next": "scene:lombard_yard"
     },
-
     {
       "kind": "narration",
       "id": "wake_again",
@@ -356,7 +640,10 @@
       "kind": "say",
       "id": "again_osoka1",
       "speaker": "osoka",
-      "text": { "ru": "Опись прежняя. Пуговицы — три.", "en": "The inventory is unchanged. Buttons: three." },
+      "text": {
+        "ru": "Опись прежняя. Пуговицы — три.",
+        "en": "The inventory is unchanged. Buttons: three."
+      },
       "next": "again_osoka2"
     },
     {
@@ -372,47 +659,113 @@
     {
       "kind": "choice",
       "id": "demand_ledger",
-      "prompt": { "ru": "Книга у неё под локтем. Не эта — та.", "en": "The book is under her elbow. Not this one — that one." },
+      "prompt": {
+        "ru": "Книга у неё под локтем. Не эта — та.",
+        "en": "The book is under her elbow. Not this one — that one."
+      },
       "options": [
         {
           "id": "demand",
-          "text": { "ru": "Потребовать опись моего архива.", "en": "Demand the inventory of my archive." },
+          "text": {
+            "ru": "Потребовать опись моего архива.",
+            "en": "Demand the inventory of my archive."
+          },
           "effects": [
-            { "kind": "fragment", "memory": "punkt_pervyy", "amount": 1 },
-            { "kind": "axis", "axis": "reason_obsession", "delta": -10 }
+            {
+              "kind": "fragment",
+              "memory": "punkt_pervyy",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -10
+            }
           ],
           "to": "r_demand"
         },
         {
           "id": "just_take",
-          "text": { "ru": "Взять опись и выйти.", "en": "Take the inventory and go." },
-          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": 3 }],
+          "text": {
+            "ru": "Взять опись и выйти.",
+            "en": "Take the inventory and go."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": 3
+            }
+          ],
           "to": "r_again_plain"
         },
         {
           "id": "ask_next",
-          "text": { "ru": "Спросить, кто следующий.", "en": "Ask who is next." },
+          "text": {
+            "ru": "Спросить, кто следующий.",
+            "en": "Ask who is next."
+          },
           "to": "r_ask_next"
         },
         {
           "id": "say_number",
-          "text": { "ru": "Назвать номер своего вклада.", "en": "State the number of my deposit." },
-          "chip": { "icon": "hourglass", "label": { "ru": "Перечень", "en": "Perechen" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "perechen" },
-          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": -8 }],
+          "text": {
+            "ru": "Назвать номер своего вклада.",
+            "en": "State the number of my deposit."
+          },
+          "chip": {
+            "icon": "hourglass",
+            "label": {
+              "ru": "Перечень",
+              "en": "Perechen"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "perechen"
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -8
+            }
+          ],
           "to": "r_number"
         },
         {
           "id": "count_visits",
-          "text": { "ru": "Спросить, сколько раз я тут стоял.", "en": "Ask how many times I have stood here." },
-          "conditions": { "kind": "deaths", "op": "gte", "value": 2 },
+          "text": {
+            "ru": "Спросить, сколько раз я тут стоял.",
+            "en": "Ask how many times I have stood here."
+          },
+          "conditions": {
+            "kind": "deaths",
+            "op": "gte",
+            "value": 2
+          },
           "to": "r_count_visits"
         },
         {
           "id": "check_everything",
-          "text": { "ru": "Проверить, всё ли на месте.", "en": "Check that everything is in place." },
-          "conditions": { "kind": "axis", "axis": "grasp_release", "op": "gte", "value": 40 },
-          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": 3 }],
+          "text": {
+            "ru": "Проверить, всё ли на месте.",
+            "en": "Check that everything is in place."
+          },
+          "conditions": {
+            "kind": "axis",
+            "axis": "grasp_release",
+            "op": "gte",
+            "value": 40
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": 3
+            }
+          ],
           "to": "r_again_plain"
         }
       ]
@@ -421,7 +774,10 @@
       "kind": "say",
       "id": "r_demand",
       "speaker": "osoka",
-      "text": { "ru": "Архив — не по этой книге.", "en": "The archive is not in this book." },
+      "text": {
+        "ru": "Архив — не по этой книге.",
+        "en": "The archive is not in this book."
+      },
       "next": "r_demand2"
     },
     {
@@ -437,28 +793,40 @@
       "kind": "say",
       "id": "r_again_plain",
       "speaker": "osoka",
-      "text": { "ru": "Принято. Дверь за вами.", "en": "Accepted. The door is behind you." },
+      "text": {
+        "ru": "Принято. Дверь за вами.",
+        "en": "Accepted. The door is behind you."
+      },
       "next": "again_exit"
     },
     {
       "kind": "say",
       "id": "r_ask_next",
       "speaker": "osoka",
-      "text": { "ru": "Следующий всегда есть.", "en": "There is always a next." },
+      "text": {
+        "ru": "Следующий всегда есть.",
+        "en": "There is always a next."
+      },
       "next": "again_exit"
     },
     {
       "kind": "say",
       "id": "r_number",
       "speaker": "osoka",
-      "text": { "ru": "Номер есть. Выдача по нему не предусмотрена.", "en": "The number exists. No release is provided against it." },
+      "text": {
+        "ru": "Номер есть. Выдача по нему не предусмотрена.",
+        "en": "The number exists. No release is provided against it."
+      },
       "next": "again_exit"
     },
     {
       "kind": "say",
       "id": "r_count_visits",
       "speaker": "osoka",
-      "text": { "ru": "Учёт считает дела. Не людей.", "en": "The Reckoning counts cases. Not people." },
+      "text": {
+        "ru": "Учёт считает дела. Не людей.",
+        "en": "The Reckoning counts cases. Not people."
+      },
       "next": "again_exit"
     },
     {
@@ -470,7 +838,6 @@
       },
       "next": "scene:zaklad_hub"
     },
-
     {
       "kind": "narration",
       "id": "end_of_chapter",
@@ -487,13 +854,29 @@
         "ru": "На полу остаётся бирка с номером дела. Номер — 1. Не «первое за сегодня». Просто 1.",
         "en": "A case tag stays on the floor. The number is 1. Not «first of the day». Just 1."
       },
-      "keywords": [{ "match": { "ru": "бирка", "en": "tag" }, "tone": "danger" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "бирка",
+            "en": "tag"
+          },
+          "tone": "danger"
+        }
+      ],
       "next": "end_router"
     },
     {
       "kind": "branch",
       "id": "end_router",
-      "branches": [{ "when": { "kind": "flag", "flag": "contract_read" }, "to": "end_hand" }],
+      "branches": [
+        {
+          "when": {
+            "kind": "flag",
+            "flag": "contract_read"
+          },
+          "to": "end_hand"
+        }
+      ],
       "fallback": "end_exit"
     },
     {
@@ -503,7 +886,15 @@
         "ru": "Бумажек в кармане по-прежнему четыре. Почерк на них тот же, что под договором, и это единственное, что у вас не отняли.",
         "en": "There are still four papers in your pocket. The hand on them is the hand under the contract, and it is the one thing nobody took."
       },
-      "keywords": [{ "match": { "ru": "Почерк", "en": "hand" }, "tone": "memory" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "Почерк",
+            "en": "hand"
+          },
+          "tone": "memory"
+        }
+      ],
       "next": "end_exit"
     },
     {
@@ -514,6 +905,48 @@
         "en": "The stairs down begin just past the storeroom and go deeper than the tower is tall. Everyone knows this and no one has checked."
       },
       "next": "scene:vault_gate"
+    },
+    {
+      "kind": "narration",
+      "id": "pledge_stirs",
+      "text": {
+        "ru": "На нижней полке что-то поворачивается к тебе. Медленно, как поворачиваются на знакомый голос.",
+        "en": "On the bottom shelf something turns toward you. Slowly, the way people turn at a familiar voice."
+      },
+      "next": "pledge_tag"
+    },
+    {
+      "kind": "lore",
+      "id": "pledge_tag",
+      "title": {
+        "ru": "Бирка на залоге",
+        "en": "The tag on the pledge"
+      },
+      "text": {
+        "ru": "«Залог невостребованный. Срок хранения истёк четырежды. Предъявителя нет». Ниже, карандашом, чужой рукой: «Не выбрасывать. Оно ходит».",
+        "en": "“Pledge unclaimed. Storage term expired four times over. No claimant.” Below, in pencil, in another hand: “Do not discard. It walks.”"
+      },
+      "next": "pledge_join"
+    },
+    {
+      "kind": "effects",
+      "id": "pledge_join",
+      "effects": [
+        {
+          "kind": "recruit",
+          "unit": "unclaimed_pledge"
+        }
+      ],
+      "next": "pledge_after"
+    },
+    {
+      "kind": "narration",
+      "id": "pledge_after",
+      "text": {
+        "ru": "Оно идёт следом и держится на два шага позади. Никто в Закладе не считает это странным: невостребованное здесь ищет предъявителя само.",
+        "en": "It follows, keeping two steps behind. Nobody in Zaklad finds this odd: here the unclaimed goes looking for its claimant."
+      },
+      "next": "wake_exit"
     }
   ]
 }

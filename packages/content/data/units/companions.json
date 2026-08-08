@@ -14,13 +14,13 @@
     "tier": 1,
     "row": "front",
     "stats": {
-      "hp": 49,
-      "atk": 11,
-      "def": 10,
+      "hp": 45,
+      "atk": 12,
+      "def": 9,
       "initiative": 8
     },
     "abilities": [
-      "stand_in_the_doorway",
+      "i_will_hold_it",
       "barefoot_rush",
       "debt_collection"
     ],
@@ -45,7 +45,7 @@
     "row": "back",
     "stats": {
       "hp": 34,
-      "atk": 9,
+      "atk": 10,
       "def": 4,
       "initiative": 12
     },

@@ -435,9 +435,12 @@ export function unitCardSvg(id: string, tier: 1 | 2 | 3, faction: string): strin
     Z
   `;
 
+  // Оружие — деталь силуэта, а не самый яркий объект карты: почти белая линия
+  // во всю высоту читалась на 110px как случайная царапина поверх фигуры.
+  const weaponTone = [PALETTE.tier1, PALETTE.tier2, PALETTE.tier3][tier - 1] ?? PALETTE.tier1;
   const weaponLine = weaponSeed
-    ? `<line x1="${weaponX}" y1="${weaponTopY}" x2="${weaponX}" y2="${weaponBotY}" stroke="${shade(PALETTE.text, -0.1)}" stroke-width="3" stroke-linecap="round" opacity="0.85"/>
-       <g transform="translate(${weaponX - 12} ${weaponTopY - 22}) scale(1.1)" color="${PALETTE.text}" opacity="0.9">${ICON_PATHS[weaponIcon]}</g>`
+    ? `<line x1="${weaponX}" y1="${weaponTopY + headR * 0.9}" x2="${weaponX}" y2="${weaponBotY - 12}" stroke="${weaponTone}" stroke-width="2.5" stroke-linecap="round" opacity="0.42"/>
+       <g transform="translate(${weaponX - 9} ${weaponTopY + headR * 0.9 - 16}) scale(0.8)" color="${weaponTone}" opacity="0.5">${ICON_PATHS[weaponIcon]}</g>`
     : "";
 
   const aura = hasAura

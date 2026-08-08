@@ -43,12 +43,12 @@
     },
     "icon": "dagger",
     "target": "enemy_any",
-    "power": 1.1,
+    "power": 1.0,
     "cooldown": 1,
     "effects": [
       {
         "kind": "damage",
-        "power": 1.1
+        "power": 1.0
       },
       {
         "kind": "debuff",

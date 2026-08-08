@@ -14,8 +14,8 @@
     "tier": 1,
     "row": "front",
     "stats": {
-      "hp": 46,
-      "atk": 12,
+      "hp": 42,
+      "atk": 11,
       "def": 6,
       "initiative": 10
     },
@@ -46,7 +46,7 @@
     "row": "back",
     "stats": {
       "hp": 34,
-      "atk": 9,
+      "atk": 12,
       "def": 3,
       "initiative": 11
     },
