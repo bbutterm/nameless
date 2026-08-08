@@ -70,7 +70,7 @@ const MAX_AUTO_STEPS = 256;
  * и фаззер должен его увидеть, а не зависнуть.
  */
 export function resolve(idx: ContentIndex, state: GameState): Resolved {
-  let s = state;
+  let s = normalizeEntry(idx, state);
   for (let i = 0; i < MAX_AUTO_STEPS; i++) {
     const key = `${s.scene}#${s.node}`;
     const node = idx.nodes.get(key);
@@ -94,12 +94,14 @@ export function resolve(idx: ContentIndex, state: GameState): Resolved {
         return { state: s, step: { kind: 'end' } };
       case 'effects': {
         s = applyEffects(s, node.effects, idx.effectCtx);
-        s = goTo(s, node.next);
+        // Переход вида "scene:id" ставит node='@entry' — его надо развернуть
+        // в настоящий узел, иначе следующий виток цикла не найдёт узел вовсе.
+        s = normalizeEntry(idx, goTo(s, node.next));
         break;
       }
       case 'branch': {
         const hit = node.branches.find((b) => evalCondition(b.when, s));
-        s = goTo(s, hit ? hit.to : node.fallback);
+        s = normalizeEntry(idx, goTo(s, hit ? hit.to : node.fallback));
         break;
       }
       default: {
