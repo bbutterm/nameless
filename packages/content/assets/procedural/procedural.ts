@@ -39,24 +39,29 @@ export interface Palette {
   tier3: string;
 }
 
-/** Единая палитра проекта. Значения совпадают с /assets/palette.css. */
+/**
+ * Единая палитра проекта. Значения совпадают с /assets/palette.css
+ * (переменные --bg-0..2, --surface, --text, --text-dim, --accent, --danger,
+ * --memory, --lie, --gold, --hp-ally, --hp-enemy, --tier-1..3), которая в свою
+ * очередь согласована по именам и цвету с `packages/client/src/theme.css`.
+ */
 export const PALETTE: Palette = {
-  bg0: "#0a0b0f",
-  bg1: "#14161d",
-  bg2: "#1c1f28",
-  surface: "#262933",
-  text: "#e9e4d8",
-  textMuted: "#8d90a0",
-  accent: "#c98a3a",
-  danger: "#b0432f",
-  memory: "#7d6bb0",
-  lie: "#4a7a8c",
-  gold: "#e6c15c",
-  hpAlly: "#5c9c6b",
-  hpEnemy: "#9c3f3f",
-  tier1: "#7a8290",
-  tier2: "#4f8fb0",
-  tier3: "#e6c15c",
+  bg0: "#0d0b0e",
+  bg1: "#151219",
+  bg2: "#1e1a22",
+  surface: "#241f29",
+  text: "#e8e2ea",
+  textMuted: "#9a90a0",
+  accent: "#c9a227",
+  danger: "#c1483f",
+  memory: "#7fd3d0",
+  lie: "#b06fd0",
+  gold: "#d8b34a",
+  hpAlly: "#6fbf73",
+  hpEnemy: "#b8574e",
+  tier1: "#6b6470",
+  tier2: "#a8935c",
+  tier3: "#8fd6d1",
 };
 
 // ---------------------------------------------------------------------------

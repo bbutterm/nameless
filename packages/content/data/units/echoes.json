@@ -1,0 +1,50 @@
+[
+  {
+    "id": "gar",
+    "name": { "ru": "Гарь", "en": "Smoke" },
+    "blurb": { "ru": "Пахнет войной, кончившейся сезоном раньше.", "en": "Smells of a war ended one season early." },
+    "art": "",
+    "faction": "echo",
+    "tier": 2,
+    "row": "back",
+    "stats": { "hp": 46, "atk": 15, "def": 6, "initiative": 12 },
+    "abilities": ["smoke_of_ples", "ember_spit"],
+    "traits": ["echo", "life_smolokur", "fear"]
+  },
+  {
+    "id": "vodonos",
+    "name": { "ru": "Водонос", "en": "Water Carrier" },
+    "blurb": { "ru": "Поит свой ряд. И чужого, если ранен.", "en": "Waters his row. And a wounded stranger too." },
+    "art": "",
+    "faction": "echo",
+    "tier": 2,
+    "row": "back",
+    "stats": { "hp": 52, "atk": 13, "def": 7, "initiative": 10 },
+    "abilities": ["bucket_round", "indiscriminate_mercy"],
+    "traits": ["echo", "life_klyuchar", "heals_enemies"]
+  },
+  {
+    "id": "posul",
+    "name": { "ru": "Посул", "en": "Promise" },
+    "blurb": { "ru": "Двойник на предъявителя. Лопается обидно.", "en": "A double payable to bearer. Bursts insultingly." },
+    "art": "",
+    "faction": "echo",
+    "tier": 2,
+    "row": "front",
+    "stats": { "hp": 70, "atk": 7, "def": 9, "initiative": 7 },
+    "abilities": ["promise_note", "paper_slap"],
+    "traits": ["echo", "life_posulshchik", "mirage"]
+  },
+  {
+    "id": "svidetel",
+    "name": { "ru": "Свидетель", "en": "Witness" },
+    "blurb": { "ru": "Записывает, кто на кого замахнулся.", "en": "Records who raised a hand at whom." },
+    "art": "",
+    "faction": "echo",
+    "tier": 2,
+    "row": "back",
+    "stats": { "hp": 45, "atk": 13, "def": 6, "initiative": 13 },
+    "abilities": ["inventory", "appraisal"],
+    "traits": ["echo", "life_chistopisets", "reveals_intent"]
+  }
+]

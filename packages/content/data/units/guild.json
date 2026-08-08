@@ -1,0 +1,45 @@
+[
+  {
+    "id": "pocket_cutter",
+    "name": { "ru": "Резчик карманов", "en": "Pocket Cutter" },
+    "blurb": { "ru": "Берёт мелочь, склянки и чужое детство.", "en": "Takes coins, flasks and someone else's childhood." },
+    "art": "",
+    "faction": "greedy_memory_guild",
+    "tier": 1,
+    "row": "front",
+    "stats": { "hp": 33, "atk": 12, "def": 4, "initiative": 13 },
+    "abilities": ["barefoot_rush", "pick_the_pocket"],
+    "evolvesTo": "guild_hoarder_vey",
+    "evolveAt": 250,
+    "recruitable": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -40 },
+    "traits": ["fighter"]
+  },
+  {
+    "id": "guild_hoarder_vey",
+    "name": { "ru": "Скопидом Вей", "en": "Hoarder Vey" },
+    "blurb": { "ru": "В среду был тремя вдовами и таможенником.", "en": "On Wednesday he was three widows and a customs man." },
+    "art": "",
+    "faction": "greedy_memory_guild",
+    "tier": 2,
+    "row": "back",
+    "stats": { "hp": 50, "atk": 15, "def": 8, "initiative": 12 },
+    "abilities": ["borrowed_grief", "coin_sling", "raise_the_rate"],
+    "evolvesTo": "memory_thief_orsa",
+    "evolveAt": 700,
+    "recruitable": { "kind": "axis", "axis": "reason_obsession", "op": "lte", "value": -40 },
+    "traits": ["mage"]
+  },
+  {
+    "id": "memory_thief_orsa",
+    "name": { "ru": "Памятная воровка Орса", "en": "Memory Thief Orsa" },
+    "blurb": { "ru": "Своё прожить не смогла. Носит чужое.", "en": "Could not live her own. Wears others'." },
+    "art": "",
+    "faction": "greedy_memory_guild",
+    "tier": 3,
+    "row": "back",
+    "stats": { "hp": 76, "atk": 23, "def": 11, "initiative": 15 },
+    "abilities": ["pledge", "borrowed_grief", "grey_dust"],
+    "recruitable": { "kind": "axis", "axis": "grasp_release", "op": "gte", "value": 40 },
+    "traits": ["mage", "breaker"]
+  }
+]

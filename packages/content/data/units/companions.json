@@ -1,0 +1,26 @@
+[
+  {
+    "id": "unclaimed_pledge",
+    "name": { "ru": "Невостребованный залог", "en": "Unclaimed Pledge" },
+    "blurb": { "ru": "Вещь, за которой не пришли. Пошла сама.", "en": "A thing nobody claimed. It came itself." },
+    "art": "",
+    "faction": "companion",
+    "tier": 1,
+    "row": "front",
+    "stats": { "hp": 44, "atk": 8, "def": 8, "initiative": 8 },
+    "abilities": ["stand_in_the_doorway", "plain_strike"],
+    "traits": ["starter", "shield"]
+  },
+  {
+    "id": "dusty_errand_boy",
+    "name": { "ru": "Пыльный посыльный", "en": "Dusty Errand Boy" },
+    "blurb": { "ru": "Знает чёрные лестницы, не помнит парадных.", "en": "Knows the back stairs, forgets the front ones." },
+    "art": "",
+    "faction": "companion",
+    "tier": 1,
+    "row": "back",
+    "stats": { "hp": 31, "atk": 9, "def": 4, "initiative": 14 },
+    "abilities": ["hook_shot", "rag_bandage"],
+    "traits": ["starter", "shooter"]
+  }
+]

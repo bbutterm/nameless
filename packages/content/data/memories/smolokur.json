@@ -1,0 +1,37 @@
+[
+  {
+    "id": "smola_na_vode",
+    "life": "smolokur",
+    "name": { "ru": "Смола на воде", "en": "Tar on the Water" },
+    "revelation": {
+      "ru": "Смолу разводят на четверть жиже, чем для крыш, иначе она тонет и горит под водой без толку. Ты помнишь этот расчёт точнее, чем лица гребцов, которые тебе его подсказали. Вода занялась ровно так, как ты обещал совету, — с опозданием на два вдоха.",
+      "en": "Tar is thinned a quarter more than for roofing, or it sinks and burns underwater to no purpose. You remember that calculation better than the faces of the oarsmen who taught it to you. The water caught exactly as you had promised the council, two breaths late."
+    },
+    "icon": "fire",
+    "cost": 2
+  },
+  {
+    "id": "ples_gorit",
+    "life": "smolokur",
+    "name": { "ru": "Плёс горит", "en": "Ples Is Burning" },
+    "revelation": {
+      "ru": "Плавучий город горел восемь часов, и ты стоял на берегу до конца, потому что уходить с недоделанной работы — дурная примета. К утру течение принесло к твоим сапогам пустую колыбель, и ты отметил про себя, что дерево у них доброе, не здешнее. Совет постановил считать сезон закрытым досрочно и поблагодарил тебя письменно.",
+      "en": "The floating town burned for eight hours and you stood on the bank to the end, because leaving unfinished work is bad luck. By morning the current brought an empty cradle to your boots, and you noted the wood was good, not local. The council declared the season closed ahead of time and thanked you in writing."
+    },
+    "icon": "blood",
+    "cost": 3,
+    "grants": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": -5 }]
+  },
+  {
+    "id": "schet_za_sezon",
+    "life": "smolokur",
+    "name": { "ru": "Счёт за сезон", "en": "The Bill for the Season" },
+    "revelation": {
+      "ru": "Тебе выписали благодарность и оплату по зимней ставке: война кончилась осенью, и казна на этом выгадала вдвое. Ты пересчитал сумму дважды при писаре и в третий раз уже дома, при свече, поделив её на число дворов Плёса. Вышло по восемь грошей на двор. С тех пор ты не любишь считать при свече.",
+      "en": "They wrote you a commendation and paid at the winter rate: the war ended in autumn, and the treasury gained twice over. You counted the sum twice in front of the clerk and a third time at home by candlelight, dividing it by the number of households in Ples. It came to eight pennies a household. You have disliked counting by candlelight ever since."
+    },
+    "icon": "coin",
+    "cost": 4,
+    "grants": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": -5 }]
+  }
+]

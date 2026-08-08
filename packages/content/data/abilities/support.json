@@ -1,0 +1,85 @@
+[
+  {
+    "id": "promise_note",
+    "name": { "ru": "Посул", "en": "Promise Note" },
+    "description": { "ru": "Обещание держит удары, пока не лопнет.", "en": "A promise holds the blows until it bursts." },
+    "icon": "shield",
+    "target": "ally_one",
+    "power": 0,
+    "cooldown": 2,
+    "effects": [{ "kind": "shield", "amount": 14, "turns": 2 }],
+    "anim": "buff"
+  },
+  {
+    "id": "stand_in_the_doorway",
+    "name": { "ru": "Встать в дверях", "en": "Stand in the Doorway" },
+    "description": { "ru": "Проход занят. Обходить некуда.", "en": "The doorway is occupied. There is no way around." },
+    "icon": "lock",
+    "target": "self",
+    "power": 0,
+    "cooldown": 3,
+    "effects": [
+      { "kind": "shield", "amount": 18, "turns": 2 },
+      { "kind": "buff", "stat": "def", "amount": 3, "turns": 2 }
+    ],
+    "anim": "buff"
+  },
+  {
+    "id": "bucket_round",
+    "name": { "ru": "Обход с ведром", "en": "Bucket Round" },
+    "description": { "ru": "Ведро идёт по ряду и не спрашивает.", "en": "The bucket walks the row and asks nothing." },
+    "icon": "heal",
+    "target": "ally_all",
+    "power": 0,
+    "cooldown": 1,
+    "effects": [{ "kind": "heal", "power": 0.6 }],
+    "anim": "buff"
+  },
+  {
+    "id": "indiscriminate_mercy",
+    "name": { "ru": "Без разбора", "en": "Without Discrimination" },
+    "description": { "ru": "Поит и того, кто сожжёт колодец.", "en": "Waters even the man who will burn the well." },
+    "icon": "heart",
+    "target": "enemy_any",
+    "power": 0,
+    "cooldown": 0,
+    "effects": [{ "kind": "heal", "power": 0.5 }],
+    "anim": "cast"
+  },
+  {
+    "id": "rag_bandage",
+    "name": { "ru": "Ветошь и вода", "en": "Rag and Water" },
+    "description": { "ru": "Дёшево, грязно, держится до вечера.", "en": "Cheap, filthy, holds until evening." },
+    "icon": "heal",
+    "target": "ally_one",
+    "power": 0,
+    "cooldown": 1,
+    "effects": [{ "kind": "heal", "power": 1.1 }],
+    "anim": "buff"
+  },
+  {
+    "id": "white_book_reading",
+    "name": { "ru": "Чтение Белой Книги", "en": "Reading the White Book" },
+    "description": { "ru": "Страницы пусты, и слушать становится легче.", "en": "The pages are blank, and listening gets easier." },
+    "icon": "book",
+    "target": "ally_all",
+    "power": 0,
+    "cooldown": 3,
+    "effects": [
+      { "kind": "cleanse" },
+      { "kind": "buff", "stat": "def", "amount": 2, "turns": 2 }
+    ],
+    "anim": "buff"
+  },
+  {
+    "id": "raise_the_rate",
+    "name": { "ru": "Поднять курс", "en": "Raise the Rate" },
+    "description": { "ru": "К вечеру всё подорожало, включая драку.", "en": "By evening everything rose in price, brawls included." },
+    "icon": "coin",
+    "target": "ally_all",
+    "power": 0,
+    "cooldown": 3,
+    "effects": [{ "kind": "buff", "stat": "atk", "amount": 3, "turns": 2 }],
+    "anim": "buff"
+  }
+]

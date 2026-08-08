@@ -1,0 +1,45 @@
+[
+  {
+    "id": "brother_ash",
+    "name": { "ru": "Брат Пепел", "en": "Brother Ash" },
+    "blurb": { "ru": "Пришёл сюда из-за одного воспоминания.", "en": "Came here because of a single memory." },
+    "art": "",
+    "faction": "clear_head_brotherhood",
+    "tier": 1,
+    "row": "front",
+    "stats": { "hp": 38, "atk": 11, "def": 6, "initiative": 11 },
+    "abilities": ["barefoot_rush", "plain_strike"],
+    "evolvesTo": "pale_deacon",
+    "evolveAt": 250,
+    "recruitable": { "kind": "axis", "axis": "grasp_release", "op": "lte", "value": -40 },
+    "traits": ["fighter", "no_back_row"]
+  },
+  {
+    "id": "pale_deacon",
+    "name": { "ru": "Бледный дьякон", "en": "Pale Deacon" },
+    "blurb": { "ru": "Читает вслух пустые страницы. Убедительно.", "en": "Reads blank pages aloud. Convincingly." },
+    "art": "",
+    "faction": "clear_head_brotherhood",
+    "tier": 2,
+    "row": "front",
+    "stats": { "hp": 58, "atk": 13, "def": 9, "initiative": 11 },
+    "abilities": ["white_book_reading", "barefoot_rush"],
+    "evolvesTo": "empty_head_elder",
+    "evolveAt": 700,
+    "recruitable": { "kind": "axis", "axis": "mercy_cruelty", "op": "gte", "value": 40 },
+    "traits": ["healer", "no_back_row"]
+  },
+  {
+    "id": "empty_head_elder",
+    "name": { "ru": "Старец с пустой головой", "en": "Empty-Headed Elder" },
+    "blurb": { "ru": "Безмятежность как мозоль. Натёрта до блеска.", "en": "Serenity like a callus. Rubbed to a shine." },
+    "art": "",
+    "faction": "clear_head_brotherhood",
+    "tier": 3,
+    "row": "front",
+    "stats": { "hp": 92, "atk": 19, "def": 15, "initiative": 9 },
+    "abilities": ["white_book_reading", "stand_in_the_doorway", "barefoot_rush"],
+    "recruitable": { "kind": "never" },
+    "traits": ["shield", "healer", "no_back_row"]
+  }
+]
