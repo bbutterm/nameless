@@ -150,5 +150,21 @@
       "ru": "Мертвец в очереди",
       "en": "Dead Man in Line"
     }
+  },
+  {
+    "id": "svodchik",
+    "name": {
+      "ru": "Сводчик Ревизии",
+      "en": "The Audit's Reconciler"
+    },
+    "art": ""
+  },
+  {
+    "id": "naryad_revizii",
+    "name": {
+      "ru": "Старший наряда",
+      "en": "Detail Sergeant"
+    },
+    "art": ""
   }
 ]

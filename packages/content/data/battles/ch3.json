@@ -1,0 +1,36 @@
+[
+  {
+    "id": "battle_reckoning_guard",
+    "name": { "ru": "Наряд при Ревизии", "en": "The Detail Attached to the Audit" },
+    "enemies": [
+      { "unit": "debt_bailiff", "row": "front", "index": 0, "level": 4 },
+      { "unit": "debt_bailiff", "row": "front", "index": 1, "level": 3 },
+      { "unit": "debt_bailiff", "row": "front", "index": 2, "level": 3 },
+      { "unit": "pawn_appraiser_dusk", "row": "back", "index": 0, "level": 4 },
+      { "unit": "pawn_appraiser_dusk", "row": "back", "index": 1, "level": 3 }
+    ],
+    "turnLimit": 7,
+    "background": "reckoning_hall",
+    "rewards": [
+      { "kind": "gold", "delta": 18 },
+      { "kind": "xp", "amount": 40 }
+    ]
+  },
+  {
+    "id": "battle_last_descent",
+    "name": { "ru": "Стража последней полки", "en": "The Guard of the Last Shelf" },
+    "enemies": [
+      { "unit": "debt_bailiff", "row": "front", "index": 0, "level": 4 },
+      { "unit": "vault_lock", "row": "front", "index": 1, "level": 3 },
+      { "unit": "debt_bailiff", "row": "front", "index": 2, "level": 3 },
+      { "unit": "pawn_appraiser_dusk", "row": "back", "index": 0, "level": 4 },
+      { "unit": "flask_hoarder", "row": "back", "index": 1, "level": 3 }
+    ],
+    "turnLimit": 0,
+    "background": "lowest_shelf",
+    "rewards": [
+      { "kind": "gold", "delta": 22 },
+      { "kind": "xp", "amount": 45 }
+    ]
+  }
+]
