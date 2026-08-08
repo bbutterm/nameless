@@ -38,6 +38,11 @@ import { playSfx, resume as resumeAudio } from '../lib/sound';
 
 export type Mode = 'title' | 'dialogue' | 'battle' | 'death' | 'end' | 'error';
 
+export interface BattleSpoils {
+  levelUps: { uid: string; from: number; to: number }[];
+  evolutions: { uid: string; from: string; to: string }[];
+}
+
 export interface DeathReveal {
   deathId: string;
   memory?: Memory;
@@ -52,6 +57,7 @@ interface GameApi {
   step: Step | undefined;
   battle: BattleState | undefined;
   reveal: DeathReveal | undefined;
+  spoils: BattleSpoils | undefined;
   lang: Lang;
   error: string | undefined;
   hasSave: boolean;
@@ -62,6 +68,8 @@ interface GameApi {
   pick(optionId: string): void;
   battleAct(action: Action): void;
   battleAuto(): void;
+  collectSpoils(): void;
+  swapSlots(a: string, b: string): void;
   finishBattle(): void;
   ackDeath(): void;
   toTitle(): void;
@@ -89,6 +97,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const [mode, setMode] = useState<Mode>('title');
   const [battle, setBattle] = useState<BattleState>();
   const [reveal, setReveal] = useState<DeathReveal>();
+  const [spoils, setSpoils] = useState<BattleSpoils>();
   const [lang, setLangState] = useState<Lang>(detectLang());
   const [error, setError] = useState<string>();
   const [saveExists, setSaveExists] = useState(false);
@@ -212,8 +221,23 @@ export function GameProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
+  /** Показывает игроку, кто вырос и кто превратился, прежде чем вернуть в сцену. */
+  const collectSpoils = useCallback(() => {
+    if (!state || !battle || battle.outcome !== 'win') {
+      setSpoils(undefined);
+      return;
+    }
+    const xp = grantXp(state, combat.units, 60 + battle.round * 3);
+    if (xp.levelUps.length === 0 && xp.evolutions.length === 0) {
+      setSpoils(undefined);
+      return;
+    }
+    setSpoils({ levelUps: xp.levelUps, evolutions: xp.evolutions });
+  }, [state, battle]);
+
   const finishBattle = useCallback(() => {
     if (!state || !battle || !battleReturn.current) return;
+    setSpoils(undefined);
     const won = battle.outcome === 'win';
     const def = content.battles.find((b) => b.id === battle.battleId);
     // Раны переносятся из боя: отряд не лечится сам собой, только смертью.
@@ -234,6 +258,27 @@ export function GameProvider({ children }: { children: ReactNode }) {
     setBattle(undefined);
     commit(jump(next, to));
   }, [state, battle, commit]);
+
+  /**
+   * Перестановка строя. Спека требует, чтобы игрок сам решал, кто стоит впереди:
+   * передний ряд прикрывает задний, и это единственный способ защитить стрелков.
+   */
+  const swapSlots = useCallback((a: string, b: string) => {
+    setState((prev) => {
+      if (!prev) return prev;
+      const ua = prev.party.find((u) => u.uid === a);
+      const ub = prev.party.find((u) => u.uid === b);
+      if (!ua || !ub) return prev;
+      const next = {
+        ...prev,
+        party: prev.party.map((u) =>
+          u.uid === a ? { ...u, slot: ub.slot } : u.uid === b ? { ...u, slot: ua.slot } : u,
+        ),
+      };
+      saveGame(next);
+      return next;
+    });
+  }, []);
 
   const ackDeath = useCallback(() => {
     if (!state) return;
@@ -259,6 +304,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
       step,
       battle,
       reveal,
+      spoils,
       lang,
       error,
       hasSave: saveExists,
@@ -269,6 +315,8 @@ export function GameProvider({ children }: { children: ReactNode }) {
       pick,
       battleAct,
       battleAuto,
+      collectSpoils,
+      swapSlots,
       finishBattle,
       ackDeath,
       toTitle,
@@ -279,6 +327,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
       step,
       battle,
       reveal,
+      spoils,
       lang,
       error,
       saveExists,
@@ -289,6 +338,8 @@ export function GameProvider({ children }: { children: ReactNode }) {
       pick,
       battleAct,
       battleAuto,
+      collectSpoils,
+      swapSlots,
       finishBattle,
       ackDeath,
       toTitle,

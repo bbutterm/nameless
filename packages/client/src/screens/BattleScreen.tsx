@@ -23,7 +23,7 @@ type Anim = Record<string, 'lunge-up' | 'lunge-down' | 'hit' | 'die' | undefined
 let floatId = 0;
 
 export function BattleScreen() {
-  const { battle, lang, battleAct, battleAuto, finishBattle } = useGame();
+  const { battle, lang, battleAct, battleAuto, collectSpoils, spoils, finishBattle } = useGame();
   const [selectedAbility, setSelectedAbility] = useState<Ability>();
   const [anims, setAnims] = useState<Anim>({});
   const [floats, setFloats] = useState<FloatingNumber[]>([]);
@@ -80,6 +80,12 @@ export function BattleScreen() {
   // Ходы противника прокручиваются по одному, с паузой на анимацию.
   // Без этого бой замирал: если первым по инициативе идёт враг, ходить было некому.
   const waitingForBots = !!battle && battle.outcome === 'ongoing' && !isPlayerTurn(battle);
+  const finished = !!battle && battle.outcome !== 'ongoing';
+  // Итоги считаются один раз, когда бой закончился: игрок должен увидеть,
+  // кто вырос и кто превратился, а не обнаружить это потом в описи.
+  useEffect(() => {
+    if (finished) collectSpoils();
+  }, [finished, collectSpoils]);
   useEffect(() => {
     if (!waitingForBots) return;
     const timer = setTimeout(battleAuto, 480);
@@ -193,6 +199,29 @@ export function BattleScreen() {
           <div className={`outcome ${battle.outcome}`}>
             {battle.outcome === 'win' ? t(lang, 'victory') : t(lang, 'defeat')}
           </div>
+          {spoils && (
+            <div className="spoils">
+              {spoils.evolutions.map((e) => (
+                <div key={e.uid} className="spoil evolve">
+                  <Icon name="wing" size={14} color="var(--tier-3)" />
+                  <span>
+                    {t(lang, 'evolved')}: {loc(defs.get(e.from)?.name, lang)} →{' '}
+                    {loc(defs.get(e.to)?.name, lang)}
+                  </span>
+                </div>
+              ))}
+              {spoils.levelUps.map((l) => (
+                <div key={l.uid} className="spoil">
+                  <Icon name="coin" size={14} color="var(--accent)" />
+                  <span>
+                    {loc(defs.get(battle.units.find((u) => u.uid === l.uid)?.defId ?? '')?.name, lang)}
+                    {' — '}
+                    {t(lang, 'levelUp')} {l.to}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
           <button className="big-button" onClick={finishBattle}>
             {t(lang, 'proceed')}
           </button>

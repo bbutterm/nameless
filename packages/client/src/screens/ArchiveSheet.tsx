@@ -4,6 +4,8 @@ import { Icon } from '../components/Icon';
 import { loc, t } from '../i18n';
 import { cardImage, svgDataUri, unitCardSvg } from '../lib/art';
 import { content } from '../store/content';
+import { useGame } from '../store/game';
+import { vibrate } from '../lib/haptics';
 
 /**
  * «Опись» — отряд и мозаика памяти. Осей здесь нет и не будет:
@@ -20,6 +22,8 @@ export function ArchiveSheet({
   onClose: () => void;
 }) {
   const [tab, setTab] = useState<'party' | 'memories'>('party');
+  const [picked, setPicked] = useState<string>();
+  const { swapSlots } = useGame();
   const defs = useMemo(() => new Map(content.units.map((u) => [u.id, u])), []);
 
   return (
@@ -39,22 +43,48 @@ export function ArchiveSheet({
             (state.party.length === 0 ? (
               <div className="sheet-empty">{t(lang, 'emptyParty')}</div>
             ) : (
+              <>
+              <div className="swap-hint">{t(lang, 'swapHint')}</div>
               <div className="party-grid">
-                {state.party.map((u) => {
+                {[...state.party]
+                  .sort((a, b) =>
+                    a.slot.row === b.slot.row
+                      ? a.slot.index - b.slot.index
+                      : a.slot.row === 'front'
+                        ? -1
+                        : 1,
+                  )
+                  .map((u) => {
                   const def = defs.get(u.defId);
                   const art = def ? (cardImage(def.id) ?? svgDataUri(unitCardSvg(def.id, def.tier, def.faction))) : '';
                   return (
-                    <div key={u.uid} className={`party-item tier-${def?.tier ?? 1}`}>
+                    <button
+                      key={u.uid}
+                      className={`party-item tier-${def?.tier ?? 1} ${picked === u.uid ? 'picked' : ''}`}
+                      onClick={() => {
+                        vibrate('tap');
+                        if (!picked) {
+                          setPicked(u.uid);
+                        } else if (picked === u.uid) {
+                          setPicked(undefined);
+                        } else {
+                          swapSlots(picked, u.uid);
+                          setPicked(undefined);
+                        }
+                      }}
+                    >
                       <img src={art} alt="" draggable={false} />
                       <div className="party-name">{def ? loc(def.name, lang) : u.defId}</div>
                       <div className="party-blurb">{def ? loc(def.blurb, lang) : ''}</div>
                       <div className="party-meta">
-                        {t(lang, 'levelUp')} {u.level} · {u.hp}/{def?.stats.hp ?? u.hp}
+                        {u.slot.row === 'front' ? t(lang, 'rowFront') : t(lang, 'rowBack')} ·{' '}
+                        {t(lang, 'levelUp')} {u.level}
                       </div>
-                    </div>
+                    </button>
                   );
                 })}
               </div>
+              </>
             ))}
 
           {tab === 'memories' &&

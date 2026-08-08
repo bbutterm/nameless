@@ -709,3 +709,27 @@
   background: linear-gradient(180deg, transparent, var(--bg-0) 22%);
 }
 .choice-area .choices { padding: 0; background: none; }
+
+/* Итоги боя: рост и превращения показываются сразу, а не «где-то в описи». */
+.spoils {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: rgba(36, 31, 41, 0.85);
+  max-width: 320px;
+}
+.spoil {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 14px;
+  color: var(--text-dim);
+}
+.spoil.evolve { color: var(--tier-3); }
+
+.swap-hint { font-size: 13px; color: var(--text-faint); font-style: italic; padding: 0 2px 2px; }
+.party-item { text-align: left; }
+.party-item.picked { box-shadow: 0 0 0 2px var(--accent); }
