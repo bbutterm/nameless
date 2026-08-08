@@ -156,7 +156,13 @@ function living(state: BattleState, side?: Side): BattleUnitState[] {
 export function beginRound(idx: CombatIndex, state: BattleState): BattleState {
   const rng = Rng.restore(state.rng);
   const round = state.round + 1;
-  const units = state.units.map((u) => ({ ...u, acted: false, statuses: u.statuses.slice() }));
+  // Статусы копируются поштучно: щиты убывают мутацией, и общие ссылки
+  // на объекты статуса сломали бы воспроизводимость боя по сиду.
+  const units = state.units.map((u) => ({
+    ...u,
+    acted: false,
+    statuses: u.statuses.map((st) => ({ ...st })),
+  }));
 
   // Урон/лечение от статусов, тик длительностей.
   const events: BattleEvent[] = [{ type: 'round', round }];
@@ -336,7 +342,7 @@ export function act(idx: CombatIndex, state: BattleState, action: Action): Battl
   }
 
   const rng = Rng.restore(state.rng);
-  const units = state.units.map((u) => ({ ...u, statuses: u.statuses.slice() }));
+  const units = state.units.map((u) => ({ ...u, statuses: u.statuses.map((st) => ({ ...st })) }));
   const self = units.find((u) => u.uid === actor.uid);
   if (!self) return advanceTurn(idx, state);
 
