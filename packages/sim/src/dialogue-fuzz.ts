@@ -19,6 +19,8 @@ export interface Personality {
   id: string;
   axes: Record<string, number>;
   flags: Record<string, boolean>;
+  counters: Record<string, number>;
+  visited: string[];
   lockedMemories: string[];
   awakenedLives: string[];
   units: string[];
@@ -26,33 +28,42 @@ export interface Personality {
   chapter: number;
 }
 
-/** Собирает все флаги, которые где-либо в контенте ставятся или проверяются. */
-function collectFlagNames(content: ContentBundle): string[] {
-  const names = new Set<string>();
+/** Собирает имена флагов и счётчиков, которые где-либо ставятся или проверяются. */
+function collectNames(content: ContentBundle): { flags: string[]; counters: string[] } {
+  const flags = new Set<string>();
+  const counters = new Set<string>();
   const walkCond = (c: unknown): void => {
     if (!c || typeof c !== 'object') return;
     const o = c as Record<string, unknown>;
-    if (o['kind'] === 'flag' && typeof o['flag'] === 'string') names.add(o['flag']);
+    if (o['kind'] === 'flag' && typeof o['flag'] === 'string') flags.add(o['flag']);
+    if (o['kind'] === 'counter' && typeof o['counter'] === 'string') counters.add(o['counter']);
     if (Array.isArray(o['of'])) (o['of'] as unknown[]).forEach(walkCond);
     else if (o['of']) walkCond(o['of']);
   };
+  const walkEffects = (effects: readonly { kind: string; flag?: string; counter?: string }[]): void => {
+    for (const e of effects) {
+      if (e.kind === 'flag' && e.flag) flags.add(e.flag);
+      if (e.kind === 'counter' && e.counter) counters.add(e.counter);
+    }
+  };
   for (const s of content.scenes) {
+    walkCond(s.available);
     for (const n of s.nodes) {
       if (n.kind === 'choice') {
         for (const opt of n.options) {
           walkCond(opt.conditions);
-          for (const e of opt.effects ?? []) if (e.kind === 'flag') names.add(e.flag);
+          walkEffects(opt.effects ?? []);
         }
       }
       if (n.kind === 'branch') n.branches.forEach((b) => walkCond(b.when));
-      if (n.kind === 'effects') for (const e of n.effects) if (e.kind === 'flag') names.add(e.flag);
+      if (n.kind === 'effects') walkEffects(n.effects);
     }
   }
-  return [...names].sort();
+  return { flags: [...flags].sort(), counters: [...counters].sort() };
 }
 
 export function makePersonalities(content: ContentBundle, count: number): Personality[] {
-  const flagNames = collectFlagNames(content);
+  const { flags: flagNames, counters: counterNames } = collectNames(content);
   const memoryIds = content.memories.map((m) => m.id);
   const lifeIds = content.lives.map((l) => l.id);
   const unitIds = content.units.map((u) => u.id);
@@ -70,6 +81,12 @@ export function makePersonalities(content: ContentBundle, count: number): Person
     }
     const flags: Record<string, boolean> = {};
     for (const f of flagNames) if (rng.chance(0.45)) flags[f] = true;
+    // Счётчики и посещённые сцены обязаны быть СЛУЧАЙНЫМИ, а не «всё пройдено»:
+    // иначе условия вида «сюда ещё не ходил» не проходят ни у кого, и целые
+    // ветки хабов выглядят мёртвыми, хотя на самом деле мертва только выборка.
+    const counters: Record<string, number> = {};
+    for (const c of counterNames) counters[c] = rng.int(0, 4);
+    const visited = content.scenes.filter(() => rng.chance(0.4)).map((s) => s.id);
     const lockedMemories = memoryIds.filter(() => rng.chance(0.3));
     const awakenedLives = [
       ...new Set([
@@ -83,6 +100,8 @@ export function makePersonalities(content: ContentBundle, count: number): Person
       id: `p${i}`,
       axes,
       flags,
+      counters,
+      visited,
       lockedMemories,
       awakenedLives,
       units: unitIds.filter(() => rng.chance(0.25)).slice(0, 6),
@@ -106,6 +125,7 @@ function stateFrom(content: ContentBundle, p: Personality, scene: string, node: 
     ...base,
     axes: { ...base.axes, ...p.axes },
     flags: p.flags,
+    counters: p.counters,
     lockedMemories: p.lockedMemories,
     awakenedLives: p.awakenedLives,
     deaths: p.deaths,
@@ -117,7 +137,7 @@ function stateFrom(content: ContentBundle, p: Personality, scene: string, node: 
       level: 1,
       slot: { row: i < 3 ? ('front' as const) : ('back' as const), index: i % 3 },
     })),
-    visitedScenes: content.scenes.map((s) => s.id),
+    visitedScenes: p.visited,
   };
 }
 
@@ -202,7 +222,10 @@ export function fuzzDialogue(content: ContentBundle, personalityCount = 300): Fu
       for (let steps = 0; steps < 400; steps++) {
         const r = resolve(idx, st);
         st = r.state;
-        reached.add(`${st.scene}#${st.node}`);
+        // Берём seenNodes, а не текущий узел: resolve проходит сквозь effects и
+        // branch, не останавливаясь на них, и без этого служебные узлы вечно
+        // числились бы недостижимыми.
+        for (const key of st.seenNodes) reached.add(key);
         if (r.step.kind === 'error') {
           errors.push({ scene: st.scene, node: st.node, message: r.step.message });
           break;

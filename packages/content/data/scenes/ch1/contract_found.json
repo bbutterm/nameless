@@ -266,8 +266,8 @@
       "kind": "narration",
       "id": "read_deny",
       "text": {
-        "ru": "Ты говоришь это вслух, твёрдо, и рука на договоре в это время сокращает слово «которого» тремя знаками с точкой посередине, на обороте описи, где ты дописываешь номер связки.",
-        "en": "You say it out loud and firmly, and while you say it your hand, on the back of the inventory where you are adding the bundle's number, economises on the word \"whereof\" with three strokes and a dot in the middle."
+        "ru": "Ты говоришь это твёрдо и вслух, а рука в это время дописывает на обороте описи номер связки и сокращает слово «которого» тремя знаками с точкой посередине. Ровно как на договоре.",
+        "en": "You say it firmly and out loud, while your hand is adding the bundle's number to the back of the inventory and economising on the word \"whereof\" with three strokes and a dot in the middle. Exactly as on the deed."
       },
       "next": "after_reading"
     },

@@ -106,8 +106,17 @@
       "id": "osoka_pages",
       "speaker": "osoka",
       "text": {
-        "ru": "Вкладная книга. Страницы пустые. Гасить нечем.",
-        "en": "Deposit book. Pages blank. Nothing to settle with."
+        "ru": "Вкладная книга. Гасить нечем.",
+        "en": "Deposit book. Nothing to settle with."
+      },
+      "next": "book_blank"
+    },
+    {
+      "kind": "narration",
+      "id": "book_blank",
+      "text": {
+        "ru": "Она проводит пальцем сверху вниз по обеим страницам, как ведут по строкам, — по привычке, а не по надобности. Строк там нет уже очень давно.",
+        "en": "She runs a finger down both pages the way one runs it down lines of writing — out of habit, not necessity. There have been no lines there for a very long time."
       },
       "next": "osoka_rule"
     },
@@ -264,8 +273,8 @@
       "id": "r_signature_first",
       "speaker": "osoka",
       "text": {
-        "ru": "Не положено. Ваша строка длиннее прочих, я её сразу нахожу.",
-        "en": "Not permitted. Your line is longer than the rest, I find it straight away."
+        "ru": "Не положено. Ваша строка длиннее прочих.",
+        "en": "Not permitted. Your line is longer than the rest."
       },
       "next": "issue_lot"
     },
@@ -310,8 +319,8 @@
       "id": "r_count_first",
       "speaker": "osoka",
       "text": {
-        "ru": "Двести одиннадцать. Считаете и вы. Здесь это редкость.",
-        "en": "Two hundred eleven. You count as well. That is rare here."
+        "ru": "Двести одиннадцать. Считаете и вы — редкость.",
+        "en": "Two hundred eleven. You count too — that is rare."
       },
       "next": "issue_lot"
     },
@@ -333,8 +342,8 @@
       "id": "r_mercy_first",
       "speaker": "osoka",
       "text": {
-        "ru": "Очередь по поступлению. У вас хвост из должников до самой Слузы. Приняла.",
-        "en": "The queue goes by arrival. You have a tail of debtors trailing to the Sluza. Noted."
+        "ru": "У вас хвост из должников до самой Слузы. Приняла.",
+        "en": "You have a tail of debtors trailing to the Sluza. Noted."
       },
       "next": "issue_lot"
     },
