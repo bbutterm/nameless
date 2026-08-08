@@ -45,7 +45,10 @@
         "en": "\"Deposit accepted in bulk.\" Below is that separate line: refusal of itemised appraisal, three times, with the receiving officer's tick against each one. The officer's surname has been rubbed away down to the paper: not struck out, rubbed out, carefully, from both sides of the sheet."
       },
       "keywords": [
-        { "match": { "ru": "Вклад принят оптом", "en": "Deposit accepted in bulk" }, "tone": "lore" }
+        {
+          "match": { "ru": "Вклад принят оптом", "en": "Deposit accepted in bulk" },
+          "tone": "lore"
+        }
       ],
       "next": "sum"
     },
@@ -154,7 +157,10 @@
       "options": [
         {
           "id": "aloud",
-          "text": { "ru": "Читать вслух. С первой строки.", "en": "Read it aloud. From the first line." },
+          "text": {
+            "ru": "Читать вслух. С первой строки.",
+            "en": "Read it aloud. From the first line."
+          },
           "fallback": true,
           "effects": [
             { "kind": "fragment", "memory": "pervaya_stroka", "amount": 2 },
@@ -172,7 +178,10 @@
         },
         {
           "id": "seventh_only",
-          "text": { "ru": "Прочитать только пункт седьмой.", "en": "Read item seven and nothing else." },
+          "text": {
+            "ru": "Прочитать только пункт седьмой.",
+            "en": "Read item seven and nothing else."
+          },
           "fallback": true,
           "effects": [
             { "kind": "flag", "flag": "contract_read", "value": true },
@@ -182,7 +191,11 @@
         },
         {
           "id": "penman",
-          "chip": { "icon": "book", "label": { "ru": "Чистописец", "en": "Penman" }, "tone": "life" },
+          "chip": {
+            "icon": "book",
+            "label": { "ru": "Чистописец", "en": "Penman" },
+            "tone": "life"
+          },
           "conditions": { "kind": "life", "life": "chistopisets" },
           "text": {
             "ru": "Вслух. Без прибавления и убавления.",
@@ -193,7 +206,8 @@
             { "kind": "axis", "axis": "honesty_deceit", "delta": 15 },
             { "kind": "flag", "flag": "contract_read", "value": true }
           ],
-          "to": "read_aloud"
+          "to": "read_aloud",
+          "priority": 6
         },
         {
           "id": "call_appraiser",
@@ -206,7 +220,8 @@
             { "kind": "flag", "flag": "contract_read", "value": true },
             { "kind": "axis", "axis": "honesty_deceit", "delta": 8 }
           ],
-          "to": "read_tminny"
+          "to": "read_tminny",
+          "priority": 5
         },
         {
           "id": "all_sixteen",
@@ -220,17 +235,22 @@
             { "kind": "axis", "axis": "honesty_deceit", "delta": 15 },
             { "kind": "flag", "flag": "contract_read", "value": true }
           ],
-          "to": "read_aloud"
+          "to": "read_aloud",
+          "priority": 5
         },
         {
           "id": "deny",
           "conditions": { "kind": "axis", "axis": "honesty_deceit", "op": "lte", "value": -30 },
-          "text": { "ru": "Читать не буду. Почерк не мой.", "en": "I will not read it. Not my hand." },
+          "text": {
+            "ru": "Читать не буду. Почерк не мой.",
+            "en": "I will not read it. Not my hand."
+          },
           "effects": [
             { "kind": "flag", "flag": "contract_read", "value": true },
             { "kind": "axis", "axis": "honesty_deceit", "delta": -8 }
           ],
-          "to": "read_deny"
+          "to": "read_deny",
+          "priority": 5
         }
       ]
     },
@@ -290,7 +310,10 @@
       "options": [
         {
           "id": "take",
-          "text": { "ru": "Забрать связку. Всю, целиком.", "en": "Take the bundle. All of it, entire." },
+          "text": {
+            "ru": "Забрать связку. Всю, целиком.",
+            "en": "Take the bundle. All of it, entire."
+          },
           "fallback": true,
           "effects": [
             { "kind": "flag", "flag": "contract_taken", "value": true },
@@ -301,7 +324,10 @@
         },
         {
           "id": "leave",
-          "text": { "ru": "Оставить на месте и завязать шнур.", "en": "Leave it in place and tie the lacing." },
+          "text": {
+            "ru": "Оставить на месте и завязать шнур.",
+            "en": "Leave it in place and tie the lacing."
+          },
           "fallback": true,
           "effects": [
             { "kind": "flag", "flag": "contract_taken", "value": false },
@@ -333,11 +359,16 @@
             { "kind": "flag", "flag": "contract_left", "value": true },
             { "kind": "axis", "axis": "reason_obsession", "delta": -3 }
           ],
-          "to": "left"
+          "to": "left",
+          "priority": 5
         },
         {
           "id": "register",
-          "chip": { "icon": "hourglass", "label": { "ru": "Перечень", "en": "Register" }, "tone": "life" },
+          "chip": {
+            "icon": "hourglass",
+            "label": { "ru": "Перечень", "en": "Register" },
+            "tone": "life"
+          },
           "conditions": { "kind": "life", "life": "perechen" },
           "text": {
             "ru": "Внести связку в свою опись и забрать.",
@@ -348,7 +379,8 @@
             { "kind": "counter", "counter": "lots_held", "delta": 1 },
             { "kind": "axis", "axis": "reason_obsession", "delta": -3 }
           ],
-          "to": "taken"
+          "to": "taken",
+          "priority": 6
         },
         {
           "id": "give_boy",
@@ -362,7 +394,8 @@
             { "kind": "counter", "counter": "lots_held", "delta": 1 },
             { "kind": "axis", "axis": "honesty_deceit", "delta": -3 }
           ],
-          "to": "taken_boy"
+          "to": "taken_boy",
+          "priority": 5
         }
       ]
     },

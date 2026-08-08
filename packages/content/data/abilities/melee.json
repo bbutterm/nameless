@@ -1,8 +1,14 @@
 [
   {
     "id": "plain_strike",
-    "name": { "ru": "Затрещина", "en": "Cuff" },
-    "description": { "ru": "Дёшево, быстро, без описи.", "en": "Cheap, quick, entered into no ledger." },
+    "name": {
+      "ru": "Затрещина",
+      "en": "Cuff"
+    },
+    "description": {
+      "ru": "Дёшево, быстро, без описи.",
+      "en": "Cheap, quick, entered into no ledger."
+    },
     "icon": "sword",
     "target": "enemy_front",
     "power": 1,
@@ -11,8 +17,14 @@
   },
   {
     "id": "debt_collection",
-    "name": { "ru": "Взыскание", "en": "Collection" },
-    "description": { "ru": "Берёт своё телом должника.", "en": "Takes what it is owed in flesh." },
+    "name": {
+      "ru": "Взыскание",
+      "en": "Collection"
+    },
+    "description": {
+      "ru": "Берёт своё телом должника.",
+      "en": "Takes what it is owed in flesh."
+    },
     "icon": "hammer",
     "target": "enemy_front",
     "power": 1.7,
@@ -21,8 +33,14 @@
   },
   {
     "id": "write_off",
-    "name": { "ru": "Списание", "en": "Write-off" },
-    "description": { "ru": "Строчку вычёркивают вместе с тем, кто в ней.", "en": "The line is struck out with its owner." },
+    "name": {
+      "ru": "Списание",
+      "en": "Write-off"
+    },
+    "description": {
+      "ru": "Строчку вычёркивают вместе с тем, кто в ней.",
+      "en": "The line is struck out with its owner."
+    },
     "icon": "skull",
     "target": "enemy_front",
     "power": 2.5,
@@ -31,8 +49,14 @@
   },
   {
     "id": "barefoot_rush",
-    "name": { "ru": "Босым вперёд", "en": "Barefoot Rush" },
-    "description": { "ru": "Нести нечего, значит и беречь нечего.", "en": "Nothing carried, so nothing to spare." },
+    "name": {
+      "ru": "Босым вперёд",
+      "en": "Barefoot Rush"
+    },
+    "description": {
+      "ru": "Нести нечего, значит и беречь нечего.",
+      "en": "Nothing carried, so nothing to spare."
+    },
     "icon": "bone",
     "target": "enemy_front",
     "power": 1.5,
@@ -41,36 +65,68 @@
   },
   {
     "id": "article_eight",
-    "name": { "ru": "Статья восьмая", "en": "Article Eight" },
-    "description": { "ru": "Пункт грустный: задержанный молчит один ход.", "en": "Sad clause: the detained stays quiet one turn." },
+    "name": {
+      "ru": "Статья восьмая",
+      "en": "Article Eight"
+    },
+    "description": {
+      "ru": "Пункт грустный: задержанный молчит один ход.",
+      "en": "Sad clause: the detained stays quiet one turn."
+    },
     "icon": "stun",
     "target": "enemy_front",
-    "power": 1.1,
+    "power": 1.9,
     "cooldown": 4,
     "effects": [
-      { "kind": "damage", "power": 1.1 },
-      { "kind": "stun", "turns": 1 }
+      {
+        "kind": "damage",
+        "power": 1.1
+      },
+      {
+        "kind": "stun",
+        "turns": 1
+      }
     ],
     "anim": "lunge"
   },
   {
     "id": "chain_of_debt",
-    "name": { "ru": "Цепь долга", "en": "Chain of Debt" },
-    "description": { "ru": "Должник ходит медленнее, чем считает.", "en": "A debtor moves slower than he counts." },
+    "name": {
+      "ru": "Цепь долга",
+      "en": "Chain of Debt"
+    },
+    "description": {
+      "ru": "Должник ходит медленнее, чем считает.",
+      "en": "A debtor moves slower than he counts."
+    },
     "icon": "chain",
     "target": "enemy_front",
-    "power": 0.9,
+    "power": 1.3,
     "cooldown": 2,
     "effects": [
-      { "kind": "damage", "power": 0.9 },
-      { "kind": "debuff", "stat": "initiative", "amount": 4, "turns": 2 }
+      {
+        "kind": "damage",
+        "power": 0.9
+      },
+      {
+        "kind": "debuff",
+        "stat": "initiative",
+        "amount": 4,
+        "turns": 2
+      }
     ],
     "anim": "lunge"
   },
   {
     "id": "paper_slap",
-    "name": { "ru": "Бумажная пощёчина", "en": "Paper Slap" },
-    "description": { "ru": "Бьёт слабо, зато с предъявлением расписки.", "en": "Weak blow, presented together with a receipt." },
+    "name": {
+      "ru": "Бумажная пощёчина",
+      "en": "Paper Slap"
+    },
+    "description": {
+      "ru": "Бьёт слабо, зато с предъявлением расписки.",
+      "en": "Weak blow, presented together with a receipt."
+    },
     "icon": "book",
     "target": "enemy_front",
     "power": 0.55,

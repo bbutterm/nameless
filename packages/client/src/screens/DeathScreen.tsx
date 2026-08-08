@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { loc, t } from '../i18n';
-import { content, useGame } from '../store/game';
+import { useGame } from '../store/game';
+import { content } from '../store/content';
 import { Icon } from '../components/Icon';
 import { vibrate } from '../lib/haptics';
 import { playSfx } from '../lib/sound';

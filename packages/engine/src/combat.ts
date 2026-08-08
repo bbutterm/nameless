@@ -144,7 +144,9 @@ export function startBattle(
     units,
     events: [],
     outcome: 'ongoing',
-    turnLimit: battle.turnLimit ?? DEFAULT_TURN_LIMIT,
+    // 0 в данных означает «без лимита» (так объявлено в BattleDef), а не «ноль ходов»:
+    // буквальное чтение превращало такой бой в мгновенное поражение.
+    turnLimit: battle.turnLimit === undefined ? DEFAULT_TURN_LIMIT : battle.turnLimit || Number.MAX_SAFE_INTEGER,
   };
   return beginRound(idx, state);
 }

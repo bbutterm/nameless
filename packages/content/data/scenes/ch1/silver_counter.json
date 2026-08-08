@@ -11,7 +11,6 @@
       "branches": [{ "when": { "kind": "deaths", "op": "gte", "value": 1 }, "to": "queue_repeat" }],
       "fallback": "queue_hall"
     },
-
     {
       "kind": "narration",
       "id": "queue_hall",
@@ -61,7 +60,6 @@
       },
       "next": "book_open"
     },
-
     {
       "kind": "narration",
       "id": "queue_repeat",
@@ -91,7 +89,6 @@
       },
       "next": "book_open"
     },
-
     {
       "kind": "narration",
       "id": "book_open",
@@ -129,7 +126,10 @@
         "en": "No payment, no passage. That rule predates the counter."
       },
       "keywords": [
-        { "match": { "ru": "Не расплатился — не прошёл", "en": "No payment, no passage" }, "tone": "lore" }
+        {
+          "match": { "ru": "Не расплатился — не прошёл", "en": "No payment, no passage" },
+          "tone": "lore"
+        }
       ],
       "next": "rule_router"
     },
@@ -170,7 +170,6 @@
       },
       "next": "counter_choice"
     },
-
     {
       "kind": "choice",
       "id": "counter_choice",
@@ -181,19 +180,13 @@
       "options": [
         {
           "id": "beyond",
-          "text": {
-            "ru": "Что там, за прилавком?",
-            "en": "What is there, past the counter?"
-          },
+          "text": { "ru": "Что там, за прилавком?", "en": "What is there, past the counter?" },
           "fallback": true,
           "to": "r_beyond"
         },
         {
           "id": "signature",
-          "text": {
-            "ru": "Кто подписывал мой договор?",
-            "en": "Who signed my contract?"
-          },
+          "text": { "ru": "Кто подписывал мой договор?", "en": "Who signed my contract?" },
           "fallback": true,
           "to": "r_signature"
         },
@@ -210,7 +203,8 @@
             "ru": "Сколько человек прошло сегодня до меня?",
             "en": "How many went through ahead of me?"
           },
-          "to": "r_count"
+          "to": "r_count",
+          "priority": 5
         },
         {
           "id": "mercy",
@@ -219,30 +213,31 @@
             "ru": "Пропустите тех, кто плачет, вперёд.",
             "en": "Let the ones who are crying go first."
           },
-          "to": "r_mercy"
+          "to": "r_mercy",
+          "priority": 5
         },
         {
           "id": "punkt",
           "conditions": { "kind": "flag", "flag": "contract_read" },
-          "text": {
-            "ru": "Пункт седьмой писан моей рукой.",
-            "en": "Item seven is in my own hand."
-          },
-          "to": "r_signature"
+          "text": { "ru": "Пункт седьмой писан моей рукой.", "en": "Item seven is in my own hand." },
+          "to": "r_signature",
+          "priority": 5
         },
         {
           "id": "cold",
           "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -30 },
           "text": { "ru": "Оформляйте. Мне некогда.", "en": "Process it. I am short of time." },
-          "to": "r_silent"
+          "to": "r_silent",
+          "priority": 5
         }
       ]
     },
-
     {
       "kind": "branch",
       "id": "r_beyond",
-      "branches": [{ "when": { "kind": "deaths", "op": "gte", "value": 1 }, "to": "r_beyond_again" }],
+      "branches": [
+        { "when": { "kind": "deaths", "op": "gte", "value": 1 }, "to": "r_beyond_again" }
+      ],
       "fallback": "r_beyond_first"
     },
     {
@@ -259,13 +254,18 @@
       "kind": "say",
       "id": "r_beyond_again",
       "speaker": "osoka",
-      "text": { "ru": "Не положено. По описи такого нет.", "en": "Not permitted. No such line in the inventory." },
+      "text": {
+        "ru": "Не положено. По описи такого нет.",
+        "en": "Not permitted. No such line in the inventory."
+      },
       "next": "issue_lot"
     },
     {
       "kind": "branch",
       "id": "r_signature",
-      "branches": [{ "when": { "kind": "deaths", "op": "gte", "value": 1 }, "to": "r_signature_again" }],
+      "branches": [
+        { "when": { "kind": "deaths", "op": "gte", "value": 1 }, "to": "r_signature_again" }
+      ],
       "fallback": "r_signature_first"
     },
     {
@@ -282,13 +282,18 @@
       "kind": "say",
       "id": "r_signature_again",
       "speaker": "osoka",
-      "text": { "ru": "Не положено. Спрашивайте у Учёта.", "en": "Not permitted. Ask the Reckoning." },
+      "text": {
+        "ru": "Не положено. Спрашивайте у Учёта.",
+        "en": "Not permitted. Ask the Reckoning."
+      },
       "next": "issue_lot"
     },
     {
       "kind": "branch",
       "id": "r_silent",
-      "branches": [{ "when": { "kind": "deaths", "op": "gte", "value": 1 }, "to": "r_silent_again" }],
+      "branches": [
+        { "when": { "kind": "deaths", "op": "gte", "value": 1 }, "to": "r_silent_again" }
+      ],
       "fallback": "r_silent_first"
     },
     {
@@ -328,7 +333,10 @@
       "kind": "say",
       "id": "r_count_again",
       "speaker": "osoka",
-      "text": { "ru": "Двести восемьдесят четыре. Следующий — вы.", "en": "Two hundred eighty-four. You are next." },
+      "text": {
+        "ru": "Двести восемьдесят четыре. Следующий — вы.",
+        "en": "Two hundred eighty-four. You are next."
+      },
       "next": "issue_lot"
     },
     {
@@ -351,10 +359,12 @@
       "kind": "say",
       "id": "r_mercy_again",
       "speaker": "osoka",
-      "text": { "ru": "Очередь по поступлению. Не положено.", "en": "The queue goes by arrival. Not permitted." },
+      "text": {
+        "ru": "Очередь по поступлению. Не положено.",
+        "en": "The queue goes by arrival. Not permitted."
+      },
       "next": "issue_lot"
     },
-
     {
       "kind": "narration",
       "id": "issue_lot",
@@ -375,36 +385,79 @@
       "keywords": [{ "match": { "ru": "резонансу", "en": "resonance" }, "tone": "memory" }],
       "next": "resonance"
     },
-
     {
       "kind": "branch",
       "id": "resonance",
       "branches": [
-        { "when": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -60 }, "to": "res_smolokur" },
-        { "when": { "kind": "axis", "axis": "mercy_cruelty", "op": "gte", "value": 60 }, "to": "res_klyuchar" },
-        { "when": { "kind": "axis", "axis": "honesty_deceit", "op": "lte", "value": -60 }, "to": "res_posulshchik" },
-        { "when": { "kind": "axis", "axis": "honesty_deceit", "op": "gte", "value": 60 }, "to": "res_chistopisets" },
-        { "when": { "kind": "axis", "axis": "reason_obsession", "op": "lte", "value": -60 }, "to": "res_perechen" },
-
-        { "when": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -40 }, "to": "res_smolokur" },
-        { "when": { "kind": "axis", "axis": "mercy_cruelty", "op": "gte", "value": 40 }, "to": "res_klyuchar" },
-        { "when": { "kind": "axis", "axis": "honesty_deceit", "op": "lte", "value": -40 }, "to": "res_posulshchik" },
-        { "when": { "kind": "axis", "axis": "honesty_deceit", "op": "gte", "value": 40 }, "to": "res_chistopisets" },
-        { "when": { "kind": "axis", "axis": "reason_obsession", "op": "lte", "value": -40 }, "to": "res_perechen" },
-
-        { "when": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -20 }, "to": "res_smolokur" },
-        { "when": { "kind": "axis", "axis": "mercy_cruelty", "op": "gte", "value": 20 }, "to": "res_klyuchar" },
-        { "when": { "kind": "axis", "axis": "honesty_deceit", "op": "lte", "value": -20 }, "to": "res_posulshchik" },
-        { "when": { "kind": "axis", "axis": "honesty_deceit", "op": "gte", "value": 20 }, "to": "res_chistopisets" },
-        { "when": { "kind": "axis", "axis": "reason_obsession", "op": "lte", "value": -20 }, "to": "res_perechen" }
+        {
+          "when": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -60 },
+          "to": "res_smolokur"
+        },
+        {
+          "when": { "kind": "axis", "axis": "mercy_cruelty", "op": "gte", "value": 60 },
+          "to": "res_klyuchar"
+        },
+        {
+          "when": { "kind": "axis", "axis": "honesty_deceit", "op": "lte", "value": -60 },
+          "to": "res_posulshchik"
+        },
+        {
+          "when": { "kind": "axis", "axis": "honesty_deceit", "op": "gte", "value": 60 },
+          "to": "res_chistopisets"
+        },
+        {
+          "when": { "kind": "axis", "axis": "reason_obsession", "op": "lte", "value": -60 },
+          "to": "res_perechen"
+        },
+        {
+          "when": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -40 },
+          "to": "res_smolokur"
+        },
+        {
+          "when": { "kind": "axis", "axis": "mercy_cruelty", "op": "gte", "value": 40 },
+          "to": "res_klyuchar"
+        },
+        {
+          "when": { "kind": "axis", "axis": "honesty_deceit", "op": "lte", "value": -40 },
+          "to": "res_posulshchik"
+        },
+        {
+          "when": { "kind": "axis", "axis": "honesty_deceit", "op": "gte", "value": 40 },
+          "to": "res_chistopisets"
+        },
+        {
+          "when": { "kind": "axis", "axis": "reason_obsession", "op": "lte", "value": -40 },
+          "to": "res_perechen"
+        },
+        {
+          "when": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -20 },
+          "to": "res_smolokur"
+        },
+        {
+          "when": { "kind": "axis", "axis": "mercy_cruelty", "op": "gte", "value": 20 },
+          "to": "res_klyuchar"
+        },
+        {
+          "when": { "kind": "axis", "axis": "honesty_deceit", "op": "lte", "value": -20 },
+          "to": "res_posulshchik"
+        },
+        {
+          "when": { "kind": "axis", "axis": "honesty_deceit", "op": "gte", "value": 20 },
+          "to": "res_chistopisets"
+        },
+        {
+          "when": { "kind": "axis", "axis": "reason_obsession", "op": "lte", "value": -20 },
+          "to": "res_perechen"
+        }
       ],
       "fallback": "res_chistopisets"
     },
-
     {
       "kind": "branch",
       "id": "res_smolokur",
-      "branches": [{ "when": { "kind": "memory", "memory": "smola_na_vode" }, "to": "res_smolokur_2" }],
+      "branches": [
+        { "when": { "kind": "memory", "memory": "smola_na_vode" }, "to": "res_smolokur_2" }
+      ],
       "fallback": "res_frag_smolokur_1"
     },
     {
@@ -428,7 +481,9 @@
     {
       "kind": "branch",
       "id": "res_smolokur_3",
-      "branches": [{ "when": { "kind": "memory", "memory": "schet_za_sezon" }, "to": "res_next_axis" }],
+      "branches": [
+        { "when": { "kind": "memory", "memory": "schet_za_sezon" }, "to": "res_next_axis" }
+      ],
       "fallback": "res_frag_smolokur_3"
     },
     {
@@ -437,11 +492,12 @@
       "effects": [{ "kind": "fragment", "memory": "schet_za_sezon", "amount": 4 }],
       "next": "lot_rises"
     },
-
     {
       "kind": "branch",
       "id": "res_klyuchar",
-      "branches": [{ "when": { "kind": "memory", "memory": "pervoye_vedro" }, "to": "res_klyuchar_2" }],
+      "branches": [
+        { "when": { "kind": "memory", "memory": "pervoye_vedro" }, "to": "res_klyuchar_2" }
+      ],
       "fallback": "res_frag_klyuchar_1"
     },
     {
@@ -453,7 +509,9 @@
     {
       "kind": "branch",
       "id": "res_klyuchar_2",
-      "branches": [{ "when": { "kind": "memory", "memory": "ochered_k_kolodtsu" }, "to": "res_klyuchar_3" }],
+      "branches": [
+        { "when": { "kind": "memory", "memory": "ochered_k_kolodtsu" }, "to": "res_klyuchar_3" }
+      ],
       "fallback": "res_frag_klyuchar_2"
     },
     {
@@ -465,7 +523,9 @@
     {
       "kind": "branch",
       "id": "res_klyuchar_3",
-      "branches": [{ "when": { "kind": "memory", "memory": "poslednyaya_kruzhka" }, "to": "res_next_axis" }],
+      "branches": [
+        { "when": { "kind": "memory", "memory": "poslednyaya_kruzhka" }, "to": "res_next_axis" }
+      ],
       "fallback": "res_frag_klyuchar_3"
     },
     {
@@ -474,11 +534,12 @@
       "effects": [{ "kind": "fragment", "memory": "poslednyaya_kruzhka", "amount": 4 }],
       "next": "lot_rises"
     },
-
     {
       "kind": "branch",
       "id": "res_posulshchik",
-      "branches": [{ "when": { "kind": "memory", "memory": "pervyy_posul" }, "to": "res_posulshchik_2" }],
+      "branches": [
+        { "when": { "kind": "memory", "memory": "pervyy_posul" }, "to": "res_posulshchik_2" }
+      ],
       "fallback": "res_frag_posulshchik_1"
     },
     {
@@ -490,7 +551,9 @@
     {
       "kind": "branch",
       "id": "res_posulshchik_2",
-      "branches": [{ "when": { "kind": "memory", "memory": "zima_bez_khleba" }, "to": "res_posulshchik_3" }],
+      "branches": [
+        { "when": { "kind": "memory", "memory": "zima_bez_khleba" }, "to": "res_posulshchik_3" }
+      ],
       "fallback": "res_frag_posulshchik_2"
     },
     {
@@ -502,7 +565,9 @@
     {
       "kind": "branch",
       "id": "res_posulshchik_3",
-      "branches": [{ "when": { "kind": "memory", "memory": "luchshie_gody" }, "to": "res_next_axis" }],
+      "branches": [
+        { "when": { "kind": "memory", "memory": "luchshie_gody" }, "to": "res_next_axis" }
+      ],
       "fallback": "res_frag_posulshchik_3"
     },
     {
@@ -511,11 +576,12 @@
       "effects": [{ "kind": "fragment", "memory": "luchshie_gody", "amount": 4 }],
       "next": "lot_rises"
     },
-
     {
       "kind": "branch",
       "id": "res_chistopisets",
-      "branches": [{ "when": { "kind": "memory", "memory": "pervaya_stroka" }, "to": "res_chistopisets_2" }],
+      "branches": [
+        { "when": { "kind": "memory", "memory": "pervaya_stroka" }, "to": "res_chistopisets_2" }
+      ],
       "fallback": "res_frag_chistopisets_1"
     },
     {
@@ -528,7 +594,10 @@
       "kind": "branch",
       "id": "res_chistopisets_2",
       "branches": [
-        { "when": { "kind": "memory", "memory": "khronika_bez_popravok" }, "to": "res_chistopisets_3" }
+        {
+          "when": { "kind": "memory", "memory": "khronika_bez_popravok" },
+          "to": "res_chistopisets_3"
+        }
       ],
       "fallback": "res_frag_chistopisets_2"
     },
@@ -541,7 +610,9 @@
     {
       "kind": "branch",
       "id": "res_chistopisets_3",
-      "branches": [{ "when": { "kind": "memory", "memory": "god_goloy_pravdy" }, "to": "res_next_axis" }],
+      "branches": [
+        { "when": { "kind": "memory", "memory": "god_goloy_pravdy" }, "to": "res_next_axis" }
+      ],
       "fallback": "res_frag_chistopisets_3"
     },
     {
@@ -550,11 +621,12 @@
       "effects": [{ "kind": "fragment", "memory": "god_goloy_pravdy", "amount": 4 }],
       "next": "lot_rises"
     },
-
     {
       "kind": "branch",
       "id": "res_perechen",
-      "branches": [{ "when": { "kind": "memory", "memory": "punkt_pervyy" }, "to": "res_perechen_2" }],
+      "branches": [
+        { "when": { "kind": "memory", "memory": "punkt_pervyy" }, "to": "res_perechen_2" }
+      ],
       "fallback": "res_frag_perechen_1"
     },
     {
@@ -580,7 +652,9 @@
     {
       "kind": "branch",
       "id": "res_perechen_3",
-      "branches": [{ "when": { "kind": "memory", "memory": "eda_ne_vnesena" }, "to": "res_next_axis" }],
+      "branches": [
+        { "when": { "kind": "memory", "memory": "eda_ne_vnesena" }, "to": "res_next_axis" }
+      ],
       "fallback": "res_frag_perechen_3"
     },
     {
@@ -589,7 +663,6 @@
       "effects": [{ "kind": "fragment", "memory": "eda_ne_vnesena", "amount": 4 }],
       "next": "lot_rises"
     },
-
     {
       "kind": "branch",
       "id": "res_next_axis",
@@ -644,7 +717,6 @@
           },
           "to": "res_perechen"
         },
-
         {
           "when": {
             "kind": "all",
@@ -708,7 +780,6 @@
       ],
       "fallback": "archive_empty"
     },
-
     {
       "kind": "say",
       "id": "archive_empty",
@@ -738,7 +809,6 @@
       "text": { "ru": "Подождите здесь.", "en": "Wait here." },
       "next": "osoka_reactions"
     },
-
     {
       "kind": "narration",
       "id": "lot_rises",
@@ -759,16 +829,30 @@
       },
       "next": "osoka_reactions"
     },
-
     {
       "kind": "branch",
       "id": "osoka_reactions",
       "branches": [
-        { "when": { "kind": "counter", "counter": "nights_awake", "op": "gte", "value": 3 }, "to": "react_nights" },
-        { "when": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -60 }, "to": "react_cruel" },
-        { "when": { "kind": "axis", "axis": "honesty_deceit", "op": "lte", "value": -60 }, "to": "react_deceit" },
-        { "when": { "kind": "axis", "axis": "grasp_release", "op": "lte", "value": -60 }, "to": "react_release" },
-        { "when": { "kind": "axis", "axis": "grasp_release", "op": "gte", "value": 60 }, "to": "react_grasp" }
+        {
+          "when": { "kind": "counter", "counter": "nights_awake", "op": "gte", "value": 3 },
+          "to": "react_nights"
+        },
+        {
+          "when": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -60 },
+          "to": "react_cruel"
+        },
+        {
+          "when": { "kind": "axis", "axis": "honesty_deceit", "op": "lte", "value": -60 },
+          "to": "react_deceit"
+        },
+        {
+          "when": { "kind": "axis", "axis": "grasp_release", "op": "lte", "value": -60 },
+          "to": "react_release"
+        },
+        {
+          "when": { "kind": "axis", "axis": "grasp_release", "op": "gte", "value": 60 },
+          "to": "react_grasp"
+        }
       ],
       "fallback": "react_plain"
     },
@@ -848,7 +932,6 @@
       },
       "next": "set_chapter_flag"
     },
-
     {
       "kind": "branch",
       "id": "set_chapter_flag",
@@ -863,7 +946,6 @@
       "effects": [{ "kind": "flag", "flag": "first_death_done", "value": true }],
       "next": "death_router"
     },
-
     {
       "kind": "branch",
       "id": "death_router",
@@ -936,7 +1018,6 @@
       },
       "next": "death_vytsvet_night"
     },
-
     { "kind": "death", "id": "death_guard_pike", "death": "death_guard_pike" },
     { "kind": "death", "id": "death_shelf", "death": "death_shelf" },
     { "kind": "death", "id": "death_scavengers", "death": "death_scavengers" },

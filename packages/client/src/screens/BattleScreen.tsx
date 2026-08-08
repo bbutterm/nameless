@@ -11,7 +11,8 @@ import {
 import { UnitCard, type FloatingNumber } from '../components/UnitCard';
 import { Icon } from '../components/Icon';
 import { loc, t } from '../i18n';
-import { combat, content, useGame } from '../store/game';
+import { useGame } from '../store/game';
+import { combat, content } from '../store/content';
 import { vibrate } from '../lib/haptics';
 import { playSfx } from '../lib/sound';
 import { backgroundSvg, svgDataUri } from '../lib/art';

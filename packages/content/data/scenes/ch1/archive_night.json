@@ -94,7 +94,8 @@
             "en": "Look for the unnumbered rack. Not everything got numbered."
           },
           "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": -3 }],
-          "to": "went_count"
+          "to": "went_count",
+          "priority": 5
         },
         {
           "id": "with_boy",
@@ -104,7 +105,8 @@
             "en": "Send the boy ahead: nobody here remembers him."
           },
           "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": 3 }],
-          "to": "went_boy"
+          "to": "went_boy",
+          "priority": 5
         },
         {
           "id": "hard_way",
@@ -114,7 +116,8 @@
             "en": "Wait for the straggler and settle it."
           },
           "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": -3 }],
-          "to": "went_quiet"
+          "to": "went_quiet",
+          "priority": 5
         }
       ]
     },
@@ -204,17 +207,18 @@
         },
         {
           "id": "still",
-          "text": {
-            "ru": "Стоять и ничего не трогать.",
-            "en": "Stand still and touch nothing."
-          },
+          "text": { "ru": "Стоять и ничего не трогать.", "en": "Stand still and touch nothing." },
           "fallback": true,
           "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 8 }],
           "to": "stood"
         },
         {
           "id": "tarburner",
-          "chip": { "icon": "fire", "label": { "ru": "Смолокур", "en": "Tarburner" }, "tone": "life" },
+          "chip": {
+            "icon": "fire",
+            "label": { "ru": "Смолокур", "en": "Tarburner" },
+            "tone": "life"
+          },
           "conditions": { "kind": "life", "life": "smolokur" },
           "text": {
             "ru": "Огонь идёт по стеклу вниз. Проверено дважды.",
@@ -225,7 +229,8 @@
             { "kind": "axis", "axis": "mercy_cruelty", "delta": -15 },
             { "kind": "flag", "flag": "archive_burned", "value": true }
           ],
-          "to": "burned"
+          "to": "burned",
+          "priority": 6
         },
         {
           "id": "pocket_thing",
@@ -235,7 +240,8 @@
             "en": "Throw your pocket thing down the far aisle."
           },
           "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -8 }],
-          "to": "stood"
+          "to": "stood",
+          "priority": 5
         },
         {
           "id": "call_them",
@@ -245,7 +251,8 @@
             "en": "Hail them first and name the bundle."
           },
           "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": 8 }],
-          "to": "hailed"
+          "to": "hailed",
+          "priority": 5
         }
       ]
     },
@@ -331,7 +338,8 @@
             "en": "The one with the lantern goes first."
           },
           "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": -3 }],
-          "to": "watch_battle"
+          "to": "watch_battle",
+          "priority": 5
         },
         {
           "id": "warn_them",
@@ -341,7 +349,8 @@
             "en": "Warn them: there is a rack behind them."
           },
           "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": 3 }],
-          "to": "watch_battle"
+          "to": "watch_battle",
+          "priority": 5
         },
         {
           "id": "boy_out",
@@ -351,18 +360,24 @@
             "en": "Send the boy up the stairs first."
           },
           "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": 8 }],
-          "to": "watch_battle"
+          "to": "watch_battle",
+          "priority": 5
         },
         {
           "id": "register_fight",
-          "chip": { "icon": "hourglass", "label": { "ru": "Перечень", "en": "Register" }, "tone": "life" },
+          "chip": {
+            "icon": "hourglass",
+            "label": { "ru": "Перечень", "en": "Register" },
+            "tone": "life"
+          },
           "conditions": { "kind": "life", "life": "perechen" },
           "text": {
             "ru": "Их четверо. Проходов три. Считай.",
             "en": "Four of them. Three aisles. Do the arithmetic."
           },
           "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": -3 }],
-          "to": "watch_battle"
+          "to": "watch_battle",
+          "priority": 6
         }
       ]
     },

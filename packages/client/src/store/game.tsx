@@ -8,7 +8,6 @@ import {
   useState,
   type ReactNode,
 } from 'react';
-import { content } from '@nameless/content';
 import {
   act,
   advance,
@@ -18,8 +17,6 @@ import {
   choose,
   createInitialState,
   grantXp,
-  indexCombat,
-  indexContent,
   isPlayerTurn,
   normalizeEntry,
   pushBubble,
@@ -33,6 +30,7 @@ import {
   type PastLife,
   type Step,
 } from '@nameless/engine';
+import { combat, content, idx } from './content';
 import { clearSave, loadGame, saveGame } from '../lib/storage';
 import { detectLang, saveLang } from '../i18n';
 import { vibrate } from '../lib/haptics';
@@ -70,9 +68,6 @@ interface GameApi {
 }
 
 const Ctx = createContext<GameApi | undefined>(undefined);
-
-const idx = indexContent(content);
-const combat = indexCombat(content);
 
 function firstChapterEntry(): { chapter: number; scene: string } {
   const ch = [...content.chapters].sort((a, b) => a.index - b.index)[0];
@@ -337,5 +332,3 @@ function findBattle(id: string) {
     enemies: [],
   };
 }
-
-export { content, idx, combat };

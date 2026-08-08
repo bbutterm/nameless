@@ -154,10 +154,7 @@
         },
         {
           "id": "false_name",
-          "text": {
-            "ru": "Списать имя строкой выше.",
-            "en": "Copy the name from the line above."
-          },
+          "text": { "ru": "Списать имя строкой выше.", "en": "Copy the name from the line above." },
           "fallback": true,
           "effects": [
             { "kind": "fragment", "memory": "pervyy_posul", "amount": 1 },
@@ -178,7 +175,11 @@
         },
         {
           "id": "penman",
-          "chip": { "icon": "book", "label": { "ru": "Чистописец", "en": "Penman" }, "tone": "life" },
+          "chip": {
+            "icon": "book",
+            "label": { "ru": "Чистописец", "en": "Penman" },
+            "tone": "life"
+          },
           "conditions": { "kind": "life", "life": "chistopisets" },
           "text": {
             "ru": "Пишу как есть: имени нет, вклад есть.",
@@ -189,11 +190,16 @@
             { "kind": "axis", "axis": "honesty_deceit", "delta": 10 },
             { "kind": "flag", "flag": "signed_insolvent", "value": true }
           ],
-          "to": "signed_true"
+          "to": "signed_true",
+          "priority": 6
         },
         {
           "id": "promiser",
-          "chip": { "icon": "coin", "label": { "ru": "Посульщик", "en": "Promiser" }, "tone": "life" },
+          "chip": {
+            "icon": "coin",
+            "label": { "ru": "Посульщик", "en": "Promiser" },
+            "tone": "life"
+          },
           "conditions": { "kind": "life", "life": "posulshchik" },
           "text": {
             "ru": "Впишу имя, которое им приятно читать.",
@@ -204,7 +210,8 @@
             { "kind": "axis", "axis": "honesty_deceit", "delta": -10 },
             { "kind": "flag", "flag": "signed_false_name", "value": true }
           ],
-          "to": "signed_false"
+          "to": "signed_false",
+          "priority": 6
         },
         {
           "id": "copy_page",
@@ -214,7 +221,8 @@
             "en": "First read the whole sheet from the top."
           },
           "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": -3 }],
-          "to": "signed_blank"
+          "to": "signed_blank",
+          "priority": 5
         },
         {
           "id": "hard",
@@ -224,7 +232,8 @@
             "en": "Let him enter it. He is the clerk here."
           },
           "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": -3 }],
-          "to": "signed_blank"
+          "to": "signed_blank",
+          "priority": 5
         }
       ]
     },
@@ -325,7 +334,8 @@
             { "kind": "axis", "axis": "honesty_deceit", "delta": 3 }
           ],
           "conditions": { "kind": "not", "of": { "kind": "flag", "flag": "signed_false_name" } },
-          "to": "card_ask"
+          "to": "card_ask",
+          "priority": 5
         },
         {
           "id": "whole_drawer",
@@ -338,11 +348,16 @@
             { "kind": "flag", "flag": "catalog_card_read", "value": true },
             { "kind": "axis", "axis": "reason_obsession", "delta": -3 }
           ],
-          "to": "card_text"
+          "to": "card_text",
+          "priority": 5
         },
         {
           "id": "register",
-          "chip": { "icon": "hourglass", "label": { "ru": "Перечень", "en": "Register" }, "tone": "life" },
+          "chip": {
+            "icon": "hourglass",
+            "label": { "ru": "Перечень", "en": "Register" },
+            "tone": "life"
+          },
           "conditions": { "kind": "life", "life": "perechen" },
           "text": {
             "ru": "Сверить весь ящик на «В» по счёту.",
@@ -352,7 +367,8 @@
             { "kind": "flag", "flag": "catalog_card_read", "value": true },
             { "kind": "axis", "axis": "reason_obsession", "delta": -3 }
           ],
-          "to": "card_text"
+          "to": "card_text",
+          "priority": 6
         }
       ]
     },
@@ -411,10 +427,7 @@
       "options": [
         {
           "id": "stay",
-          "text": {
-            "ru": "Остаться за столом до утра.",
-            "en": "Stay at the table until morning."
-          },
+          "text": { "ru": "Остаться за столом до утра.", "en": "Stay at the table until morning." },
           "fallback": true,
           "effects": [
             { "kind": "fragment", "memory": "punkt_pervyy", "amount": 1 },
@@ -458,7 +471,8 @@
             { "kind": "axis", "axis": "reason_obsession", "delta": -12 },
             { "kind": "counter", "counter": "nights_awake", "delta": 1 }
           ],
-          "to": "stayed"
+          "to": "stayed",
+          "priority": 5
         },
         {
           "id": "boy_wait",
@@ -471,7 +485,8 @@
             { "kind": "counter", "counter": "nights_awake", "delta": 1 },
             { "kind": "axis", "axis": "grasp_release", "delta": 3 }
           ],
-          "to": "stayed"
+          "to": "stayed",
+          "priority": 5
         },
         {
           "id": "key_now",
@@ -484,7 +499,8 @@
             { "kind": "counter", "counter": "nights_awake", "delta": 1 },
             { "kind": "axis", "axis": "honesty_deceit", "delta": -3 }
           ],
-          "to": "stayed"
+          "to": "stayed",
+          "priority": 5
         }
       ]
     },

@@ -47,10 +47,7 @@
     {
       "kind": "lore",
       "id": "lore_audit",
-      "title": {
-        "ru": "Уведомление о Ревизии, форма Р-1",
-        "en": "Notice of Audit, form A-1"
-      },
+      "title": { "ru": "Уведомление о Ревизии, форма Р-1", "en": "Notice of Audit, form A-1" },
       "text": {
         "ru": "«Настоящим уведомляется население города Заклад, что назначена сверка Учёта. Сроки: не установлены. Порядок: сплошной. Обжалование: предусмотрено формой Р-2. Форма Р-2 не отпечатана. Отпечатание формы Р-2 включено в сверку».",
         "en": "\"The population of the city of Zaklad is hereby notified that a reconciliation of the Reckoning has been ordered. Duration: not established. Method: total. Appeals: provided for by form A-2. Form A-2 has not been printed. The printing of form A-2 is included in the reconciliation.\""
@@ -128,7 +125,11 @@
         },
         {
           "id": "penman",
-          "chip": { "icon": "book", "label": { "ru": "Чистописец", "en": "Penman" }, "tone": "life" },
+          "chip": {
+            "icon": "book",
+            "label": { "ru": "Чистописец", "en": "Penman" },
+            "tone": "life"
+          },
           "conditions": { "kind": "life", "life": "chistopisets" },
           "text": {
             "ru": "Диктуйте. Запишу вместе с собственным участием.",
@@ -138,11 +139,16 @@
             { "kind": "fragment", "memory": "pervaya_stroka", "amount": 1 },
             { "kind": "axis", "axis": "honesty_deceit", "delta": 10 }
           ],
-          "to": "rev_true"
+          "to": "rev_true",
+          "priority": 6
         },
         {
           "id": "promiser",
-          "chip": { "icon": "coin", "label": { "ru": "Посульщик", "en": "Promiser" }, "tone": "life" },
+          "chip": {
+            "icon": "coin",
+            "label": { "ru": "Посульщик", "en": "Promiser" },
+            "tone": "life"
+          },
           "conditions": { "kind": "life", "life": "posulshchik" },
           "text": {
             "ru": "Расхождение будет закрыто. Дайте расписку, подпишу.",
@@ -153,7 +159,8 @@
             { "kind": "axis", "axis": "honesty_deceit", "delta": -12 },
             { "kind": "flag", "flag": "revizor_lied_to", "value": true }
           ],
-          "to": "rev_lie"
+          "to": "rev_lie",
+          "priority": 6
         },
         {
           "id": "signed",
@@ -163,14 +170,19 @@
             "en": "I am entered in the book. Check the book."
           },
           "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": 3 }],
-          "to": "rev_signed"
+          "to": "rev_signed",
+          "priority": 5
         },
         {
           "id": "walk_past",
           "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -20 },
-          "text": { "ru": "Пройти мимо, не сбавляя шага.", "en": "Walk past him without slowing down." },
+          "text": {
+            "ru": "Пройти мимо, не сбавляя шага.",
+            "en": "Walk past him without slowing down."
+          },
           "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": -3 }],
-          "to": "rev_silent"
+          "to": "rev_silent",
+          "priority": 5
         }
       ]
     },
@@ -253,10 +265,7 @@
         },
         {
           "id": "ask_name",
-          "text": {
-            "ru": "Спросить, кто его сюда прислал.",
-            "en": "Ask who sent him here."
-          },
+          "text": { "ru": "Спросить, кто его сюда прислал.", "en": "Ask who sent him here." },
           "fallback": true,
           "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 3 }],
           "to": "rev_sender"
@@ -273,7 +282,8 @@
             { "kind": "counter", "counter": "lots_held", "delta": -1 },
             { "kind": "axis", "axis": "grasp_release", "delta": -8 }
           ],
-          "to": "rev_taken"
+          "to": "rev_taken",
+          "priority": 5
         },
         {
           "id": "warn_him",
@@ -283,7 +293,8 @@
             "en": "Tell him to step away from the stairs."
           },
           "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": 3 }],
-          "to": "met"
+          "to": "met",
+          "priority": 5
         },
         {
           "id": "count_five",
@@ -293,7 +304,8 @@
             "en": "Clarify: five now, or five in total."
           },
           "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": -3 }],
-          "to": "rev_sender"
+          "to": "rev_sender",
+          "priority": 5
         },
         {
           "id": "read_aloud",
@@ -303,7 +315,8 @@
             "en": "Recite item seven to him from memory."
           },
           "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": 8 }],
-          "to": "rev_punkt"
+          "to": "rev_punkt",
+          "priority": 5
         }
       ]
     },

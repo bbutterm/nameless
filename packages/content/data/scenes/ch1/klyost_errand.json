@@ -113,7 +113,11 @@
         },
         {
           "id": "penman",
-          "chip": { "icon": "book", "label": { "ru": "Чистописец", "en": "Penman" }, "tone": "life" },
+          "chip": {
+            "icon": "book",
+            "label": { "ru": "Чистописец", "en": "Penman" },
+            "tone": "life"
+          },
           "conditions": { "kind": "life", "life": "chistopisets" },
           "text": {
             "ru": "Записал бы так: мальчик, вчера, двор, свёрток.",
@@ -124,11 +128,16 @@
             { "kind": "axis", "axis": "honesty_deceit", "delta": 8 },
             { "kind": "counter", "counter": "klyost_seen", "delta": 1 }
           ],
-          "to": "seen_true"
+          "to": "seen_true",
+          "priority": 6
         },
         {
           "id": "promiser",
-          "chip": { "icon": "coin", "label": { "ru": "Посульщик", "en": "Promiser" }, "tone": "life" },
+          "chip": {
+            "icon": "coin",
+            "label": { "ru": "Посульщик", "en": "Promiser" },
+            "tone": "life"
+          },
           "conditions": { "kind": "life", "life": "posulshchik" },
           "text": {
             "ru": "Выпишу расписку: предъявителю сего — вчерашний день.",
@@ -138,7 +147,8 @@
             { "kind": "fragment", "memory": "pervyy_posul", "amount": 1 },
             { "kind": "axis", "axis": "honesty_deceit", "delta": -8 }
           ],
-          "to": "seen_lie"
+          "to": "seen_lie",
+          "priority": 6
         },
         {
           "id": "cold",
@@ -148,7 +158,8 @@
             "en": "Nobody saw you. Take that as your answer."
           },
           "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": -3 }],
-          "to": "seen_cold"
+          "to": "seen_cold",
+          "priority": 5
         },
         {
           "id": "count",
@@ -158,7 +169,8 @@
             "en": "List yesterday hour by hour. I will check."
           },
           "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": -3 }],
-          "to": "seen_count"
+          "to": "seen_count",
+          "priority": 5
         }
       ]
     },
@@ -296,7 +308,8 @@
             { "kind": "flag", "flag": "guild_key", "value": true },
             { "kind": "axis", "axis": "reason_obsession", "delta": 3 }
           ],
-          "to": "key_ask"
+          "to": "key_ask",
+          "priority": 5
         },
         {
           "id": "cruel",
@@ -309,11 +322,16 @@
             { "kind": "flag", "flag": "guild_key", "value": true },
             { "kind": "axis", "axis": "mercy_cruelty", "delta": -3 }
           ],
-          "to": "key_taken"
+          "to": "key_taken",
+          "priority": 5
         },
         {
           "id": "register",
-          "chip": { "icon": "hourglass", "label": { "ru": "Перечень", "en": "Register" }, "tone": "life" },
+          "chip": {
+            "icon": "hourglass",
+            "label": { "ru": "Перечень", "en": "Register" },
+            "tone": "life"
+          },
           "conditions": { "kind": "life", "life": "perechen" },
           "text": {
             "ru": "Ключи считают по описи. Твоего там нет.",
@@ -323,7 +341,8 @@
             { "kind": "flag", "flag": "guild_key", "value": true },
             { "kind": "axis", "axis": "reason_obsession", "delta": -3 }
           ],
-          "to": "key_taken"
+          "to": "key_taken",
+          "priority": 6
         }
       ]
     },

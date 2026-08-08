@@ -1,28 +1,20 @@
 [
   {
     "id": "battle_archive_watch",
-    "name": {
-      "ru": "Архивная стража третьего яруса",
-      "en": "The Third-Tier Archive Watch"
-    },
+    "name": { "ru": "Архивная стража третьего яруса", "en": "The Third-Tier Archive Watch" },
     "enemies": [
-      { "unit": "archive_rat", "row": "front", "index": 0, "level": 1 },
-      { "unit": "archive_rat", "row": "front", "index": 1, "level": 1 },
-      { "unit": "ledger_clerk", "row": "back", "index": 0, "level": 2 },
-      { "unit": "pawn_appraiser_dusk", "row": "back", "index": 1, "level": 2 }
+      { "unit": "archive_rat", "row": "front", "index": 0, "level": 2 },
+      { "unit": "archive_rat", "row": "front", "index": 1, "level": 3 },
+      { "unit": "ledger_clerk", "row": "back", "index": 0, "level": 3 },
+      { "unit": "pawn_appraiser_dusk", "row": "back", "index": 1, "level": 3 }
     ],
     "background": "archive_night",
-    "rewards": [
-      { "kind": "gold", "delta": 14 },
-      { "kind": "xp", "amount": 12 }
-    ]
+    "rewards": [{ "kind": "gold", "delta": 14 }, { "kind": "xp", "amount": 12 }]
   },
   {
     "id": "battle_lombard_guard",
-    "name": {
-      "ru": "Наряд стражи залоговых споров",
-      "en": "Detail of the Pledge-Dispute Guard"
-    },
+    "name": { "ru": "Наряд стражи залоговых споров", "en": "Detail of the Pledge-Dispute Guard" },
+    "tags": ["lethal"],
     "enemies": [
       { "unit": "hollow_sergeant", "row": "front", "index": 0, "level": 3 },
       { "unit": "debt_bailiff", "row": "front", "index": 1, "level": 3 },

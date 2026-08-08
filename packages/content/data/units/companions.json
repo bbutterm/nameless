@@ -1,26 +1,61 @@
 [
   {
     "id": "unclaimed_pledge",
-    "name": { "ru": "Невостребованный залог", "en": "Unclaimed Pledge" },
-    "blurb": { "ru": "Вещь, за которой не пришли. Пошла сама.", "en": "A thing nobody claimed. It came itself." },
+    "name": {
+      "ru": "Невостребованный залог",
+      "en": "Unclaimed Pledge"
+    },
+    "blurb": {
+      "ru": "Вещь, за которой не пришли. Пошла сама.",
+      "en": "A thing nobody claimed. It came itself."
+    },
     "art": "",
     "faction": "companion",
     "tier": 1,
     "row": "front",
-    "stats": { "hp": 48, "atk": 10, "def": 9, "initiative": 8 },
-    "abilities": ["stand_in_the_doorway", "barefoot_rush", "debt_collection"],
-    "traits": ["starter", "shield"]
+    "stats": {
+      "hp": 49,
+      "atk": 11,
+      "def": 10,
+      "initiative": 8
+    },
+    "abilities": [
+      "stand_in_the_doorway",
+      "barefoot_rush",
+      "debt_collection"
+    ],
+    "traits": [
+      "starter",
+      "shield"
+    ]
   },
   {
     "id": "dusty_errand_boy",
-    "name": { "ru": "Пыльный посыльный", "en": "Dusty Errand Boy" },
-    "blurb": { "ru": "Знает чёрные лестницы, не помнит парадных.", "en": "Knows the back stairs, forgets the front ones." },
+    "name": {
+      "ru": "Пыльный посыльный",
+      "en": "Dusty Errand Boy"
+    },
+    "blurb": {
+      "ru": "Знает чёрные лестницы, не помнит парадных.",
+      "en": "Knows the back stairs, forgets the front ones."
+    },
     "art": "",
     "faction": "companion",
     "tier": 1,
     "row": "back",
-    "stats": { "hp": 30, "atk": 8, "def": 4, "initiative": 12 },
-    "abilities": ["hook_shot", "rag_bandage"],
-    "traits": ["starter", "shooter"]
+    "stats": {
+      "hp": 34,
+      "atk": 9,
+      "def": 4,
+      "initiative": 12
+    },
+    "abilities": [
+      "hook_shot",
+      "rag_bandage"
+    ],
+    "traits": [
+      "starter",
+      "shooter"
+    ]
   }
 ]

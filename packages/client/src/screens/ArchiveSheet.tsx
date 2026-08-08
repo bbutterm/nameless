@@ -3,7 +3,7 @@ import { lifeProgress, type GameState, type Lang } from '@nameless/engine';
 import { Icon } from '../components/Icon';
 import { loc, t } from '../i18n';
 import { cardImage, svgDataUri, unitCardSvg } from '../lib/art';
-import { content } from '../store/game';
+import { content } from '../store/content';
 
 /**
  * «Опись» — отряд и мозаика памяти. Осей здесь нет и не будет:

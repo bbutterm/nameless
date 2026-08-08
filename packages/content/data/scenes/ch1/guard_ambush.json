@@ -98,10 +98,7 @@
         },
         {
           "id": "shield_boy",
-          "text": {
-            "ru": "Встать между ним и пиками.",
-            "en": "Stand between him and the pikes."
-          },
+          "text": { "ru": "Встать между ним и пиками.", "en": "Stand between him and the pikes." },
           "fallback": true,
           "effects": [
             { "kind": "fragment", "memory": "pervoye_vedro", "amount": 1 },
@@ -121,7 +118,11 @@
         },
         {
           "id": "tarburner",
-          "chip": { "icon": "fire", "label": { "ru": "Смолокур", "en": "Tarburner" }, "tone": "life" },
+          "chip": {
+            "icon": "fire",
+            "label": { "ru": "Смолокур", "en": "Tarburner" },
+            "tone": "life"
+          },
           "conditions": { "kind": "life", "life": "smolokur" },
           "text": {
             "ru": "Быстрая потеря дешевле долгой. Пусть бежит.",
@@ -131,21 +132,24 @@
             { "kind": "fragment", "memory": "smola_na_vode", "amount": 1 },
             { "kind": "axis", "axis": "mercy_cruelty", "delta": -15 }
           ],
-          "to": "boy_used"
+          "to": "boy_used",
+          "priority": 6
         },
         {
           "id": "keyholder",
-          "chip": { "icon": "heal", "label": { "ru": "Ключарь", "en": "Keyholder" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "klyuchar" },
-          "text": {
-            "ru": "Мальчику я тоже не откажу.",
-            "en": "I will not refuse the boy either."
+          "chip": {
+            "icon": "heal",
+            "label": { "ru": "Ключарь", "en": "Keyholder" },
+            "tone": "life"
           },
+          "conditions": { "kind": "life", "life": "klyuchar" },
+          "text": { "ru": "Мальчику я тоже не откажу.", "en": "I will not refuse the boy either." },
           "effects": [
             { "kind": "fragment", "memory": "pervoye_vedro", "amount": 1 },
             { "kind": "axis", "axis": "mercy_cruelty", "delta": 12 }
           ],
-          "to": "boy_shielded"
+          "to": "boy_shielded",
+          "priority": 6
         },
         {
           "id": "name_him",
@@ -158,7 +162,8 @@
             { "kind": "counter", "counter": "klyost_seen", "delta": 1 },
             { "kind": "axis", "axis": "grasp_release", "delta": 8 }
           ],
-          "to": "boy_named"
+          "to": "boy_named",
+          "priority": 5
         }
       ]
     },
@@ -223,7 +228,8 @@
           "conditions": { "kind": "flag", "flag": "contract_taken" },
           "text": { "ru": "Держать. Обеими руками.", "en": "Hold on to it. With both hands." },
           "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": 8 }],
-          "to": "held"
+          "to": "held",
+          "priority": 5
         },
         {
           "id": "drop",
@@ -237,7 +243,8 @@
             { "kind": "counter", "counter": "lots_held", "delta": -1 },
             { "kind": "axis", "axis": "grasp_release", "delta": -8 }
           ],
-          "to": "dropped"
+          "to": "dropped",
+          "priority": 5
         },
         {
           "id": "hands_up",
@@ -272,9 +279,13 @@
         {
           "id": "first_blood",
           "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -30 },
-          "text": { "ru": "Ударить первым. По опущенной пике.", "en": "Strike first. At the lowered pike." },
+          "text": {
+            "ru": "Ударить первым. По опущенной пике.",
+            "en": "Strike first. At the lowered pike."
+          },
           "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": -3 }],
-          "to": "held"
+          "to": "held",
+          "priority": 5
         }
       ]
     },
