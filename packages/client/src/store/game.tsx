@@ -36,6 +36,7 @@ import {
 import { clearSave, loadGame, saveGame } from '../lib/storage';
 import { detectLang, saveLang } from '../i18n';
 import { vibrate } from '../lib/haptics';
+import { playSfx, resume as resumeAudio } from '../lib/sound';
 
 export type Mode = 'title' | 'dialogue' | 'battle' | 'death' | 'end' | 'error';
 
@@ -137,6 +138,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
       });
       setMode('death');
       vibrate('death');
+      playSfx('death');
       saveGame(out.state);
       return;
     }
@@ -160,6 +162,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
       node: '@entry',
       now: Date.now(),
     });
+    void resumeAudio();
     setReveal(undefined);
     setBattle(undefined);
     setError(undefined);
@@ -168,6 +171,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
   }, [commit]);
 
   const resume = useCallback(() => {
+    void resumeAudio();
     const loaded = loadGame();
     if (!loaded.state) {
       setError(loaded.error ?? 'Сейва нет');
@@ -180,6 +184,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const tap = useCallback(() => {
     if (!state || step?.kind !== 'bubble') return;
     vibrate('tap');
+    playSfx('bubble');
     commit(advance(idx, state));
   }, [state, step, commit]);
 
@@ -187,6 +192,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     (optionId: string) => {
       if (!state || step?.kind !== 'choice') return;
       vibrate('choice');
+      playSfx('choice');
       commit(choose(idx, state, optionId));
     },
     [state, step, commit],

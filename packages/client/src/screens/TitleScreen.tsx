@@ -3,11 +3,13 @@ import type { Lang } from '@nameless/engine';
 import { t } from '../i18n';
 import { useGame } from '../store/game';
 import { hapticsEnabled, setHaptics } from '../lib/haptics';
+import { setSound, soundEnabled } from '../lib/sound';
 
 export function TitleScreen() {
   const { lang, setLang, startNew, resume, hasSave, error } = useGame();
   const [confirm, setConfirm] = useState(false);
   const [haptics, setH] = useState(hapticsEnabled());
+  const [sound, setS] = useState(soundEnabled());
 
   return (
     <div className="screen title">
@@ -56,6 +58,29 @@ export function TitleScreen() {
                 {l.toUpperCase()}
               </button>
             ))}
+          </div>
+        </div>
+        <div className="setting">
+          <span>{t(lang, 'sound')}</span>
+          <div className="seg">
+            <button
+              className={sound ? 'on' : ''}
+              onClick={() => {
+                setSound(true);
+                setS(true);
+              }}
+            >
+              ON
+            </button>
+            <button
+              className={!sound ? 'on' : ''}
+              onClick={() => {
+                setSound(false);
+                setS(false);
+              }}
+            >
+              OFF
+            </button>
           </div>
         </div>
         <div className="setting">

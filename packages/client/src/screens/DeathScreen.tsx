@@ -3,6 +3,7 @@ import { loc, t } from '../i18n';
 import { content, useGame } from '../store/game';
 import { Icon } from '../components/Icon';
 import { vibrate } from '../lib/haptics';
+import { playSfx } from '../lib/sound';
 
 /**
  * Церемония смерти: очередь → Прилавок → выдача лота → чулан.
@@ -18,6 +19,7 @@ export function DeathScreen() {
     const b = setTimeout(() => {
       setPhase(2);
       vibrate('memory');
+      playSfx('memory');
     }, 2800);
     return () => {
       clearTimeout(a);

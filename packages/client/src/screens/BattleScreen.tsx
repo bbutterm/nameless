@@ -13,6 +13,7 @@ import { Icon } from '../components/Icon';
 import { loc, t } from '../i18n';
 import { combat, content, useGame } from '../store/game';
 import { vibrate } from '../lib/haptics';
+import { playSfx } from '../lib/sound';
 import { backgroundSvg, svgDataUri } from '../lib/art';
 import { TutorialHint } from '../components/Tutorial';
 
@@ -52,8 +53,15 @@ export function BattleScreen() {
       }
       if (e.type === 'death') nextAnims[e.uid] = 'die';
     }
-    if (fresh.some((e) => e.type === 'damage' && e.crit)) vibrate('crit');
-    else if (fresh.some((e) => e.type === 'damage')) vibrate('hit');
+    if (fresh.some((e) => e.type === 'damage' && e.crit)) {
+      vibrate('crit');
+      playSfx('crit');
+    } else if (fresh.some((e) => e.type === 'damage')) {
+      vibrate('hit');
+      playSfx('hit');
+    }
+    const done = fresh.find((e) => e.type === 'outcome');
+    if (done && done.type === 'outcome') playSfx(done.result === 'win' ? 'victory' : 'defeat');
 
     setAnims(nextAnims);
     setFloats((f) => [...f, ...nextFloats]);
