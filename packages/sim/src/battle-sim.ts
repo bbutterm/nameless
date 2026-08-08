@@ -15,6 +15,9 @@ import {
 
 export const WINRATE_MIN = 0.42;
 export const WINRATE_MAX = 0.58;
+/** Бой короче — не успевает стать тактикой, длиннее — надоедает на телефоне. */
+export const ROUNDS_MIN = 6;
+export const ROUNDS_MAX = 14;
 
 export interface UnitWinrate {
   unit: string;
@@ -76,7 +79,16 @@ export function unitWinrates(content: ContentBundle, runsPerUnit = 60): UnitWinr
 
   const out: UnitWinrate[] = [];
   for (const unit of content.units) {
-    const pool = (byTier.get(unit.tier) ?? []).filter((u) => u.id !== unit.id);
+    // Зеркалим внутри тира. Если в тире меньше четырёх соседей, турнир вырождается
+    // (каждый дерётся с одними и теми же двумя), поэтому добираем соседний тир —
+    // иначе винрейт тира 3 говорит не о балансе, а о размере выборки.
+    let pool = (byTier.get(unit.tier) ?? []).filter((u) => u.id !== unit.id);
+    if (pool.length < 4) {
+      const neighbours = [unit.tier - 1, unit.tier + 1]
+        .flatMap((t) => byTier.get(t) ?? [])
+        .filter((u) => u.id !== unit.id);
+      pool = [...pool, ...neighbours];
+    }
     if (pool.length === 0) {
       out.push({ unit: unit.id, tier: unit.tier, battles: 0, wins: 0, winrate: 0.5, avgRounds: 0, inCorridor: true });
       continue;

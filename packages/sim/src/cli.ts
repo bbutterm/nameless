@@ -4,6 +4,8 @@ import { content, validateBundle } from '@nameless/content';
 import type { PartyUnit, UnitDef } from '@nameless/engine';
 import {
   determinismCheck,
+  ROUNDS_MAX,
+  ROUNDS_MIN,
   scriptedBattles,
   unitWinrates,
   WINRATE_MAX,
@@ -52,6 +54,14 @@ if (!only || only === 'battles') {
     console.log(
       `Вне коридора ${(WINRATE_MIN * 100).toFixed(0)}–${(WINRATE_MAX * 100).toFixed(0)}%: ${out.length} из ${wr.length}`,
     );
+    const avgRounds = wr.reduce((a, w) => a + w.avgRounds, 0) / Math.max(1, wr.length);
+    const roundsOk = avgRounds >= ROUNDS_MIN && avgRounds <= ROUNDS_MAX;
+    console.log(
+      `${roundsOk ? '  ' : '!!'} средняя длина боя ${avgRounds.toFixed(1)} раундов ` +
+        `(коридор ${ROUNDS_MIN}–${ROUNDS_MAX})`,
+    );
+    summary['avgRounds'] = avgRounds;
+    if (!roundsOk) failed = true;
     summary['unitsOutOfCorridor'] = out.map((w) => ({ unit: w.unit, winrate: w.winrate }));
     if (out.length > 0) failed = true;
 
