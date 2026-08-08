@@ -315,6 +315,7 @@
         {
           "id": "leave_as_is",
           "text": { "ru": "Оставить как есть.", "en": "Leave it as it is." },
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 3 }],
           "to": "pier_no_fight"
         },
         {

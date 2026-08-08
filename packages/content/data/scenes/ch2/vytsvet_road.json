@@ -92,7 +92,7 @@
           "id": "hurry",
           "text": { "ru": "Гнать. Успеть до темноты.", "en": "Push the horse. Beat the dark." },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 3 }],
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 8 }],
           "to": "r_hurry"
         },
         {
@@ -354,7 +354,7 @@
           },
           "effects": [
             { "kind": "fragment", "memory": "eda_ne_vnesena", "amount": 1 },
-            { "kind": "axis", "axis": "reason_obsession", "delta": -12 }
+            { "kind": "axis", "axis": "reason_obsession", "delta": -8 }
           ],
           "to": "r_counted",
           "priority": 5

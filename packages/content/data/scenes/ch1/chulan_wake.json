@@ -450,6 +450,13 @@
             "ru": "Промолчать.",
             "en": "Say nothing."
           },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": 3
+            }
+          ],
           "to": "r_silent"
         },
         {
@@ -691,6 +698,11 @@
             "en": "Take the inventory and go."
           },
           "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": 3
+            },
             {
               "kind": "axis",
               "axis": "grasp_release",

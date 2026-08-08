@@ -349,7 +349,7 @@
           "id": "tell_short",
           "text": { "ru": "Отвечать только на заданные вопросы.", "en": "Answer only the questions asked." },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 5 }],
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 8 }],
           "to": "r_short"
         },
         {

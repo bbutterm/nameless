@@ -147,12 +147,14 @@
           "id": "keep_silent",
           "text": { "ru": "Промолчать.", "en": "Say nothing." },
           "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 3 }],
           "to": "a_silent"
         },
         {
           "id": "by_record",
           "text": { "ru": "По описи — продавец. Больше там ничего нет.", "en": "By the record: the seller. Nothing else there." },
           "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 3 }],
           "to": "a_record"
         },
         {

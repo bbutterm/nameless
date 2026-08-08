@@ -83,7 +83,7 @@
           "fallback": true,
           "effects": [
             { "kind": "fragment", "memory": "opis_vsego_sushchego", "amount": 2 },
-            { "kind": "axis", "axis": "reason_obsession", "delta": -12 },
+            { "kind": "axis", "axis": "reason_obsession", "delta": -8 },
             { "kind": "counter", "counter": "nights_awake", "delta": 1 }
           ],
           "to": "r_copied"
@@ -93,6 +93,7 @@
           "text": { "ru": "Взять карточку. Гнездо не трогать.", "en": "Take the card. Leave the nest alone." },
           "fallback": true,
           "effects": [
+            { "kind": "axis", "axis": "reason_obsession", "delta": 3 },
             { "kind": "counter", "counter": "lots_held", "delta": 1 },
             { "kind": "axis", "axis": "grasp_release", "delta": 8 }
           ],

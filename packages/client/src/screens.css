@@ -1,5 +1,40 @@
 /* Экраны. База 390×844, обязана не ломаться на 360×640 и 430×932. */
 
+/* ── Рамки Kenney: общий механизм ────────────────────────────────────────────
+ *
+ * Источник: Kenney «Fantasy UI Borders», CC0. Исходники — белая штриховая
+ * графика 48×48 на прозрачном фоне; цвет палитры запечён в PNG скриптом
+ * `packages/content/assets/ui/nameless/tint.py` (почему не CSS-фильтр —
+ * см. шапку скрипта и docs/UI_INTEGRATION.md).
+ *
+ * 9-slice: холст 48×48, декоративный угол занимает ровно треть → slice 16.
+ * `border-image-width` всегда равен `border-width`, поэтому линии внутри
+ * слайса ужимаются пропорционально: при рамке 7px исходная линия 2px
+ * становится ~0.9px и остаётся волосяной, а не превращается в брус.
+ *
+ * Рамка всегда живёт на ::after поверх содержимого, а не на самом элементе:
+ * так она не отъедает content-box (карточка сохраняет ровно 3:4, арт не
+ * подрезается) и не мешает тап-цели — pointer-events: none.
+ * ------------------------------------------------------------------------- */
+.card::after,
+.choice::after,
+.big-button::after,
+.ability::after,
+.party-item::after,
+.memory-card::after,
+.sheet-tabs button::after,
+.archive-button::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  border-style: solid;
+  border-color: transparent;
+  border-image-slice: 16;
+  border-image-repeat: stretch;
+}
+
 /* ── Плашка поворота ─────────────────────────────────────────────────────── */
 .rotate-gate {
   height: 100dvh;
@@ -78,20 +113,31 @@
   gap: 8px;
 }
 .setting { display: flex; align-items: center; justify-content: space-between; color: var(--text-dim); font-size: 15px; }
+/* Сегменты настроек рамку Kenney НЕ получают — пробовал, откатил.
+   Переключатель 52×36 слишком мелкий: угловой орнамент занимает 7px из 36,
+   а `overflow: hidden` (без него заливка активного сегмента вылезала из-под
+   рамки) орнамент срезает. Плюс рамка вокруг пары сегментов читалась как одна
+   кнопка, а не как переключатель. Тонкая линия здесь честнее. */
 .seg { display: flex; border: 1px solid var(--line); border-radius: var(--r-sm); overflow: hidden; }
 .seg button { min-width: 52px; min-height: 36px; padding: 0 10px; color: var(--text-dim); font-size: 14px; }
 .seg button.on { background: var(--surface-hi); color: var(--accent); }
 
 .big-button {
+  position: relative;
   min-height: var(--tap);
-  padding: 12px 20px;
+  padding: 12px 24px;
   border-radius: var(--r-md);
   background: linear-gradient(180deg, var(--surface-hi), var(--surface));
-  border: 1px solid var(--accent-dim);
+  border: none;
   color: var(--text);
   font-family: var(--font-display);
   font-size: 18px;
   transition: transform 90ms ease;
+}
+.big-button::after {
+  border-width: 10px;
+  border-image-source: url('../../content/assets/ui/nameless/frame-accent.png');
+  border-image-width: 10px;
 }
 .big-button:active { transform: scale(0.97); }
 .ghost-button {
@@ -257,10 +303,13 @@
 }
 .choice-prompt { font-size: 14px; color: var(--text-dim); font-style: italic; padding: 0 4px 2px; }
 .choice {
+  position: relative;
   min-height: var(--tap);
-  padding: 10px 14px;
+  /* +4px по бокам против прежних 14px: угловой орнамент рамки занимает 8px,
+     и текст на 360px упирался в него первой буквой. */
+  padding: 10px 18px;
   border-radius: var(--r-md);
-  border: 1px solid var(--line);
+  border: none;
   background: var(--surface);
   text-align: left;
   font-size: 16.5px;
@@ -268,9 +317,19 @@
   display: flex;
   flex-direction: column;
   gap: 3px;
-  transition: transform 90ms ease, border-color 140ms ease;
+  transition: transform 90ms ease;
 }
-.choice:active { transform: scale(0.985); border-color: var(--accent-dim); }
+.choice::after {
+  border-width: 8px;
+  border-image-source: url('../../content/assets/ui/nameless/frame-panel.png');
+  border-image-width: 8px;
+}
+/* Нажатие теперь читается не только сжатием, но и цветом рамки: та же форма
+   в золоте Ломбарда. */
+.choice:active { transform: scale(0.985); }
+.choice:active::after {
+  border-image-source: url('../../content/assets/ui/nameless/frame-accent.png');
+}
 .chip {
   display: inline-flex;
   align-items: center;
@@ -312,10 +371,14 @@
 }
 .side { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 6px; }
 .row { flex: 1; min-height: 0; display: flex; gap: 6px; justify-content: center; align-items: center; }
+/* Ничейная полоса между сторонами. Разделитель Kenney (divider-fade-004,
+   зеркально склеенный в симметричный) вместо градиентной линии: у него по
+   центру ромб-замок, и середина поля перестала быть просто пустотой. */
 .divider {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--line), transparent);
-  margin: 2px 0;
+  height: 10px;
+  background: url('../../content/assets/ui/nameless/divider-ornate.png') center / auto 10px
+    no-repeat;
+  margin: 3px 0;
   flex-shrink: 0;
 }
 
@@ -329,18 +392,38 @@
   min-width: 0;
   position: relative;
   border-radius: var(--r-sm);
-  border: 1.5px solid var(--tier-1);
+  border: none;
   background: var(--bg-1);
   overflow: visible;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 0 0 3px;
+  /* 6px снизу и по бокам — под нижнюю грань рамки тира: имя и полоса HP
+     заходили под орнамент и теряли по пикселю на 360px. */
+  padding: 0 5px 6px;
   transition: transform 140ms ease, opacity 300ms ease, filter 200ms ease;
 }
-.card.empty { border-style: dashed; border-color: var(--line); opacity: 0.25; background: none; }
-.card.tier-2 { border-color: var(--tier-2); }
-.card.tier-3 { border-color: var(--tier-3); border-width: 2px; }
+.card.empty { border: 1.5px dashed var(--line); opacity: 0.25; background: none; }
+.card.empty::after { display: none; }
+
+/* Рамка тира. Форма и толщина растут вместе с тиром и монотонно —
+   голая рамка → угловые квадраты → угловые узлы, 7 → 9 → 11px
+   (docs/STYLE.md §3). Тир читается силуэтом даже в градациях серого. */
+.card::after {
+  border-width: 7px;
+  border-image-source: url('../../content/assets/ui/nameless/frame-tier-1.png');
+  border-image-width: 7px;
+}
+.card.tier-2::after {
+  border-width: 9px;
+  border-image-source: url('../../content/assets/ui/nameless/frame-tier-2.png');
+  border-image-width: 9px;
+}
+.card.tier-3::after {
+  border-width: 11px;
+  border-image-source: url('../../content/assets/ui/nameless/frame-tier-3.png');
+  border-image-width: 11px;
+}
 .card.selected { box-shadow: 0 0 0 2px var(--accent); transform: translateY(-4px); }
 .card.targetable { box-shadow: 0 0 0 2px var(--danger); }
 /* Цель лечения — своя карта, и красная (опасная) рамка на ней читалась как
@@ -355,14 +438,27 @@
 }
 .card.dead { opacity: 0; pointer-events: none; }
 
-.card-art {
+/* Обойма арта. Нужна ради overflow: hidden — сама карточка обязана оставаться
+   overflow: visible (цифры урона, значок намерения и щит вылезают за край). */
+.card-art-clip {
   position: absolute;
   inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  border-radius: 4px;
+}
+.card-art {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 4px;
-  z-index: 0;
+  display: block;
+  /* Процедурный арт рисует СВОЮ рамку тира внутри SVG (procedural.ts#frameSvg).
+     Под рамкой Kenney она читалась вторым контуром в 1.5px от края — «двойная
+     обводка», классический признак «двух разных игр» на одном экране.
+     Подрезаем её зумом: 1.16 съедает 6.9% с каждой стороны, а угловые метки
+     процедурной рамки заканчиваются на 5.3%. Пропорция 3:4 не меняется —
+     масштаб равномерный, а обойма квадратно вписана в карточку 3:4. */
+  transform: scale(1.16);
 }
 .card-name {
   position: relative;
@@ -486,10 +582,11 @@
 }
 .ability-bar::-webkit-scrollbar { display: none; }
 .ability {
-  min-width: 74px;
+  position: relative;
+  min-width: 78px;
   min-height: var(--tap);
-  padding: 6px 8px;
-  border: 1px solid var(--line);
+  padding: 6px 10px;
+  border: none;
   border-radius: var(--r-sm);
   background: var(--surface);
   display: flex;
@@ -500,7 +597,15 @@
   color: var(--text-dim);
   flex-shrink: 0;
 }
-.ability.active { border-color: var(--accent); color: var(--accent); background: var(--surface-hi); }
+.ability::after {
+  border-width: 7px;
+  border-image-source: url('../../content/assets/ui/nameless/frame-panel.png');
+  border-image-width: 7px;
+}
+.ability.active { color: var(--accent); background: var(--surface-hi); }
+.ability.active::after {
+  border-image-source: url('../../content/assets/ui/nameless/frame-accent.png');
+}
 .waiting { min-height: var(--tap); display: flex; align-items: center; padding-left: 12px; color: var(--text-faint); }
 .battle-hint {
   position: relative;
@@ -559,15 +664,22 @@
 }
 .death-wake { font-size: 18px; font-style: italic; color: var(--text-dim); margin-top: 10px; max-width: 330px; }
 
+/* Выкупленная память — самая ценная карточка в игре, и рамка у неё та же,
+   что у карт тира 3 (узел в углах), только в цвете --memory. */
 .memory-card {
   position: relative;
   z-index: 1;
-  border: 1px solid var(--memory);
+  border: none;
   border-radius: var(--r-lg);
   background: linear-gradient(180deg, rgba(127, 211, 208, 0.07), transparent);
-  padding: 16px 16px 14px;
+  padding: 20px 20px 18px;
   max-width: 340px;
   box-shadow: 0 0 40px -14px var(--memory);
+}
+.memory-card::after {
+  border-width: 12px;
+  border-image-source: url('../../content/assets/ui/nameless/frame-memory.png');
+  border-image-width: 12px;
 }
 .memory-head {
   display: flex;
@@ -640,6 +752,7 @@
 
 /* ── Опись: отряд и мозаика памяти ───────────────────────────────────────── */
 .archive-button {
+  position: relative;
   width: var(--tap);
   height: var(--tap);
   display: flex;
@@ -647,7 +760,12 @@
   justify-content: center;
   border-radius: var(--r-sm);
   background: rgba(13, 11, 14, 0.55);
-  border: 1px solid var(--line);
+  border: none;
+}
+.archive-button::after {
+  border-width: 9px;
+  border-image-source: url('../../content/assets/ui/nameless/frame-panel.png');
+  border-image-width: 9px;
 }
 .sheet-backdrop {
   position: fixed;
@@ -658,6 +776,11 @@
   align-items: flex-end;
   animation: rise 200ms ease-out;
 }
+/* Лист описи. Полной рамки по контуру он не получает намеренно: лист
+   приклеен к нижнему краю экрана, и замкнутая рамка вокруг «уехавшего за
+   экран» низа читается как обрезанная картинка. Вместо неё — тот же
+   разделитель Kenney по верхней кромке: лист опознаётся как из одной
+   семьи с полем боя, но остаётся шторкой, а не окном. */
 .sheet {
   width: 100%;
   max-height: 88dvh;
@@ -666,20 +789,37 @@
   background: var(--bg-1);
   border-top: 1px solid var(--line);
   border-radius: var(--r-lg) var(--r-lg) 0 0;
-  padding: 10px 12px calc(12px + var(--safe-bottom));
+  padding: 14px 12px calc(12px + var(--safe-bottom));
   gap: 10px;
+}
+.sheet::before {
+  content: '';
+  display: block;
+  height: 7px;
+  flex-shrink: 0;
+  background: url('../../content/assets/ui/nameless/divider-ornate.png') center / auto 7px
+    no-repeat;
 }
 .sheet-tabs { display: flex; gap: 8px; }
 .sheet-tabs button {
+  position: relative;
   flex: 1;
   min-height: 42px;
   border-radius: var(--r-sm);
-  border: 1px solid var(--line);
+  border: none;
   color: var(--text-dim);
   font-family: var(--font-display);
   font-size: 16px;
 }
-.sheet-tabs button.on { color: var(--accent); border-color: var(--accent-dim); background: var(--surface); }
+.sheet-tabs button::after {
+  border-width: 8px;
+  border-image-source: url('../../content/assets/ui/nameless/frame-panel.png');
+  border-image-width: 8px;
+}
+.sheet-tabs button.on { color: var(--accent); background: var(--surface); }
+.sheet-tabs button.on::after {
+  border-image-source: url('../../content/assets/ui/nameless/frame-accent.png');
+}
 .sheet-body { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 12px; }
 .sheet-empty { color: var(--text-faint); font-style: italic; text-align: center; padding: 28px 0; }
 .sheet-close { width: 100%; }
@@ -687,15 +827,46 @@
 /* minmax(0,1fr), а не 1fr: колонка с «Невостребованным залогом» раздувалась по
    самому длинному слову, и три карточки описи получались разной ширины. */
 .party-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+/* Те же рамки тиров, что в бою: карточка отряда в описи и карточка в бою —
+   один объект, и обязаны опознаваться как один объект. */
 .party-item {
-  border: 1px solid var(--tier-1);
+  position: relative;
+  border: none;
   border-radius: var(--r-sm);
-  padding: 4px;
+  /* 7px снизу — под нижнюю грань рамки: строка «зад · Уровень 1» ложилась
+     ровно на линию орнамента. */
+  padding: 6px 7px 7px;
   background: var(--bg-2);
 }
-.party-item.tier-2 { border-color: var(--tier-2); }
-.party-item.tier-3 { border-color: var(--tier-3); }
-.party-item img { width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 4px; }
+.party-item::after {
+  border-width: 7px;
+  border-image-source: url('../../content/assets/ui/nameless/frame-tier-1.png');
+  border-image-width: 7px;
+}
+.party-item.tier-2::after {
+  border-width: 9px;
+  border-image-source: url('../../content/assets/ui/nameless/frame-tier-2.png');
+  border-image-width: 9px;
+}
+.party-item.tier-3::after {
+  border-width: 11px;
+  border-image-source: url('../../content/assets/ui/nameless/frame-tier-3.png');
+  border-image-width: 11px;
+}
+/* overflow: hidden + зум — по той же причине, что и в .card-art:
+   гасим собственную рамку процедурного арта, чтобы не было двойного контура. */
+.party-item img {
+  width: 100%;
+  aspect-ratio: 3/4;
+  object-fit: cover;
+  border-radius: 4px;
+  transform: scale(1.16);
+}
+.party-thumb {
+  overflow: hidden;
+  border-radius: 4px;
+  aspect-ratio: 3/4;
+}
 .party-name { font-size: 12px; margin-top: 3px; line-height: 1.2; overflow-wrap: anywhere; }
 .party-blurb { font-size: 10.5px; color: var(--text-faint); line-height: 1.2; }
 .party-meta { font-size: 10.5px; color: var(--text-dim); margin-top: 2px; }

@@ -71,7 +71,7 @@
           "id": "keep_digging",
           "text": { "ru": "Копать молча до конца ряда.", "en": "Dig in silence to the row's end." },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -3 }],
+          "effects": [ { "kind": "axis", "axis": "reason_obsession", "delta": 3 },{ "kind": "axis", "axis": "grasp_release", "delta": -3 }],
           "to": "r_dug_anyway"
         },
         {

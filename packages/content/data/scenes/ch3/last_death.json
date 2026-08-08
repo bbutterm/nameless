@@ -89,6 +89,7 @@
           "id": "the_chair",
           "text": { "ru": "«Сидя». Стул всё равно принесли.", "en": "\"Seated.\" They brought the chair anyway." },
           "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 3 }],
           "to": "m_chair"
         },
         {

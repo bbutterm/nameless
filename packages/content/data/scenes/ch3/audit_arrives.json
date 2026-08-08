@@ -165,6 +165,7 @@
           "id": "ask_city",
           "text": { "ru": "Спросить, что будет с городом.", "en": "Ask what becomes of the city." },
           "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 3 }],
           "to": "r_city"
         },
         {
@@ -331,7 +332,7 @@
           "id": "close_case",
           "text": { "ru": "Закрыть дело и отойти.", "en": "Shut the case and step away." },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -3 }],
+          "effects": [ { "kind": "axis", "axis": "reason_obsession", "delta": 8 },{ "kind": "axis", "axis": "grasp_release", "delta": -3 }],
           "to": "r_closed"
         },
         {

@@ -61,7 +61,7 @@
           "id": "just_sit",
           "text": { "ru": "Молчать.", "en": "Say nothing." },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -3 }],
+          "effects": [ { "kind": "axis", "axis": "reason_obsession", "delta": 3 },{ "kind": "axis", "axis": "grasp_release", "delta": -3 }],
           "to": "r_sit"
         },
         {
@@ -246,7 +246,7 @@
           "id": "thank_and_go",
           "text": { "ru": "Поблагодарить и встать.", "en": "Say thank you and get up." },
           "fallback": true,
-          "effects": [{ "kind": "heal", "amount": 20 }],
+          "effects": [ { "kind": "axis", "axis": "reason_obsession", "delta": 3 },{ "kind": "heal", "amount": 20 }],
           "to": "r_thanked"
         },
         {

@@ -47,6 +47,105 @@
         "ru": "Короче, я никому не сказал. Всё равно бы не поверили: меня же не помнят.",
         "en": "So anyway, I told nobody. They wouldn't believe me: nobody remembers me."
       },
+      "next": "hub_saw_router"
+    },
+    {
+      "kind": "branch",
+      "id": "hub_saw_router",
+      "branches": [
+        {
+          "when": {
+            "kind": "hasUnit",
+            "unit": "unclaimed_pledge"
+          },
+          "to": "hub_pledge_front"
+        }
+      ],
+      "fallback": "hub_hired_saw"
+    },
+    {
+      "kind": "narration",
+      "id": "hub_pledge_front",
+      "text": {
+        "ru": "Залог идёт теперь не позади, а впереди, и на каждом перекрёстке останавливается раньше тебя. Он видел, как тебя смели в мешок, и держит с тех пор ровно два шага между тобой и улицей.",
+        "en": "The pledge walks in front now, not behind, and stops at every crossing before you do. It watched you swept into a sack, and since then it keeps exactly two paces between you and the street."
+      },
+      "next": "hub_party_router"
+    },
+    {
+      "kind": "narration",
+      "id": "hub_hired_saw",
+      "text": {
+        "ru": "Нанятые держатся на шаг дальше, чем вчера, и ни один не ушёл: расчёт был вперёд, а видеть, как наниматель осыпается, в уговоре не запрещено.",
+        "en": "The hired ones keep a pace further off than yesterday, and not one of them has left: they were paid up front, and watching your employer come apart is nowhere forbidden in the terms."
+      },
+      "next": "hub_party_router"
+    },
+    {
+      "kind": "branch",
+      "id": "hub_party_router",
+      "branches": [
+        {
+          "when": {
+            "kind": "partySize",
+            "op": "gte",
+            "value": 3
+          },
+          "to": "hub_echo_note"
+        }
+      ],
+      "fallback": "hub_hint_router"
+    },
+    {
+      "kind": "narration",
+      "id": "hub_echo_note",
+      "text": {
+        "ru": "В двух шагах за тобой идёт то, чего вчера не было: поднялось из чулана вместе с тобой и в строю встаёт само, в задний ряд. Возвращённое на прилавке ходит следом, пока его помнят.",
+        "en": "Two paces behind you walks something that was not there yesterday: it came up out of the storeroom with you and takes its own place in the line, at the back. What is handed back at the counter walks with you for as long as it is remembered."
+      },
+      "keywords": [
+        {
+          "match": {
+            "ru": "Возвращённое на прилавке",
+            "en": "What is handed back at the counter"
+          },
+          "tone": "memory"
+        }
+      ],
+      "next": "hub_hint_router"
+    },
+    {
+      "kind": "branch",
+      "id": "hub_hint_router",
+      "branches": [
+        {
+          "when": {
+            "kind": "visited",
+            "scene": "archive_night"
+          },
+          "to": "hub_klyost_again"
+        }
+      ],
+      "fallback": "hub_klyost_reading"
+    },
+    {
+      "kind": "say",
+      "id": "hub_klyost_again",
+      "speaker": "klyost",
+      "text": {
+        "ru": "Третий ярус стоит на месте. И вы теперь не один.",
+        "en": "The third tier is still standing. And you're not alone now."
+      },
+      "next": "hub_in"
+    },
+    {
+      "kind": "say",
+      "id": "hub_klyost_reading",
+      "speaker": "klyost",
+      "text": {
+        "ru": "В читальню пускают до полуночи. Про неё все забывают.",
+        "en": "The reading room lets you in till midnight. Everyone forgets it's there."
+      },
       "next": "hub_in"
     },
     {
@@ -84,7 +183,33 @@
           "tone": "danger"
         }
       ],
-      "next": "klyost_tips2"
+      "next": "tips_router"
+    },
+    {
+      "kind": "branch",
+      "id": "tips_router",
+      "branches": [
+        {
+          "when": {
+            "kind": "counter",
+            "counter": "errands_done",
+            "op": "gte",
+            "value": 2
+          },
+          "to": "klyost_tips_late"
+        }
+      ],
+      "fallback": "klyost_tips2"
+    },
+    {
+      "kind": "say",
+      "id": "klyost_tips_late",
+      "speaker": "klyost",
+      "text": {
+        "ru": "Кварталы вы обошли. Осталась читальня, туда никто не ходит.",
+        "en": "You've done the quarters. There's the reading room left, nobody goes."
+      },
+      "next": "hub_guard_router"
     },
     {
       "kind": "say",
@@ -94,6 +219,61 @@
         "ru": "А на Том берегу хоронят чайник, сегодня в три. Я сам слышал. Или в четверг.",
         "en": "And on the Other Bank they're burying a teapot, three o'clock today. I heard it myself. Or Thursday."
       },
+      "next": "hub_guard_router"
+    },
+    {
+      "kind": "branch",
+      "id": "hub_guard_router",
+      "branches": [
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "deaths",
+                "op": "gte",
+                "value": 3
+              },
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "flag",
+                  "flag": "first_death_done"
+                }
+              }
+            ]
+          },
+          "to": "hub_guard_waits"
+        }
+      ],
+      "fallback": "hub_choice"
+    },
+    {
+      "kind": "narration",
+      "id": "hub_guard_waits",
+      "text": {
+        "ru": "У водостока стоит наряд залоговых споров: четверо и старшая. Старшая держит бумагу на отлёте и сверяет с ней прохожих, не спеша, как сверяют опись.",
+        "en": "A pledge-dispute detail stands by the drain: four of them and their senior. She holds a sheet at arm's length and checks passers-by against it, unhurried, the way an inventory is checked."
+      },
+      "next": "hub_guard_dratva"
+    },
+    {
+      "kind": "say",
+      "id": "hub_guard_dratva",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Приметы сходятся. По вам у меня отдельная строка.",
+        "en": "The description matches. I have a separate line for you."
+      },
+      "keywords": [
+        {
+          "match": {
+            "ru": "строка",
+            "en": "a line"
+          },
+          "tone": "danger"
+        }
+      ],
       "next": "hub_choice"
     },
     {
@@ -197,12 +377,38 @@
           "to": "scene:hire_wall"
         },
         {
+          "id": "to_guard",
+          "text": {
+            "ru": "Подойти к наряду самому.",
+            "en": "Walk up to the detail yourself."
+          },
+          "conditions": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "deaths",
+                "op": "gte",
+                "value": 3
+              },
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "flag",
+                  "flag": "first_death_done"
+                }
+              }
+            ]
+          },
+          "priority": 8,
+          "to": "scene:guard_ambush#ring_familiar"
+        },
+        {
           "id": "ask_klyost",
           "text": {
             "ru": "Спросить мальчишку, где он врёт.",
             "en": "Ask the boy where he is lying."
           },
-          "to": "klyost_lie_answer"
+          "to": "klyost_lie_router"
         },
         {
           "id": "read_board",
@@ -210,9 +416,121 @@
             "ru": "Прочитать доску объявлений.",
             "en": "Read the notice board."
           },
-          "to": "hub_board"
+          "to": "board_router"
         }
       ]
+    },
+    {
+      "kind": "branch",
+      "id": "klyost_lie_router",
+      "branches": [
+        {
+          "when": {
+            "kind": "counter",
+            "counter": "errands_done",
+            "op": "gte",
+            "value": 3
+          },
+          "to": "klyost_marks_two"
+        },
+        {
+          "when": {
+            "kind": "counter",
+            "counter": "errands_done",
+            "op": "gte",
+            "value": 1
+          },
+          "to": "klyost_marks_one"
+        }
+      ],
+      "fallback": "klyost_lie_answer"
+    },
+    {
+      "kind": "say",
+      "id": "klyost_marks_one",
+      "speaker": "klyost",
+      "text": {
+        "ru": "Я вас черчу мелом на тумбе. Чтобы не сбиться.",
+        "en": "I chalk you on the bollard. So I don't lose count."
+      },
+      "next": "klyost_marks_one_look"
+    },
+    {
+      "kind": "narration",
+      "id": "klyost_marks_one_look",
+      "text": {
+        "ru": "Черты на тумбе есть: короткие, разной длины, часть смыло дождём. Считает он не тебя — он считает, сколько раз его в этом городе вспомнили.",
+        "en": "The marks are there on the bollard: short, uneven, some washed off by rain. He is not counting you — he is counting the times this city has remembered him."
+      },
+      "next": "hub_choice"
+    },
+    {
+      "kind": "say",
+      "id": "klyost_marks_two",
+      "speaker": "klyost",
+      "text": {
+        "ru": "На тумбе места нет. Начал вторую, через дом.",
+        "en": "The bollard's full. I started a second one, a house along."
+      },
+      "next": "klyost_marks_two_look"
+    },
+    {
+      "kind": "narration",
+      "id": "klyost_marks_two_look",
+      "text": {
+        "ru": "Он ведёт две тумбы сразу и не путается ни разу. Это единственный учёт в Закладе, который сходится, и ведёт его тот, кого в Учёте нет.",
+        "en": "He keeps two bollards at once and never once muddles them. It is the only reckoning in Zaklad that balances, and it is kept by someone the Reckoning does not have."
+      },
+      "next": "hub_choice"
+    },
+    {
+      "kind": "branch",
+      "id": "board_router",
+      "branches": [
+        {
+          "when": {
+            "kind": "deaths",
+            "op": "gte",
+            "value": 4
+          },
+          "to": "hub_board_3"
+        },
+        {
+          "when": {
+            "kind": "deaths",
+            "op": "gte",
+            "value": 1
+          },
+          "to": "hub_board_2"
+        }
+      ],
+      "fallback": "hub_board"
+    },
+    {
+      "kind": "lore",
+      "id": "hub_board_2",
+      "title": {
+        "ru": "Доска у фонаря, дата вторая",
+        "en": "The board by the lamp, second date"
+      },
+      "text": {
+        "ru": "Объявление то же, а дата под ним заклеена свежей полоской: из-под неё торчит угол прежней. Мелом, той же рукой, что и в прошлый раз: «Срок прежний. Дата другая. Разницу нам объяснили, я не понял».",
+        "en": "The notice is the same, but the date below it has been pasted over with a fresh strip: the corner of the old one still shows. In chalk, in the same hand as before: \"Same deadline. Different date. It was explained to us; I did not follow.\""
+      },
+      "next": "hub_choice"
+    },
+    {
+      "kind": "lore",
+      "id": "hub_board_3",
+      "title": {
+        "ru": "Доска у фонаря, дата четвёртая",
+        "en": "The board by the lamp, fourth date"
+      },
+      "text": {
+        "ru": "Полосок с датами уже четыре, одна на другой, и угол верхней отходит. Сбоку мелом: «Ставлю грош, что сроку конца нет». Ниже, другой рукой и мельче: «Принято. Внесено в книгу пари, строка одиннадцать».",
+        "en": "There are four date strips now, one over another, and the top corner is peeling. In chalk at the side: \"A groschen says there is no end to this deadline.\" Below, in another hand and smaller: \"Accepted. Entered in the wagers book, line eleven.\""
+      },
+      "next": "hub_choice"
     },
     {
       "kind": "say",

@@ -194,6 +194,7 @@
           "id": "silence",
           "text": { "ru": "Промолчать.", "en": "Say nothing." },
           "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 3 }],
           "to": "r_silent"
         },
         {
@@ -248,7 +249,7 @@
         "ru": "Не положено, и я не знаю. Я тоже туда не смотрела ни разу.",
         "en": "Not permitted, and I do not know. I have never looked in there either."
       },
-      "next": "issue_lot"
+      "next": "lot_form"
     },
     {
       "kind": "say",
@@ -258,7 +259,7 @@
         "ru": "Не положено. По описи такого нет.",
         "en": "Not permitted. No such line in the inventory."
       },
-      "next": "issue_lot"
+      "next": "lot_form"
     },
     {
       "kind": "branch",
@@ -276,7 +277,7 @@
         "ru": "Не положено. Ваша строка длиннее прочих.",
         "en": "Not permitted. Your line is longer than the rest."
       },
-      "next": "issue_lot"
+      "next": "lot_form"
     },
     {
       "kind": "say",
@@ -286,7 +287,7 @@
         "ru": "Не положено. Спрашивайте у Учёта.",
         "en": "Not permitted. Ask the Reckoning."
       },
-      "next": "issue_lot"
+      "next": "lot_form"
     },
     {
       "kind": "branch",
@@ -304,14 +305,14 @@
         "ru": "Принято. Молчите вы правильно: я реже сбиваюсь.",
         "en": "Noted. You keep silence correctly: I lose my place less often."
       },
-      "next": "issue_lot"
+      "next": "lot_form"
     },
     {
       "kind": "say",
       "id": "r_silent_again",
       "speaker": "osoka",
       "text": { "ru": "Принято. Продолжаем по порядку.", "en": "Noted. We continue in order." },
-      "next": "issue_lot"
+      "next": "lot_form"
     },
     {
       "kind": "branch",
@@ -327,7 +328,7 @@
         "ru": "Двести одиннадцать. Считаете и вы — редкость.",
         "en": "Two hundred eleven. You count too — that is rare."
       },
-      "next": "issue_lot"
+      "next": "lot_form"
     },
     {
       "kind": "say",
@@ -337,7 +338,7 @@
         "ru": "Двести восемьдесят четыре. Следующий — вы.",
         "en": "Two hundred eighty-four. You are next."
       },
-      "next": "issue_lot"
+      "next": "lot_form"
     },
     {
       "kind": "branch",
@@ -353,7 +354,7 @@
         "ru": "У вас хвост из должников до самой Слузы. Приняла.",
         "en": "You have a tail of debtors trailing to the Sluza. Noted."
       },
-      "next": "issue_lot"
+      "next": "lot_form"
     },
     {
       "kind": "say",
@@ -363,7 +364,16 @@
         "ru": "Очередь по поступлению. Не положено.",
         "en": "The queue goes by arrival. Not permitted."
       },
-      "next": "issue_lot"
+      "next": "lot_form"
+    },
+    {
+      "kind": "branch",
+      "id": "lot_form",
+      "branches": [
+        { "when": { "kind": "deaths", "op": "gte", "value": 6 }, "to": "issue_lot_3" },
+        { "when": { "kind": "deaths", "op": "gte", "value": 2 }, "to": "issue_lot_2" }
+      ],
+      "fallback": "issue_lot"
     },
     {
       "kind": "narration",
@@ -371,6 +381,24 @@
       "text": {
         "ru": "Она переворачивает страницу и находит нужный бланк с третьей попытки: бланки на неустойку лежат отдельно, потому что нужны один раз в четыреста лет.",
         "en": "She turns the page and finds the right form on the third try: the penalty forms are kept apart, because they are needed once in four hundred years."
+      },
+      "next": "osoka_penalty"
+    },
+    {
+      "kind": "narration",
+      "id": "issue_lot_2",
+      "text": {
+        "ru": "Бланк на неустойку лежит теперь сверху, углом наружу. Она достаёт его, не глядя, и всё равно проверяет номер по краю — порядок держится на том, что его проверяют.",
+        "en": "The penalty form lies on top now, corner outwards. She takes it without looking and checks the number along the edge anyway: order holds because somebody checks it."
+      },
+      "next": "osoka_penalty"
+    },
+    {
+      "kind": "narration",
+      "id": "issue_lot_3",
+      "text": {
+        "ru": "У бланка сменился оттенок: партию перепечатали, и в новой графа «повод» стоит выше графы «сумма». Она заполняет по старому порядку и потом переписывает набело.",
+        "en": "The form has changed shade: the batch was reprinted, and in the new one the \"grounds\" line sits above the \"amount\" line. She fills it in the old order and then copies it out clean."
       },
       "next": "osoka_penalty"
     },
@@ -671,8 +699,38 @@
           "when": {
             "kind": "all",
             "of": [
-              { "kind": "not", "of": { "kind": "memory", "memory": "schet_za_sezon" } },
-              { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -20 }
+              {
+                "kind": "any",
+                "of": [
+                  {
+                    "kind": "not",
+                    "of": {
+                      "kind": "memory",
+                      "memory": "smola_na_vode"
+                    }
+                  },
+                  {
+                    "kind": "not",
+                    "of": {
+                      "kind": "memory",
+                      "memory": "ples_gorit"
+                    }
+                  },
+                  {
+                    "kind": "not",
+                    "of": {
+                      "kind": "memory",
+                      "memory": "schet_za_sezon"
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "axis",
+                "axis": "mercy_cruelty",
+                "op": "lte",
+                "value": -20
+              }
             ]
           },
           "to": "res_smolokur"
@@ -681,8 +739,38 @@
           "when": {
             "kind": "all",
             "of": [
-              { "kind": "not", "of": { "kind": "memory", "memory": "poslednyaya_kruzhka" } },
-              { "kind": "axis", "axis": "mercy_cruelty", "op": "gte", "value": 20 }
+              {
+                "kind": "any",
+                "of": [
+                  {
+                    "kind": "not",
+                    "of": {
+                      "kind": "memory",
+                      "memory": "pervoye_vedro"
+                    }
+                  },
+                  {
+                    "kind": "not",
+                    "of": {
+                      "kind": "memory",
+                      "memory": "ochered_k_kolodtsu"
+                    }
+                  },
+                  {
+                    "kind": "not",
+                    "of": {
+                      "kind": "memory",
+                      "memory": "poslednyaya_kruzhka"
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "axis",
+                "axis": "mercy_cruelty",
+                "op": "gte",
+                "value": 20
+              }
             ]
           },
           "to": "res_klyuchar"
@@ -691,8 +779,38 @@
           "when": {
             "kind": "all",
             "of": [
-              { "kind": "not", "of": { "kind": "memory", "memory": "luchshie_gody" } },
-              { "kind": "axis", "axis": "honesty_deceit", "op": "lte", "value": -20 }
+              {
+                "kind": "any",
+                "of": [
+                  {
+                    "kind": "not",
+                    "of": {
+                      "kind": "memory",
+                      "memory": "pervyy_posul"
+                    }
+                  },
+                  {
+                    "kind": "not",
+                    "of": {
+                      "kind": "memory",
+                      "memory": "zima_bez_khleba"
+                    }
+                  },
+                  {
+                    "kind": "not",
+                    "of": {
+                      "kind": "memory",
+                      "memory": "luchshie_gody"
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "axis",
+                "axis": "honesty_deceit",
+                "op": "lte",
+                "value": -20
+              }
             ]
           },
           "to": "res_posulshchik"
@@ -701,8 +819,38 @@
           "when": {
             "kind": "all",
             "of": [
-              { "kind": "not", "of": { "kind": "memory", "memory": "god_goloy_pravdy" } },
-              { "kind": "axis", "axis": "honesty_deceit", "op": "gte", "value": 20 }
+              {
+                "kind": "any",
+                "of": [
+                  {
+                    "kind": "not",
+                    "of": {
+                      "kind": "memory",
+                      "memory": "pervaya_stroka"
+                    }
+                  },
+                  {
+                    "kind": "not",
+                    "of": {
+                      "kind": "memory",
+                      "memory": "khronika_bez_popravok"
+                    }
+                  },
+                  {
+                    "kind": "not",
+                    "of": {
+                      "kind": "memory",
+                      "memory": "god_goloy_pravdy"
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "axis",
+                "axis": "honesty_deceit",
+                "op": "gte",
+                "value": 20
+              }
             ]
           },
           "to": "res_chistopisets"
@@ -711,8 +859,38 @@
           "when": {
             "kind": "all",
             "of": [
-              { "kind": "not", "of": { "kind": "memory", "memory": "eda_ne_vnesena" } },
-              { "kind": "axis", "axis": "reason_obsession", "op": "lte", "value": -20 }
+              {
+                "kind": "any",
+                "of": [
+                  {
+                    "kind": "not",
+                    "of": {
+                      "kind": "memory",
+                      "memory": "punkt_pervyy"
+                    }
+                  },
+                  {
+                    "kind": "not",
+                    "of": {
+                      "kind": "memory",
+                      "memory": "opis_vsego_sushchego"
+                    }
+                  },
+                  {
+                    "kind": "not",
+                    "of": {
+                      "kind": "memory",
+                      "memory": "eda_ne_vnesena"
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "axis",
+                "axis": "reason_obsession",
+                "op": "lte",
+                "value": -20
+              }
             ]
           },
           "to": "res_perechen"
@@ -721,8 +899,38 @@
           "when": {
             "kind": "all",
             "of": [
-              { "kind": "not", "of": { "kind": "memory", "memory": "schet_za_sezon" } },
-              { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": 0 }
+              {
+                "kind": "any",
+                "of": [
+                  {
+                    "kind": "not",
+                    "of": {
+                      "kind": "memory",
+                      "memory": "smola_na_vode"
+                    }
+                  },
+                  {
+                    "kind": "not",
+                    "of": {
+                      "kind": "memory",
+                      "memory": "ples_gorit"
+                    }
+                  },
+                  {
+                    "kind": "not",
+                    "of": {
+                      "kind": "memory",
+                      "memory": "schet_za_sezon"
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "axis",
+                "axis": "mercy_cruelty",
+                "op": "lte",
+                "value": 0
+              }
             ]
           },
           "to": "res_smolokur"
@@ -731,8 +939,38 @@
           "when": {
             "kind": "all",
             "of": [
-              { "kind": "not", "of": { "kind": "memory", "memory": "poslednyaya_kruzhka" } },
-              { "kind": "axis", "axis": "mercy_cruelty", "op": "gt", "value": 0 }
+              {
+                "kind": "any",
+                "of": [
+                  {
+                    "kind": "not",
+                    "of": {
+                      "kind": "memory",
+                      "memory": "pervoye_vedro"
+                    }
+                  },
+                  {
+                    "kind": "not",
+                    "of": {
+                      "kind": "memory",
+                      "memory": "ochered_k_kolodtsu"
+                    }
+                  },
+                  {
+                    "kind": "not",
+                    "of": {
+                      "kind": "memory",
+                      "memory": "poslednyaya_kruzhka"
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "axis",
+                "axis": "mercy_cruelty",
+                "op": "gt",
+                "value": 0
+              }
             ]
           },
           "to": "res_klyuchar"
@@ -741,8 +979,38 @@
           "when": {
             "kind": "all",
             "of": [
-              { "kind": "not", "of": { "kind": "memory", "memory": "luchshie_gody" } },
-              { "kind": "axis", "axis": "honesty_deceit", "op": "lte", "value": 0 }
+              {
+                "kind": "any",
+                "of": [
+                  {
+                    "kind": "not",
+                    "of": {
+                      "kind": "memory",
+                      "memory": "pervyy_posul"
+                    }
+                  },
+                  {
+                    "kind": "not",
+                    "of": {
+                      "kind": "memory",
+                      "memory": "zima_bez_khleba"
+                    }
+                  },
+                  {
+                    "kind": "not",
+                    "of": {
+                      "kind": "memory",
+                      "memory": "luchshie_gody"
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "axis",
+                "axis": "honesty_deceit",
+                "op": "lte",
+                "value": 0
+              }
             ]
           },
           "to": "res_posulshchik"
@@ -751,31 +1019,343 @@
           "when": {
             "kind": "all",
             "of": [
-              { "kind": "not", "of": { "kind": "memory", "memory": "god_goloy_pravdy" } },
-              { "kind": "axis", "axis": "honesty_deceit", "op": "gt", "value": 0 }
+              {
+                "kind": "any",
+                "of": [
+                  {
+                    "kind": "not",
+                    "of": {
+                      "kind": "memory",
+                      "memory": "pervaya_stroka"
+                    }
+                  },
+                  {
+                    "kind": "not",
+                    "of": {
+                      "kind": "memory",
+                      "memory": "khronika_bez_popravok"
+                    }
+                  },
+                  {
+                    "kind": "not",
+                    "of": {
+                      "kind": "memory",
+                      "memory": "god_goloy_pravdy"
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "axis",
+                "axis": "honesty_deceit",
+                "op": "gt",
+                "value": 0
+              }
             ]
           },
           "to": "res_chistopisets"
         },
         {
-          "when": { "kind": "not", "of": { "kind": "memory", "memory": "eda_ne_vnesena" } },
+          "when": {
+            "kind": "any",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "punkt_pervyy"
+                }
+              },
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "opis_vsego_sushchego"
+                }
+              },
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "eda_ne_vnesena"
+                }
+              }
+            ]
+          },
           "to": "res_perechen"
         },
         {
-          "when": { "kind": "not", "of": { "kind": "memory", "memory": "schet_za_sezon" } },
+          "when": {
+            "kind": "any",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "smola_na_vode"
+                }
+              },
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "ples_gorit"
+                }
+              },
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "schet_za_sezon"
+                }
+              }
+            ]
+          },
           "to": "res_smolokur"
         },
         {
-          "when": { "kind": "not", "of": { "kind": "memory", "memory": "poslednyaya_kruzhka" } },
+          "when": {
+            "kind": "any",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "pervoye_vedro"
+                }
+              },
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "ochered_k_kolodtsu"
+                }
+              },
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "poslednyaya_kruzhka"
+                }
+              }
+            ]
+          },
           "to": "res_klyuchar"
         },
         {
-          "when": { "kind": "not", "of": { "kind": "memory", "memory": "luchshie_gody" } },
+          "when": {
+            "kind": "any",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "pervyy_posul"
+                }
+              },
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "zima_bez_khleba"
+                }
+              },
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "luchshie_gody"
+                }
+              }
+            ]
+          },
           "to": "res_posulshchik"
         },
         {
-          "when": { "kind": "not", "of": { "kind": "memory", "memory": "god_goloy_pravdy" } },
+          "when": {
+            "kind": "any",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "pervaya_stroka"
+                }
+              },
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "khronika_bez_popravok"
+                }
+              },
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "god_goloy_pravdy"
+                }
+              }
+            ]
+          },
           "to": "res_chistopisets"
+        }
+      ],
+      "fallback": "res_last_resort"
+    },
+    {
+      "kind": "branch",
+      "id": "res_last_resort",
+      "branches": [
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "smola_na_vode"
+            }
+          },
+          "to": "res_frag_smolokur_1"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "ples_gorit"
+            }
+          },
+          "to": "res_frag_smolokur_2"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "schet_za_sezon"
+            }
+          },
+          "to": "res_frag_smolokur_3"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "pervoye_vedro"
+            }
+          },
+          "to": "res_frag_klyuchar_1"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "ochered_k_kolodtsu"
+            }
+          },
+          "to": "res_frag_klyuchar_2"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "poslednyaya_kruzhka"
+            }
+          },
+          "to": "res_frag_klyuchar_3"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "pervyy_posul"
+            }
+          },
+          "to": "res_frag_posulshchik_1"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "zima_bez_khleba"
+            }
+          },
+          "to": "res_frag_posulshchik_2"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "luchshie_gody"
+            }
+          },
+          "to": "res_frag_posulshchik_3"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "pervaya_stroka"
+            }
+          },
+          "to": "res_frag_chistopisets_1"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "khronika_bez_popravok"
+            }
+          },
+          "to": "res_frag_chistopisets_2"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "god_goloy_pravdy"
+            }
+          },
+          "to": "res_frag_chistopisets_3"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "punkt_pervyy"
+            }
+          },
+          "to": "res_frag_perechen_1"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "opis_vsego_sushchego"
+            }
+          },
+          "to": "res_frag_perechen_2"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "eda_ne_vnesena"
+            }
+          },
+          "to": "res_frag_perechen_3"
         }
       ],
       "fallback": "archive_empty"
@@ -950,13 +1530,47 @@
       "kind": "branch",
       "id": "death_router",
       "branches": [
-        { "when": { "kind": "flag", "flag": "death_cause_shelf" }, "to": "cause_shelf" },
+        { "when": { "kind": "flag", "flag": "death_cause_shelf" }, "to": "shelf_router" },
         { "when": { "kind": "flag", "flag": "death_cause_scavengers" }, "to": "cause_scavengers" },
         { "when": { "kind": "flag", "flag": "death_cause_guild" }, "to": "cause_guild" },
-        { "when": { "kind": "flag", "flag": "death_cause_sluza" }, "to": "cause_sluza" },
-        { "when": { "kind": "flag", "flag": "death_cause_vytsvet" }, "to": "cause_vytsvet" }
+        { "when": { "kind": "flag", "flag": "death_cause_sluza" }, "to": "sluza_router" },
+        { "when": { "kind": "flag", "flag": "death_cause_vytsvet" }, "to": "vytsvet_router" }
+      ],
+      "fallback": "guard_router"
+    },
+    {
+      "kind": "branch",
+      "id": "shelf_router",
+      "branches": [
+        { "when": { "kind": "deaths", "op": "gte", "value": 9 }, "to": "cause_shelf_4" },
+        { "when": { "kind": "deaths", "op": "gte", "value": 5 }, "to": "cause_shelf_3" },
+        { "when": { "kind": "deaths", "op": "gte", "value": 2 }, "to": "cause_shelf_2" }
+      ],
+      "fallback": "cause_shelf"
+    },
+    {
+      "kind": "branch",
+      "id": "guard_router",
+      "branches": [
+        { "when": { "kind": "deaths", "op": "gte", "value": 3 }, "to": "cause_guard_2" }
       ],
       "fallback": "cause_guard"
+    },
+    {
+      "kind": "branch",
+      "id": "sluza_router",
+      "branches": [
+        { "when": { "kind": "deaths", "op": "gte", "value": 3 }, "to": "cause_sluza_2" }
+      ],
+      "fallback": "cause_sluza"
+    },
+    {
+      "kind": "branch",
+      "id": "vytsvet_router",
+      "branches": [
+        { "when": { "kind": "deaths", "op": "gte", "value": 6 }, "to": "cause_vytsvet_2" }
+      ],
+      "fallback": "cause_vytsvet"
     },
     {
       "kind": "say",
@@ -1015,6 +1629,120 @@
       "text": {
         "ru": "Причина: край Выцвети, ночь. Одна строка утрачена.",
         "en": "Cause: the edge of the Vytsvet, night. One line lost."
+      },
+      "next": "death_vytsvet_night"
+    },
+    {
+      "kind": "say",
+      "id": "cause_shelf_2",
+      "speaker": "osoka",
+      "text": {
+        "ru": "Причина: стеллаж, ярус третий. Ведомость продолжена.",
+        "en": "Cause: shelving, tier three. Damages sheet continued."
+      },
+      "next": "shelf_form_2"
+    },
+    {
+      "kind": "narration",
+      "id": "shelf_form_2",
+      "text": {
+        "ru": "Прежний лист кончился на строке про уборку, и она подшивает второй. Строки в новом те же, только нумерация опять с единицы: так положено, лист — самостоятельный документ.",
+        "en": "The previous sheet ran out at the line about the cleaning, and she files a second one. The lines on the new sheet are the same, only numbered from one again: that is the form, a sheet is a document in its own right."
+      },
+      "next": "death_shelf"
+    },
+    {
+      "kind": "say",
+      "id": "cause_shelf_3",
+      "speaker": "osoka",
+      "text": {
+        "ru": "Стеллаж, ярус третий. Убыток по прежней ведомости.",
+        "en": "Shelving, tier three. Damages on the standing sheet."
+      },
+      "next": "shelf_form_3"
+    },
+    {
+      "kind": "narration",
+      "id": "shelf_form_3",
+      "text": {
+        "ru": "Ведомость она больше не ищет: та лежит отдельно от прочих, углом наружу. Графа «обстоятельства» заполнена заранее и до половины — почерк не её, и почерк ровный.",
+        "en": "She no longer hunts for the sheet: it lies apart from the rest, corner outwards. The \"circumstances\" line has been filled in ahead of time and halfway down — not in her hand, and the hand is steady."
+      },
+      "next": "death_shelf"
+    },
+    {
+      "kind": "say",
+      "id": "cause_shelf_4",
+      "speaker": "osoka",
+      "text": {
+        "ru": "Ярус третий. Ведомость подшита к делу.",
+        "en": "Tier three. The sheet is filed to the case."
+      },
+      "next": "shelf_form_4"
+    },
+    {
+      "kind": "narration",
+      "id": "shelf_form_4",
+      "text": {
+        "ru": "Ломбард завёл для убытка по третьему ярусу отдельную обложку. Номер дела на обложке — тот же, что у тебя на бирке, и это единственное место в городе, где вы с этим стеллажом числитесь вместе.",
+        "en": "The Pawnshop has opened a separate folder for the third-tier damages. The case number on the cover is the number on your tag, and it is the one place in the city where you and that shelving are entered together."
+      },
+      "next": "death_shelf"
+    },
+    {
+      "kind": "say",
+      "id": "cause_guard_2",
+      "speaker": "osoka",
+      "text": {
+        "ru": "Причина: древко, под ребро. Формулировка прежняя.",
+        "en": "Cause: shaft, under the rib. Wording as before."
+      },
+      "next": "guard_form_2"
+    },
+    {
+      "kind": "narration",
+      "id": "guard_form_2",
+      "text": {
+        "ru": "Она сверяет с прошлой записью и добавляет одно слово: «слева» стало «слева, ниже». Устав стражи требует точности, и Прилавок этой точности не спорит.",
+        "en": "She checks it against the earlier entry and adds one word: \"left side\" becomes \"left side, lower\". The guard's regulations demand precision, and the counter does not argue with precision."
+      },
+      "next": "death_guard_pike"
+    },
+    {
+      "kind": "say",
+      "id": "cause_sluza_2",
+      "speaker": "osoka",
+      "text": {
+        "ru": "Причина: река. Строка про воду уже заведена.",
+        "en": "Cause: the river. The line for water already exists."
+      },
+      "next": "sluza_form_2"
+    },
+    {
+      "kind": "narration",
+      "id": "sluza_form_2",
+      "text": {
+        "ru": "Из-за реки в бланке появилась дописанная от руки графа: «примесь речная, к возврату не подлежит». Дописал её кто-то до неё, и с тех пор графу печатают.",
+        "en": "Because of the river the form has grown a line added by hand: \"river matter, not subject to return\". Somebody before her wrote it in, and since then the line is printed."
+      },
+      "next": "death_sluza"
+    },
+    {
+      "kind": "say",
+      "id": "cause_vytsvet_2",
+      "speaker": "osoka",
+      "text": {
+        "ru": "Край Выцвети, ночь. Утрачено две строки.",
+        "en": "Edge of the Vytsvet, night. Two lines lost."
+      },
+      "next": "vytsvet_form_2"
+    },
+    {
+      "kind": "narration",
+      "id": "vytsvet_form_2",
+      "text": {
+        "ru": "В графе «утрачено» она пишет цифру и обводит её кружком: обведённое пересчитывают в конце месяца отдельно. Что именно утрачено, в бланке не спрашивают — спрашивают сколько.",
+        "en": "In the \"lost\" line she writes a figure and rings it: ringed figures are counted separately at month's end. The form does not ask what was lost, it asks how much."
       },
       "next": "death_vytsvet_night"
     },

@@ -305,6 +305,7 @@
           },
           "fallback": true,
           "effects": [
+            { "kind": "axis", "axis": "reason_obsession", "delta": 8 },
             { "kind": "flag", "flag": "catalog_card_read", "value": true },
             { "kind": "axis", "axis": "grasp_release", "delta": -3 }
           ],
@@ -431,7 +432,7 @@
           "fallback": true,
           "effects": [
             { "kind": "fragment", "memory": "punkt_pervyy", "amount": 1 },
-            { "kind": "axis", "axis": "reason_obsession", "delta": -12 },
+            { "kind": "axis", "axis": "reason_obsession", "delta": -8 },
             { "kind": "counter", "counter": "nights_awake", "delta": 1 }
           ],
           "to": "stayed"
@@ -443,7 +444,7 @@
             "en": "Sleep on it. The drawer will keep."
           },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 8 }],
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 15 }],
           "to": "slept"
         },
         {
@@ -455,7 +456,7 @@
           "fallback": true,
           "effects": [
             { "kind": "axis", "axis": "mercy_cruelty", "delta": 3 },
-            { "kind": "axis", "axis": "reason_obsession", "delta": 3 }
+            { "kind": "axis", "axis": "reason_obsession", "delta": 8 }
           ],
           "to": "slept"
         },
@@ -468,7 +469,7 @@
           },
           "effects": [
             { "kind": "fragment", "memory": "punkt_pervyy", "amount": 1 },
-            { "kind": "axis", "axis": "reason_obsession", "delta": -12 },
+            { "kind": "axis", "axis": "reason_obsession", "delta": -8 },
             { "kind": "counter", "counter": "nights_awake", "delta": 1 }
           ],
           "to": "stayed",

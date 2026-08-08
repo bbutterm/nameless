@@ -329,7 +329,7 @@
           "id": "hang_tag",
           "text": { "ru": "Снять и повесить бирку на решётку.", "en": "Take it off and hang it on the grate." },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -3 }],
+          "effects": [ { "kind": "axis", "axis": "reason_obsession", "delta": 3 },{ "kind": "axis", "axis": "grasp_release", "delta": -3 }],
           "to": "r_hang"
         },
         {

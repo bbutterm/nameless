@@ -139,6 +139,11 @@
           "effects": [
             {
               "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": 8
+            },
+            {
+              "kind": "axis",
               "axis": "grasp_release",
               "delta": -5
             }
@@ -466,7 +471,7 @@
             {
               "kind": "axis",
               "axis": "reason_obsession",
-              "delta": 5
+              "delta": 8
             }
           ],
           "to": "r_trade_it"

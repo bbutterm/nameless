@@ -128,6 +128,7 @@
           "id": "read_near",
           "text": { "ru": "Читать ближнюю. Ту, что под лампой.", "en": "Read the near one. The one under the lamp." },
           "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 8 }],
           "to": "r_fourth"
         },
         {
@@ -332,7 +333,7 @@
           "id": "put_back",
           "text": { "ru": "Поставить короб обратно в дыру.", "en": "Put the crate back in the hole." },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -8 }],
+          "effects": [ { "kind": "axis", "axis": "reason_obsession", "delta": 8 },{ "kind": "axis", "axis": "grasp_release", "delta": -8 }],
           "to": "r_put_back"
         },
         {
@@ -409,7 +410,7 @@
           "id": "touch_nothing",
           "conditions": { "kind": "axis", "axis": "grasp_release", "op": "lte", "value": -30 },
           "text": { "ru": "Не трогать ничего. Идти наверх.", "en": "Touch nothing. Go back up." },
-          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -8 }],
+          "effects": [ { "kind": "axis", "axis": "reason_obsession", "delta": 8 },{ "kind": "axis", "axis": "grasp_release", "delta": -8 }],
           "to": "r_touch_nothing",
           "priority": 5
         }

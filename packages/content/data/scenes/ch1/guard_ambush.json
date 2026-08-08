@@ -291,6 +291,136 @@
     },
     {
       "kind": "narration",
+      "id": "ring_familiar",
+      "text": {
+        "ru": "Наряд не окружает — наряд расступается и пропускает тебя внутрь кольца, как пропускают в контору. Кольцо смыкается уже за спиной, ровно, на счёт.",
+        "en": "The detail does not surround you — it opens and lets you inside the ring, the way you are let into an office. The ring closes behind you, evenly, on a count."
+      },
+      "next": "familiar_sheet"
+    },
+    {
+      "kind": "say",
+      "id": "familiar_sheet",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Приметы серые, вес малый, имени нет. Дело завели вчера.",
+        "en": "Grey description, low weight, no name. The case was opened yesterday."
+      },
+      "next": "familiar_bundle"
+    },
+    {
+      "kind": "narration",
+      "id": "familiar_bundle",
+      "text": {
+        "ru": "Под мышкой у неё связка в шестнадцать листов, изъятая из читальни по описи. Шнур перетёрся не о её рукав.",
+        "en": "Under her arm is a bundle of sixteen sheets, taken from the reading room by inventory. The lacing wore through on somebody else's sleeve."
+      },
+      "keywords": [{ "match": { "ru": "связка", "en": "bundle" }, "tone": "memory" }],
+      "next": "familiar_reads"
+    },
+    {
+      "kind": "say",
+      "id": "familiar_reads",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Читаю верхний лист. «Вклад первый, оптом, бессрочно».",
+        "en": "Reading the top sheet. \"Deposit one, in bulk, no term.\""
+      },
+      "next": "familiar_hand"
+    },
+    {
+      "kind": "narration",
+      "id": "familiar_hand",
+      "text": {
+        "ru": "Она читает вслух, потому что по уставу изъятое зачитывается владельцу. Ты смотришь не на слова, а на то, как написана буква «д»: с длинной петлёй вниз и обратно вверх. Так пишешь ты. На бумажках в кармане та же петля.",
+        "en": "She reads it aloud because the regulations require seized property to be read out to its owner. You are not looking at the words but at the way the letter is formed: a long loop down and back up. That is how you write. The papers in your pocket carry the same loop."
+      },
+      "keywords": [{ "match": { "ru": "Так пишешь ты", "en": "That is how you write" }, "tone": "memory" }],
+      "next": "familiar_known"
+    },
+    {
+      "kind": "effects",
+      "id": "familiar_known",
+      "effects": [{ "kind": "flag", "flag": "contract_read", "value": true }],
+      "next": "familiar_dratva_close"
+    },
+    {
+      "kind": "say",
+      "id": "familiar_dratva_close",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Вопрос по существу: вы этому имуществу владелец или принадлежность?",
+        "en": "A question to the point: are you this property's owner, or part of it?"
+      },
+      "next": "familiar_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "familiar_choice",
+      "prompt": {
+        "ru": "Наряд ждёт ответа. Пики подняты, ни одна не опущена.",
+        "en": "The detail waits for an answer. The pikes are raised, not one lowered."
+      },
+      "options": [
+        {
+          "id": "owner",
+          "text": { "ru": "Владелец. Почерк мой.", "en": "The owner. That is my hand." },
+          "fallback": true,
+          "effects": [
+            { "kind": "axis", "axis": "honesty_deceit", "delta": 8 },
+            { "kind": "axis", "axis": "grasp_release", "delta": 8 }
+          ],
+          "to": "familiar_close"
+        },
+        {
+          "id": "ask_case",
+          "text": {
+            "ru": "Спросить номер дела и кто его завёл.",
+            "en": "Ask the case number and who opened it."
+          },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 8 }],
+          "to": "familiar_close"
+        },
+        {
+          "id": "belonging",
+          "text": {
+            "ru": "Принадлежность. Опишите меня и уходите.",
+            "en": "Part of it. Inventory me and go."
+          },
+          "fallback": true,
+          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -8 }],
+          "to": "familiar_close"
+        },
+        {
+          "id": "boy_out_first",
+          "conditions": { "kind": "flag", "flag": "klyost_named" },
+          "text": {
+            "ru": "Сначала отпустите мальчишку за ящиками.",
+            "en": "First let the boy behind the crates go."
+          },
+          "effects": [
+            { "kind": "counter", "counter": "klyost_seen", "delta": 1 },
+            { "kind": "axis", "axis": "mercy_cruelty", "delta": 8 }
+          ],
+          "to": "familiar_close",
+          "priority": 5
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "familiar_close",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Отделимость устанавливаю я. Наряд, к изъятию.",
+        "en": "Separability is established by me. Detail, prepare to seize."
+      },
+      "mood": "flat",
+      "next": "guard_battle"
+    },
+    {
+      "kind": "narration",
       "id": "held",
       "text": {
         "ru": "Кольцо сходится ровно, без крика: их учили сходиться на счёт, и они считают про себя.",

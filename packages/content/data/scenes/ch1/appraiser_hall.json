@@ -247,6 +247,7 @@
           "id": "sell",
           "text": { "ru": "Продать за одиннадцать.", "en": "Sell it for eleven." },
           "effects": [
+            { "kind": "axis", "axis": "reason_obsession", "delta": 3 },
             { "kind": "flag", "flag": "pocket_lot_sold", "value": true },
             { "kind": "gold", "delta": 11 },
             { "kind": "axis", "axis": "grasp_release", "delta": -5 }
@@ -383,7 +384,7 @@
         {
           "id": "walk_off",
           "text": { "ru": "Уйти без справки.", "en": "Leave without the note." },
-          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -3 }],
+          "effects": [ { "kind": "axis", "axis": "reason_obsession", "delta": 8 },{ "kind": "axis", "axis": "grasp_release", "delta": -3 }],
           "to": "r_no_note"
         },
         {
