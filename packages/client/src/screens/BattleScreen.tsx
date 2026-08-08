@@ -14,6 +14,7 @@ import { loc, t } from '../i18n';
 import { combat, content, useGame } from '../store/game';
 import { vibrate } from '../lib/haptics';
 import { backgroundSvg, svgDataUri } from '../lib/art';
+import { TutorialHint } from '../components/Tutorial';
 
 type Anim = Record<string, 'lunge-up' | 'lunge-down' | 'hit' | 'die' | undefined>;
 
@@ -166,6 +167,8 @@ export function BattleScreen() {
           {selectedAbility ? t(lang, 'chooseTarget') : t(lang, 'yourTurn')}
         </div>
       )}
+
+      {!over && <TutorialHint step="battle" lang={lang} />}
 
       {over && (
         <div className="battle-over">

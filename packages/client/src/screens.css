@@ -654,3 +654,28 @@
 .mem-row { display: flex; gap: 8px; align-items: flex-start; padding: 6px 0; }
 .mem-name { font-size: 15px; color: var(--memory); }
 .mem-text { font-size: 14.5px; color: var(--text-dim); line-height: 1.4; margin-top: 2px; }
+
+/* ── Обучение ────────────────────────────────────────────────────────────── */
+.tutorial {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  z-index: 15;
+  background: rgba(36, 31, 41, 0.96);
+  border: 1px solid var(--accent-dim);
+  border-radius: var(--r-md);
+  padding: 12px 14px;
+  animation: rise 320ms ease-out;
+  box-shadow: 0 8px 30px -10px #000;
+}
+.tutorial-bottom { bottom: calc(84px + var(--safe-bottom)); }
+.tutorial-center { top: 42%; }
+.tutorial-text { font-size: 16px; line-height: 1.35; }
+.tutorial-skip {
+  margin-top: 6px;
+  font-size: 12.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-dim);
+  text-align: right;
+}

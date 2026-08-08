@@ -7,6 +7,7 @@ import { loc, t } from '../i18n';
 import { idx, useGame } from '../store/game';
 import { backgroundSvg, svgDataUri } from '../lib/art';
 import { ArchiveSheet } from './ArchiveSheet';
+import { TutorialHint } from '../components/Tutorial';
 
 /** Имя говорящего: в контенте оно живёт в сцене, а не в реестре — реестр только про арт. */
 function speakerName(id: string, lang: 'ru' | 'en'): string {
@@ -106,6 +107,8 @@ export function DialogueScreen() {
       ) : (
         <div className="tap-hint">{t(lang, 'tapToContinue')}</div>
       )}
+
+      <TutorialHint step={isChoice ? 'choice' : 'tap'} lang={lang} />
 
       {archive && <ArchiveSheet state={state} lang={lang} onClose={() => setArchive(false)} />}
     </div>
