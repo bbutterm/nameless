@@ -1,17 +1,42 @@
 {
   "id": "vaults_hub",
   "chapter": 2,
-  "title": { "ru": "Пересыльная площадка", "en": "The Transit Landing" },
-  "tags": ["hub", "vaults"],
-  "available": { "kind": "visited", "scene": "vault_gate" },
+  "title": {
+    "ru": "Пересыльная площадка",
+    "en": "The Transit Landing"
+  },
+  "tags": [
+    "hub",
+    "vaults"
+  ],
+  "available": {
+    "kind": "visited",
+    "scene": "vault_gate"
+  },
   "entry": "hub_router",
   "nodes": [
     {
       "kind": "branch",
       "id": "hub_router",
       "branches": [
-        { "when": { "kind": "counter", "counter": "vault_depth", "op": "gte", "value": 3 }, "to": "hub_deep" },
-        { "when": { "kind": "counter", "counter": "vault_depth", "op": "gte", "value": 1 }, "to": "hub_again" }
+        {
+          "when": {
+            "kind": "counter",
+            "counter": "vault_depth",
+            "op": "gte",
+            "value": 3
+          },
+          "to": "hub_deep"
+        },
+        {
+          "when": {
+            "kind": "counter",
+            "counter": "vault_depth",
+            "op": "gte",
+            "value": 1
+          },
+          "to": "hub_again"
+        }
       ],
       "fallback": "hub_first"
     },
@@ -22,7 +47,15 @@
         "ru": "На площадке пахнет сургучом и мокрой верёвкой. Ящики стоят в два ряда, у каждого на боку мелом раздел и число, и мел стирают, не дожидаясь, пока ящик уйдёт.",
         "en": "The landing smells of sealing wax and wet rope. The crates stand in two rows, each with a section and a number chalked on its side, and the chalk is wiped off without waiting for the crate to go."
       },
-      "keywords": [{ "match": { "ru": "раздел", "en": "section" }, "tone": "lore" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "раздел",
+            "en": "section"
+          },
+          "tone": "lore"
+        }
+      ],
       "next": "hub_first2"
     },
     {
@@ -109,7 +142,15 @@
         "ru": "На доске расхождений сегодня одна строка. Число в ней не проставлено, вместо числа стоит бирка на гвозде: жесть, продавленная единица, тупые края.",
         "en": "There is one line on the discrepancy board today. The figure is not filled in; instead of a figure there is a tag on a nail: tin, a punched one, blunted edges."
       },
-      "keywords": [{ "match": { "ru": "доске расхождений", "en": "discrepancy board" }, "tone": "danger" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "доске расхождений",
+            "en": "discrepancy board"
+          },
+          "tone": "danger"
+        }
+      ],
       "next": "hub_choice"
     },
     {
@@ -122,57 +163,109 @@
       "options": [
         {
           "id": "down_stairs",
-          "text": { "ru": "Вниз, к ярусам обеспечения.", "en": "Down, to the holding tiers." },
+          "text": {
+            "ru": "Вниз, к ярусам обеспечения.",
+            "en": "Down, to the holding tiers."
+          },
           "fallback": true,
           "to": "hub_down"
         },
         {
           "id": "to_city",
-          "text": { "ru": "Наверх, в город.", "en": "Up, into the city." },
+          "text": {
+            "ru": "Наверх, в город.",
+            "en": "Up, into the city."
+          },
           "fallback": true,
           "to": "hub_up"
         },
         {
           "id": "read_board",
-          "text": { "ru": "Прочитать доску расхождений.", "en": "Read the discrepancy board." },
+          "text": {
+            "ru": "Прочитать доску расхождений.",
+            "en": "Read the discrepancy board."
+          },
           "to": "hub_board"
         },
         {
           "id": "to_tminny",
-          "text": { "ru": "К оценщику, за особым распоряжением.", "en": "To the appraiser, for the special order." },
-          "conditions": { "kind": "not", "of": { "kind": "visited", "scene": "tminny_price" } },
+          "text": {
+            "ru": "К оценщику, за особым распоряжением.",
+            "en": "To the appraiser, for the special order."
+          },
+          "conditions": {
+            "kind": "not",
+            "of": {
+              "kind": "visited",
+              "scene": "tminny_price"
+            }
+          },
           "to": "scene:tminny_price",
           "priority": 7
         },
         {
           "id": "to_foundation",
-          "text": { "ru": "Ниже последнего яруса. К несущей стене.", "en": "Below the last tier. To the bearing wall." },
-          "conditions": { "kind": "counter", "counter": "vault_depth", "op": "gte", "value": 3 },
+          "text": {
+            "ru": "Ниже последнего яруса. К несущей стене.",
+            "en": "Below the last tier. To the bearing wall."
+          },
+          "conditions": {
+            "kind": "counter",
+            "counter": "vault_depth",
+            "op": "gte",
+            "value": 3
+          },
           "to": "scene:foundation",
           "priority": 9
         },
         {
           "id": "to_revizor",
-          "text": { "ru": "К человеку в сером пальто у стола.", "en": "To the man in the grey coat by the table." },
-          "conditions": { "kind": "not", "of": { "kind": "visited", "scene": "revizor_second" } },
+          "text": {
+            "ru": "К человеку в сером пальто у стола.",
+            "en": "To the man in the grey coat by the table."
+          },
+          "conditions": {
+            "kind": "not",
+            "of": {
+              "kind": "visited",
+              "scene": "revizor_second"
+            }
+          },
           "to": "scene:revizor_second",
           "priority": 4
         },
         {
           "id": "ask_klyost",
-          "text": { "ru": "Спросить мальчишку, куда сегодня не ходить.", "en": "Ask the boy where not to go today." },
-          "conditions": { "kind": "flag", "flag": "klyost_named" },
+          "text": {
+            "ru": "Спросить мальчишку, куда сегодня не ходить.",
+            "en": "Ask the boy where not to go today."
+          },
+          "conditions": {
+            "kind": "flag",
+            "flag": "klyost_named"
+          },
           "to": "hub_klyost_ask",
           "priority": 3
         },
         {
           "id": "to_rats",
-          "text": { "ru": "Пойти за крысами.", "en": "Follow the rats." },
+          "text": {
+            "ru": "Пойти за крысами.",
+            "en": "Follow the rats."
+          },
           "conditions": {
             "kind": "any",
             "of": [
-              { "kind": "axis", "axis": "reason_obsession", "op": "lte", "value": -60 },
-              { "kind": "flag", "flag": "archive_copied" }
+              {
+                "kind": "axis",
+                "axis": "reason_obsession",
+                "op": "lte",
+                "value": -60
+              },
+              {
+                "kind": "flag",
+                "flag": "archive_copied"
+              }
             ]
           },
           "to": "scene:rat_escort",
@@ -180,8 +273,16 @@
         },
         {
           "id": "to_things",
-          "text": { "ru": "Обратно в чулан невостребованного.", "en": "Back to the unclaimed room." },
-          "conditions": { "kind": "axis", "axis": "grasp_release", "op": "gte", "value": 60 },
+          "text": {
+            "ru": "Обратно в чулан невостребованного.",
+            "en": "Back to the unclaimed room."
+          },
+          "conditions": {
+            "kind": "axis",
+            "axis": "grasp_release",
+            "op": "gte",
+            "value": 60
+          },
           "to": "scene:things_turn",
           "priority": 5
         }
@@ -197,50 +298,103 @@
       "options": [
         {
           "id": "first_tier",
-          "text": { "ru": "На первый ярус обеспечения.", "en": "To the first holding tier." },
+          "text": {
+            "ru": "На первый ярус обеспечения.",
+            "en": "To the first holding tier."
+          },
           "fallback": true,
-          "conditions": { "kind": "not", "of": { "kind": "visited", "scene": "vault_first_tier" } },
+          "conditions": {
+            "kind": "not",
+            "of": {
+              "kind": "visited",
+              "scene": "vault_first_tier"
+            }
+          },
           "to": "scene:vault_first_tier"
         },
         {
           "id": "back_up",
-          "text": { "ru": "Вернуться к столу.", "en": "Go back to the table." },
+          "text": {
+            "ru": "Вернуться к столу.",
+            "en": "Go back to the table."
+          },
           "to": "hub_choice"
         },
         {
           "id": "count_crates",
-          "text": { "ru": "Сосчитать ящики на подъёмнике.", "en": "Count the crates on the hoist." },
+          "text": {
+            "ru": "Сосчитать ящики на подъёмнике.",
+            "en": "Count the crates on the hoist."
+          },
           "to": "hub_hoist"
         },
         {
           "id": "down_gar",
-          "text": { "ru": "На запах горелой смолы в галерее.", "en": "Towards the burnt tar smell in the gallery." },
+          "text": {
+            "ru": "На запах горелой смолы в галерее.",
+            "en": "Towards the burnt tar smell in the gallery."
+          },
           "conditions": {
             "kind": "all",
             "of": [
-              { "kind": "life", "life": "smolokur" },
-              { "kind": "not", "of": { "kind": "visited", "scene": "gar_debt" } }
+              {
+                "kind": "life",
+                "life": "smolokur"
+              },
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "visited",
+                  "scene": "gar_debt"
+                }
+              }
             ]
           },
-          "chip": { "icon": "fire", "label": { "ru": "Смолокур", "en": "Smolokur" }, "tone": "life" },
+          "chip": {
+            "icon": "fire",
+            "label": {
+              "ru": "Смолокур",
+              "en": "Smolokur"
+            },
+            "tone": "life"
+          },
           "to": "scene:gar_debt",
           "priority": 6
         },
         {
           "id": "down_foundation",
-          "text": { "ru": "Ниже последнего яруса, к несущей стене.", "en": "Below the last tier, to the bearing wall." },
-          "conditions": { "kind": "counter", "counter": "vault_depth", "op": "gte", "value": 3 },
+          "text": {
+            "ru": "Ниже последнего яруса, к несущей стене.",
+            "en": "Below the last tier, to the bearing wall."
+          },
+          "conditions": {
+            "kind": "counter",
+            "counter": "vault_depth",
+            "op": "gte",
+            "value": 3
+          },
           "to": "scene:foundation",
           "priority": 9
         },
         {
           "id": "down_rats",
-          "text": { "ru": "В боковой ход, куда уходят крысы.", "en": "Into the side passage where the rats go." },
+          "text": {
+            "ru": "В боковой ход, куда уходят крысы.",
+            "en": "Into the side passage where the rats go."
+          },
           "conditions": {
             "kind": "any",
             "of": [
-              { "kind": "axis", "axis": "reason_obsession", "op": "lte", "value": -60 },
-              { "kind": "flag", "flag": "archive_copied" }
+              {
+                "kind": "axis",
+                "axis": "reason_obsession",
+                "op": "lte",
+                "value": -60
+              },
+              {
+                "kind": "flag",
+                "flag": "archive_copied"
+              }
             ]
           },
           "to": "scene:rat_escort",
@@ -258,31 +412,66 @@
       "options": [
         {
           "id": "back_down",
-          "text": { "ru": "Остаться на площадке.", "en": "Stay on the landing." },
+          "text": {
+            "ru": "Остаться на площадке.",
+            "en": "Stay on the landing."
+          },
           "to": "hub_choice"
         },
         {
+          "id": "check_rates",
+          "text": {
+            "ru": "Посмотреть курс, вывешенный на завтра.",
+            "en": "Look at the rate posted for tomorrow."
+          },
+          "to": "hub_rates"
+        },
+        {
           "id": "to_vytsvet",
-          "text": { "ru": "С обозом на край Выцвети.", "en": "With the wagon train to the Vytsvet edge." },
+          "text": {
+            "ru": "С обозом на край Выцвети.",
+            "en": "With the wagon train to the Vytsvet edge."
+          },
           "fallback": true,
-          "conditions": { "kind": "not", "of": { "kind": "visited", "scene": "vytsvet_road" } },
+          "conditions": {
+            "kind": "not",
+            "of": {
+              "kind": "visited",
+              "scene": "vytsvet_road"
+            }
+          },
           "to": "scene:vytsvet_road",
           "priority": 3
         },
         {
           "id": "to_auction",
-          "text": { "ru": "На закрытый торг Цеха.", "en": "To the Guild's closed sale." },
+          "text": {
+            "ru": "На закрытый торг Цеха.",
+            "en": "To the Guild's closed sale."
+          },
           "conditions": {
             "kind": "all",
             "of": [
               {
                 "kind": "any",
                 "of": [
-                  { "kind": "flag", "flag": "scavenger_finished" },
-                  { "kind": "flag", "flag": "zhichka_promise" }
+                  {
+                    "kind": "flag",
+                    "flag": "scavenger_finished"
+                  },
+                  {
+                    "kind": "flag",
+                    "flag": "zhichka_promise"
+                  }
                 ]
               },
-              { "kind": "not", "of": { "kind": "visited", "scene": "guild_auction" } }
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "visited",
+                  "scene": "guild_auction"
+                }
+              }
             ]
           },
           "to": "scene:guild_auction",
@@ -290,18 +479,35 @@
         },
         {
           "id": "to_dratva",
-          "text": { "ru": "К стойке залоговых споров.", "en": "To the pledge-dispute desk." },
+          "text": {
+            "ru": "К стойке залоговых споров.",
+            "en": "To the pledge-dispute desk."
+          },
           "conditions": {
             "kind": "all",
             "of": [
               {
                 "kind": "any",
                 "of": [
-                  { "kind": "counter", "counter": "lots_held", "op": "gte", "value": 3 },
-                  { "kind": "flag", "flag": "contract_taken" }
+                  {
+                    "kind": "counter",
+                    "counter": "lots_held",
+                    "op": "gte",
+                    "value": 3
+                  },
+                  {
+                    "kind": "flag",
+                    "flag": "contract_taken"
+                  }
                 ]
               },
-              { "kind": "not", "of": { "kind": "visited", "scene": "dratva_arrest" } }
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "visited",
+                  "scene": "dratva_arrest"
+                }
+              }
             ]
           },
           "to": "scene:dratva_arrest",
@@ -309,18 +515,33 @@
         },
         {
           "id": "to_zhichka",
-          "text": { "ru": "В Мокрые ряды, к Жичке.", "en": "To the Wet Rows, to Zhichka." },
+          "text": {
+            "ru": "В Мокрые ряды, к Жичке.",
+            "en": "To the Wet Rows, to Zhichka."
+          },
           "conditions": {
             "kind": "all",
             "of": [
               {
                 "kind": "any",
                 "of": [
-                  { "kind": "flag", "flag": "zhichka_promise" },
-                  { "kind": "flag", "flag": "zhichka_deal" }
+                  {
+                    "kind": "flag",
+                    "flag": "zhichka_promise"
+                  },
+                  {
+                    "kind": "flag",
+                    "flag": "zhichka_deal"
+                  }
                 ]
               },
-              { "kind": "not", "of": { "kind": "visited", "scene": "zhichka_slip" } }
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "visited",
+                  "scene": "zhichka_slip"
+                }
+              }
             ]
           },
           "to": "scene:zhichka_slip",
@@ -328,13 +549,30 @@
         },
         {
           "id": "to_witness",
-          "text": { "ru": "На сделку, понятым.", "en": "To a deal, as a witness." },
+          "text": {
+            "ru": "На сделку, понятым.",
+            "en": "To a deal, as a witness."
+          },
           "conditions": {
             "kind": "all",
             "of": [
-              { "kind": "flag", "flag": "signed_insolvent" },
-              { "kind": "axis", "axis": "honesty_deceit", "op": "gte", "value": 40 },
-              { "kind": "not", "of": { "kind": "visited", "scene": "witness_work" } }
+              {
+                "kind": "flag",
+                "flag": "signed_insolvent"
+              },
+              {
+                "kind": "axis",
+                "axis": "honesty_deceit",
+                "op": "gte",
+                "value": 40
+              },
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "visited",
+                  "scene": "witness_work"
+                }
+              }
             ]
           },
           "to": "scene:witness_work",
@@ -342,19 +580,37 @@
         },
         {
           "id": "to_shelter",
-          "text": { "ru": "За реку, под крышу Братства.", "en": "Across the river, under the Brotherhood's roof." },
+          "text": {
+            "ru": "За реку, под крышу Братства.",
+            "en": "Across the river, under the Brotherhood's roof."
+          },
           "conditions": {
             "kind": "all",
             "of": [
               {
                 "kind": "any",
                 "of": [
-                  { "kind": "flag", "flag": "brotherhood_welcome" },
-                  { "kind": "flag", "flag": "beggar_helped" },
-                  { "kind": "flag", "flag": "dust_buried" }
+                  {
+                    "kind": "flag",
+                    "flag": "brotherhood_welcome"
+                  },
+                  {
+                    "kind": "flag",
+                    "flag": "beggar_helped"
+                  },
+                  {
+                    "kind": "flag",
+                    "flag": "dust_buried"
+                  }
                 ]
               },
-              { "kind": "not", "of": { "kind": "flag", "flag": "brotherhood_gate_shut" } }
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "flag",
+                  "flag": "brotherhood_gate_shut"
+                }
+              }
             ]
           },
           "to": "scene:brotherhood_shelter",
@@ -362,12 +618,26 @@
         },
         {
           "id": "to_quiet",
-          "text": { "ru": "На грядку, помолчать вместе.", "en": "To the vegetable bed, to be silent together." },
+          "text": {
+            "ru": "На грядку, помолчать вместе.",
+            "en": "To the vegetable bed, to be silent together."
+          },
           "conditions": {
             "kind": "all",
             "of": [
-              { "kind": "axis", "axis": "reason_obsession", "op": "gte", "value": 40 },
-              { "kind": "not", "of": { "kind": "flag", "flag": "brotherhood_gate_shut" } }
+              {
+                "kind": "axis",
+                "axis": "reason_obsession",
+                "op": "gte",
+                "value": 40
+              },
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "flag",
+                  "flag": "brotherhood_gate_shut"
+                }
+              }
             ]
           },
           "to": "scene:quiet_together",
@@ -375,12 +645,23 @@
         },
         {
           "id": "to_proshchai",
-          "text": { "ru": "К настоятелю, за реку.", "en": "To the prior, across the river." },
+          "text": {
+            "ru": "К настоятелю, за реку.",
+            "en": "To the prior, across the river."
+          },
           "conditions": {
             "kind": "any",
             "of": [
-              { "kind": "counter", "counter": "debts_forgiven", "op": "gte", "value": 2 },
-              { "kind": "flag", "flag": "proshchai_question" }
+              {
+                "kind": "counter",
+                "counter": "debts_forgiven",
+                "op": "gte",
+                "value": 2
+              },
+              {
+                "kind": "flag",
+                "flag": "proshchai_question"
+              }
             ]
           },
           "to": "scene:proshchai_confession",
@@ -388,9 +669,22 @@
         },
         {
           "id": "to_vodonos",
-          "text": { "ru": "К водокачке, где стоит хвост.", "en": "To the water pump, where the tail is standing." },
-          "conditions": { "kind": "life", "life": "klyuchar" },
-          "chip": { "icon": "heal", "label": { "ru": "Ключарь", "en": "Klyuchar" }, "tone": "life" },
+          "text": {
+            "ru": "К водокачке, где стоит хвост.",
+            "en": "To the water pump, where the tail is standing."
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "klyuchar"
+          },
+          "chip": {
+            "icon": "heal",
+            "label": {
+              "ru": "Ключарь",
+              "en": "Klyuchar"
+            },
+            "tone": "life"
+          },
           "to": "scene:vodonos_queue",
           "priority": 5
         }
@@ -408,7 +702,10 @@
     {
       "kind": "lore",
       "id": "hub_board",
-      "title": { "ru": "Доска расхождений, нижняя приёмка", "en": "Discrepancy board, lower intake" },
+      "title": {
+        "ru": "Доска расхождений, нижняя приёмка",
+        "en": "Discrepancy board, lower intake"
+      },
       "text": {
         "ru": "«Расхождений на сегодня: одно. Возраст расхождения: не установлен, установить не удалось, установить поручено. Сумма расхождения: см. обеспечение. Ответственный: см. обеспечение». Ниже, карандашом и другой рукой: «Обеспечение смотреть нельзя. Мы спрашивали».",
         "en": "\"Discrepancies as of today: one. Age of the discrepancy: not established, could not be established, ordered to be established. Amount of the discrepancy: see holdings. Party responsible: see holdings.\" Below, in pencil and another hand: \"The holdings may not be viewed. We asked.\""
@@ -424,6 +721,24 @@
         "en": "So: today don't go to the sale empty-handed, and don't go to the dispute desk at all. One of those two I've got mixed up."
       },
       "next": "hub_choice"
+    },
+    {
+      "kind": "narration",
+      "id": "hub_rates",
+      "text": {
+        "ru": "Курс на завтра вывешен только конторой у ворот, и в нём стоит прочерк вместо числа. Внизу приписка сторожа: «до сверки обеспечения курс не объявляется, спрашивать не у кого».",
+        "en": "The rate for tomorrow has been posted by the gate office alone, and it carries a dash where the figure should be. Beneath it, in the watchman's hand: \"no rate is announced until the holdings are reconciled, and there is nobody to ask\"."
+      },
+      "keywords": [
+        {
+          "match": {
+            "ru": "прочерк вместо числа",
+            "en": "a dash where the figure should be"
+          },
+          "tone": "danger"
+        }
+      ],
+      "next": "hub_up"
     }
   ]
 }
