@@ -44,8 +44,17 @@ export function useTutorial(step: TutorialStep | undefined): {
       setShow(false);
       return;
     }
-    const timer = setTimeout(() => setShow(true), 700);
-    return () => clearTimeout(timer);
+    const appear = setTimeout(() => setShow(true), 700);
+    // Подсказка гаснет сама. Кликать по ней нельзя: всплывашка над кнопками
+    // выбора и панелью способностей перехватывала бы тапы по самой игре.
+    const vanish = setTimeout(() => {
+      markSeen(step);
+      setShow(false);
+    }, 6500);
+    return () => {
+      clearTimeout(appear);
+      clearTimeout(vanish);
+    };
   }, [step]);
 
   return {
@@ -72,18 +81,11 @@ export function TutorialHint({
   lang: Lang;
   anchor?: 'bottom' | 'center' | 'top';
 }) {
-  const { show, dismiss } = useTutorial(step);
+  const { show } = useTutorial(step);
   if (!show || !step) return null;
   return (
-    <div
-      className={`tutorial tutorial-${anchor}`}
-      onClick={(e) => {
-        e.stopPropagation();
-        dismiss();
-      }}
-    >
+    <div className={`tutorial tutorial-${anchor}`} aria-live="polite">
       <div className="tutorial-text">{t(lang, TEXT[step])}</div>
-      <div className="tutorial-skip">{t(lang, 'skip')}</div>
     </div>
   );
 }

@@ -51,10 +51,10 @@
     "tier": 2,
     "row": "back",
     "stats": {
+      "initiative": 12,
       "hp": 45,
-      "atk": 17,
-      "def": 6,
-      "initiative": 12
+      "atk": 16,
+      "def": 6
     },
     "abilities": [
       "bucket_round",
@@ -122,10 +122,10 @@
     "tier": 2,
     "row": "back",
     "stats": {
+      "initiative": 11,
       "hp": 45,
       "atk": 17,
-      "def": 6,
-      "initiative": 11
+      "def": 6
     },
     "abilities": [
       "burning_water",
@@ -335,10 +335,10 @@
     "tier": 2,
     "row": "back",
     "stats": {
+      "initiative": 11,
       "hp": 45,
       "atk": 16,
-      "def": 6,
-      "initiative": 11
+      "def": 6
     },
     "abilities": [
       "inventory",
@@ -406,10 +406,10 @@
     "tier": 2,
     "row": "back",
     "stats": {
-      "hp": 46,
+      "initiative": 10,
+      "hp": 45,
       "atk": 18,
-      "def": 7,
-      "initiative": 10
+      "def": 7
     },
     "abilities": [
       "borrowed_grief",

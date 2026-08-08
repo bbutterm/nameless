@@ -121,10 +121,10 @@
     "tier": 2,
     "row": "back",
     "stats": {
+      "initiative": 11,
       "hp": 45,
-      "atk": 17,
-      "def": 6,
-      "initiative": 11
+      "atk": 16,
+      "def": 6
     },
     "abilities": [
       "appraisal",

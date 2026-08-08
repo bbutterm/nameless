@@ -14,10 +14,10 @@
     "tier": 2,
     "row": "back",
     "stats": {
-      "hp": 47,
+      "initiative": 10,
+      "hp": 48,
       "atk": 18,
-      "def": 7,
-      "initiative": 10
+      "def": 7
     },
     "abilities": [
       "smoke_of_ples",
@@ -105,10 +105,10 @@
     "tier": 2,
     "row": "back",
     "stats": {
-      "hp": 45,
+      "initiative": 11,
+      "hp": 46,
       "atk": 18,
-      "def": 6,
-      "initiative": 11
+      "def": 6
     },
     "abilities": [
       "inventory",

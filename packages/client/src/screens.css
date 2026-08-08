@@ -658,6 +658,7 @@
 /* ── Обучение ────────────────────────────────────────────────────────────── */
 .tutorial {
   position: absolute;
+  pointer-events: none;
   left: 14px;
   right: 14px;
   z-index: 15;
@@ -665,9 +666,10 @@
   border: 1px solid var(--accent-dim);
   border-radius: var(--r-md);
   padding: 12px 14px;
-  animation: rise 320ms ease-out;
+  animation: rise 320ms ease-out, fade-out 700ms ease-in 5.8s forwards;
   box-shadow: 0 8px 30px -10px #000;
 }
+@keyframes fade-out { to { opacity: 0; } }
 .tutorial-bottom { bottom: calc(84px + var(--safe-bottom)); }
 .tutorial-center { top: 42%; }
 .tutorial-top { top: calc(52px + var(--safe-top)); }

@@ -50,10 +50,10 @@
     "tier": 2,
     "row": "back",
     "stats": {
+      "initiative": 12,
       "hp": 45,
-      "atk": 18,
-      "def": 7,
-      "initiative": 12
+      "atk": 17,
+      "def": 7
     },
     "abilities": [
       "borrowed_grief",
