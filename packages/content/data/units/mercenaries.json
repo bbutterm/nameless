@@ -12,7 +12,7 @@
     "evolvesTo": "almshouse_sister",
     "evolveAt": 250,
     "recruitable": { "kind": "axis", "axis": "mercy_cruelty", "op": "gte", "value": 40 },
-    "traits": ["healer", "pole_mercy"]
+    "traits": ["fighter", "pole_mercy"]
   },
   {
     "id": "almshouse_sister",
@@ -168,7 +168,7 @@
     "tier": 1,
     "row": "front",
     "stats": { "hp": 48, "atk": 10, "def": 9, "initiative": 8 },
-    "abilities": ["plain_strike", "debt_collection"],
+    "abilities": ["plain_strike", "debt_collection", "stand_in_the_doorway"],
     "recruitable": { "kind": "axis", "axis": "grasp_release", "op": "gte", "value": 40 },
     "traits": ["shield", "pole_grasp"]
   },
