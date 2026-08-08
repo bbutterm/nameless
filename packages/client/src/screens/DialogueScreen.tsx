@@ -119,10 +119,13 @@ export function DialogueScreen() {
           />
         </div>
       ) : (
-        <>
+        // Подсказка «коснись экрана» стоит в потоке под лентой, а не поверх неё:
+        // всплывашка с anchor="bottom" ложилась ровно на нижнюю (то есть свежую)
+        // реплику — на первом экране игры она накрывала собой самую первую фразу.
+        <div className="tap-area">
+          <TutorialHint step="tap" lang={lang} anchor="flow" />
           <div className="tap-hint">{t(lang, 'tapToContinue')}</div>
-          <TutorialHint step="tap" lang={lang} />
-        </>
+        </div>
       )}
 
       {archive && <ArchiveSheet state={state} lang={lang} onClose={() => setArchive(false)} />}

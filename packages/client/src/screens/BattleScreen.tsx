@@ -163,7 +163,7 @@ export function BattleScreen() {
         </div>
       )}
 
-      <div className="field">
+      <div className={`field ${myTurn && selectedAbility ? 'targeting' : ''}`}>
         <div className="side enemy-side">
           {renderRow('enemy', 'back')}
           {renderRow('enemy', 'front')}
