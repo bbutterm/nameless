@@ -50,7 +50,7 @@
     "row": "front",
     "stats": {
       "initiative": 10,
-      "hp": 65,
+      "hp": 64,
       "atk": 15,
       "def": 11
     },
@@ -122,7 +122,7 @@
     "row": "back",
     "stats": {
       "initiative": 11,
-      "hp": 47,
+      "hp": 46,
       "atk": 15,
       "def": 6
     },

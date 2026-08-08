@@ -52,7 +52,7 @@
     "row": "back",
     "stats": {
       "initiative": 11,
-      "hp": 50,
+      "hp": 49,
       "atk": 16,
       "def": 7
     },
@@ -123,8 +123,8 @@
     "row": "back",
     "stats": {
       "initiative": 11,
-      "hp": 47,
-      "atk": 17,
+      "hp": 45,
+      "atk": 16,
       "def": 6
     },
     "abilities": [
@@ -480,7 +480,7 @@
     "stats": {
       "initiative": 8,
       "hp": 72,
-      "atk": 15,
+      "atk": 16,
       "def": 12
     },
     "abilities": [
@@ -515,7 +515,7 @@
     "row": "front",
     "stats": {
       "initiative": 10,
-      "hp": 44,
+      "hp": 45,
       "atk": 9,
       "def": 7
     },
@@ -550,8 +550,8 @@
     "row": "front",
     "stats": {
       "initiative": 9,
-      "hp": 71,
-      "atk": 17,
+      "hp": 72,
+      "atk": 18,
       "def": 12
     },
     "abilities": [
