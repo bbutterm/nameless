@@ -575,3 +575,82 @@
   .portrait { width: 38px; height: 38px; }
   .card-name { font-size: 10px; }
 }
+
+/* ── Опись: отряд и мозаика памяти ───────────────────────────────────────── */
+.archive-button {
+  position: absolute;
+  top: calc(6px + var(--safe-top));
+  right: 10px;
+  z-index: 3;
+  width: var(--tap);
+  height: var(--tap);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r-sm);
+  background: rgba(13, 11, 14, 0.55);
+  border: 1px solid var(--line);
+}
+.sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  background: rgba(6, 5, 7, 0.78);
+  display: flex;
+  align-items: flex-end;
+  animation: rise 200ms ease-out;
+}
+.sheet {
+  width: 100%;
+  max-height: 88dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-1);
+  border-top: 1px solid var(--line);
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
+  padding: 10px 12px calc(12px + var(--safe-bottom));
+  gap: 10px;
+}
+.sheet-tabs { display: flex; gap: 8px; }
+.sheet-tabs button {
+  flex: 1;
+  min-height: 42px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--line);
+  color: var(--text-dim);
+  font-family: var(--font-display);
+  font-size: 16px;
+}
+.sheet-tabs button.on { color: var(--accent); border-color: var(--accent-dim); background: var(--surface); }
+.sheet-body { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 12px; }
+.sheet-empty { color: var(--text-faint); font-style: italic; text-align: center; padding: 28px 0; }
+.sheet-close { width: 100%; }
+
+.party-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.party-item {
+  border: 1px solid var(--tier-1);
+  border-radius: var(--r-sm);
+  padding: 4px;
+  background: var(--bg-2);
+}
+.party-item.tier-2 { border-color: var(--tier-2); }
+.party-item.tier-3 { border-color: var(--tier-3); }
+.party-item img { width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 4px; }
+.party-name { font-size: 12px; margin-top: 3px; line-height: 1.2; }
+.party-blurb { font-size: 10.5px; color: var(--text-faint); line-height: 1.2; }
+.party-meta { font-size: 10.5px; color: var(--text-dim); margin-top: 2px; }
+
+.life-block { border-left: 2px solid var(--accent-dim); padding-left: 10px; }
+.life-block-head {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-display);
+  font-size: 17px;
+  color: var(--accent);
+}
+.life-prog { margin-left: auto; font-size: 13px; color: var(--text-faint); }
+.life-block-flavor { font-size: 14.5px; font-style: italic; color: var(--text-dim); margin: 4px 0 8px; }
+.mem-row { display: flex; gap: 8px; align-items: flex-start; padding: 6px 0; }
+.mem-name { font-size: 15px; color: var(--memory); }
+.mem-text { font-size: 14.5px; color: var(--text-dim); line-height: 1.4; margin-top: 2px; }

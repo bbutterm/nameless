@@ -1,10 +1,12 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { SceneNode } from '@nameless/engine';
 import { LoreBubble, NarrationBubble, SayBubble } from '../components/Bubble';
 import { ChoiceBar } from '../components/ChoiceBar';
+import { Icon } from '../components/Icon';
 import { loc, t } from '../i18n';
 import { idx, useGame } from '../store/game';
 import { backgroundSvg, svgDataUri } from '../lib/art';
+import { ArchiveSheet } from './ArchiveSheet';
 
 /** Имя говорящего: в контенте оно живёт в сцене, а не в реестре — реестр только про арт. */
 function speakerName(id: string, lang: 'ru' | 'en'): string {
@@ -27,6 +29,7 @@ export function DialogueScreen() {
   const { state, step, lang, tap, pick } = useGame();
   const feedRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const [archive, setArchive] = useState(false);
 
   const log = state?.log ?? [];
 
@@ -41,6 +44,17 @@ export function DialogueScreen() {
   return (
     <div className="screen dialogue" onClick={isChoice ? undefined : tap}>
       <img className="scene-bg" src={bg} alt="" draggable={false} />
+
+      <button
+        className="archive-button"
+        aria-label={t(lang, 'memories')}
+        onClick={(e) => {
+          e.stopPropagation();
+          setArchive(true);
+        }}
+      >
+        <Icon name="book" size={20} color="var(--text-dim)" />
+      </button>
 
       <div className="feed scroll" ref={feedRef}>
         {log.map((entry, i) => {
@@ -92,6 +106,8 @@ export function DialogueScreen() {
       ) : (
         <div className="tap-hint">{t(lang, 'tapToContinue')}</div>
       )}
+
+      {archive && <ArchiveSheet state={state} lang={lang} onClose={() => setArchive(false)} />}
     </div>
   );
 }
