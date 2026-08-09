@@ -100,11 +100,67 @@
           "unit": "chalk_marker"
         },
         {
+          "kind": "recruit",
+          "unit": "relay_driver"
+        },
+        {
           "kind": "flag",
           "flag": "shcherb_arrived",
           "value": true
         }
       ],
+      "next": "road_cart"
+    },
+    {
+      "kind": "narration",
+      "id": "road_cart",
+      "text": {
+        "ru": "За поворотом стоит телега Гоньбы: ямщик ждёт груза, которого не будет, и от скуки соглашается подвезти. Груз он и так возит чужой, а кого везти — ему всё равно.",
+        "en": "Beyond the turning stands a Relay cart: the coachman is waiting for a load that will not come and, out of boredom, agrees to give a lift. The load he carries is another's anyway, and who he carries is all the same to him."
+      },
+      "next": "road_cutters"
+    },
+    {
+      "kind": "narration",
+      "id": "road_cutters",
+      "text": {
+        "ru": "На версте от деревни у обочины поднимается человек с ножом на короткой верёвке — срезает с идущих то, что плохо привязано. На телегу он смотрит с расчётом, на троих — уже нет.",
+        "en": "A verst out of the village a man rises at the roadside with a knife on a short cord — he cuts loose from passers-by whatever is badly tied. He eyes the cart with calculation; three of us, less so."
+      },
+      "keywords": [
+        {
+          "match": {
+            "ru": "с ножом на короткой верёвке",
+            "en": "a knife on a short cord"
+          },
+          "tone": "danger"
+        }
+      ],
+      "next": "cutters_battle"
+    },
+    {
+      "kind": "battle",
+      "id": "cutters_battle",
+      "battle": "battle_road_cutters",
+      "onWin": "cutters_won",
+      "onLose": "cutters_lost"
+    },
+    {
+      "kind": "narration",
+      "id": "cutters_won",
+      "text": {
+        "ru": "Он уходит в жнивьё, забрав нож и оставив верёвку. Ямщик подбирает верёвку и наматывает на кулак: в дороге всё пригодится.",
+        "en": "He goes off into the stubble, taking the knife and leaving the cord. The coachman picks up the cord and winds it round his fist: on the road everything comes in useful."
+      },
+      "next": "road_hub"
+    },
+    {
+      "kind": "narration",
+      "id": "cutters_lost",
+      "text": {
+        "ru": "Он срезает суму и уходит не спеша: убивать ему незачем, а бежать не от кого. Мел у парня остался — мел никому не нужен.",
+        "en": "He cuts the bag loose and leaves without hurrying: he has no reason to kill and nobody to run from. The lad kept his chalk — chalk is of no use to anyone."
+      },
       "next": "road_hub"
     },
     {
@@ -121,9 +177,15 @@
             "ru": "К Марье, про лишний прибор.",
             "en": "To Marya, about the extra setting."
           },
-          "fallback": true,
           "priority": 3,
-          "to": "scene:hearth_reckoning"
+          "to": "scene:hearth_reckoning",
+          "conditions": {
+            "kind": "not",
+            "of": {
+              "kind": "flag",
+              "flag": "saw_second_plate"
+            }
+          }
         },
         {
           "id": "to_muster",
@@ -131,9 +193,31 @@
             "ru": "К сходу, где считают дворы.",
             "en": "To the meeting, where they count households."
           },
-          "fallback": true,
           "priority": 3,
-          "to": "scene:witness_muster"
+          "to": "scene:witness_muster",
+          "conditions": {
+            "kind": "not",
+            "of": {
+              "kind": "flag",
+              "flag": "recount_confirmed"
+            }
+          }
+        },
+        {
+          "id": "to_archive",
+          "text": {
+            "ru": "В приходскую читальню, к спискам.",
+            "en": "To the parish reading room, to the lists."
+          },
+          "priority": 3,
+          "to": "scene:parish_archive",
+          "conditions": {
+            "kind": "not",
+            "of": {
+              "kind": "flag",
+              "flag": "chronicle_read"
+            }
+          }
         },
         {
           "id": "to_watchfire",
@@ -151,11 +235,6 @@
             "ru": "Уйти трактом к Закладу.",
             "en": "Take the highway to Zaklad."
           },
-          "conditions": {
-            "kind": "deaths",
-            "op": "gte",
-            "value": 1
-          },
           "priority": 2,
           "effects": [
             {
@@ -164,7 +243,8 @@
               "delta": -4
             }
           ],
-          "to": "tract_gap"
+          "to": "tract_gap",
+          "fallback": true
         },
         {
           "id": "stay_night",
@@ -172,13 +252,13 @@
             "ru": "Остаться в Щерби до утра.",
             "en": "Stay in Shcherb until morning."
           },
+          "priority": 1,
+          "to": "road_end",
           "conditions": {
             "kind": "deaths",
             "op": "gte",
             "value": 1
-          },
-          "priority": 1,
-          "to": "road_end"
+          }
         }
       ]
     },

@@ -31,8 +31,13 @@ await page.reload({ waitUntil: 'networkidle' });
 await page.locator('.big-button').first().click();
 await page.waitForTimeout(400);
 
-/** Куда ведёт глава: сначала к Марье, потом к вешке. */
-const ROUTE = ['к марье', 'спросить прямо', 'к дозорному огню', 'сказать, что имени нет'];
+/**
+ * Куда ведёт глава: по одному разу к Марье и на сход, потом к вешке.
+ * Пункт, по которому уже ходили, выбрасывается — иначе хаб и изба Марьи
+ * ловят автомат в вечное кольцо, и до смерти он не доходит никогда.
+ */
+const ROUTE = ['к марье', 'спросить прямо', 'к сходу', 'пересчитать вслух', 'к дозорному огню', 'сказать, что имени нет'];
+const used = new Set();
 let bubbles = 0;
 let promiseAt = null;
 let shot = { marya: false, hail: false, battle: false };
@@ -67,8 +72,13 @@ for (let step = 0; step < 400; step++) {
     [...document.querySelectorAll('.choice')].map((b) => b.textContent.toLowerCase()),
   );
   if (texts.length) {
-    let i = texts.findIndex((t) => ROUTE.some((w) => t.includes(w)));
+    let hit = null;
+    let i = texts.findIndex((t) => {
+      hit = ROUTE.find((w) => t.includes(w) && !used.has(w));
+      return !!hit;
+    });
     if (i < 0) i = 0;
+    else used.add(hit);
     await page.locator('.choice').nth(i).click();
   } else {
     const feed = await page.evaluate(() => document.body.innerText);

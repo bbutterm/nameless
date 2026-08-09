@@ -603,8 +603,8 @@
     "id": "svodchik",
     "kind": "person",
     "name": {
-      "ru": "Сводчик Ревизии",
-      "en": "The Audit's Reconciler"
+      "ru": "Сводчик",
+      "en": "Svod the Reconciler"
     },
     "blurb": {
       "ru": "Сводчик, картотека дыр",

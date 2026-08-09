@@ -1,5 +1,38 @@
 [
   {
+    "id": "battle_road_cutters",
+    "name": {
+      "ru": "Двое у обочины",
+      "en": "Two by the Roadside"
+    },
+    "enemies": [
+      {
+        "unit": "pocket_cutter",
+        "row": "front",
+        "index": 0,
+        "level": 1
+      }
+    ],
+    "background": "shcherb_road",
+    "rewards": [
+      {
+        "kind": "gold",
+        "delta": 6
+      },
+      {
+        "kind": "xp",
+        "amount": 8
+      }
+    ],
+    "tags": [
+      "tutorial"
+    ],
+    "expectParty": [
+      "chalk_marker",
+      "relay_driver"
+    ]
+  },
+  {
     "id": "battle_dratva_oklik",
     "name": {
       "ru": "Дозор на окликe",

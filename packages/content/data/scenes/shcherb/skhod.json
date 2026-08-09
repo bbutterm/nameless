@@ -5,18 +5,28 @@
     "ru": "Сход",
     "en": "The Gathering"
   },
-  "tags": ["death", "ceremony", "no_combat"],
+  "tags": [
+    "death",
+    "ceremony",
+    "no_combat"
+  ],
   "entry": "skhod_entry",
   "nodes": [
     {
       "kind": "branch",
       "id": "skhod_entry",
       "branches": [
-        { "when": { "kind": "deaths", "op": "gte", "value": 1 }, "to": "skhod_again" }
+        {
+          "when": {
+            "kind": "deaths",
+            "op": "gte",
+            "value": 1
+          },
+          "to": "skhod_again"
+        }
       ],
       "fallback": "skhod_floor"
     },
-
     {
       "kind": "narration",
       "id": "skhod_floor",
@@ -24,7 +34,15 @@
         "ru": "Гумно без края. Под ногами утоптанный ток, и он тёплый — как бывает тёплой земля там, где долго молотили. Стен нет, а гулко, как в закрытом.",
         "en": "A threshing floor with no edge. Underfoot the beaten ground is warm — the way ground is warm where threshing went on a long time. There are no walls, and yet it echoes as though closed in."
       },
-      "keywords": [{ "match": { "ru": "Гумно", "en": "threshing floor" }, "tone": "lore" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "Гумно",
+            "en": "threshing floor"
+          },
+          "tone": "lore"
+        }
+      ],
       "next": "skhod_queue"
     },
     {
@@ -44,7 +62,15 @@
         "ru": "Ты тоже оттуда, где стол на двоих? Я ставил. Не помню кому, а ставил.",
         "en": "Are you from there too, where the table is set for two? I used to set it. I do not remember for whom, but I set it."
       },
-      "keywords": [{ "match": { "ru": "стол на двоих", "en": "the table is set for two" }, "tone": "danger" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "стол на двоих",
+            "en": "the table is set for two"
+          },
+          "tone": "danger"
+        }
+      ],
       "next": "queue_dead_after"
     },
     {
@@ -64,7 +90,15 @@
         "ru": "Не вспомнил — не прошёл. Правило старше нас, и мы его не писали.",
         "en": "Not remembered, not let through. The rule is older than we are, and we did not write it."
       },
-      "keywords": [{ "match": { "ru": "Не вспомнил — не прошёл", "en": "Not remembered, not let through" }, "tone": "name" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "Не вспомнил — не прошёл",
+            "en": "Not remembered, not let through"
+          },
+          "tone": "name"
+        }
+      ],
       "next": "golos_why"
     },
     {
@@ -81,7 +115,22 @@
       "kind": "branch",
       "id": "skhod_confirm",
       "branches": [
-        { "when": { "kind": "flag", "flag": "oklik_refused" }, "to": "golos_no_name" }
+        {
+          "when": {
+            "kind": "counter",
+            "counter": "_shards",
+            "op": "lt",
+            "value": 2
+          },
+          "to": "golos_empty"
+        },
+        {
+          "when": {
+            "kind": "flag",
+            "flag": "oklik_refused"
+          },
+          "to": "golos_no_name"
+        }
       ],
       "fallback": "golos_borrowed"
     },
@@ -106,17 +155,56 @@
       "next": "skhod_zarubka"
     },
     {
+      "kind": "say",
+      "id": "golos_empty",
+      "speaker": "golos_iz_trukhi",
+      "text": {
+        "ru": "Пусто. Подтверждать нечего: ты прожил сутки так, что и вспоминать нечем. Ступай обратно и сделай что-нибудь, что удержится.",
+        "en": "Empty. There is nothing to acknowledge: you lived the day in a way that leaves nothing to remember by. Go back and do something that will hold."
+      },
+      "keywords": [
+        {
+          "match": {
+            "ru": "Подтверждать нечего",
+            "en": "nothing to acknowledge"
+          },
+          "tone": "danger"
+        }
+      ],
+      "next": "skhod_empty_out"
+    },
+    {
+      "kind": "narration",
+      "id": "skhod_empty_out",
+      "text": {
+        "ru": "Труха у ног не собирается ни во что. Щепка в кулаке та же, и мест под зарубки на ней столько же, сколько было утром.",
+        "en": "The dust at your feet gathers into nothing. The stick in your fist is the same, and there are as many places for notches on it as there were in the morning."
+      },
+      "next": "death_oklik"
+    },
+    {
       "kind": "narration",
       "id": "skhod_zarubka",
       "text": {
         "ru": "Труха у тебя под ногами собирается в кучку и оседает обратно. В кулаке — щепка, и на ней место под зарубку, которого утром не было.",
         "en": "The dust at your feet gathers into a little heap and settles back. In your fist is the stick, and on it a place for a notch that was not there in the morning."
       },
-      "keywords": [{ "match": { "ru": "зарубку", "en": "a notch" }, "tone": "memory" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "зарубку",
+            "en": "a notch"
+          },
+          "tone": "memory"
+        }
+      ],
       "next": "death_oklik"
     },
-    { "kind": "death", "id": "death_oklik", "death": "death_oklik" },
-
+    {
+      "kind": "death",
+      "id": "death_oklik",
+      "death": "death_oklik"
+    },
     {
       "kind": "narration",
       "id": "skhod_again",

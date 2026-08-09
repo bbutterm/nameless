@@ -33,20 +33,9 @@
       "kind": "narration",
       "id": "watchfire_ride",
       "text": {
-        "ru": "До вешки подвозит ямщик Гоньбы: ему всё равно, кого везти, но у ямы он не разворачивается, а слезает и встаёт рядом — говорит, что кнут длиннее пики.",
-        "en": "A Relay coachman gives you a lift to the marker: he does not care who he carries, but at the pit he does not turn around — he climbs down and stands alongside, saying a whip is longer than a pike."
+        "ru": "Ямщик доводит телегу до вешки и не разворачивается: слезает и встаёт рядом, говорит, что кнут длиннее пики. Мальчишка с мелом остаётся при лошади.",
+        "en": "The coachman brings the cart up to the marker and does not turn back: he climbs down and stands alongside, saying a whip is longer than a pike. The lad with the chalk stays with the horse."
       },
-      "next": "watchfire_ride_fx"
-    },
-    {
-      "kind": "effects",
-      "id": "watchfire_ride_fx",
-      "effects": [
-        {
-          "kind": "recruit",
-          "unit": "relay_driver"
-        }
-      ],
       "next": "dratva_hail"
     },
     {

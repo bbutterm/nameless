@@ -112,7 +112,12 @@
             {
               "kind": "fragment",
               "memory": "poslednyaya_kruzhka",
-              "amount": 1
+              "amount": 2
+            },
+            {
+              "kind": "counter",
+              "counter": "_shards",
+              "delta": 2
             }
           ],
           "fallback": true,
@@ -178,6 +183,11 @@
               "kind": "fragment",
               "memory": "poslednyaya_kruzhka",
               "amount": 3
+            },
+            {
+              "kind": "counter",
+              "counter": "_shards",
+              "delta": 3
             }
           ],
           "to": "marya_cup"

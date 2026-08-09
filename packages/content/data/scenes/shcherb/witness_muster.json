@@ -5,18 +5,25 @@
     "ru": "Пересчёт дворов",
     "en": "The Count of Households"
   },
-  "tags": ["village"],
+  "tags": [
+    "village"
+  ],
   "entry": "muster_router",
   "nodes": [
     {
       "kind": "branch",
       "id": "muster_router",
       "branches": [
-        { "when": { "kind": "flag", "flag": "recount_confirmed" }, "to": "muster_return" }
+        {
+          "when": {
+            "kind": "flag",
+            "flag": "recount_confirmed"
+          },
+          "to": "muster_return"
+        }
       ],
       "fallback": "muster_room"
     },
-
     {
       "kind": "narration",
       "id": "muster_room",
@@ -24,7 +31,15 @@
         "ru": "Изба схода: две лавки, стол и опись на стене, прибитая гвоздём сквозь верхний лист. Раз в месяц по ней вслух пересчитывают дворы — так велено с Засеки.",
         "en": "The meeting house: two benches, a table, and the register on the wall, nailed through its top sheet. Once a month the households are counted aloud from it — orders from the Zaseka."
       },
-      "keywords": [{ "match": { "ru": "опись", "en": "register" }, "tone": "lore" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "опись",
+            "en": "register"
+          },
+          "tone": "lore"
+        }
+      ],
       "next": "starosta_count"
     },
     {
@@ -54,7 +69,15 @@
         "ru": "Спорят они не первый месяц и знают все ходы наперёд. Свод ведёт пальцем по своим папкам, Староста — по улице в памяти. Расхождение всегда одно и то же: один двор.",
         "en": "They have been arguing for months and know every move in advance. Svod runs a finger down his files, the Headman down the street in his memory. The discrepancy is always the same: one household."
       },
-      "keywords": [{ "match": { "ru": "один двор", "en": "one household" }, "tone": "danger" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "один двор",
+            "en": "one household"
+          },
+          "tone": "danger"
+        }
+      ],
       "next": "recount_name"
     },
     {
@@ -77,7 +100,6 @@
       },
       "next": "muster_choice"
     },
-
     {
       "kind": "choice",
       "id": "muster_choice",
@@ -88,49 +110,106 @@
       "options": [
         {
           "id": "count_aloud",
-          "text": { "ru": "Пересчитать вслух самому, по дворам.", "en": "Count aloud yourself, household by household." },
+          "text": {
+            "ru": "Пересчитать вслух самому, по дворам.",
+            "en": "Count aloud yourself, household by household."
+          },
           "effects": [
-            { "kind": "axis", "axis": "reason_obsession", "delta": 6 },
-            { "kind": "fragment", "memory": "punkt_pervyy", "amount": 1 }
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": 6
+            },
+            {
+              "kind": "fragment",
+              "memory": "punkt_pervyy",
+              "amount": 2
+            },
+            {
+              "kind": "counter",
+              "counter": "_shards",
+              "delta": 2
+            }
           ],
           "fallback": true,
           "to": "count_result"
         },
         {
           "id": "side_starosta",
-          "text": { "ru": "Согласиться со Старостой: сорок один.", "en": "Side with the Headman: forty-one." },
+          "text": {
+            "ru": "Согласиться со Старостой: сорок один.",
+            "en": "Side with the Headman: forty-one."
+          },
           "effects": [
-            { "kind": "axis", "axis": "honesty_deceit", "delta": -6 },
-            { "kind": "axis", "axis": "mercy_cruelty", "delta": 4 }
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": -6
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": 4
+            }
           ],
           "fallback": true,
           "to": "side_result"
         },
         {
           "id": "side_svod",
-          "text": { "ru": "Настоять на бумаге: сорок.", "en": "Insist on the paper: forty." },
+          "text": {
+            "ru": "Настоять на бумаге: сорок.",
+            "en": "Insist on the paper: forty."
+          },
           "effects": [
-            { "kind": "axis", "axis": "honesty_deceit", "delta": 6 },
-            { "kind": "axis", "axis": "mercy_cruelty", "delta": -4 }
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 6
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": -4
+            }
           ],
           "fallback": true,
           "to": "paper_result"
         },
         {
           "id": "check_by_files",
-          "text": { "ru": "Сверить дворы по картотеке, лист к листу.", "en": "Check the households against the files, sheet by sheet." },
+          "text": {
+            "ru": "Сверить дворы по картотеке, лист к листу.",
+            "en": "Check the households against the files, sheet by sheet."
+          },
           "chip": {
             "icon": "hourglass",
-            "label": { "ru": "Перечень", "en": "Perechen" },
+            "label": {
+              "ru": "Перечень",
+              "en": "Perechen"
+            },
             "tone": "life"
           },
-          "conditions": { "kind": "life", "life": "perechen" },
-          "effects": [{ "kind": "fragment", "memory": "punkt_pervyy", "amount": 2 }],
+          "conditions": {
+            "kind": "life",
+            "life": "perechen"
+          },
+          "effects": [
+            {
+              "kind": "fragment",
+              "memory": "punkt_pervyy",
+              "amount": 2
+            },
+            {
+              "kind": "counter",
+              "counter": "_shards",
+              "delta": 2
+            }
+          ],
           "to": "files_result"
         }
       ]
     },
-
     {
       "kind": "narration",
       "id": "count_result",
@@ -165,16 +244,29 @@
         "ru": "Ты кладёшь листы веером и ведёшь по краю ногтем — так проверяют опись, не читая её. Руки знают этот приём; в сороковой папке лежит расписка на два имени, а имя в ней одно.",
         "en": "You spread the sheets in a fan and run a nail along their edge — that is how a register is checked without being read. Your hands know the trick; in the fortieth folder lies a receipt made out to two names, and there is only one name on it."
       },
-      "keywords": [{ "match": { "ru": "Руки знают", "en": "Your hands know" }, "tone": "memory" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "Руки знают",
+            "en": "Your hands know"
+          },
+          "tone": "memory"
+        }
+      ],
       "next": "muster_out"
     },
     {
       "kind": "effects",
       "id": "muster_out",
-      "effects": [{ "kind": "flag", "flag": "recount_confirmed", "value": true }],
+      "effects": [
+        {
+          "kind": "flag",
+          "flag": "recount_confirmed",
+          "value": true
+        }
+      ],
       "next": "scene:shcherb_road#road_hub"
     },
-
     {
       "kind": "narration",
       "id": "muster_return",
@@ -187,7 +279,13 @@
     {
       "kind": "effects",
       "id": "muster_return_out",
-      "effects": [{ "kind": "counter", "counter": "muster_visits", "delta": 1 }],
+      "effects": [
+        {
+          "kind": "counter",
+          "counter": "muster_visits",
+          "delta": 1
+        }
+      ],
       "next": "scene:shcherb_road#road_hub"
     }
   ]
