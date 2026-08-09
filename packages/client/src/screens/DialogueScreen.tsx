@@ -45,9 +45,8 @@ export function DialogueScreen() {
   }, [scene]);
 
   if (!state) return null;
-  const bg =
-    backgroundImage(state.scene, placeKey(state.scene)) ??
-    svgDataUri(backgroundSvg(state.scene, placeTone(state.scene)));
+  const drawnBg = backgroundImage(state.scene, placeKey(state.scene));
+  const bg = drawnBg ?? svgDataUri(backgroundSvg(state.scene, placeTone(state.scene)));
   const isChoice = step?.kind === 'choice';
 
   /*
@@ -78,7 +77,7 @@ export function DialogueScreen() {
           чернота: фон-градиент там ничего не рисует, а лента прижата вниз.
           Знак заполняет её ровно настолько, чтобы сцена перестала быть
           безымянной, и не настолько, чтобы спорить с текстом (см. ART_PASS §5). */}
-      <span className="scene-mark" style={placeEmblem(state.scene)} aria-hidden="true" />
+      {!drawnBg && <span className="scene-mark" style={placeEmblem(state.scene)} aria-hidden="true" />}
 
       <div className="top-bar">
         <button

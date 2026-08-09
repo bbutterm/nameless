@@ -185,6 +185,7 @@ export function BattleScreen() {
   // Псевдоним под сужение типа: onTapUnit — объявление функции, и внутри него
   // TypeScript про проверку выше уже не помнит.
   const live = battle;
+  const drawnBg = backgroundImage(battle.battleId, placeKey(battle.battleId));
 
   const actor = currentActor(battle);
   const myTurn = isPlayerTurn(battle);
@@ -377,16 +378,17 @@ export function BattleScreen() {
           assets/backgrounds/ под именем боя или ключом места — она встаёт сюда. */}
       <img
         className="scene-bg"
-        src={
-          backgroundImage(battle.battleId, placeKey(battle.battleId)) ??
-          svgDataUri(backgroundSvg(battle.battleId, placeTone(battle.battleId)))
-        }
+        src={drawnBg ?? svgDataUri(backgroundSvg(battle.battleId, placeTone(battle.battleId)))}
         alt=""
         draggable={false}
       />
       {/* Тот же знак места, что и в диалоге, — бой идёт не в вакууме, а там же,
           где только что был разговор. На поле он ещё бледнее: карты важнее. */}
-      <span className="scene-mark battle-mark" style={placeEmblem(battle.battleId)} aria-hidden="true" />
+      {/* Знак места снимается, когда фон нарисован: рисунок уже называет
+          место, а глиф поверх него — вторая вывеска на той же двери. */}
+      {!drawnBg && (
+        <span className="scene-mark battle-mark" style={placeEmblem(battle.battleId)} aria-hidden="true" />
+      )}
 
       <div className="battle-top">
         <div className="battle-top-line">
