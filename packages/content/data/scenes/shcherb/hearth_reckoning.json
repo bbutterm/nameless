@@ -16,6 +16,30 @@
       "branches": [
         {
           "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "flag",
+                "flag": "saw_second_plate"
+              },
+              {
+                "kind": "deaths",
+                "op": "gte",
+                "value": 1
+              },
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "flag",
+                  "flag": "marya_joined"
+                }
+              }
+            ]
+          },
+          "to": "marya_after_skhod"
+        },
+        {
+          "when": {
             "kind": "flag",
             "flag": "saw_second_plate"
           },
@@ -344,6 +368,141 @@
         }
       ],
       "next": "scene:shcherb_road#road_hub"
+    },
+    {
+      "kind": "narration",
+      "id": "marya_after_skhod",
+      "text": {
+        "ru": "Она смотрит на тебя дольше, чем в первый раз, и вытирает руки, хотя они сухие. За сутки в деревне решили, что тебя убили у вешки; ты стоишь в дверях.",
+        "en": "She looks at you longer than the first time and wipes her hands, though they are dry. In a day the village settled that you were killed at the marker; you are standing in the doorway."
+      },
+      "next": "marya_asks"
+    },
+    {
+      "kind": "say",
+      "id": "marya_asks",
+      "speaker": "marya",
+      "text": {
+        "ru": "Тебя закопать обещали к вечеру. Ты там был? Там спрашивают про наших?",
+        "en": "They promised to bury you by evening. Were you there? Do they ask about ours there?"
+      },
+      "next": "marya_join_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "marya_join_choice",
+      "prompt": {
+        "ru": "Она не садится. Ложка на том месте лежит по-прежнему, черенком к краю.",
+        "en": "She does not sit down. The spoon still lies in its place, handle towards the edge."
+      },
+      "options": [
+        {
+          "id": "tell_truth",
+          "text": {
+            "ru": "Сказать как было: там стоят все.",
+            "en": "Tell it as it was: they all stand there."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 8
+            }
+          ],
+          "fallback": true,
+          "to": "marya_decides"
+        },
+        {
+          "id": "tell_soft",
+          "text": {
+            "ru": "Сказать, что там никого нет.",
+            "en": "Say there is nobody there."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": -8
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": 4
+            }
+          ],
+          "fallback": true,
+          "to": "marya_soft"
+        }
+      ]
+    },
+    {
+      "kind": "branch",
+      "id": "marya_decides",
+      "branches": [
+        {
+          "when": {
+            "kind": "axis",
+            "axis": "honesty_deceit",
+            "op": "gte",
+            "value": 20
+          },
+          "to": "marya_joins"
+        }
+      ],
+      "fallback": "marya_not_yet"
+    },
+    {
+      "kind": "narration",
+      "id": "marya_joins",
+      "text": {
+        "ru": "Она снимает с гвоздя платок и завязывает его так, как завязывают в дорогу. Второй прибор остаётся на столе: убирать его она не собирается и объяснять не собирается тоже.",
+        "en": "She takes her kerchief off the nail and ties it the way it is tied for the road. The second setting stays on the table: she does not mean to clear it and does not mean to explain either."
+      },
+      "next": "marya_join_fx"
+    },
+    {
+      "kind": "effects",
+      "id": "marya_join_fx",
+      "effects": [
+        {
+          "kind": "flag",
+          "flag": "marya_joined",
+          "value": true
+        },
+        {
+          "kind": "recruit",
+          "unit": "sworn_witness"
+        }
+      ],
+      "next": "scene:shcherb_road#road_hub"
+    },
+    {
+      "kind": "narration",
+      "id": "marya_not_yet",
+      "text": {
+        "ru": "Она кивает и не двигается с места. Кому верить, в деревне решают не за один разговор, а ты в ней третий день и уже один раз умер.",
+        "en": "She nods and does not move. Whom to believe is not settled in one conversation here, and you have been in the village three days and have died once already."
+      },
+      "next": "hearth_return_out"
+    },
+    {
+      "kind": "say",
+      "id": "marya_soft",
+      "speaker": "marya",
+      "text": {
+        "ru": "Значит, никого. Ну и ладно. Ну и хорошо.",
+        "en": "Nobody, then. Well. That is all right, then."
+      },
+      "next": "marya_soft_after"
+    },
+    {
+      "kind": "narration",
+      "id": "marya_soft_after",
+      "text": {
+        "ru": "Она ставит чайник и больше не спрашивает. Вечером на столе окажется три прибора: второй, твой и ещё один, для того, кого там нет.",
+        "en": "She puts the kettle on and asks nothing more. In the evening there will be three settings on the table: the second, yours, and one more, for the one who is not there."
+      },
+      "next": "hearth_return_out"
     },
     {
       "kind": "narration",
