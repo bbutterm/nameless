@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import type { CodexEntry, CodexSource, Lang } from '@nameless/engine';
 import { loc, t, type UiKey } from '../i18n';
 import { content, idx } from '../store/content';
-import { portraitImage, portraitSvg } from '../lib/art';
-import { hasPortrait } from '@nameless/content/portraits';
+import { portraitImage } from '../lib/art';
+import { hasPortrait, portraitSvg } from '@nameless/content/portraits';
 import { placeEmblemByKey, speakerEmblem } from '../lib/emblems';
 import { Icon } from '../components/Icon';
 import { vibrate } from '../lib/haptics';
@@ -72,9 +72,16 @@ function sourceKey(source: CodexSource): UiKey {
   }
 }
 
-/** Портрет: арт пользователя → лицо-гравюра → знак роли/жизни. Тот же порядок,
-    что в ленте диалога (Bubble.tsx), только крупнее и без выцветания смертями:
-    здесь запись видна вне контекста конкретного забега. */
+/**
+ * Портрет: арт пользователя → лицо-гравюра → знак роли/жизни. Тот же порядок
+ * и тот же рисовальщик, что в ленте диалога (Bubble.tsx), только крупнее и без
+ * состояния забега: книгу открывают, когда сейва нет, и лицо в ней не имеет
+ * права зависеть от того, сколько раз игрок умер в стёртом прохождении.
+ *
+ * Важно брать лицо именно из `@nameless/content/portraits`, а не одноимённую
+ * функцию из `lib/art`: та отдаёт процедурную заглушку, и на 132px запись
+ * показывала бы тёмный силуэт вместо единственного крупного лица в игре.
+ */
 function CodexPortrait({ entry, big }: { entry: CodexEntry; big?: boolean }) {
   const img = portraitImage(entry.id);
   const drawn = !img && hasPortrait(entry.id) ? portraitSvg(entry.id) : undefined;
