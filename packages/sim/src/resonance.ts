@@ -29,7 +29,6 @@ import {
   evalCondition,
   goTo,
   indexContent,
-
   lifeRecognizes,
   normalizeEntry,
   resolve,
