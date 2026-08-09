@@ -1,8 +1,24 @@
 [
   {
+    "index": 0,
+    "id": "shcherb",
+    "title": {
+      "ru": "Щербь",
+      "en": "Shcherb"
+    },
+    "subtitle": {
+      "ru": "На столе два прибора. Ты не тот, кого ждали, и всё равно сел.",
+      "en": "Two places are set at the table. You are not the one they were waiting for, and you sat down anyway."
+    },
+    "entryScene": "witness_intake"
+  },
+  {
     "index": 1,
     "id": "pocket_inventory",
-    "title": { "ru": "Опись карманов", "en": "Inventory of Pockets" },
+    "title": {
+      "ru": "Опись карманов",
+      "en": "Inventory of Pockets"
+    },
     "subtitle": {
       "ru": "Вас обокрали. Осталось выяснить, кто расписался в получении.",
       "en": "You were robbed. It remains to find out who signed for the goods."
@@ -12,7 +28,10 @@
   {
     "index": 2,
     "id": "lower_vaults",
-    "title": { "ru": "Нижние ярусы", "en": "The Lower Vaults" },
+    "title": {
+      "ru": "Нижние ярусы",
+      "en": "The Lower Vaults"
+    },
     "subtitle": {
       "ru": "Подвалы Ломбарда глубже, чем башня высока. Теперь известно почему.",
       "en": "The Pawnshop's cellars run deeper than its tower is tall. Now you know why."
@@ -22,7 +41,10 @@
   {
     "index": 3,
     "id": "first_deposit",
-    "title": { "ru": "Вклад Первый", "en": "The First Deposit" },
+    "title": {
+      "ru": "Вклад Первый",
+      "en": "The First Deposit"
+    },
     "subtitle": {
       "ru": "Ревизия сверяет город. Расхождение одно, и оно ходит, дышит и задаёт вопросы.",
       "en": "The Audit is reconciling the city. There is one discrepancy, and it walks, breathes and asks questions."

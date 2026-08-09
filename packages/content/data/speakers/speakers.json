@@ -238,5 +238,21 @@
       "ru": "Гладень",
       "en": "The Smoother"
     }
+  },
+  {
+    "id": "marya",
+    "art": "",
+    "name": {
+      "ru": "Марья",
+      "en": "Marya"
+    }
+  },
+  {
+    "id": "starosta",
+    "art": "",
+    "name": {
+      "ru": "Староста",
+      "en": "The Headman"
+    }
   }
 ]

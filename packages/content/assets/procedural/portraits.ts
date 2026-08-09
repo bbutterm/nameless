@@ -493,9 +493,28 @@ const FACES: Record<string, FaceSpec> = {
   mat_sheptunya: {
     house: 'faint',
     jaw: 0.35, cheek: 0.75, brow: 0.4, long: 0.65, age: 0.65,
-    hair: 'long', beard: 'none', collar: 'rag', shoulders: 0.25,
+    hair: 'long', beard: 'none', collar: 'scarf', shoulders: 0.25,
     lid: 0.7, gaze: 'down', socket: 0.4, nose: 'sharp',
     mouth: -1, mouthW: 0.35, lips: 'parted', furrows: 0.7, asym: 0.35,
+  },
+
+  /** Марья из Щерби: накрывает на двоих и не знает, для кого второй прибор. */
+  marya: {
+    house: 'faint',
+    jaw: 0.4, cheek: 0.65, brow: 0.35, long: 0.55, age: 0.45,
+    hair: 'bun', beard: 'none', collar: 'rag', shoulders: 0.4,
+    lid: 0.3, gaze: 'aside', socket: 0.25, nose: 'straight',
+    mouth: -2, mouthW: 0.45, lips: 'pressed', furrows: 0.45, asym: 0.25,
+  },
+
+  /** Староста: считает по знакомым лицам и всякий раз выходит на одного больше. */
+  starosta: {
+    house: 'faint',
+    jaw: 0.65, cheek: 0.4, brow: 0.6, long: 0.45, age: 0.7,
+    hair: 'bald', beard: 'full', collar: 'v', shoulders: 0.6,
+    lid: 0.5, gaze: 'past', socket: 0.3, nose: 'blunt',
+    mouth: -1, mouthW: 0.55, lips: 'line', furrows: 0.6, asym: 0.3,
+    jowl: 0.5,
   },
 
   /** Скупщик Цеха: в голове шесть чужих жизней, склянка при себе полная. */

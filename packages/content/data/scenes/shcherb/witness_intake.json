@@ -1,0 +1,325 @@
+{
+  "id": "witness_intake",
+  "chapter": 0,
+  "title": {
+    "ru": "Каморка Свода",
+    "en": "Svod's Nook"
+  },
+  "tags": [
+    "wake",
+    "chapter_entry"
+  ],
+  "entry": "wake_router",
+  "nodes": [
+    {
+      "kind": "branch",
+      "id": "wake_router",
+      "branches": [
+        {
+          "when": {
+            "kind": "deaths",
+            "op": "gte",
+            "value": 1
+          },
+          "to": "wake_again"
+        }
+      ],
+      "fallback": "wake_dust"
+    },
+    {
+      "kind": "narration",
+      "id": "wake_dust",
+      "text": {
+        "ru": "Труха на полу подбирается к своему месту и становится тобой. Дольше всего собирается лицо.",
+        "en": "The dust on the floor creeps back into place and becomes you. The face takes longest."
+      },
+      "keywords": [
+        {
+          "match": {
+            "ru": "Труха",
+            "en": "dust"
+          },
+          "tone": "memory"
+        }
+      ],
+      "next": "svod_line"
+    },
+    {
+      "kind": "narration",
+      "id": "svod_line",
+      "text": {
+        "ru": "Свод не поднимает головы. Место в его книге под тобой уже разлиновано — со вчерашнего дня.",
+        "en": "Svod does not look up. The line for you in his ledger is already ruled — since yesterday."
+      },
+      "keywords": [
+        {
+          "match": {
+            "ru": "разлиновано",
+            "en": "already ruled"
+          },
+          "tone": "lore"
+        }
+      ],
+      "next": "svod_new"
+    },
+    {
+      "kind": "say",
+      "id": "svod_new",
+      "speaker": "svodchik",
+      "text": {
+        "ru": "Новый. Опять новый. Имя впишешь сам, если вспомнишь.",
+        "en": "New. New again. Write the name yourself, if you remember it."
+      },
+      "keywords": [
+        {
+          "match": {
+            "ru": "если вспомнишь",
+            "en": "if you remember"
+          },
+          "tone": "memory"
+        }
+      ],
+      "next": "name_gap"
+    },
+    {
+      "kind": "narration",
+      "id": "name_gap",
+      "text": {
+        "ru": "Графа пустая. Ты примеряешь пару слов на пробу — ни одно не налезает, как чужой сапог.",
+        "en": "The column is empty. You try on a couple of words — none of them fit, like someone else's boot."
+      },
+      "next": "svod_note"
+    },
+    {
+      "kind": "say",
+      "id": "svod_note",
+      "speaker": "svodchik",
+      "text": {
+        "ru": "Ничего. Отпишем «без имени», впишем заново, если найдётся.",
+        "en": "No matter. We will note it \"nameless\", enter it again if one turns up."
+      },
+      "next": "svod_belongings"
+    },
+    {
+      "kind": "narration",
+      "id": "svod_belongings",
+      "text": {
+        "ru": "Он выкладывает то, что было при тебе: нож без черенка, моток бечёвки, три щепки с зарубками. Зарубок он не считает — говорит, не его отдел.",
+        "en": "He lays out what was on you: a knife with no handle, a coil of twine, three notched sticks. He does not count the notches — says that is not his department."
+      },
+      "keywords": [
+        {
+          "match": {
+            "ru": "три щепки с зарубками",
+            "en": "three notched sticks"
+          },
+          "tone": "memory"
+        }
+      ],
+      "next": "svod_promise"
+    },
+    {
+      "kind": "say",
+      "id": "svod_promise",
+      "speaker": "svodchik",
+      "text": {
+        "ru": "Умрёшь — вспомнишь кусок. Так у нас заведено. Не спрашивай, кем заведено, — я и сам не упомню.",
+        "en": "Die, and you will remember a piece. That is how it is set up here. Do not ask who set it up — I would not recall myself."
+      },
+      "keywords": [
+        {
+          "match": {
+            "ru": "вспомнишь кусок",
+            "en": "remember a piece"
+          },
+          "tone": "memory"
+        }
+      ],
+      "next": "belongings_settle"
+    },
+    {
+      "kind": "narration",
+      "id": "belongings_settle",
+      "text": {
+        "ru": "Три щепки помещаются в кулак. Нож — за голенище. Бечёвка никуда не помещается и остаётся лежать.",
+        "en": "The three sticks fit in your fist. The knife goes into your boot. The twine does not fit anywhere and stays where it lies."
+      },
+      "next": "svod_send"
+    },
+    {
+      "kind": "say",
+      "id": "svod_send",
+      "speaker": "svodchik",
+      "text": {
+        "ru": "Иди в Щербь, спроси Марью про лишний прибор. Она злится, когда спрашивают, — значит, ещё не привыкла.",
+        "en": "Go into Shcherb, ask Marya about the extra place setting. She gets angry when asked — means she has not gotten used to it yet."
+      },
+      "keywords": [
+        {
+          "match": {
+            "ru": "лишний прибор",
+            "en": "extra place setting"
+          },
+          "tone": "danger"
+        }
+      ],
+      "next": "svod_door"
+    },
+    {
+      "kind": "narration",
+      "id": "svod_door",
+      "text": {
+        "ru": "Дверь без петель, просто прислонена. Свод не провожает: у него всегда есть кто-то на подходе.",
+        "en": "The door has no hinges, it just leans in place. Svod does not see you out: there is always someone else on the way."
+      },
+      "next": "intake_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "intake_choice",
+      "prompt": {
+        "ru": "Щепки в кулаке. На каждой — зарубки, и их не три, а больше.",
+        "en": "The sticks are in your fist. Each has notches, and there are more than three."
+      },
+      "options": [
+        {
+          "id": "count_notches",
+          "text": {
+            "ru": "Пересчитать зарубки при нём.",
+            "en": "Count the notches in front of him."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -6
+            }
+          ],
+          "fallback": true,
+          "to": "notches_counted"
+        },
+        {
+          "id": "ask_who_before",
+          "text": {
+            "ru": "Спросить, кто был в этой графе вчера.",
+            "en": "Ask who was in this column yesterday."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 5
+            }
+          ],
+          "fallback": true,
+          "to": "svod_yesterday"
+        },
+        {
+          "id": "leave_sticks",
+          "text": {
+            "ru": "Оставить щепки на столе и выйти.",
+            "en": "Leave the sticks on the table and go."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": -8
+            }
+          ],
+          "fallback": true,
+          "to": "sticks_left"
+        }
+      ]
+    },
+    {
+      "kind": "narration",
+      "id": "notches_counted",
+      "text": {
+        "ru": "Пятнадцать мест под зарубки, и занято одно. Щепа под ним ещё светлая. Резала твоя рука: угол ложится ровно под большой палец.",
+        "en": "Fifteen places for notches, and one of them taken. The wood under it is still pale. Your hand cut it: the angle sits right under your thumb."
+      },
+      "keywords": [
+        {
+          "match": {
+            "ru": "Пятнадцать",
+            "en": "Fifteen"
+          },
+          "tone": "memory"
+        }
+      ],
+      "next": "intake_out"
+    },
+    {
+      "kind": "say",
+      "id": "svod_yesterday",
+      "speaker": "svodchik",
+      "text": {
+        "ru": "Вчера. Женщина. Не назвалась и не спорила. Строка есть, а под ней уже нет никого — сам смотри.",
+        "en": "Yesterday. A woman. Gave no name and made no argument. There is a line, and nobody under it any more — see for yourself."
+      },
+      "next": "yesterday_line"
+    },
+    {
+      "kind": "narration",
+      "id": "yesterday_line",
+      "text": {
+        "ru": "Строка есть. Буквы стоят ровно, а прочесть их не выходит — не выцвели, не смазаны, просто не складываются в слово. Свод переворачивает лист, не дав досмотреть.",
+        "en": "There is a line. The letters stand straight and will not be read — not faded, not smudged, they simply do not add up to a word. Svod turns the page before you finish looking."
+      },
+      "next": "intake_out"
+    },
+    {
+      "kind": "narration",
+      "id": "sticks_left",
+      "text": {
+        "ru": "Щепки остаются на краю стола, ровной стопкой. Свод сдвигает их к остальным — там таких стопок много, и все чьи-то.",
+        "en": "The sticks stay on the edge of the table in a neat stack. Svod pushes them in with the others — there are many such stacks there, and every one is somebody's."
+      },
+      "next": "intake_out"
+    },
+    {
+      "kind": "effects",
+      "id": "intake_out",
+      "effects": [
+        {
+          "kind": "flag",
+          "flag": "intake_done",
+          "value": true
+        }
+      ],
+      "next": "scene:shcherb_road"
+    },
+    {
+      "kind": "narration",
+      "id": "wake_again",
+      "text": {
+        "ru": "Сутки собираются в обратном порядке: сначала холод, потом вес, потом руки. Свод уже пишет — он начал раньше, чем ты стал видимым.",
+        "en": "The day reassembles in reverse: first the cold, then the weight, then the hands. Svod is already writing — he started before you became visible."
+      },
+      "next": "svod_again"
+    },
+    {
+      "kind": "say",
+      "id": "svod_again",
+      "speaker": "svodchik",
+      "text": {
+        "ru": "Ну вот. Заведено — работает. Причину скажешь или сам впишу?",
+        "en": "There. Set up, and it works. Will you state the cause, or shall I enter it myself?"
+      },
+      "next": "again_out"
+    },
+    {
+      "kind": "effects",
+      "id": "again_out",
+      "effects": [
+        {
+          "kind": "counter",
+          "counter": "intakes",
+          "delta": 1
+        }
+      ],
+      "next": "scene:shcherb_road"
+    }
+  ]
+}
