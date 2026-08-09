@@ -8,8 +8,22 @@
   "tags": [
     "hub"
   ],
-  "entry": "road_open",
+  "entry": "road_router",
   "nodes": [
+    {
+      "kind": "branch",
+      "id": "road_router",
+      "branches": [
+        {
+          "when": {
+            "kind": "flag",
+            "flag": "shcherb_arrived"
+          },
+          "to": "road_hub"
+        }
+      ],
+      "fallback": "road_open"
+    },
     {
       "kind": "narration",
       "id": "road_open",
@@ -57,6 +71,18 @@
         "ru": "Слово здешнее и старше деревни: щербь — это когда в семье недосчёт, а поплакать не с кем, потому что и плакать-то как будто не о ком. Деревню назвали по слову, а не слово по деревне; кто и когда её так назвал, в приходских списках не значится.",
         "en": "The word is local and older than the village: a notch is when a household comes up short and there is nobody to grieve with, because there seems to be nobody to grieve for. The village was named after the word, not the word after the village; who named it, and when, does not appear in the parish lists."
       },
+      "next": "road_arrived"
+    },
+    {
+      "kind": "effects",
+      "id": "road_arrived",
+      "effects": [
+        {
+          "kind": "flag",
+          "flag": "shcherb_arrived",
+          "value": true
+        }
+      ],
       "next": "road_hub"
     },
     {
@@ -74,7 +100,7 @@
             "en": "To Marya, about the extra setting."
           },
           "fallback": true,
-          "to": "marya_door"
+          "to": "scene:hearth_reckoning"
         },
         {
           "id": "to_muster",
@@ -95,125 +121,6 @@
           "to": "not_written"
         }
       ]
-    },
-    {
-      "kind": "narration",
-      "id": "marya_door",
-      "text": {
-        "ru": "Изба у околицы. Дверь открыта настежь, хотя стоит холод: так открывают, когда ждут, а войти боятся первыми.",
-        "en": "The cottage at the edge. The door stands wide open though the cold has set in: that is how you leave it when you are waiting and afraid to be the first inside."
-      },
-      "next": "marya_first"
-    },
-    {
-      "kind": "say",
-      "id": "marya_first",
-      "speaker": "marya",
-      "text": {
-        "ru": "Садись, коли пришёл. Только не туда. Туда не садись.",
-        "en": "Sit down, since you came. Not there, though. Do not sit there."
-      },
-      "next": "marya_table"
-    },
-    {
-      "kind": "narration",
-      "id": "marya_table",
-      "text": {
-        "ru": "На столе два прибора. Миска, ложка, кружка — с той стороны, куда никто не садится третий месяц. Кружка повёрнута щербинкой от стола, как отворачивают лицо.",
-        "en": "There are two places set. Bowl, spoon, cup — on the side where nobody has sat for three months. The cup is turned so its chipped rim faces away, the way a face is turned away."
-      },
-      "keywords": [
-        {
-          "match": {
-            "ru": "два прибора",
-            "en": "two places set"
-          },
-          "tone": "danger"
-        }
-      ],
-      "next": "marya_choice"
-    },
-    {
-      "kind": "choice",
-      "id": "marya_choice",
-      "prompt": {
-        "ru": "Она стоит у печи и ждёт, пока ты спросишь. Или не спросишь.",
-        "en": "She stands by the stove, waiting for you to ask. Or not ask."
-      },
-      "options": [
-        {
-          "id": "ask_who",
-          "text": {
-            "ru": "Спросить, для кого второй прибор.",
-            "en": "Ask who the second setting is for."
-          },
-          "effects": [
-            {
-              "kind": "axis",
-              "axis": "honesty_deceit",
-              "delta": 6
-            }
-          ],
-          "fallback": true,
-          "to": "marya_answer"
-        },
-        {
-          "id": "say_nothing",
-          "text": {
-            "ru": "Не спрашивать. Сесть, где велено.",
-            "en": "Not ask. Sit where you were told."
-          },
-          "effects": [
-            {
-              "kind": "axis",
-              "axis": "mercy_cruelty",
-              "delta": 6
-            }
-          ],
-          "fallback": true,
-          "to": "marya_silence"
-        }
-      ]
-    },
-    {
-      "kind": "say",
-      "id": "marya_answer",
-      "speaker": "marya",
-      "text": {
-        "ru": "Не знаю. Ставлю — и не знаю. Спроси ещё раз, если тебе от этого легче.",
-        "en": "I do not know. I set it out and I do not know. Ask again, if it makes it easier for you."
-      },
-      "keywords": [
-        {
-          "match": {
-            "ru": "Не знаю",
-            "en": "I do not know"
-          },
-          "tone": "memory"
-        }
-      ],
-      "next": "marya_flag"
-    },
-    {
-      "kind": "narration",
-      "id": "marya_silence",
-      "text": {
-        "ru": "Ты садишься с краю. Она ставит перед тобой третью миску, а вторую не убирает — и обе стоят, пока не остынут.",
-        "en": "You sit at the edge. She sets a third bowl in front of you and does not clear the second — and both stand there until they go cold."
-      },
-      "next": "marya_flag"
-    },
-    {
-      "kind": "effects",
-      "id": "marya_flag",
-      "effects": [
-        {
-          "kind": "flag",
-          "flag": "saw_second_plate",
-          "value": true
-        }
-      ],
-      "next": "not_written"
     },
     {
       "kind": "narration",

@@ -1,0 +1,360 @@
+{
+  "id": "hearth_reckoning",
+  "chapter": 0,
+  "title": {
+    "ru": "Стол на двоих",
+    "en": "A Table Set for Two"
+  },
+  "tags": [
+    "village"
+  ],
+  "entry": "hearth_router",
+  "nodes": [
+    {
+      "kind": "branch",
+      "id": "hearth_router",
+      "branches": [
+        {
+          "when": {
+            "kind": "flag",
+            "flag": "saw_second_plate"
+          },
+          "to": "hearth_return"
+        }
+      ],
+      "fallback": "marya_door"
+    },
+    {
+      "kind": "narration",
+      "id": "marya_door",
+      "text": {
+        "ru": "Изба у околицы. Дверь открыта настежь, хотя стоит холод: так открывают, когда ждут, а войти боятся первыми.",
+        "en": "The cottage at the edge. The door stands wide open though the cold has set in: that is how you leave it when you are waiting and afraid to be the first inside."
+      },
+      "next": "marya_first"
+    },
+    {
+      "kind": "say",
+      "id": "marya_first",
+      "speaker": "marya",
+      "text": {
+        "ru": "Садись, коли пришёл. Только не туда. Туда не садись.",
+        "en": "Sit down, since you came. Not there, though. Do not sit there."
+      },
+      "next": "marya_table"
+    },
+    {
+      "kind": "narration",
+      "id": "marya_table",
+      "text": {
+        "ru": "На столе два прибора. Миска, ложка, кружка — с той стороны, куда никто не садится третий месяц. Кружка повёрнута щербинкой от стола, как отворачивают лицо.",
+        "en": "There are two places set. Bowl, spoon, cup — on the side where nobody has sat for three months. The cup is turned so its chipped rim faces away, the way a face is turned away."
+      },
+      "keywords": [
+        {
+          "match": {
+            "ru": "два прибора",
+            "en": "two places set"
+          },
+          "tone": "danger"
+        }
+      ],
+      "next": "marya_cradle"
+    },
+    {
+      "kind": "narration",
+      "id": "marya_cradle",
+      "text": {
+        "ru": "В горнице стоит колыбель. Полозья стёрты — её качали долго и часто. Внутри свёрнутое одеяло, и оно свёрнуто по чьему-то росту.",
+        "en": "A cradle stands in the front room. The rockers are worn down — it was rocked long and often. Inside is a folded blanket, and it is folded to somebody's size."
+      },
+      "keywords": [
+        {
+          "match": {
+            "ru": "колыбель",
+            "en": "cradle"
+          },
+          "tone": "danger"
+        }
+      ],
+      "next": "marya_cradle_ask"
+    },
+    {
+      "kind": "say",
+      "id": "marya_cradle_ask",
+      "speaker": "marya",
+      "text": {
+        "ru": "Соседская. Или сестрина. Я её выставлю, как погода станет. Не смотри туда.",
+        "en": "It is the neighbours'. Or my sister's. I will put it out when the weather turns. Do not look over there."
+      },
+      "next": "hearth_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "hearth_choice",
+      "prompt": {
+        "ru": "Она стоит у печи, спиной, и мешает в котле дольше, чем нужно.",
+        "en": "She stands at the stove with her back to you, stirring the pot longer than it needs."
+      },
+      "options": [
+        {
+          "id": "comfort_her",
+          "text": {
+            "ru": "Сесть и есть молча, пока горячее.",
+            "en": "Sit and eat in silence, while it is hot."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": 8
+            },
+            {
+              "kind": "fragment",
+              "memory": "poslednyaya_kruzhka",
+              "amount": 1
+            }
+          ],
+          "fallback": true,
+          "to": "marya_silence"
+        },
+        {
+          "id": "press_facts",
+          "text": {
+            "ru": "Спросить прямо: кого нет за столом.",
+            "en": "Ask outright: who is missing at the table."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": -6
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 8
+            }
+          ],
+          "fallback": true,
+          "to": "marya_answer"
+        },
+        {
+          "id": "lie_cradle",
+          "text": {
+            "ru": "Сказать, что колыбель точно соседская.",
+            "en": "Say the cradle is certainly the neighbours'."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": -8
+            }
+          ],
+          "fallback": true,
+          "to": "marya_relief"
+        },
+        {
+          "id": "unfinished_cup",
+          "text": {
+            "ru": "Оставить кружку недопитой.",
+            "en": "Leave the cup unfinished."
+          },
+          "chip": {
+            "icon": "heal",
+            "label": {
+              "ru": "Ключарь",
+              "en": "Klyuchar"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "klyuchar"
+          },
+          "effects": [
+            {
+              "kind": "fragment",
+              "memory": "poslednyaya_kruzhka",
+              "amount": 3
+            }
+          ],
+          "to": "marya_cup"
+        }
+      ]
+    },
+    {
+      "kind": "narration",
+      "id": "marya_silence",
+      "text": {
+        "ru": "Ты садишься с краю. Она ставит третью миску, а вторую не убирает — и обе стоят, пока не остынут. Марья ест стоя, у печи, и на стол не смотрит.",
+        "en": "You sit at the edge. She sets out a third bowl and does not clear the second — both stand there until they go cold. Marya eats standing, at the stove, and does not look at the table."
+      },
+      "next": "hearth_take"
+    },
+    {
+      "kind": "say",
+      "id": "marya_answer",
+      "speaker": "marya",
+      "text": {
+        "ru": "Не знаю. Ставлю — и не знаю. Третий месяц ставлю. Спроси ещё раз, если тебе от этого легче.",
+        "en": "I do not know. I set it out and I do not know. Three months now. Ask again, if it makes it easier for you."
+      },
+      "keywords": [
+        {
+          "match": {
+            "ru": "Не знаю",
+            "en": "I do not know"
+          },
+          "tone": "memory"
+        }
+      ],
+      "next": "marya_hands"
+    },
+    {
+      "kind": "narration",
+      "id": "marya_hands",
+      "text": {
+        "ru": "Руки при этом делают своё: ложка ложится справа от миски, черенком к краю стола. Так кладут тому, кто берёт левой.",
+        "en": "Her hands go on with their work: the spoon goes to the right of the bowl, handle towards the table edge. That is how you lay it for someone who takes it with the left."
+      },
+      "next": "hearth_take"
+    },
+    {
+      "kind": "say",
+      "id": "marya_relief",
+      "speaker": "marya",
+      "text": {
+        "ru": "Соседская, да. Я так и говорила. Вот и ты говоришь.",
+        "en": "The neighbours', yes. That is what I said. And now you say it too."
+      },
+      "next": "marya_relief_after"
+    },
+    {
+      "kind": "narration",
+      "id": "marya_relief_after",
+      "text": {
+        "ru": "Она садится впервые за разговор. Колыбель после твоего ухода останется в горнице до весны, и полозья сотрутся ещё немного.",
+        "en": "She sits down for the first time in the conversation. After you leave, the cradle will stay in the front room until spring, and the rockers will wear down a little more."
+      },
+      "next": "hearth_take"
+    },
+    {
+      "kind": "narration",
+      "id": "marya_cup",
+      "text": {
+        "ru": "Ты не допиваешь и отставляешь кружку. Руки знают этот порядок: недопитое ставят так, чтобы вернувшийся видел — его ждали и место держали. Откуда знают — не помнится.",
+        "en": "You do not finish, and set the cup aside. Your hands know this order: what is left unfinished is set down so that the one who comes back can see he was expected and his place was kept. Where the hands learned it does not come back."
+      },
+      "keywords": [
+        {
+          "match": {
+            "ru": "Руки знают",
+            "en": "Your hands know"
+          },
+          "tone": "memory"
+        }
+      ],
+      "next": "hearth_take"
+    },
+    {
+      "kind": "choice",
+      "id": "hearth_take",
+      "prompt": {
+        "ru": "Второй прибор стоит там же. Марья за ним не следит.",
+        "en": "The second setting stands where it stood. Marya is not watching it."
+      },
+      "options": [
+        {
+          "id": "take_cup",
+          "text": {
+            "ru": "Забрать кружку с собой как улику.",
+            "en": "Take the cup with you as evidence."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": 8
+            },
+            {
+              "kind": "flag",
+              "flag": "took_the_cup",
+              "value": true
+            }
+          ],
+          "fallback": true,
+          "to": "cup_taken"
+        },
+        {
+          "id": "leave_setting",
+          "text": {
+            "ru": "Оставить всё как стоит.",
+            "en": "Leave everything as it stands."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": -8
+            }
+          ],
+          "fallback": true,
+          "to": "setting_left"
+        }
+      ]
+    },
+    {
+      "kind": "narration",
+      "id": "cup_taken",
+      "text": {
+        "ru": "Кружка помещается в карман щербинкой наружу. Марья не спрашивает. Вечером она поставит на то место другую — у неё их четыре, и все четыре щербатые.",
+        "en": "The cup fits in your pocket, chipped side out. Marya does not ask. In the evening she will put another one there — she has four, and all four are chipped."
+      },
+      "next": "hearth_out"
+    },
+    {
+      "kind": "narration",
+      "id": "setting_left",
+      "text": {
+        "ru": "Ты выходишь, ничего не тронув. За спиной слышно, как она поправляет ложку — на палец, туда, где та и лежала.",
+        "en": "You go out without touching anything. Behind you she is heard straightening the spoon — by a finger's width, back to where it already lay."
+      },
+      "next": "hearth_out"
+    },
+    {
+      "kind": "effects",
+      "id": "hearth_out",
+      "effects": [
+        {
+          "kind": "flag",
+          "flag": "saw_second_plate",
+          "value": true
+        }
+      ],
+      "next": "scene:shcherb_road#road_hub"
+    },
+    {
+      "kind": "narration",
+      "id": "hearth_return",
+      "text": {
+        "ru": "Дверь по-прежнему открыта. Приборов на столе два, и один из них теперь твой: она положила ложку и тебе — справа от миски, черенком к краю.",
+        "en": "The door still stands open. There are two settings on the table, and one of them is now yours: she has laid a spoon for you too — to the right of the bowl, handle towards the edge."
+      },
+      "next": "hearth_return_out"
+    },
+    {
+      "kind": "effects",
+      "id": "hearth_return_out",
+      "effects": [
+        {
+          "kind": "counter",
+          "counter": "marya_visits",
+          "delta": 1
+        }
+      ],
+      "next": "scene:shcherb_road#road_hub"
+    }
+  ]
+}
