@@ -8,13 +8,13 @@
     "node": ">=20"
   },
   "scripts": {
-    "build": "pnpm -r --filter @nameless/engine --filter @nameless/content build && pnpm --filter @nameless/client build",
+    "build": "pnpm --filter @nameless/client build",
     "typecheck": "pnpm -r typecheck",
     "test": "pnpm -r test",
     "dev": "pnpm --filter @nameless/client dev",
     "sim": "pnpm --filter @nameless/sim sim",
     "validate": "pnpm --filter @nameless/content validate",
-    "ci": "pnpm typecheck && pnpm validate && pnpm test && pnpm sim"
+    "ci": "pnpm typecheck && pnpm validate && pnpm test && pnpm sim && pnpm build"
   },
   "devDependencies": {
     "@types/node": "^22.20.1",

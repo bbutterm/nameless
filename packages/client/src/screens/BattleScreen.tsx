@@ -4,6 +4,7 @@ import {
   isPlayerTurn,
   legalTargets,
   readyAbilities,
+  PARTY_SLOTS_PER_ROW,
   type Ability,
   type BattleEvent,
   type BattleUnitState,
@@ -36,6 +37,12 @@ let floatId = 0;
 const HOLD_MS = 380;
 /** Столько висит объяснение «почему сюда нельзя». */
 const REASON_MS = 2600;
+/** Столько живёт всплывающая цифра — ровно длина анимации .float в screens.css. */
+const FLOAT_MS = 900;
+/** Столько держится рывок/тряска карточки. */
+const ANIM_MS = 420;
+/** Ряд отряда — три слота; столько же у врага. */
+const SLOTS = Array.from({ length: PARTY_SLOTS_PER_ROW }, (_, i) => i);
 
 export function BattleScreen() {
   const { battle, lang, battleAct, battleAuto, collectSpoils, spoils, finishBattle } = useGame();
@@ -48,12 +55,52 @@ export function BattleScreen() {
   const fieldRef = useRef<HTMLDivElement>(null);
   const holdTimer = useRef<ReturnType<typeof setTimeout>>();
   const heldOpen = useRef(false);
+  // Таймеры уборки живут в ref, а не в cleanup эффекта: ходы идут чаще, чем
+  // гаснут цифры (бот ходит раз в 480 мс, цифра висит 900 мс), и cleanup при
+  // каждом новом ходе отменял бы уборку предыдущей партии — старые floats
+  // копились бы в стейте и в DOM до конца боя, невидимые из-за opacity 0.
+  const floatTimers = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const animTimer = useRef<ReturnType<typeof setTimeout>>();
 
   const defs = useMemo(() => new Map(content.units.map((u) => [u.id, u])), []);
+
+  const clearViewTimers = useCallback(() => {
+    for (const timer of floatTimers.current) clearTimeout(timer);
+    floatTimers.current = [];
+    clearTimeout(animTimer.current);
+    animTimer.current = undefined;
+  }, []);
+
+  /** Забыть всё, что нарисовано от предыдущего боя. */
+  const resetBattleView = useCallback(() => {
+    clearViewTimers();
+    seenEvents.current = 0;
+    setFloats([]);
+    setAnims({});
+    setSelectedAbility(undefined);
+    setPeek(undefined);
+    setReason(undefined);
+  }, [clearViewTimers]);
+
+  // Экран боя не размонтируется между боями: узел onWin может вести прямо в
+  // следующий бой, и тогда mode всё время остаётся 'battle'. Без явного сброса
+  // счётчик seenEvents оставался от прошлого боя, и первая пачка событий нового
+  // (намерения врагов, урон эффектов первого раунда) молча пропадала из
+  // анимаций, а floats и рывки старого боя переезжали в новый.
+  // Объявлен ДО эффекта событий: React выполняет эффекты в порядке объявления,
+  // так что на смене боя сначала сброс, потом разбор свежей ленты.
+  const battleId = battle?.battleId;
+  useEffect(() => {
+    resetBattleView();
+    return clearViewTimers;
+  }, [battleId, resetBattleView, clearViewTimers]);
 
   // Новые события боя превращаем в анимацию карточек и всплывающие цифры.
   useEffect(() => {
     if (!battle) return;
+    // Тот же бой начат заново (id совпал, лента откатилась к началу) — id не
+    // сменился, а смотреть надо с нуля.
+    if (battle.events.length < seenEvents.current) resetBattleView();
     const fresh = battle.events.slice(seenEvents.current);
     seenEvents.current = battle.events.length;
     if (fresh.length === 0) return;
@@ -86,16 +133,22 @@ export function BattleScreen() {
 
     setAnims(nextAnims);
     setFloats((f) => [...f, ...nextFloats]);
-    const clearAnims = setTimeout(() => setAnims({}), 420);
-    const clearFloats = setTimeout(
-      () => setFloats((f) => f.filter((x) => !nextFloats.some((n) => n.id === x.id))),
-      900,
-    );
-    return () => {
-      clearTimeout(clearAnims);
-      clearTimeout(clearFloats);
-    };
-  }, [battle]);
+
+    // Анимации карточек заменяются целиком, поэтому её таймер один на экран.
+    clearTimeout(animTimer.current);
+    animTimer.current = setTimeout(() => setAnims({}), ANIM_MS);
+
+    // А каждая партия цифр убирает СЕБЯ и досматривает свои 900 мс до конца,
+    // даже если за это время случилось ещё три хода.
+    const batch = new Set(nextFloats.map((f) => f.id));
+    if (batch.size > 0) {
+      const timer = setTimeout(() => {
+        floatTimers.current = floatTimers.current.filter((x) => x !== timer);
+        setFloats((f) => f.filter((x) => !batch.has(x.id)));
+      }, FLOAT_MS);
+      floatTimers.current.push(timer);
+    }
+  }, [battle, resetBattleView]);
 
   // Объяснение запрета живёт пару секунд и уходит само.
   useEffect(() => {
@@ -173,7 +226,7 @@ export function BattleScreen() {
 
   const renderRow = (side: 'player' | 'enemy', row: 'front' | 'back') => (
     <div className={`row row-${row}`}>
-      {[0, 1, 2].map((i) => {
+      {SLOTS.map((i) => {
         const u = slot(side, row, i);
         if (!u) return <div key={i} className="card empty" />;
         const covered =

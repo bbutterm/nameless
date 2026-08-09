@@ -478,7 +478,7 @@
     "tier": 2,
     "row": "front",
     "stats": {
-      "initiative": 8,
+      "initiative": 10,
       "hp": 72,
       "atk": 16,
       "def": 12
