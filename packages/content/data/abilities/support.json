@@ -102,8 +102,8 @@
       "en": "Burst in His Stead"
     },
     "description": {
-      "ru": "Мираж встаёт под удар и лопается с обидным звуком.",
-      "en": "The mirage steps under the blow and bursts with an insulting sound."
+      "ru": "Мираж встаёт под удар, лопается — и часть чужой раны уходит в бумагу.",
+      "en": "The mirage steps under the blow, bursts — and part of the wound goes into the paper."
     },
     "icon": "shield",
     "target": "ally_one",
@@ -112,8 +112,12 @@
     "effects": [
       {
         "kind": "shield",
-        "amount": 40,
+        "amount": 34,
         "turns": 2
+      },
+      {
+        "kind": "heal",
+        "power": 0.8
       }
     ],
     "anim": "buff"

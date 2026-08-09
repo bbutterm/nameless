@@ -16,13 +16,13 @@
         "unit": "archive_rat",
         "row": "front",
         "index": 1,
-        "level": 3
+        "level": 4
       },
       {
         "unit": "ledger_clerk",
         "row": "back",
         "index": 0,
-        "level": 1
+        "level": 2
       },
       {
         "unit": "pawn_appraiser_dusk",
