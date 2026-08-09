@@ -126,6 +126,16 @@
           "to": "scene:hearth_reckoning"
         },
         {
+          "id": "to_muster",
+          "text": {
+            "ru": "К сходу, где считают дворы.",
+            "en": "To the meeting, where they count households."
+          },
+          "fallback": true,
+          "priority": 3,
+          "to": "scene:witness_muster"
+        },
+        {
           "id": "to_watchfire",
           "text": {
             "ru": "К дозорному огню, спросить оклик.",

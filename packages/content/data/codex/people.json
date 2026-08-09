@@ -2,8 +2,14 @@
   {
     "id": "osoka",
     "kind": "person",
-    "name": { "ru": "Осока", "en": "Osoka" },
-    "blurb": { "ru": "Приёмщица у прилавка", "en": "Clerk at the counter" },
+    "name": {
+      "ru": "Осока",
+      "en": "Osoka"
+    },
+    "blurb": {
+      "ru": "Приёмщица у прилавка",
+      "en": "Clerk at the counter"
+    },
     "signs": {
       "ru": "Веки тяжелеют раньше срока — смену на границе никто не подхватывает. Волосы собраны так туго, что сходят за часть форменного убора.",
       "en": "Her lids grow heavy before their time — no one relieves the shift at the edge. Hair pulled back so tight it passes for part of the uniform."
@@ -16,7 +22,10 @@
           "en": "She watches the last one in line to the door, then squares the ledger on the counter — always by the same finger's width."
         },
         "source": "seen",
-        "unlock": { "kind": "meet", "speaker": "osoka" }
+        "unlock": {
+          "kind": "meet",
+          "speaker": "osoka"
+        }
       },
       {
         "id": "osoka_l2",
@@ -25,15 +34,24 @@
           "en": "She asks a newcomer's name twice, though she heard it the first time — that is simply her habit, not forgetfulness."
         },
         "source": "seen",
-        "unlock": { "kind": "meet", "speaker": "osoka" }
+        "unlock": {
+          "kind": "meet",
+          "speaker": "osoka"
+        }
       }
     ]
   },
   {
     "id": "tminny",
     "kind": "person",
-    "name": { "ru": "Тминный", "en": "Tminny" },
-    "blurb": { "ru": "Старший оценщик", "en": "Senior appraiser" },
+    "name": {
+      "ru": "Тминный",
+      "en": "Tminny"
+    },
+    "blurb": {
+      "ru": "Старший оценщик",
+      "en": "Senior appraiser"
+    },
     "signs": {
       "ru": "Седой, с двойной складкой у губ — паузой перед цифрой. Смотрит вбок, на вещь, а не в лицо: оценивает боковым зрением.",
       "en": "Grey-haired, a double crease at the mouth — the pause before a number. He looks aside, at the thing, not the face: he prices by side glance."
@@ -46,7 +64,10 @@
           "en": "He takes off his pince-nez without looking, the way some men take off a hat — it sits on his nose more often than off it."
         },
         "source": "seen",
-        "unlock": { "kind": "meet", "speaker": "tminny" }
+        "unlock": {
+          "kind": "meet",
+          "speaker": "tminny"
+        }
       },
       {
         "id": "tminny_l2",
@@ -55,15 +76,24 @@
           "en": "His jowls sit softer than the other appraisers' — the only one in the office who eats every day, not every other."
         },
         "source": "seen",
-        "unlock": { "kind": "meet", "speaker": "tminny" }
+        "unlock": {
+          "kind": "meet",
+          "speaker": "tminny"
+        }
       }
     ]
   },
   {
     "id": "proshchai",
     "kind": "person",
-    "name": { "ru": "Брат Прощай", "en": "Brother Farewell" },
-    "blurb": { "ru": "Настоятель Братства Чистой Головы", "en": "Abbot of the Clear Head Brotherhood" },
+    "name": {
+      "ru": "Брат Прощай",
+      "en": "Brother Farewell"
+    },
+    "blurb": {
+      "ru": "Настоятель Братства Чистой Головы",
+      "en": "Abbot of the Clear Head Brotherhood"
+    },
     "signs": {
       "ru": "Единственная в Братстве полная борода, седая до бела. Борозды залегли у глаз, а не у рта — тепло, что не доходит до улыбки.",
       "en": "The only full beard in the Brotherhood, gone white. His furrows sit by the eyes, not the mouth — warmth that stops short of a smile."
@@ -76,7 +106,10 @@
           "en": "He reads the service aloud from the White Book, though the pages are blank — and it comes out different every time, word for word."
         },
         "source": "seen",
-        "unlock": { "kind": "meet", "speaker": "proshchai" }
+        "unlock": {
+          "kind": "meet",
+          "speaker": "proshchai"
+        }
       },
       {
         "id": "proshchai_l2",
@@ -85,15 +118,24 @@
           "en": "Losing the middle of a sermon, he does not falter or apologise — he finishes the thought as if it had been the whole sermon."
         },
         "source": "seen",
-        "unlock": { "kind": "meet", "speaker": "proshchai" }
+        "unlock": {
+          "kind": "meet",
+          "speaker": "proshchai"
+        }
       }
     ]
   },
   {
     "id": "zhichka",
     "kind": "person",
-    "name": { "ru": "Жичка", "en": "Zhichka" },
-    "blurb": { "ru": "Скупщица Цеха Жадной Памяти", "en": "Buyer for the Greedy Memory Guild" },
+    "name": {
+      "ru": "Жичка",
+      "en": "Zhichka"
+    },
+    "blurb": {
+      "ru": "Скупщица Цеха Жадной Памяти",
+      "en": "Buyer for the Greedy Memory Guild"
+    },
     "signs": {
       "ru": "Рот всегда чуть сдвинут вбок — чужие интонации перекашивают. На запястьях склянки с чужим ношеным, не снимает их даже дома.",
       "en": "Her mouth sits faintly askew — other people's inflections pull at it. Jars of worn-in memory hang at her wrists, kept on even at home."
@@ -106,7 +148,10 @@
           "en": "Haggling, she looks past the eyes, sideways at the goods — pricing the thing before she has time to answer."
         },
         "source": "seen",
-        "unlock": { "kind": "meet", "speaker": "zhichka" }
+        "unlock": {
+          "kind": "meet",
+          "speaker": "zhichka"
+        }
       },
       {
         "id": "zhichka_l2",
@@ -115,15 +160,24 @@
           "en": "After a deal she touches her own jars one by one — checking that nothing of hers went missing while she counted another's."
         },
         "source": "seen",
-        "unlock": { "kind": "meet", "speaker": "zhichka" }
+        "unlock": {
+          "kind": "meet",
+          "speaker": "zhichka"
+        }
       }
     ]
   },
   {
     "id": "dratva",
     "kind": "person",
-    "name": { "ru": "Капрал Дратва", "en": "Corporal Dratva" },
-    "blurb": { "ru": "Капрал стражи залоговых споров", "en": "Corporal of the watch" },
+    "name": {
+      "ru": "Капрал Дратва",
+      "en": "Corporal Dratva"
+    },
+    "blurb": {
+      "ru": "Капрал засечной стражи",
+      "en": "Corporal of the Zaseka Watch"
+    },
     "signs": {
       "ru": "Нос переломан и сросся неровно. Поперёк лба — светлая полоса: след подшлемника, который снимает, только говоря с людьми.",
       "en": "Her nose is broken and healed crooked. Across her brow, a pale band — the mark of a helmet she takes off only to speak to people."
@@ -136,7 +190,10 @@
           "en": "She quotes regulations that are not in the regulations, in the same voice she uses for the real ones."
         },
         "source": "seen",
-        "unlock": { "kind": "meet", "speaker": "dratva" }
+        "unlock": {
+          "kind": "meet",
+          "speaker": "dratva"
+        }
       },
       {
         "id": "dratva_l2",
@@ -145,15 +202,24 @@
           "en": "She takes off her helmet before talking and holds it under her arm until she's done — then puts it back on without looking, in one motion."
         },
         "source": "seen",
-        "unlock": { "kind": "meet", "speaker": "dratva" }
+        "unlock": {
+          "kind": "meet",
+          "speaker": "dratva"
+        }
       }
     ]
   },
   {
     "id": "klyost",
     "kind": "person",
-    "name": { "ru": "Клёст", "en": "Crossbill" },
-    "blurb": { "ru": "Посыльный Ломбарда", "en": "The Pawnshop's errand-runner" },
+    "name": {
+      "ru": "Клёст",
+      "en": "Crossbill"
+    },
+    "blurb": {
+      "ru": "Посыльный Ломбарда",
+      "en": "The Pawnshop's errand-runner"
+    },
     "signs": {
       "ru": "На вид лет двенадцати. Стрижен неровно, торчком — сам себе, судя по всему. Глаза распахнуты шире, чем у прочих в городе.",
       "en": "Looks about twelve. His hair is cropped unevenly, in tufts — cut by his own hand, by the look of it. His eyes open wider than anyone else's in town."
@@ -166,7 +232,10 @@
           "en": "He knows every back stair in town and takes them openly, in broad daylight."
         },
         "source": "seen",
-        "unlock": { "kind": "meet", "speaker": "klyost" }
+        "unlock": {
+          "kind": "meet",
+          "speaker": "klyost"
+        }
       },
       {
         "id": "klyost_l2",
@@ -175,15 +244,24 @@
           "en": "He keeps his whistle on a cord under his shirt, not on show, and takes it out only to call someone by name."
         },
         "source": "seen",
-        "unlock": { "kind": "meet", "speaker": "klyost" }
+        "unlock": {
+          "kind": "meet",
+          "speaker": "klyost"
+        }
       }
     ]
   },
   {
     "id": "revizor",
     "kind": "person",
-    "name": { "ru": "Ревизор", "en": "The Auditor" },
-    "blurb": { "ru": "Ревизор", "en": "The Auditor" },
+    "name": {
+      "ru": "Ревизор",
+      "en": "The Auditor"
+    },
+    "blurb": {
+      "ru": "Ревизор",
+      "en": "The Auditor"
+    },
     "signs": {
       "ru": "Лицо слишком правильное: ни одной морщины, бровь и бровь — зеркально. Портфель несёт всегда в одной руке, никогда не перекладывает.",
       "en": "His face is too regular: not a single furrow, brow matching brow like a mirror. He carries his case in the same hand always, never switches."
@@ -196,7 +274,10 @@
           "en": "He answers even a plain 'hello' with a list and a number — and has not once lost count, so far as the record shows."
         },
         "source": "seen",
-        "unlock": { "kind": "meet", "speaker": "revizor" }
+        "unlock": {
+          "kind": "meet",
+          "speaker": "revizor"
+        }
       },
       {
         "id": "revizor_l2",
@@ -205,15 +286,24 @@
           "en": "He does not eat. At a shared table he pulls his plate closer, but has not once brought a spoon to his mouth."
         },
         "source": "seen",
-        "unlock": { "kind": "meet", "speaker": "revizor" }
+        "unlock": {
+          "kind": "meet",
+          "speaker": "revizor"
+        }
       }
     ]
   },
   {
     "id": "strazhnik",
     "kind": "person",
-    "name": { "ru": "Стражник", "en": "Guard" },
-    "blurb": { "ru": "Стражник", "en": "Guard" },
+    "name": {
+      "ru": "Стражник",
+      "en": "Guard"
+    },
+    "blurb": {
+      "ru": "Стражник",
+      "en": "Guard"
+    },
     "signs": {
       "ru": "Забрало опущено, от лица — только щетинистый подбородок и ровный рот. Один спикер на четыре поста, и лицо у всех четырёх одно.",
       "en": "Visor down, only a stubbled chin and a level mouth show. One voice for four postings, and the same face for all four."
@@ -226,15 +316,24 @@
           "en": "He answers rudeness politely, word for word the same phrase, at any of the four postings."
         },
         "source": "seen",
-        "unlock": { "kind": "meet", "speaker": "strazhnik" }
+        "unlock": {
+          "kind": "meet",
+          "speaker": "strazhnik"
+        }
       }
     ]
   },
   {
     "id": "otsenshchik",
     "kind": "person",
-    "name": { "ru": "Оценщик", "en": "Appraiser" },
-    "blurb": { "ru": "Оценщик за окошком", "en": "Appraiser at the window" },
+    "name": {
+      "ru": "Оценщик",
+      "en": "Appraiser"
+    },
+    "blurb": {
+      "ru": "Оценщик за окошком",
+      "en": "Appraiser at the window"
+    },
     "signs": {
       "ru": "Глаза ещё открыты по-молодому, седины нет. Две лобные борозды — от счёта, не от возраста: цифры уже прочертили лицо.",
       "en": "His eyes still open young, no grey yet. Two furrows on the brow — from counting, not from age: the numbers have already marked his face."
@@ -247,15 +346,24 @@
           "en": "He looks down at the price list and only raises his eyes to the client at the final figure — earlier, he sees no point."
         },
         "source": "seen",
-        "unlock": { "kind": "meet", "speaker": "otsenshchik" }
+        "unlock": {
+          "kind": "meet",
+          "speaker": "otsenshchik"
+        }
       }
     ]
   },
   {
     "id": "poproshayka",
     "kind": "person",
-    "name": { "ru": "Попрошайка", "en": "Beggar" },
-    "blurb": { "ru": "Попрошайка у ворот", "en": "Beggar at the gate" },
+    "name": {
+      "ru": "Попрошайка",
+      "en": "Beggar"
+    },
+    "blurb": {
+      "ru": "Попрошайка у ворот",
+      "en": "Beggar at the gate"
+    },
     "signs": {
       "ru": "Щёки провалены до кости, борода неровная — борода голода, не выбора. Держит у груди расписку, разглаженную до мягкости ткани.",
       "en": "His cheeks are sunk to the bone, his beard patchy — a beard of hunger, not of choice. He holds a receipt to his chest, smoothed soft as cloth."
@@ -268,15 +376,24 @@
           "en": "He does not look at the receipt — he holds it by feel, knows every crease of it without looking."
         },
         "source": "seen",
-        "unlock": { "kind": "meet", "speaker": "poproshayka" }
+        "unlock": {
+          "kind": "meet",
+          "speaker": "poproshayka"
+        }
       }
     ]
   },
   {
     "id": "marodyor",
     "kind": "person",
-    "name": { "ru": "Мародёр", "en": "Scavenger" },
-    "blurb": { "ru": "Сборщик с весами", "en": "Scavenger with a scale" },
+    "name": {
+      "ru": "Мародёр",
+      "en": "Scavenger"
+    },
+    "blurb": {
+      "ru": "Сборщик с весами",
+      "en": "Scavenger with a scale"
+    },
     "signs": {
       "ru": "Веки тяжёлые на три четверти, взгляд вниз — на весы, на труху. Щетина третьего дня, картуз мятый, старый шов на скуле.",
       "en": "His lids sit heavy, three-quarters shut, eyes down — on the scale, on the dust. Three days' stubble, a crumpled cap, an old scar on the cheekbone."
@@ -289,15 +406,24 @@
           "en": "He waits for hours without moving or complaining — waiting is the one thing he does better than anything else."
         },
         "source": "seen",
-        "unlock": { "kind": "meet", "speaker": "marodyor" }
+        "unlock": {
+          "kind": "meet",
+          "speaker": "marodyor"
+        }
       }
     ]
   },
   {
     "id": "golos_iz_trukhi",
     "kind": "person",
-    "name": { "ru": "Голос из трухи", "en": "Voice from the Dust" },
-    "blurb": { "ru": "Голос из трухи", "en": "Voice from the dust" },
+    "name": {
+      "ru": "Голос из трухи",
+      "en": "Voice from the Dust"
+    },
+    "blurb": {
+      "ru": "Голос из трухи",
+      "en": "Voice from the dust"
+    },
     "signs": {
       "ru": "Контур на теневой стороне тоньше и реже — не дыра, а недостача. На шее шнурок с пустой склянкой, ношеный двадцать лет.",
       "en": "On the shadowed side her outline runs thin and sparse — not a hole, a shortage. A cord with an empty jar hangs at her neck, worn twenty years."
@@ -310,7 +436,10 @@
           "en": "She speaks faster than is usual, and never finishes a started sentence to its full stop."
         },
         "source": "seen",
-        "unlock": { "kind": "meet", "speaker": "golos_iz_trukhi" }
+        "unlock": {
+          "kind": "meet",
+          "speaker": "golos_iz_trukhi"
+        }
       },
       {
         "id": "golos_iz_trukhi_l2",
@@ -319,15 +448,24 @@
           "en": "By her own account: she kept the jar for 'the very worst of it' twenty years — and never put anything in it."
         },
         "source": "heard",
-        "unlock": { "kind": "meet", "speaker": "golos_iz_trukhi" }
+        "unlock": {
+          "kind": "meet",
+          "speaker": "golos_iz_trukhi"
+        }
       }
     ]
   },
   {
     "id": "brat_ogorodnik",
     "kind": "person",
-    "name": { "ru": "Брат-огородник", "en": "Brother Gardener" },
-    "blurb": { "ru": "Брат-огородник", "en": "Brother gardener" },
+    "name": {
+      "ru": "Брат-огородник",
+      "en": "Brother Gardener"
+    },
+    "blurb": {
+      "ru": "Брат-огородник",
+      "en": "Brother gardener"
+    },
     "signs": {
       "ru": "Выдублен солнцем, платок от жары, щетина. Борозды на лице — от прищура над грядкой, не от горя.",
       "en": "Sun-tanned to leather, a kerchief against the heat, stubble. The furrows on his face come from squinting over a bed of plants, not from grief."
@@ -340,15 +478,24 @@
           "en": "He counts the harvest aloud, down to the last head, and loses count only if someone interrupts with a question."
         },
         "source": "seen",
-        "unlock": { "kind": "meet", "speaker": "brat_ogorodnik" }
+        "unlock": {
+          "kind": "meet",
+          "speaker": "brat_ogorodnik"
+        }
       }
     ]
   },
   {
     "id": "pisar_chitalni",
     "kind": "person",
-    "name": { "ru": "Писарь читальни", "en": "Reading-Room Scribe" },
-    "blurb": { "ru": "Писарь читальни", "en": "Reading-room scribe" },
+    "name": {
+      "ru": "Писарь читальни",
+      "en": "Reading-Room Scribe"
+    },
+    "blurb": {
+      "ru": "Писарь читальни",
+      "en": "Reading-room scribe"
+    },
     "signs": {
       "ru": "Лицо вытянутое и сухое, нос острый, как перо. Веки — щели: поднимает на посетителя веки, а не голову.",
       "en": "His face runs long and dry, his nose sharp as a quill. His lids sit narrow — he lifts his eyelids to a visitor, not his head."
@@ -361,7 +508,10 @@
           "en": "He keeps a quill behind his ear even while writing with a spare one — he dislikes taking it down."
         },
         "source": "seen",
-        "unlock": { "kind": "meet", "speaker": "pisar_chitalni" }
+        "unlock": {
+          "kind": "meet",
+          "speaker": "pisar_chitalni"
+        }
       },
       {
         "id": "pisar_chitalni_l2",
@@ -370,15 +520,24 @@
           "en": "One of his brows sits higher than the other — years of asking the same question, who stands before him today under this name."
         },
         "source": "seen",
-        "unlock": { "kind": "meet", "speaker": "pisar_chitalni" }
+        "unlock": {
+          "kind": "meet",
+          "speaker": "pisar_chitalni"
+        }
       }
     ]
   },
   {
     "id": "storozh_arkhiva",
     "kind": "person",
-    "name": { "ru": "Сторож архива", "en": "Archive Watchman" },
-    "blurb": { "ru": "Сторож архива", "en": "Archive watchman" },
+    "name": {
+      "ru": "Сторож архива",
+      "en": "Archive Watchman"
+    },
+    "blurb": {
+      "ru": "Сторож архива",
+      "en": "Archive watchman"
+    },
     "signs": {
       "ru": "Круглое лицо, щетина, шарф. Рот всегда чуть приоткрыт — губы шевелятся счётом даже во сне.",
       "en": "A round face, stubble, a scarf. His mouth sits faintly open — his lips move with counting even in sleep."
@@ -391,15 +550,24 @@
           "en": "On his rounds he counts his steps aloud and loses the count at the same spot every time — where the floorboard creaks."
         },
         "source": "seen",
-        "unlock": { "kind": "meet", "speaker": "storozh_arkhiva" }
+        "unlock": {
+          "kind": "meet",
+          "speaker": "storozh_arkhiva"
+        }
       }
     ]
   },
   {
     "id": "mertvyy_v_ocheredi",
     "kind": "person",
-    "name": { "ru": "Мертвец в очереди", "en": "Dead Man in Line" },
-    "blurb": { "ru": "Мертвец в очереди", "en": "Dead man in the queue" },
+    "name": {
+      "ru": "Мертвец в очереди",
+      "en": "Dead Man in Line"
+    },
+    "blurb": {
+      "ru": "Мертвец в очереди",
+      "en": "Dead man in the queue"
+    },
     "signs": {
       "ru": "Каждый раз другой человек — и всегда один и тот же страх на лице. Держит склянку двумя руками снизу, как торт, боится наклонить.",
       "en": "A different person every time — and always the same fear on the face. He holds the jar with both hands from below, like a cake, afraid to tilt it."
@@ -412,15 +580,36 @@
           "en": "The only one in the queue who looks straight at whoever approaches and asks what happens next — the rest stay silent, eyes down."
         },
         "source": "seen",
-        "unlock": { "kind": "meet", "speaker": "mertvyy_v_ocheredi" }
+        "unlock": {
+          "kind": "meet",
+          "speaker": "mertvyy_v_ocheredi"
+        }
+      },
+      {
+        "id": "mertvyy_v_ocheredi_l2",
+        "text": {
+          "ru": "Пока ты собирался сутки, он дошёл до начала очереди. Место за ним осталось пустым: следующего в тот день не привели, и очередь так и стояла — с прорехой.",
+          "en": "While you spent a day reassembling, he reached the head of the queue. The place behind him stayed empty: nobody was brought that day, and the queue stood on with a gap in it."
+        },
+        "source": "after_death",
+        "unlock": {
+          "kind": "player_death_with",
+          "speaker": "mertvyy_v_ocheredi"
+        }
       }
     ]
   },
   {
     "id": "svodchik",
     "kind": "person",
-    "name": { "ru": "Сводчик Ревизии", "en": "The Audit's Reconciler" },
-    "blurb": { "ru": "Сводчик Ревизии", "en": "The Audit's reconciler" },
+    "name": {
+      "ru": "Сводчик Ревизии",
+      "en": "The Audit's Reconciler"
+    },
+    "blurb": {
+      "ru": "Сводчик, картотека дыр",
+      "en": "Svod, keeper of the file of holes"
+    },
     "signs": {
       "ru": "Глаза шире, чем положено по стажу, на лбу — две свежие борозды. Плечи свисли: пишет от руки впервые в жизни.",
       "en": "His eyes open wider than his years should allow, two fresh furrows on the brow. His shoulders slump — he is writing by hand for the first time."
@@ -433,15 +622,37 @@
           "en": "He keeps the quill behind his ear point-up, not the usual way — and no one has corrected him."
         },
         "source": "seen",
-        "unlock": { "kind": "meet", "speaker": "svodchik" }
+        "unlock": {
+          "kind": "meet",
+          "speaker": "svodchik"
+        }
+      },
+      {
+        "id": "svodchik_l2",
+        "text": {
+          "ru": "Считает не лица, а дыры: папка заводится на недостачу, а не на человека. Пустых папок у него больше, чем полных, и лежат они отдельно, слева.",
+          "en": "He counts holes, not faces: a folder is opened for a shortfall, not for a person. He has more empty folders than full ones, and keeps them apart, on the left."
+        },
+        "source": "seen",
+        "unlock": {
+          "kind": "node",
+          "scene": "witness_muster",
+          "node": "recount_short"
+        }
       }
     ]
   },
   {
     "id": "naryad_revizii",
     "kind": "person",
-    "name": { "ru": "Старший наряда", "en": "Detail Sergeant" },
-    "blurb": { "ru": "Старший наряда", "en": "Detail sergeant" },
+    "name": {
+      "ru": "Старший наряда",
+      "en": "Detail Sergeant"
+    },
+    "blurb": {
+      "ru": "Старший наряда",
+      "en": "Detail sergeant"
+    },
     "signs": {
       "ru": "Картуз с красным околышем, усы, рот-прорезь на всю ширину челюсти. Лицо открытое и казённое одновременно.",
       "en": "A cap with a red band, a moustache, a mouth cut wide as the jaw. A face that is open and official at once."
@@ -454,7 +665,10 @@
           "en": "He gives the same order with the same pause in the middle every time, exactly on the count of two."
         },
         "source": "seen",
-        "unlock": { "kind": "meet", "speaker": "naryad_revizii" }
+        "unlock": {
+          "kind": "meet",
+          "speaker": "naryad_revizii"
+        }
       }
     ]
   }
