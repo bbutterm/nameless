@@ -11,7 +11,13 @@ import {
   unitWinrates,
 } from './battle-sim.js';
 import { fuzzDialogue } from './dialogue-fuzz.js';
-import { BUBBLES_TO_BATTLE_MAX, timeToFirstBattle } from './pacing.js';
+import {
+  battleRhythm,
+  BUBBLES_BETWEEN_BATTLES_MAX,
+  BUBBLES_BETWEEN_BATTLES_P90,
+  BUBBLES_TO_BATTLE_MAX,
+  timeToFirstBattle,
+} from './pacing.js';
 
 const args = process.argv.slice(2);
 const only = args.find((a) => a.startsWith('--only='))?.split('=')[1];
@@ -138,6 +144,16 @@ if (!only || only === 'dialogue' || only === 'pacing') {
     );
     summary['pacing'] = p;
     if (!p.ok) failed = true;
+
+    const rh = battleRhythm(content, 60);
+    console.log(
+      `${rh.ok ? '  ' : '!!'} между боями: медиана ${rh.median}, девять из десяти ` +
+        `в пределах ${rh.p90} (коридор ≤${BUBBLES_BETWEEN_BATTLES_P90}), ` +
+        `максимум ${rh.max} (предел ${BUBBLES_BETWEEN_BATTLES_MAX})`,
+    );
+    console.log(`   боёв за прохождение: ${rh.battlesPerRun}; длинных промежутков: ${rh.overP90}`);
+    summary['rhythm'] = rh;
+    if (!rh.ok) failed = true;
   }
 }
 
