@@ -478,7 +478,7 @@
           "to": "res_perechen"
         }
       ],
-      "fallback": "res_chistopisets"
+      "fallback": "res_faint"
     },
     {
       "kind": "branch",
@@ -491,7 +491,10 @@
     {
       "kind": "effects",
       "id": "res_frag_smolokur_1",
-      "effects": [{ "kind": "fragment", "memory": "smola_na_vode", "amount": 2 }],
+      "effects": [
+        { "kind": "fragment", "memory": "smola_na_vode", "amount": 2 },
+        { "kind": "counter", "counter": "_res:smola_na_vode", "delta": 2 }
+      ],
       "next": "lot_rises"
     },
     {
@@ -503,7 +506,10 @@
     {
       "kind": "effects",
       "id": "res_frag_smolokur_2",
-      "effects": [{ "kind": "fragment", "memory": "ples_gorit", "amount": 3 }],
+      "effects": [
+        { "kind": "fragment", "memory": "ples_gorit", "amount": 3 },
+        { "kind": "counter", "counter": "_res:ples_gorit", "delta": 3 }
+      ],
       "next": "lot_rises"
     },
     {
@@ -517,7 +523,10 @@
     {
       "kind": "effects",
       "id": "res_frag_smolokur_3",
-      "effects": [{ "kind": "fragment", "memory": "schet_za_sezon", "amount": 4 }],
+      "effects": [
+        { "kind": "fragment", "memory": "schet_za_sezon", "amount": 4 },
+        { "kind": "counter", "counter": "_res:schet_za_sezon", "delta": 4 }
+      ],
       "next": "lot_rises"
     },
     {
@@ -531,7 +540,10 @@
     {
       "kind": "effects",
       "id": "res_frag_klyuchar_1",
-      "effects": [{ "kind": "fragment", "memory": "pervoye_vedro", "amount": 2 }],
+      "effects": [
+        { "kind": "fragment", "memory": "pervoye_vedro", "amount": 2 },
+        { "kind": "counter", "counter": "_res:pervoye_vedro", "delta": 2 }
+      ],
       "next": "lot_rises"
     },
     {
@@ -545,7 +557,10 @@
     {
       "kind": "effects",
       "id": "res_frag_klyuchar_2",
-      "effects": [{ "kind": "fragment", "memory": "ochered_k_kolodtsu", "amount": 3 }],
+      "effects": [
+        { "kind": "fragment", "memory": "ochered_k_kolodtsu", "amount": 3 },
+        { "kind": "counter", "counter": "_res:ochered_k_kolodtsu", "delta": 3 }
+      ],
       "next": "lot_rises"
     },
     {
@@ -559,7 +574,10 @@
     {
       "kind": "effects",
       "id": "res_frag_klyuchar_3",
-      "effects": [{ "kind": "fragment", "memory": "poslednyaya_kruzhka", "amount": 4 }],
+      "effects": [
+        { "kind": "fragment", "memory": "poslednyaya_kruzhka", "amount": 4 },
+        { "kind": "counter", "counter": "_res:poslednyaya_kruzhka", "delta": 4 }
+      ],
       "next": "lot_rises"
     },
     {
@@ -573,7 +591,10 @@
     {
       "kind": "effects",
       "id": "res_frag_posulshchik_1",
-      "effects": [{ "kind": "fragment", "memory": "pervyy_posul", "amount": 2 }],
+      "effects": [
+        { "kind": "fragment", "memory": "pervyy_posul", "amount": 2 },
+        { "kind": "counter", "counter": "_res:pervyy_posul", "delta": 2 }
+      ],
       "next": "lot_rises"
     },
     {
@@ -587,7 +608,10 @@
     {
       "kind": "effects",
       "id": "res_frag_posulshchik_2",
-      "effects": [{ "kind": "fragment", "memory": "zima_bez_khleba", "amount": 3 }],
+      "effects": [
+        { "kind": "fragment", "memory": "zima_bez_khleba", "amount": 3 },
+        { "kind": "counter", "counter": "_res:zima_bez_khleba", "delta": 3 }
+      ],
       "next": "lot_rises"
     },
     {
@@ -601,7 +625,10 @@
     {
       "kind": "effects",
       "id": "res_frag_posulshchik_3",
-      "effects": [{ "kind": "fragment", "memory": "luchshie_gody", "amount": 4 }],
+      "effects": [
+        { "kind": "fragment", "memory": "luchshie_gody", "amount": 4 },
+        { "kind": "counter", "counter": "_res:luchshie_gody", "delta": 4 }
+      ],
       "next": "lot_rises"
     },
     {
@@ -615,7 +642,10 @@
     {
       "kind": "effects",
       "id": "res_frag_chistopisets_1",
-      "effects": [{ "kind": "fragment", "memory": "pervaya_stroka", "amount": 2 }],
+      "effects": [
+        { "kind": "fragment", "memory": "pervaya_stroka", "amount": 2 },
+        { "kind": "counter", "counter": "_res:pervaya_stroka", "delta": 2 }
+      ],
       "next": "lot_rises"
     },
     {
@@ -632,7 +662,10 @@
     {
       "kind": "effects",
       "id": "res_frag_chistopisets_2",
-      "effects": [{ "kind": "fragment", "memory": "khronika_bez_popravok", "amount": 3 }],
+      "effects": [
+        { "kind": "fragment", "memory": "khronika_bez_popravok", "amount": 3 },
+        { "kind": "counter", "counter": "_res:khronika_bez_popravok", "delta": 3 }
+      ],
       "next": "lot_rises"
     },
     {
@@ -646,7 +679,10 @@
     {
       "kind": "effects",
       "id": "res_frag_chistopisets_3",
-      "effects": [{ "kind": "fragment", "memory": "god_goloy_pravdy", "amount": 4 }],
+      "effects": [
+        { "kind": "fragment", "memory": "god_goloy_pravdy", "amount": 4 },
+        { "kind": "counter", "counter": "_res:god_goloy_pravdy", "delta": 4 }
+      ],
       "next": "lot_rises"
     },
     {
@@ -660,7 +696,10 @@
     {
       "kind": "effects",
       "id": "res_frag_perechen_1",
-      "effects": [{ "kind": "fragment", "memory": "punkt_pervyy", "amount": 2 }],
+      "effects": [
+        { "kind": "fragment", "memory": "punkt_pervyy", "amount": 2 },
+        { "kind": "counter", "counter": "_res:punkt_pervyy", "delta": 2 }
+      ],
       "next": "lot_rises"
     },
     {
@@ -674,7 +713,10 @@
     {
       "kind": "effects",
       "id": "res_frag_perechen_2",
-      "effects": [{ "kind": "fragment", "memory": "opis_vsego_sushchego", "amount": 3 }],
+      "effects": [
+        { "kind": "fragment", "memory": "opis_vsego_sushchego", "amount": 3 },
+        { "kind": "counter", "counter": "_res:opis_vsego_sushchego", "delta": 3 }
+      ],
       "next": "lot_rises"
     },
     {
@@ -688,7 +730,10 @@
     {
       "kind": "effects",
       "id": "res_frag_perechen_3",
-      "effects": [{ "kind": "fragment", "memory": "eda_ne_vnesena", "amount": 4 }],
+      "effects": [
+        { "kind": "fragment", "memory": "eda_ne_vnesena", "amount": 4 },
+        { "kind": "counter", "counter": "_res:eda_ne_vnesena", "delta": 4 }
+      ],
       "next": "lot_rises"
     },
     {
@@ -702,35 +747,12 @@
               {
                 "kind": "any",
                 "of": [
-                  {
-                    "kind": "not",
-                    "of": {
-                      "kind": "memory",
-                      "memory": "smola_na_vode"
-                    }
-                  },
-                  {
-                    "kind": "not",
-                    "of": {
-                      "kind": "memory",
-                      "memory": "ples_gorit"
-                    }
-                  },
-                  {
-                    "kind": "not",
-                    "of": {
-                      "kind": "memory",
-                      "memory": "schet_za_sezon"
-                    }
-                  }
+                  { "kind": "not", "of": { "kind": "memory", "memory": "smola_na_vode" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "ples_gorit" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "schet_za_sezon" } }
                 ]
               },
-              {
-                "kind": "axis",
-                "axis": "mercy_cruelty",
-                "op": "lte",
-                "value": -20
-              }
+              { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -20 }
             ]
           },
           "to": "res_smolokur"
@@ -742,35 +764,12 @@
               {
                 "kind": "any",
                 "of": [
-                  {
-                    "kind": "not",
-                    "of": {
-                      "kind": "memory",
-                      "memory": "pervoye_vedro"
-                    }
-                  },
-                  {
-                    "kind": "not",
-                    "of": {
-                      "kind": "memory",
-                      "memory": "ochered_k_kolodtsu"
-                    }
-                  },
-                  {
-                    "kind": "not",
-                    "of": {
-                      "kind": "memory",
-                      "memory": "poslednyaya_kruzhka"
-                    }
-                  }
+                  { "kind": "not", "of": { "kind": "memory", "memory": "pervoye_vedro" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "ochered_k_kolodtsu" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "poslednyaya_kruzhka" } }
                 ]
               },
-              {
-                "kind": "axis",
-                "axis": "mercy_cruelty",
-                "op": "gte",
-                "value": 20
-              }
+              { "kind": "axis", "axis": "mercy_cruelty", "op": "gte", "value": 20 }
             ]
           },
           "to": "res_klyuchar"
@@ -782,35 +781,12 @@
               {
                 "kind": "any",
                 "of": [
-                  {
-                    "kind": "not",
-                    "of": {
-                      "kind": "memory",
-                      "memory": "pervyy_posul"
-                    }
-                  },
-                  {
-                    "kind": "not",
-                    "of": {
-                      "kind": "memory",
-                      "memory": "zima_bez_khleba"
-                    }
-                  },
-                  {
-                    "kind": "not",
-                    "of": {
-                      "kind": "memory",
-                      "memory": "luchshie_gody"
-                    }
-                  }
+                  { "kind": "not", "of": { "kind": "memory", "memory": "pervyy_posul" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "zima_bez_khleba" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "luchshie_gody" } }
                 ]
               },
-              {
-                "kind": "axis",
-                "axis": "honesty_deceit",
-                "op": "lte",
-                "value": -20
-              }
+              { "kind": "axis", "axis": "honesty_deceit", "op": "lte", "value": -20 }
             ]
           },
           "to": "res_posulshchik"
@@ -822,35 +798,12 @@
               {
                 "kind": "any",
                 "of": [
-                  {
-                    "kind": "not",
-                    "of": {
-                      "kind": "memory",
-                      "memory": "pervaya_stroka"
-                    }
-                  },
-                  {
-                    "kind": "not",
-                    "of": {
-                      "kind": "memory",
-                      "memory": "khronika_bez_popravok"
-                    }
-                  },
-                  {
-                    "kind": "not",
-                    "of": {
-                      "kind": "memory",
-                      "memory": "god_goloy_pravdy"
-                    }
-                  }
+                  { "kind": "not", "of": { "kind": "memory", "memory": "pervaya_stroka" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "khronika_bez_popravok" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "god_goloy_pravdy" } }
                 ]
               },
-              {
-                "kind": "axis",
-                "axis": "honesty_deceit",
-                "op": "gte",
-                "value": 20
-              }
+              { "kind": "axis", "axis": "honesty_deceit", "op": "gte", "value": 20 }
             ]
           },
           "to": "res_chistopisets"
@@ -862,35 +815,12 @@
               {
                 "kind": "any",
                 "of": [
-                  {
-                    "kind": "not",
-                    "of": {
-                      "kind": "memory",
-                      "memory": "punkt_pervyy"
-                    }
-                  },
-                  {
-                    "kind": "not",
-                    "of": {
-                      "kind": "memory",
-                      "memory": "opis_vsego_sushchego"
-                    }
-                  },
-                  {
-                    "kind": "not",
-                    "of": {
-                      "kind": "memory",
-                      "memory": "eda_ne_vnesena"
-                    }
-                  }
+                  { "kind": "not", "of": { "kind": "memory", "memory": "punkt_pervyy" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "opis_vsego_sushchego" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "eda_ne_vnesena" } }
                 ]
               },
-              {
-                "kind": "axis",
-                "axis": "reason_obsession",
-                "op": "lte",
-                "value": -20
-              }
+              { "kind": "axis", "axis": "reason_obsession", "op": "lte", "value": -20 }
             ]
           },
           "to": "res_perechen"
@@ -899,37 +829,15 @@
           "when": {
             "kind": "all",
             "of": [
+              { "kind": "life", "life": "smolokur" },
+              { "kind": "axis", "axis": "mercy_cruelty", "op": "lt", "value": 20 },
               {
                 "kind": "any",
                 "of": [
-                  {
-                    "kind": "not",
-                    "of": {
-                      "kind": "memory",
-                      "memory": "smola_na_vode"
-                    }
-                  },
-                  {
-                    "kind": "not",
-                    "of": {
-                      "kind": "memory",
-                      "memory": "ples_gorit"
-                    }
-                  },
-                  {
-                    "kind": "not",
-                    "of": {
-                      "kind": "memory",
-                      "memory": "schet_za_sezon"
-                    }
-                  }
+                  { "kind": "not", "of": { "kind": "memory", "memory": "smola_na_vode" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "ples_gorit" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "schet_za_sezon" } }
                 ]
-              },
-              {
-                "kind": "axis",
-                "axis": "mercy_cruelty",
-                "op": "lte",
-                "value": 0
               }
             ]
           },
@@ -939,37 +847,15 @@
           "when": {
             "kind": "all",
             "of": [
+              { "kind": "life", "life": "klyuchar" },
+              { "kind": "axis", "axis": "mercy_cruelty", "op": "gt", "value": -20 },
               {
                 "kind": "any",
                 "of": [
-                  {
-                    "kind": "not",
-                    "of": {
-                      "kind": "memory",
-                      "memory": "pervoye_vedro"
-                    }
-                  },
-                  {
-                    "kind": "not",
-                    "of": {
-                      "kind": "memory",
-                      "memory": "ochered_k_kolodtsu"
-                    }
-                  },
-                  {
-                    "kind": "not",
-                    "of": {
-                      "kind": "memory",
-                      "memory": "poslednyaya_kruzhka"
-                    }
-                  }
+                  { "kind": "not", "of": { "kind": "memory", "memory": "pervoye_vedro" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "ochered_k_kolodtsu" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "poslednyaya_kruzhka" } }
                 ]
-              },
-              {
-                "kind": "axis",
-                "axis": "mercy_cruelty",
-                "op": "gt",
-                "value": 0
               }
             ]
           },
@@ -979,37 +865,15 @@
           "when": {
             "kind": "all",
             "of": [
+              { "kind": "life", "life": "posulshchik" },
+              { "kind": "axis", "axis": "honesty_deceit", "op": "lt", "value": 20 },
               {
                 "kind": "any",
                 "of": [
-                  {
-                    "kind": "not",
-                    "of": {
-                      "kind": "memory",
-                      "memory": "pervyy_posul"
-                    }
-                  },
-                  {
-                    "kind": "not",
-                    "of": {
-                      "kind": "memory",
-                      "memory": "zima_bez_khleba"
-                    }
-                  },
-                  {
-                    "kind": "not",
-                    "of": {
-                      "kind": "memory",
-                      "memory": "luchshie_gody"
-                    }
-                  }
+                  { "kind": "not", "of": { "kind": "memory", "memory": "pervyy_posul" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "zima_bez_khleba" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "luchshie_gody" } }
                 ]
-              },
-              {
-                "kind": "axis",
-                "axis": "honesty_deceit",
-                "op": "lte",
-                "value": 0
               }
             ]
           },
@@ -1019,37 +883,15 @@
           "when": {
             "kind": "all",
             "of": [
+              { "kind": "life", "life": "chistopisets" },
+              { "kind": "axis", "axis": "honesty_deceit", "op": "gt", "value": -20 },
               {
                 "kind": "any",
                 "of": [
-                  {
-                    "kind": "not",
-                    "of": {
-                      "kind": "memory",
-                      "memory": "pervaya_stroka"
-                    }
-                  },
-                  {
-                    "kind": "not",
-                    "of": {
-                      "kind": "memory",
-                      "memory": "khronika_bez_popravok"
-                    }
-                  },
-                  {
-                    "kind": "not",
-                    "of": {
-                      "kind": "memory",
-                      "memory": "god_goloy_pravdy"
-                    }
-                  }
+                  { "kind": "not", "of": { "kind": "memory", "memory": "pervaya_stroka" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "khronika_bez_popravok" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "god_goloy_pravdy" } }
                 ]
-              },
-              {
-                "kind": "axis",
-                "axis": "honesty_deceit",
-                "op": "gt",
-                "value": 0
               }
             ]
           },
@@ -1057,308 +899,542 @@
         },
         {
           "when": {
-            "kind": "any",
+            "kind": "all",
             "of": [
+              { "kind": "life", "life": "perechen" },
+              { "kind": "axis", "axis": "reason_obsession", "op": "lt", "value": 20 },
               {
-                "kind": "not",
-                "of": {
-                  "kind": "memory",
-                  "memory": "punkt_pervyy"
-                }
-              },
-              {
-                "kind": "not",
-                "of": {
-                  "kind": "memory",
-                  "memory": "opis_vsego_sushchego"
-                }
-              },
-              {
-                "kind": "not",
-                "of": {
-                  "kind": "memory",
-                  "memory": "eda_ne_vnesena"
-                }
+                "kind": "any",
+                "of": [
+                  { "kind": "not", "of": { "kind": "memory", "memory": "punkt_pervyy" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "opis_vsego_sushchego" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "eda_ne_vnesena" } }
+                ]
               }
             ]
           },
           "to": "res_perechen"
-        },
-        {
-          "when": {
-            "kind": "any",
-            "of": [
-              {
-                "kind": "not",
-                "of": {
-                  "kind": "memory",
-                  "memory": "smola_na_vode"
-                }
-              },
-              {
-                "kind": "not",
-                "of": {
-                  "kind": "memory",
-                  "memory": "ples_gorit"
-                }
-              },
-              {
-                "kind": "not",
-                "of": {
-                  "kind": "memory",
-                  "memory": "schet_za_sezon"
-                }
-              }
-            ]
-          },
-          "to": "res_smolokur"
-        },
-        {
-          "when": {
-            "kind": "any",
-            "of": [
-              {
-                "kind": "not",
-                "of": {
-                  "kind": "memory",
-                  "memory": "pervoye_vedro"
-                }
-              },
-              {
-                "kind": "not",
-                "of": {
-                  "kind": "memory",
-                  "memory": "ochered_k_kolodtsu"
-                }
-              },
-              {
-                "kind": "not",
-                "of": {
-                  "kind": "memory",
-                  "memory": "poslednyaya_kruzhka"
-                }
-              }
-            ]
-          },
-          "to": "res_klyuchar"
-        },
-        {
-          "when": {
-            "kind": "any",
-            "of": [
-              {
-                "kind": "not",
-                "of": {
-                  "kind": "memory",
-                  "memory": "pervyy_posul"
-                }
-              },
-              {
-                "kind": "not",
-                "of": {
-                  "kind": "memory",
-                  "memory": "zima_bez_khleba"
-                }
-              },
-              {
-                "kind": "not",
-                "of": {
-                  "kind": "memory",
-                  "memory": "luchshie_gody"
-                }
-              }
-            ]
-          },
-          "to": "res_posulshchik"
-        },
-        {
-          "when": {
-            "kind": "any",
-            "of": [
-              {
-                "kind": "not",
-                "of": {
-                  "kind": "memory",
-                  "memory": "pervaya_stroka"
-                }
-              },
-              {
-                "kind": "not",
-                "of": {
-                  "kind": "memory",
-                  "memory": "khronika_bez_popravok"
-                }
-              },
-              {
-                "kind": "not",
-                "of": {
-                  "kind": "memory",
-                  "memory": "god_goloy_pravdy"
-                }
-              }
-            ]
-          },
-          "to": "res_chistopisets"
         }
       ],
-      "fallback": "res_last_resort"
+      "fallback": "res_faint"
     },
     {
       "kind": "branch",
-      "id": "res_last_resort",
+      "id": "res_faint",
       "branches": [
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "smola_na_vode"
-            }
+            "kind": "all",
+            "of": [
+              { "kind": "axis", "axis": "mercy_cruelty", "op": "lt", "value": 0 },
+              {
+                "kind": "any",
+                "of": [
+                  { "kind": "not", "of": { "kind": "memory", "memory": "smola_na_vode" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "ples_gorit" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "schet_za_sezon" } }
+                ]
+              }
+            ]
           },
-          "to": "res_frag_smolokur_1"
+          "to": "res_smolokur"
         },
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "ples_gorit"
-            }
+            "kind": "all",
+            "of": [
+              { "kind": "axis", "axis": "mercy_cruelty", "op": "gt", "value": 0 },
+              {
+                "kind": "any",
+                "of": [
+                  { "kind": "not", "of": { "kind": "memory", "memory": "pervoye_vedro" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "ochered_k_kolodtsu" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "poslednyaya_kruzhka" } }
+                ]
+              }
+            ]
           },
-          "to": "res_frag_smolokur_2"
+          "to": "res_klyuchar"
         },
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "schet_za_sezon"
-            }
+            "kind": "all",
+            "of": [
+              { "kind": "axis", "axis": "honesty_deceit", "op": "lt", "value": 0 },
+              {
+                "kind": "any",
+                "of": [
+                  { "kind": "not", "of": { "kind": "memory", "memory": "pervyy_posul" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "zima_bez_khleba" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "luchshie_gody" } }
+                ]
+              }
+            ]
           },
-          "to": "res_frag_smolokur_3"
+          "to": "res_posulshchik"
         },
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "pervoye_vedro"
-            }
+            "kind": "all",
+            "of": [
+              { "kind": "axis", "axis": "honesty_deceit", "op": "gt", "value": 0 },
+              {
+                "kind": "any",
+                "of": [
+                  { "kind": "not", "of": { "kind": "memory", "memory": "pervaya_stroka" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "khronika_bez_popravok" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "god_goloy_pravdy" } }
+                ]
+              }
+            ]
           },
-          "to": "res_frag_klyuchar_1"
+          "to": "res_chistopisets"
         },
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "ochered_k_kolodtsu"
-            }
+            "kind": "all",
+            "of": [
+              { "kind": "axis", "axis": "reason_obsession", "op": "lt", "value": 0 },
+              {
+                "kind": "any",
+                "of": [
+                  { "kind": "not", "of": { "kind": "memory", "memory": "punkt_pervyy" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "opis_vsego_sushchego" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "eda_ne_vnesena" } }
+                ]
+              }
+            ]
           },
-          "to": "res_frag_klyuchar_2"
+          "to": "res_perechen"
+        }
+      ],
+      "fallback": "res_even_hand"
+    },
+    {
+      "kind": "branch",
+      "id": "res_even_hand",
+      "branches": [
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              { "kind": "axis", "axis": "honesty_deceit", "op": "gte", "value": 0 },
+              {
+                "kind": "any",
+                "of": [
+                  { "kind": "not", "of": { "kind": "memory", "memory": "pervaya_stroka" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "khronika_bez_popravok" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "god_goloy_pravdy" } }
+                ]
+              }
+            ]
+          },
+          "to": "res_chistopisets"
         },
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "poslednyaya_kruzhka"
-            }
+            "kind": "all",
+            "of": [
+              { "kind": "axis", "axis": "honesty_deceit", "op": "lt", "value": 0 },
+              {
+                "kind": "any",
+                "of": [
+                  { "kind": "not", "of": { "kind": "memory", "memory": "pervyy_posul" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "zima_bez_khleba" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "luchshie_gody" } }
+                ]
+              }
+            ]
           },
-          "to": "res_frag_klyuchar_3"
+          "to": "res_posulshchik"
+        }
+      ],
+      "fallback": "res_edge"
+    },
+    {
+      "kind": "branch",
+      "id": "res_edge",
+      "branches": [
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              { "kind": "axis", "axis": "mercy_cruelty", "op": "lt", "value": 20 },
+              {
+                "kind": "any",
+                "of": [
+                  { "kind": "not", "of": { "kind": "memory", "memory": "smola_na_vode" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "ples_gorit" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "schet_za_sezon" } }
+                ]
+              }
+            ]
+          },
+          "to": "res_smolokur"
         },
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "pervyy_posul"
-            }
+            "kind": "all",
+            "of": [
+              { "kind": "axis", "axis": "mercy_cruelty", "op": "gt", "value": -20 },
+              {
+                "kind": "any",
+                "of": [
+                  { "kind": "not", "of": { "kind": "memory", "memory": "pervoye_vedro" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "ochered_k_kolodtsu" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "poslednyaya_kruzhka" } }
+                ]
+              }
+            ]
           },
-          "to": "res_frag_posulshchik_1"
+          "to": "res_klyuchar"
         },
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "zima_bez_khleba"
-            }
+            "kind": "all",
+            "of": [
+              { "kind": "axis", "axis": "honesty_deceit", "op": "lt", "value": 20 },
+              {
+                "kind": "any",
+                "of": [
+                  { "kind": "not", "of": { "kind": "memory", "memory": "pervyy_posul" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "zima_bez_khleba" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "luchshie_gody" } }
+                ]
+              }
+            ]
           },
-          "to": "res_frag_posulshchik_2"
+          "to": "res_posulshchik"
         },
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "luchshie_gody"
-            }
+            "kind": "all",
+            "of": [
+              { "kind": "axis", "axis": "honesty_deceit", "op": "gt", "value": -20 },
+              {
+                "kind": "any",
+                "of": [
+                  { "kind": "not", "of": { "kind": "memory", "memory": "pervaya_stroka" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "khronika_bez_popravok" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "god_goloy_pravdy" } }
+                ]
+              }
+            ]
           },
-          "to": "res_frag_posulshchik_3"
+          "to": "res_chistopisets"
         },
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "pervaya_stroka"
-            }
+            "kind": "all",
+            "of": [
+              { "kind": "axis", "axis": "reason_obsession", "op": "lt", "value": 20 },
+              {
+                "kind": "any",
+                "of": [
+                  { "kind": "not", "of": { "kind": "memory", "memory": "punkt_pervyy" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "opis_vsego_sushchego" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "eda_ne_vnesena" } }
+                ]
+              }
+            ]
           },
-          "to": "res_frag_chistopisets_1"
+          "to": "res_perechen"
+        }
+      ],
+      "fallback": "res_no_echo"
+    },
+    {
+      "kind": "branch",
+      "id": "res_no_echo",
+      "branches": [
+        {
+          "when": { "kind": "not", "of": { "kind": "memory", "memory": "smola_na_vode" } },
+          "to": "res_dust_smola_na_vode"
         },
         {
-          "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "khronika_bez_popravok"
-            }
-          },
-          "to": "res_frag_chistopisets_2"
+          "when": { "kind": "not", "of": { "kind": "memory", "memory": "ples_gorit" } },
+          "to": "res_dust_ples_gorit"
         },
         {
-          "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "god_goloy_pravdy"
-            }
-          },
-          "to": "res_frag_chistopisets_3"
+          "when": { "kind": "not", "of": { "kind": "memory", "memory": "schet_za_sezon" } },
+          "to": "res_dust_schet_za_sezon"
         },
         {
-          "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "punkt_pervyy"
-            }
-          },
-          "to": "res_frag_perechen_1"
+          "when": { "kind": "not", "of": { "kind": "memory", "memory": "pervoye_vedro" } },
+          "to": "res_dust_pervoye_vedro"
         },
         {
-          "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "opis_vsego_sushchego"
-            }
-          },
-          "to": "res_frag_perechen_2"
+          "when": { "kind": "not", "of": { "kind": "memory", "memory": "ochered_k_kolodtsu" } },
+          "to": "res_dust_ochered_k_kolodtsu"
         },
         {
-          "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "eda_ne_vnesena"
-            }
-          },
-          "to": "res_frag_perechen_3"
+          "when": { "kind": "not", "of": { "kind": "memory", "memory": "poslednyaya_kruzhka" } },
+          "to": "res_dust_poslednyaya_kruzhka"
+        },
+        {
+          "when": { "kind": "not", "of": { "kind": "memory", "memory": "pervyy_posul" } },
+          "to": "res_dust_pervyy_posul"
+        },
+        {
+          "when": { "kind": "not", "of": { "kind": "memory", "memory": "zima_bez_khleba" } },
+          "to": "res_dust_zima_bez_khleba"
+        },
+        {
+          "when": { "kind": "not", "of": { "kind": "memory", "memory": "luchshie_gody" } },
+          "to": "res_dust_luchshie_gody"
+        },
+        {
+          "when": { "kind": "not", "of": { "kind": "memory", "memory": "pervaya_stroka" } },
+          "to": "res_dust_pervaya_stroka"
+        },
+        {
+          "when": { "kind": "not", "of": { "kind": "memory", "memory": "khronika_bez_popravok" } },
+          "to": "res_dust_khronika_bez_popravok"
+        },
+        {
+          "when": { "kind": "not", "of": { "kind": "memory", "memory": "god_goloy_pravdy" } },
+          "to": "res_dust_god_goloy_pravdy"
+        },
+        {
+          "when": { "kind": "not", "of": { "kind": "memory", "memory": "punkt_pervyy" } },
+          "to": "res_dust_punkt_pervyy"
+        },
+        {
+          "when": { "kind": "not", "of": { "kind": "memory", "memory": "opis_vsego_sushchego" } },
+          "to": "res_dust_opis_vsego_sushchego"
+        },
+        {
+          "when": { "kind": "not", "of": { "kind": "memory", "memory": "eda_ne_vnesena" } },
+          "to": "res_dust_eda_ne_vnesena"
         }
       ],
       "fallback": "archive_empty"
+    },
+    {
+      "kind": "effects",
+      "id": "res_dust_smola_na_vode",
+      "effects": [
+        { "kind": "fragment", "memory": "smola_na_vode", "amount": 1 },
+        { "kind": "counter", "counter": "_res:smola_na_vode", "delta": 1 }
+      ],
+      "next": "no_echo_smolokur"
+    },
+    {
+      "kind": "effects",
+      "id": "res_dust_ples_gorit",
+      "effects": [
+        { "kind": "fragment", "memory": "ples_gorit", "amount": 1 },
+        { "kind": "counter", "counter": "_res:ples_gorit", "delta": 1 }
+      ],
+      "next": "no_echo_smolokur"
+    },
+    {
+      "kind": "effects",
+      "id": "res_dust_schet_za_sezon",
+      "effects": [
+        { "kind": "fragment", "memory": "schet_za_sezon", "amount": 1 },
+        { "kind": "counter", "counter": "_res:schet_za_sezon", "delta": 1 }
+      ],
+      "next": "no_echo_smolokur"
+    },
+    {
+      "kind": "effects",
+      "id": "res_dust_pervoye_vedro",
+      "effects": [
+        { "kind": "fragment", "memory": "pervoye_vedro", "amount": 1 },
+        { "kind": "counter", "counter": "_res:pervoye_vedro", "delta": 1 }
+      ],
+      "next": "no_echo_klyuchar"
+    },
+    {
+      "kind": "effects",
+      "id": "res_dust_ochered_k_kolodtsu",
+      "effects": [
+        { "kind": "fragment", "memory": "ochered_k_kolodtsu", "amount": 1 },
+        { "kind": "counter", "counter": "_res:ochered_k_kolodtsu", "delta": 1 }
+      ],
+      "next": "no_echo_klyuchar"
+    },
+    {
+      "kind": "effects",
+      "id": "res_dust_poslednyaya_kruzhka",
+      "effects": [
+        { "kind": "fragment", "memory": "poslednyaya_kruzhka", "amount": 1 },
+        { "kind": "counter", "counter": "_res:poslednyaya_kruzhka", "delta": 1 }
+      ],
+      "next": "no_echo_klyuchar"
+    },
+    {
+      "kind": "effects",
+      "id": "res_dust_pervyy_posul",
+      "effects": [
+        { "kind": "fragment", "memory": "pervyy_posul", "amount": 1 },
+        { "kind": "counter", "counter": "_res:pervyy_posul", "delta": 1 }
+      ],
+      "next": "no_echo_posulshchik"
+    },
+    {
+      "kind": "effects",
+      "id": "res_dust_zima_bez_khleba",
+      "effects": [
+        { "kind": "fragment", "memory": "zima_bez_khleba", "amount": 1 },
+        { "kind": "counter", "counter": "_res:zima_bez_khleba", "delta": 1 }
+      ],
+      "next": "no_echo_posulshchik"
+    },
+    {
+      "kind": "effects",
+      "id": "res_dust_luchshie_gody",
+      "effects": [
+        { "kind": "fragment", "memory": "luchshie_gody", "amount": 1 },
+        { "kind": "counter", "counter": "_res:luchshie_gody", "delta": 1 }
+      ],
+      "next": "no_echo_posulshchik"
+    },
+    {
+      "kind": "effects",
+      "id": "res_dust_pervaya_stroka",
+      "effects": [
+        { "kind": "fragment", "memory": "pervaya_stroka", "amount": 1 },
+        { "kind": "counter", "counter": "_res:pervaya_stroka", "delta": 1 }
+      ],
+      "next": "no_echo_chistopisets"
+    },
+    {
+      "kind": "effects",
+      "id": "res_dust_khronika_bez_popravok",
+      "effects": [
+        { "kind": "fragment", "memory": "khronika_bez_popravok", "amount": 1 },
+        { "kind": "counter", "counter": "_res:khronika_bez_popravok", "delta": 1 }
+      ],
+      "next": "no_echo_chistopisets"
+    },
+    {
+      "kind": "effects",
+      "id": "res_dust_god_goloy_pravdy",
+      "effects": [
+        { "kind": "fragment", "memory": "god_goloy_pravdy", "amount": 1 },
+        { "kind": "counter", "counter": "_res:god_goloy_pravdy", "delta": 1 }
+      ],
+      "next": "no_echo_chistopisets"
+    },
+    {
+      "kind": "effects",
+      "id": "res_dust_punkt_pervyy",
+      "effects": [
+        { "kind": "fragment", "memory": "punkt_pervyy", "amount": 1 },
+        { "kind": "counter", "counter": "_res:punkt_pervyy", "delta": 1 }
+      ],
+      "next": "no_echo_perechen"
+    },
+    {
+      "kind": "effects",
+      "id": "res_dust_opis_vsego_sushchego",
+      "effects": [
+        { "kind": "fragment", "memory": "opis_vsego_sushchego", "amount": 1 },
+        { "kind": "counter", "counter": "_res:opis_vsego_sushchego", "delta": 1 }
+      ],
+      "next": "no_echo_perechen"
+    },
+    {
+      "kind": "effects",
+      "id": "res_dust_eda_ne_vnesena",
+      "effects": [
+        { "kind": "fragment", "memory": "eda_ne_vnesena", "amount": 1 },
+        { "kind": "counter", "counter": "_res:eda_ne_vnesena", "delta": 1 }
+      ],
+      "next": "no_echo_perechen"
+    },
+    {
+      "kind": "say",
+      "id": "no_echo_smolokur",
+      "speaker": "osoka",
+      "text": {
+        "ru": "Раздел первый не отзывается. Неустойка за беспокойство начислена осколком.",
+        "en": "Section one does not answer. Penalty for inconvenience credited: one shard."
+      },
+      "keywords": [
+        { "match": { "ru": "не отзывается", "en": "does not answer" }, "tone": "memory" }
+      ],
+      "next": "no_echo_form"
+    },
+    {
+      "kind": "say",
+      "id": "no_echo_klyuchar",
+      "speaker": "osoka",
+      "text": {
+        "ru": "Раздел второй не отзывается. Неустойка за беспокойство начислена осколком.",
+        "en": "Section two does not answer. Penalty for inconvenience credited: one shard."
+      },
+      "keywords": [
+        { "match": { "ru": "не отзывается", "en": "does not answer" }, "tone": "memory" }
+      ],
+      "next": "no_echo_form"
+    },
+    {
+      "kind": "say",
+      "id": "no_echo_posulshchik",
+      "speaker": "osoka",
+      "text": {
+        "ru": "Раздел третий не отзывается. Неустойка за беспокойство начислена осколком.",
+        "en": "Section three does not answer. Penalty for inconvenience credited: one shard."
+      },
+      "keywords": [
+        { "match": { "ru": "не отзывается", "en": "does not answer" }, "tone": "memory" }
+      ],
+      "next": "no_echo_form"
+    },
+    {
+      "kind": "say",
+      "id": "no_echo_chistopisets",
+      "speaker": "osoka",
+      "text": {
+        "ru": "Раздел четвёртый не отзывается. Неустойка за беспокойство начислена осколком.",
+        "en": "Section four does not answer. Penalty for inconvenience credited: one shard."
+      },
+      "keywords": [
+        { "match": { "ru": "не отзывается", "en": "does not answer" }, "tone": "memory" }
+      ],
+      "next": "no_echo_form"
+    },
+    {
+      "kind": "say",
+      "id": "no_echo_perechen",
+      "speaker": "osoka",
+      "text": {
+        "ru": "Раздел пятый не отзывается. Неустойка за беспокойство начислена осколком.",
+        "en": "Section five does not answer. Penalty for inconvenience credited: one shard."
+      },
+      "keywords": [
+        { "match": { "ru": "не отзывается", "en": "does not answer" }, "tone": "memory" }
+      ],
+      "next": "no_echo_form"
+    },
+    {
+      "kind": "branch",
+      "id": "no_echo_form",
+      "branches": [
+        { "when": { "kind": "deaths", "op": "gte", "value": 2 }, "to": "no_echo_note_2" }
+      ],
+      "fallback": "no_echo_note_1"
+    },
+    {
+      "kind": "narration",
+      "id": "no_echo_note_1",
+      "text": {
+        "ru": "Подъёмник под стойкой не трогается с места. Она ставит в графе «выдано» прочерк, ниже вписывает начисленное и переворачивает страницу: по описи сошлось.",
+        "en": "The hoist under the counter does not stir. She puts a dash in the «issued» column, enters the credit below it and turns the page: by the inventory it balances."
+      },
+      "next": "osoka_reactions"
+    },
+    {
+      "kind": "narration",
+      "id": "no_echo_note_2",
+      "text": {
+        "ru": "Прочерк в графе «выдано» она ставит, не дочитывая строку. Подъёмник за её спиной стоит там же, где стоял.",
+        "en": "She puts the dash in the «issued» column without reading the line to the end. The hoist behind her stands where it stood."
+      },
+      "next": "osoka_reactions"
     },
     {
       "kind": "say",
@@ -1551,17 +1627,13 @@
     {
       "kind": "branch",
       "id": "guard_router",
-      "branches": [
-        { "when": { "kind": "deaths", "op": "gte", "value": 3 }, "to": "cause_guard_2" }
-      ],
+      "branches": [{ "when": { "kind": "deaths", "op": "gte", "value": 3 }, "to": "cause_guard_2" }],
       "fallback": "cause_guard"
     },
     {
       "kind": "branch",
       "id": "sluza_router",
-      "branches": [
-        { "when": { "kind": "deaths", "op": "gte", "value": 3 }, "to": "cause_sluza_2" }
-      ],
+      "branches": [{ "when": { "kind": "deaths", "op": "gte", "value": 3 }, "to": "cause_sluza_2" }],
       "fallback": "cause_sluza"
     },
     {
