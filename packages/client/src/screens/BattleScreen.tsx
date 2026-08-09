@@ -124,6 +124,9 @@ export function BattleScreen() {
   }, []);
 
   if (!battle) return null;
+  // Псевдоним под сужение типа: onTapUnit — объявление функции, и внутри него
+  // TypeScript про проверку выше уже не помнит.
+  const live = battle;
 
   const actor = currentActor(battle);
   const myTurn = isPlayerTurn(battle);
@@ -186,6 +189,7 @@ export function BattleScreen() {
             threatened={threatened.get(u.uid)}
             covered={covered}
             coveredLabel={t(lang, 'coveredShort')}
+            hideIntent={over}
             preview={previews.get(u.uid)}
             anim={anims[u.uid]}
             floats={floats.filter((f) => f.uid === u.uid)}
@@ -217,7 +221,7 @@ export function BattleScreen() {
     vibrate('tap');
     setReason(
       selectedAbility
-        ? blockReason(battle, actor, selectedAbility, u, lang)
+        ? blockReason(live, actor, selectedAbility, u, lang)
         : t(lang, 'chooseAbility'),
     );
   }

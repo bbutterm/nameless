@@ -24,6 +24,7 @@ export function UnitCard({
   threatened,
   covered,
   coveredLabel,
+  hideIntent,
   preview,
   anim,
   floats,
@@ -40,6 +41,8 @@ export function UnitCard({
   /** Закрыта живым передним рядом — цель недоступна, и это надо объяснить. */
   covered?: boolean;
   coveredLabel?: string;
+  /** Бой кончился — намерения больше ни к чему не относятся. */
+  hideIntent?: boolean;
   /** Сколько примерно снимет выбранная способность именно с этой цели. */
   preview?: Preview;
   /** Человеческое имя способности, которую враг готовит на этот раунд. */
@@ -55,7 +58,7 @@ export function UnitCard({
   // Намерение показываем только тому, кто в этом раунде ещё не ходил: движок
   // проставляет intent всем врагам на весь раунд и после хода его не гасит,
   // так что иконка (а теперь и стрелка к цели) врала про уже отстрелявшихся.
-  const showIntent = !!unit.intent && unit.alive && !unit.acted;
+  const showIntent = !!unit.intent && unit.alive && !unit.acted && !hideIntent;
 
   return (
     <button
