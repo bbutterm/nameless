@@ -12,6 +12,8 @@ import {
   lifeOfMemory,
   personaRun,
   PERSONAS,
+  randomPersonas,
+  TURNED_PERSONA,
   type PersonaRun,
 } from './resonance.js';
 
@@ -49,6 +51,7 @@ if (ex.silent > 0 || ex.fundedButNoLot > 0 || ex.archiveEmptyEarly > 0) failed =
 
 head('Инвариант 2: три личности — три набора');
 const runs: PersonaRun[] = PERSONAS.map((p) => personaRun(content, p, 16));
+const turned = personaRun(content, TURNED_PERSONA, 16);
 for (const r of runs) {
   const byLife = new Map<string, string[]>();
   for (const m of r.locked) {
@@ -79,6 +82,13 @@ for (const r of runs) {
   if (r.silent > 0 || r.fundedButNoLot > 0) failed = true;
 }
 
+console.log(
+  `\nсверх задания — ${turned.persona}: закреплено ${turned.locked.length}/15, ` +
+    `жизней ${turned.lives.length}/5, «не отзывается» ${turned.noEcho}, молчаливых ${turned.silent}, ` +
+    `швов ${turned.seam}`,
+);
+console.log(`  ${turned.locked.join(', ')}`);
+
 const sets = runs.map((r) => [...r.locked].sort().join('|'));
 const distinct = new Set(sets).size;
 console.log(`\nразных наборов: ${distinct} из ${runs.length}`);
@@ -98,6 +108,28 @@ const sizes = runs.map((r) => r.locked.length);
 const inCorridor = sizes.every((s) => s >= 8 && s <= 12);
 console.log(`наборы ${sizes.join(' / ')} — коридор 8–12: ${inCorridor ? 'да' : 'НЕТ'}`);
 if (distinct !== runs.length) failed = true;
+
+head('Распределение: 40 случайных личностей по 16 смертей');
+const randoms = randomPersonas(40, content).map((p) => personaRun(content, p, 16));
+const hist = new Map<number, number>();
+for (const r of randoms) hist.set(r.locked.length, (hist.get(r.locked.length) ?? 0) + 1);
+const keys = [...hist.keys()].sort((a, b) => a - b);
+for (const k of keys) console.log(`  ${String(k).padStart(2)}/15  ${'█'.repeat(hist.get(k) ?? 0)} ${hist.get(k)}`);
+const allSizes = randoms.map((r) => r.locked.length).sort((a, b) => a - b);
+const distinctRandom = new Set(randoms.map((r) => [...r.locked].sort().join('|'))).size;
+console.log(
+  `  минимум ${allSizes[0]}, медиана ${allSizes[Math.floor(allSizes.length / 2)]}, ` +
+    `максимум ${allSizes[allSizes.length - 1]}; разных наборов ${distinctRandom} из ${randoms.length}`,
+);
+console.log(`  выкупили архив целиком (15/15): ${randoms.filter((r) => r.locked.length === 15).length}`);
+const badRandom = randoms.filter((r) => r.silent > 0 || r.fundedButNoLot > 0 || r.seam > 0);
+console.log(
+  `  молчаливых смертей ${randoms.reduce((a, r) => a + r.silent, 0)}, ` +
+    `досыпано-без-лота ${randoms.reduce((a, r) => a + r.fundedButNoLot, 0)}, ` +
+    `швов ${randoms.reduce((a, r) => a + r.seam, 0)}`,
+);
+if (badRandom.length > 0) failed = true;
+if (randoms.some((r) => r.locked.length === 15)) failed = true;
 
 head(failed ? 'ИТОГ: КРАСНЫЙ' : 'ИТОГ: зелёный');
 process.exit(failed ? 1 : 0);

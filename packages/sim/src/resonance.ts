@@ -262,25 +262,59 @@ export interface PersonaProfile {
   name: string;
   /** Вес оси: +1 — тянуть к положительному полюсу, −1 — к отрицательному. */
   weights: Record<string, number>;
+  /** Личность, которая переменилась: после стольких смертей веса переворачиваются. */
+  turnAt?: number;
 }
 
+/**
+ * Три профиля — те же три личности, которыми игрался плейтест
+ * (`PLAYTEST_REPORT` §«Оси и отряд»), с одной поправкой: «расследующий» стал
+ * «рассудочным», потому что после починки оси рассудка (`PROGRESSION_FIX` §1)
+ * полюс рассудка наконец достижим, и именно он — самый интересный случай:
+ * у рассудка нет своей жизни, это канон (CANON 5, конец раздела).
+ */
 export const PERSONAS: PersonaProfile[] = [
   {
     id: 'cruel',
     name: 'жестокий',
-    weights: { mercy_cruelty: -1, honesty_deceit: -0.7, reason_obsession: -0.4, grasp_release: 0.3 },
+    weights: { mercy_cruelty: -1, honesty_deceit: -0.6, reason_obsession: -0.5, grasp_release: 0.3 },
   },
   {
     id: 'merciful',
     name: 'милосердный',
-    weights: { mercy_cruelty: 1, honesty_deceit: 0.7, reason_obsession: 0.4, grasp_release: -0.3 },
+    weights: { mercy_cruelty: 1, honesty_deceit: 0.6, reason_obsession: -0.5, grasp_release: -0.3 },
   },
   {
     id: 'reasoning',
     name: 'рассудочный',
-    weights: { mercy_cruelty: 0.2, honesty_deceit: 0.9, reason_obsession: 1, grasp_release: 0.2 },
+    weights: {
+      mercy_cruelty: -0.15,
+      honesty_deceit: 1,
+      reason_obsession: 1,
+      grasp_release: 0.2,
+    },
   },
 ];
+
+/** Случайные личности — для распределения размеров набора, а не для примеров. */
+export function randomPersonas(count: number, content: ContentBundle): PersonaProfile[] {
+  const out: PersonaProfile[] = [];
+  for (let i = 0; i < count; i++) {
+    const rng = new Rng(`b6:rand:${i}`);
+    const weights: Record<string, number> = {};
+    for (const a of content.axes) weights[a.id] = rng.next() * 2 - 1;
+    out.push({ id: `rand${i}`, name: `случайная ${i}`, weights });
+  }
+  return out;
+}
+
+/** Четвёртый профиль — сверх задания: личность, которая переменилась на полпути. */
+export const TURNED_PERSONA: PersonaProfile = {
+  id: 'turned',
+  name: 'переменившийся',
+  weights: { mercy_cruelty: -1, honesty_deceit: -0.6, reason_obsession: -0.5, grasp_release: 0.3 },
+  turnAt: 6,
+};
 
 export interface PersonaRun {
   persona: string;
@@ -375,7 +409,7 @@ export function personaRun(
   for (let step = 0; step < 200_000 && run.deaths < targetDeaths; step++) {
     const r = resolve(idx, state);
     state = r.state;
-    if (r.step.kind === 'error' || r.step.kind === 'end' || ++stall > 1200) {
+    if (r.step.kind === 'error' || r.step.kind === 'end' || ++stall > 400) {
       stall = 0;
       state = normalizeEntry(idx, goTo(state, `scene:${COUNTER_SCENE}#queue_entry`));
       continue;
@@ -390,11 +424,15 @@ export function personaRun(
         state = normalizeEntry(idx, goTo(state, `scene:${COUNTER_SCENE}#queue_entry`));
         continue;
       }
+      const weights =
+        profile.turnAt !== undefined && run.deaths >= profile.turnAt
+          ? Object.fromEntries(Object.entries(profile.weights).map(([k, v]) => [k, -v]))
+          : profile.weights;
       let best = options[0];
       let bestScore = -Infinity;
       for (const o of options) {
         // Жребий только для ничьих: без него личность в хабе ходит по кругу.
-        const s = scoreOption(o.effects, profile.weights) + rng.next() * 0.5;
+        const s = scoreOption(o.effects, weights) + rng.next() * 0.5;
         if (s > bestScore) {
           bestScore = s;
           best = o;

@@ -1049,6 +1049,98 @@
           "to": "res_posulshchik"
         }
       ],
+      "fallback": "res_edge"
+    },
+    {
+      "kind": "branch",
+      "id": "res_edge",
+      "branches": [
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              { "kind": "axis", "axis": "mercy_cruelty", "op": "lt", "value": 20 },
+              {
+                "kind": "any",
+                "of": [
+                  { "kind": "not", "of": { "kind": "memory", "memory": "smola_na_vode" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "ples_gorit" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "schet_za_sezon" } }
+                ]
+              }
+            ]
+          },
+          "to": "res_smolokur"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              { "kind": "axis", "axis": "mercy_cruelty", "op": "gt", "value": -20 },
+              {
+                "kind": "any",
+                "of": [
+                  { "kind": "not", "of": { "kind": "memory", "memory": "pervoye_vedro" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "ochered_k_kolodtsu" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "poslednyaya_kruzhka" } }
+                ]
+              }
+            ]
+          },
+          "to": "res_klyuchar"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              { "kind": "axis", "axis": "honesty_deceit", "op": "lt", "value": 20 },
+              {
+                "kind": "any",
+                "of": [
+                  { "kind": "not", "of": { "kind": "memory", "memory": "pervyy_posul" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "zima_bez_khleba" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "luchshie_gody" } }
+                ]
+              }
+            ]
+          },
+          "to": "res_posulshchik"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              { "kind": "axis", "axis": "honesty_deceit", "op": "gt", "value": -20 },
+              {
+                "kind": "any",
+                "of": [
+                  { "kind": "not", "of": { "kind": "memory", "memory": "pervaya_stroka" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "khronika_bez_popravok" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "god_goloy_pravdy" } }
+                ]
+              }
+            ]
+          },
+          "to": "res_chistopisets"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              { "kind": "axis", "axis": "reason_obsession", "op": "lt", "value": 20 },
+              {
+                "kind": "any",
+                "of": [
+                  { "kind": "not", "of": { "kind": "memory", "memory": "punkt_pervyy" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "opis_vsego_sushchego" } },
+                  { "kind": "not", "of": { "kind": "memory", "memory": "eda_ne_vnesena" } }
+                ]
+              }
+            ]
+          },
+          "to": "res_perechen"
+        }
+      ],
       "fallback": "res_no_echo"
     },
     {
