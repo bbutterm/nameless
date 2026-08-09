@@ -22,6 +22,7 @@ import { placeEmblem, placeKey, placeTone, unitEmblem } from '../lib/emblems';
 import { TutorialHint } from '../components/Tutorial';
 import {
   abilityChips,
+  abilityGist,
   blockReason,
   isCovered,
   previewFor,
@@ -475,7 +476,10 @@ export function BattleScreen() {
                   }}
                 >
                   <Icon name={a.icon} size={22} />
-                  <span>{loc(a.name, lang)}</span>
+                  <span className="ability-name">{loc(a.name, lang)}</span>
+                  {/* Что она делает — прямо на кнопке, а не по долгому нажатию:
+                      жест, о котором надо догадаться, объяснением не считается. */}
+                  <span className="ability-gist">{abilityGist(a, lang)}</span>
                 </button>
               ))
             ) : (

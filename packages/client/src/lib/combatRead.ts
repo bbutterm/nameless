@@ -210,3 +210,25 @@ export function isCovered(
   if (target.side === actor.side || target.row !== 'back' || !target.alive) return false;
   return state.units.some((u) => u.alive && u.side === target.side && u.row === 'front');
 }
+
+/**
+ * Одна строка под названием способности: что она делает и с кем.
+ *
+ * Разбор способности («цель, кулдаун, эффекты») уже был — но только по
+ * долгому нажатию, а по отзыву владельца «непонятно, откуда скиллы и что они
+ * делают». Показана и прочитана — разные вещи: жест, о котором надо догадаться,
+ * не считается объяснением. Тридцать способностей из тридцати не называют
+ * механику ни именем, ни подписью на карте, поэтому одна строка ставится прямо
+ * на кнопку и видна всегда.
+ *
+ * Строка нарочно короткая: кнопка занимает треть ширины экрана в 390px.
+ * Формат «глагол + кому»: «урон переднему», «щит 16 своему», «лечит своего».
+ */
+export function abilityGist(ability: Ability, lang: Lang): string {
+  const who = targetWord(ability.target, lang);
+  // Урон не лежит в effects — он выводится из power, поэтому проверяется первым.
+  const damaging = ability.power > 0 && ability.target.startsWith('enemy');
+  const first = (ability.effects ?? []).find((e) => e.kind !== 'damage');
+  const what = damaging ? t(lang, 'damageWord') : first ? effectWord(first, lang) : '';
+  return what ? `${what} · ${who}` : who;
+}

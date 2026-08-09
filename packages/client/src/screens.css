@@ -1555,3 +1555,17 @@
 .card-hp {
   text-shadow: 0 1px 3px rgb(0 0 0 / 80%);
 }
+
+/* Подпись «что делает» под названием способности. Мельче названия и тусклее:
+   игрок читает её один раз на незнакомой кнопке, дальше узнаёт по имени. */
+.ability-gist {
+  display: block;
+  font-size: 10px;
+  line-height: 1.15;
+  color: var(--text-dim);
+  margin-top: 1px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
