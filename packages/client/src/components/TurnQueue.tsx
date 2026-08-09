@@ -1,19 +1,30 @@
 import type { BattleState, Lang, UnitDef } from '@nameless/engine';
 import { loc, t } from '../i18n';
-import { cardImage, svgDataUri, unitCardSvg } from '../lib/art';
+import { unitEmblem } from '../lib/emblems';
 
 /**
  * Лента очереди хода. Движок держит `order` — порядок uid на раунд — и
  * `turnIndex`; на экране этого не было видно вовсе, и «чей сейчас ход» игрок
  * узнавал только по рывку карточки постфактум.
  *
- * Показываем текущего и ближайших: миниатюра арта той же карты + кольцо по
- * стороне (свой / враг). Текущий крупнее и в золоте — тем же цветом, что
- * обводка его карточки на поле, чтобы связь читалась без подписи.
- * Хвост очереди упирается в значок нового раунда: дальше порядок решает
- * бросок инициативы, и врать про него нельзя.
+ * Здесь исправлены две вещи из первого захода.
+ *
+ * 1. **Не буква, а знак.** Подпись была первой буквой имени, и три «Багорщика»
+ *    давали три одинаковых «Б» подряд — то есть ровно тот случай, ради которого
+ *    очередь и заводилась, она не разбирала. Теперь в кружке тот же знак дома
+ *    или спутника, что и на карточке этого юнита (`lib/emblems.ts`): очередь и
+ *    доска говорят одним алфавитом, и «через два хода бьёт вон тот с ножом»
+ *    читается без подписи. Тонкая обводка по стороне (свой/чужой) осталась.
+ *
+ * 2. **Лента больше не пустеет.** Показывались только те, кто ещё не ходил, и к
+ *    середине раунда от очереди на четверых оставалось одно-два деления —
+ *    полоса выглядела сломанной. Окно теперь постоянной длины: текущий и
+ *    ближайшие, а если впереди осталось мало — хвост добирается уже
+ *    отходившими (они гаснут). Значок нового раунда стоит только тогда, когда
+ *    окно действительно дошло до конца раунда: дальше порядок решает бросок
+ *    инициативы, и врать про него нельзя.
  */
-const MAX_CHIPS = 7;
+const WINDOW = 8;
 
 export function TurnQueue({
   battle,
@@ -24,34 +35,45 @@ export function TurnQueue({
   defs: Map<string, UnitDef>;
   lang: Lang;
 }) {
-  const upcoming = battle.order
-    .slice(battle.turnIndex)
-    .map((uid) => battle.units.find((u) => u.uid === uid))
-    .filter((u): u is NonNullable<typeof u> => !!u && u.alive)
-    .slice(0, MAX_CHIPS);
+  const rows = battle.order
+    .map((uid, i) => ({ u: battle.units.find((x) => x.uid === uid), done: i < battle.turnIndex }))
+    .filter((r): r is { u: NonNullable<typeof r.u>; done: boolean } => !!r.u && r.u.alive);
 
-  if (upcoming.length === 0) return null;
+  if (rows.length === 0) return null;
+
+  const nowIdx = rows.findIndex((r) => !r.done);
+  const nowUid = rows[nowIdx]?.u.uid;
+  // Окно всегда содержит текущего и по возможности WINDOW делений: сдвигаем
+  // назад, пока хватает уже отходивших.
+  const start = Math.max(0, Math.min(Math.max(0, nowIdx), rows.length - WINDOW));
+  const win = rows.slice(start, start + WINDOW);
+  const tailShown = start + win.length >= rows.length;
 
   return (
     <div className="turn-queue" aria-hidden="true">
-      {upcoming.map((u, i) => {
+      {win.map(({ u, done }) => {
         const def = defs.get(u.defId);
-        const art = def ? (cardImage(def.id) ?? svgDataUri(unitCardSvg(def.id, def.tier, def.faction))) : undefined;
+        const mark = unitEmblem(def?.id, def?.faction);
         const name = def ? loc(def.name, lang) : u.defId;
         return (
           <div
             key={u.uid}
-            className={['queue-chip', u.side, i === 0 ? 'now' : ''].filter(Boolean).join(' ')}
+            className={['queue-chip', u.side, done ? 'done' : '', u.uid === nowUid ? 'now' : '']
+              .filter(Boolean)
+              .join(' ')}
             title={name}
           >
-            {art && <img className="queue-art" src={art} alt="" draggable={false} />}
-            {/* Буква поверх арта: процедурные заглушки — почти чёрные силуэты,
-                на 26px они неразличимы между собой, а буква имени различима. */}
-            <span className="queue-letter">{name.slice(0, 1)}</span>
+            {mark ? (
+              <span className="queue-mark" style={mark} />
+            ) : (
+              // Юнит без знака (такого в игре сейчас нет, но контент растёт) —
+              // буква лучше пустого кружка.
+              <span className="queue-letter">{name.slice(0, 1)}</span>
+            )}
           </div>
         );
       })}
-      {upcoming.length < MAX_CHIPS && (
+      {tailShown && (
         <div className="queue-chip queue-next-round" title={t(lang, 'nextRound')}>
           ↻
         </div>

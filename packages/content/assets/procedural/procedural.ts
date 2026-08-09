@@ -433,6 +433,15 @@ function factionHue(faction: string, rng: Rng): number {
 /**
  * Арт карточки юнита 3:4 (300×400): силуэт фигуры на фоне,
  * тонированном по фракции, плюс рамка тира.
+ *
+ * Оружия здесь больше нет. Линия оружия и глиф из `ICON_PATHS` ложились ровно
+ * туда, куда клиент теперь кладёт знак дома (`.card-mark`, 42px по центру на
+ * 32% высоты), и на карточке в 105px два наложенных глифа читались как
+ * случайное число — на «Пыльном посыльном» это выглядело как «10». Знак несёт
+ * ту же роль («кто это») лучше: он не случайный, а закреплён за домом или
+ * спутником. Заглушка без оружия проверена отдельно, без знака сверху
+ * (`samples/cards/*.svg`): глиф был меньше 20px при прозрачности 0.5 на почти
+ * чёрном силуэте и не нёс ни смысла, ни силуэта — на экране его не хватишься.
  */
 export function unitCardSvg(id: string, tier: 1 | 2 | 3, faction: string): string {
   const rng = rngFromSeed(`unit:${id}:${faction}`);
@@ -451,12 +460,6 @@ export function unitCardSvg(id: string, tier: 1 | 2 | 3, faction: string): strin
   const hemY = CARD_H - 60 - rng.range(-10, 20);
   const lean = rng.range(-10, 10);
 
-  const weaponSeed = rng.bool(0.7);
-  const weaponIcon = rng.pick(["sword", "staff", "bow", "dagger", "hammer"] as const);
-  const weaponX = cx + shoulderW / 2 - 6 + lean * 0.4;
-  const weaponTopY = headY - headR * 0.4;
-  const weaponBotY = hemY + 10;
-
   const auraColor = rng.pick([PALETTE.memory, PALETTE.accent, PALETTE.lie, PALETTE.gold] as const);
   const hasAura = tier === 3 || rng.bool(0.3);
 
@@ -469,14 +472,6 @@ export function unitCardSvg(id: string, tier: 1 | 2 | 3, faction: string): strin
     C ${cx + shoulderW / 2 + lean * 0.5} ${shoulderY + 10}, ${cx + hipW / 2 + lean} ${shoulderY + 30}, ${cx + hipW / 2 + lean} ${hemY}
     Z
   `;
-
-  // Оружие — деталь силуэта, а не самый яркий объект карты: почти белая линия
-  // во всю высоту читалась на 110px как случайная царапина поверх фигуры.
-  const weaponTone = [PALETTE.tier1, PALETTE.tier2, PALETTE.tier3][tier - 1] ?? PALETTE.tier1;
-  const weaponLine = weaponSeed
-    ? `<line x1="${weaponX}" y1="${weaponTopY + headR * 0.9}" x2="${weaponX}" y2="${weaponBotY - 12}" stroke="${weaponTone}" stroke-width="2.5" stroke-linecap="round" opacity="0.42"/>
-       <g transform="translate(${weaponX - 9} ${weaponTopY + headR * 0.9 - 16}) scale(0.8)" color="${weaponTone}" opacity="0.5">${ICON_PATHS[weaponIcon]}</g>`
-    : "";
 
   const aura = hasAura
     ? `<circle cx="${cx}" cy="${headY - headR * 0.2}" r="${headR * 2.4}" fill="${auraColor}" opacity="0.12"/>`
@@ -492,7 +487,6 @@ export function unitCardSvg(id: string, tier: 1 | 2 | 3, faction: string): strin
   <rect width="${CARD_W}" height="${CARD_H}" fill="url(#ug-${escapeXml(id)})"/>
   ${aura}
   <path d="${bodyPath}" fill="${silhouette}" stroke="${shade(silhouette, -0.3)}" stroke-width="1"/>
-  ${weaponLine}
   ${frameInner(tier)}
 </svg>`;
 }

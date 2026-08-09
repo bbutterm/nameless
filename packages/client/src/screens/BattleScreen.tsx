@@ -9,8 +9,7 @@ import {
   type BattleEvent,
   type BattleUnitState,
 } from '@nameless/engine';
-import { UnitCard, type FloatingNumber } from '../components/UnitCard';
-import { ThreatLayer, type ThreatLink } from '../components/ThreatLayer';
+import { UnitCard, type FloatingNumber, type ThreatMark } from '../components/UnitCard';
 import { TurnQueue } from '../components/TurnQueue';
 import { Icon } from '../components/Icon';
 import { loc, t } from '../i18n';
@@ -19,7 +18,7 @@ import { combat, content } from '../store/content';
 import { vibrate } from '../lib/haptics';
 import { playSfx } from '../lib/sound';
 import { backgroundSvg, svgDataUri } from '../lib/art';
-import { placeEmblem, placeTone } from '../lib/emblems';
+import { placeEmblem, placeTone, unitEmblem } from '../lib/emblems';
 import { TutorialHint } from '../components/Tutorial';
 import {
   abilityChips,
@@ -53,7 +52,6 @@ export function BattleScreen() {
   const [anims, setAnims] = useState<Anim>({});
   const [floats, setFloats] = useState<FloatingNumber[]>([]);
   const seenEvents = useRef(0);
-  const fieldRef = useRef<HTMLDivElement>(null);
   const holdTimer = useRef<ReturnType<typeof setTimeout>>();
   const heldOpen = useRef(false);
   // Таймеры уборки живут в ref, а не в cleanup эффекта: ходы идут чаще, чем
@@ -202,31 +200,56 @@ export function BattleScreen() {
     }
   }
 
-  // Кто в кого метит. Иконка намерения висела над врагом и раньше — не было
-  // видно цели, хотя движок её знает (`intent.targetUid`).
+  // Кто в кого метит. Связь показываем НА КАРТЕ ЖЕРТВЫ — знаком нападающего,
+  // а не линией через доску. Линия масштабировалась плохо: при полном строю
+  // шесть пунктиров пересекали и чужой передний ряд, и свой, и вместо ответа
+  // «кого ударят» игрок видел клубок (долг итерации 1). Знак нападающего
+  // растёт линейно и остаётся внутри той карточки, про которую он говорит.
   const soonestEnemy = battle.order.slice(battle.turnIndex).find((uid) => {
     const u = battle.units.find((x) => x.uid === uid);
     return !!u && u.alive && u.side === 'enemy' && !u.acted && !!u.intent;
   });
-  const links: ThreatLink[] = [];
   const threatened = new Map<string, 'danger' | 'ally'>();
+  const incoming = new Map<string, ThreatMark[]>();
   if (!over) {
     for (const u of battle.units) {
       if (u.side !== 'enemy' || !u.alive || u.acted || !u.intent?.targetUid) continue;
       const tgt = battle.units.find((x) => x.uid === u.intent!.targetUid);
       if (!tgt || !tgt.alive) continue;
       const tone: 'danger' | 'ally' = tgt.side === 'player' ? 'danger' : 'ally';
-      links.push({ fromUid: u.uid, toUid: tgt.uid, tone, strong: u.uid === soonestEnemy });
-      // Ярлык «в тебя метят» остаётся, даже если пунктир не поместился.
+      // Ярлык «в эту карту метят» — рамка вокруг жертвы.
       if (threatened.get(tgt.uid) !== 'danger') threatened.set(tgt.uid, tone);
+      const def = defs.get(u.defId);
+      const list = incoming.get(tgt.uid) ?? [];
+      list.push({
+        key: u.uid,
+        mark: unitEmblem(def?.id, def?.faction),
+        soon: u.uid === soonestEnemy,
+        tone,
+        name: nameOf(u),
+      });
+      incoming.set(tgt.uid, list);
     }
   }
 
   const slot = (side: 'player' | 'enemy', row: 'front' | 'back', index: number) =>
     battle.units.find((u) => u.side === side && u.row === row && u.index === index);
 
+  /**
+   * Ряд без единого бойца не показываем вовсе: бой на двух врагов держал три
+   * пустых пунктирных слота заднего ряда — 145px, то есть верхнюю треть доски,
+   * — и карточки из-за этого жались до 105px.
+   *
+   * Считаем по ИСХОДНОМУ составу, а не по живым: иначе доска перестраивалась бы
+   * посреди боя, в момент смерти последнего в ряду, — ровно тогда, когда игрок
+   * смотрит на анимацию рассыпания. Пустые слоты внутри непустого ряда
+   * остаются: в них видно, что место свободно, и туда бьёт передний ряд.
+   */
+  const rowUsed = (side: 'player' | 'enemy', row: 'front' | 'back') =>
+    battle.units.some((u) => u.side === side && u.row === row);
+
   const renderRow = (side: 'player' | 'enemy', row: 'front' | 'back') => (
-    <div className={`row row-${row}`}>
+    <div className={`row row-${row}`} key={`${side}-${row}`}>
       {SLOTS.map((i) => {
         const u = slot(side, row, i);
         if (!u) return <div key={i} className="card empty" />;
@@ -241,6 +264,7 @@ export function BattleScreen() {
             selected={actor?.uid === u.uid && myTurn}
             targetable={targets.includes(u.uid)}
             threatened={threatened.get(u.uid)}
+            threats={incoming.get(u.uid)}
             covered={covered}
             coveredLabel={t(lang, 'coveredShort')}
             hideIntent={over}
@@ -358,26 +382,21 @@ export function BattleScreen() {
         {!over && <TurnQueue battle={battle} defs={defs} lang={lang} />}
       </div>
 
-      {/* Подсказка боя стоит в потоке, над полем: всплывашка с anchor="top"
-          ложилась ровно на задний ряд врага и на первые 6.5 секунды первого
-          боя прятала и имена, и иконки намерений — то есть ровно то, о чём
-          сама же и рассказывает. */}
-      {!over && (
-        <div className="tutorial-slot">
-          <TutorialHint step="battle" lang={lang} anchor="flow" />
-        </div>
-      )}
-
-      <div ref={fieldRef} className={`field ${myTurn && selectedAbility ? 'targeting' : ''}`}>
-        <ThreatLayer containerRef={fieldRef} links={links} dim={myTurn && !!selectedAbility} />
+      <div className={`field ${myTurn && selectedAbility ? 'targeting' : ''}`}>
+        {/* Подсказка боя переехала из отдельной полки над полем внутрь поля.
+            Поле прижимает строй к нижнему краю, поэтому подсказка садится в
+            свободную высоту над задним рядом врага: доску она больше не
+            толкает (см. `.tutorial-flow` в screens.css). Тапы не перехватывает
+            — `pointer-events: none`. */}
+        {!over && <TutorialHint step="battle" lang={lang} anchor="flow" />}
         <div className="side enemy-side">
-          {renderRow('enemy', 'back')}
-          {renderRow('enemy', 'front')}
+          {rowUsed('enemy', 'back') && renderRow('enemy', 'back')}
+          {rowUsed('enemy', 'front') && renderRow('enemy', 'front')}
         </div>
         <div className="divider" />
         <div className="side player-side">
-          {renderRow('player', 'front')}
-          {renderRow('player', 'back')}
+          {rowUsed('player', 'front') && renderRow('player', 'front')}
+          {rowUsed('player', 'back') && renderRow('player', 'back')}
         </div>
       </div>
 

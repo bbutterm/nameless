@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import type { BattleUnitState, Lang, StatusEffect, UnitDef } from '@nameless/engine';
 import { loc } from '../i18n';
 import { cardImage, svgDataUri, unitCardSvg } from '../lib/art';
@@ -10,6 +11,53 @@ export interface FloatingNumber {
   uid: string;
   amount: number;
   kind: 'damage' | 'heal' | 'crit';
+}
+
+/** Кто метит в эту карту: знак нападающего в её левом верхнем углу. */
+export interface ThreatMark {
+  key: string;
+  /** Переменные спрайт-ленты знаков; undefined — у юнита знака нет. */
+  mark: CSSProperties | undefined;
+  /** Этот ходит ближе всех — его метка ярче и дышит. */
+  soon: boolean;
+  /** Удар по игроку или помощь своим: не всякое намерение врага — угроза. */
+  tone: 'danger' | 'ally';
+  name: string;
+}
+
+/** Столько знаков нападающих помещается в ряд на карточке; дальше — счёт «+N». */
+const MAX_THREAT_MARKS = 3;
+
+/**
+ * Ступень кегля подписи — по самому длинному СЛОВУ, а не по всей строке.
+ *
+ * Переносить по буквам («Невостребованны/й залог») нельзя: игрок обязан
+ * отличать «Невостребованный залог» от «Невостребованного вклада», а слово,
+ * разорванное посередине, читается как другое слово. Многоточие запрещено по
+ * той же причине: имя карты — это то, чем игрок её называет. Значит, длинное
+ * слово обязано уместиться в строку целиком, и единственная величина, которой
+ * за это можно платить, — кегль.
+ *
+ * Здесь только СТУПЕНЬ (насколько имя длинное), а сам размер считает CSS от
+ * ширины карточки — `clamp(9px, 9.6cqw, 11px)` в `.card-name.name-xs`: одна и
+ * та же карта бывает 134px и 82px шириной, и от экрана этого не вывести.
+ *
+ * Предел — 9px, и он назван сознательно: это последний кегль, на котором PT
+ * Sans на 2× экране (то есть 18 физических пикселей) ещё держит различие
+ * «ш/щ» и «и/й»; проверено глазами на 360×640. Правило проекта «текст ≥16px»
+ * относится к диалогам — к тому, что читают строками; подпись карточки — ярлык
+ * в одно-два слова рядом со знаком дома и полосой HP, у неё другая работа.
+ * Ниже 9px не опускаемся даже ценой переноса: перенос виден как дефект, а
+ * нечитаемая подпись — нет.
+ *
+ * Пороги в символах: 15+ — самое длинное слово игры («Невостребованный», 16),
+ * 12–14 — «Прямоговорящий», «Благодарный». Короче 12 базовые 11px держат сами.
+ */
+function nameSizeClass(name: string): string {
+  const longest = name.split(/\s+/).reduce((m, w) => Math.max(m, w.length), 0);
+  if (longest >= 15) return 'name-xs';
+  if (longest >= 12) return 'name-s';
+  return '';
 }
 
 /**
@@ -81,6 +129,7 @@ export function UnitCard({
   selected,
   targetable,
   threatened,
+  threats,
   covered,
   coveredLabel,
   hideIntent,
@@ -95,8 +144,10 @@ export function UnitCard({
   lang: Lang;
   selected?: boolean;
   targetable?: boolean;
-  /** В эту карту метит враг: конец пунктира намерения. */
+  /** В эту карту метят: рамка-дыхание вокруг карточки. */
   threatened?: 'danger' | 'ally';
+  /** Кто именно метит — знаки нападающих над карточкой. */
+  threats?: ThreatMark[];
   /** Закрыта живым передним рядом — цель недоступна, и это надо объяснить. */
   covered?: boolean;
   coveredLabel?: string;
@@ -117,6 +168,9 @@ export function UnitCard({
   // (assets/cards/<id>.webp) ничем не забиваем — это его слот, а не наш холст.
   const mark = custom ? undefined : unitEmblem(def?.id, def?.faction);
   const chips = statusChips(unit.statuses);
+  const name = def ? loc(def.name, lang) : unit.defId;
+  const marked = (threats ?? []).filter((x) => !!x.mark);
+  const extraThreats = marked.length - MAX_THREAT_MARKS;
   // Намерение показываем только тому, кто в этом раунде ещё не ходил: движок
   // проставляет intent всем врагам на весь раунд и после хода его не гасит,
   // так что иконка (а теперь и стрелка к цели) врала про уже отстрелявшихся.
@@ -151,7 +205,25 @@ export function UnitCard({
           {mark && <span className="card-mark" style={mark} aria-hidden="true" />}
         </div>
       )}
-      <div className="card-name">{def ? loc(def.name, lang) : unit.defId}</div>
+      {/* Кто в неё метит. Раньше это была линия через всю доску от карточки
+          врага; шесть таких линий при полном строю читались как паутина.
+          Знак нападающего лежит на самой жертве — сколько знаков, столько
+          ударов придёт, и по цвету знака видно, чей это дом. */}
+      {marked.length > 0 && (
+        <span className="threat-marks" aria-hidden="true">
+          {marked.slice(0, MAX_THREAT_MARKS).map((x) => (
+            <span
+              key={x.key}
+              className={`threat-mark ${x.tone}${x.soon ? ' soon' : ''}`}
+              style={x.mark}
+              title={x.name}
+            />
+          ))}
+          {extraThreats > 0 && <span className="threat-more">+{extraThreats}</span>}
+        </span>
+      )}
+
+      <div className={`card-name ${nameSizeClass(name)}`.trim()}>{name}</div>
 
       {chips.length > 0 && (
         <div className="status-row">
