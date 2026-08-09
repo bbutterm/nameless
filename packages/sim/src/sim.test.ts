@@ -35,6 +35,7 @@ function bundle(part: Partial<ContentBundle> = {}): ContentBundle {
     deaths: [],
     chapters: [{ index: 1, id: 'ch1', title: L('ch1'), entryScene: 'start' }],
     speakers: [{ id: 'narrator' }],
+    codex: [],
     ...part,
   };
 }
