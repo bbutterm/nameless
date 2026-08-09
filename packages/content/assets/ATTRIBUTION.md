@@ -11,3 +11,9 @@ Source: https://game-icons.net/
 ## OpenGameArt
 Lorc RPG Icons, via OpenGameArt. CC BY 3.0. Attribution required to Lorc.
 Source: https://opengameart.org/content/700-rpg-icons
+
+Used in the build: 57 icons, recoloured to the project palette and packed into
+three sprite sheets — `assets/emblems/{speakers,units,places}.png`.
+Generator: `assets/ui/nameless/emblems.py` (the table there names every source
+file). Derivatives keep the CC BY 3.0 licence; the in-build credit line lives on
+the title screen (`packages/client/src/components/Attribution.tsx`).

@@ -21,7 +21,12 @@ import os
 from PIL import Image
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-PACK = os.path.join(HERE, "..", "fantasy-ui-borders", "PNG", "Default")
+# Пак лежит в art-source/ у корня репозитория, а не внутри packages/content:
+# Vite сканирует пакет при сборке, и полторы тысячи лишних файлов раздували
+# контекст сборки (см. art-source/README.md). Путь ниже был указан на старое
+# место и после переезда пака вёл в никуда — скрипт падал на первом же файле.
+REPO = os.path.abspath(os.path.join(HERE, "..", "..", "..", "..", ".."))
+PACK = os.path.join(REPO, "art-source", "fantasy-ui-borders", "PNG", "Default")
 BORDER = os.path.join(PACK, "Border")
 DIVIDER = os.path.join(PACK, "Divider Fade")
 

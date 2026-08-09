@@ -101,6 +101,21 @@ export const SPEAKER_TONE: Record<string, string> = {
   'unknown': 'text-faint',
 };
 
+export const PLACE_TONE: Record<string, string> = {
+  'counter': '#c9a227',
+  'hall': '#c9a227',
+  'archive': '#c9a227',
+  'vault': '#c9a227',
+  'tower': '#c9a227',
+  'ledger': '#c9a227',
+  'gate': '#9a90a0',
+  'road': '#9a90a0',
+  'garden': '#7fd3d0',
+  'hourglass': '#7fd3d0',
+  'guild': '#b06fd0',
+  'audit': '#c1483f',
+};
+
 export const UNIT_TONE: Record<string, string> = {
   'great_pawnshop': 'accent',
   'greedy_memory_guild': 'lie',

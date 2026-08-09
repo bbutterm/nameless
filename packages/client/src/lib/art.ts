@@ -57,8 +57,8 @@ export function unitCardSvg(id: string, tier: 1 | 2 | 3, faction = 'street'): st
   return genUnitCard(id, tier, faction);
 }
 
-export function backgroundSvg(seed: string): string {
-  return genBackground(seed);
+export function backgroundSvg(seed: string, tone?: string): string {
+  return genBackground(seed, tone);
 }
 
 export function svgDataUri(svg: string): string {

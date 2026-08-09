@@ -7,7 +7,7 @@ import { loc, t } from '../i18n';
 import { useGame } from '../store/game';
 import { content, idx } from '../store/content';
 import { backgroundSvg, svgDataUri } from '../lib/art';
-import { placeEmblem } from '../lib/emblems';
+import { placeEmblem, placeTone } from '../lib/emblems';
 import { ArchiveSheet } from './ArchiveSheet';
 import { TutorialHint } from '../components/Tutorial';
 
@@ -37,7 +37,7 @@ export function DialogueScreen() {
   }, [log.length, step]);
 
   if (!state) return null;
-  const bg = svgDataUri(backgroundSvg(state.scene));
+  const bg = svgDataUri(backgroundSvg(state.scene, placeTone(state.scene)));
   const isChoice = step?.kind === 'choice';
 
   /*

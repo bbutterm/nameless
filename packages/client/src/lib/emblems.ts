@@ -18,6 +18,7 @@ import unitsUrl from '../../../content/assets/emblems/units.png';
 import placesUrl from '../../../content/assets/emblems/places.png';
 import {
   PLACES_ORDER,
+  PLACE_TONE,
   SPEAKERS_ORDER,
   SPEAKER_TONE,
   UNITS_ORDER,
@@ -103,6 +104,16 @@ export function placeKey(sceneOrBattleId: string): string {
 export function placeEmblem(sceneOrBattleId: string): CSSProperties {
   const at = PLACE_AT.get(placeKey(sceneOrBattleId)) ?? 0;
   return vars(placesUrl, PLACES_ORDER.length, at);
+}
+
+/**
+ * Цвет места — тот же, в который покрашен его знак. Уходит в градиент фона
+ * сцены (`backgroundSvg`), чтобы фон и знак поверх него говорили одно и то же,
+ * а не спорили: до этого оттенок фона брался из хэша id сцены, то есть был
+ * случайным числом.
+ */
+export function placeTone(sceneOrBattleId: string): string {
+  return PLACE_TONE[placeKey(sceneOrBattleId)] ?? '#9a90a0';
 }
 
 /** Знак по прямому ключу места — для экранов без сцены (смерть, опись). */

@@ -254,6 +254,11 @@ def emit_ts() -> None:
         lines.append(f"  '{key}': '{tone}',")
     lines.append("};")
     lines.append("")
+    lines.append("export const PLACE_TONE: Record<string, string> = {")
+    for key, _f, tone, _why in PLACES:
+        lines.append(f"  '{key}': '{PALETTE[tone]}',")
+    lines.append("};")
+    lines.append("")
     lines.append("export const UNIT_TONE: Record<string, string> = {")
     for key, _f, tone, _why in UNITS:
         lines.append(f"  '{key}': '{tone}',")
