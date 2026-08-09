@@ -477,6 +477,18 @@
             "ru": "Прочитать вслух, что написано на подстилке.",
             "en": "Read aloud what is written on the bedding."
           },
+          "chip": {
+            "icon": "book",
+            "label": {
+              "ru": "Чистописец",
+              "en": "Chistopisets"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "chistopisets"
+          },
           "effects": [
             {
               "kind": "axis",

@@ -198,6 +198,27 @@
           "to": "r_yard_first"
         },
         {
+          "id": "hold_it_tight",
+          "text": {
+            "ru": "Взять залог за плечо и не отпускать.",
+            "en": "Take the pledge by the shoulder and not let go."
+          },
+          "conditions": {
+            "kind": "axis",
+            "axis": "grasp_release",
+            "op": "gte",
+            "value": 25
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": 5
+            }
+          ],
+          "to": "r_yard_between"
+        },
+        {
           "id": "tip_the_barrow",
           "text": {
             "ru": "Опрокинуть тачку в лужу. Так короче.",
@@ -301,27 +322,6 @@
               "kind": "axis",
               "axis": "mercy_cruelty",
               "delta": 8
-            }
-          ],
-          "to": "r_yard_between"
-        },
-        {
-          "id": "hold_it_tight",
-          "text": {
-            "ru": "Взять залог за плечо и не отпускать.",
-            "en": "Take the pledge by the shoulder and not let go."
-          },
-          "conditions": {
-            "kind": "axis",
-            "axis": "grasp_release",
-            "op": "gte",
-            "value": 25
-          },
-          "effects": [
-            {
-              "kind": "axis",
-              "axis": "grasp_release",
-              "delta": 5
             }
           ],
           "to": "r_yard_between"

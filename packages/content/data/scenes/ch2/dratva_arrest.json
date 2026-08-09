@@ -874,6 +874,10 @@
             "ru": "Сослаться на статью четвёртую, пункт про терпение.",
             "en": "Cite article four, the clause about patience."
           },
+          "conditions": {
+            "kind": "flag",
+            "flag": "dratva_debt"
+          },
           "effects": [
             {
               "kind": "axis",

@@ -132,20 +132,26 @@
           "to": "r_toll_paid"
         },
         {
-          "id": "into_water",
-          "text": { "ru": "Лезть за склянкой в Слузу.", "en": "Go into the Sluza after the flask." },
-          "to": "sluza_under"
-        },
-        {
           "id": "walk_past",
           "text": { "ru": "Не вмешиваться.", "en": "Stay out of it." },
           "to": "r_toll_past"
         },
         {
+          "id": "into_water",
+          "text": { "ru": "Лезть за склянкой в Слузу.", "en": "Go into the Sluza after the flask." },
+          "to": "sluza_under"
+        },
+        {
           "id": "sit_with_her",
           "text": { "ru": "Сесть рядом и досидеть с ней.", "en": "Sit down beside her and stay." },
           "chip": { "icon": "heal", "label": { "ru": "Ключарь", "en": "Klyuchar" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "klyuchar" },
+          "conditions": {
+            "kind": "all",
+            "of": [
+              { "kind": "life", "life": "klyuchar" },
+              { "kind": "flag", "flag": "beggar_helped" }
+            ]
+          },
           "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": 8 }],
           "to": "r_toll_free"
         },
@@ -168,7 +174,7 @@
         {
           "id": "what_else",
           "text": { "ru": "Спросить, что у неё осталось ценного.", "en": "Ask what she has left that is worth anything." },
-          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -25 },
+          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -40 },
           "effects": [
             { "kind": "axis", "axis": "mercy_cruelty", "delta": -5 },
             { "kind": "gold", "delta": 4 }

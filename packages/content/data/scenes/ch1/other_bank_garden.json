@@ -953,6 +953,12 @@
             "ru": "Ударить лопатой того, кто с весами.",
             "en": "Hit the one with the scales, with the spade."
           },
+          "conditions": {
+            "kind": "axis",
+            "axis": "mercy_cruelty",
+            "op": "lte",
+            "value": -25
+          },
           "effects": [
             {
               "kind": "axis",
@@ -982,6 +988,12 @@
           "text": {
             "ru": "Выкупить поднятое по их цене.",
             "en": "Buy back what they raised, at their price."
+          },
+          "conditions": {
+            "kind": "axis",
+            "axis": "grasp_release",
+            "op": "gte",
+            "value": 25
           },
           "effects": [
             {

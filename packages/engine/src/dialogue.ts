@@ -5,6 +5,20 @@ import { applyEffects, markVisited, type EffectContext, type GameState } from '.
 export const MIN_OPTIONS = 2;
 export const MAX_OPTIONS = 4;
 
+/**
+ * Сколько мест на экране может занять «заработанное» — вариант, открытый
+ * условием (прожитой жизнью, флагом, памятью, осью, числом смертей).
+ *
+ * Число не выбрано, а выведено: `MAX_OPTIONS - MIN_OPTIONS`. Два места из
+ * четырёх закреплены за общедоступными вариантами, и это даёт сразу две вещи.
+ * Первое: железное правило «≥2 варианта при любой личности» держится на
+ * вариантах, которые проходят у кого угодно, а не на удачно сложившихся статах.
+ * Второе, и оно важнее: игроку с тремя прожитыми жизнями узел остаётся выбором,
+ * а не витриной способностей — обычный путь никуда не девается, и отказаться от
+ * заработанного можно, не выходя из узла.
+ */
+export const EARNED_SLOTS = MAX_OPTIONS - MIN_OPTIONS;
+
 export interface SceneRef {
   scene: string;
   node?: string;
@@ -139,6 +153,75 @@ export function normalizeEntry(idx: ContentIndex, state: GameState): GameState {
 }
 
 /**
+ * «Заработанный» вариант — открытый условием и не страховочный. Страховочный
+ * (`fallback`) тоже бывает с условием, но он по назначению общедоступный:
+ * его задача — не дать узлу схлопнуться, а не наградить за прожитое.
+ */
+function isEarned(o: Option): boolean {
+  return o.conditions !== undefined && !o.fallback;
+}
+
+/**
+ * Под квоту заработанных попадают только варианты БЕЗ явного `priority`.
+ * Явный приоритет — ручка автора, и она главнее правила отбора: если автор
+ * поднял вариант руками, движок не двигает его обратно. На этом держатся хабы,
+ * где двери в сцены расставлены приоритетами 3–9, и стена найма, где двадцать
+ * четыре условных вербовки стоят на одном приоритете 5.
+ */
+function underQuota(o: Option): boolean {
+  return isEarned(o) && o.priority === undefined;
+}
+
+/**
+ * Порядок ОТБОРА (не показа): priority по убыванию → заработанное выше
+ * общедоступного → порядок объявления. Ключи полные и однозначные, порядок
+ * объявления уникален, поэтому сортировка детерминирована: один и тот же игрок
+ * в одном и том же узле видит одно и то же.
+ */
+function byRank(options: Option[], list: Option[]): Option[] {
+  const declared = new Map<Option, number>(options.map((o, i) => [o, i]));
+  return list.slice().sort((a, b) => {
+    const p = (b.priority ?? 0) - (a.priority ?? 0);
+    if (p !== 0) return p;
+    const e = Number(isEarned(b)) - Number(isEarned(a));
+    if (e !== 0) return e;
+    return (declared.get(a) ?? 0) - (declared.get(b) ?? 0);
+  });
+}
+
+/**
+ * Кого из прошедших пустить на экран, когда их больше четырёх.
+ *
+ * Раньше выигрывали объявленные раньше, и это выкидывало «заработанное» ради
+ * общедоступного, стоящего в файле выше: редкая реплика, открытая прожитой
+ * жизнью или флагом, проигрывала кнопке «пройти мимо» просто по номеру строки.
+ * Теперь при равном `priority` заработанное идёт первым, но не больше
+ * EARNED_SLOTS штук — остальное откладывается в хвост и берётся, только если
+ * общедоступных не хватило добрать до четырёх.
+ */
+function selectVisible(options: Option[], passing: Option[]): Option[] {
+  const taken: Option[] = [];
+  const deferred: Option[] = [];
+  let earned = 0;
+  for (const o of byRank(options, passing)) {
+    if (taken.length >= MAX_OPTIONS) break;
+    if (underQuota(o)) {
+      if (earned >= EARNED_SLOTS) {
+        deferred.push(o);
+        continue;
+      }
+      earned++;
+    }
+    taken.push(o);
+  }
+  for (const o of deferred) {
+    if (taken.length >= MAX_OPTIONS) break;
+    taken.push(o);
+  }
+  return taken;
+}
+
+/**
  * ЖЕЛЕЗНОЕ ПРАВИЛО: после фильтрации остаётся ≥2 варианта при любой личности.
  * Порядок спасения: подходящие → страховочные (fallback) → добор по priority.
  * Последний шаг — аварийный: фаззер помечает такие узлы как нарушение,
@@ -173,12 +256,7 @@ export function filterOptions(options: Option[], state: GameState): Option[] {
     list.slice().sort((a, b) => options.indexOf(a) - options.indexOf(b));
 
   if (chosen.length <= MAX_OPTIONS) return inDeclarationOrder(chosen);
-  return inDeclarationOrder(
-    chosen
-      .slice()
-      .sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0))
-      .slice(0, MAX_OPTIONS),
-  );
+  return inDeclarationOrder(selectVisible(options, chosen));
 }
 
 /** Проверка без страховок — нужна фаззеру, чтобы поймать настоящие тупики. */

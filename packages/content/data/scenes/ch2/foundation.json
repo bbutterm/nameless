@@ -983,6 +983,10 @@
             "ru": "Прочитать им табличку раздела вслух.",
             "en": "Read them the section tablet aloud."
           },
+          "conditions": {
+            "kind": "flag",
+            "flag": "catalog_card_read"
+          },
           "effects": [
             {
               "kind": "axis",
@@ -1012,6 +1016,12 @@
           "text": {
             "ru": "Выбить клин из шва первым.",
             "en": "Knock the wedge out of the joint first."
+          },
+          "conditions": {
+            "kind": "axis",
+            "axis": "mercy_cruelty",
+            "op": "lte",
+            "value": -25
           },
           "effects": [
             {
@@ -1047,6 +1057,10 @@
           "text": {
             "ru": "Сказать, чьё это обеспечение. Своё имя первым.",
             "en": "Say whose holding this is. Your own name first."
+          },
+          "conditions": {
+            "kind": "flag",
+            "flag": "contract_read"
           },
           "effects": [
             {

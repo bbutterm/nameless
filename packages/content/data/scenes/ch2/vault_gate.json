@@ -898,6 +898,10 @@
             "ru": "Назвать оценщика, который прислал записку.",
             "en": "Name the appraiser who sent the note."
           },
+          "conditions": {
+            "kind": "flag",
+            "flag": "tminny_trust"
+          },
           "effects": [
             {
               "kind": "axis",

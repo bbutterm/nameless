@@ -199,6 +199,37 @@
           "priority": 6
         },
         {
+          "id": "ask_her_name",
+          "text": {
+            "ru": "Спросить у неё имя того, кто живой.",
+            "en": "Ask her the name of the living man."
+          },
+          "conditions": {
+            "kind": "axis",
+            "axis": "mercy_cruelty",
+            "op": "gte",
+            "value": 30
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": 5
+            },
+            {
+              "kind": "gold",
+              "delta": 9
+            },
+            {
+              "kind": "flag",
+              "flag": "witness_paid",
+              "value": true
+            }
+          ],
+          "to": "r_ask_name",
+          "priority": 7
+        },
+        {
           "id": "read_aloud_all",
           "text": {
             "ru": "Прочитать ей бланк вслух. Весь.",
@@ -370,36 +401,6 @@
           ],
           "to": "r_promise_her",
           "priority": 6
-        },
-        {
-          "id": "ask_her_name",
-          "text": {
-            "ru": "Спросить у неё имя того, кто живой.",
-            "en": "Ask her the name of the living man."
-          },
-          "conditions": {
-            "kind": "axis",
-            "axis": "mercy_cruelty",
-            "op": "gte",
-            "value": 30
-          },
-          "effects": [
-            {
-              "kind": "axis",
-              "axis": "mercy_cruelty",
-              "delta": 5
-            },
-            {
-              "kind": "gold",
-              "delta": 9
-            },
-            {
-              "kind": "flag",
-              "flag": "witness_paid",
-              "value": true
-            }
-          ],
-          "to": "r_ask_name"
         }
       ]
     },

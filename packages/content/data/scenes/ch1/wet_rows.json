@@ -467,6 +467,19 @@
             "ru": "Выкупить чужой лот и вернуть владельцу.",
             "en": "Buy the stranger's lot back and return it."
           },
+          "conditions": {
+            "kind": "any",
+            "of": [
+              {
+                "kind": "flag",
+                "flag": "beggar_helped"
+              },
+              {
+                "kind": "flag",
+                "flag": "dust_buried"
+              }
+            ]
+          },
           "effects": [
             {
               "kind": "fragment",
@@ -1262,6 +1275,19 @@
           "text": {
             "ru": "Сказать, что за это уже уплачено Жичке.",
             "en": "Say it has already been paid for, to Zhichka."
+          },
+          "conditions": {
+            "kind": "any",
+            "of": [
+              {
+                "kind": "flag",
+                "flag": "zhichka_deal"
+              },
+              {
+                "kind": "flag",
+                "flag": "zhichka_promise"
+              }
+            ]
           },
           "effects": [
             {

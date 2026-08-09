@@ -690,6 +690,10 @@
             "ru": "Сказать, что лестница служебная и они не посыльные.",
             "en": "Staff stairs. They are not messengers."
           },
+          "conditions": {
+            "kind": "flag",
+            "flag": "tminny_trust"
+          },
           "effects": [
             {
               "kind": "axis",

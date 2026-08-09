@@ -967,6 +967,18 @@
             "ru": "Считать вслух вместе со сторожем.",
             "en": "Count aloud together with the watchman."
           },
+          "chip": {
+            "icon": "hourglass",
+            "label": {
+              "ru": "Перечень",
+              "en": "Perechen"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "perechen"
+          },
           "effects": [
             {
               "kind": "axis",
