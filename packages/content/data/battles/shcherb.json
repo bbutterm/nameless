@@ -1,0 +1,41 @@
+[
+  {
+    "id": "battle_dratva_oklik",
+    "name": {
+      "ru": "Дозор на окликe",
+      "en": "The Watch at the Hail"
+    },
+    "enemies": [
+      {
+        "unit": "hollow_sergeant",
+        "row": "front",
+        "index": 0,
+        "level": 1
+      },
+      {
+        "unit": "line_hailer",
+        "row": "back",
+        "index": 0,
+        "level": 1
+      }
+    ],
+    "background": "shcherb_watchfire",
+    "rewards": [
+      {
+        "kind": "gold",
+        "delta": 4
+      },
+      {
+        "kind": "xp",
+        "amount": 10
+      }
+    ],
+    "tags": [
+      "lethal"
+    ],
+    "expectParty": [
+      "chalk_marker",
+      "relay_driver"
+    ]
+  }
+]

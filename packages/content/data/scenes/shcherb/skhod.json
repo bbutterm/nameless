@@ -1,0 +1,140 @@
+{
+  "id": "skhod",
+  "chapter": 0,
+  "title": {
+    "ru": "Сход",
+    "en": "The Gathering"
+  },
+  "tags": ["death", "ceremony", "no_combat"],
+  "entry": "skhod_entry",
+  "nodes": [
+    {
+      "kind": "branch",
+      "id": "skhod_entry",
+      "branches": [
+        { "when": { "kind": "deaths", "op": "gte", "value": 1 }, "to": "skhod_again" }
+      ],
+      "fallback": "skhod_floor"
+    },
+
+    {
+      "kind": "narration",
+      "id": "skhod_floor",
+      "text": {
+        "ru": "Гумно без края. Под ногами утоптанный ток, и он тёплый — как бывает тёплой земля там, где долго молотили. Стен нет, а гулко, как в закрытом.",
+        "en": "A threshing floor with no edge. Underfoot the beaten ground is warm — the way ground is warm where threshing went on a long time. There are no walls, and yet it echoes as though closed in."
+      },
+      "keywords": [{ "match": { "ru": "Гумно", "en": "threshing floor" }, "tone": "lore" }],
+      "next": "skhod_queue"
+    },
+    {
+      "kind": "narration",
+      "id": "skhod_queue",
+      "text": {
+        "ru": "Очередь стоит боком, трое. Их уводят по одному, и никто не оборачивается посмотреть куда. Ты встаёшь последним, потому что так стоят.",
+        "en": "The queue stands sideways, three of them. They are taken one at a time, and nobody turns to see where. You stand last, because that is how one stands."
+      },
+      "next": "queue_dead_shcherb"
+    },
+    {
+      "kind": "say",
+      "id": "queue_dead_shcherb",
+      "speaker": "mertvyy_v_ocheredi",
+      "text": {
+        "ru": "Ты тоже оттуда, где стол на двоих? Я ставил. Не помню кому, а ставил.",
+        "en": "Are you from there too, where the table is set for two? I used to set it. I do not remember for whom, but I set it."
+      },
+      "keywords": [{ "match": { "ru": "стол на двоих", "en": "the table is set for two" }, "tone": "danger" }],
+      "next": "queue_dead_after"
+    },
+    {
+      "kind": "narration",
+      "id": "queue_dead_after",
+      "text": {
+        "ru": "Он щербатый на левую сторону — не лицом, а всем: рукав пустой там, где не рука, а привычка. Пока ты думаешь, что ответить, его уводят.",
+        "en": "He is notched down his left side — not in the face but all over: the sleeve is empty where there is no arm, only a habit. While you are working out what to answer, he is taken."
+      },
+      "next": "golos_first"
+    },
+    {
+      "kind": "say",
+      "id": "golos_first",
+      "speaker": "golos_iz_trukhi",
+      "text": {
+        "ru": "Не вспомнил — не прошёл. Правило старше нас, и мы его не писали.",
+        "en": "Not remembered, not let through. The rule is older than we are, and we did not write it."
+      },
+      "keywords": [{ "match": { "ru": "Не вспомнил — не прошёл", "en": "Not remembered, not let through" }, "tone": "name" }],
+      "next": "golos_why"
+    },
+    {
+      "kind": "say",
+      "id": "golos_why",
+      "speaker": "golos_iz_trukhi",
+      "text": {
+        "ru": "Тебя держат не в наказание. Нам нужен свидетель, которого нельзя съесть. Другого у нас нет.",
+        "en": "You are not held here as punishment. We need a witness who cannot be eaten. We have no other."
+      },
+      "next": "skhod_confirm"
+    },
+    {
+      "kind": "branch",
+      "id": "skhod_confirm",
+      "branches": [
+        { "when": { "kind": "flag", "flag": "oklik_refused" }, "to": "golos_no_name" }
+      ],
+      "fallback": "golos_borrowed"
+    },
+    {
+      "kind": "say",
+      "id": "golos_no_name",
+      "speaker": "golos_iz_trukhi",
+      "text": {
+        "ru": "На окликe ты не соврал. Пустое — не ложь. Признано.",
+        "en": "At the hail you did not lie. Empty is not a lie. Acknowledged."
+      },
+      "next": "skhod_zarubka"
+    },
+    {
+      "kind": "say",
+      "id": "golos_borrowed",
+      "speaker": "golos_iz_trukhi",
+      "text": {
+        "ru": "Ты назвался чужим. Чужое здесь не в счёт: чужим именем к нам приходили и до тебя. Признано другое.",
+        "en": "You gave another's name. Another's does not count here: people have come to us under other names before you. Something else is acknowledged."
+      },
+      "next": "skhod_zarubka"
+    },
+    {
+      "kind": "narration",
+      "id": "skhod_zarubka",
+      "text": {
+        "ru": "Труха у тебя под ногами собирается в кучку и оседает обратно. В кулаке — щепка, и на ней место под зарубку, которого утром не было.",
+        "en": "The dust at your feet gathers into a little heap and settles back. In your fist is the stick, and on it a place for a notch that was not there in the morning."
+      },
+      "keywords": [{ "match": { "ru": "зарубку", "en": "a notch" }, "tone": "memory" }],
+      "next": "death_oklik"
+    },
+    { "kind": "death", "id": "death_oklik", "death": "death_oklik" },
+
+    {
+      "kind": "narration",
+      "id": "skhod_again",
+      "text": {
+        "ru": "Ток под ногами тот же и такой же тёплый. Очередь другая — из этих троих ты не видел никого.",
+        "en": "The floor underfoot is the same and just as warm. The queue is a different one — you have seen none of these three before."
+      },
+      "next": "golos_again"
+    },
+    {
+      "kind": "say",
+      "id": "golos_again",
+      "speaker": "golos_iz_trukhi",
+      "text": {
+        "ru": "Опять ты. Становись, где стоял. Спрашивать будем о том же.",
+        "en": "You again. Stand where you stood. We will be asking about the same thing."
+      },
+      "next": "skhod_zarubka"
+    }
+  ]
+}

@@ -1,0 +1,263 @@
+{
+  "id": "dratva_checkpoint",
+  "chapter": 0,
+  "title": {
+    "ru": "Оклик",
+    "en": "The Hail"
+  },
+  "tags": [
+    "battle",
+    "death"
+  ],
+  "entry": "watchfire_come",
+  "nodes": [
+    {
+      "kind": "narration",
+      "id": "watchfire_come",
+      "text": {
+        "ru": "Дозорный огонь оказывается ямой с углями и вешкой над ней. У вешки двое: капрал и парень с рожком. Костёр разложен так, чтобы освещать не их, а того, кто подходит.",
+        "en": "The watch-fire turns out to be a pit of coals with a marker pole over it. Two are at the pole: a corporal and a lad with a horn. The fire is laid to light not them but whoever comes up."
+      },
+      "keywords": [
+        {
+          "match": {
+            "ru": "вешкой",
+            "en": "marker pole"
+          },
+          "tone": "lore"
+        }
+      ],
+      "next": "watchfire_ride"
+    },
+    {
+      "kind": "narration",
+      "id": "watchfire_ride",
+      "text": {
+        "ru": "До вешки подвозит ямщик Гоньбы: ему всё равно, кого везти, но у ямы он не разворачивается, а слезает и встаёт рядом — говорит, что кнут длиннее пики.",
+        "en": "A Relay coachman gives you a lift to the marker: he does not care who he carries, but at the pit he does not turn around — he climbs down and stands alongside, saying a whip is longer than a pike."
+      },
+      "next": "watchfire_ride_fx"
+    },
+    {
+      "kind": "effects",
+      "id": "watchfire_ride_fx",
+      "effects": [
+        {
+          "kind": "recruit",
+          "unit": "relay_driver"
+        }
+      ],
+      "next": "dratva_hail"
+    },
+    {
+      "kind": "say",
+      "id": "dratva_hail",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Стой на свету. Оклик: назовись именем, каким тебя зовут дома.",
+        "en": "Stand in the light. The hail: give the name they call you by at home."
+      },
+      "keywords": [
+        {
+          "match": {
+            "ru": "Оклик",
+            "en": "The hail"
+          },
+          "tone": "name"
+        }
+      ],
+      "next": "hail_lore"
+    },
+    {
+      "kind": "lore",
+      "id": "hail_lore",
+      "title": {
+        "ru": "Устав Засеки, статья об окликe",
+        "en": "Zaseka Regulations, the article on the hail"
+      },
+      "text": {
+        "ru": "«Идущего из степи окликать по имени. Кто отзовётся своим — пропускать; кто отзовётся чужим — задерживать до выяснения; кто не отзовётся никаким — не пропускать вовсе». Ниже, другой рукой и мельче: «Не пропускать — не значит убивать. Проверено дважды, оба раза поздно».",
+        "en": "\"Hail whoever comes out of the steppe by name. Whoever answers with his own is let through; whoever answers with another's is held pending inquiry; whoever answers with none at all is not let through at all.\" Below, in another hand and smaller: \"Not let through does not mean killed. Verified twice, both times too late.\""
+      },
+      "next": "hail_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "hail_choice",
+      "prompt": {
+        "ru": "Имени нет. Есть графа, в которой стоит «без имени», и она осталась в другой избе.",
+        "en": "There is no name. There is a column with \"nameless\" in it, and it stayed in another cottage."
+      },
+      "options": [
+        {
+          "id": "answer_borrowed",
+          "text": {
+            "ru": "Назваться чужим именем наугад.",
+            "en": "Answer with someone else's name, at random."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": -8
+            },
+            {
+              "kind": "flag",
+              "flag": "oklik_answered",
+              "value": true
+            }
+          ],
+          "fallback": true,
+          "to": "dratva_checks"
+        },
+        {
+          "id": "answer_none",
+          "text": {
+            "ru": "Сказать, что имени нет.",
+            "en": "Say that there is no name."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 8
+            },
+            {
+              "kind": "flag",
+              "flag": "oklik_refused",
+              "value": true
+            }
+          ],
+          "fallback": true,
+          "to": "dratva_no_name"
+        },
+        {
+          "id": "answer_silence",
+          "text": {
+            "ru": "Молчать и не сходить со света.",
+            "en": "Say nothing and stay in the light."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": -6
+            },
+            {
+              "kind": "flag",
+              "flag": "oklik_refused",
+              "value": true
+            }
+          ],
+          "fallback": true,
+          "to": "dratva_silence"
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "dratva_checks",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Такого в списке нет. Значит, чужое. За чужое имя — задержать до выяснения, статья вторая.",
+        "en": "No such name on the list. So it is another's. For another's name — hold pending inquiry, article two."
+      },
+      "next": "watch_closes"
+    },
+    {
+      "kind": "say",
+      "id": "dratva_no_name",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Без имени из степи выходят выцветшие. Я на них насмотрелась. Ты стой, где стоишь.",
+        "en": "The faded come out of the steppe with no name. I have seen enough of them. You stand where you are."
+      },
+      "next": "watch_closes"
+    },
+    {
+      "kind": "narration",
+      "id": "dratva_silence",
+      "text": {
+        "ru": "Капрал ждёт ровно столько, сколько велит устав, и ни мгновением дольше: она считает про себя и на счёте видно губы.",
+        "en": "The corporal waits exactly as long as the regulation says and not a moment longer: she counts to herself, and the counting shows on her lips."
+      },
+      "next": "watch_closes"
+    },
+    {
+      "kind": "narration",
+      "id": "watch_closes",
+      "text": {
+        "ru": "Парень с рожком заходит сбоку — не бегом, а как заходят на работу. Пика у сержанта опущена к земле: её поднимают в последний момент, чтобы не пугать заранее.",
+        "en": "The lad with the horn comes round the side — not running, the way you come round to work. The sergeant's pike is lowered to the ground: it is raised at the last moment, so as not to frighten anyone in advance."
+      },
+      "next": "oklik_battle"
+    },
+    {
+      "kind": "battle",
+      "id": "oklik_battle",
+      "battle": "battle_dratva_oklik",
+      "onWin": "won_but",
+      "onLose": "lost_plain"
+    },
+    {
+      "kind": "narration",
+      "id": "won_but",
+      "text": {
+        "ru": "Дозор отходит, и рожок остаётся в траве. Ты успеваешь сделать четыре шага, прежде чем понимаешь, что пика вошла ещё в начале — между вопросом и ответом, — и что шёл ты уже с ней.",
+        "en": "The watch falls back and the horn stays in the grass. You manage four steps before you understand that the pike went in at the start — between the question and the answer — and that you had been walking with it in you already."
+      },
+      "next": "dying_oklik"
+    },
+    {
+      "kind": "narration",
+      "id": "lost_plain",
+      "text": {
+        "ru": "Пику поднимают в последний момент, как и заведено. Земля у ямы тёплая от углей, и это последнее, что ты успеваешь про неё подумать.",
+        "en": "The pike goes up at the last moment, as the practice is. The ground by the pit is warm from the coals, and that is the last thing you manage to think about it."
+      },
+      "next": "dying_oklik"
+    },
+    {
+      "kind": "effects",
+      "id": "dying_oklik",
+      "effects": [
+        {
+          "kind": "flag",
+          "flag": "death_cause_oklik",
+          "value": true
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_guard",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_shelf",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_scavengers",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_guild",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_sluza",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_vytsvet",
+          "value": false
+        }
+      ],
+      "next": "scene:skhod"
+    }
+  ]
+}
