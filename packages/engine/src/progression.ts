@@ -53,10 +53,64 @@ export interface DeathOutcome {
 }
 
 /**
+ * Порог узнавания. Архив не подаёт наверх раздел той жизни, чей полюс игрок
+ * прожил В ОБРАТНУЮ сторону хотя бы на столько: милосердный не получит
+ * Смолокура, потому что он не тот человек, и архив это знает (CANON 3.5).
+ *
+ * Число то же, что у нижней ступени лестницы резонанса (STORY_GLOBAL 3.4):
+ * лестница досыпает осколки жизни при `pull >= 20`, движок отказывает при
+ * `pull <= -20`. Между ними полоса «не определился» — там архив отвечает
+ * нейтральным разделом и движок ему не мешает. Разъедутся эти два числа —
+ * появится смерть, на которой склянка поднялась, а лот не закрепился.
+ */
+export const RECOGNITION_THRESHOLD = 20;
+
+/**
+ * Префикс служебного счётчика, которым лестница резонанса помечает выданные
+ * ЕЮ осколки: `_res:<memoryId>`.
+ *
+ * Зачем вообще различать. Осколок поступка и осколок неустойки лежат в одном
+ * `fragments`, но стоят разного: первый игрок оплатил выбором, второй ему
+ * досыпал архив. Если не различать, лестница сама себе открывает любой раздел
+ * (досыпала до цены — значит, «набрано честно»), и фильтр узнавания
+ * превращается в тавтологию. Счётчик пишет контент — в тех же `effects`-узлах,
+ * что выдают осколок; движок только вычитает. Служебные счётчики с
+ * подчёркиванием в этом состоянии уже живут (`_recruits`), новых полей в
+ * `GameState` не заводится и версия сейва не двигается.
+ */
+export const RESONANCE_COUNTER_PREFIX = '_res:';
+
+/** Осколки, набранные поступками: всё, что не досыпал архив. */
+export function deedFragments(state: GameState, memory: Memory): number {
+  const total = state.fragments[memory.id] ?? 0;
+  const byResonance = state.counters[RESONANCE_COUNTER_PREFIX + memory.id] ?? 0;
+  return Math.max(0, total - byResonance);
+}
+
+/** Тяга оси к полюсу жизни: +100 — игрок ровно эта жизнь, −100 — её обратная. */
+export function lifePull(state: GameState, life: PastLife): number {
+  const axisValue = state.axes[life.axis] ?? 0;
+  return life.pole === 'positive' ? axisValue : -axisValue;
+}
+
+/**
+ * Узнаёт ли архив игрока в этой жизни. «Не узнаёт» — только про прожитый
+ * обратный полюс: середина оси не отказ, а неопределённость.
+ */
+export function lifeRecognizes(
+  state: GameState,
+  life: PastLife,
+  threshold: number = RECOGNITION_THRESHOLD,
+): boolean {
+  return lifePull(state, life) > -threshold;
+}
+
+/**
  * Какое воспоминание закрепит эта смерть.
  * Решают поступки, а не игрок: побеждает воспоминание с наибольшим числом
  * осколков; при равенстве — то, чья жизнь ближе к текущему полюсу своей оси.
- * Возвращает undefined, если закреплять нечего (осколков не набрано).
+ * Возвращает undefined, если закреплять нечего (осколков не набрано ИЛИ
+ * набраны они в разделе, который игрока не узнаёт).
  */
 export function selectMemoryOnDeath(state: GameState, content: ContentBundle): Memory | undefined {
   const lifeById = new Map(content.lives.map((l) => [l.id, l]));
@@ -65,11 +119,17 @@ export function selectMemoryOnDeath(state: GameState, content: ContentBundle): M
     .map((m) => {
       const frags = state.fragments[m.id] ?? 0;
       const life = lifeById.get(m.life);
-      const axisValue = life ? (state.axes[life.axis] ?? 0) : 0;
-      const pull = life ? (life.pole === 'positive' ? axisValue : -axisValue) : 0;
-      return { m, frags, pull };
+      const pull = life ? lifePull(state, life) : 0;
+      // Жизнь без описания в контенте — не повод молчать: ведёт себя как
+      // нейтральная (pull 0), архив её узнаёт.
+      const recognized = life ? lifeRecognizes(state, life) : true;
+      return { m, frags, pull, recognized };
     })
-    .filter((c) => c.frags >= c.m.cost);
+    .filter((c) => c.frags >= c.m.cost)
+    // Раздел, чей обратный полюс прожит, кандидатом не является — КРОМЕ
+    // случая, когда осколки в него набраны поступками: за это уже заплачено
+    // выбором, и архив не вправе не отдать (DIRECTION B6).
+    .filter((c) => c.recognized || deedFragments(state, c.m) >= c.m.cost);
 
   if (candidates.length === 0) return undefined;
   candidates.sort((a, b) => {
