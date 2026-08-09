@@ -349,15 +349,83 @@
   position: relative;
   z-index: 1;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 14px;
+  flex-direction: column;
+  gap: 5px;
+  padding: 6px 14px 5px;
   font-size: 13px;
   color: var(--text-dim);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
-.battle-title { font-family: var(--font-display); color: var(--accent-dim); }
+.battle-top-line { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.battle-title {
+  font-family: var(--font-display);
+  color: var(--accent-dim);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Очередь хода ────────────────────────────────────────────────────────────
+ * Движок держит порядок раунда (`order` + `turnIndex`) с самого начала, но на
+ * экране его не было: «чей ход» игрок узнавал по рывку карточки постфактум.
+ * Лента миниатюр — текущий и ближайшие; дальше хвоста честно стоит значок
+ * нового раунда, потому что следующий порядок решает бросок инициативы.
+ * ------------------------------------------------------------------------- */
+.turn-queue {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 30px;
+  overflow: hidden;
+}
+.queue-chip {
+  position: relative;
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  background: var(--bg-1);
+  box-shadow: 0 0 0 1.5px var(--text-faint);
+  opacity: 0.72;
+  transition: transform 160ms ease, opacity 160ms ease;
+}
+.queue-chip.enemy { box-shadow: 0 0 0 1.5px var(--hp-enemy); }
+.queue-chip.player { box-shadow: 0 0 0 1.5px var(--hp-ally); }
+/* Текущий — тем же золотом, что обводка его карточки на поле: связь «этот
+   кружок = вон та карта» должна читаться без подписи. */
+.queue-chip.now {
+  width: 30px;
+  height: 30px;
+  opacity: 1;
+  box-shadow: 0 0 0 2px var(--accent);
+}
+.queue-art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.85; }
+.queue-letter {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 14px;
+  line-height: 1;
+  color: var(--text);
+  text-shadow: 0 1px 3px #000, 0 0 6px #000;
+  letter-spacing: 0;
+}
+.queue-next-round {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: var(--text-faint);
+  background: none;
+  box-shadow: none;
+  opacity: 0.65;
+}
 
 .field {
   position: relative;
@@ -436,7 +504,51 @@
   opacity: 0.42;
   filter: grayscale(0.5);
 }
+/* Закрытая передним рядом карта гаснет меньше остальных: на ней написана
+   причина, и её надо прочитать, а не угадать. */
+.field.targeting .card.covered { opacity: 0.74; filter: grayscale(0.3); }
 .card.dead { opacity: 0; pointer-events: none; }
+
+/* Конец пунктира намерения: в эту карту метит враг. Дыхание — по STYLE §6
+   (2000ms, ease-in-out, opacity 0.35↔0.9), чтобы метка жила, но не мигала. */
+.card.threatened-danger::before,
+.card.threatened-ally::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  z-index: 2;
+  pointer-events: none;
+  border: 1.5px dashed var(--danger);
+  border-radius: var(--r-sm);
+  animation: threat-breathe 1900ms ease-in-out infinite;
+}
+.card.threatened-ally::before { border-color: var(--hp-ally); }
+@keyframes threat-breathe {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 0.9; }
+}
+
+/* Пунктир «этот ударит вот этого». Слой лежит поверх карт: линия от заднего
+   ряда обязана пересекать передний, иначе она обрывается на полпути. */
+.threat-layer { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+/* Пока выбирается цель, угрозы уходят на второй план: решение сейчас про удар. */
+.threat-layer.dim { opacity: 0.3; }
+.threat line {
+  fill: none;
+  stroke-width: 1.4;
+  stroke-dasharray: 5 4;
+  opacity: 0.62;
+  animation: threat-flow 900ms linear infinite;
+}
+.threat polygon { opacity: 0.62; }
+.threat.danger line { stroke: var(--danger); }
+.threat.danger polygon { fill: var(--danger); }
+.threat.ally line { stroke: var(--hp-ally); }
+.threat.ally polygon { fill: var(--hp-ally); }
+/* Тот, кто ходит ближе всех, — сплошная линия в полную силу. */
+.threat.strong line { stroke-width: 2.2; stroke-dasharray: none; opacity: 1; }
+.threat.strong polygon { opacity: 1; }
+@keyframes threat-flow { to { stroke-dashoffset: -18; } }
 
 /* Обойма арта. Нужна ради overflow: hidden — сама карточка обязана оставаться
    overflow: visible (цифры урона, значок намерения и щит вылезают за край). */
@@ -523,6 +635,54 @@
   line-height: 0;
 }
 
+/* Предпросмотр урона и причина запрета живут в одном месте — там, где через
+   мгновение всплывёт настоящая цифра урона (.float ниже, top 24%). */
+.preview,
+.cover-mark {
+  position: absolute;
+  left: 50%;
+  top: 22%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  max-width: calc(100% - 4px);
+  padding: 1px 5px;
+  border-radius: var(--r-sm);
+  background: rgba(13, 11, 14, 0.72);
+  line-height: 1.15;
+  pointer-events: none;
+}
+.preview {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--danger);
+  text-shadow: 0 1px 3px #000;
+  white-space: nowrap;
+}
+.preview-heal { color: var(--hp-ally); }
+/* Способность без урона и лечения: слово эффекта вместо числа — оно длиннее
+   и на 69-пиксельной карточке обязано переноситься. */
+.preview-effect {
+  font-family: var(--font-text);
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--memory);
+  white-space: normal;
+  text-align: center;
+}
+/* Нижний край разброса уже убивает: удар точно добьёт. */
+.preview.lethal { color: var(--gold); box-shadow: 0 0 0 1px var(--gold); }
+.cover-mark {
+  font-size: 12px;
+  color: var(--accent);
+  white-space: normal;
+  text-align: center;
+}
+
 .float {
   position: absolute;
   left: 50%;
@@ -571,6 +731,32 @@
   100% { opacity: 0; transform: translateY(10px) scale(0.86) rotate(3deg); filter: grayscale(1) blur(2px); }
 }
 
+/* Нижняя панель боя: строка разбора, всплывающий разбор способности и сами
+   способности. Обойма нужна ради position: relative — разбор по долгому тапу
+   висит НАД панелью абсолютным слоем, чтобы поле боя не сжималось. */
+.battle-panel {
+  position: relative;
+  z-index: 1;
+  padding-bottom: calc(4px + var(--safe-bottom));
+}
+.ability-peek {
+  position: absolute;
+  bottom: 100%;
+  left: 10px;
+  right: 10px;
+  z-index: 4;
+  padding: 9px 12px 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--bg-1);
+  box-shadow: 0 8px 22px rgba(6, 5, 7, 0.72);
+  animation: rise 240ms ease-out;
+  text-align: left;
+}
+.peek-head { display: flex; align-items: center; gap: 7px; font-size: 16px; color: var(--text); }
+.peek-desc { font-size: 16px; line-height: 1.3; color: var(--text-dim); margin: 4px 0 7px; }
+.peek-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+
 .ability-bar {
   position: relative;
   z-index: 1;
@@ -606,15 +792,60 @@
 .ability.active::after {
   border-image-source: url('../../content/assets/ui/nameless/frame-accent.png');
 }
-.waiting { min-height: var(--tap); display: flex; align-items: center; padding-left: 12px; color: var(--text-faint); }
+.waiting { min-height: var(--tap); display: flex; align-items: center; padding-left: 14px; color: var(--text-faint); }
+/* Пока ходит противник, панель пуста — но кто именно ходит, теперь написано
+   строкой выше, а здесь только дыхание ожидания. */
+.waiting-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-faint);
+  animation: breathe 2000ms ease-in-out infinite;
+}
+@keyframes breathe {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 0.85; }
+}
+
+/* Служебная строка боя. Отвечает на три вопроса одним местом: чей сейчас ход
+   (и во что он метит), что делает выбранная способность, почему по этой цели
+   ударить нельзя. Раньше здесь было только «Твой ход» / «Выбери цель». */
 .battle-hint {
   position: relative;
   z-index: 1;
-  text-align: center;
-  font-size: 13px;
+  min-height: 26px;
+  display: flex;
+  align-items: center;
+  padding: 2px 12px;
+  font-size: 12.5px;
   color: var(--text-dim);
-  padding-bottom: calc(8px + var(--safe-bottom));
+  overflow: hidden;
 }
+.hint-turn,
+.hint-block {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  white-space: nowrap;
+}
+.hint-turn b { color: var(--text); font-weight: 700; }
+.hint-ability { color: var(--accent); }
+.hint-target { color: var(--danger); overflow: hidden; text-overflow: ellipsis; }
+.hint-hold { color: var(--text-faint); overflow: hidden; text-overflow: ellipsis; }
+.hint-block { color: var(--danger); white-space: normal; }
+.chip-info,
+.chip-dmg {
+  flex-shrink: 0;
+  padding: 1px 6px;
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  font-size: 12px;
+  color: var(--text-dim);
+  letter-spacing: 0;
+  text-transform: none;
+}
+.chip-dmg { color: var(--danger); }
 .battle-over {
   position: relative;
   z-index: 3;
@@ -624,10 +855,21 @@
   gap: 12px;
   padding: 12px 20px calc(20px + var(--safe-bottom));
 }
-.outcome { font-family: var(--font-display); font-size: 30px; letter-spacing: 0.06em; }
+.outcome { font-family: var(--font-display); font-size: 30px; letter-spacing: 0.06em; text-align: center; }
 .outcome.win { color: var(--accent); }
-.outcome.lose { color: var(--danger); }
-.outcome.draw { color: var(--text-dim); }
+/* Проигранный бой — переход, а не провал: цвет закреплённой памяти вместо
+   цвета опасности, и кегль на ступень ниже победного. Красное «Поражение»
+   тридцатым спорило с церемонией, которая начинается через три секунды. */
+.outcome.lose,
+.outcome.draw { color: var(--memory); font-size: 26px; }
+.outcome-note {
+  margin-top: -6px;
+  max-width: 300px;
+  text-align: center;
+  font-size: 15px;
+  line-height: 1.35;
+  color: var(--text-dim);
+}
 
 /* ── Смерть ──────────────────────────────────────────────────────────────── */
 .death {
@@ -748,6 +990,13 @@
   .choice { font-size: 15.5px; padding: 9px 12px; }
   .portrait { width: 38px; height: 38px; }
   .card-name { font-size: 10px; }
+  /* Узкий экран: очередь и строка разбора ужимаются, поле боя не отдаёт
+     ни пикселя сверх необходимого. */
+  .turn-queue { height: 28px; gap: 4px; }
+  .queue-chip { width: 24px; height: 24px; }
+  .queue-chip.now { width: 28px; height: 28px; }
+  .battle-hint { font-size: 12px; padding: 2px 10px; }
+  .preview { font-size: 13px; }
 }
 
 /* ── Опись: отряд и мозаика памяти ───────────────────────────────────────── */

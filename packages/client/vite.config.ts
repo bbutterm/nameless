@@ -11,7 +11,15 @@ export default defineConfig({
     chunkSizeWarningLimit: 900,
     rollupOptions: {
       output: {
-        manualChunks: { react: ['react', 'react-dom'] },
+        manualChunks(id) {
+          if (id.includes('node_modules/react')) return 'react';
+          // Текст трёх глав — почти весь вес бандла. Отдельным чанком он не
+          // мешает оболочке отрисоваться, и браузер кэширует его отдельно от кода.
+          if (id.includes('/content/data/') || id.includes('content/src/generated')) {
+            return 'content';
+          }
+          return undefined;
+        },
       },
     },
   },

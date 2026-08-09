@@ -1,6 +1,7 @@
 import type { BattleUnitState, Lang, UnitDef } from '@nameless/engine';
 import { loc } from '../i18n';
 import { cardImage, svgDataUri, unitCardSvg } from '../lib/art';
+import type { Preview } from '../lib/combatRead';
 import { Icon } from './Icon';
 
 export interface FloatingNumber {
@@ -20,6 +21,10 @@ export function UnitCard({
   lang,
   selected,
   targetable,
+  threatened,
+  covered,
+  coveredLabel,
+  preview,
   anim,
   floats,
   intentName,
@@ -30,6 +35,13 @@ export function UnitCard({
   lang: Lang;
   selected?: boolean;
   targetable?: boolean;
+  /** В эту карту метит враг: конец пунктира намерения. */
+  threatened?: 'danger' | 'ally';
+  /** Закрыта живым передним рядом — цель недоступна, и это надо объяснить. */
+  covered?: boolean;
+  coveredLabel?: string;
+  /** Сколько примерно снимет выбранная способность именно с этой цели. */
+  preview?: Preview;
   /** Человеческое имя способности, которую враг готовит на этот раунд. */
   intentName?: string;
   anim?: 'lunge-up' | 'lunge-down' | 'hit' | 'die' | undefined;
@@ -40,6 +52,10 @@ export function UnitCard({
   const art = def ? (cardImage(def.id) ?? svgDataUri(unitCardSvg(def.id, def.tier, def.faction))) : undefined;
   const shield = unit.statuses.filter((s) => s.kind === 'shield').reduce((a, s) => a + s.amount, 0);
   const stunned = unit.statuses.some((s) => s.kind === 'stun');
+  // Намерение показываем только тому, кто в этом раунде ещё не ходил: движок
+  // проставляет intent всем врагам на весь раунд и после хода его не гасит,
+  // так что иконка (а теперь и стрелка к цели) врала про уже отстрелявшихся.
+  const showIntent = !!unit.intent && unit.alive && !unit.acted;
 
   return (
     <button
@@ -50,12 +66,15 @@ export function UnitCard({
         unit.alive ? '' : 'dead',
         selected ? 'selected' : '',
         targetable ? 'targetable' : '',
+        threatened ? `threatened-${threatened}` : '',
+        covered ? 'covered' : '',
         anim ? `anim-${anim}` : '',
       ]
         .filter(Boolean)
         .join(' ')}
       onClick={onTap}
       disabled={!unit.alive}
+      data-uid={unit.uid}
       aria-label={def ? loc(def.name, lang) : unit.defId}
     >
       {/* Арт лежит в обойме с overflow: hidden — сама карточка обязана
@@ -82,7 +101,7 @@ export function UnitCard({
         {unit.hp}/{unit.maxHp}
       </div>
 
-      {unit.intent && (
+      {showIntent && unit.intent && (
         // В title лежало сырое id способности («pick_the_pocket»): служебная
         // строка, которая утекала в интерфейс. Показываем человеческое имя.
         <div className="intent" title={intentName ?? unit.intent.ability}>
@@ -93,6 +112,23 @@ export function UnitCard({
         <div className="status-badge">
           <Icon name="stun" size={13} color="var(--accent)" />
         </div>
+      )}
+
+      {/* Предпросмотр урона поверх арта: та же позиция, где через мгновение
+          всплывёт настоящая цифра, — «во что превратится тап» читается сразу. */}
+      {preview && (
+        <span className={`preview preview-${preview.tone} ${preview.lethal ? 'lethal' : ''}`}>
+          {preview.lethal && <Icon name="skull" size={11} />}
+          {preview.text}
+        </span>
+      )}
+
+      {/* Закрытая цель раньше просто гасла — без слова «почему». */}
+      {covered && (
+        <span className="cover-mark">
+          <Icon name="shield" size={11} />
+          {coveredLabel}
+        </span>
       )}
 
       {floats?.map((f) => (
