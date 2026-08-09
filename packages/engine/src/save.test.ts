@@ -95,3 +95,44 @@ describe('миграции', () => {
     expect(r.error).toMatch(/Нет миграции с версии 0/);
   });
 });
+
+describe('структурная проверка', () => {
+  it('конверт с пустым состоянием не выдаётся за валидный сейв', () => {
+    const r = deserialize(JSON.stringify({ version: SAVE_VERSION, savedAt: 1, state: {} }));
+    expect(r.ok).toBe(false);
+  });
+
+  it.each([
+    ['seed', 42, /«seed» не строка/],
+    ['scene', null, /«scene» не строка/],
+    ['node', 7, /«node» не строка/],
+    ['gold', '17', /«gold» не число/],
+    ['chapter', NaN, /«chapter» не число/],
+    ['deaths', undefined, /«deaths» не число/],
+    ['party', {}, /«party» не список/],
+    ['log', 'пусто', /«log» не список/],
+    ['seenNodes', null, /«seenNodes» не список/],
+    ['axes', [], /«axes» не словарь/],
+    ['flags', 'нет', /«flags» не словарь/],
+    ['rng', { seed: 'x', calls: 0 }, /генератора случайных чисел/],
+  ])('поле %s неверного типа отвергается с внятной причиной', (key, bad, expected) => {
+    const broken = { ...(state() as unknown as Record<string, unknown>), [key]: bad };
+    const r = deserialize(JSON.stringify({ version: SAVE_VERSION, savedAt: 1, state: broken }));
+    expect(r.ok).toBe(false);
+    expect(r.error).toMatch(expected);
+  });
+
+  it('проверка идёт ПОСЛЕ миграций: старое состояние чинится, а не отбраковывается', () => {
+    migrations[0] = (old) => ({ ...old, seenNodes: [] });
+    const legacy = { ...(state() as unknown as Record<string, unknown>) };
+    delete legacy['seenNodes'];
+    const r = deserialize(JSON.stringify({ version: 0, savedAt: 1, state: legacy }));
+    expect(r.ok).toBe(true);
+    expect(r.state?.seenNodes).toEqual([]);
+  });
+
+  it('ссылочная целостность не проверяется: сцена из удалённого контента доезжает до движка', () => {
+    const r = deserialize(serialize(state({ scene: 'сцены-такой-больше-нет' }), 1));
+    expect(r.ok).toBe(true);
+  });
+});

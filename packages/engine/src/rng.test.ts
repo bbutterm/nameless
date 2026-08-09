@@ -144,3 +144,33 @@ describe('Rng', () => {
     expect(parent.snapshot()).toEqual(before);
   });
 });
+
+describe('restore() и вырожденное состояние', () => {
+  it('нулевое внутреннее состояние восстанавливается как ноль, а не как единица', () => {
+    // Ноль — легальное состояние mulberry32 (шанс 2⁻³² на вызов). Конструктор
+    // подменяет нулевой сид единицей, и раньше restore() наследовал эту подмену:
+    // реплей расходился с живым прогоном на всей оставшейся цепочке.
+    const live = Rng.restore({ seed: 0, calls: 0 });
+    const replay = Rng.restore(live.snapshot());
+    expect(replay.snapshot().seed).toBe(0);
+    expect(take(replay, 12)).toEqual(take(Rng.restore({ seed: 0, calls: 0 }), 12));
+  });
+
+  it('нулевое состояние даёт не тот же поток, что единичное', () => {
+    expect(take(Rng.restore({ seed: 0, calls: 0 }), 8)).not.toEqual(
+      take(Rng.restore({ seed: 1, calls: 0 }), 8),
+    );
+  });
+
+  it('снимок в любой момент цепочки восстанавливается точь-в-точь', () => {
+    const live = new Rng('replay');
+    take(live, 17);
+    const mid = live.snapshot();
+    const rest = take(live, 25);
+    expect(take(Rng.restore(mid), 25)).toEqual(rest);
+  });
+
+  it('new Rng(0) по-прежнему защищён от вырождения', () => {
+    expect(new Rng(0).snapshot().seed).toBe(1);
+  });
+});

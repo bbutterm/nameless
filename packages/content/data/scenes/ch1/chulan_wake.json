@@ -17,8 +17,21 @@
       "branches": [
         {
           "when": {
-            "kind": "flag",
-            "flag": "first_death_done"
+            "kind": "all",
+            "of": [
+              { "kind": "flag", "flag": "foundation" },
+              { "kind": "not", "of": { "kind": "visited", "scene": "audit_arrives" } }
+            ]
+          },
+          "to": "vaults_end"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              { "kind": "flag", "flag": "first_death_done" },
+              { "kind": "not", "of": { "kind": "visited", "scene": "vault_gate" } }
+            ]
           },
           "to": "end_of_chapter"
         },
@@ -641,7 +654,45 @@
         "ru": "Санки № 4417 на месте. Владелец опять приходил в среду и опять заплатил один грош.",
         "en": "Sled no. 4417 is where it was. The owner came again on Wednesday and again paid one groschen."
       },
-      "next": "again_osoka1"
+      "next": "again_router"
+    },
+    {
+      "kind": "branch",
+      "id": "again_router",
+      "branches": [
+        {
+          "when": { "kind": "visited", "scene": "audit_arrives" },
+          "to": "again_no_osoka"
+        }
+      ],
+      "fallback": "again_osoka1"
+    },
+    {
+      "kind": "narration",
+      "id": "again_no_osoka",
+      "text": {
+        "ru": "Осоки нет и сегодня. На её месте стопка дел, перевязанная бечёвкой, и бечёвка новая: дела перевязали, чтобы не перепутать в сверке.",
+        "en": "Osoka is not here today either. In her place is a stack of cases tied with twine, and the twine is new: the cases were tied so they would not be muddled in the reconciliation."
+      },
+      "next": "again_unprocessed"
+    },
+    {
+      "kind": "narration",
+      "id": "again_unprocessed",
+      "text": {
+        "ru": "Расписываться не в чем. Ты уходишь, не оформившись, и это первый раз, когда Ломбард не возражает.",
+        "en": "There is nothing to sign. You leave unprocessed, and it is the first time the Pawnshop has not objected."
+      },
+      "keywords": [
+        {
+          "match": {
+            "ru": "не возражает",
+            "en": "has not objected"
+          },
+          "tone": "danger"
+        }
+      ],
+      "next": "again_exit"
     },
     {
       "kind": "say",
@@ -842,13 +893,55 @@
       "next": "again_exit"
     },
     {
-      "kind": "narration",
+      "kind": "branch",
       "id": "again_exit",
+      "branches": [
+        {
+          "when": { "kind": "visited", "scene": "audit_arrives" },
+          "to": "again_exit_ledger"
+        },
+        {
+          "when": { "kind": "visited", "scene": "vault_gate" },
+          "to": "again_exit_vaults"
+        }
+      ],
+      "fallback": "again_exit_yard"
+    },
+    {
+      "kind": "narration",
+      "id": "again_exit_yard",
       "text": {
         "ru": "Во дворе всё то же: весы, тачка, семь этажей в луже. Город не заметил, что тебя сутки не было.",
         "en": "The yard is as it was: the scale, the barrow, seven storeys in the puddle. The city has not noticed you were gone a day."
       },
       "next": "scene:zaklad_hub"
+    },
+    {
+      "kind": "narration",
+      "id": "again_exit_vaults",
+      "text": {
+        "ru": "Обратно вниз ведёт та же лестница, и ступени на ней сочтены: сто девяносто до первого яруса. Ты успел сосчитать их дважды и оба раза получил одно и то же.",
+        "en": "The same stairs lead back down, and their steps are counted: a hundred and ninety to the first tier. You have managed to count them twice and got the same number both times."
+      },
+      "next": "scene:vaults_hub"
+    },
+    {
+      "kind": "narration",
+      "id": "again_exit_ledger",
+      "text": {
+        "ru": "В зале Учёта свечи всё ещё горят все разом. За те сутки, что тебя не было, сверка не сдвинулась ни на позицию: расхождение по-прежнему одно, и оно опять пришло само.",
+        "en": "In the Ledger Hall every candle is still burning at once. In the day you were gone the reconciliation has not moved by a single entry: the discrepancy is still the one, and it has walked in again by itself."
+      },
+      "keywords": [
+        {
+          "match": {
+            "ru": "оно опять пришло само",
+            "en": "it has walked in again by itself"
+          },
+          "tone": "danger"
+        }
+      ],
+      "next": "scene:ledger_hub"
     },
     {
       "kind": "narration",
@@ -917,6 +1010,96 @@
         "en": "The stairs down begin just past the storeroom and go deeper than the tower is tall. Everyone knows this and no one has checked."
       },
       "next": "scene:vault_gate"
+    },
+    {
+      "kind": "narration",
+      "id": "vaults_end",
+      "text": {
+        "ru": "Труха собирается быстрее обычного, и никто не стоит над ней с бумагой. Дольше всего возвращается слух — и возвращается в тишину.",
+        "en": "The dust gathers faster than usual, and nobody stands over it with a paper. Hearing takes longest to come back — and it comes back into silence."
+      },
+      "next": "vaults_corridor"
+    },
+    {
+      "kind": "narration",
+      "id": "vaults_corridor",
+      "text": {
+        "ru": "Осоки нет. Коридор за её местом больше не пустой: по нему носят бумагу в обе стороны, быстро, и ни один из носящих не смотрит в чулан.",
+        "en": "Osoka is not here. The corridor behind her place is no longer empty: paper is being carried along it both ways, quickly, and not one of the carriers looks into the storeroom."
+      },
+      "keywords": [
+        {
+          "match": {
+            "ru": "Осоки нет",
+            "en": "Osoka is not here"
+          },
+          "tone": "danger"
+        }
+      ],
+      "next": "vaults_note"
+    },
+    {
+      "kind": "lore",
+      "id": "vaults_note",
+      "title": {
+        "ru": "Бумажка на ящике, вместо описи",
+        "en": "A slip on the crate, in place of the inventory"
+      },
+      "text": {
+        "ru": "«Опись по делу № 1 изъята в сверку. До окончания сверки имущество не описывается, не выдаётся и не принимается. Расписываться не в чем и нечем». Ниже, карандашом, чужой рукой: «Почерк не мой. Проверял».",
+        "en": "\"The inventory on case no. 1 has been taken into reconciliation. Until the reconciliation is complete, property is not inventoried, not released and not accepted. There is nothing to sign and nothing to sign with.\" Below, in pencil, in another hand: \"The writing is not mine. I checked.\""
+      },
+      "keywords": [
+        {
+          "match": {
+            "ru": "сверку",
+            "en": "reconciliation"
+          },
+          "tone": "lore"
+        }
+      ],
+      "next": "vaults_router"
+    },
+    {
+      "kind": "branch",
+      "id": "vaults_router",
+      "branches": [
+        {
+          "when": {
+            "kind": "flag",
+            "flag": "catalog_card_read"
+          },
+          "to": "vaults_card"
+        }
+      ],
+      "fallback": "vaults_exit"
+    },
+    {
+      "kind": "narration",
+      "id": "vaults_card",
+      "text": {
+        "ru": "Карточка называлась «Вклад Первый», и графа вкладчика в ней была пустой. Внизу, под несущей стеной, стало понятно почему: имя вписывают, когда вклад можно выдать.",
+        "en": "The card was headed \"The First Deposit\", and the depositor's line on it was blank. Down below, under the load-bearing wall, it became clear why: the name is entered when the deposit can be released."
+      },
+      "keywords": [
+        {
+          "match": {
+            "ru": "Вклад Первый",
+            "en": "The First Deposit"
+          },
+          "tone": "memory"
+        }
+      ],
+      "next": "vaults_exit"
+    },
+    {
+      "kind": "narration",
+      "id": "vaults_exit",
+      "text": {
+        "ru": "Дверь чулана открыта — так положено оставлять помещения, где не хранится ничего ценного. Сегодня её никто не открывал: она так и стояла.",
+        "en": "The storeroom door is open, as one is required to leave rooms that hold nothing of value. Nobody opened it today: it simply stayed that way."
+      },
+      "next": "scene:audit_arrives"
     },
     {
       "kind": "narration",

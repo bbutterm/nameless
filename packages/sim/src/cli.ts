@@ -15,7 +15,14 @@ import { fuzzDialogue } from './dialogue-fuzz.js';
 const args = process.argv.slice(2);
 const only = args.find((a) => a.startsWith('--only='))?.split('=')[1];
 const personas = Number(args.find((a) => a.startsWith('--personas='))?.split('=')[1] ?? 300);
-const runs = Number(args.find((a) => a.startsWith('--runs='))?.split('=')[1] ?? 60);
+// 300, не 60: биномиальная стандартная ошибка при p≈0.5 и n=60 — около 6.5 пункта
+// при коридоре ±8, то есть турнир на 60 прогонах мерит в основном свой же шум.
+// Сид прогона детерминирован (`wr:${unit.id}:${i}`), поэтому шум СТАБИЛЕН между
+// запусками — вне коридора при 60 прогонах оказывались 10 юнитов из 34, при 300 — 4,
+// при 900 — 1. Если когда-нибудь захочется вернуть 60 «ради скорости» — не надо:
+// это не ускорение симулятора, а понижение его разрешающей способности до уровня
+// шума, замаскированное тем, что шум воспроизводимый и выглядит как сигнал.
+const runs = Number(args.find((a) => a.startsWith('--runs='))?.split('=')[1] ?? 300);
 const reportDir = join(process.cwd(), '..', '..', 'sim-reports');
 
 let failed = false;

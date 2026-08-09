@@ -51,6 +51,62 @@ export function deserialize(raw: string): LoadResult {
     data = m(data);
     migrated = true;
   }
+  const shapeError = checkShape(data);
+  if (shapeError) return { ok: false, error: shapeError };
+
   const state = data as unknown as GameState;
   return { ok: true, state: { ...state, version: SAVE_VERSION }, migrated };
+}
+
+/**
+ * Структурная проверка после миграций. Без неё `{"version":1,"state":{}}` из
+ * localStorage проходил как валидный сейв, а падало потом глубоко в движке —
+ * на `state.log.push` или обходе пустого отряда, где причину уже не видно.
+ *
+ * Проверяем форму, а не смысл: что поле есть и нужного типа. Ссылочная
+ * целостность (существует ли такая сцена, такой юнит) — не наша забота:
+ * контент между версиями меняется, и сейв, ссылающийся на удалённую сцену,
+ * должен доходить до движка и падать там внятно, а не отбраковываться здесь.
+ *
+ * Намеренно руками, а не через zod: движок обязан оставаться без зависимостей.
+ */
+function checkShape(data: Record<string, unknown>): string | null {
+  const isObj = (v: unknown): v is Record<string, unknown> =>
+    typeof v === 'object' && v !== null && !Array.isArray(v);
+
+  const strings: Array<keyof GameState> = ['seed', 'scene', 'node'];
+  for (const key of strings) {
+    if (typeof data[key] !== 'string') return `Сейв повреждён: поле «${key}» не строка`;
+  }
+
+  const numbers: Array<keyof GameState> = ['gold', 'chapter', 'deaths'];
+  for (const key of numbers) {
+    if (typeof data[key] !== 'number' || !Number.isFinite(data[key])) {
+      return `Сейв повреждён: поле «${key}» не число`;
+    }
+  }
+
+  const arrays: Array<keyof GameState> = [
+    'party',
+    'lockedMemories',
+    'awakenedLives',
+    'visitedScenes',
+    'seenNodes',
+    'log',
+  ];
+  for (const key of arrays) {
+    if (!Array.isArray(data[key])) return `Сейв повреждён: поле «${key}» не список`;
+  }
+
+  const records: Array<keyof GameState> = ['axes', 'flags', 'counters', 'fragments'];
+  for (const key of records) {
+    if (!isObj(data[key])) return `Сейв повреждён: поле «${key}» не словарь`;
+  }
+
+  const rng = data['rng'];
+  if (!isObj(rng) || typeof rng['seed'] !== 'number' || typeof rng['calls'] !== 'number') {
+    return 'Сейв повреждён: состояние генератора случайных чисел не читается';
+  }
+
+  return null;
 }

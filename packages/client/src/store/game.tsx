@@ -16,6 +16,7 @@ import {
   autoAct,
   choose,
   createInitialState,
+  goTo,
   grantXp,
   isPlayerTurn,
   normalizeEntry,
@@ -82,6 +83,63 @@ function firstChapterEntry(): { chapter: number; scene: string } {
   return { chapter: ch?.index ?? 1, scene: ch?.entryScene ?? '' };
 }
 
+/**
+ * Опыт за бой. Единственное место, где живёт формула: экран итогов и настоящее
+ * начисление обязаны считать одно и то же число.
+ */
+const BATTLE_XP_BASE = 60;
+const BATTLE_XP_PER_ROUND = 3;
+
+function battleXp(battle: BattleState): number {
+  return BATTLE_XP_BASE + battle.round * BATTLE_XP_PER_ROUND;
+}
+
+interface Settled {
+  state: GameState;
+  spoils?: BattleSpoils;
+}
+
+/**
+ * Единственный конвейер исхода боя: раны из боя, награды узла, опыт за бой.
+ * Итоги (`spoils`) — это ДИФФ отряда до и после прогона, а не отдельный расчёт:
+ * раньше экран итогов считал прирост от состояния ДО наград, и эволюция,
+ * доехавшая на опыте из награды боя, происходила по-настоящему, но игроку
+ * не показывалась. Диффом ловится и повышение уровня от одной только награды —
+ * `grantXp` о нём не сообщает, потому что `applyEffects` уже поднял уровень.
+ */
+function settleBattle(state: GameState, battle: BattleState): Settled {
+  const won = battle.outcome === 'win';
+  const def = content.battles.find((b) => b.id === battle.battleId);
+  // Раны переносятся из боя: отряд не лечится сам собой, только смертью.
+  // Порог в 1 hp одинаков для победы и поражения, и вариантов тут нет: юнит
+  // с нулём hp не восстановится сам, а проигранный бой всё равно ведёт в
+  // церемонию смерти (`onLose` → узел death), где отряд лечится целиком.
+  let next: GameState = {
+    ...state,
+    party: state.party.map((u) => {
+      const bu = battle.units.find((x) => x.uid === u.uid);
+      return bu ? { ...u, hp: Math.max(1, bu.hp) } : u;
+    }),
+  };
+  if (!won) return { state: next };
+
+  next = applyEffects(next, def?.rewards, idx.effectCtx);
+  next = grantXp(next, combat.units, battleXp(battle)).state;
+
+  const before = new Map(state.party.map((u) => [u.uid, u]));
+  const levelUps: BattleSpoils['levelUps'] = [];
+  const evolutions: BattleSpoils['evolutions'] = [];
+  for (const u of next.party) {
+    const was = before.get(u.uid);
+    if (!was) continue;
+    if (was.defId !== u.defId) evolutions.push({ uid: u.uid, from: was.defId, to: u.defId });
+    if (was.level !== u.level) levelUps.push({ uid: u.uid, from: was.level, to: u.level });
+  }
+  const spoils =
+    levelUps.length > 0 || evolutions.length > 0 ? { levelUps, evolutions } : undefined;
+  return { state: next, spoils };
+}
+
 /** Доводит состояние до ближайшего показываемого шага, попутно копя ленту. */
 function present(state: GameState): { state: GameState; step: Step } {
   const r = resolve(idx, normalizeEntry(idx, state));
@@ -102,6 +160,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState<string>();
   const [saveExists, setSaveExists] = useState(false);
   const battleReturn = useRef<{ onWin: string; onLose: string }>();
+  const settledRef = useRef<{ from: GameState; battle: BattleState; result: Settled }>();
 
   useEffect(() => {
     const loaded = loadGame();
@@ -119,16 +178,28 @@ export function GameProvider({ children }: { children: ReactNode }) {
       return;
     }
     if (r.step.kind === 'battle') {
-      battleReturn.current = { onWin: r.step.node.onWin, onLose: r.step.node.onLose };
-      setBattle(startBattle(combat, findBattle(r.step.node.battle), r.state.party, r.state.seed));
+      const node = r.step.node;
+      // Битый id боя раньше подменялся боем без врагов — и checkOutcome объявлял
+      // победу на первом же раунде. Валидатор ловит такое на сборке, но если
+      // валидацию не гоняли, игрок получал молча выигранный пустой бой вместо
+      // сообщения о поломанном контенте.
+      const battleDef = content.battles.find((b) => b.id === node.battle);
+      if (!battleDef) {
+        setError(`Нет описания боя ${node.battle}`);
+        setMode('error');
+        return;
+      }
+      battleReturn.current = { onWin: node.onWin, onLose: node.onLose };
+      setBattle(startBattle(combat, battleDef, r.state.party, r.state.seed));
       setMode('battle');
       saveGame(r.state);
       return;
     }
     if (r.step.kind === 'death') {
-      const deathDef = content.deaths.find((d) => d.id === (r.step as { node: { death: string } }).node.death);
+      const node = r.step.node;
+      const deathDef = content.deaths.find((d) => d.id === node.death);
       if (!deathDef) {
-        setError(`Нет описания смерти ${(r.step as { node: { death: string } }).node.death}`);
+        setError(`Нет описания смерти ${node.death}`);
         setMode('error');
         return;
       }
@@ -221,43 +292,38 @@ export function GameProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
+  /**
+   * Один прогон исхода на бой: экран итогов и переход в сцену обязаны видеть
+   * ОДИН И ТОТ ЖЕ результат, поэтому он считается однажды и запоминается.
+   */
+  const settle = useCallback((from: GameState, fought: BattleState): Settled => {
+    const cached = settledRef.current;
+    if (cached && cached.from === from && cached.battle === fought) return cached.result;
+    const result = settleBattle(from, fought);
+    settledRef.current = { from, battle: fought, result };
+    return result;
+  }, []);
+
   /** Показывает игроку, кто вырос и кто превратился, прежде чем вернуть в сцену. */
   const collectSpoils = useCallback(() => {
-    if (!state || !battle || battle.outcome !== 'win') {
+    if (!state || !battle || battle.outcome === 'ongoing') {
       setSpoils(undefined);
       return;
     }
-    const xp = grantXp(state, combat.units, 60 + battle.round * 3);
-    if (xp.levelUps.length === 0 && xp.evolutions.length === 0) {
-      setSpoils(undefined);
-      return;
-    }
-    setSpoils({ levelUps: xp.levelUps, evolutions: xp.evolutions });
-  }, [state, battle]);
+    setSpoils(settle(state, battle).spoils);
+  }, [state, battle, settle]);
 
   const finishBattle = useCallback(() => {
     if (!state || !battle || !battleReturn.current) return;
     setSpoils(undefined);
     const won = battle.outcome === 'win';
-    const def = content.battles.find((b) => b.id === battle.battleId);
-    // Раны переносятся из боя: отряд не лечится сам собой, только смертью.
-    let next: GameState = {
-      ...state,
-      party: state.party.map((u) => {
-        const bu = battle.units.find((x) => x.uid === u.uid);
-        return bu ? { ...u, hp: Math.max(won ? 1 : 1, bu.hp) } : u;
-      }),
-    };
-    if (won) {
-      next = applyEffects(next, def?.rewards, idx.effectCtx);
-      const xp = grantXp(next, combat.units, 60 + battle.round * 3);
-      next = xp.state;
-    }
+    const settled = settle(state, battle);
     const to = won ? battleReturn.current.onWin : battleReturn.current.onLose;
     battleReturn.current = undefined;
+    settledRef.current = undefined;
     setBattle(undefined);
-    commit(jump(next, to));
-  }, [state, battle, commit]);
+    commit(goTo(settled.state, to));
+  }, [state, battle, commit, settle]);
 
   /**
    * Перестановка строя. Спека требует, чтобы игрок сам решал, кто стоит впереди:
@@ -353,24 +419,4 @@ export function useGame(): GameApi {
   const ctx = useContext(Ctx);
   if (!ctx) throw new Error('useGame вне GameProvider');
   return ctx;
-}
-
-function jump(state: GameState, to: string): GameState {
-  if (to.startsWith('scene:')) {
-    const rest = to.slice(6);
-    const hash = rest.indexOf('#');
-    if (hash === -1) return { ...state, scene: rest, node: '@entry' };
-    return { ...state, scene: rest.slice(0, hash), node: rest.slice(hash + 1) };
-  }
-  return { ...state, node: to };
-}
-
-function findBattle(id: string) {
-  const b = content.battles.find((x) => x.id === id);
-  if (b) return b;
-  return {
-    id,
-    name: { ru: 'Стычка', en: 'Skirmish' },
-    enemies: [],
-  };
 }

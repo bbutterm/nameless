@@ -721,23 +721,53 @@ export function validateBundle(bundle: ContentBundle): Issue[] {
       walk.push(id);
     }
   };
-  for (const c of bundle.chapters) visit(c.entryScene);
-  while (walk.length > 0) {
-    const sid = walk.shift() as string;
-    const scene = sceneById.get(sid);
-    if (!scene) continue;
-    for (const { to } of sceneTargets(scene)) {
-      if (to.startsWith('scene:')) visit(to.slice(6).split('#')[0] as string);
-    }
-    for (const n of scene.nodes) {
-      if (n.kind === 'battle') reachedBattles.add(n.battle);
-      if (n.kind === 'death') {
-        reachedDeaths.add(n.death);
-        const d = deathById.get(n.death);
-        if (d) visit(d.wakeScene);
+  // Стартуем ТОЛЬКО с первой главы. Раньше корнями обхода были entry всех глав
+  // сразу — и это скрывало худший из возможных дефектов контента: глава 3 не
+  // имела ни одного входящего перехода из главы 2, но числилась достижимой,
+  // потому что была сама себе корнем. Игра собиралась, валидатор молчал,
+  // фаззер показывал 97.9% охвата — а треть игры доехать было нельзя.
+  // Игрок начинает новую игру с первой главы; всё остальное он обязан достичь.
+  const orderedChapters = [...bundle.chapters].sort((a, b) => a.index - b.index);
+  const firstChapter = orderedChapters[0];
+  const drain = (): void => {
+    while (walk.length > 0) {
+      const sid = walk.shift() as string;
+      const scene = sceneById.get(sid);
+      if (!scene) continue;
+      for (const { to } of sceneTargets(scene)) {
+        if (to.startsWith('scene:')) visit(to.slice(6).split('#')[0] as string);
+      }
+      for (const n of scene.nodes) {
+        if (n.kind === 'battle') reachedBattles.add(n.battle);
+        if (n.kind === 'death') {
+          reachedDeaths.add(n.death);
+          const d = deathById.get(n.death);
+          if (d) visit(d.wakeScene);
+        }
       }
     }
+  };
+
+  if (firstChapter) visit(firstChapter.entryScene);
+  drain();
+
+  // Каждая следующая глава обязана достигаться из предыдущих. Это ошибка,
+  // а не предупреждение: непройденная глава — это не «мёртвый узел где-то
+  // сбоку», это отсутствующая треть игры.
+  for (const c of orderedChapters.slice(1)) {
+    if (reachedScenes.has(c.entryScene)) continue;
+    issues.push({
+      level: 'error',
+      where: `chapter:${c.id}`,
+      message: `Стартовая сцена главы «${c.entryScene}» недостижима из предыдущих глав: в неё не ведёт ни один переход`,
+    });
+    // Дальше считаем главу открытой — иначе одна оборванная связка выдала бы
+    // ещё и лавину «сцена недостижима» на весь её текст, и настоящую причину
+    // пришлось бы искать в сотне строк отчёта.
+    visit(c.entryScene);
+    drain();
   }
+
   for (const s of bundle.scenes) {
     if (linkedScenes.has(s.id) && !reachedScenes.has(s.id)) {
       issues.push({
