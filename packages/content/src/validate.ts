@@ -330,6 +330,7 @@ export function validateBundle(bundle: ContentBundle): Issue[] {
   dup('chapters', bundle.chapters.map((c) => c.id));
   dup('axes', bundle.axes.map((a) => a.id));
   dup('speakers', bundle.speakers.map((s) => s.id));
+  dup('codex', bundle.codex.map((e) => e.id));
 
   const reads = emptyRefs();
   const writes = emptyRefs();
@@ -572,6 +573,92 @@ export function validateBundle(bundle: ContentBundle): Issue[] {
   for (const c of bundle.chapters) {
     if (!sceneIds.has(c.entryScene)) {
       issues.push({ level: 'error', where: `chapter:${c.id}`, message: `Нет стартовой сцены «${c.entryScene}»` });
+    }
+  }
+
+  // ── Помянник (CODEX §2, §9) ────────────────────────────────────────────────
+  const codexLineIds = new Set<string>();
+  for (const entry of bundle.codex) {
+    const where = `codex:${entry.id}`;
+    if (entry.kind === 'person' && !speakerIds.has(entry.id)) {
+      issues.push({
+        level: 'error',
+        where,
+        message: `Запись Помянника «${entry.id}» (person) не найдена среди говорящих в speakers.json`,
+      });
+    }
+    if (entry.kind === 'life' && !lifeIds.has(entry.id)) {
+      issues.push({
+        level: 'error',
+        where,
+        message: `Запись Помянника «${entry.id}» (life) не найдена среди прошлых жизней`,
+      });
+    }
+    if (entry.lines.length < 1 || entry.lines.length > 6) {
+      issues.push({
+        level: 'error',
+        where,
+        message: `В записи ${entry.lines.length} строк — по CODEX §2 допустимо от 1 до 6`,
+      });
+    }
+    const lastCount = entry.lines.filter((l) => l.source === 'last').length;
+    if (lastCount > 1) {
+      issues.push({
+        level: 'error',
+        where,
+        message: `В записи ${lastCount} строк с source «last» — последняя строка на запись только одна`,
+      });
+    }
+    for (const line of entry.lines) {
+      const lineWhere = `${where}#${line.id}`;
+      if (codexLineIds.has(line.id)) {
+        issues.push({ level: 'error', where: lineWhere, message: `Дубликат id строки Помянника: «${line.id}»` });
+      }
+      codexLineIds.add(line.id);
+      const unlock = line.unlock;
+      switch (unlock.kind) {
+        case 'meet':
+        case 'player_death_with':
+          if (!speakerIds.has(unlock.speaker)) {
+            issues.push({
+              level: 'error',
+              where: lineWhere,
+              message: `unlock ссылается на несуществующего говорящего «${unlock.speaker}»`,
+            });
+          }
+          break;
+        case 'node': {
+          const targetScene = bundle.scenes.find((s) => s.id === unlock.scene);
+          if (!targetScene) {
+            issues.push({
+              level: 'error',
+              where: lineWhere,
+              message: `unlock ссылается на несуществующую сцену «${unlock.scene}»`,
+            });
+          } else if (!targetScene.nodes.some((n) => n.id === unlock.node)) {
+            issues.push({
+              level: 'error',
+              where: lineWhere,
+              message: `unlock ссылается на несуществующий узел «${unlock.node}» в сцене «${unlock.scene}»`,
+            });
+          }
+          break;
+        }
+        case 'memory':
+          if (!memoryIds.has(unlock.memory)) {
+            issues.push({
+              level: 'error',
+              where: lineWhere,
+              message: `unlock ссылается на несуществующее воспоминание «${unlock.memory}»`,
+            });
+          }
+          break;
+        case 'flag':
+          // Флаги мира свободные строки — существование не проверяется, как и в Condition.
+          break;
+        default:
+          break;
+      }
     }
   }
 

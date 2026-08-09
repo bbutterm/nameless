@@ -18,6 +18,7 @@ export const content: ContentBundle = {
   deaths: gen.deaths as ContentBundle['deaths'],
   chapters: gen.chapters as ContentBundle['chapters'],
   speakers: gen.speakers as ContentBundle['speakers'],
+  codex: gen.codex as ContentBundle['codex'],
 };
 
 export function checkContent(): Issue[] {

@@ -24,6 +24,7 @@ const GROUPS = [
   { dir: 'chapters', name: 'chapters' },
   { dir: 'axes', name: 'axes' },
   { dir: 'speakers', name: 'speakers' },
+  { dir: 'codex', name: 'codex' },
 ] as const;
 
 function walk(dir: string): string[] {

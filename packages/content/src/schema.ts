@@ -292,6 +292,55 @@ export const zSpeaker = z.object({
   art: z.string().optional(),
 });
 
+export const zCodexSource = z.enum(['seen', 'heard', 'after_death', 'last']);
+
+/** Ровно один вид условия открытия на строку (CODEX §9, типы.ts CodexUnlock). */
+export const zCodexUnlock = z.discriminatedUnion('kind', [
+  z.object({ kind: z.literal('meet'), speaker: z.string().min(1) }),
+  z.object({ kind: z.literal('node'), scene: z.string().min(1), node: z.string().min(1) }),
+  z.object({ kind: z.literal('memory'), memory: z.string().min(1) }),
+  z.object({ kind: z.literal('player_death_with'), speaker: z.string().min(1) }),
+  z.object({ kind: z.literal('flag'), flag: z.string().min(1) }),
+]);
+
+/** Экран 390×844 (CODEX §2): приметы ≤160 знаков, строка ≤220 знаков — в обоих языках. */
+const MAX_CODEX_SIGNS_CHARS = 160;
+const MAX_CODEX_LINE_CHARS = 220;
+
+export const zCodexLine = z
+  .object({
+    id: z.string().min(1),
+    text: zLocalized,
+    source: zCodexSource,
+    unlock: zCodexUnlock,
+  })
+  .refine((l) => l.text.ru.length <= MAX_CODEX_LINE_CHARS, {
+    message: `Строка Помянника (ru) длиннее ${MAX_CODEX_LINE_CHARS} знаков`,
+    path: ['text', 'ru'],
+  })
+  .refine((l) => l.text.en.length <= MAX_CODEX_LINE_CHARS, {
+    message: `Строка Помянника (en) длиннее ${MAX_CODEX_LINE_CHARS} знаков`,
+    path: ['text', 'en'],
+  });
+
+export const zCodexEntry = z
+  .object({
+    id: z.string().min(1),
+    kind: z.enum(['person', 'life']),
+    name: zLocalized,
+    blurb: zLocalized,
+    signs: zLocalized,
+    lines: z.array(zCodexLine).min(1).max(6),
+  })
+  .refine((e) => e.signs.ru.length <= MAX_CODEX_SIGNS_CHARS, {
+    message: `Приметы (ru) длиннее ${MAX_CODEX_SIGNS_CHARS} знаков`,
+    path: ['signs', 'ru'],
+  })
+  .refine((e) => e.signs.en.length <= MAX_CODEX_SIGNS_CHARS, {
+    message: `Приметы (en) длиннее ${MAX_CODEX_SIGNS_CHARS} знаков`,
+    path: ['signs', 'en'],
+  });
+
 export const zBundle = z.object({
   axes: z.array(zAxis).min(1),
   scenes: z.array(zScene),
@@ -303,4 +352,5 @@ export const zBundle = z.object({
   deaths: z.array(zDeath),
   chapters: z.array(zChapter).min(1),
   speakers: z.array(zSpeaker),
+  codex: z.array(zCodexEntry),
 });

@@ -11,6 +11,7 @@ import type {
   Ability,
   BattleDef,
   Chapter,
+  CodexEntry,
   Condition,
   ContentBundle,
   DeathDef,
@@ -37,6 +38,7 @@ function bundle(part: Partial<ContentBundle> = {}): ContentBundle {
     deaths: [],
     chapters: [{ index: 1, id: 'ch1', title: L('ch1'), entryScene: 'start' }],
     speakers: [{ id: 'narrator' }],
+    codex: [],
     ...part,
   };
 }
@@ -94,6 +96,16 @@ const memory = (id: string, lifeId: string, cost: number): Memory => ({
   revelation: L(id),
   icon: 'i',
   cost,
+});
+
+const codexEntry = (id: string, kind: CodexEntry['kind'], extra: Partial<CodexEntry> = {}): CodexEntry => ({
+  id,
+  kind,
+  name: L(id),
+  blurb: L(id),
+  signs: L(`приметы ${id}`),
+  lines: [{ id: `${id}_l1`, text: L(`строка ${id}`), source: 'seen', unlock: { kind: 'meet', speaker: id } }],
+  ...extra,
 });
 
 /** Только сообщения нужного уровня — тесты сверяются по подстроке, не по формату. */
@@ -402,6 +414,165 @@ describe('бой без лимита ходов', () => {
     (b.battles[0] as BattleDef).turnLimit = 0;
     // power: 0 без effects всё равно бьёт минимум на единицу — бой закончится.
     expect(has(validateBundle(b), 'бой может не закончиться никогда')).toBe(false);
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Помянник (CODEX §2, §9)
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe('Помянник: ссылки записи', () => {
+  it('kind person ссылается на несуществующего говорящего — ошибка', () => {
+    const b = bundle({ codex: [codexEntry('ghost', 'person')] });
+    expect(has(validateBundle(b), 'не найдена среди говорящих')).toBe(true);
+  });
+
+  it('kind person на существующего говорящего — молчит', () => {
+    const b = bundle({ speakers: [{ id: 'narrator' }, { id: 'osoka' }], codex: [codexEntry('osoka', 'person')] });
+    expect(has(validateBundle(b), 'не найдена среди говорящих')).toBe(false);
+  });
+
+  it('kind life ссылается на несуществующую жизнь — ошибка', () => {
+    const b = bundle({ codex: [codexEntry('ghost_life', 'life')] });
+    expect(has(validateBundle(b), 'не найдена среди прошлых жизней')).toBe(true);
+  });
+
+  it('kind life на существующую жизнь — молчит', () => {
+    const b = bundle({
+      lives: [life('smolokur', ['m1'])],
+      memories: [memory('m1', 'smolokur', 2)],
+      codex: [
+        codexEntry('smolokur', 'life', {
+          lines: [
+            { id: 'smolokur_l1', text: L('строка'), source: 'seen', unlock: { kind: 'memory', memory: 'm1' } },
+          ],
+        }),
+      ],
+    });
+    expect(has(validateBundle(b), 'не найдена среди прошлых жизней')).toBe(false);
+  });
+});
+
+describe('Помянник: unlock ссылается на существующее', () => {
+  it('meet на несуществующего говорящего — ошибка', () => {
+    const b = bundle({
+      speakers: [{ id: 'narrator' }, { id: 'osoka' }],
+      codex: [codexEntry('osoka', 'person', { lines: [{ id: 'l1', text: L('x'), source: 'seen', unlock: { kind: 'meet', speaker: 'ghost' } }] })],
+    });
+    expect(has(validateBundle(b), 'несуществующего говорящего «ghost»')).toBe(true);
+  });
+
+  it('player_death_with на несуществующего говорящего — ошибка', () => {
+    const b = bundle({
+      speakers: [{ id: 'narrator' }, { id: 'osoka' }],
+      codex: [
+        codexEntry('osoka', 'person', {
+          lines: [{ id: 'l1', text: L('x'), source: 'after_death', unlock: { kind: 'player_death_with', speaker: 'ghost' } }],
+        }),
+      ],
+    });
+    expect(has(validateBundle(b), 'несуществующего говорящего «ghost»')).toBe(true);
+  });
+
+  it('node на несуществующую сцену — ошибка', () => {
+    const b = bundle({
+      speakers: [{ id: 'narrator' }, { id: 'osoka' }],
+      codex: [
+        codexEntry('osoka', 'person', {
+          lines: [{ id: 'l1', text: L('x'), source: 'seen', unlock: { kind: 'node', scene: 'ghost', node: 'n' } }],
+        }),
+      ],
+    });
+    expect(has(validateBundle(b), 'несуществующую сцену «ghost»')).toBe(true);
+  });
+
+  it('node на существующую сцену, но несуществующий узел — ошибка', () => {
+    const b = bundle({
+      scenes: [scene('start', [endNode('e')])],
+      speakers: [{ id: 'narrator' }, { id: 'osoka' }],
+      codex: [
+        codexEntry('osoka', 'person', {
+          lines: [{ id: 'l1', text: L('x'), source: 'seen', unlock: { kind: 'node', scene: 'start', node: 'ghost' } }],
+        }),
+      ],
+    });
+    expect(has(validateBundle(b), 'несуществующий узел «ghost» в сцене «start»')).toBe(true);
+  });
+
+  it('node на существующую сцену и узел — молчит', () => {
+    const b = bundle({
+      scenes: [scene('start', [endNode('e')])],
+      speakers: [{ id: 'narrator' }, { id: 'osoka' }],
+      codex: [
+        codexEntry('osoka', 'person', {
+          lines: [{ id: 'l1', text: L('x'), source: 'seen', unlock: { kind: 'node', scene: 'start', node: 'e' } }],
+        }),
+      ],
+    });
+    expect(has(validateBundle(b), 'unlock ссылается на несуществующий')).toBe(false);
+  });
+
+  it('memory на несуществующее воспоминание — ошибка', () => {
+    const b = bundle({
+      speakers: [{ id: 'narrator' }, { id: 'osoka' }],
+      codex: [
+        codexEntry('osoka', 'person', {
+          lines: [{ id: 'l1', text: L('x'), source: 'seen', unlock: { kind: 'memory', memory: 'ghost' } }],
+        }),
+      ],
+    });
+    expect(has(validateBundle(b), 'несуществующее воспоминание «ghost»')).toBe(true);
+  });
+});
+
+describe('Помянник: форма записи', () => {
+  it('дубликат id строки между двумя разными записями — ошибка', () => {
+    const b = bundle({
+      speakers: [{ id: 'narrator' }, { id: 'osoka' }, { id: 'tminny' }],
+      codex: [
+        codexEntry('osoka', 'person', { lines: [{ id: 'dup', text: L('a'), source: 'seen', unlock: { kind: 'meet', speaker: 'osoka' } }] }),
+        codexEntry('tminny', 'person', { lines: [{ id: 'dup', text: L('b'), source: 'seen', unlock: { kind: 'meet', speaker: 'tminny' } }] }),
+      ],
+    });
+    expect(has(validateBundle(b), 'Дубликат id строки Помянника: «dup»')).toBe(true);
+  });
+
+  it('уникальные id строк — молчит', () => {
+    const b = bundle({
+      speakers: [{ id: 'narrator' }, { id: 'osoka' }, { id: 'tminny' }],
+      codex: [codexEntry('osoka', 'person'), codexEntry('tminny', 'person')],
+    });
+    expect(has(validateBundle(b), 'Дубликат id строки Помянника')).toBe(false);
+  });
+
+  it('больше одной строки с source «last» — ошибка', () => {
+    const b = bundle({
+      speakers: [{ id: 'narrator' }, { id: 'osoka' }],
+      codex: [
+        codexEntry('osoka', 'person', {
+          lines: [
+            { id: 'l1', text: L('a'), source: 'last', unlock: { kind: 'meet', speaker: 'osoka' } },
+            { id: 'l2', text: L('b'), source: 'last', unlock: { kind: 'meet', speaker: 'osoka' } },
+          ],
+        }),
+      ],
+    });
+    expect(has(validateBundle(b), 'строк с source «last» — последняя строка на запись только одна')).toBe(true);
+  });
+
+  it('ровно одна строка с source «last» — молчит', () => {
+    const b = bundle({
+      speakers: [{ id: 'narrator' }, { id: 'osoka' }],
+      codex: [
+        codexEntry('osoka', 'person', {
+          lines: [
+            { id: 'l1', text: L('a'), source: 'seen', unlock: { kind: 'meet', speaker: 'osoka' } },
+            { id: 'l2', text: L('b'), source: 'last', unlock: { kind: 'meet', speaker: 'osoka' } },
+          ],
+        }),
+      ],
+    });
+    expect(has(validateBundle(b), 'source «last»')).toBe(false);
   });
 });
 

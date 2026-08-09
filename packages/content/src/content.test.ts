@@ -28,7 +28,7 @@ import {
   type SceneNode,
   type UnitDef,
 } from '@nameless/engine';
-import { content } from './index.js';
+import { content, validateBundle } from './index.js';
 
 const scenesById = new Map(content.scenes.map((s) => [s.id, s]));
 const unitsById = new Map(content.units.map((u) => [u.id, u]));
@@ -459,5 +459,53 @@ describe('настоящий контент: эффекты ссылаются �
       }
     }
     expect(bad, bad.join('\n')).toEqual([]);
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Помянник
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe('настоящий контент: Помянник', () => {
+  it('весь бандл, включая codex, проходит валидацию без ошибок и предупреждений про codex', () => {
+    const issues = validateBundle(content).filter((i) => i.where.startsWith('codex'));
+    expect(issues.map((i) => `${i.where}: ${i.message}`)).toEqual([]);
+  });
+
+  it('каждая запись имеет непустые приметы и хотя бы одну строку', () => {
+    for (const entry of content.codex) {
+      expect(entry.signs.ru.trim().length, `${entry.id}: пустые приметы (ru)`).toBeGreaterThan(0);
+      expect(entry.signs.en.trim().length, `${entry.id}: пустые приметы (en)`).toBeGreaterThan(0);
+      expect(entry.lines.length, `${entry.id}: без строк`).toBeGreaterThanOrEqual(1);
+    }
+  });
+
+  it('kind person заводится только тем, кто есть в speakers.json, кроме narrator/player/ochered', () => {
+    const speakerIds = new Set(content.speakers.map((s) => s.id));
+    for (const entry of content.codex) {
+      if (entry.kind !== 'person') continue;
+      expect(speakerIds.has(entry.id), `${entry.id}: нет среди speakers`).toBe(true);
+      expect(['narrator', 'player', 'ochered']).not.toContain(entry.id);
+    }
+  });
+
+  it('kind life заводится только для существующих прошлых жизней', () => {
+    const lifeIds = new Set(content.lives.map((l) => l.id));
+    for (const entry of content.codex) {
+      if (entry.kind !== 'life') continue;
+      expect(lifeIds.has(entry.id), `${entry.id}: нет среди lives`).toBe(true);
+    }
+  });
+
+  it('id строк Помянника уникальны глобально', () => {
+    const seen = new Set<string>();
+    const dup: string[] = [];
+    for (const entry of content.codex) {
+      for (const line of entry.lines) {
+        if (seen.has(line.id)) dup.push(line.id);
+        seen.add(line.id);
+      }
+    }
+    expect(dup).toEqual([]);
   });
 });

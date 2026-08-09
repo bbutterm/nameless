@@ -1,0 +1,107 @@
+[
+  {
+    "id": "smolokur",
+    "kind": "life",
+    "name": { "ru": "Смолокур", "en": "The Tarburner" },
+    "blurb": { "ru": "Командующий речной войной", "en": "Commander of the river war" },
+    "signs": {
+      "ru": "На ладони правой руки старая мозоль — не от меча, от черпака со смолой. Тело о ней не помнит; помнит только жест.",
+      "en": "On the palm of the right hand, an old callus — not from a sword, from a tar ladle. The body recalls nothing of it; only the gesture remembers."
+    },
+    "lines": [
+      {
+        "id": "smolokur_l1",
+        "text": {
+          "ru": "Ночами, пока отряд спал, проверял, насколько прогорели фитили, — привычку эту он пронёс через все прочие жизни, не только эту.",
+          "en": "At night, while the company slept, he checked how far the fuses had burned — a habit he carried into every other life, not only this one."
+        },
+        "source": "seen",
+        "unlock": { "kind": "memory", "memory": "smola_na_vode" }
+      }
+    ]
+  },
+  {
+    "id": "klyuchar",
+    "kind": "life",
+    "name": { "ru": "Ключарь", "en": "The Keyholder" },
+    "blurb": { "ru": "Хранитель колодца", "en": "Keeper of the well" },
+    "signs": {
+      "ru": "Ладони разбиты вёдерной верёвкой ровно посередине — след многолетней хватки в одном и том же месте.",
+      "en": "His palms are calloused by the bucket rope exactly at the middle — the mark of years gripping the same spot."
+    },
+    "lines": [
+      {
+        "id": "klyuchar_l1",
+        "text": {
+          "ru": "Черпал воду и чужой собаке, не спрашивая, чья, — а когда сушь кончилась, в округе не осталось ни одной собаки, кроме той, что пила первой.",
+          "en": "He drew water for a stray dog too, without asking whose it was — and by the time the drought broke, no other dog was left in the district but the one that drank first."
+        },
+        "source": "seen",
+        "unlock": { "kind": "memory", "memory": "pervoye_vedro" }
+      }
+    ]
+  },
+  {
+    "id": "posulshchik",
+    "kind": "life",
+    "name": { "ru": "Посульщик", "en": "The Promiser" },
+    "blurb": { "ru": "Изобретатель посула", "en": "Inventor of the promise note" },
+    "signs": {
+      "ru": "Почерк твёрдый, буквы без нажима — рука, которая ни разу не дрогнула, подписывая чужое будущее.",
+      "en": "A firm hand, letters without pressure — a hand that never shook while signing away someone else's future."
+    },
+    "lines": [
+      {
+        "id": "posulshchik_l1",
+        "text": {
+          "ru": "Бумагу вдове мельника выписал бесплатно, для пробы, — и именно эту, первую, из всех сорока запомнил лучше остальных.",
+          "en": "He wrote the note for the miller's widow for free, as a trial — and of all the forty that followed, that first one he remembered best."
+        },
+        "source": "seen",
+        "unlock": { "kind": "memory", "memory": "pervyy_posul" }
+      }
+    ]
+  },
+  {
+    "id": "chistopisets",
+    "kind": "life",
+    "name": { "ru": "Чистописец", "en": "The Penman" },
+    "blurb": { "ru": "Городской писарь", "en": "Town scribe" },
+    "signs": {
+      "ru": "Пальцы чернильные до второго сустава — не смываются, даже когда руки чисто вымыты.",
+      "en": "His fingers are ink-stained to the second knuckle — it does not wash off, even scrubbed clean."
+    },
+    "lines": [
+      {
+        "id": "chistopisets_l1",
+        "text": {
+          "ru": "Со слов его самого: хронику писал только при дневном свете — при свече буквы выходили как чужие, не его.",
+          "en": "By his own account: he wrote the chronicle only by daylight — by candle, he said, the letters came out looking like someone else's, not his own."
+        },
+        "source": "heard",
+        "unlock": { "kind": "memory", "memory": "pervaya_stroka" }
+      }
+    ]
+  },
+  {
+    "id": "perechen",
+    "kind": "life",
+    "name": { "ru": "Перечень", "en": "The Register" },
+    "blurb": { "ru": "Счетовод, взявшийся описать всё сущее", "en": "The bookkeeper who tried to inventory everything" },
+    "signs": {
+      "ru": "Пальцы чуть подрагивают в такт счёту даже тогда, когда руки лежат неподвижно.",
+      "en": "His fingers twitch faintly to a count even when his hands lie still."
+    },
+    "lines": [
+      {
+        "id": "perechen_l1",
+        "text": {
+          "ru": "Со слов его самого: после того как имена в описи сменились числами, тетрадь стал подписывать датой без года — год, по его словам, для дела значения не имел.",
+          "en": "By his own account: after names in the inventory turned into numbers, he began dating his own ledger without the year — the year, he said, made no difference to the work."
+        },
+        "source": "heard",
+        "unlock": { "kind": "memory", "memory": "opis_vsego_sushchego" }
+      }
+    ]
+  }
+]
