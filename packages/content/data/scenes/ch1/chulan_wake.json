@@ -971,8 +971,8 @@
       "kind": "narration",
       "id": "again_exit_yard_first",
       "text": {
-        "ru": "Двор тот же, и тачка на нём та же. Цеховые вернулись к ней раньше тебя: у них по списку до полудня, а полдень ещё не наступал.",
-        "en": "The same yard, and the same barrow in it. The Guild men got back to it before you did: their list runs until noon, and noon has not come yet."
+        "ru": "Дверь чулана открыта, за ней тот же двор. Оттуда слышно, как на весы кладут и снимают: тачку ещё разбирают.",
+        "en": "The storeroom door is open, and beyond it the same yard. From there you can hear things put on the scale and taken off it: the barrow is still being worked through."
       },
       "next": "scene:lombard_yard"
     },

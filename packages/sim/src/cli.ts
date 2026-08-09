@@ -87,9 +87,12 @@ if (!only || only === 'battles') {
     const rep = scriptedBattles(
       content,
       (id) => {
-        // К главе 2 игрок успевает набрать наёмников второго тира на стене найма,
-        // к главе 3 — ещё и отголоски закреплённых жизней. Мерить эти бои отрядом
-        // первого тира — мерить не тот вход: там 0% побед у любого баланса.
+        // Если бой объявил свой отряд — меряем ровно им: в начале главы у игрока
+        // двое, и шесть сильнейших юнитов дают ложные 100%.
+        const def = content.battles.find((b) => b.id === id);
+        if (def?.expectParty?.length) return namedParty(content.units, def.expectParty);
+        // Иначе: к главе 2 игрок успевает набрать наёмников второго тира на стене
+        // найма, к главе 3 — ещё и отголоски закреплённых жизней.
         const ch = battleChapter.get(id) ?? 1;
         return defaultParty(content.units, ch === 1 ? 1 : ch === 2 ? 2 : 3, ch);
       },
@@ -99,11 +102,13 @@ if (!only || only === 'battles') {
       const def = content.battles.find((b) => b.id === r.battle);
       // Бой, помеченный `lethal`, игрок по сюжету не переживает — коридор к нему неприменим.
       const lethal = def?.tags?.includes('lethal') ?? false;
-      const ok = lethal || (r.winrate >= 0.6 && r.winrate <= 0.85);
+      // Бой-знакомство должен почти всегда выигрываться: это обучение, а не проверка.
+      const tutorial = def?.tags?.includes('tutorial') ?? false;
+      const ok = lethal || (tutorial ? r.winrate >= 0.85 : r.winrate >= 0.6 && r.winrate <= 0.85);
       console.log(
         `${lethal ? '~~' : ok ? '  ' : '!!'} ${r.battle.padEnd(24)} побед ${(r.winrate * 100).toFixed(0)}%  ` +
           `раундов ${r.avgRounds.toFixed(1)}  выжило ${(r.avgSurvivors * 100).toFixed(0)}%` +
-          `${lethal ? '  (сюжетно летальный)' : ''}`,
+          `${lethal ? '  (сюжетно летальный)' : ''}${tutorial ? '  (знакомство)' : ''}`,
       );
       if (!ok) failed = true;
     }
@@ -199,6 +204,28 @@ process.exit(failed ? 1 : 0);
 
 function dedupe(items: string[]): string[] {
   return [...new Set(items)];
+}
+
+/**
+ * Отряд по именам: ровно тот, что есть у игрока в этой точке сюжета.
+ * Нужен для боёв, объявивших `expectParty`: бой-знакомство в начале главы
+ * проходится вдвоём, и мерить его шестью сильнейшими юнитами тира — мерить
+ * не тот вход, там любой состав даёт 100%.
+ */
+function namedParty(units: UnitDef[], ids: string[]): PartyUnit[] {
+  const byId = new Map(units.map((u) => [u.id, u]));
+  const out: PartyUnit[] = [];
+  let front = 0;
+  let back = 0;
+  for (const id of ids) {
+    const u = byId.get(id);
+    if (!u) continue;
+    const row = u.row;
+    const index = row === 'front' ? front++ : back++;
+    if (index > 2) continue;
+    out.push({ uid: `n${out.length}`, defId: u.id, hp: u.stats.hp, xp: 0, level: 1, slot: { row, index } });
+  }
+  return out;
 }
 
 /** Отряд «среднего игрока» заданной главы: потолок тира и уровень. */
