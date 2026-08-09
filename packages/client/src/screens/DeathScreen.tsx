@@ -6,6 +6,7 @@ import { Icon } from '../components/Icon';
 import { vibrate } from '../lib/haptics';
 import { playSfx } from '../lib/sound';
 import { placeEmblemByKey } from '../lib/emblems';
+import { CodexScreen } from './CodexScreen';
 
 /**
  * Церемония смерти: очередь → Прилавок → выдача лота → чулан.
@@ -15,6 +16,10 @@ import { placeEmblemByKey } from '../lib/emblems';
 export function DeathScreen() {
   const { reveal, lang, ackDeath, state } = useGame();
   const [phase, setPhase] = useState<0 | 1 | 2>(0);
+  // Тап по имени в такте Помянника (CODEX §5, такт 2) открывает запись поверх
+  // церемонии; закрытие возвращает сюда же, а не в список — третий переход,
+  // единственное исключение из «два уровня» (CODEX §7).
+  const [openEntry, setOpenEntry] = useState<string>();
 
   useEffect(() => {
     const a = setTimeout(() => setPhase(1), 1400);
@@ -31,6 +36,7 @@ export function DeathScreen() {
 
   if (!reveal) return null;
   const death = content.deaths.find((d) => d.id === reveal.deathId);
+  const codexLineCount = reveal.codexAdded.reduce((n, g) => n + g.lineIds.length, 0);
 
   return (
     <div className="screen death">
@@ -70,6 +76,31 @@ export function DeathScreen() {
         </div>
       )}
 
+      {phase >= 2 && reveal.codexAdded.length > 0 && (
+        <div className="codex-tact in">
+          <div className="codex-tact-head">
+            <Icon name="candle" size={16} color="var(--accent)" />
+            <span>
+              {t(lang, 'codexAdded')}: {codexLineCount}
+            </span>
+          </div>
+          <div className="codex-tact-list">
+            {reveal.codexAdded.map(({ entry }) => (
+              <button
+                key={entry.id}
+                className="codex-tact-name"
+                onClick={() => {
+                  vibrate('tap');
+                  setOpenEntry(entry.id);
+                }}
+              >
+                {loc(entry.name, lang)}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       {phase >= 2 && (
         <div className="death-footer in">
           <div className="death-count">
@@ -79,6 +110,10 @@ export function DeathScreen() {
             {t(lang, 'proceed')}
           </button>
         </div>
+      )}
+
+      {openEntry && (
+        <CodexScreen lang={lang} initialEntryId={openEntry} onClose={() => setOpenEntry(undefined)} />
       )}
     </div>
   );

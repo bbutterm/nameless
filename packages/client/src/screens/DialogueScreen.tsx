@@ -10,6 +10,7 @@ import { backgroundImage, backgroundSvg, svgDataUri } from '../lib/art';
 import { placeEmblem, placeKey, placeTone } from '../lib/emblems';
 import { setAir } from '../lib/sound';
 import { ArchiveSheet } from './ArchiveSheet';
+import { CodexScreen } from './CodexScreen';
 import { TutorialHint } from '../components/Tutorial';
 
 /**
@@ -30,6 +31,7 @@ export function DialogueScreen() {
   const feedRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const [archive, setArchive] = useState(false);
+  const [codex, setCodex] = useState(false);
 
   const log = state?.log ?? [];
 
@@ -80,6 +82,17 @@ export function DialogueScreen() {
       {!drawnBg && <span className="scene-mark" style={placeEmblem(state.scene)} aria-hidden="true" />}
 
       <div className="top-bar">
+        {/* Второй вход в Помянник — там же, где Опись: пауза забега (CODEX §7). */}
+        <button
+          className="archive-button"
+          aria-label={t(lang, 'codexOpen')}
+          onClick={(e) => {
+            e.stopPropagation();
+            setCodex(true);
+          }}
+        >
+          <Icon name="candle" size={20} color="var(--text-dim)" />
+        </button>
         <button
           className="archive-button"
           aria-label={t(lang, 'memories')}
@@ -154,6 +167,7 @@ export function DialogueScreen() {
       )}
 
       {archive && <ArchiveSheet state={state} lang={lang} onClose={() => setArchive(false)} />}
+      {codex && <CodexScreen lang={lang} onClose={() => setCodex(false)} />}
     </div>
   );
 }

@@ -194,6 +194,7 @@
   z-index: 3;
   display: flex;
   justify-content: flex-end;
+  gap: 8px;
   padding: 4px 8px 0;
 }
 
@@ -1095,6 +1096,39 @@
 }
 .death-count { font-size: 13px; color: var(--text-faint); letter-spacing: 0.1em; }
 
+/* Такт 2 церемонии: строки, дописанные в Помянник (CODEX §5). Числа-бейджа
+   на карточке нет намеренно — счётчик уже назван словами в заголовке, а тир
+   карточки — тот же скромный контур, что у .life-card, чтобы не спорить с
+   картой памяти, которая в этом такте главная. */
+.codex-tact {
+  position: relative;
+  z-index: 1;
+  max-width: 340px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 12px 14px;
+}
+.codex-tact-head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.codex-tact-list { display: flex; flex-direction: column; align-items: center; gap: 2px; margin-top: 8px; }
+.codex-tact-name {
+  min-height: 36px;
+  padding: 4px 8px;
+  color: var(--text);
+  font-size: 15px;
+  text-decoration: underline;
+  text-decoration-color: var(--text-faint);
+  text-underline-offset: 3px;
+}
+
 /* ── Узкие и низкие экраны ───────────────────────────────────────────────── */
 @media (max-height: 680px) {
   .bubble-text, .narration { font-size: 16px; }
@@ -1265,6 +1299,97 @@
 .mem-row { display: flex; gap: 8px; align-items: flex-start; padding: 6px 0; }
 .mem-name { font-size: 15px; color: var(--memory); }
 .mem-text { font-size: 14.5px; color: var(--text-dim); line-height: 1.4; margin-top: 2px; }
+
+/* ── Помянник (docs/CODEX.md) ────────────────────────────────────────────
+   Тот же лист, что у Описи (.sheet), но своя книга: Опись — про этот забег,
+   Помянник — про все забеги (CODEX §7). Список, не сетка: 390px не даёт
+   сетке места под подпись под портретом, а без подписи люди неразличимы. */
+.codex-head { display: flex; justify-content: flex-end; padding: 0 4px 4px; }
+.codex-count {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+.codex-group-head {
+  font-family: var(--font-display);
+  font-size: 17px;
+  color: var(--accent);
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+.codex-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 56px;
+  padding: 6px 4px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+.codex-row:last-child { border-bottom: none; }
+.codex-portrait,
+.codex-portrait-big {
+  flex-shrink: 0;
+  display: block;
+  overflow: hidden;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--line);
+  background: var(--bg-1);
+  box-shadow: inset 0 2px 8px rgb(0 0 0 / 55%);
+}
+.codex-portrait { width: 48px; height: 48px; }
+/* Единственное место в игре, где портрет крупнее 44px (CODEX §2, поле 2):
+   вторая группа черт лица — веки, борозды, взгляд — нигде больше не видна. */
+.codex-portrait-big { width: 132px; height: 132px; border-radius: var(--r-md); }
+.codex-portrait-face > svg { display: block; width: 100%; height: 100%; }
+.codex-portrait-fallback { display: flex; align-items: center; justify-content: center; }
+.codex-row-text { flex: 1; min-width: 0; }
+.codex-row-name { display: flex; align-items: center; gap: 6px; font-size: 16px; color: var(--text); }
+.codex-row-blurb {
+  font-size: 12.5px;
+  color: var(--text-faint);
+  margin-top: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* Точка «есть новое» — не бейдж с числом: «+3» превращает книгу в почтовый
+   ящик (CODEX §7). Гаснет открытием записи. */
+.codex-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+
+.codex-back { align-self: flex-start; min-height: 36px; padding: 6px 10px; font-size: 13px; }
+
+.codex-entry { display: flex; flex-direction: column; gap: 12px; }
+.codex-entry-head { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 5px; }
+.codex-entry-name { font-family: var(--font-display); font-size: 22px; margin-top: 4px; }
+.codex-entry-blurb { font-size: 14px; color: var(--text-dim); }
+.codex-signs { font-size: 14px; font-style: italic; color: var(--text-dim); line-height: 1.4; text-align: center; }
+
+.codex-lines { display: flex; flex-direction: column; gap: 10px; }
+.codex-line { padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+.codex-line:last-child { border-bottom: none; }
+.codex-line-source {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-bottom: 3px;
+}
+.codex-line-text { font-size: 15px; line-height: 1.45; color: var(--text); }
+/* Последняя строка — с отступом (CODEX §2, поле 4): набрана иначе, потому
+   что закрывает запись, а не продолжает её. */
+.codex-line-last { margin-left: 16px; }
+.codex-line-last .codex-line-text { font-style: italic; }
+/* Линейки после последней найденной строки — честный маркер неполноты
+   (CODEX §2, поле 5): графлёный лист, а не «???». */
+.codex-rule {
+  height: 1px;
+  margin: 2px 0;
+  background: repeating-linear-gradient(90deg, var(--line) 0 6px, transparent 6px 11px);
+}
 
 /* ── Обучение ────────────────────────────────────────────────────────────── */
 .tutorial {

@@ -427,6 +427,101 @@ const FACES: Record<string, FaceSpec> = {
     mouth: -3, mouthW: 0.35, lips: 'line', furrows: 0.8, asym: 0.35,
     fade: 0.45, prop: 'receipt',
   },
+
+  // ── Сторонь: люди мира Б (docs/WORLD_B.md) ────────────────────────────────
+  // Дом здесь — сила, а не ведомство: щербатым досталась засохшая кровь
+  // упразднённой Ревизии (`danger`), засеке — сталь, Гоньбе и людям дороги —
+  // тусклый лиловый (`faint`), Цеху — синяк.
+
+  /** Вдова из Щерби: накрывает на двоих и не знает, для кого второй прибор. */
+  vdova_shcherb: {
+    house: 'danger',
+    jaw: 0.35, cheek: 0.7, brow: 0.4, long: 0.6, age: 0.55,
+    hair: 'kerchief', beard: 'none', collar: 'rag', shoulders: 0.3,
+    lid: 0.35, gaze: 'past', socket: 0.3, nose: 'straight',
+    mouth: -2, mouthW: 0.4, lips: 'parted', furrows: 0.5, asym: 0.3,
+  },
+
+  /** Хранитель картотеки: держит папки на людей, которых больше нет. */
+  khranitel_kartoteki: {
+    house: 'danger',
+    jaw: 0.45, cheek: 0.55, brow: 0.65, long: 0.7, age: 0.6,
+    hair: 'long', beard: 'short', collar: 'scarf', shoulders: 0.3,
+    lid: 0.6, gaze: 'aside', socket: 0.45, nose: 'sharp',
+    mouth: 0, mouthW: 0.45, lips: 'pressed', furrows: 0.65, asym: 0.35,
+    prop: 'pen_ear',
+  },
+
+  /** Ямщик Гоньбы: страну держит сшитой тот, кто возит. */
+  yamshchik_gonby: {
+    house: 'faint',
+    jaw: 0.6, cheek: 0.4, brow: 0.5, long: 0.45, age: 0.45,
+    hair: 'cap', beard: 'short', collar: 'scarf', shoulders: 0.65,
+    lid: 0.45, gaze: 'straight', socket: 0.25, nose: 'blunt',
+    mouth: 0, mouthW: 0.55, lips: 'line', furrows: 0.35, asym: 0.25,
+  },
+
+  /** Багорщик с Слузы: тянет из воды то, что оплачено. */
+  bagorshchik_sluzy: {
+    house: 'faint',
+    jaw: 0.75, cheek: 0.35, brow: 0.6, long: 0.4, age: 0.5,
+    hair: 'crop', beard: 'full', collar: 'rag', shoulders: 0.8,
+    lid: 0.4, gaze: 'aside', socket: 0.3, nose: 'broken',
+    mouth: -1, mouthW: 0.6, lips: 'pressed', furrows: 0.4, asym: 0.4,
+    scar: 'brow',
+  },
+
+  /** Паромщица: перевозит и считает — на том берегу всегда на одного меньше. */
+  paromshchitsa: {
+    house: 'faint',
+    jaw: 0.45, cheek: 0.5, brow: 0.45, long: 0.5, age: 0.5,
+    hair: 'kerchief', beard: 'none', collar: 'scarf', shoulders: 0.55,
+    lid: 0.3, gaze: 'straight', socket: 0.25, nose: 'straight',
+    mouth: 0, mouthW: 0.5, lips: 'line', furrows: 0.3, asym: 0.2,
+  },
+
+  /** Сержант заставы: окликает идущих из степи по имени. */
+  serzhant_zastavy: {
+    house: 'steel',
+    jaw: 0.7, cheek: 0.45, brow: 0.7, long: 0.5, age: 0.6,
+    hair: 'cap', beard: 'full', collar: 'scarf', shoulders: 0.85,
+    lid: 0.5, gaze: 'past', socket: 0.35, nose: 'blunt',
+    mouth: -1, mouthW: 0.55, lips: 'pressed', furrows: 0.55, asym: 0.3,
+  },
+
+  /** Мать-шептунья: знает, как позвать того, кто заберёт невыносимое. */
+  mat_sheptunya: {
+    house: 'faint',
+    jaw: 0.35, cheek: 0.75, brow: 0.4, long: 0.65, age: 0.65,
+    hair: 'long', beard: 'none', collar: 'rag', shoulders: 0.25,
+    lid: 0.7, gaze: 'down', socket: 0.4, nose: 'sharp',
+    mouth: -1, mouthW: 0.35, lips: 'parted', furrows: 0.7, asym: 0.35,
+  },
+
+  /** Скупщик Цеха: в голове шесть чужих жизней, склянка при себе полная. */
+  skupshchik_tsekha: {
+    house: 'lie',
+    jaw: 0.5, cheek: 0.45, brow: 0.55, long: 0.55, age: 0.55,
+    hair: 'bald', beard: 'mustache', collar: 'chain', shoulders: 0.5,
+    lid: 0.55, gaze: 'aside', socket: 0.35, nose: 'hook',
+    mouth: 1, mouthW: 0.5, lips: 'line', furrows: 0.4, asym: 0.3,
+    prop: 'lot_jar', propFull: true,
+  },
+
+  /**
+   * Гладень: примет нет — в этом вся примета. Никакой шкалы на краю, ворот
+   * дорожного сюртука застёгнут, лицо запоминается ровно настолько, чтобы
+   * потом никто не смог его описать (мир Б, B.6 и запрет I.8: он — сапоги,
+   * крошки и просьба воды, а не «тьма»). Веки чуть тяжелее людских, взгляд
+   * прямой: он слушает лучше всех, кого ты знал.
+   */
+  gladen: {
+    house: 'faint',
+    jaw: 0.5, cheek: 0.5, brow: 0.5, long: 0.5, age: 0.5,
+    hair: 'crop', beard: 'short', collar: 'stand', shoulders: 0.5,
+    lid: 0.55, gaze: 'straight', socket: 0.3, nose: 'straight',
+    mouth: 0, mouthW: 0.5, lips: 'line', furrows: 0.2, asym: 0.1,
+  },
 };
 
 /** Отголоски (канон §3.1). Лица нужны, но людьми их рисовать нельзя. */

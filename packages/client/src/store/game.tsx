@@ -25,6 +25,7 @@ import {
   startBattle,
   type Action,
   type BattleState,
+  type CodexEntry,
   type GameState,
   type Lang,
   type Memory,
@@ -33,6 +34,7 @@ import {
 } from '@nameless/engine';
 import { combat, content, idx } from './content';
 import { clearSave, loadGame, saveGame } from '../lib/storage';
+import { bumpRuns, commitPending, loadCodex } from '../lib/codex';
 import { detectLang, saveLang } from '../i18n';
 import { vibrate } from '../lib/haptics';
 import { playSfx, resume as resumeAudio } from '../lib/sound';
@@ -44,11 +46,19 @@ export interface BattleSpoils {
   evolutions: { uid: string; from: string; to: string }[];
 }
 
+/** Одна запись Помянника и строки, которые в неё легли на этой церемонии. */
+export interface CodexAddedGroup {
+  entry: CodexEntry;
+  lineIds: string[];
+}
+
 export interface DeathReveal {
   deathId: string;
   memory?: Memory;
   life?: PastLife;
   lifeAwakened: boolean;
+  /** Такт 2 церемонии (CODEX §5): что дописалось в Помянник этой смертью. */
+  codexAdded: CodexAddedGroup[];
 }
 
 interface GameApi {
@@ -140,6 +150,25 @@ function settleBattle(state: GameState, battle: BattleState): Settled {
   return { state: next, spoils };
 }
 
+/**
+ * Переносит найденные за забег строки Помянника в хранилище и группирует их
+ * по записям — для такта церемонии («В Помянник дописано: N», CODEX §5).
+ * Единственное место в клиенте, где книга пишется (кроме финала забега,
+ * см. `commit`): вызывается только на церемонии смерти и на конце игры.
+ */
+function commitCodex(pending: readonly string[]): CodexAddedGroup[] {
+  const addedIds = commitPending(pending, loadCodex().runs);
+  const groups = new Map<string, CodexAddedGroup>();
+  for (const id of addedIds) {
+    const entry = idx.codex.entryOfLine.get(id);
+    if (!entry) continue; // не бывает: id пришёл из того же индекса
+    const g = groups.get(entry.id);
+    if (g) g.lineIds.push(id);
+    else groups.set(entry.id, { entry, lineIds: [id] });
+  }
+  return [...groups.values()];
+}
+
 /** Доводит состояние до ближайшего показываемого шага, попутно копя ленту. */
 function present(state: GameState): { state: GameState; step: Step } {
   const r = resolve(idx, normalizeEntry(idx, state));
@@ -204,22 +233,33 @@ export function GameProvider({ children }: { children: ReactNode }) {
         return;
       }
       const out = applyDeath(r.state, content, deathDef, idx.effectCtx);
-      setState(out.state);
+      // Помянник пишется по мёртвому времени (CODEX §4): найденное за забег
+      // ложится в книгу здесь и только здесь, вместе с лотом. codexPending
+      // после этого пуст — бросить книгу на середине смерти нельзя.
+      const codexAdded = commitCodex(out.state.codexPending);
+      const afterCodex: GameState = { ...out.state, codexPending: [] };
+      setState(afterCodex);
       setReveal({
         deathId: deathDef.id,
         memory: out.memory,
         life: out.life,
         lifeAwakened: out.lifeAwakened,
+        codexAdded,
       });
       setMode('death');
       vibrate('death');
       playSfx('death');
-      saveGame(out.state);
+      saveGame(afterCodex);
       return;
     }
     if (r.step.kind === 'end') {
+      // Финал забега — второе (и последнее) место записи в Помянник (CODEX §9).
+      // Такта на экране здесь нет: игра и так кончилась, поздравлять нечего.
+      commitCodex(r.state.codexPending);
+      const afterCodex: GameState = { ...r.state, codexPending: [] };
+      setState(afterCodex);
       setMode('end');
-      saveGame(r.state);
+      saveGame(afterCodex);
       return;
     }
     setMode('dialogue');
@@ -228,6 +268,9 @@ export function GameProvider({ children }: { children: ReactNode }) {
 
   const startNew = useCallback(() => {
     clearSave();
+    // Забег — единица счёта Помянника (CODEX §4, §9): считаем по «Новой игре»,
+    // а не по смертям, потому что смерть здесь продолжает забег, а не кончает его.
+    bumpRuns();
     const entry = firstChapterEntry();
     const fresh = createInitialState({
       seed: `run-${Date.now().toString(36)}`,

@@ -5,12 +5,14 @@ import { useGame } from '../store/game';
 import { hapticsEnabled, setHaptics } from '../lib/haptics';
 import { setSound, soundEnabled } from '../lib/sound';
 import { Attribution } from '../components/Attribution';
+import { CodexScreen } from './CodexScreen';
 
 export function TitleScreen() {
   const { lang, setLang, startNew, resume, hasSave, error } = useGame();
   const [confirm, setConfirm] = useState(false);
   const [haptics, setH] = useState(hapticsEnabled());
   const [sound, setS] = useState(soundEnabled());
+  const [codexOpen, setCodexOpen] = useState(false);
 
   return (
     <div className="screen title">
@@ -28,6 +30,12 @@ export function TitleScreen() {
             {t(lang, 'continue')}
           </button>
         )}
+        {/* Главный вход в Помянник — именно здесь, между забегами: сейва может
+            не быть, а книга уже может быть непустой (CODEX §7). Кнопка видна
+            и работает даже на пустой книге — пустая книга честно об этом скажет. */}
+        <button className="ghost-button" onClick={() => setCodexOpen(true)}>
+          {t(lang, 'codexOpen')}
+        </button>
         {!confirm ? (
           <button
             className={hasSave ? 'ghost-button' : 'big-button'}
@@ -110,6 +118,8 @@ export function TitleScreen() {
       </div>
 
       <Attribution lang={lang} />
+
+      {codexOpen && <CodexScreen lang={lang} onClose={() => setCodexOpen(false)} />}
     </div>
   );
 }

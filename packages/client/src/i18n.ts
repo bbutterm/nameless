@@ -88,6 +88,18 @@ export const ui = {
     tutorialChoice: 'Выбирай снизу. Некоторых вариантов ты не увидишь никогда.',
     tutorialBattle: 'Тапни свою карту, потом врага. Передний ряд прикрывает задний.',
     skip: 'Пропустить',
+    /* Помянник (docs/CODEX.md) */
+    codexOpen: 'Помянник',
+    codexCount: 'вписано',
+    codexEmpty: 'Пока никто не вписан.',
+    codexYou: 'Ты',
+    codexBack: 'К списку',
+    codexReturn: 'Назад к церемонии',
+    codexSourceSeen: 'увидено',
+    codexSourceHeard: 'со слов',
+    codexSourceAfterDeath: 'после твоей смерти',
+    codexSourceLast: 'последняя',
+    codexAdded: 'В Помянник дописано',
   },
   en: {
     title: 'The Nameless',
@@ -167,6 +179,18 @@ export const ui = {
     tutorialChoice: 'Choose below. Some options you will never see.',
     tutorialBattle: 'Tap your card, then an enemy. The front row shields the back.',
     skip: 'Skip',
+    /* The Remembrance Book (docs/CODEX.md) */
+    codexOpen: 'The Remembrance Book',
+    codexCount: 'recorded',
+    codexEmpty: 'No one is recorded yet.',
+    codexYou: 'You',
+    codexBack: 'To the list',
+    codexReturn: 'Back to the ceremony',
+    codexSourceSeen: 'seen',
+    codexSourceHeard: 'as told',
+    codexSourceAfterDeath: 'after your death',
+    codexSourceLast: 'last',
+    codexAdded: 'Recorded in the Book',
   },
 } as const;
 
