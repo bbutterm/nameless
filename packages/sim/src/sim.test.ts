@@ -16,8 +16,10 @@ import type {
   SceneNode,
   UnitDef,
 } from '@nameless/engine';
+import { content as gameContent } from '@nameless/content';
 import { fuzzDialogue, makePersonalities } from './dialogue-fuzz.js';
 import { determinismCheck, scriptedBattles, unitWinrates } from './battle-sim.js';
+import { exhaustiveLadderCheck, personaRun, PERSONAS } from './resonance.js';
 
 const L = (s: string) => ({ ru: s, en: s });
 
@@ -446,5 +448,53 @@ describe('battle-sim: цифры значат то, что написано', ()
   it('бандл без юнитов не роняет симулятор', () => {
     expect(unitWinrates(bundle({}), 5)).toEqual([]);
     expect(scriptedBattles(bundle({}), () => [], 5)).toEqual([]);
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Итерация B6: архив узнаёт не всех
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe('резонанс: архив узнаёт не всех (B6)', () => {
+  // Прореженный вариант того же перебора, что печатает `resonance-proof.ts`:
+  // все 512 классов осей, каждый тридцать первый набор закреплённого (шаг
+  // делит 32 767 нацело, поэтому полный архив в выборку попадает).
+  const rep = exhaustiveLadderCheck(gameContent, 31);
+
+  it('смертей без лота и без реплики не существует', () => {
+    expect(rep.combos).toBeGreaterThan(500_000);
+    expect(rep.silent).toBe(0);
+  });
+
+  it('если лестница досыпала осколки — лот закрепляется', () => {
+    expect(rep.fundedButNoLot).toBe(0);
+    expect(rep.lots).toBeGreaterThan(0);
+  });
+
+  it('«раздел не отзывается» достижимо и всегда с неустойкой', () => {
+    expect(rep.noEcho).toBeGreaterThan(0);
+  });
+
+  it('контент и движок сходятся: шва «не отзывается, но раздел узнаваем» нет', () => {
+    expect(rep.noEchoSeam).toBe(0);
+  });
+
+  it('механическая дверь в финал открыта только при полном архиве', () => {
+    expect(rep.archiveEmptyEarly).toBe(0);
+    expect(rep.archiveEmpty).toBeGreaterThan(0);
+  });
+
+  it('три личности приходят к разным наборам и ни одна не выкупает всё', () => {
+    const runs = PERSONAS.map((p) => personaRun(gameContent, p, 16));
+    const sets = runs.map((r) => [...r.locked].sort().join('|'));
+    expect(new Set(sets).size).toBe(runs.length);
+    for (const r of runs) {
+      expect(r.deaths).toBe(16);
+      expect(r.locked.length).toBeGreaterThanOrEqual(6);
+      expect(r.locked.length).toBeLessThan(gameContent.memories.length);
+      expect(r.silent).toBe(0);
+      expect(r.fundedButNoLot).toBe(0);
+      expect(r.seam).toBe(0);
+    }
   });
 });

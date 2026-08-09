@@ -11,6 +11,7 @@ import {
   unitWinrates,
 } from './battle-sim.js';
 import { fuzzDialogue } from './dialogue-fuzz.js';
+import { BUBBLES_TO_BATTLE_MAX, timeToFirstBattle } from './pacing.js';
 
 const args = process.argv.slice(2);
 const only = args.find((a) => a.startsWith('--only='))?.split('=')[1];
@@ -111,6 +112,27 @@ if (!only || only === 'battles') {
     const det = determinismCheck(content, party);
     console.log(det.ok ? 'Детерминизм: OK' : `Детерминизм НАРУШЕН в бою ${det.battle}`);
     if (!det.ok) failed = true;
+  }
+}
+
+// ── Темп начала ──────────────────────────────────────────────────────────────
+if (!only || only === 'dialogue' || only === 'pacing') {
+  head('Темп: сколько реплик до первого боя');
+  if (content.scenes.length === 0) {
+    console.log('сцен нет — пропуск');
+  } else {
+    const p = timeToFirstBattle(content, 200);
+    console.log(
+      `${p.ok ? '  ' : '!!'} медиана ${p.median} реплик (~${Math.floor(p.medianSeconds / 60)} мин ` +
+        `${p.medianSeconds % 60} с), минимум ${p.min}, максимум ${p.max}; ` +
+        `коридор: медиана ≤${BUBBLES_TO_BATTLE_MAX}`,
+    );
+    console.log(
+      `${p.reachedBattle >= p.runs * 0.9 ? '  ' : '!!'} прогонов, дошедших до боя: ` +
+        `${p.reachedBattle} из ${p.runs}`,
+    );
+    summary['pacing'] = p;
+    if (!p.ok) failed = true;
   }
 }
 

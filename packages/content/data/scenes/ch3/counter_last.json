@@ -435,7 +435,7 @@
         "ru": "Вместе с сорока годами она получила и тот день — он лежит у неё между двумя обычными днями и вынимается только по договору. Ломбард примет его по цене, которую в зале произносят шёпотом, и цену эту она называет вслух каждую смену, другим.",
         "en": "Along with the forty years she has been given that day as well; it lies between two ordinary days of hers and comes out only by contract. The Pawnshop will take it at the price they say in whispers in the hall, and that price she names out loud every shift, to other people."
       },
-      "next": "ransom_boy_router"
+      "next": "ransom_left_gate"
     },
     {
       "kind": "branch",
@@ -506,7 +506,7 @@
         "ru": "Она закрывает книгу и убирает бланк наследования в нижний ящик, к тем, что заполнены не до конца. Ящик открывают раз в год и не разбирают.",
         "en": "She shuts the book and puts the inheritance form away in the bottom drawer, with the ones that were never filled in to the end. The drawer is opened once a year and never sorted through."
       },
-      "next": "keep_boy_router"
+      "next": "keep_left_gate"
     },
     {
       "kind": "branch",
@@ -602,7 +602,7 @@
         "ru": "Пятым уходит право называть и изымать, и вместе с ним — все описи разом. Насосы останавливаются последними: в смете больше нет строки, из которой их оплачивать.",
         "en": "Fifth goes the right to name and to take, and with it every inventory at once. The pumps stop last: there is no longer a line in the estimate to pay for them out of."
       },
-      "next": "writeoff_boy_router"
+      "next": "writeoff_left_gate"
     },
     {
       "kind": "branch",
@@ -647,6 +647,426 @@
       },
       "next": "end_writeoff"
     },
-    { "kind": "end", "id": "end_writeoff" }
+    { "kind": "end", "id": "end_writeoff" },
+    {
+      "kind": "branch",
+      "id": "keep_left_gate",
+      "branches": [
+        {
+          "when": {
+            "kind": "any",
+            "of": [
+              { "kind": "not", "of": { "kind": "memory", "memory": "smola_na_vode" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "ples_gorit" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "schet_za_sezon" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "pervoye_vedro" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "ochered_k_kolodtsu" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "poslednyaya_kruzhka" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "pervyy_posul" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "zima_bez_khleba" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "luchshie_gody" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "pervaya_stroka" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "khronika_bez_popravok" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "god_goloy_pravdy" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "punkt_pervyy" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "opis_vsego_sushchego" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "eda_ne_vnesena" } }
+            ]
+          },
+          "to": "keep_left_open"
+        }
+      ],
+      "fallback": "keep_boy_router"
+    },
+    {
+      "kind": "narration",
+      "id": "keep_left_open",
+      "text": {
+        "ru": "Подъёмник уходит вниз пустым и там остаётся. Внизу за ним стоят полки, с которых сегодня не сняли ничего, и на каждой — жестянка с номером.",
+        "en": "The hoist goes down empty and stays down. Below it there are shelves from which nothing was taken today, and on each of them a tin plate with a number."
+      },
+      "next": "keep_left_1"
+    },
+    {
+      "kind": "branch",
+      "id": "keep_left_1",
+      "branches": [
+        {
+          "when": {
+            "kind": "any",
+            "of": [
+              { "kind": "not", "of": { "kind": "memory", "memory": "smola_na_vode" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "ples_gorit" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "schet_za_sezon" } }
+            ]
+          },
+          "to": "keep_left_smolokur"
+        }
+      ],
+      "fallback": "keep_left_2"
+    },
+    {
+      "kind": "narration",
+      "id": "keep_left_smolokur",
+      "text": {
+        "ru": "Раздел первый остаётся в фундаменте. На нём стоит свайное поле, и дома над Слузой держатся ровно, потому что снизу их держит то, чего ты не вспомнил.",
+        "en": "Section one stays in the foundation. The pile field stands on it, and the houses over the Sluza hold level, because what holds them from below is the thing you never remembered."
+      },
+      "next": "keep_left_2"
+    },
+    {
+      "kind": "branch",
+      "id": "keep_left_2",
+      "branches": [
+        {
+          "when": {
+            "kind": "any",
+            "of": [
+              { "kind": "not", "of": { "kind": "memory", "memory": "pervoye_vedro" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "ochered_k_kolodtsu" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "poslednyaya_kruzhka" } }
+            ]
+          },
+          "to": "keep_left_klyuchar"
+        }
+      ],
+      "fallback": "keep_left_3"
+    },
+    {
+      "kind": "narration",
+      "id": "keep_left_klyuchar",
+      "text": {
+        "ru": "Раздел второй остаётся. Воду поднимают насосами, а держится она на разделе, который тебе не отдали; очередь у водокачки на Том берегу об этом не спрашивает.",
+        "en": "Section two stays. The water is raised by pumps, but it holds on a section that was never handed to you; the queue at the pump on the Other Bank does not ask about that."
+      },
+      "next": "keep_left_3"
+    },
+    {
+      "kind": "branch",
+      "id": "keep_left_3",
+      "branches": [
+        {
+          "when": {
+            "kind": "any",
+            "of": [
+              { "kind": "not", "of": { "kind": "memory", "memory": "pervyy_posul" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "zima_bez_khleba" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "luchshie_gody" } }
+            ]
+          },
+          "to": "keep_left_posulshchik"
+        }
+      ],
+      "fallback": "keep_left_4"
+    },
+    {
+      "kind": "narration",
+      "id": "keep_left_posulshchik",
+      "text": {
+        "ru": "Раздел третий остаётся. Шесть грошей из десяти в этом городе — расписки на него, и завтра ими опять заплатят за хлеб.",
+        "en": "Section three stays. Six groschen in every ten in this city are notes drawn on it, and tomorrow they will pay for bread with them again."
+      },
+      "next": "keep_left_4"
+    },
+    {
+      "kind": "branch",
+      "id": "keep_left_4",
+      "branches": [
+        {
+          "when": {
+            "kind": "any",
+            "of": [
+              { "kind": "not", "of": { "kind": "memory", "memory": "pervaya_stroka" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "khronika_bez_popravok" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "god_goloy_pravdy" } }
+            ]
+          },
+          "to": "keep_left_chistopisets"
+        }
+      ],
+      "fallback": "keep_left_5"
+    },
+    {
+      "kind": "narration",
+      "id": "keep_left_chistopisets",
+      "text": {
+        "ru": "Раздел четвёртый остаётся. Подпись, которой верят в четырёх конторах, стоит не на тебе, а на нём.",
+        "en": "Section four stays. The signature they trust in four offices stands not on you but on it."
+      },
+      "next": "keep_left_5"
+    },
+    {
+      "kind": "branch",
+      "id": "keep_left_5",
+      "branches": [
+        {
+          "when": {
+            "kind": "any",
+            "of": [
+              { "kind": "not", "of": { "kind": "memory", "memory": "punkt_pervyy" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "opis_vsego_sushchego" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "eda_ne_vnesena" } }
+            ]
+          },
+          "to": "keep_left_perechen"
+        }
+      ],
+      "fallback": "keep_left_end"
+    },
+    {
+      "kind": "narration",
+      "id": "keep_left_perechen",
+      "text": {
+        "ru": "Раздел пятый остаётся. Право назвать и изъять держится на описи, в которой ты стоишь пунктом первым.",
+        "en": "Section five stays. The right to name and to take holds on an inventory in which you are item one."
+      },
+      "next": "keep_left_end"
+    },
+    {
+      "kind": "narration",
+      "id": "keep_left_end",
+      "text": {
+        "ru": "Ты уносишь ровно то, чем был. Остальное остаётся работать, и завтра в этом городе никто не заметит разницы.",
+        "en": "You carry off exactly what you were. The rest stays in service, and tomorrow nobody in this city will notice the difference."
+      },
+      "next": "keep_boy_router"
+    },
+    {
+      "kind": "branch",
+      "id": "writeoff_left_gate",
+      "branches": [
+        {
+          "when": {
+            "kind": "any",
+            "of": [
+              { "kind": "not", "of": { "kind": "memory", "memory": "smola_na_vode" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "ples_gorit" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "schet_za_sezon" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "pervoye_vedro" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "ochered_k_kolodtsu" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "poslednyaya_kruzhka" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "pervyy_posul" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "zima_bez_khleba" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "luchshie_gody" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "pervaya_stroka" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "khronika_bez_popravok" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "god_goloy_pravdy" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "punkt_pervyy" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "opis_vsego_sushchego" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "eda_ne_vnesena" } }
+            ]
+          },
+          "to": "writeoff_left_open"
+        }
+      ],
+      "fallback": "writeoff_boy_router"
+    },
+    {
+      "kind": "say",
+      "id": "writeoff_left_open",
+      "speaker": "revizor",
+      "text": {
+        "ru": "Невыкупленное читается вслух, по табличкам. Так положено: списать можно только названное.",
+        "en": "What was never redeemed is read out loud, by the plates. That is the procedure: only what is named can be written off."
+      },
+      "next": "writeoff_left_1"
+    },
+    {
+      "kind": "branch",
+      "id": "writeoff_left_1",
+      "branches": [
+        {
+          "when": {
+            "kind": "any",
+            "of": [
+              { "kind": "not", "of": { "kind": "memory", "memory": "smola_na_vode" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "ples_gorit" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "schet_za_sezon" } }
+            ]
+          },
+          "to": "writeoff_left_smolokur"
+        }
+      ],
+      "fallback": "writeoff_left_2"
+    },
+    {
+      "kind": "say",
+      "id": "writeoff_left_smolokur",
+      "speaker": "revizor",
+      "text": {
+        "ru": "Раздел первый. Войны Тихой Воды. Остаток не выкуплен. Списан.",
+        "en": "Section one. The Wars of the Quiet Water. Remainder not redeemed. Written off."
+      },
+      "next": "writeoff_left_2"
+    },
+    {
+      "kind": "branch",
+      "id": "writeoff_left_2",
+      "branches": [
+        {
+          "when": {
+            "kind": "any",
+            "of": [
+              { "kind": "not", "of": { "kind": "memory", "memory": "pervoye_vedro" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "ochered_k_kolodtsu" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "poslednyaya_kruzhka" } }
+            ]
+          },
+          "to": "writeoff_left_klyuchar"
+        }
+      ],
+      "fallback": "writeoff_left_3"
+    },
+    {
+      "kind": "say",
+      "id": "writeoff_left_klyuchar",
+      "speaker": "revizor",
+      "text": {
+        "ru": "Раздел второй. Сушьи годы. Остаток не выкуплен. Списан.",
+        "en": "Section two. The Dry Years. Remainder not redeemed. Written off."
+      },
+      "next": "writeoff_left_3"
+    },
+    {
+      "kind": "branch",
+      "id": "writeoff_left_3",
+      "branches": [
+        {
+          "when": {
+            "kind": "any",
+            "of": [
+              { "kind": "not", "of": { "kind": "memory", "memory": "pervyy_posul" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "zima_bez_khleba" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "luchshie_gody" } }
+            ]
+          },
+          "to": "writeoff_left_posulshchik"
+        }
+      ],
+      "fallback": "writeoff_left_4"
+    },
+    {
+      "kind": "say",
+      "id": "writeoff_left_posulshchik",
+      "speaker": "revizor",
+      "text": {
+        "ru": "Раздел третий. Бумажный век. Остаток не выкуплен. Списан.",
+        "en": "Section three. The Paper Age. Remainder not redeemed. Written off."
+      },
+      "next": "writeoff_left_4"
+    },
+    {
+      "kind": "branch",
+      "id": "writeoff_left_4",
+      "branches": [
+        {
+          "when": {
+            "kind": "any",
+            "of": [
+              { "kind": "not", "of": { "kind": "memory", "memory": "pervaya_stroka" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "khronika_bez_popravok" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "god_goloy_pravdy" } }
+            ]
+          },
+          "to": "writeoff_left_chistopisets"
+        }
+      ],
+      "fallback": "writeoff_left_5"
+    },
+    {
+      "kind": "say",
+      "id": "writeoff_left_chistopisets",
+      "speaker": "revizor",
+      "text": {
+        "ru": "Раздел четвёртый. Год Голой Правды. Остаток не выкуплен. Списан.",
+        "en": "Section four. The Year of Bare Truth. Remainder not redeemed. Written off."
+      },
+      "next": "writeoff_left_5"
+    },
+    {
+      "kind": "branch",
+      "id": "writeoff_left_5",
+      "branches": [
+        {
+          "when": {
+            "kind": "any",
+            "of": [
+              { "kind": "not", "of": { "kind": "memory", "memory": "punkt_pervyy" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "opis_vsego_sushchego" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "eda_ne_vnesena" } }
+            ]
+          },
+          "to": "writeoff_left_perechen"
+        }
+      ],
+      "fallback": "writeoff_left_end"
+    },
+    {
+      "kind": "say",
+      "id": "writeoff_left_perechen",
+      "speaker": "revizor",
+      "text": {
+        "ru": "Раздел пятый. Первый Учёт. Остаток не выкуплен. Списан.",
+        "en": "Section five. The First Reckoning. Remainder not redeemed. Written off."
+      },
+      "next": "writeoff_left_end"
+    },
+    {
+      "kind": "narration",
+      "id": "writeoff_left_end",
+      "text": {
+        "ru": "Он читает ровно и делает после каждой таблички паузу одинаковой длины. Названия эпох, в которых ты жил, ты слышишь первый раз и последний, и слушать их приходится до конца: пока читают, ничего не происходит.",
+        "en": "He reads evenly and leaves a pause of the same length after every plate. The names of the ages you lived in you are hearing for the first and the last time, and you have to hear them out: while the reading goes on, nothing happens."
+      },
+      "next": "writeoff_boy_router"
+    },
+    {
+      "kind": "branch",
+      "id": "ransom_left_gate",
+      "branches": [
+        {
+          "when": {
+            "kind": "any",
+            "of": [
+              { "kind": "not", "of": { "kind": "memory", "memory": "smola_na_vode" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "ples_gorit" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "schet_za_sezon" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "pervoye_vedro" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "ochered_k_kolodtsu" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "poslednyaya_kruzhka" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "pervyy_posul" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "zima_bez_khleba" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "luchshie_gody" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "pervaya_stroka" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "khronika_bez_popravok" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "god_goloy_pravdy" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "punkt_pervyy" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "opis_vsego_sushchego" } },
+              { "kind": "not", "of": { "kind": "memory", "memory": "eda_ne_vnesena" } }
+            ]
+          },
+          "to": "ransom_left_note"
+        }
+      ],
+      "fallback": "ransom_full_note"
+    },
+    {
+      "kind": "narration",
+      "id": "ransom_left_note",
+      "text": {
+        "ru": "В книге против его строк остаются прочерки: разделы, которые за все смерти ни разу не отозвались. Он расплачивается и ими — не глядя, потому что смотреть не на что.",
+        "en": "In the book, dashes are left against his lines: the sections that never once answered, through all those deaths. He pays with those as well, without looking, because there is nothing to look at."
+      },
+      "next": "ransom_boy_router"
+    },
+    {
+      "kind": "narration",
+      "id": "ransom_full_note",
+      "text": {
+        "ru": "Против каждой его строки стоит отметка о выдаче. Он отдаёт всё, что помнит, и знает при этом, что именно отдаёт: за четыреста лет в этом зале такого не платили.",
+        "en": "Against every one of his lines stands a note of issue. He gives away everything he remembers, and he knows exactly what he is giving: in four hundred years nobody has paid that in this hall."
+      },
+      "next": "ransom_boy_router"
+    }
   ]
 }
