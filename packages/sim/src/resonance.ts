@@ -29,7 +29,6 @@ import {
   evalCondition,
   goTo,
   indexContent,
-
   lifeRecognizes,
   normalizeEntry,
   resolve,
@@ -37,6 +36,7 @@ import {
   selectMemoryOnDeath,
   type ContentBundle,
   type GameState,
+  type PartyUnit,
   type SceneNode,
 } from '@nameless/engine';
 
@@ -135,7 +135,12 @@ export interface ExhaustiveReport {
   samples: string[];
 }
 
-export function exhaustiveLadderCheck(content: ContentBundle): ExhaustiveReport {
+/**
+ * `maskStride` прореживает наборы закреплённого: 1 — полный перебор (для
+ * отчёта), 16 — быстрая проверка того же самого для тестов. Оси при этом
+ * перебираются полностью всегда: они и есть предмет итерации.
+ */
+export function exhaustiveLadderCheck(content: ContentBundle, maskStride = 1): ExhaustiveReport {
   const nodes = counterNodes(content);
   const memories = content.memories;
   const lifeById = new Map(content.lives.map((l) => [l.id, l]));
@@ -172,7 +177,7 @@ export function exhaustiveLadderCheck(content: ContentBundle): ExhaustiveReport 
 
   const rep: ExhaustiveReport = {
     axisClasses: AXIS_CLASS_REPS.length ** 3,
-    lockedSets: masks,
+    lockedSets: Math.ceil(masks / maskStride),
     combos: 0,
     silent: 0,
     fundedButNoLot: 0,
@@ -193,7 +198,7 @@ export function exhaustiveLadderCheck(content: ContentBundle): ExhaustiveReport 
           reason_obsession: reason,
           grasp_release: 0,
         };
-        for (let mask = 0; mask < masks; mask++) {
+        for (let mask = 0; mask < masks; mask += maskStride) {
           const state: GameState = {
             ...base,
             axes,
@@ -334,6 +339,8 @@ export interface PersonaRun {
   /** Осколки, набранные поступками (без неустоек), к концу прогона. */
   deedShards: Record<string, number>;
   axes: Record<string, number>;
+  /** Отряд на выходе: меньше жизней — меньше отголосков, это риск итерации. */
+  party: PartyUnit[];
 }
 
 /** Сколько осколков за игру досыпала лестница (её след — служебный счётчик). */
@@ -399,6 +406,7 @@ export function personaRun(
     seam: 0,
     deedShards: {},
     axes: {},
+    party: [],
   };
   let resSeen = 0;
   // Игра не обязана предложить шестнадцать смертей подряд: в хабе главы 3
@@ -478,6 +486,7 @@ export function personaRun(
     }
   }
 
+  run.party = state.party.map((u) => ({ ...u }));
   run.locked = [...state.lockedMemories];
   run.lives = [...state.awakenedLives];
   run.axes = { ...state.axes };

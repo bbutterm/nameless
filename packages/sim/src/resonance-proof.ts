@@ -7,6 +7,7 @@
  * прогон трёх личностей по 16 смертей.
  */
 import { content } from '@nameless/content';
+import { scriptedBattles } from './battle-sim.js';
 import {
   exhaustiveLadderCheck,
   lifeOfMemory,
@@ -16,6 +17,9 @@ import {
   TURNED_PERSONA,
   type PersonaRun,
 } from './resonance.js';
+
+/** Отголоски прошлых жизней: их приводит в отряд закреплённая память. */
+const ECHO_UNITS = ['gar', 'vodonos', 'posul', 'svidetel'];
 
 const SECTION: Record<string, string> = {
   smolokur: 'I Смолокур',
@@ -108,6 +112,52 @@ const sizes = runs.map((r) => r.locked.length);
 const inCorridor = sizes.every((s) => s >= 8 && s <= 12);
 console.log(`наборы ${sizes.join(' / ')} — коридор 8–12: ${inCorridor ? 'да' : 'НЕТ'}`);
 if (distinct !== runs.length) failed = true;
+
+head('Риск итерации: чего стоит отряду недостача отголосков');
+// Абсолютные винрейты тут не мерятся: личность-бот не качает отряд и не ходит
+// на стену найма, так что её отряд слабее живого. Мерится РАЗНИЦА — тот же
+// отряд с недостающими отголосками и без них. Она и есть цена итерации.
+for (const r of runs) {
+  const party = r.party.map((u) => u.defId);
+  const have = party.filter((u) => ECHO_UNITS.includes(u));
+  const missing = ECHO_UNITS.filter((u) => !party.includes(u));
+  const level = Math.max(1, ...r.party.map((u) => u.level));
+  const add = (defIds: string[], tag: string) => [
+    ...r.party,
+    ...defIds.map((defId, i) => {
+      const def = content.units.find((u) => u.id === defId);
+      return {
+        uid: `${tag}${i}`,
+        defId,
+        hp: Math.round((def?.stats.hp ?? 20) * (1 + 0.12 * (level - 1))),
+        xp: 0,
+        level,
+        slot: { row: (def?.row ?? 'back') as 'front' | 'back', index: i },
+      };
+    }),
+  ];
+  // Наёмники того же числа и тира — чтобы мерить отголоски, а не лишние тела.
+  const hires = content.units
+    .filter((u) => !ECHO_UNITS.includes(u.id) && !party.includes(u.id) && u.tier <= 2)
+    .sort((a2, b2) => b2.tier - a2.tier)
+    .slice(0, missing.length)
+    .map((u) => u.id);
+  console.log(`\n${r.persona}: отголосков ${have.length}/4 (${have.join(', ') || 'нет'})`);
+  const a = scriptedBattles(content, () => add(hires, 'hire'), 120);
+  const b = scriptedBattles(content, () => add(missing, 'echo'), 120);
+  for (let i = 0; i < a.length; i++) {
+    const x = a[i];
+    const y = b[i];
+    if (!x || !y) continue;
+    const def = content.battles.find((d) => d.id === x.battle);
+    if (def?.tags?.includes('lethal')) continue;
+    console.log(
+      `  ${x.battle.padEnd(24)} с наёмниками ${(x.winrate * 100).toFixed(0)}%  ` +
+        `с отголосками ${(y.winrate * 100).toFixed(0)}%  ` +
+        `разница ${((y.winrate - x.winrate) * 100).toFixed(0)} п.`,
+    );
+  }
+}
 
 head('Распределение: 40 случайных личностей по 16 смертей');
 const randoms = randomPersonas(40, content).map((p) => personaRun(content, p, 16));

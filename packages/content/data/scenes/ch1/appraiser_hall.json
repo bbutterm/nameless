@@ -14,7 +14,32 @@
         "en": "A long hall, nine desks, three of them manned. Over each desk hangs a plate with the appraiser's name and beside it a smaller one, with what he paid to get in."
       },
       "keywords": [{ "match": { "ru": "взносом", "en": "what he paid" }, "tone": "lore" }],
-      "next": "otsen_1"
+      "next": "hall_look"
+    },
+    {
+      "kind": "choice",
+      "id": "hall_look",
+      "prompt": {
+        "ru": "За дальним столом уже подняли голову и ждут. У ближнего окошка ещё торгуются.",
+        "en": "At the far desk a head is already up and waiting. At the near window they are still haggling."
+      },
+      "options": [
+        {
+          "id": "listen_haggle",
+          "text": { "ru": "Послушать, о чём торгуются.", "en": "Listen to what they are haggling over." },
+          "to": "otsen_1"
+        },
+        {
+          "id": "read_price_list",
+          "text": { "ru": "Прочитать прейскурант на стене.", "en": "Read the price list on the wall." },
+          "to": "price_list"
+        },
+        {
+          "id": "straight_to_desk",
+          "text": { "ru": "К дальнему столу. Там ждут.", "en": "To the far desk. They are waiting." },
+          "to": "tminny_1"
+        }
+      ]
     },
     {
       "kind": "say",
@@ -43,7 +68,27 @@
         "ru": "Они торгуются сорок минут. Женщина уходит с двумя грошами и всю дорогу до дверей проверяет, при ней ли ключи.",
         "en": "They haggle for forty minutes. The woman leaves with two groschen and checks all the way to the door whether she still has her keys."
       },
-      "next": "price_list"
+      "next": "hall_price_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "hall_price_choice",
+      "prompt": {
+        "ru": "Прейскурант висит на стене, лист второй отогнут углом.",
+        "en": "The price list hangs on the wall, sheet two dog-eared at the corner."
+      },
+      "options": [
+        {
+          "id": "read_sheet_two",
+          "text": { "ru": "Заглянуть в лист второй.", "en": "Look into sheet two." },
+          "to": "price_list"
+        },
+        {
+          "id": "enough",
+          "text": { "ru": "Хватит. К дальнему столу.", "en": "Enough. To the far desk." },
+          "to": "tminny_1"
+        }
+      ]
     },
     {
       "kind": "lore",

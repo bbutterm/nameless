@@ -1350,8 +1350,8 @@
       "id": "no_echo_smolokur",
       "speaker": "osoka",
       "text": {
-        "ru": "Раздел первый не отзывается. Неустойка за беспокойство начислена осколком.",
-        "en": "Section one does not answer. Penalty for inconvenience credited: one shard."
+        "ru": "Раздел первый не отзывается. Начисляю осколком: по книге так можно.",
+        "en": "Section one does not answer. I am crediting it as one shard: the book allows that."
       },
       "keywords": [
         { "match": { "ru": "не отзывается", "en": "does not answer" }, "tone": "memory" }
@@ -1363,8 +1363,8 @@
       "id": "no_echo_klyuchar",
       "speaker": "osoka",
       "text": {
-        "ru": "Раздел второй не отзывается. Неустойка за беспокойство начислена осколком.",
-        "en": "Section two does not answer. Penalty for inconvenience credited: one shard."
+        "ru": "Раздел второй не отзывается. Начисляю осколком: по книге так можно.",
+        "en": "Section two does not answer. I am crediting it as one shard: the book allows that."
       },
       "keywords": [
         { "match": { "ru": "не отзывается", "en": "does not answer" }, "tone": "memory" }
@@ -1376,8 +1376,8 @@
       "id": "no_echo_posulshchik",
       "speaker": "osoka",
       "text": {
-        "ru": "Раздел третий не отзывается. Неустойка за беспокойство начислена осколком.",
-        "en": "Section three does not answer. Penalty for inconvenience credited: one shard."
+        "ru": "Раздел третий не отзывается. Начисляю осколком: по книге так можно.",
+        "en": "Section three does not answer. I am crediting it as one shard: the book allows that."
       },
       "keywords": [
         { "match": { "ru": "не отзывается", "en": "does not answer" }, "tone": "memory" }
@@ -1389,8 +1389,8 @@
       "id": "no_echo_chistopisets",
       "speaker": "osoka",
       "text": {
-        "ru": "Раздел четвёртый не отзывается. Неустойка за беспокойство начислена осколком.",
-        "en": "Section four does not answer. Penalty for inconvenience credited: one shard."
+        "ru": "Раздел четвёртый не отзывается. Начисляю осколком: по книге так можно.",
+        "en": "Section four does not answer. I am crediting it as one shard: the book allows that."
       },
       "keywords": [
         { "match": { "ru": "не отзывается", "en": "does not answer" }, "tone": "memory" }
@@ -1402,8 +1402,8 @@
       "id": "no_echo_perechen",
       "speaker": "osoka",
       "text": {
-        "ru": "Раздел пятый не отзывается. Неустойка за беспокойство начислена осколком.",
-        "en": "Section five does not answer. Penalty for inconvenience credited: one shard."
+        "ru": "Раздел пятый не отзывается. Начисляю осколком: по книге так можно.",
+        "en": "Section five does not answer. I am crediting it as one shard: the book allows that."
       },
       "keywords": [
         { "match": { "ru": "не отзывается", "en": "does not answer" }, "tone": "memory" }
@@ -1422,8 +1422,8 @@
       "kind": "narration",
       "id": "no_echo_note_1",
       "text": {
-        "ru": "Подъёмник под стойкой не трогается с места. Она ставит в графе «выдано» прочерк, ниже вписывает начисленное и переворачивает страницу: по описи сошлось.",
-        "en": "The hoist under the counter does not stir. She puts a dash in the «issued» column, enters the credit below it and turns the page: by the inventory it balances."
+        "ru": "Где-то очень глубоко полка с этим номером остаётся на месте. Она вписывает начисленное, ставит номер строки и переворачивает страницу: по описи сошлось.",
+        "en": "Somewhere very deep down the shelf with that number stays where it is. She enters the credit, puts the line number against it and turns the page: by the inventory it balances."
       },
       "next": "osoka_reactions"
     },
@@ -1431,8 +1431,8 @@
       "kind": "narration",
       "id": "no_echo_note_2",
       "text": {
-        "ru": "Прочерк в графе «выдано» она ставит, не дочитывая строку. Подъёмник за её спиной стоит там же, где стоял.",
-        "en": "She puts the dash in the «issued» column without reading the line to the end. The hoist behind her stands where it stood."
+        "ru": "Полка с этим номером остаётся на месте. Начисленное она вписывает, не дочитывая строку.",
+        "en": "The shelf with that number stays where it is. She enters the credit without reading the line to the end."
       },
       "next": "osoka_reactions"
     },

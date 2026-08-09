@@ -80,7 +80,60 @@
           "tone": "lore"
         }
       ],
-      "next": "shelf_tag"
+      "next": "shelf_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "shelf_choice",
+      "prompt": {
+        "ru": "Дверь открыта и в трёх шагах. Бирки висят на уровне глаз.",
+        "en": "The door is open, three steps away. The tags hang at eye level."
+      },
+      "options": [
+        {
+          "id": "read_sled_tag",
+          "text": {
+            "ru": "Прочитать бирку на санках.",
+            "en": "Read the tag on the sled."
+          },
+          "to": "shelf_tag"
+        },
+        {
+          "id": "past_shelves",
+          "text": {
+            "ru": "У полок не задерживаться.",
+            "en": "Do not linger at the shelves."
+          },
+          "to": "wake_grey"
+        },
+        {
+          "id": "count_the_tags",
+          "text": {
+            "ru": "Сверить бирки по номерам, подряд.",
+            "en": "Check the tags by number, one after another."
+          },
+          "chip": {
+            "icon": "hourglass",
+            "label": {
+              "ru": "Перечень",
+              "en": "Perechen"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "perechen"
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -3
+            }
+          ],
+          "to": "shelf_tag"
+        }
+      ]
     },
     {
       "kind": "lore",
@@ -903,9 +956,25 @@
         {
           "when": { "kind": "visited", "scene": "vault_gate" },
           "to": "again_exit_vaults"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": { "kind": "visited", "scene": "appraiser_hall" }
+          },
+          "to": "again_exit_yard_first"
         }
       ],
       "fallback": "again_exit_yard"
+    },
+    {
+      "kind": "narration",
+      "id": "again_exit_yard_first",
+      "text": {
+        "ru": "Дверь чулана открыта, за ней тот же двор. Оттуда слышно, как на весы кладут и снимают: тачку ещё разбирают.",
+        "en": "The storeroom door is open, and beyond it the same yard. From there you can hear things put on the scale and taken off it: the barrow is still being worked through."
+      },
+      "next": "scene:lombard_yard"
     },
     {
       "kind": "narration",
@@ -1108,7 +1177,33 @@
         "ru": "На нижней полке что-то поворачивается к тебе. Медленно, как поворачиваются на знакомый голос.",
         "en": "On the bottom shelf something turns toward you. Slowly, the way people turn at a familiar voice."
       },
-      "next": "pledge_tag"
+      "next": "pledge_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "pledge_choice",
+      "prompt": {
+        "ru": "Оно ждёт, пока ты решишь, смотреть на него или нет.",
+        "en": "It waits while you decide whether to look at it."
+      },
+      "options": [
+        {
+          "id": "read_pledge_tag",
+          "text": {
+            "ru": "Прочитать бирку.",
+            "en": "Read the tag."
+          },
+          "to": "pledge_tag"
+        },
+        {
+          "id": "just_go",
+          "text": {
+            "ru": "Не читать. Идти к двери.",
+            "en": "Do not read it. Go to the door."
+          },
+          "to": "pledge_join"
+        }
+      ]
     },
     {
       "kind": "lore",

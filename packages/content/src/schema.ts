@@ -225,6 +225,7 @@ export const zBattle = z.object({
   id: z.string().min(1),
   name: zLocalized,
   tags: z.array(z.string()).optional(),
+  expectParty: z.array(z.string()).optional(),
   enemies: z
     .array(
       z.object({

@@ -1,5 +1,45 @@
 [
   {
+    "id": "battle_yard_marauders",
+    "name": {
+      "ru": "Переучёт у весов",
+      "en": "Recount at the Scale"
+    },
+    "enemies": [
+      {
+        "unit": "pocket_cutter",
+        "row": "front",
+        "index": 0,
+        "level": 1
+      },
+      {
+        "unit": "hook_man",
+        "row": "front",
+        "index": 1,
+        "level": 1
+      }
+    ],
+    "turnLimit": 10,
+    "background": "lombard_yard",
+    "rewards": [
+      {
+        "kind": "gold",
+        "delta": 6
+      },
+      {
+        "kind": "xp",
+        "amount": 12
+      }
+    ],
+    "tags": [
+      "tutorial"
+    ],
+    "expectParty": [
+      "unclaimed_pledge",
+      "dusty_errand_boy"
+    ]
+  },
+  {
     "id": "battle_scavengers",
     "name": {
       "ru": "Падальщики на мостках",
