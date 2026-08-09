@@ -1,0 +1,7 @@
+# Сырые паки ассетов в сборке не нужны: код импортирует только то, что лежит
+# в packages/content/assets. Исключаем, чтобы не гонять 14 МБ на каждый деплой.
+art-source/
+sim-reports/
+screenshots/
+docs/
+tools/

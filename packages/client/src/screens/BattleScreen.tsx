@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   currentActor,
   isPlayerTurn,
@@ -9,6 +9,8 @@ import {
   type BattleUnitState,
 } from '@nameless/engine';
 import { UnitCard, type FloatingNumber } from '../components/UnitCard';
+import { ThreatLayer, type ThreatLink } from '../components/ThreatLayer';
+import { TurnQueue } from '../components/TurnQueue';
 import { Icon } from '../components/Icon';
 import { loc, t } from '../i18n';
 import { useGame } from '../store/game';
@@ -17,17 +19,35 @@ import { vibrate } from '../lib/haptics';
 import { playSfx } from '../lib/sound';
 import { backgroundSvg, svgDataUri } from '../lib/art';
 import { TutorialHint } from '../components/Tutorial';
+import {
+  abilityChips,
+  blockReason,
+  isCovered,
+  previewFor,
+  spanOverTargets,
+  type Preview,
+} from '../lib/combatRead';
 
 type Anim = Record<string, 'lunge-up' | 'lunge-down' | 'hit' | 'die' | undefined>;
 
 let floatId = 0;
 
+/** Столько держим палец на способности, чтобы увидеть её разбор. */
+const HOLD_MS = 380;
+/** Столько висит объяснение «почему сюда нельзя». */
+const REASON_MS = 2600;
+
 export function BattleScreen() {
   const { battle, lang, battleAct, battleAuto, collectSpoils, spoils, finishBattle } = useGame();
   const [selectedAbility, setSelectedAbility] = useState<Ability>();
+  const [peek, setPeek] = useState<Ability>();
+  const [reason, setReason] = useState<string>();
   const [anims, setAnims] = useState<Anim>({});
   const [floats, setFloats] = useState<FloatingNumber[]>([]);
   const seenEvents = useRef(0);
+  const fieldRef = useRef<HTMLDivElement>(null);
+  const holdTimer = useRef<ReturnType<typeof setTimeout>>();
+  const heldOpen = useRef(false);
 
   const defs = useMemo(() => new Map(content.units.map((u) => [u.id, u])), []);
 
@@ -77,6 +97,13 @@ export function BattleScreen() {
     };
   }, [battle]);
 
+  // Объяснение запрета живёт пару секунд и уходит само.
+  useEffect(() => {
+    if (!reason) return;
+    const timer = setTimeout(() => setReason(undefined), REASON_MS);
+    return () => clearTimeout(timer);
+  }, [reason]);
+
   // Ходы противника прокручиваются по одному, с паузой на анимацию.
   // Без этого бой замирал: если первым по инициативе идёт враг, ходить было некому.
   const waitingForBots = !!battle && battle.outcome === 'ongoing' && !isPlayerTurn(battle);
@@ -92,13 +119,51 @@ export function BattleScreen() {
     return () => clearTimeout(timer);
   }, [waitingForBots, battle, battleAuto]);
 
+  const endHold = useCallback(() => {
+    clearTimeout(holdTimer.current);
+  }, []);
+
   if (!battle) return null;
 
   const actor = currentActor(battle);
   const myTurn = isPlayerTurn(battle);
   const abilities = actor && myTurn ? readyAbilities(combat, actor) : [];
-  const targets =
-    actor && selectedAbility ? legalTargets(battle, actor.uid, selectedAbility).map((u) => u.uid) : [];
+  const legal = actor && selectedAbility && myTurn ? legalTargets(battle, actor.uid, selectedAbility) : [];
+  const targets = legal.map((u) => u.uid);
+  const over = battle.outcome !== 'ongoing';
+
+  const nameOf = (u: BattleUnitState | undefined) =>
+    u ? loc(defs.get(u.defId)?.name, lang) : '';
+
+  // Предпросмотр урона: считается по той же формуле, что и настоящий удар,
+  // и ложится прямо на карточку цели — «тыкаю» превращается в «считаю».
+  const previews = new Map<string, Preview>();
+  if (actor && selectedAbility && myTurn) {
+    for (const tgt of legal) {
+      const p = previewFor(actor, tgt, selectedAbility, lang);
+      if (p) previews.set(tgt.uid, p);
+    }
+  }
+
+  // Кто в кого метит. Иконка намерения висела над врагом и раньше — не было
+  // видно цели, хотя движок её знает (`intent.targetUid`).
+  const soonestEnemy = battle.order.slice(battle.turnIndex).find((uid) => {
+    const u = battle.units.find((x) => x.uid === uid);
+    return !!u && u.alive && u.side === 'enemy' && !u.acted && !!u.intent;
+  });
+  const links: ThreatLink[] = [];
+  const threatened = new Map<string, 'danger' | 'ally'>();
+  if (!over) {
+    for (const u of battle.units) {
+      if (u.side !== 'enemy' || !u.alive || u.acted || !u.intent?.targetUid) continue;
+      const tgt = battle.units.find((x) => x.uid === u.intent!.targetUid);
+      if (!tgt || !tgt.alive) continue;
+      const tone: 'danger' | 'ally' = tgt.side === 'player' ? 'danger' : 'ally';
+      links.push({ fromUid: u.uid, toUid: tgt.uid, tone, strong: u.uid === soonestEnemy });
+      // Ярлык «в тебя метят» остаётся, даже если пунктир не поместился.
+      if (threatened.get(tgt.uid) !== 'danger') threatened.set(tgt.uid, tone);
+    }
+  }
 
   const slot = (side: 'player' | 'enemy', row: 'front' | 'back', index: number) =>
     battle.units.find((u) => u.side === side && u.row === row && u.index === index);
@@ -108,6 +173,8 @@ export function BattleScreen() {
       {[0, 1, 2].map((i) => {
         const u = slot(side, row, i);
         if (!u) return <div key={i} className="card empty" />;
+        const covered =
+          !!actor && !!selectedAbility && myTurn && isCovered(battle, actor, selectedAbility, u);
         return (
           <UnitCard
             key={u.uid}
@@ -116,6 +183,10 @@ export function BattleScreen() {
             lang={lang}
             selected={actor?.uid === u.uid && myTurn}
             targetable={targets.includes(u.uid)}
+            threatened={threatened.get(u.uid)}
+            covered={covered}
+            coveredLabel={t(lang, 'coveredShort')}
+            preview={previews.get(u.uid)}
             anim={anims[u.uid]}
             floats={floats.filter((f) => f.uid === u.uid)}
             intentName={u.intent ? loc(combat.abilities.get(u.intent.ability)?.name, lang) : undefined}
@@ -132,25 +203,98 @@ export function BattleScreen() {
       vibrate('tap');
       battleAct({ ability: selectedAbility.id, targetUid: u.uid });
       setSelectedAbility(undefined);
+      setPeek(undefined);
+      setReason(undefined);
       return;
     }
     // Тап по своей карте = выбрать её базовое действие.
     if (u.uid === actor.uid && abilities.length > 0) {
       setSelectedAbility(abilities[0]);
+      return;
     }
+    // Тап по недоступной цели раньше не делал ничего — игрок не понимал, сломалась
+    // игра или так задумано. Теперь карта отвечает словами.
+    vibrate('tap');
+    setReason(
+      selectedAbility
+        ? blockReason(battle, actor, selectedAbility, u, lang)
+        : t(lang, 'chooseAbility'),
+    );
   }
 
-  const over = battle.outcome !== 'ongoing';
+  const startHold = (a: Ability) => {
+    clearTimeout(holdTimer.current);
+    heldOpen.current = false;
+    holdTimer.current = setTimeout(() => {
+      heldOpen.current = true;
+      setPeek(a);
+      vibrate('tap');
+    }, HOLD_MS);
+  };
+
+  const shown = peek ?? selectedAbility;
+  const shownSpan = shown && actor ? spanOverTargets(actor, legal, shown, lang) : undefined;
+
+  // Одна служебная строка над панелью отвечает на все три вопроса разом:
+  // чей ход, что делает выбранная способность и почему цель недоступна.
+  const hint = (() => {
+    if (reason) return <span className="hint-block">{reason}</span>;
+    if (!myTurn && actor) {
+      const ab = actor.intent ? combat.abilities.get(actor.intent.ability) : undefined;
+      const tgt = battle.units.find((u) => u.uid === actor.intent?.targetUid);
+      return (
+        <span className="hint-turn">
+          {t(lang, 'turnOf')}: <b>{nameOf(actor)}</b>
+          {ab && (
+            <>
+              {' · '}
+              <Icon name={ab.icon} size={12} />
+              <span className="hint-ability">{loc(ab.name, lang)}</span>
+              {tgt && (
+                <span className="hint-target">
+                  {' → '}
+                  {nameOf(tgt)}
+                </span>
+              )}
+            </>
+          )}
+        </span>
+      );
+    }
+    if (shown) {
+      return (
+        <span className="hint-turn">
+          <Icon name={shown.icon} size={12} />
+          <span className="hint-ability">{loc(shown.name, lang)}</span>
+          {shownSpan && <span className="chip-dmg">{shownSpan}</span>}
+          {abilityChips(shown, lang).map((c) => (
+            <span key={c} className="chip-info">
+              {c}
+            </span>
+          ))}
+        </span>
+      );
+    }
+    return (
+      <span className="hint-turn">
+        {t(lang, 'yourTurn')}: <b>{nameOf(actor)}</b>
+        <span className="hint-hold">· {t(lang, 'holdForInfo')}</span>
+      </span>
+    );
+  })();
 
   return (
     <div className="screen battle">
       <img className="scene-bg" src={svgDataUri(backgroundSvg(battle.battleId))} alt="" draggable={false} />
 
       <div className="battle-top">
-        <span>
-          {t(lang, 'round')} {battle.round}
-        </span>
-        <span className="battle-title">{loc(content.battles.find((b) => b.id === battle.battleId)?.name, lang)}</span>
+        <div className="battle-top-line">
+          <span>
+            {t(lang, 'round')} {battle.round}
+          </span>
+          <span className="battle-title">{loc(content.battles.find((b) => b.id === battle.battleId)?.name, lang)}</span>
+        </div>
+        {!over && <TurnQueue battle={battle} defs={defs} lang={lang} />}
       </div>
 
       {/* Подсказка боя стоит в потоке, над полем: всплывашка с anchor="top"
@@ -163,7 +307,8 @@ export function BattleScreen() {
         </div>
       )}
 
-      <div className={`field ${myTurn && selectedAbility ? 'targeting' : ''}`}>
+      <div ref={fieldRef} className={`field ${myTurn && selectedAbility ? 'targeting' : ''}`}>
+        <ThreatLayer containerRef={fieldRef} links={links} dim={myTurn && !!selectedAbility} />
         <div className="side enemy-side">
           {renderRow('enemy', 'back')}
           {renderRow('enemy', 'front')}
@@ -176,38 +321,79 @@ export function BattleScreen() {
       </div>
 
       {!over && (
-        <div className="ability-bar">
-          {myTurn ? (
-            abilities.map((a) => (
-              <button
-                key={a.id}
-                className={`ability ${selectedAbility?.id === a.id ? 'active' : ''}`}
-                onClick={() => {
-                  vibrate('tap');
-                  setSelectedAbility(a);
-                }}
-              >
-                <Icon name={a.icon} size={22} />
-                <span>{loc(a.name, lang)}</span>
-              </button>
-            ))
-          ) : (
-            <div className="waiting">…</div>
+        <div className="battle-panel">
+          {/* Разбор способности по долгому тапу. Слой абсолютный: панель не
+              прыгает, поле боя не сжимается. */}
+          {peek && (
+            <div className="ability-peek" onClick={() => setPeek(undefined)}>
+              <div className="peek-head">
+                <Icon name={peek.icon} size={16} color="var(--accent)" />
+                <b>{loc(peek.name, lang)}</b>
+              </div>
+              <div className="peek-desc">{loc(peek.description, lang)}</div>
+              <div className="peek-chips">
+                {shownSpan && <span className="chip-dmg">{shownSpan}</span>}
+                {abilityChips(peek, lang).map((c) => (
+                  <span key={c} className="chip-info">
+                    {c}
+                  </span>
+                ))}
+              </div>
+            </div>
           )}
-        </div>
-      )}
 
-      {!over && myTurn && (
-        <div className="battle-hint">
-          {selectedAbility ? t(lang, 'chooseTarget') : t(lang, 'yourTurn')}
+          <div className="battle-hint">{hint}</div>
+
+          <div className="ability-bar">
+            {myTurn ? (
+              abilities.map((a) => (
+                <button
+                  key={a.id}
+                  className={`ability ${selectedAbility?.id === a.id ? 'active' : ''}`}
+                  onPointerDown={() => startHold(a)}
+                  onPointerUp={endHold}
+                  onPointerLeave={endHold}
+                  onPointerCancel={endHold}
+                  onClick={() => {
+                    endHold();
+                    // Долгий тап уже показал разбор — не превращаем его в выбор.
+                    if (heldOpen.current) {
+                      heldOpen.current = false;
+                      return;
+                    }
+                    vibrate('tap');
+                    setPeek(undefined);
+                    setReason(undefined);
+                    setSelectedAbility(a);
+                  }}
+                >
+                  <Icon name={a.icon} size={22} />
+                  <span>{loc(a.name, lang)}</span>
+                </button>
+              ))
+            ) : (
+              <div className="waiting">
+                <span className="waiting-dot" />
+              </div>
+            )}
+          </div>
         </div>
       )}
 
       {over && (
         <div className="battle-over">
           <div className={`outcome ${battle.outcome}`}>
-            {battle.outcome === 'win' ? t(lang, 'victory') : t(lang, 'defeat')}
+            {battle.outcome === 'win'
+              ? t(lang, 'victory')
+              : battle.outcome === 'draw'
+                ? t(lang, 'battleDraw')
+                : t(lang, 'battleLost')}
           </div>
+          {/* Проигранный бой — не провал, а переход: смерть здесь единственный
+              работающий способ вернуть себе себя (канон). Красное «Поражение»
+              тридцатым кеглем спорило с церемонией, которая начиналась через
+              три секунды после него. */}
+          {battle.outcome !== 'win' && <div className="outcome-note">{t(lang, 'battleLostNote')}</div>}
           {spoils && (
             <div className="spoils">
               {spoils.evolutions.map((e) => (
