@@ -17,8 +17,16 @@ function state(patch: Partial<GameState> = {}): GameState {
   return { ...base, ...patch };
 }
 
+/**
+ * Тесты подмешивают фиктивные миграции в общий реестр. Снимок настоящих —
+ * чтобы afterEach возвращал реестр как был, а не вычищал его: без этого
+ * первый же тест уносил боевую миграцию, и следующие падали на её отсутствии.
+ */
+const realMigrations = { ...migrations };
+
 afterEach(() => {
   for (const k of Object.keys(migrations)) delete migrations[Number(k)];
+  Object.assign(migrations, realMigrations);
 });
 
 describe('serialize / deserialize', () => {

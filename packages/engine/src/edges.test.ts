@@ -74,6 +74,7 @@ function bundleOf(part: Partial<ContentBundle>): ContentBundle {
     deaths: [],
     chapters: [],
     speakers: [],
+    codex: [],
     ...part,
   };
 }

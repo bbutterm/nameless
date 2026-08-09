@@ -385,6 +385,58 @@ export interface AxisDef {
   start: number;
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Помянник
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Откуда строка известна рассказчику. Пометка печатается рядом со строкой:
+ * «увидено» ручается за факт, «со слов» — только за то, что так сказали
+ * (CODEX §8: книге врать нельзя, людям в ней — можно).
+ */
+export type CodexSource = 'seen' | 'heard' | 'after_death' | 'last';
+
+/**
+ * Условие, по которому строка открывается. Ровно одно на строку.
+ *
+ * Отступление от CODEX §9, сознательное: вместо `char_death` и `chapter_end`
+ * — один `flag`. Смерть персонажа и конец главы контент и так отмечает
+ * флагами; отдельные виды события дали бы движку два новых обработчика,
+ * которые внутри проверяли бы тот же флаг.
+ */
+export type CodexUnlock =
+  /** Первая встреча: говорящий появился в ленте. */
+  | { kind: 'meet'; speaker: string }
+  /** Прожит конкретный узел конкретной сцены. */
+  | { kind: 'node'; scene: SceneId; node: NodeId }
+  /** Воспоминание закреплено смертью. */
+  | { kind: 'memory'; memory: MemoryId }
+  /** Игрок умер, а этот человек говорил с ним в той же сцене. */
+  | { kind: 'player_death_with'; speaker: string }
+  /** Флаг мира: смерть персонажа, конец главы, что угодно из контента. */
+  | { kind: 'flag'; flag: FlagId };
+
+export interface CodexLine {
+  /** Уникален глобально: `osoka_l2`. По нему хранилище отличает открытое. */
+  id: string;
+  text: LocalizedText;
+  source: CodexSource;
+  unlock: CodexUnlock;
+}
+
+/** Страница Помянника: человек или прошлая жизнь игрока. */
+export interface CodexEntry {
+  /** Совпадает с id говорящего (`person`) или прошлой жизни (`life`). */
+  id: string;
+  kind: 'person' | 'life';
+  name: LocalizedText;
+  /** Подпись-должность под именем. */
+  blurb: LocalizedText;
+  /** Приметы: что с этим лицом сделала работа. ≤160 знаков. */
+  signs: LocalizedText;
+  lines: CodexLine[];
+}
+
 /** Весь контент игры, собранный и провалидированный. */
 export interface ContentBundle {
   axes: AxisDef[];
@@ -397,4 +449,5 @@ export interface ContentBundle {
   deaths: DeathDef[];
   chapters: Chapter[];
   speakers: Speaker[];
+  codex: CodexEntry[];
 }

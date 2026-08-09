@@ -82,6 +82,7 @@ const content: ContentBundle = {
   deaths: [],
   chapters: [],
   speakers: [],
+  codex: [],
 };
 
 const death: DeathDef = {

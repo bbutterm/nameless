@@ -1,5 +1,6 @@
 import type { ContentBundle, Option, Scene, SceneNode } from './types.js';
 import { evalCondition } from './conditions.js';
+import { indexCodex, noteCodexEvent, type CodexIndex } from './codex.js';
 import { applyEffects, markVisited, type EffectContext, type GameState, type LogEntry } from './state.js';
 
 export const MIN_OPTIONS = 2;
@@ -40,6 +41,7 @@ export interface ContentIndex {
   nodes: Map<string, SceneNode>; // ключ "sceneId#nodeId"
   bundle: ContentBundle;
   effectCtx: EffectContext;
+  codex: CodexIndex;
 }
 
 export function indexContent(bundle: ContentBundle): ContentIndex {
@@ -54,6 +56,7 @@ export function indexContent(bundle: ContentBundle): ContentIndex {
     scenes,
     nodes,
     bundle,
+    codex: indexCodex(bundle),
     effectCtx: {
       unitStats: (id) => {
         const u = unitById.get(id);
@@ -90,6 +93,7 @@ export function resolve(idx: ContentIndex, state: GameState): Resolved {
     const node = idx.nodes.get(key);
     if (!node) return { state: s, step: { kind: 'error', message: `Нет узла ${key}` } };
     s = markVisited(s, s.scene, s.node);
+    s = notePassed(idx, s, node);
 
     switch (node.kind) {
       case 'say':
@@ -129,6 +133,27 @@ export function resolve(idx: ContentIndex, state: GameState): Resolved {
     state: s,
     step: { kind: 'error', message: `Зацикливание в сцене ${s.scene} (узел ${s.node})` },
   };
+}
+
+/**
+ * Узел прожит: отметить это в Помяннике. Три события за один проход —
+ * узел, встреча (если у узла есть говорящий) и флаги мира.
+ *
+ * Флаги проверяются целиком, а не по изменению: узел, поставивший флаг,
+ * и узел, на котором этот флаг наконец что-то значит, — разные узлы, и
+ * ловить момент установки пришлось бы во всех местах, где эффекты
+ * применяются. Дедупликация делает повтор бесплатным.
+ */
+function notePassed(idx: ContentIndex, state: GameState, node: SceneNode): GameState {
+  let s = noteCodexEvent(state, idx.codex, {
+    kind: 'node',
+    scene: state.scene,
+    node: node.id,
+  });
+  if (node.kind === 'say') {
+    s = noteCodexEvent(s, idx.codex, { kind: 'meet', speaker: node.speaker });
+  }
+  return noteCodexEvent(s, idx.codex, { kind: 'flags', flags: s.flags });
 }
 
 export function goTo(state: GameState, to: string): GameState {

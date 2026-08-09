@@ -146,6 +146,7 @@ function genCombatWorld(rng: Rng): GenWorld {
       deaths: [],
       chapters: [],
       speakers: [],
+      codex: [],
     },
     units,
   };
@@ -592,6 +593,7 @@ function genMemoryWorld(rng: Rng): ContentBundle {
     deaths: [],
     chapters: [],
     speakers: [],
+    codex: [],
   };
 }
 
@@ -748,6 +750,7 @@ describe('свойство: resolve всегда возвращает шаг', (
         deaths: [],
         chapters: [],
         speakers: [],
+        codex: [],
       };
       const idx = indexContent(bundle);
       const s = { ...genState(rng), scene: rng.pick(names) as string, node: '@entry' };

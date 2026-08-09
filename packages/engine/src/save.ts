@@ -13,7 +13,10 @@ export type Migration = (state: Record<string, unknown>) => Record<string, unkno
  * Добавляя поле в GameState, поднимай SAVE_VERSION и клади сюда миграцию,
  * иначе игроки с ночной сборкой потеряют прохождение.
  */
-export const migrations: Record<number, Migration> = {};
+export const migrations: Record<number, Migration> = {
+  /** 1 → 2: появился Помянник. Старый забег просто ничего ещё не нашёл. */
+  1: (state) => ({ ...state, codexPending: [] }),
+};
 
 export function serialize(state: GameState, now: number): string {
   const envelope: SaveEnvelope = { version: SAVE_VERSION, savedAt: now, state };
@@ -92,6 +95,7 @@ function checkShape(data: Record<string, unknown>): string | null {
     'awakenedLives',
     'visitedScenes',
     'seenNodes',
+    'codexPending',
     'log',
   ];
   for (const key of arrays) {

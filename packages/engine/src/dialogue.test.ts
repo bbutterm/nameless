@@ -30,6 +30,7 @@ function bundle(scenes: Scene[]): ContentBundle {
     deaths: [],
     chapters: [],
     speakers: [],
+    codex: [],
   };
 }
 

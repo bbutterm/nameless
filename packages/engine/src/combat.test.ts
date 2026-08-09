@@ -92,6 +92,7 @@ const bundle: ContentBundle = {
   deaths: [],
   chapters: [],
   speakers: [],
+  codex: [],
 };
 
 const idx = indexCombat(bundle);

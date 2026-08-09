@@ -13,7 +13,7 @@ import type { RngState } from './rng.js';
 import { levelFromXp } from './levels.js';
 
 /** Версия схемы сейва. Растёт при любом несовместимом изменении GameState. */
-export const SAVE_VERSION = 1;
+export const SAVE_VERSION = 2;
 
 export interface GameState {
   version: number;
@@ -43,6 +43,14 @@ export interface GameState {
   /** Узлы, которые игрок уже читал — для метрик достижимости. */
   seenNodes: string[];
   deaths: number;
+
+  /**
+   * Строки Помянника, открытые в этом забеге и ещё не переписанные в книгу.
+   * Книга пишется по мёртвому времени (CODEX §4): пока игрок жив, найденное
+   * лежит здесь, а в хранилище уходит на церемонии смерти и на финале.
+   * Брошенный забег уносит несписанное с собой — это и есть цена.
+   */
+  codexPending: string[];
 
   /** Лента текущей сцены: что уже показано (для скролла вверх). */
   log: LogEntry[];
@@ -104,6 +112,7 @@ export function createInitialState(params: {
     visitedScenes: [],
     seenNodes: [],
     deaths: 0,
+    codexPending: [],
     log: [],
     startedAt: params.now,
     updatedAt: params.now,

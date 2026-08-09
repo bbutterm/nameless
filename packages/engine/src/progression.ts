@@ -1,4 +1,5 @@
 import type { ContentBundle, DeathDef, Memory, MemoryId, PastLife, UnitDef } from './types.js';
+import { indexCodex, noteCodexEvent, speakersAtDeath, type CodexIndex } from './codex.js';
 import { applyEffects, scaledMaxHp, type EffectContext, type GameState } from './state.js';
 
 import { levelFromXp } from './levels.js';
@@ -146,19 +147,25 @@ export function applyDeath(
   content: ContentBundle,
   death: DeathDef,
   ctx?: EffectContext,
+  codexIdx?: CodexIndex,
 ): DeathOutcome {
   const memory = selectMemoryOnDeath(state, content);
+  const codex = codexIdx ?? indexCodex(content);
+  // Кто был рядом — считается ДО очистки ленты: после неё свидетелей нет.
+  const witnesses = speakersAtDeath(state);
   let s: GameState = {
     ...state,
     deaths: state.deaths + 1,
     log: [],
   };
+  s = noteCodexEvent(s, codex, { kind: 'player_death_with', speakers: witnesses });
 
   let life: PastLife | undefined;
   let lifeAwakened = false;
 
   if (memory) {
     s = { ...s, lockedMemories: [...s.lockedMemories, memory.id] };
+    s = noteCodexEvent(s, codex, { kind: 'memory', memory: memory.id });
     s = applyEffects(s, memory.grants, ctx);
     life = content.lives.find((l) => l.id === memory.life);
     if (life && !s.awakenedLives.includes(life.id)) {

@@ -3,6 +3,7 @@ export * from './rng.js';
 export * from './levels.js';
 export * from './state.js';
 export * from './conditions.js';
+export * from './codex.js';
 export * from './dialogue.js';
 export * from './combat.js';
 export * from './progression.js';
