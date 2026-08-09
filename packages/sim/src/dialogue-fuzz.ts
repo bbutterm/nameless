@@ -178,6 +178,13 @@ export interface FuzzReport {
 }
 
 /**
+ * Сколько случайных проходов делает каждая личность. Восемь — точка, где
+ * список недостижимых узлов перестаёт заметно сокращаться от добавки проходов
+ * (см. комментарий в теле fuzzDialogue).
+ */
+const WALKS_PER_PERSONALITY = 8;
+
+/**
  * Основная проверка железного правила: при ЛЮБОЙ комбинации статов
  * в узле выбора остаётся ≥2 варианта БЕЗ страховочного механизма движка.
  */
@@ -227,11 +234,24 @@ export function fuzzDialogue(content: ContentBundle, personalityCount = 300): Fu
     .map((o) => ({ scene: o.scene, node: o.node, option: o.option.id }));
 
   // Проход по игре: случайные личности случайно кликают, собираем достижимость.
+  //
+  // Проходов на личность несколько, и это не украшение. Личность задаёт, какие
+  // варианты вообще ПОКАЗЫВАЮТСЯ (это проверка железного правила), а какая
+  // ветка будет ПРОЙДЕНА — решает случайный клик внутри прохода. Один проход на
+  // личность мерил вторую величину выборкой в три раза меньше первой, и список
+  // «недостижимых» на треть состоял из узлов, до которых просто не докликали:
+  // на 300 личностях их 70, на 1200 — 45, на 4000 — 34. То есть прибор врал в
+  // полтора-два раза, и настоящий мёртвый текст тонул в шуме.
+  //
+  // Дешевле добавить проходов, чем личностей: генерация личности с перебором
+  // осей стоит дороже, чем ещё один клик по уже готовому состоянию.
   const reached = new Set<string>();
   for (const p of personalities) {
     for (const chapter of content.chapters) {
       const st = normalizeEntry(idx, stateFrom(content, p, chapter.entryScene, '@entry'));
-      walkGame(idx, content, st, `walk:${p.id}:${chapter.id}`, reached, errors);
+      for (let walk = 0; walk < WALKS_PER_PERSONALITY; walk++) {
+        walkGame(idx, content, st, `walk:${p.id}:${chapter.id}:${walk}`, reached, errors);
+      }
     }
   }
 
@@ -241,7 +261,9 @@ export function fuzzDialogue(content: ContentBundle, personalityCount = 300): Fu
   const cleanReached = new Set<string>();
   const cleanErrors: FuzzReport['errors'] = [];
   const firstChapter = [...content.chapters].sort((a, b) => a.index - b.index)[0];
-  const cleanRuns = Math.max(40, Math.floor(personalityCount / 4));
+  // Честных прогонов тоже нужно больше по той же причине: недобор кликов
+  // занижает «охват честным прохождением», то есть врёт в пользу тревоги.
+  const cleanRuns = Math.max(200, personalityCount);
   if (firstChapter) {
     for (let i = 0; i < cleanRuns; i++) {
       const rng = new Rng(`clean:${i}`);
