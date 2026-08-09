@@ -1,12 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import {
   applyDeath,
+  deedFragments,
   grantXp,
   levelFromXp,
   lifeProgress,
+  lifePull,
+  lifeRecognizes,
   memoryFragmentProgress,
   memoryIdsOfLife,
   recruitableUnits,
+  RESONANCE_COUNTER_PREFIX,
   selectMemoryOnDeath,
   xpForLevel,
 } from './progression.js';
@@ -183,6 +187,69 @@ describe('selectMemoryOnDeath', () => {
   it('уже закреплённое не выдаётся повторно', () => {
     const s = state({ fragments: { kolodets: 9, ples: 5 }, lockedMemories: ['kolodets'] });
     expect(selectMemoryOnDeath(s, content)?.id).toBe('ples');
+  });
+});
+
+describe('архив узнаёт не всех (B6)', () => {
+  /** Осколки, которые досыпал сам архив: помечены служебным счётчиком. */
+  const byResonance = (memory: string, amount: number) => ({
+    fragments: { [memory]: amount },
+    counters: { [`${RESONANCE_COUNTER_PREFIX}${memory}`]: amount },
+  });
+
+  it('милосердному не выдаётся раздел Смолокура, даже если осколки досыпаны', () => {
+    const s = state({ ...byResonance('ples', 5), axes: { mercy_cruelty: 40 } });
+    expect(selectMemoryOnDeath(s, content)).toBeUndefined();
+  });
+
+  it('жестокому не выдаётся раздел Ключаря', () => {
+    const s = state({ ...byResonance('kolodets', 5), axes: { mercy_cruelty: -40 } });
+    expect(selectMemoryOnDeath(s, content)).toBeUndefined();
+  });
+
+  it('осколки, набранные поступками, выкупаются вопреки оси: цена уплачена', () => {
+    const s = state({ fragments: { ples: 5 }, axes: { mercy_cruelty: 100 } });
+    expect(selectMemoryOnDeath(s, content)?.id).toBe('ples');
+  });
+
+  it('поступков меньше цены — досыпанное их не дотягивает', () => {
+    const s = state({
+      fragments: { ples: 6 },
+      counters: { [`${RESONANCE_COUNTER_PREFIX}ples`]: 4 },
+      axes: { mercy_cruelty: 100 },
+    });
+    // Поступками набрано 2 из 5 — раздел не отзывается, как бы архив ни досыпал.
+    expect(selectMemoryOnDeath(s, content)).toBeUndefined();
+  });
+
+  it('порог ровно на границе: ±20 уже отказ, между ними — ещё нет', () => {
+    const smolokur = content.lives.find((l) => l.id === 'smolokur');
+    if (!smolokur) throw new Error('нет жизни');
+    expect(lifeRecognizes(state({ axes: { mercy_cruelty: 19 } }), smolokur)).toBe(true);
+    expect(lifeRecognizes(state({ axes: { mercy_cruelty: 20 } }), smolokur)).toBe(false);
+    expect(lifePull(state({ axes: { mercy_cruelty: 40 } }), smolokur)).toBe(-40);
+  });
+
+  it('середина оси — не отказ: неопределившемуся архив отвечает', () => {
+    const s = state({ ...byResonance('ples', 5), axes: { mercy_cruelty: 10 } });
+    expect(selectMemoryOnDeath(s, content)?.id).toBe('ples');
+  });
+
+  it('deedFragments вычитает досыпанное и не уходит в минус', () => {
+    const m = content.memories.find((x) => x.id === 'ples');
+    if (!m) throw new Error('нет воспоминания');
+    expect(deedFragments(state({ fragments: { ples: 7 }, counters: { '_res:ples': 3 } }), m)).toBe(4);
+    expect(deedFragments(state({ fragments: { ples: 2 }, counters: { '_res:ples': 9 } }), m)).toBe(0);
+    expect(deedFragments(state({ fragments: { ples: 2 } }), m)).toBe(2);
+  });
+
+  it('applyDeath на непрожитом полюсе возвращает отряд, но не лот', () => {
+    const s = state({ ...byResonance('ples', 5), axes: { mercy_cruelty: 60 }, party: [member('vodonos', 1)] });
+    const out = applyDeath(s, content, death, ctx);
+    expect(out.memory).toBeUndefined();
+    expect(out.lifeAwakened).toBe(false);
+    expect(out.state.deaths).toBe(1);
+    expect(out.state.party[0]?.hp).toBe(40);
   });
 });
 
