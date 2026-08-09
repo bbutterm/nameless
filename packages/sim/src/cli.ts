@@ -45,6 +45,11 @@ const issues = validateBundle(content);
 const errors = issues.filter((i) => i.level === 'error');
 console.log(`ошибок ${errors.length}, предупреждений ${issues.length - errors.length}`);
 for (const i of errors.slice(0, 20)) console.log(`  ОШИБКА ${i.where}: ${i.message}`);
+// Предупреждения считались, но не печатались: строка «предупреждений 1» без
+// текста бесполезна — по ней нельзя ни починить, ни решить, что чинить не надо.
+for (const i of issues.filter((x) => x.level !== 'error').slice(0, 20)) {
+  console.log(`  ПРЕДУПРЕЖДЕНИЕ ${i.where}: ${i.message}`);
+}
 if (errors.length > 0) failed = true;
 summary['contentErrors'] = errors.length;
 summary['contentWarnings'] = issues.length - errors.length;

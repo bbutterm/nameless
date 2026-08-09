@@ -12,12 +12,21 @@
     "kind": "visited",
     "scene": "appraiser_hall"
   },
-  "entry": "hub_router",
+  "entry": "hub_enter",
   "nodes": [
     {
       "kind": "branch",
       "id": "hub_router",
       "branches": [
+        {
+          "when": {
+            "kind": "counter",
+            "counter": "hub_visits",
+            "op": "gte",
+            "value": 3
+          },
+          "to": "hub_again"
+        },
         {
           "when": {
             "kind": "deaths",
@@ -408,7 +417,14 @@
             "ru": "Спросить мальчишку, где он врёт.",
             "en": "Ask the boy where he is lying."
           },
-          "to": "klyost_lie_router"
+          "to": "klyost_lie_router",
+          "effects": [
+            {
+              "kind": "counter",
+              "counter": "klyost_asked",
+              "delta": 1
+            }
+          ]
         },
         {
           "id": "read_board",
@@ -416,7 +432,14 @@
             "ru": "Прочитать доску объявлений.",
             "en": "Read the notice board."
           },
-          "to": "board_router"
+          "to": "board_router",
+          "effects": [
+            {
+              "kind": "counter",
+              "counter": "board_read",
+              "delta": 1
+            }
+          ]
         }
       ]
     },
@@ -424,6 +447,72 @@
       "kind": "branch",
       "id": "klyost_lie_router",
       "branches": [
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "counter",
+                "counter": "errands_done",
+                "op": "lte",
+                "value": 0
+              },
+              {
+                "kind": "counter",
+                "counter": "klyost_asked",
+                "op": "gte",
+                "value": 2
+              }
+            ]
+          },
+          "to": "klyost_same"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "counter",
+                "counter": "errands_done",
+                "op": "gte",
+                "value": 1
+              },
+              {
+                "kind": "counter",
+                "counter": "errands_done",
+                "op": "lte",
+                "value": 2
+              },
+              {
+                "kind": "counter",
+                "counter": "klyost_asked",
+                "op": "gte",
+                "value": 3
+              }
+            ]
+          },
+          "to": "klyost_same"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "counter",
+                "counter": "errands_done",
+                "op": "gte",
+                "value": 3
+              },
+              {
+                "kind": "counter",
+                "counter": "klyost_asked",
+                "op": "gte",
+                "value": 4
+              }
+            ]
+          },
+          "to": "klyost_same"
+        },
         {
           "when": {
             "kind": "counter",
@@ -487,6 +576,68 @@
       "kind": "branch",
       "id": "board_router",
       "branches": [
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "deaths",
+                "op": "lte",
+                "value": 0
+              },
+              {
+                "kind": "counter",
+                "counter": "board_read",
+                "op": "gte",
+                "value": 2
+              }
+            ]
+          },
+          "to": "hub_board_same"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "deaths",
+                "op": "gte",
+                "value": 1
+              },
+              {
+                "kind": "deaths",
+                "op": "lte",
+                "value": 3
+              },
+              {
+                "kind": "counter",
+                "counter": "board_read",
+                "op": "gte",
+                "value": 3
+              }
+            ]
+          },
+          "to": "hub_board_same"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "deaths",
+                "op": "gte",
+                "value": 4
+              },
+              {
+                "kind": "counter",
+                "counter": "board_read",
+                "op": "gte",
+                "value": 4
+              }
+            ]
+          },
+          "to": "hub_board_same"
+        },
         {
           "when": {
             "kind": "deaths",
@@ -554,6 +705,46 @@
         "en": "\"The Audit. Reconciliation of the Reckoning will begin on schedule. Citizens are to keep with them inventories of property, memory and debt. Discrepancies are resolved on the spot.\" Below, in chalk and another hand: \"Nobody knows what this means. We asked the Pawnshop; the Pawnshop said it was ready.\""
       },
       "next": "hub_choice"
+    },
+    {
+      "kind": "narration",
+      "id": "hub_board_same",
+      "text": {
+        "ru": "Доска та же. Ниже прежнего объявления кто-то дописал ногтем: «и я тоже».",
+        "en": "The board is the same. Below the old notice someone has scratched with a nail: «me too»."
+      },
+      "next": "hub_choice"
+    },
+    {
+      "kind": "say",
+      "id": "klyost_same",
+      "speaker": "klyost",
+      "text": {
+        "ru": "Я это уже говорил. Второй раз стоит столько же, а несу я его бесплатно.",
+        "en": "I said that already. A second telling costs the same, and I carry it for free."
+      },
+      "next": "hub_choice"
+    },
+    {
+      "kind": "effects",
+      "id": "hub_enter",
+      "effects": [
+        {
+          "kind": "counter",
+          "counter": "hub_visits",
+          "delta": 1
+        }
+      ],
+      "next": "hub_router"
+    },
+    {
+      "kind": "narration",
+      "id": "hub_again",
+      "text": {
+        "ru": "Двор тот же. Очередь стоит на своих местах, как расставленные с вечера стулья.",
+        "en": "The same yard. The queue stands in its places, like chairs set out the night before."
+      },
+      "next": "hub_guard_router"
     }
   ]
 }
