@@ -12,6 +12,7 @@ import {
   goTo,
   indexContent,
   normalizeEntry,
+  filterOptions,
   rawPassingOptions,
   resolve,
   Rng,
@@ -160,8 +161,15 @@ export interface FuzzReport {
   personalities: number;
   choiceNodes: number;
   deadEnds: DeadEnd[];
-  /** Варианты, которые не показались НИ ОДНОЙ личности — мёртвый текст. */
+  /** Варианты, которые не прошли по условиям НИ У ОДНОЙ личности — мёртвый текст. */
   neverShownOptions: { scene: string; node: string; option: string }[];
+  /**
+   * Варианты, которые по условиям проходят, но на экран не попадают никогда:
+   * узел объявляет больше вариантов, чем помещается кнопок (MAX_OPTIONS), и
+   * обрезка по priority выкидывает их у каждой личности. Мёртвый текст, который
+   * проверка по условиям не видит.
+   */
+  neverVisibleOptions: { scene: string; node: string; option: string }[];
   /** Варианты, которые показывались всем — возможно, условие лишнее. */
   alwaysShownConditional: { scene: string; node: string; option: string }[];
   unreachableNodes: { scene: string; node: string }[];
@@ -195,6 +203,7 @@ export function fuzzDialogue(content: ContentBundle, personalityCount = 300): Fu
   const deadEnds: DeadEnd[] = [];
   const errors: FuzzReport['errors'] = [];
   const shownCount = new Map<string, number>();
+  const visibleCount = new Map<string, number>();
   const optionKeys: { key: string; scene: string; node: string; option: Option }[] = [];
   let choiceNodes = 0;
 
@@ -205,6 +214,7 @@ export function fuzzDialogue(content: ContentBundle, personalityCount = 300): Fu
       for (const o of node.options) {
         const key = `${scene.id}#${node.id}#${o.id}`;
         shownCount.set(key, 0);
+        visibleCount.set(key, 0);
         optionKeys.push({ key, scene: scene.id, node: node.id, option: o });
       }
       for (const p of personalities) {
@@ -217,12 +227,26 @@ export function fuzzDialogue(content: ContentBundle, personalityCount = 300): Fu
         if (passing.length < 2) {
           deadEnds.push({ scene: scene.id, node: node.id, personality: p.id, passing: passing.length });
         }
+        // То же самое, но глазами игрока: на экран влезает не больше MAX_OPTIONS
+        // кнопок, и лишнее срезается по priority. Вариант, который «проходит по
+        // условиям», и вариант, который игрок УВИДИТ, — разные вещи, а мерилась
+        // до сих пор только первая. В узле с пятью безусловными вариантами пятый
+        // не показывается никому и никогда, что бы игрок ни делал, и вся ветка
+        // за ним — мёртвый текст; фаззер при этом честно писал «не показанных
+        // никому: 0», потому что смотрел до обрезки.
+        for (const o of filterOptions(node.options, st)) {
+          const key = `${scene.id}#${node.id}#${o.id}`;
+          visibleCount.set(key, (visibleCount.get(key) ?? 0) + 1);
+        }
       }
     }
   }
 
   const neverShownOptions = optionKeys
     .filter((o) => (shownCount.get(o.key) ?? 0) === 0)
+    .map((o) => ({ scene: o.scene, node: o.node, option: o.option.id }));
+  const neverVisibleOptions = optionKeys
+    .filter((o) => (shownCount.get(o.key) ?? 0) > 0 && (visibleCount.get(o.key) ?? 0) === 0)
     .map((o) => ({ scene: o.scene, node: o.node, option: o.option.id }));
   const alwaysShownConditional = optionKeys
     .filter(
@@ -303,6 +327,7 @@ export function fuzzDialogue(content: ContentBundle, personalityCount = 300): Fu
     choiceNodes,
     deadEnds,
     neverShownOptions,
+    neverVisibleOptions,
     alwaysShownConditional,
     unreachableNodes,
     errors,

@@ -171,6 +171,13 @@ if (!only || only === 'dialogue') {
     }
     console.log(`варианты, не показанные никому: ${r.neverShownOptions.length}`);
     for (const o of r.neverShownOptions.slice(0, 15)) console.log(`  МЁРТВЫЙ ${o.scene}#${o.node}/${o.option}`);
+    // Проходит по условиям, но на экран не попадает: узел объявил больше
+    // вариантов, чем помещается кнопок, и обрезка выкинула его у всех.
+    console.log(`варианты, не попадающие на экран никогда: ${r.neverVisibleOptions.length}`);
+    for (const o of r.neverVisibleOptions.slice(0, 15)) {
+      console.log(`  НЕ ВИДЕН ${o.scene}#${o.node}/${o.option}`);
+    }
+    if (r.neverVisibleOptions.length > 0) failed = true;
     console.log(`условия, срабатывающие всегда: ${r.alwaysShownConditional.length}`);
     console.log(`недостижимые узлы: ${r.unreachableNodes.length}`);
     for (const n of r.unreachableNodes.slice(0, 15)) console.log(`  НЕДОСТИЖИМ ${n.scene}#${n.node}`);
