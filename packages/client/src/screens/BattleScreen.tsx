@@ -17,7 +17,7 @@ import { useGame } from '../store/game';
 import { combat, content } from '../store/content';
 import { vibrate } from '../lib/haptics';
 import { playSfx, setAir } from '../lib/sound';
-import { backgroundSvg, svgDataUri } from '../lib/art';
+import { backgroundImage, backgroundSvg, svgDataUri } from '../lib/art';
 import { placeEmblem, placeKey, placeTone, unitEmblem } from '../lib/emblems';
 import { TutorialHint } from '../components/Tutorial';
 import {
@@ -373,7 +373,17 @@ export function BattleScreen() {
 
   return (
     <div className="screen battle">
-      <img className="scene-bg" src={svgDataUri(backgroundSvg(battle.battleId, placeTone(battle.battleId)))} alt="" draggable={false} />
+      {/* Нарисованный фон главнее процедурного: положил картинку в
+          assets/backgrounds/ под именем боя или ключом места — она встаёт сюда. */}
+      <img
+        className="scene-bg"
+        src={
+          backgroundImage(battle.battleId, placeKey(battle.battleId)) ??
+          svgDataUri(backgroundSvg(battle.battleId, placeTone(battle.battleId)))
+        }
+        alt=""
+        draggable={false}
+      />
       {/* Тот же знак места, что и в диалоге, — бой идёт не в вакууме, а там же,
           где только что был разговор. На поле он ещё бледнее: карты важнее. */}
       <span className="scene-mark battle-mark" style={placeEmblem(battle.battleId)} aria-hidden="true" />

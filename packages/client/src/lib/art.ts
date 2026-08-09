@@ -10,6 +10,12 @@ const cardFiles = import.meta.glob('../../../content/assets/cards/*.{webp,png,jp
   import: 'default',
 }) as Record<string, string>;
 
+const backgroundFiles = import.meta.glob('../../../content/assets/backgrounds/*.{webp,png,jpg,jpeg,svg}', {
+  eager: true,
+  query: '?url',
+  import: 'default',
+}) as Record<string, string>;
+
 const portraitFiles = import.meta.glob('../../../content/assets/portraits/*.{webp,png,jpg,jpeg,svg}', {
   eager: true,
   query: '?url',
@@ -28,6 +34,21 @@ function indexByBasename(files: Record<string, string>): Map<string, string> {
 
 const cardArt = indexByBasename(cardFiles);
 const portraitArt = indexByBasename(portraitFiles);
+const backgroundArt = indexByBasename(backgroundFiles);
+
+/**
+ * Фон арены или сцены. Имя файла — id боя (`battle_wall_crew`), id сцены
+ * (`pier_dust`) или ключ места (`vault`, `gate`): ищем от частного к общему,
+ * чтобы одной картинкой можно было закрыть все подвалы разом, а потом при
+ * желании переопределить конкретный бой.
+ */
+export function backgroundImage(...keys: string[]): string | undefined {
+  for (const k of keys) {
+    const hit = backgroundArt.get(k);
+    if (hit) return hit;
+  }
+  return undefined;
+}
 
 export function cardImage(unitId: string): string | undefined {
   return cardArt.get(unitId);

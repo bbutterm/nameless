@@ -6,7 +6,7 @@ import { Icon } from '../components/Icon';
 import { loc, t } from '../i18n';
 import { useGame } from '../store/game';
 import { content, idx } from '../store/content';
-import { backgroundSvg, svgDataUri } from '../lib/art';
+import { backgroundImage, backgroundSvg, svgDataUri } from '../lib/art';
 import { placeEmblem, placeKey, placeTone } from '../lib/emblems';
 import { setAir } from '../lib/sound';
 import { ArchiveSheet } from './ArchiveSheet';
@@ -45,7 +45,9 @@ export function DialogueScreen() {
   }, [scene]);
 
   if (!state) return null;
-  const bg = svgDataUri(backgroundSvg(state.scene, placeTone(state.scene)));
+  const bg =
+    backgroundImage(state.scene, placeKey(state.scene)) ??
+    svgDataUri(backgroundSvg(state.scene, placeTone(state.scene)));
   const isChoice = step?.kind === 'choice';
 
   /*
