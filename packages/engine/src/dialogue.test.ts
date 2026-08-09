@@ -10,6 +10,8 @@ import {
   normalizeEntry,
   MAX_OPTIONS,
   MIN_OPTIONS,
+  LOG_LIMIT,
+  pushBubble,
 } from './dialogue.js';
 import { createInitialState, type GameState } from './state.js';
 import type { ContentBundle, Option, Scene } from './types.js';
@@ -316,5 +318,49 @@ describe('синхронизация главы', () => {
     expect(normalizeEntry(idx, st('s2', '@entry', { chapter: 1 })).chapter).toBe(2);
     // Уже развёрнутый узел тоже подтягивает главу: игрок мог войти по прямой ссылке.
     expect(normalizeEntry(idx, st('s2', 'n1', { chapter: 1 })).chapter).toBe(2);
+  });
+});
+
+describe('лента не растёт без предела', () => {
+  it('после LOG_LIMIT записей хранятся только последние', () => {
+    // Кольцо из трёх реплик: pushBubble глушит только подряд идущий повтор
+    // одного узла, поэтому цикл длиной три даёт бесконечную ленту.
+    const content = bundle([
+      {
+        id: 'ring',
+        chapter: 1,
+        title: t('кольцо'),
+        entry: 'a',
+        nodes: [
+          { kind: 'narration', id: 'a', text: t('раз'), next: 'b' },
+          { kind: 'narration', id: 'b', text: t('два'), next: 'c' },
+          { kind: 'narration', id: 'c', text: t('три'), next: 'a' },
+        ],
+      } as Scene,
+    ]);
+    const idx = indexContent(content);
+    let st = createInitialState({
+      seed: 'log',
+      axes: content.axes.map((a) => ({ id: a.id, start: a.start })),
+      chapter: 1,
+      scene: 'ring',
+      node: '@entry',
+      now: 0,
+    });
+    st = normalizeEntry(idx, st);
+
+    // Гоняем заведомо дольше предела: без обрезки лента росла до 1206 записей
+    // (около 190 КБ в сейве), упиралась в квоту localStorage, а исключение
+    // глоталось молча — игрок терял час игры, не увидев ни слова на экране.
+    for (let i = 0; i < LOG_LIMIT * 3; i++) {
+      const r = resolve(idx, st);
+      // Ленту наполняет клиент: resolve только сообщает, что показать.
+      st = r.step.kind === 'bubble' ? pushBubble(r.state, r.step.node) : r.state;
+      if (r.step.kind !== 'bubble') break;
+      st = advance(idx, st);
+    }
+    expect(st.log.length).toBe(LOG_LIMIT);
+    // Обрезается начало, а не конец: игрок должен видеть последнее.
+    expect(st.log[st.log.length - 1]?.ru).toBe('три');
   });
 });

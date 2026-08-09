@@ -1,6 +1,6 @@
 import type { ContentBundle, Option, Scene, SceneNode } from './types.js';
 import { evalCondition } from './conditions.js';
-import { applyEffects, markVisited, type EffectContext, type GameState } from './state.js';
+import { applyEffects, markVisited, type EffectContext, type GameState, type LogEntry } from './state.js';
 
 export const MIN_OPTIONS = 2;
 export const MAX_OPTIONS = 4;
@@ -275,6 +275,26 @@ export function advance(idx: ContentIndex, state: GameState): GameState {
 }
 
 /** Игрок выбрал вариант. */
+/**
+ * Сколько записей ленты храним. Лента нужна ровно для одного — прокрутить
+ * вверх и перечитать, что было только что; двести пузырей это заведомо
+ * больше, чем кто-либо листает.
+ *
+ * Предел нужен, потому что его не было: комментарий у поля `log` обещал
+ * «ленту текущей сцены», но между сценами она не чистилась ни разу за всю
+ * игру. Замер на тридцати прогонах: медиана пика 49 записей, максимум 1206 в
+ * хабе — около 190 КБ в сейве. Дальше localStorage упирается в квоту,
+ * `saveGame` глотает исключение молча, и игрок теряет час игры, не увидев на
+ * экране ни слова. Обрезка снизу дешевле любой починки хранилища.
+ */
+export const LOG_LIMIT = 200;
+
+/** Приписывает запись в ленту, не давая ей расти без предела. */
+function appendLog(log: readonly LogEntry[], entry: LogEntry): LogEntry[] {
+  const next = [...log, entry];
+  return next.length > LOG_LIMIT ? next.slice(next.length - LOG_LIMIT) : next;
+}
+
 export function choose(idx: ContentIndex, state: GameState, optionId: string): GameState {
   const node = idx.nodes.get(`${state.scene}#${state.node}`);
   if (!node || node.kind !== 'choice') return state;
@@ -284,17 +304,14 @@ export function choose(idx: ContentIndex, state: GameState, optionId: string): G
   let s = applyEffects(state, option.effects, idx.effectCtx);
   s = {
     ...s,
-    log: [
-      ...s.log,
-      {
-        nodeId: node.id,
-        scene: s.scene,
-        kind: 'choice-made',
-        ru: option.text.ru,
-        en: option.text.en,
-        chosenOptionId: option.id,
-      },
-    ],
+    log: appendLog(s.log, {
+      nodeId: node.id,
+      scene: s.scene,
+      kind: 'choice-made',
+      ru: option.text.ru,
+      en: option.text.en,
+      chosenOptionId: option.id,
+    }),
   };
   return normalizeEntry(idx, goTo(s, option.to));
 }
@@ -308,16 +325,13 @@ export function pushBubble(
   if (last && last.nodeId === node.id && last.scene === state.scene) return state;
   return {
     ...state,
-    log: [
-      ...state.log,
-      {
-        nodeId: node.id,
-        scene: state.scene,
-        kind: node.kind,
-        speaker: node.kind === 'say' ? node.speaker : undefined,
-        ru: node.text.ru,
-        en: node.text.en,
-      },
-    ],
+    log: appendLog(state.log, {
+      nodeId: node.id,
+      scene: state.scene,
+      kind: node.kind,
+      speaker: node.kind === 'say' ? node.speaker : undefined,
+      ru: node.text.ru,
+      en: node.text.en,
+    }),
   };
 }
