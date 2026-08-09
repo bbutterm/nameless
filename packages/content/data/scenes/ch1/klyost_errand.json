@@ -342,7 +342,7 @@
         "ru": "Дальше он считает ступени вслух, начав с двадцать первой, и на двадцать шестой сбивается. Начинает опять с двадцать первой.",
         "en": "From there he counts the steps out loud, starting at twenty-one, and loses the thread at twenty-six. He starts again at twenty-one."
       },
-      "next": "door_reach"
+      "next": "niche_dark"
     },
     {
       "kind": "narration",
@@ -581,6 +581,250 @@
         }
       ],
       "next": "scene:zaklad_hub"
+    },
+    {
+      "kind": "narration",
+      "id": "niche_dark",
+      "text": {
+        "ru": "Выше двадцать шестой ступени света становится меньше, чем было: три ниши подряд пустые, а склянки из них стоят внизу в мешке, и мешок держат за горло, чтобы не звенел.",
+        "en": "Above the twenty-sixth step there is less light than there was: three niches in a row are empty, and their flasks are down in a sack, and the sack is held by the neck so it will not clink."
+      },
+      "next": "snuffers_1"
+    },
+    {
+      "kind": "say",
+      "id": "snuffers_1",
+      "speaker": "marodyor",
+      "text": {
+        "ru": "Списано как негодное. Негодное горит по полгроша за ночь, а недогоревшее идёт по четыре гроша за склянку — разницу мы и снимаем.",
+        "en": "Written off as unfit. Unfit burns at half a grosh a night, and unburnt goes at four groschen a flask — the difference is what we take off."
+      },
+      "next": "snuffers_2"
+    },
+    {
+      "kind": "say",
+      "id": "snuffers_2",
+      "speaker": "klyost",
+      "text": {
+        "ru": "Пуговица, они не посыльные. Посыльных я всех знаю по шагам, а эти считают ступени неправильно.",
+        "en": "Button, they are not messengers. I know every messenger by his tread, and these ones count the steps wrong."
+      },
+      "next": "snuffers_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "snuffers_choice",
+      "prompt": {
+        "ru": "Лестница узкая, мешок стоит на ступени, а ключ у тебя в кулаке ещё не остыл.",
+        "en": "The stairs are narrow, the sack stands on a step, and the key in your fist has not cooled yet."
+      },
+      "options": [
+        {
+          "id": "block_stairs",
+          "text": {
+            "ru": "Встать на ступень выше мешка.",
+            "en": "Stand on the step above the sack."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": 5
+            }
+          ],
+          "to": "r_snuff_stand"
+        },
+        {
+          "id": "count_niches",
+          "text": {
+            "ru": "Спросить, сколько ниш они уже сняли.",
+            "en": "Ask how many niches they have stripped."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -3
+            }
+          ],
+          "to": "r_snuff_count"
+        },
+        {
+          "id": "let_them_pass",
+          "text": {
+            "ru": "Прижаться к стене. Пусть проносят.",
+            "en": "Press to the wall. Let them carry it past."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": -5
+            },
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": 3
+            }
+          ],
+          "to": "r_snuff_past"
+        },
+        {
+          "id": "kick_sack",
+          "text": {
+            "ru": "Сбить мешок ногой. Внизу семьдесят ступеней.",
+            "en": "Kick the sack down. Seventy steps below."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": -8
+            }
+          ],
+          "to": "r_snuff_first"
+        },
+        {
+          "id": "name_the_stair",
+          "text": {
+            "ru": "Сказать, что лестница служебная и они не посыльные.",
+            "en": "Staff stairs. They are not messengers."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 5
+            }
+          ],
+          "to": "r_snuff_stand"
+        },
+        {
+          "id": "boy_below",
+          "text": {
+            "ru": "Отправить мальчишку вниз, за дверь.",
+            "en": "Send the boy down, behind the door."
+          },
+          "conditions": {
+            "kind": "flag",
+            "flag": "klyost_named"
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": 5
+            }
+          ],
+          "to": "r_snuff_stand"
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "r_snuff_stand",
+      "speaker": "marodyor",
+      "text": {
+        "ru": "Служебная, верно. У нас и поручение есть: устное, от того, кто перебил на бирке семёрку на тройку. Предъявить его нельзя, зато оспорить тоже.",
+        "en": "For staff, true. And we have an errand: a spoken one, from the man who recut the seven into a three on the tag. It cannot be produced, but it cannot be disputed either."
+      },
+      "next": "fight_snuffers"
+    },
+    {
+      "kind": "say",
+      "id": "r_snuff_count",
+      "speaker": "marodyor",
+      "text": {
+        "ru": "Одиннадцать ниш. В двух склянки были полные, и это уже не убыль, это находка, а находку делят на всех, кто её видел.",
+        "en": "Eleven niches. In two of them the flasks were full, and that is not shrinkage any more, that is a find, and a find is split among everyone who saw it."
+      },
+      "next": "fight_snuffers"
+    },
+    {
+      "kind": "narration",
+      "id": "r_snuff_first",
+      "text": {
+        "ru": "Мешок идёт вниз через ступень и звенит на каждой второй. Звон слышно до самого низа, и внизу его никто не считает: за лестницей числится сторож, а сторож числится за описью.",
+        "en": "The sack goes down every other step and clinks on every second one. The clinking carries all the way to the bottom, and down there nobody counts it: the stairs are entered against a watchman, and the watchman is entered against the inventory."
+      },
+      "next": "fight_snuffers"
+    },
+    {
+      "kind": "battle",
+      "id": "fight_snuffers",
+      "battle": "battle_stair_snuffers",
+      "onWin": "snuffers_after",
+      "onLose": "dying_stairs"
+    },
+    {
+      "kind": "narration",
+      "id": "snuffers_after",
+      "text": {
+        "ru": "Склянки Клёст расставляет обратно по нишам сам, по одной, и считает вслух с двадцать первой. На двадцать шестой сбивается и начинает опять с двадцать первой.",
+        "en": "Klyost puts the flasks back into the niches himself, one at a time, counting aloud from the twenty-first. At the twenty-sixth he loses the count and starts again from the twenty-first."
+      },
+      "next": "door_reach"
+    },
+    {
+      "kind": "say",
+      "id": "r_snuff_past",
+      "speaker": "klyost",
+      "text": {
+        "ru": "Правильно. Меня они не видели, вас теперь тоже как будто не видели. Тут так и живут: кто не мешает, того не было.",
+        "en": "Right. They did not see me, and now it is as if they did not see you either. That is how it works here: whoever does not get in the way was never there."
+      },
+      "next": "door_reach"
+    },
+    {
+      "kind": "effects",
+      "id": "dying_stairs",
+      "effects": [
+        {
+          "kind": "flag",
+          "flag": "death_cause_guild",
+          "value": true
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_scavengers",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_sluza",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_guard",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_shelf",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_vytsvet",
+          "value": false
+        },
+        {
+          "kind": "counter",
+          "counter": "errands_done",
+          "delta": 1
+        }
+      ],
+      "next": "stairs_falling"
+    },
+    {
+      "kind": "narration",
+      "id": "stairs_falling",
+      "text": {
+        "ru": "Семьдесят четыре ступени, и последние из них считаются сами. Внизу мешок ставят на площадку и добавляют в него ещё одну склянку — пустую, снятую с шеи того, кто уже не понадобится.",
+        "en": "Seventy-four steps, and the last of them count themselves. At the bottom the sack is set on the landing and one more flask is added to it — an empty one, taken from the neck of somebody who will not be needing it."
+      },
+      "next": "scene:silver_counter#queue_entry"
     }
   ]
 }

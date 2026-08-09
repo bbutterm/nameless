@@ -140,5 +140,119 @@
         "amount": 35
       }
     ]
+  },
+  {
+    "id": "battle_garden_diggers",
+    "name": {
+      "ru": "Ночная выемка на Том берегу",
+      "en": "A Night Withdrawal on the Other Bank"
+    },
+    "enemies": [
+      {
+        "unit": "pocket_cutter",
+        "row": "front",
+        "index": 0,
+        "level": 1
+      },
+      {
+        "unit": "wandering_debtor",
+        "row": "front",
+        "index": 1,
+        "level": 1
+      },
+      {
+        "unit": "throat_taker",
+        "row": "front",
+        "index": 2,
+        "level": 1
+      },
+      {
+        "unit": "hook_man",
+        "row": "back",
+        "index": 0,
+        "level": 1
+      },
+      {
+        "unit": "hook_man",
+        "row": "back",
+        "index": 1,
+        "level": 1
+      },
+      {
+        "unit": "sworn_witness",
+        "row": "back",
+        "index": 2,
+        "level": 1
+      }
+    ],
+    "turnLimit": 14,
+    "background": "other_bank_garden",
+    "rewards": [
+      {
+        "kind": "gold",
+        "delta": 12
+      },
+      {
+        "kind": "xp",
+        "amount": 20
+      }
+    ]
+  },
+  {
+    "id": "battle_stair_snuffers",
+    "name": {
+      "ru": "Съём огарков на чёрной лестнице",
+      "en": "Stripping the Cinders on the Back Stairs"
+    },
+    "enemies": [
+      {
+        "unit": "pocket_cutter",
+        "row": "front",
+        "index": 0,
+        "level": 1
+      },
+      {
+        "unit": "throat_taker",
+        "row": "front",
+        "index": 1,
+        "level": 1
+      },
+      {
+        "unit": "pocket_cutter",
+        "row": "front",
+        "index": 2,
+        "level": 1
+      },
+      {
+        "unit": "hook_man",
+        "row": "back",
+        "index": 0,
+        "level": 1
+      },
+      {
+        "unit": "hook_man",
+        "row": "back",
+        "index": 1,
+        "level": 1
+      },
+      {
+        "unit": "ledger_clerk",
+        "row": "back",
+        "index": 2,
+        "level": 1
+      }
+    ],
+    "turnLimit": 14,
+    "background": "klyost_errand",
+    "rewards": [
+      {
+        "kind": "gold",
+        "delta": 9
+      },
+      {
+        "kind": "xp",
+        "amount": 18
+      }
+    ]
   }
 ]

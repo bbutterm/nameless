@@ -1,13 +1,28 @@
 {
   "id": "rat_escort",
   "chapter": 2,
-  "title": { "ru": "Крысиный конвой", "en": "The Rat Escort" },
-  "tags": ["insert", "vaults", "no_combat"],
+  "title": {
+    "ru": "Крысиный конвой",
+    "en": "The Rat Escort"
+  },
+  "tags": [
+    "insert",
+    "vaults",
+    "no_combat"
+  ],
   "available": {
     "kind": "any",
     "of": [
-      { "kind": "axis", "axis": "reason_obsession", "op": "lte", "value": -60 },
-      { "kind": "flag", "flag": "archive_copied" }
+      {
+        "kind": "axis",
+        "axis": "reason_obsession",
+        "op": "lte",
+        "value": -60
+      },
+      {
+        "kind": "flag",
+        "flag": "archive_copied"
+      }
     ]
   },
   "entry": "three_of_them",
@@ -43,7 +58,10 @@
     {
       "kind": "lore",
       "id": "lore_rats",
-      "title": { "ru": "Циркуляр о вредителях, пункт четвёртый", "en": "Circular on vermin, item four" },
+      "title": {
+        "ru": "Циркуляр о вредителях, пункт четвёртый",
+        "en": "Circular on vermin, item four"
+      },
       "text": {
         "ru": "«Меры принимать без применения ядов: отравленный вредитель уносит принятое в кладку и портит хранение». За четыреста лет пункт превратился в обычай, обычай — в паёк: сторожа выносят вниз хлеб «на тридцать одну» и списывают его по статье на побелку. Побелки в нижних ярусах нет.",
         "en": "\"Measures to be taken without poisons: a poisoned pest carries what it has taken into the masonry and spoils the storage.\" In four hundred years the item became a custom, the custom a ration: the watchmen carry bread down \"for thirty-one\" and write it off under the whitewash article. There is no whitewash in the lower tiers."
@@ -57,7 +75,15 @@
         "ru": "За дырой ход, за ходом гнездо. Оно свито из бумаги с сургучом: другой бумаги они не берут, сургуч держит форму. Дело, которое искали двадцать лет, лежит здесь, разодранное на подстилку и уложенное аккуратно.",
         "en": "Behind the hole is a passage, behind the passage a nest. It is woven out of paper with wax on it: they take no other kind, the wax holds its shape. A case file they hunted for twenty years lies here, torn up for bedding and laid out neatly."
       },
-      "keywords": [{ "match": { "ru": "свито из бумаги с сургучом", "en": "woven out of paper with wax" }, "tone": "lore" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "свито из бумаги с сургучом",
+            "en": "woven out of paper with wax"
+          },
+          "tone": "lore"
+        }
+      ],
       "next": "nest_card"
     },
     {
@@ -79,75 +105,183 @@
       "options": [
         {
           "id": "copy_nest",
-          "text": { "ru": "Переписать гнездо. Всё, до подстилки.", "en": "Copy the nest. All of it, bedding included." },
+          "text": {
+            "ru": "Переписать гнездо. Всё, до подстилки.",
+            "en": "Copy the nest. All of it, bedding included."
+          },
           "fallback": true,
           "effects": [
-            { "kind": "fragment", "memory": "opis_vsego_sushchego", "amount": 2 },
-            { "kind": "axis", "axis": "reason_obsession", "delta": -8 },
-            { "kind": "counter", "counter": "nights_awake", "delta": 1 }
+            {
+              "kind": "fragment",
+              "memory": "opis_vsego_sushchego",
+              "amount": 2
+            },
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -8
+            },
+            {
+              "kind": "counter",
+              "counter": "nights_awake",
+              "delta": 1
+            }
           ],
           "to": "r_copied"
         },
         {
           "id": "take_card",
-          "text": { "ru": "Взять карточку. Гнездо не трогать.", "en": "Take the card. Leave the nest alone." },
+          "text": {
+            "ru": "Взять карточку. Гнездо не трогать.",
+            "en": "Take the card. Leave the nest alone."
+          },
           "fallback": true,
           "effects": [
-            { "kind": "axis", "axis": "reason_obsession", "delta": 3 },
-            { "kind": "counter", "counter": "lots_held", "delta": 1 },
-            { "kind": "axis", "axis": "grasp_release", "delta": 8 }
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": 3
+            },
+            {
+              "kind": "counter",
+              "counter": "lots_held",
+              "delta": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": 8
+            }
           ],
           "to": "r_took_card"
         },
         {
           "id": "feed_them",
-          "text": { "ru": "Отдать им свой хлеб.", "en": "Give them your bread." },
+          "text": {
+            "ru": "Отдать им свой хлеб.",
+            "en": "Give them your bread."
+          },
           "fallback": true,
           "effects": [
-            { "kind": "fragment", "memory": "ochered_k_kolodtsu", "amount": 1 },
-            { "kind": "axis", "axis": "mercy_cruelty", "delta": 8 }
+            {
+              "kind": "fragment",
+              "memory": "ochered_k_kolodtsu",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": 8
+            }
           ],
           "to": "r_fed"
         },
         {
           "id": "tell_watchman",
-          "conditions": { "kind": "axis", "axis": "honesty_deceit", "op": "gte", "value": 25 },
-          "text": { "ru": "Позвать сторожа. Дело нашлось.", "en": "Call the watchman. The file has turned up." },
+          "conditions": {
+            "kind": "axis",
+            "axis": "honesty_deceit",
+            "op": "gte",
+            "value": 25
+          },
+          "text": {
+            "ru": "Позвать сторожа. Дело нашлось.",
+            "en": "Call the watchman. The file has turned up."
+          },
           "effects": [
-            { "kind": "fragment", "memory": "khronika_bez_popravok", "amount": 1 },
-            { "kind": "axis", "axis": "honesty_deceit", "delta": 8 }
+            {
+              "kind": "fragment",
+              "memory": "khronika_bez_popravok",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 8
+            }
           ],
           "to": "r_told",
           "priority": 5
         },
         {
           "id": "burn_nest",
-          "chip": { "icon": "fire", "label": { "ru": "Смолокур", "en": "Smolokur" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "smolokur" },
-          "text": { "ru": "Выжечь гнездо. Бумага горит быстро.", "en": "Burn the nest out. Paper goes fast." },
+          "chip": {
+            "icon": "fire",
+            "label": {
+              "ru": "Смолокур",
+              "en": "Smolokur"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "smolokur"
+          },
+          "text": {
+            "ru": "Выжечь гнездо. Бумага горит быстро.",
+            "en": "Burn the nest out. Paper goes fast."
+          },
           "effects": [
-            { "kind": "fragment", "memory": "ples_gorit", "amount": 1 },
-            { "kind": "axis", "axis": "mercy_cruelty", "delta": -12 }
+            {
+              "kind": "fragment",
+              "memory": "ples_gorit",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": -12
+            }
           ],
           "to": "r_burned",
           "priority": 6
         },
         {
           "id": "let_them_lead",
-          "conditions": { "kind": "axis", "axis": "reason_obsession", "op": "lte", "value": -40 },
-          "text": { "ru": "Ничего не брать. Идти за ними дальше.", "en": "Take nothing. Follow them further." },
+          "conditions": {
+            "kind": "axis",
+            "axis": "reason_obsession",
+            "op": "lte",
+            "value": -40
+          },
+          "text": {
+            "ru": "Ничего не брать. Идти за ними дальше.",
+            "en": "Take nothing. Follow them further."
+          },
           "effects": [
-            { "kind": "fragment", "memory": "eda_ne_vnesena", "amount": 1 },
-            { "kind": "axis", "axis": "reason_obsession", "delta": -8 }
+            {
+              "kind": "fragment",
+              "memory": "eda_ne_vnesena",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -8
+            }
           ],
           "to": "r_followed",
           "priority": 5
         },
         {
           "id": "put_board",
-          "conditions": { "kind": "axis", "axis": "grasp_release", "op": "lte", "value": -25 },
-          "text": { "ru": "Подложить им щепку взамен карточки.", "en": "Slip them a chip of wood instead of the card." },
-          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -8 }],
+          "conditions": {
+            "kind": "axis",
+            "axis": "grasp_release",
+            "op": "lte",
+            "value": -25
+          },
+          "text": {
+            "ru": "Подложить им щепку взамен карточки.",
+            "en": "Slip them a chip of wood instead of the card."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": -8
+            }
+          ],
           "to": "r_swapped",
           "priority": 5
         }
@@ -224,7 +358,7 @@
         "ru": "Дальше двери попадаются незапертыми одна за другой. Они не отпирают: они знают, какая из них не заперта уже сорок лет, потому что ходят этим путём каждую ночь, а ты — первую.",
         "en": "After that the doors turn up unlocked one after another. They do not open them: they know which one has been unlocked for forty years, because they go this way every night, and you are on your first."
       },
-      "next": "escort_exit"
+      "next": "nest_sack"
     },
     {
       "kind": "narration",
@@ -234,6 +368,252 @@
         "en": "At the stairway up they all stop at once and sit down in an even row. Escorting any higher is evidently not part of their post."
       },
       "next": "scene:vaults_hub"
+    },
+    {
+      "kind": "narration",
+      "id": "nest_sack",
+      "text": {
+        "ru": "У одиннадцатой двери крысы садятся и дальше не идут. За дверью на полу разложены гнёзда — восемь штук, распотрошённых до подстилки, и рядом мешок, в который их складывают обратно уже сортированными: бумага к бумаге, сургуч к сургучу.",
+        "en": "At the eleventh door the rats sit down and go no further. Beyond the door nests are laid out on the floor — eight of them, torn down to the bedding, and beside them a sack into which they are being put back already sorted: paper with paper, wax with wax."
+      },
+      "next": "nest_1"
+    },
+    {
+      "kind": "say",
+      "id": "nest_1",
+      "speaker": "marodyor",
+      "text": {
+        "ru": "Гнездо вьётся из того, что не хватились. Мы берём гнёзда, а не дела: за дело спросят, за подстилку — никто.",
+        "en": "A nest is woven out of what nobody missed. We take nests, not cases: a case gets asked about, bedding never does."
+      },
+      "next": "nest_2"
+    },
+    {
+      "kind": "say",
+      "id": "nest_2",
+      "speaker": "marodyor",
+      "text": {
+        "ru": "За четыре года из этого хода вынесено одиннадцать гнёзд. Три из них потом продали обратно Ломбарду, и Ломбард заплатил как за находку.",
+        "en": "In four years eleven nests have been carried out of this passage. Three of them were later sold back to the Pawnshop, and the Pawnshop paid for them as for a find."
+      },
+      "next": "nest_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "nest_choice",
+      "prompt": {
+        "ru": "Передняя сидит у порога и не заходит. Остальные тридцать сидят за ней.",
+        "en": "The lead one sits at the threshold and does not go in. The other thirty sit behind her."
+      },
+      "options": [
+        {
+          "id": "stand_threshold",
+          "text": {
+            "ru": "Встать в дверях. Их тридцать один, считая переднюю.",
+            "en": "Stand in the doorway. There are thirty-one, counting the lead."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": 5
+            }
+          ],
+          "to": "r_nest_stand"
+        },
+        {
+          "id": "ask_buyer",
+          "text": {
+            "ru": "Спросить, кому продают подстилку.",
+            "en": "Ask who buys the bedding."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -5
+            }
+          ],
+          "to": "r_nest_buyer"
+        },
+        {
+          "id": "let_them_take",
+          "text": {
+            "ru": "Закрыть дверь и увести крыс.",
+            "en": "Close the door and lead the rats away."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": -5
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": 3
+            }
+          ],
+          "to": "r_nest_left"
+        },
+        {
+          "id": "kick_sack",
+          "text": {
+            "ru": "Опрокинуть мешок. Сортировать заново долго.",
+            "en": "Tip the sack over. Re-sorting takes a while."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": -5
+            }
+          ],
+          "to": "r_nest_first"
+        },
+        {
+          "id": "read_bedding",
+          "text": {
+            "ru": "Прочитать вслух, что написано на подстилке.",
+            "en": "Read aloud what is written on the bedding."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 5
+            }
+          ],
+          "to": "r_nest_buyer"
+        },
+        {
+          "id": "count_nests",
+          "text": {
+            "ru": "Сосчитать гнёзда и назвать двенадцатое.",
+            "en": "Count the nests and name the twelfth."
+          },
+          "chip": {
+            "icon": "hourglass",
+            "label": {
+              "ru": "Перечень",
+              "en": "Perechen"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "perechen"
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -8
+            }
+          ],
+          "to": "r_nest_stand"
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "r_nest_stand",
+      "speaker": "marodyor",
+      "text": {
+        "ru": "В дверях стоять неудобно обоим. Крысы вас не защитят: они не кусают, они пережидают, и пережидают они лучше всех в этом городе.",
+        "en": "Standing in a doorway is awkward for both sides. The rats will not protect you: they do not bite, they wait it out, and they wait better than anyone in this city."
+      },
+      "next": "fight_nests"
+    },
+    {
+      "kind": "say",
+      "id": "r_nest_buyer",
+      "speaker": "marodyor",
+      "text": {
+        "ru": "Покупает тот, кто читает подстилку до дыр. Прочли вы вслух — цена подстилки упала, и теперь мы вам должны, а долги мы отдаём тем же весом.",
+        "en": "The buyer is the one who reads the bedding to shreds. You read it aloud — the bedding's price has dropped, and now we owe you, and we pay debts back by the same weight."
+      },
+      "next": "fight_nests"
+    },
+    {
+      "kind": "narration",
+      "id": "r_nest_first",
+      "text": {
+        "ru": "Мешок опрокидывается на бок, и рассортированное перемешивается за один вдох. Тот, кто сортировал, поднимает голову медленнее остальных: он считал вслух и теперь сбился.",
+        "en": "The sack goes over on its side, and what was sorted mixes in a single breath. The one who was sorting lifts his head slower than the rest: he was counting out loud, and now he has lost it."
+      },
+      "next": "fight_nests"
+    },
+    {
+      "kind": "battle",
+      "id": "fight_nests",
+      "battle": "battle_nest_collectors",
+      "onWin": "nests_after",
+      "onLose": "dying_nests"
+    },
+    {
+      "kind": "narration",
+      "id": "nests_after",
+      "text": {
+        "ru": "Мешок остаётся у порога. Крысы заходят, когда в ходе становится тихо, и начинают вить заново с того же угла: бумага к бумаге, сургуч держит форму.",
+        "en": "The sack stays at the threshold. The rats come in when the passage falls quiet and start weaving again from the same corner: paper with paper, the sealing wax holds the shape."
+      },
+      "next": "escort_exit"
+    },
+    {
+      "kind": "narration",
+      "id": "r_nest_left",
+      "text": {
+        "ru": "Дверь идёт тяжело и садится в косяк не сразу. Крысы уходят за тобой все разом, и передняя идёт последней, оглядываясь ровно столько раз, сколько за дверью гнёзд.",
+        "en": "The door moves heavily and does not settle into the frame at once. The rats leave with you all together, and the lead one goes last, looking back exactly as many times as there are nests behind the door."
+      },
+      "next": "escort_exit"
+    },
+    {
+      "kind": "effects",
+      "id": "dying_nests",
+      "effects": [
+        {
+          "kind": "flag",
+          "flag": "death_cause_guild",
+          "value": true
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_scavengers",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_sluza",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_guard",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_shelf",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_vytsvet",
+          "value": false
+        }
+      ],
+      "next": "nests_falling"
+    },
+    {
+      "kind": "narration",
+      "id": "nests_falling",
+      "text": {
+        "ru": "Тебя описывают на месте, как описывают подстилку: бумага отдельно, всё остальное на вес. Крысы сидят за порогом ровным рядом и не расходятся, пока в ходе не гасят последнюю лампу.",
+        "en": "They inventory you where you lie, the way bedding is inventoried: paper apart, the rest by weight. The rats sit beyond the threshold in an even row and do not disperse until the last lamp in the passage goes out."
+      },
+      "next": "scene:silver_counter#queue_entry"
     }
   ]
 }

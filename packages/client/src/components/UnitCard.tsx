@@ -1,6 +1,7 @@
-import type { BattleUnitState, Lang, UnitDef } from '@nameless/engine';
+import type { BattleUnitState, Lang, StatusEffect, UnitDef } from '@nameless/engine';
 import { loc } from '../i18n';
 import { cardImage, svgDataUri, unitCardSvg } from '../lib/art';
+import { unitEmblem } from '../lib/emblems';
 import type { Preview } from '../lib/combatRead';
 import { Icon } from './Icon';
 
@@ -9,6 +10,64 @@ export interface FloatingNumber {
   uid: string;
   amount: number;
   kind: 'damage' | 'heal' | 'crit';
+}
+
+/**
+ * Строка состояний под именем карты.
+ *
+ * До этого на карточке жили ровно два состояния: число щита в углу полосы HP и
+ * значок оглушения. Яд, усиления и ослабления не показывались НИКАК — урон
+ * «сам собой» капал в начале хода, а собственный бафф атаки нельзя было
+ * увидеть, только вспомнить. Показываем все пять видов одним рядом.
+ *
+ * Иконки берём из уже принятого набора (`Icon`, game-icons/Lorc), а не из
+ * пака Kenney: см. docs/ART_PASS.md §3 — «значков статов» в том паке нет,
+ * там галочки, крестики и курсоры, и они бежевые с заливкой.
+ *
+ * Цвет — смысл, а не украшение: щит — свой цвет щита, вред (яд, ослабление,
+ * оглушение) — `--danger`, польза (усиление) — `--accent`.
+ */
+interface StatusChip {
+  icon: string;
+  tone: string;
+  label: string;
+  key: string;
+}
+
+const STAT_ICON: Record<string, string> = {
+  atk: 'sword',
+  def: 'shield',
+  initiative: 'wing',
+};
+
+function statusChips(statuses: StatusEffect[]): StatusChip[] {
+  const chips: StatusChip[] = [];
+  let shield = 0;
+  let dot = 0;
+  let stunTurns = 0;
+  for (const s of statuses) {
+    if (s.kind === 'shield') shield += s.amount;
+    else if (s.kind === 'dot') dot += s.amount;
+    else if (s.kind === 'stun') stunTurns = Math.max(stunTurns, s.turns);
+    else if (s.kind === 'buff' || s.kind === 'debuff') {
+      const sign = s.kind === 'buff' ? '+' : '−';
+      chips.push({
+        key: `${s.kind}-${s.stat}-${chips.length}`,
+        icon: STAT_ICON[s.stat ?? 'atk'] ?? 'sword',
+        tone: s.kind === 'buff' ? 'var(--accent)' : 'var(--danger)',
+        label: `${sign}${Math.abs(s.amount)}`,
+      });
+    }
+  }
+  // Порядок постоянный: щит → яд → оглушение → усиления. Прыгающий порядок
+  // на карточке 105px читается как мигание, а не как информация.
+  const head: StatusChip[] = [];
+  if (shield > 0)
+    head.push({ key: 'shield', icon: 'shield', tone: 'var(--shield)', label: String(shield) });
+  if (dot > 0) head.push({ key: 'dot', icon: 'poison', tone: 'var(--danger)', label: String(dot) });
+  if (stunTurns > 0)
+    head.push({ key: 'stun', icon: 'stun', tone: 'var(--danger)', label: String(stunTurns) });
+  return [...head, ...chips];
 }
 
 /**
@@ -52,9 +111,12 @@ export function UnitCard({
   onTap?: () => void;
 }) {
   const hpPct = Math.max(0, Math.min(1, unit.hp / Math.max(1, unit.maxHp)));
-  const art = def ? (cardImage(def.id) ?? svgDataUri(unitCardSvg(def.id, def.tier, def.faction))) : undefined;
-  const shield = unit.statuses.filter((s) => s.kind === 'shield').reduce((a, s) => a + s.amount, 0);
-  const stunned = unit.statuses.some((s) => s.kind === 'stun');
+  const custom = def ? cardImage(def.id) : undefined;
+  const art = def ? (custom ?? svgDataUri(unitCardSvg(def.id, def.tier, def.faction))) : undefined;
+  // Знак дома кладём только поверх процедурной заглушки. Свой арт пользователя
+  // (assets/cards/<id>.webp) ничем не забиваем — это его слот, а не наш холст.
+  const mark = custom ? undefined : unitEmblem(def?.id, def?.faction);
+  const chips = statusChips(unit.statuses);
   // Намерение показываем только тому, кто в этом раунде ещё не ходил: движок
   // проставляет intent всем врагам на весь раунд и после хода его не гасит,
   // так что иконка (а теперь и стрелка к цели) врала про уже отстрелявшихся.
@@ -86,9 +148,21 @@ export function UnitCard({
       {art && (
         <div className="card-art-clip">
           <img className="card-art" src={art} alt="" draggable={false} />
+          {mark && <span className="card-mark" style={mark} aria-hidden="true" />}
         </div>
       )}
       <div className="card-name">{def ? loc(def.name, lang) : unit.defId}</div>
+
+      {chips.length > 0 && (
+        <div className="status-row">
+          {chips.map((c) => (
+            <span key={c.key} className="status-chip" style={{ color: c.tone }}>
+              <Icon name={c.icon} size={11} color={c.tone} />
+              {c.label}
+            </span>
+          ))}
+        </div>
+      )}
 
       <div className="hp-bar">
         <div
@@ -98,7 +172,6 @@ export function UnitCard({
             background: unit.side === 'player' ? 'var(--hp-ally)' : 'var(--hp-enemy)',
           }}
         />
-        {shield > 0 && <div className="shield-pip">{shield}</div>}
       </div>
       <div className="card-hp">
         {unit.hp}/{unit.maxHp}
@@ -111,12 +184,6 @@ export function UnitCard({
           <Icon name={unit.intent.icon} size={14} />
         </div>
       )}
-      {stunned && (
-        <div className="status-badge">
-          <Icon name="stun" size={13} color="var(--accent)" />
-        </div>
-      )}
-
       {/* Предпросмотр урона поверх арта: та же позиция, где через мгновение
           всплывёт настоящая цифра, — «во что превратится тап» читается сразу. */}
       {preview && (

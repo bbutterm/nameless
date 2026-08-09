@@ -5,6 +5,7 @@ import { content } from '../store/content';
 import { Icon } from '../components/Icon';
 import { vibrate } from '../lib/haptics';
 import { playSfx } from '../lib/sound';
+import { placeEmblemByKey } from '../lib/emblems';
 
 /**
  * Церемония смерти: очередь → Прилавок → выдача лота → чулан.
@@ -34,6 +35,10 @@ export function DeathScreen() {
   return (
     <div className="screen death">
       <div className="ash" />
+      {/* Церемония смерти была набрана одним шрифтом на пустоте. Песочные часы
+          в цвете памяти — единственный знак на экране: он не иллюстрирует
+          смерть, он называет то, что здесь на самом деле происходит, — срок. */}
+      <span className="death-mark" style={placeEmblemByKey('hourglass')} aria-hidden="true" />
 
       <div className={`death-stage ${phase >= 0 ? 'in' : ''}`}>
         <div className="death-name">{loc(death?.name, lang)}</div>

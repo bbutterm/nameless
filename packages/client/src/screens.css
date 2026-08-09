@@ -601,12 +601,31 @@
   overflow: hidden;
 }
 .hp-fill { height: 100%; transition: width 260ms ease; }
-.shield-pip {
-  position: absolute;
-  right: 1px;
-  top: -9px;
-  font-size: 9px;
-  color: var(--shield);
+/* Состояния юнита — строкой над полосой HP, а не одной цифрой в углу полосы:
+   щит, яд, оглушение, усиления и ослабления показываются одинаково (значок из
+   набора игры + число), и ни один из них больше не действует втихую.
+   Раньше здесь жили .shield-pip (число щита поверх полосы) и .status-badge
+   (единственный значок оглушения в углу) — оба выброшены, см. docs/ART_PASS.md §3. */
+.status-row {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 2px 4px;
+  padding: 0 2px 1px;
+  line-height: 1;
+}
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+  font-size: 9.5px;
+  line-height: 1;
+  /* Тень обязательна: строка лежит поверх арта карточки, а он у каждой
+     фракции своего тона — без тени число тонет на светлом знаке. */
+  text-shadow: 0 1px 2px #000, 0 0 6px #000;
 }
 .card-hp {
   position: relative;
@@ -629,14 +648,6 @@
   color: var(--danger);
   line-height: 0;
 }
-.status-badge {
-  position: absolute;
-  top: 2px;
-  right: 2px;
-  z-index: 2;
-  line-height: 0;
-}
-
 /* Предпросмотр урона и причина запрета живут в одном месте — там, где через
    мгновение всплывёт настоящая цифра урона (.float ниже, top 24%). */
 .preview,
@@ -1036,6 +1047,7 @@
    разделитель Kenney по верхней кромке: лист опознаётся как из одной
    семьи с полем боя, но остаётся шторкой, а не окном. */
 .sheet {
+  position: relative;
   width: 100%;
   max-height: 88dvh;
   display: flex;
@@ -1054,6 +1066,13 @@
   background: url('../../content/assets/ui/nameless/divider-ornate.png') center / auto 7px
     no-repeat;
 }
+/* Всё содержимое листа обязано лежать НАД водяным знаком описи: знак
+   абсолютный, а флексовые дети без позиции рисуются под позиционированным
+   братом — без этих трёх строк свиток накрыл бы вкладки. */
+.sheet::before,
+.sheet-tabs,
+.sheet-body,
+.sheet-close { position: relative; z-index: 1; }
 .sheet-tabs { display: flex; gap: 8px; }
 .sheet-tabs button {
   position: relative;
@@ -1117,6 +1136,7 @@
   transform: scale(1.16);
 }
 .party-thumb {
+  position: relative;
   overflow: hidden;
   border-radius: 4px;
   aspect-ratio: 3/4;
@@ -1217,3 +1237,137 @@
   padding-top: 10px;
 }
 .attribution b { font-weight: 600; color: var(--text-dim); }
+
+/* ── Знаки Lorc: общий механизм ──────────────────────────────────────────────
+ *
+ * Источник: 700 RPG-иконок Lorc (OpenGameArt, CC BY 3.0) — тот же автор, что и
+ * у набора game-icons в `Icon.tsx`, поэтому это расширение уже принятого языка
+ * формы, а не второй набор (docs/STYLE.md §7.2). Цвет палитры запечён в PNG
+ * скриптом `packages/content/assets/ui/nameless/emblems.py` — по той же
+ * причине, что и у рамок Kenney: из белого `hue-rotate()` цвета не даёт.
+ *
+ * Все знаки лежат тремя спрайт-лентами (говорящие / фракции / места). JS ставит
+ * три переменные: `--mark-url` (лента), `--mark-n` (сколько в ней ячеек),
+ * `--mark-i` (какая нужна). Размер знака на экране задаёт CSS — `--mark-s`, и
+ * только он: один и тот же файл работает и знаком в 27px, и водяным знаком
+ * в 190px, второго ассета под второй размер не заводим.
+ *
+ * Знак рисуется на ::before размером ровно в одну ячейку, а не фоном самого
+ * блока. Причина не косметическая: проценты в `background-position` считаются
+ * от РАЗНИЦЫ размеров блока и картинки, а лента в двадцать раз шире блока —
+ * `50%` там даёт большое отрицательное смещение, и в портрете 44px оказывались
+ * видны сразу две чужие ячейки. Блок в одну ячейку + `translate(-50%,-50%)`
+ * убирает эту арифметику совсем: сдвиг по ленте остаётся один, целочисленный.
+ * ------------------------------------------------------------------------- */
+.portrait-mark,
+.card-mark,
+.scene-mark,
+.death-mark,
+.sheet-mark {
+  position: relative;
+  pointer-events: none;
+}
+.portrait-mark::before,
+.card-mark::before,
+.scene-mark::before,
+.death-mark::before,
+.sheet-mark::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: var(--mark-y, 50%);
+  width: var(--mark-s);
+  height: var(--mark-s);
+  transform: translate(-50%, -50%);
+  background-image: var(--mark-url);
+  background-repeat: no-repeat;
+  background-size: calc(var(--mark-n) * var(--mark-s)) var(--mark-s);
+  background-position: calc(-1 * var(--mark-i) * var(--mark-s)) 0;
+}
+
+/* Портрет-знак вместо процедурного силуэта в капюшоне. Семь главных лиц игры
+   рисовались одной и той же тенью с разбросом в несколько пикселей и на 44px
+   были неразличимы; теперь у каждого свой предмет, а цвет знака называет дом
+   (золото — Учёт, сталь — стража, красный — Ревизия, бирюза — Братство,
+   фиолет — Цех, бледный — безымянные). См. docs/ART_PASS.md §1. */
+.portrait-mark {
+  --mark-s: 27px;
+  --mark-y: 50%;
+  display: block;
+  overflow: hidden;
+  background-color: var(--bg-1);
+  /* Внутренняя тень даёт знаку нишу, а не наклейку: без неё глиф висел прямо
+     на плоскости пузыря и читался как иконка кнопки. */
+  box-shadow: inset 0 1px 0 rgba(232, 226, 234, 0.05), inset 0 -7px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* Знак дома на карточке юнита. Лежит поверх процедурной заглушки и только
+   поверх неё: свой арт пользователя из assets/cards/ ничем не забивается. */
+.card-mark {
+  --mark-s: 42px;
+  --mark-y: 32%;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.66;
+}
+/* В описи карточка вдвое мельче боевой — знак ужимаем вместе с ней. */
+.party-thumb .card-mark { --mark-s: 34px; }
+
+/* Крупные водяные знаки (место сцены, срок на экране смерти, свиток описи)
+   получают мягкий край. Без него знак в 300px читается как наклейка с ровной
+   границей: пробовал плотный вариант в 176px без маски — на экране диалога он
+   выглядел приклеенным поверх черноты предметом, то есть ровно тем, чего
+   правило цельности не разрешает. Растворённый край превращает его в свет
+   на стене, а не в картинку. */
+.scene-mark::before,
+.death-mark::before,
+.sheet-mark::before {
+  -webkit-mask-image: radial-gradient(closest-side, #000 38%, transparent 100%);
+  mask-image: radial-gradient(closest-side, #000 38%, transparent 100%);
+}
+
+/* Знак места. Живёт в верхней трети экрана — там, где у диалога чистая
+   чернота, а у боя пустой ряд. Он намеренно больше экрана по ширине и
+   подрезается краями: сцена получает не иллюстрацию, а тень чего-то большого. */
+.scene-mark {
+  --mark-s: 300px;
+  --mark-y: 13%;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.085;
+  /* Мир сереет с каждой смертью — знак места обязан сереть вместе с фоном,
+     иначе он остаётся единственным цветным пятном на выцветшем экране. */
+  filter: grayscale(var(--greyness, 0));
+}
+.battle-mark {
+  --mark-s: 240px;
+  --mark-y: 8%;
+  opacity: 0.055;
+}
+
+/* Церемония смерти была набрана одним шрифтом на пустом фоне. */
+.death-mark {
+  --mark-s: 260px;
+  --mark-y: 12%;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.09;
+}
+
+/* Свиток описи под листом. */
+.sheet-mark {
+  --mark-s: 185px;
+  --mark-y: 62%;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.09;
+}
+
+@media (max-height: 700px) {
+  .scene-mark { --mark-s: 240px; }
+  .death-mark { --mark-s: 200px; }
+}

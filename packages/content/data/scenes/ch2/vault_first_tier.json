@@ -132,7 +132,7 @@
             "en": "Keep talking until both sides tire of it."
           },
           "fallback": true,
-          "to": "watch_battle"
+          "to": "tier_fight_mark"
         },
         {
           "id": "rush",
@@ -148,7 +148,7 @@
               "delta": -3
             }
           ],
-          "to": "watch_battle"
+          "to": "tier_fight_mark"
         },
         {
           "id": "wait_shift",
@@ -319,7 +319,7 @@
               "delta": -8
             }
           ],
-          "to": "watch_battle",
+          "to": "tier_fight_mark",
           "priority": 6
         },
         {
@@ -741,7 +741,7 @@
         "ru": "Пластина выходит легко и оставляет в кладке ровный прямоугольник пустоты. Стена стоит. Ты некоторое время ждёшь, что не будет стоять.",
         "en": "The plate comes away easily and leaves a neat rectangle of nothing in the masonry. The wall stands. You spend some time waiting for it not to."
       },
-      "next": "depth_up"
+      "next": "post_router"
     },
     {
       "kind": "narration",
@@ -750,7 +750,7 @@
         "ru": "Ты переписываешь обе строки на обороте описи карманов и на слове «которого» останавливаешься: рука уже сократила его сама, до того как ты решил сокращать.",
         "en": "You copy both lines onto the back of the inventory of your pockets, and at the word \"whereof\" you stop: the hand has already shortened it by itself, before you decided to shorten anything."
       },
-      "next": "depth_up"
+      "next": "post_router"
     },
     {
       "kind": "narration",
@@ -759,7 +759,7 @@
         "ru": "Пластин на ярусе сорок одна, и все сорок одна относятся к одному разделу. Ты сводишь список к утру, и в списке нет ни одной фамилии, кроме той, что стёрта на каждой пластине одинаково аккуратно.",
         "en": "There are forty-one plates on the tier, and all forty-one belong to one section. You reconcile the list by morning, and there is not one surname in it except the one rubbed off every plate with the same care."
       },
-      "next": "depth_up"
+      "next": "post_router"
     },
     {
       "kind": "narration",
@@ -768,7 +768,7 @@
         "ru": "Ты читаешь вслух, и «проверял вкладчик» звучит в галерее дважды: второй раз возвращается от кладки на четверть тише. Мальчик за спиной повторяет одними губами, чтобы точнее.",
         "en": "You read it aloud, and \"checked by the depositor\" sounds twice in the gallery: the second time it comes back off the masonry a quarter quieter. Behind you the boy repeats it with his lips only, to get it right."
       },
-      "next": "depth_up"
+      "next": "post_router"
     },
     {
       "kind": "narration",
@@ -777,7 +777,7 @@
         "ru": "Связка занимается медленно и пахнет смолой, а не бумагой: описи здесь пропитаны, чтобы не гнили. Кладка над выжженным местом оседает на палец и останавливается.",
         "en": "The bundle catches slowly and smells of tar rather than paper: the inventories down here are steeped so they will not rot. The masonry above the burnt place settles by a finger's width and stops."
       },
-      "next": "depth_up"
+      "next": "post_router"
     },
     {
       "kind": "say",
@@ -787,7 +787,7 @@
         "ru": "Тяжёлая. Ничего, я мигом: у меня под рубахой уже бирка с номером, будет теперь две.",
         "en": "Heavy. Never mind, I'll be quick: I've already got a tag with a number under my shirt, now there'll be two."
       },
-      "next": "depth_up"
+      "next": "post_router"
     },
     {
       "kind": "narration",
@@ -796,7 +796,7 @@
         "ru": "Раствор ты разводишь из пыли под ногами и воды из фляги; схватывается он плохо и держится честно. Через год пластину найдут заново и запишут как найденное имущество.",
         "en": "You mix the mortar from the dust underfoot and water from a flask; it sets badly and holds honestly. In a year the plate will be found again and entered as property recovered."
       },
-      "next": "depth_up"
+      "next": "post_router"
     },
     {
       "kind": "effects",
@@ -818,6 +818,169 @@
         "en": "You go back up past the same masonry and count the plates the other way. The fifth from the stairs reads \"Section two. The Dry Years\", and it is still two tiers further down."
       },
       "next": "scene:vaults_hub"
+    },
+    {
+      "kind": "effects",
+      "id": "tier_fight_mark",
+      "effects": [
+        {
+          "kind": "flag",
+          "flag": "vault_post_fought",
+          "value": true
+        }
+      ],
+      "next": "watch_battle"
+    },
+    {
+      "kind": "branch",
+      "id": "post_router",
+      "branches": [
+        {
+          "when": {
+            "kind": "flag",
+            "flag": "vault_post_fought"
+          },
+          "to": "depth_up"
+        }
+      ],
+      "fallback": "post_returns"
+    },
+    {
+      "kind": "narration",
+      "id": "post_returns",
+      "text": {
+        "ru": "Пост возвращается быстрее, чем полагается по расписанию смены: свинец в кладке держат не за металл, а за то, что по нему видно, тронута ли стена. Видно с четырёх шагов.",
+        "en": "The post comes back sooner than the shift schedule allows: the lead is set in the masonry not for the metal but because it shows whether the wall has been touched. It shows from four paces."
+      },
+      "next": "post_says"
+    },
+    {
+      "kind": "say",
+      "id": "post_says",
+      "speaker": "strazhnik",
+      "text": {
+        "ru": "Пластина числится за кладкой, а кладка за разделом. Кто тронул пластину, тот тронул раздел, и дальше разговор идёт не со мной.",
+        "en": "The plate is entered against the masonry, and the masonry against the section. Whoever touched the plate touched the section, and past that the conversation is not with me."
+      },
+      "next": "post_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "post_choice",
+      "prompt": {
+        "ru": "Пролом за спиной, пост впереди, между ними двадцать шагов ровной кладки.",
+        "en": "The breach behind you, the post ahead, twenty paces of even masonry between."
+      },
+      "options": [
+        {
+          "id": "post_stand",
+          "text": {
+            "ru": "Не отдавать. Стать так, чтобы видели руки.",
+            "en": "Not give it back. Stand so your hands show."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": 5
+            }
+          ],
+          "to": "r_post_stand"
+        },
+        {
+          "id": "post_read",
+          "text": {
+            "ru": "Прочитать им вторую строку пластины вслух.",
+            "en": "Read them the plate's second line aloud."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 5
+            }
+          ],
+          "to": "r_post_read"
+        },
+        {
+          "id": "post_back",
+          "text": {
+            "ru": "Вернуть пластину в шов и уйти.",
+            "en": "Put the plate back in the joint and go."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": -8
+            }
+          ],
+          "to": "r_post_back"
+        },
+        {
+          "id": "post_rush",
+          "text": {
+            "ru": "Пройти двадцать шагов, не останавливаясь.",
+            "en": "Walk the twenty paces without stopping."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": -3
+            }
+          ],
+          "to": "r_post_stand"
+        },
+        {
+          "id": "post_order",
+          "text": {
+            "ru": "Показать особое распоряжение ещё раз.",
+            "en": "Show the special order one more time."
+          },
+          "conditions": {
+            "kind": "flag",
+            "flag": "vault_order"
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": -3
+            }
+          ],
+          "to": "r_post_read"
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "r_post_stand",
+      "speaker": "strazhnik",
+      "text": {
+        "ru": "Руки я вижу. В описи руки не значатся, значатся кисти — отдельной строкой и с левой начиная.",
+        "en": "I see the hands. Hands are not in the inventory; wrists are, on a separate line, starting from the left."
+      },
+      "next": "watch_battle"
+    },
+    {
+      "kind": "say",
+      "id": "r_post_read",
+      "speaker": "strazhnik",
+      "text": {
+        "ru": "«Проверял вкладчик». Читать умею, потому и стою тут, а не наверху: наверху с такой строкой не служат.",
+        "en": "\"Checked by the depositor.\" I can read; that is why I stand here and not upstairs: upstairs they do not keep men who have read that line."
+      },
+      "next": "watch_battle"
+    },
+    {
+      "kind": "narration",
+      "id": "r_post_back",
+      "text": {
+        "ru": "Пластина входит в шов криво и на палец глубже, чем стояла. Пост считает это возвратом, записывает «на месте» и в третий раз за смену сходится с описью, которой не верит.",
+        "en": "The plate goes into the joint crooked and a finger deeper than it stood. The post calls that a return, writes \"in place\" and for the third time this shift agrees with an inventory it does not believe."
+      },
+      "next": "depth_up"
     }
   ]
 }

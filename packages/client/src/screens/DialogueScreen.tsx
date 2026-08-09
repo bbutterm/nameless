@@ -7,6 +7,7 @@ import { loc, t } from '../i18n';
 import { useGame } from '../store/game';
 import { content, idx } from '../store/content';
 import { backgroundSvg, svgDataUri } from '../lib/art';
+import { placeEmblem } from '../lib/emblems';
 import { ArchiveSheet } from './ArchiveSheet';
 import { TutorialHint } from '../components/Tutorial';
 
@@ -54,6 +55,11 @@ export function DialogueScreen() {
       onClick={isChoice ? undefined : tap}
     >
       <img className="scene-bg" src={bg} alt="" draggable={false} />
+      {/* Знак места в пустоте над лентой. Верхняя треть экрана диалога — чистая
+          чернота: фон-градиент там ничего не рисует, а лента прижата вниз.
+          Знак заполняет её ровно настолько, чтобы сцена перестала быть
+          безымянной, и не настолько, чтобы спорить с текстом (см. ART_PASS §5). */}
+      <span className="scene-mark" style={placeEmblem(state.scene)} aria-hidden="true" />
 
       <div className="top-bar">
         <button

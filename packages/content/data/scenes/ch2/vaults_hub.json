@@ -13,12 +13,33 @@
     "kind": "visited",
     "scene": "vault_gate"
   },
-  "entry": "hub_router",
+  "entry": "hub_count",
   "nodes": [
     {
       "kind": "branch",
       "id": "hub_router",
       "branches": [
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "counter",
+                "counter": "landing_rounds",
+                "op": "gte",
+                "value": 3
+              },
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "flag",
+                  "flag": "landing_skim"
+                }
+              }
+            ]
+          },
+          "to": "skim_mark"
+        },
         {
           "when": {
             "kind": "counter",
@@ -254,17 +275,29 @@
             "en": "Follow the rats."
           },
           "conditions": {
-            "kind": "any",
+            "kind": "all",
             "of": [
               {
-                "kind": "axis",
-                "axis": "reason_obsession",
-                "op": "lte",
-                "value": -60
+                "kind": "any",
+                "of": [
+                  {
+                    "kind": "axis",
+                    "axis": "reason_obsession",
+                    "op": "lte",
+                    "value": -60
+                  },
+                  {
+                    "kind": "flag",
+                    "flag": "archive_copied"
+                  }
+                ]
               },
               {
-                "kind": "flag",
-                "flag": "archive_copied"
+                "kind": "not",
+                "of": {
+                  "kind": "visited",
+                  "scene": "rat_escort"
+                }
               }
             ]
           },
@@ -278,10 +311,22 @@
             "en": "Back to the unclaimed room."
           },
           "conditions": {
-            "kind": "axis",
-            "axis": "grasp_release",
-            "op": "gte",
-            "value": 60
+            "kind": "all",
+            "of": [
+              {
+                "kind": "axis",
+                "axis": "grasp_release",
+                "op": "gte",
+                "value": 60
+              },
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "visited",
+                  "scene": "things_turn"
+                }
+              }
+            ]
           },
           "to": "scene:things_turn",
           "priority": 5
@@ -383,17 +428,29 @@
             "en": "Into the side passage where the rats go."
           },
           "conditions": {
-            "kind": "any",
+            "kind": "all",
             "of": [
               {
-                "kind": "axis",
-                "axis": "reason_obsession",
-                "op": "lte",
-                "value": -60
+                "kind": "any",
+                "of": [
+                  {
+                    "kind": "axis",
+                    "axis": "reason_obsession",
+                    "op": "lte",
+                    "value": -60
+                  },
+                  {
+                    "kind": "flag",
+                    "flag": "archive_copied"
+                  }
+                ]
               },
               {
-                "kind": "flag",
-                "flag": "archive_copied"
+                "kind": "not",
+                "of": {
+                  "kind": "visited",
+                  "scene": "rat_escort"
+                }
               }
             ]
           },
@@ -610,6 +667,13 @@
                   "kind": "flag",
                   "flag": "brotherhood_gate_shut"
                 }
+              },
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "visited",
+                  "scene": "brotherhood_shelter"
+                }
               }
             ]
           },
@@ -637,6 +701,13 @@
                   "kind": "flag",
                   "flag": "brotherhood_gate_shut"
                 }
+              },
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "visited",
+                  "scene": "quiet_together"
+                }
               }
             ]
           },
@@ -650,17 +721,29 @@
             "en": "To the prior, across the river."
           },
           "conditions": {
-            "kind": "any",
+            "kind": "all",
             "of": [
               {
-                "kind": "counter",
-                "counter": "debts_forgiven",
-                "op": "gte",
-                "value": 2
+                "kind": "any",
+                "of": [
+                  {
+                    "kind": "counter",
+                    "counter": "debts_forgiven",
+                    "op": "gte",
+                    "value": 2
+                  },
+                  {
+                    "kind": "flag",
+                    "flag": "proshchai_question"
+                  }
+                ]
               },
               {
-                "kind": "flag",
-                "flag": "proshchai_question"
+                "kind": "not",
+                "of": {
+                  "kind": "visited",
+                  "scene": "proshchai_confession"
+                }
               }
             ]
           },
@@ -674,8 +757,20 @@
             "en": "To the water pump, where the tail is standing."
           },
           "conditions": {
-            "kind": "life",
-            "life": "klyuchar"
+            "kind": "all",
+            "of": [
+              {
+                "kind": "life",
+                "life": "klyuchar"
+              },
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "visited",
+                  "scene": "vodonos_queue"
+                }
+              }
+            ]
           },
           "chip": {
             "icon": "heal",
@@ -739,6 +834,286 @@
         }
       ],
       "next": "hub_up"
+    },
+    {
+      "kind": "effects",
+      "id": "hub_count",
+      "effects": [
+        {
+          "kind": "counter",
+          "counter": "landing_rounds",
+          "delta": 1
+        }
+      ],
+      "next": "hub_router"
+    },
+    {
+      "kind": "effects",
+      "id": "skim_mark",
+      "effects": [
+        {
+          "kind": "flag",
+          "flag": "landing_skim",
+          "value": true
+        }
+      ],
+      "next": "skim_1"
+    },
+    {
+      "kind": "narration",
+      "id": "skim_1",
+      "text": {
+        "ru": "Лампу на столе прикрутили, и площадка работает при одной. Ящик стоит на подъёмнике вскрытым, сургуч снят целой печатью — так снимают те, кому печать ещё пригодится.",
+        "en": "The lamp on the table has been turned down, and the landing is working by one. A crate stands opened on the hoist, its wax lifted whole — the way it is lifted by people who will need the seal again."
+      },
+      "next": "skim_2"
+    },
+    {
+      "kind": "say",
+      "id": "skim_2",
+      "speaker": "storozh_arkhiva",
+      "text": {
+        "ru": "Восемь вниз, шесть наверх. Разницу мне печатают в бланке заранее: «убыль при перемещении, обычная». Я четыре года считаю то, что уже посчитали за меня.",
+        "en": "Eight down, six up. The difference is printed on my form in advance: \"loss in transit, ordinary\". For four years I have been counting what was counted for me."
+      },
+      "next": "skim_3"
+    },
+    {
+      "kind": "say",
+      "id": "skim_3",
+      "speaker": "marodyor",
+      "text": {
+        "ru": "Убыль обычная. Необычная — это когда её кто-то видит, и тогда её приходится оформлять на видевшего.",
+        "en": "The loss is ordinary. Extraordinary is when somebody sees it, and then it has to be filed against the one who saw."
+      },
+      "next": "skim_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "skim_choice",
+      "prompt": {
+        "ru": "Стол между вами. На столе бланк с отпечатанной строкой и мел.",
+        "en": "The table is between you. On it a form with the line already printed, and chalk."
+      },
+      "options": [
+        {
+          "id": "chalk_the_crate",
+          "text": {
+            "ru": "Написать мелом на ящике настоящее число.",
+            "en": "Chalk the real figure on the crate."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 8
+            }
+          ],
+          "to": "r_skim_chalk"
+        },
+        {
+          "id": "stand_at_hoist",
+          "text": {
+            "ru": "Встать у подъёмника. Ящик вниз не пойдёт.",
+            "en": "Stand at the hoist. The crate is not going down."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": 5
+            }
+          ],
+          "to": "r_skim_stand"
+        },
+        {
+          "id": "ask_the_printer",
+          "text": {
+            "ru": "Спросить, в какой типографии печатали строку.",
+            "en": "Ask which printer set that line."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -5
+            }
+          ],
+          "to": "r_skim_print"
+        },
+        {
+          "id": "look_away",
+          "text": {
+            "ru": "Не смотреть. Убыль обычная.",
+            "en": "Look away. The loss is ordinary."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": -5
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": -5
+            }
+          ],
+          "to": "r_skim_away"
+        },
+        {
+          "id": "count_with_watchman",
+          "text": {
+            "ru": "Считать вслух вместе со сторожем.",
+            "en": "Count aloud together with the watchman."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -3
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": 3
+            }
+          ],
+          "to": "r_skim_stand"
+        },
+        {
+          "id": "cut_the_rope",
+          "text": {
+            "ru": "Обрубить канат. Барабан внизу тянет к себе.",
+            "en": "Cut the rope. The drum below pulls its own way."
+          },
+          "conditions": {
+            "kind": "axis",
+            "axis": "mercy_cruelty",
+            "op": "lte",
+            "value": -25
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": -8
+            }
+          ],
+          "to": "r_skim_rope"
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "r_skim_chalk",
+      "speaker": "marodyor",
+      "text": {
+        "ru": "Мел стирают, не дожидаясь, пока ящик уйдёт. Это и есть весь порядок на этой площадке, и вы его только что нарушили одной цифрой.",
+        "en": "The chalk is wiped off without waiting for the crate to go. That is the entire order of this landing, and you have just broken it with one figure."
+      },
+      "next": "fight_skim"
+    },
+    {
+      "kind": "say",
+      "id": "r_skim_stand",
+      "speaker": "marodyor",
+      "text": {
+        "ru": "У подъёмника стоять можно. Он всё равно тянет вниз, а что на нём стоит — барабану без разницы: он считает вес, а не строки.",
+        "en": "You may stand at the hoist. It hauls downward anyway, and what stands on it is all the same to the drum: it counts weight, not lines."
+      },
+      "next": "fight_skim"
+    },
+    {
+      "kind": "say",
+      "id": "r_skim_print",
+      "speaker": "marodyor",
+      "text": {
+        "ru": "Типография казённая, заказ годовой, тираж двенадцать тысяч. Двенадцать тысяч убылей в год кто-то заказал заранее, и это не мы: мы только выбираем, какая из них сегодня.",
+        "en": "A state printer, an annual order, twelve thousand copies. Somebody ordered twelve thousand losses a year in advance, and it was not us: we only pick which one it is today."
+      },
+      "next": "fight_skim"
+    },
+    {
+      "kind": "narration",
+      "id": "r_skim_rope",
+      "text": {
+        "ru": "Канат идёт вниз без остановок и под топором расходится в две пряди, а не в одну. Барабан внизу тянет ещё три удара насоса, потом перестаёт, и на площадке впервые за вечер становится слышно воду.",
+        "en": "The rope runs down without stopping and parts under the axe into two strands, not one. The drum below hauls for another three strokes of the pumps, then stops, and for the first time this evening the water can be heard on the landing."
+      },
+      "next": "fight_skim"
+    },
+    {
+      "kind": "battle",
+      "id": "fight_skim",
+      "battle": "battle_landing_shrinkage",
+      "onWin": "skim_after",
+      "onLose": "dying_skim"
+    },
+    {
+      "kind": "narration",
+      "id": "skim_after",
+      "text": {
+        "ru": "Печать возвращают на место, и она садится ровно: её снимали целой не первый раз. Сторож дописывает в бланк своё число рядом с отпечатанным, и два числа стоят в одной графе, ни одно не зачёркнуто.",
+        "en": "The seal goes back and settles evenly: it has been lifted whole more than once. The watchman writes his own figure into the form beside the printed one, and the two stand in one column, neither struck out."
+      },
+      "next": "hub_choice"
+    },
+    {
+      "kind": "say",
+      "id": "r_skim_away",
+      "speaker": "storozh_arkhiva",
+      "text": {
+        "ru": "Правильно. Я тоже не смотрю, я считаю. Считать и смотреть — это две разные должности, и вторую в штате не держат.",
+        "en": "Right. I do not look either, I count. Counting and looking are two different posts, and the second one is not kept on the staff."
+      },
+      "next": "hub_choice"
+    },
+    {
+      "kind": "effects",
+      "id": "dying_skim",
+      "effects": [
+        {
+          "kind": "flag",
+          "flag": "death_cause_guild",
+          "value": true
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_scavengers",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_sluza",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_guard",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_shelf",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_vytsvet",
+          "value": false
+        }
+      ],
+      "next": "skim_falling"
+    },
+    {
+      "kind": "narration",
+      "id": "skim_falling",
+      "text": {
+        "ru": "Тебя укладывают в тот самый ящик и накрывают печатью, снятой целой. Внизу барабан принимает вес, не спрашивая описи, и на бланке остаётся строка, отпечатанная год назад: убыль при перемещении, обычная.",
+        "en": "They lay you in that same crate and close it with the seal lifted whole. Below, the drum takes the weight without asking for an inventory, and on the form there remains a line printed a year ago: loss in transit, ordinary."
+      },
+      "next": "scene:silver_counter#queue_entry"
     }
   ]
 }

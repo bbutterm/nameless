@@ -1,8 +1,15 @@
 {
   "id": "audit_arrives",
   "chapter": 3,
-  "title": { "ru": "Ревизия пришла", "en": "The Audit Has Arrived" },
-  "tags": ["story", "chapter3", "no_combat"],
+  "title": {
+    "ru": "Ревизия пришла",
+    "en": "The Audit Has Arrived"
+  },
+  "tags": [
+    "story",
+    "chapter3",
+    "no_combat"
+  ],
   "entry": "pumps_faster",
   "nodes": [
     {
@@ -22,14 +29,23 @@
         "en": "You come out of the storeroom to the gates and do not at once work out what is missing. The queue is missing: it is empty right out to the bollard, and on the flagstones there are two worn tracks where feet shifted from one to the other for four hundred years."
       },
       "keywords": [
-        { "match": { "ru": "Не хватает очереди", "en": "The queue is missing" }, "tone": "danger" }
+        {
+          "match": {
+            "ru": "Не хватает очереди",
+            "en": "The queue is missing"
+          },
+          "tone": "danger"
+        }
       ],
       "next": "notice"
     },
     {
       "kind": "lore",
       "id": "notice",
-      "title": { "ru": "Объявление у ворот, лист первый", "en": "Notice at the gates, sheet one" },
+      "title": {
+        "ru": "Объявление у ворот, лист первый",
+        "en": "Notice at the gates, sheet one"
+      },
       "text": {
         "ru": "«Приём вкладов приостановлен до окончания сверки. Выдача приостановлена. Оценка приостановлена. Горе принимается по записи; запись ведётся на бумаге; бумага находится в сверке». Ниже мелом, рукой стражника: «Меня не спрашивайте. Я тут тоже по описи».",
         "en": "\"Acceptance of deposits is suspended until the reconciliation is complete. Issue is suspended. Appraisal is suspended. Grief is taken by appointment; appointments are kept on paper; the paper is in reconciliation.\" Below, in chalk, in a guard's hand: \"Do not ask me. I am here by inventory too.\""
@@ -44,7 +60,13 @@
         "en": "In the Ledger Hall every candle is burning at once, the spares included. The cost of candles has gone into the reconciliation estimate as a separate line and in three days has passed the hall's takings for a month."
       },
       "keywords": [
-        { "match": { "ru": "все свечи разом", "en": "every candle is burning at once" }, "tone": "lore" }
+        {
+          "match": {
+            "ru": "все свечи разом",
+            "en": "every candle is burning at once"
+          },
+          "tone": "lore"
+        }
       ],
       "next": "svodchik_1"
     },
@@ -71,7 +93,15 @@
     {
       "kind": "branch",
       "id": "boy_router",
-      "branches": [{ "when": { "kind": "flag", "flag": "klyost_named" }, "to": "boy_seen" }],
+      "branches": [
+        {
+          "when": {
+            "kind": "flag",
+            "flag": "klyost_named"
+          },
+          "to": "boy_seen"
+        }
+      ],
       "fallback": "revizor_stands"
     },
     {
@@ -107,7 +137,10 @@
       "kind": "say",
       "id": "revizor_a2",
       "speaker": "revizor",
-      "text": { "ru": "Присаживайтесь.", "en": "Do sit down." },
+      "text": {
+        "ru": "Присаживайтесь.",
+        "en": "Do sit down."
+      },
       "next": "one_chair"
     },
     {
@@ -139,76 +172,181 @@
       "options": [
         {
           "id": "by_inventory",
-          "text": { "ru": "Отвечать по описи. Все пункты.", "en": "Answer by the inventory. Every entry." },
+          "text": {
+            "ru": "Отвечать по описи. Все пункты.",
+            "en": "Answer by the inventory. Every entry."
+          },
           "fallback": true,
           "effects": [
-            { "kind": "fragment", "memory": "god_goloy_pravdy", "amount": 2 },
-            { "kind": "axis", "axis": "honesty_deceit", "delta": 8 }
+            {
+              "kind": "fragment",
+              "memory": "god_goloy_pravdy",
+              "amount": 2
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 8
+            }
           ],
           "to": "r_inventory"
         },
         {
           "id": "sit_down",
-          "text": { "ru": "Сесть на единственный стул.", "en": "Sit down on the only chair." },
+          "text": {
+            "ru": "Сесть на единственный стул.",
+            "en": "Sit down on the only chair."
+          },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 3 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": 3
+            }
+          ],
           "to": "r_sat"
         },
         {
           "id": "stay_standing",
-          "text": { "ru": "Остаться стоять. Стул не мой.", "en": "Stay standing. The chair is not mine." },
+          "text": {
+            "ru": "Остаться стоять. Стул не мой.",
+            "en": "Stay standing. The chair is not mine."
+          },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -3 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": -3
+            }
+          ],
           "to": "r_standing"
         },
         {
           "id": "ask_city",
-          "text": { "ru": "Спросить, что будет с городом.", "en": "Ask what becomes of the city." },
+          "text": {
+            "ru": "Спросить, что будет с городом.",
+            "en": "Ask what becomes of the city."
+          },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 3 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": 3
+            }
+          ],
           "to": "r_city"
         },
         {
           "id": "deny_self",
-          "conditions": { "kind": "axis", "axis": "honesty_deceit", "op": "lte", "value": -30 },
-          "text": { "ru": "Вкладчик — другой человек. Я его знал.", "en": "The depositor is another man. I knew him." },
+          "conditions": {
+            "kind": "axis",
+            "axis": "honesty_deceit",
+            "op": "lte",
+            "value": -30
+          },
+          "text": {
+            "ru": "Вкладчик — другой человек. Я его знал.",
+            "en": "The depositor is another man. I knew him."
+          },
           "effects": [
-            { "kind": "fragment", "memory": "luchshie_gody", "amount": 2 },
-            { "kind": "axis", "axis": "honesty_deceit", "delta": -8 }
+            {
+              "kind": "fragment",
+              "memory": "luchshie_gody",
+              "amount": 2
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": -8
+            }
           ],
           "to": "r_denied",
           "priority": 6
         },
         {
           "id": "ask_sum",
-          "chip": { "icon": "hourglass", "label": { "ru": "Перечень", "en": "Perechen" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "perechen" },
-          "text": { "ru": "Назовите сумму расхождения. Цифрами.", "en": "Name the amount of the discrepancy. In figures." },
+          "chip": {
+            "icon": "hourglass",
+            "label": {
+              "ru": "Перечень",
+              "en": "Perechen"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "perechen"
+          },
+          "text": {
+            "ru": "Назовите сумму расхождения. Цифрами.",
+            "en": "Name the amount of the discrepancy. In figures."
+          },
           "effects": [
-            { "kind": "fragment", "memory": "eda_ne_vnesena", "amount": 2 },
-            { "kind": "axis", "axis": "reason_obsession", "delta": -8 }
+            {
+              "kind": "fragment",
+              "memory": "eda_ne_vnesena",
+              "amount": 2
+            },
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -8
+            }
           ],
           "to": "r_sum",
           "priority": 6
         },
         {
           "id": "spare_others",
-          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "gte", "value": 30 },
-          "text": { "ru": "Сверяйте меня. Остальных не трогайте.", "en": "Reconcile me. Leave the rest alone." },
+          "conditions": {
+            "kind": "axis",
+            "axis": "mercy_cruelty",
+            "op": "gte",
+            "value": 30
+          },
+          "text": {
+            "ru": "Сверяйте меня. Остальных не трогайте.",
+            "en": "Reconcile me. Leave the rest alone."
+          },
           "effects": [
-            { "kind": "fragment", "memory": "poslednyaya_kruzhka", "amount": 2 },
-            { "kind": "axis", "axis": "mercy_cruelty", "delta": 8 }
+            {
+              "kind": "fragment",
+              "memory": "poslednyaya_kruzhka",
+              "amount": 2
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": 8
+            }
           ],
           "to": "r_spare",
           "priority": 6
         },
         {
           "id": "hide_boy",
-          "conditions": { "kind": "flag", "flag": "klyost_named" },
-          "text": { "ru": "Мальчишку в сверку не вносите.", "en": "Do not enter the boy in the reconciliation." },
+          "conditions": {
+            "kind": "flag",
+            "flag": "klyost_named"
+          },
+          "text": {
+            "ru": "Мальчишку в сверку не вносите.",
+            "en": "Do not enter the boy in the reconciliation."
+          },
           "effects": [
-            { "kind": "counter", "counter": "klyost_seen", "delta": 1 },
-            { "kind": "axis", "axis": "mercy_cruelty", "delta": 3 }
+            {
+              "kind": "counter",
+              "counter": "klyost_seen",
+              "delta": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": 3
+            }
           ],
           "to": "r_boy",
           "priority": 5
@@ -310,7 +448,15 @@
         "ru": "В деле есть графа «приметы», и она заполнена. Заполнял её человек с той же экономной рукой, что и в договоре: «которого» тремя знаками с точкой посередине.",
         "en": "The case has a column for \"description\", and it is filled in. It was filled in by a hand with the same economy as the deed: \"whereof\" in three strokes with a dot in the middle."
       },
-      "keywords": [{ "match": { "ru": "приметы", "en": "description" }, "tone": "memory" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "приметы",
+            "en": "description"
+          },
+          "tone": "memory"
+        }
+      ],
       "next": "case_choice"
     },
     {
@@ -323,81 +469,210 @@
       "options": [
         {
           "id": "read_marks",
-          "text": { "ru": "Прочитать графу «приметы».", "en": "Read the column for \"description\"." },
+          "text": {
+            "ru": "Прочитать графу «приметы».",
+            "en": "Read the column for \"description\"."
+          },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": -3 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -3
+            }
+          ],
           "to": "r_marks"
         },
         {
           "id": "close_case",
-          "text": { "ru": "Закрыть дело и отойти.", "en": "Shut the case and step away." },
+          "text": {
+            "ru": "Закрыть дело и отойти.",
+            "en": "Shut the case and step away."
+          },
           "fallback": true,
-          "effects": [ { "kind": "axis", "axis": "reason_obsession", "delta": 8 },{ "kind": "axis", "axis": "grasp_release", "delta": -3 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": 8
+            },
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": -3
+            }
+          ],
           "to": "r_closed"
         },
         {
           "id": "copy_case",
-          "text": { "ru": "Переписать дело себе.", "en": "Copy the case out for myself." },
+          "text": {
+            "ru": "Переписать дело себе.",
+            "en": "Copy the case out for myself."
+          },
           "fallback": true,
           "effects": [
-            { "kind": "counter", "counter": "lots_held", "delta": 1 },
-            { "kind": "axis", "axis": "grasp_release", "delta": 8 }
+            {
+              "kind": "counter",
+              "counter": "lots_held",
+              "delta": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": 8
+            }
           ],
           "to": "r_copied"
         },
         {
           "id": "check_tag",
-          "chip": { "icon": "hourglass", "label": { "ru": "Перечень", "en": "Perechen" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "perechen" },
-          "text": { "ru": "Сверить номер дела с номером бирки.", "en": "Check the case number against the tag." },
+          "chip": {
+            "icon": "hourglass",
+            "label": {
+              "ru": "Перечень",
+              "en": "Perechen"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "perechen"
+          },
+          "text": {
+            "ru": "Сверить номер дела с номером бирки.",
+            "en": "Check the case number against the tag."
+          },
           "effects": [
-            { "kind": "fragment", "memory": "eda_ne_vnesena", "amount": 2 },
-            { "kind": "axis", "axis": "reason_obsession", "delta": -8 }
+            {
+              "kind": "fragment",
+              "memory": "eda_ne_vnesena",
+              "amount": 2
+            },
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -8
+            }
           ],
           "to": "r_tag",
           "priority": 6
         },
         {
           "id": "write_today",
-          "chip": { "icon": "book", "label": { "ru": "Чистописец", "en": "Chistopisets" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "chistopisets" },
-          "text": { "ru": "Вписать в дело сегодняшний день.", "en": "Enter today's date in the case." },
+          "chip": {
+            "icon": "book",
+            "label": {
+              "ru": "Чистописец",
+              "en": "Chistopisets"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "chistopisets"
+          },
+          "text": {
+            "ru": "Вписать в дело сегодняшний день.",
+            "en": "Enter today's date in the case."
+          },
           "effects": [
-            { "kind": "fragment", "memory": "god_goloy_pravdy", "amount": 2 },
-            { "kind": "axis", "axis": "honesty_deceit", "delta": 8 }
+            {
+              "kind": "fragment",
+              "memory": "god_goloy_pravdy",
+              "amount": 2
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 8
+            }
           ],
           "to": "r_today",
           "priority": 6
         },
         {
           "id": "candle_it",
-          "chip": { "icon": "fire", "label": { "ru": "Смолокур", "en": "Smolokur" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "smolokur" },
-          "text": { "ru": "Поднести дело к свече.", "en": "Hold the case to a candle." },
+          "chip": {
+            "icon": "fire",
+            "label": {
+              "ru": "Смолокур",
+              "en": "Smolokur"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "smolokur"
+          },
+          "text": {
+            "ru": "Поднести дело к свече.",
+            "en": "Hold the case to a candle."
+          },
           "effects": [
-            { "kind": "fragment", "memory": "schet_za_sezon", "amount": 2 },
-            { "kind": "axis", "axis": "mercy_cruelty", "delta": -8 }
+            {
+              "kind": "fragment",
+              "memory": "schet_za_sezon",
+              "amount": 2
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": -8
+            }
           ],
           "to": "r_candle",
           "priority": 6
         },
         {
           "id": "give_boy",
-          "conditions": { "kind": "flag", "flag": "klyost_named" },
-          "text": { "ru": "Отдать дело мальчишке. Пусть спрячет.", "en": "Give the case to the boy. Let him hide it." },
+          "conditions": {
+            "kind": "flag",
+            "flag": "klyost_named"
+          },
+          "text": {
+            "ru": "Отдать дело мальчишке. Пусть спрячет.",
+            "en": "Give the case to the boy. Let him hide it."
+          },
           "effects": [
-            { "kind": "counter", "counter": "klyost_seen", "delta": 1 },
-            { "kind": "counter", "counter": "lots_held", "delta": 1 },
-            { "kind": "axis", "axis": "honesty_deceit", "delta": -3 }
+            {
+              "kind": "counter",
+              "counter": "klyost_seen",
+              "delta": 1
+            },
+            {
+              "kind": "counter",
+              "counter": "lots_held",
+              "delta": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": -3
+            }
           ],
           "to": "r_give_boy",
           "priority": 5
         },
         {
           "id": "ask_reconciler",
-          "conditions": { "kind": "axis", "axis": "honesty_deceit", "op": "gte", "value": 30 },
-          "text": { "ru": "Спросить у сводчика разрешения читать.", "en": "Ask the reconciler for leave to read." },
-          "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": 3 }],
+          "conditions": {
+            "kind": "axis",
+            "axis": "honesty_deceit",
+            "op": "gte",
+            "value": 30
+          },
+          "text": {
+            "ru": "Спросить у сводчика разрешения читать.",
+            "en": "Ask the reconciler for leave to read."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 3
+            }
+          ],
           "to": "r_asked",
           "priority": 5
         }
@@ -410,7 +685,7 @@
         "ru": "«Рост средний. Лет около сорока. Волос тёмный. Особых примет не имеет». Ты дочитываешь и оборачиваешься на человека в сером пальто, потому что описание подходит и ему.",
         "en": "\"Middling height. About forty years of age. Dark hair. No distinguishing marks.\" You finish reading and turn to look at the man in the grey coat, because the description fits him too."
       },
-      "next": "exit_hall"
+      "next": "securing"
     },
     {
       "kind": "narration",
@@ -419,7 +694,7 @@
         "ru": "Обложка садится на место с сухим стуком, и на столе остаётся прямоугольник без пыли. Пыль в зале Учёта ложится за час: свечей много, воздуха мало.",
         "en": "The cover comes down with a dry knock, leaving a dustless rectangle on the table. Dust settles in the Ledger Hall within the hour: many candles, little air."
       },
-      "next": "exit_hall"
+      "next": "securing"
     },
     {
       "kind": "narration",
@@ -428,7 +703,7 @@
         "ru": "Ты списываешь дело на оборот объявления, и рука сама сокращает «которого» тремя знаками с точкой посередине. Списанное дело в этом городе стоит ровно столько же, сколько подлинник, и это единственная скидка, которую Ломбард даёт даром.",
         "en": "You copy the case onto the back of the notice, and your hand of itself puts \"whereof\" in three strokes with a dot in the middle. A copied case is worth exactly what the original is worth in this city, and that is the only discount the Pawnshop gives away free."
       },
-      "next": "exit_hall"
+      "next": "securing"
     },
     {
       "kind": "narration",
@@ -437,7 +712,7 @@
         "ru": "Бирка на запястье и корешок дела совпадают: жесть, продавленная единица, тупые края. Разница одна — на бирке единицу продавили насквозь, а в деле её пропечатали дважды, чтобы не спутали с прочерком.",
         "en": "The tag on your wrist and the spine of the case match: tin, a punched one, blunted edges. There is one difference: on the tag the one was punched clean through, and in the case it was printed twice, so it would not be mistaken for a dash."
       },
-      "next": "exit_hall"
+      "next": "securing"
     },
     {
       "kind": "narration",
@@ -446,7 +721,7 @@
         "ru": "Ты вписываешь число, месяц и час, как записывают присутствующие. Строка ложится под последней записью, и последняя запись сделана той же рукой, тем же нажимом, без указания года.",
         "en": "You enter the day, the month and the hour, the way those present enter them. The line sits under the last entry, and the last entry is in the same hand, at the same pressure, with no year given."
       },
-      "next": "exit_hall"
+      "next": "securing"
     },
     {
       "kind": "say",
@@ -456,7 +731,7 @@
         "ru": "Второй экземпляр в сверке, третий у Ревизии. Жгите, если вам от этого легче: расход на свечу я уже внёс.",
         "en": "The second copy is in reconciliation, the third is with the Audit. Burn it if it makes things easier: I have already entered the cost of the candle."
       },
-      "next": "exit_hall"
+      "next": "securing"
     },
     {
       "kind": "say",
@@ -466,7 +741,7 @@
         "ru": "Под рубаху и вынесу. У меня спрашивают имя, а с именем у меня по-прежнему всё в порядке.",
         "en": "Under my shirt and out it goes. They ask me for a name, and my name is still doing fine."
       },
-      "next": "exit_hall"
+      "next": "securing"
     },
     {
       "kind": "say",
@@ -476,7 +751,7 @@
         "ru": "Читайте. Вы по этому делу проходите единственным лицом, и лицо это никем не оспорено.",
         "en": "Read it. You appear in this case as the sole party, and the party has been contested by nobody."
       },
-      "next": "exit_hall"
+      "next": "securing"
     },
     {
       "kind": "narration",
@@ -486,6 +761,261 @@
         "en": "The Ledger Hall is long, and today all of it is yours. At the far end sit four reconcilers and one Auditor, and all five are waiting for you to come the length of it."
       },
       "next": "scene:ledger_hub"
+    },
+    {
+      "kind": "narration",
+      "id": "securing",
+      "text": {
+        "ru": "Наряд входит в зал не строем, а вразвалку, как входят туда, где очереди нет и держать некого. Старший разворачивает предписание на первом листе и читает его вслух, не глядя в лист.",
+        "en": "The detail comes into the hall not in formation but at a slouch, the way men come where there is no queue and nobody to hold back. The senior unrolls the order at the first sheet and reads it out without looking at the sheet."
+      },
+      "next": "securing_1"
+    },
+    {
+      "kind": "say",
+      "id": "securing_1",
+      "speaker": "naryad_revizii",
+      "text": {
+        "ru": "Расхождение подлежит обеспечению сохранности до подписания акта. Обеспечение сохранности означает: не выпускать, не поить, не считать вслух.",
+        "en": "The discrepancy is subject to safekeeping until the act is signed. Safekeeping means: do not let out, do not give water, do not count aloud."
+      },
+      "next": "securing_2"
+    },
+    {
+      "kind": "say",
+      "id": "securing_2",
+      "speaker": "revizor",
+      "text": {
+        "ru": "Наряд действует по инструкции. Инструкция: старше меня. Возражений: не имею; полномочий возражать: тоже.",
+        "en": "The detail acts by the standing instruction. The instruction: older than I am. Objections: none; authority to object: also none."
+      },
+      "next": "securing_3"
+    },
+    {
+      "kind": "say",
+      "id": "securing_3",
+      "speaker": "svodchik",
+      "text": {
+        "ru": "Сверка идёт с трёх сторон, а расхождение у нас одно и ходячее. Если его унесут в кладовую, сверка встанет, и свечи мы жгли зря.",
+        "en": "The reconciliation runs from three sides, and our one discrepancy walks. If it is carried off to the store room the reconciliation stops, and we burned the candles for nothing."
+      },
+      "next": "securing_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "securing_choice",
+      "prompt": {
+        "ru": "Зал длинный, свечей много, воздуха мало. Стул по-прежнему один.",
+        "en": "The hall is long, the candles many, the air short. There is still one chair."
+      },
+      "options": [
+        {
+          "id": "stay_by_case",
+          "text": {
+            "ru": "Встать у дела и не отойти от стола.",
+            "en": "Stand by the case and not leave the table."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": 5
+            }
+          ],
+          "to": "r_sec_stand"
+        },
+        {
+          "id": "ask_clause",
+          "text": {
+            "ru": "Спросить, какой инструкцией это предписано.",
+            "en": "Ask which instruction requires this."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": 5
+            }
+          ],
+          "to": "r_sec_clause"
+        },
+        {
+          "id": "be_secured",
+          "text": {
+            "ru": "Дать себя обеспечить. Сохранность так сохранность.",
+            "en": "Let yourself be secured. Safekeeping is safekeeping."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": -8
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": 3
+            }
+          ],
+          "to": "r_sec_taken"
+        },
+        {
+          "id": "count_aloud",
+          "text": {
+            "ru": "Считать вслух. Именно это и запрещено.",
+            "en": "Count aloud. That is the very thing forbidden."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -8
+            }
+          ],
+          "to": "r_sec_clause"
+        },
+        {
+          "id": "first_hand",
+          "text": {
+            "ru": "Бить первым: их пятеро, зал длинный.",
+            "en": "Strike first: five of them, a long hall."
+          },
+          "conditions": {
+            "kind": "axis",
+            "axis": "mercy_cruelty",
+            "op": "lte",
+            "value": -25
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": -8
+            }
+          ],
+          "to": "r_sec_first"
+        },
+        {
+          "id": "boy_line",
+          "text": {
+            "ru": "Проверить, пуста ли ещё строка под мальчишку.",
+            "en": "Check whether the boy's line is still empty."
+          },
+          "conditions": {
+            "kind": "flag",
+            "flag": "klyost_named"
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": 5
+            }
+          ],
+          "to": "r_sec_stand"
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "r_sec_stand",
+      "speaker": "naryad_revizii",
+      "text": {
+        "ru": "У стола стоять не воспрещается. Воспрещается стоять у стола после того, как вам сказали от него отойти, и это две разные строки в одном предписании.",
+        "en": "Standing by the table is not forbidden. Standing by the table after being told to step away from it is forbidden, and those are two different lines in one order."
+      },
+      "next": "naryad_hall"
+    },
+    {
+      "kind": "say",
+      "id": "r_sec_clause",
+      "speaker": "naryad_revizii",
+      "text": {
+        "ru": "Инструкция без номера. Номера у неё нет, потому что случая не было, а порядок был нужен уже вчера. Мы её сегодня и составили, вдвоём, стоя.",
+        "en": "The instruction has no number. It has no number because there was no such case, and the procedure was needed by yesterday. We drew it up today, the two of us, standing."
+      },
+      "next": "naryad_hall"
+    },
+    {
+      "kind": "narration",
+      "id": "r_sec_first",
+      "text": {
+        "ru": "Свечей в зале больше, чем нужно, и первая же опрокинутая показывает, зачем их столько: горит не одна, горит стол. Сводчик считает их вслух и на девятой сбивается.",
+        "en": "There are more candles in the hall than are needed, and the first one knocked over shows why there are so many: it is not one candle burning, it is the table. The reconciler counts them aloud and loses the count at the ninth."
+      },
+      "next": "naryad_hall"
+    },
+    {
+      "kind": "battle",
+      "id": "naryad_hall",
+      "battle": "battle_reckoning_guard",
+      "onWin": "sec_after",
+      "onLose": "dying_hall"
+    },
+    {
+      "kind": "narration",
+      "id": "sec_after",
+      "text": {
+        "ru": "Наряд уходит своим ходом, забрав стул. Ревизор смотрит им вслед и записывает что-то в портфель, не открывая его: он держит портфель на весу и пишет по крышке.",
+        "en": "The detail leaves on its own feet, taking the chair. The Auditor watches them go and writes something into his case without opening it: he holds the case up and writes on the lid."
+      },
+      "next": "exit_hall"
+    },
+    {
+      "kind": "say",
+      "id": "r_sec_taken",
+      "speaker": "revizor",
+      "text": {
+        "ru": "Обеспечено. Срок обеспечения: до подписания акта. Подписей требуется две, и вторая — ваша, поэтому обеспечение снимается через минуту. Инструкция этого не предусмотрела.",
+        "en": "Secured. Term of safekeeping: until the act is signed. Two signatures are required, and the second is yours, so the safekeeping is lifted in a minute. The instruction did not foresee that."
+      },
+      "next": "exit_hall"
+    },
+    {
+      "kind": "effects",
+      "id": "dying_hall",
+      "effects": [
+        {
+          "kind": "flag",
+          "flag": "death_cause_guard",
+          "value": true
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_guild",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_scavengers",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_sluza",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_shelf",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_vytsvet",
+          "value": false
+        }
+      ],
+      "next": "hall_falling"
+    },
+    {
+      "kind": "narration",
+      "id": "hall_falling",
+      "text": {
+        "ru": "Труху сметают к колонне, потому что в зале Учёта пыль ложится за час и уборщик приходит в шесть. Сводчик просит подождать с уборкой до конца сверки и получает отказ по смете.",
+        "en": "They sweep the dust to the column, because in the hall of the Ledger dust settles within the hour and the cleaner comes at six. The reconciler asks for the sweeping to wait until the reconciliation is done and is refused on budget grounds."
+      },
+      "next": "scene:silver_counter#queue_entry"
     }
   ]
 }

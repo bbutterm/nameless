@@ -99,5 +99,115 @@
         "amount": 40
       }
     ]
+  },
+  {
+    "id": "battle_nest_collectors",
+    "name": {
+      "ru": "Сбор гнёзд в боковом ходе",
+      "en": "Nest Collection in the Side Passage"
+    },
+    "tags": [
+      "greedy_memory_guild",
+      "vaults"
+    ],
+    "enemies": [
+      {
+        "unit": "borrowed_face",
+        "row": "front",
+        "index": 0,
+        "level": 4
+      },
+      {
+        "unit": "pocket_cutter",
+        "row": "front",
+        "index": 1,
+        "level": 5
+      },
+      {
+        "unit": "archive_rat",
+        "row": "front",
+        "index": 2,
+        "level": 4
+      },
+      {
+        "unit": "cold_reckoner",
+        "row": "back",
+        "index": 0,
+        "level": 3
+      },
+      {
+        "unit": "flask_hoarder",
+        "row": "back",
+        "index": 1,
+        "level": 4
+      }
+    ],
+    "turnLimit": 10,
+    "background": "vault_first_tier",
+    "rewards": [
+      {
+        "kind": "gold",
+        "delta": 16
+      },
+      {
+        "kind": "xp",
+        "amount": 32
+      }
+    ]
+  },
+  {
+    "id": "battle_landing_shrinkage",
+    "name": {
+      "ru": "Убыль при перемещении, обычная",
+      "en": "Loss in Transit, Ordinary"
+    },
+    "tags": [
+      "great_pawnshop",
+      "vaults"
+    ],
+    "enemies": [
+      {
+        "unit": "debt_bailiff",
+        "row": "front",
+        "index": 0,
+        "level": 3
+      },
+      {
+        "unit": "borrowed_face",
+        "row": "front",
+        "index": 1,
+        "level": 3
+      },
+      {
+        "unit": "pocket_cutter",
+        "row": "front",
+        "index": 2,
+        "level": 4
+      },
+      {
+        "unit": "pawn_appraiser_dusk",
+        "row": "back",
+        "index": 0,
+        "level": 3
+      },
+      {
+        "unit": "flask_hoarder",
+        "row": "back",
+        "index": 1,
+        "level": 2
+      }
+    ],
+    "turnLimit": 10,
+    "background": "vaults_hub",
+    "rewards": [
+      {
+        "kind": "gold",
+        "delta": 18
+      },
+      {
+        "kind": "xp",
+        "amount": 34
+      }
+    ]
   }
 ]

@@ -1,9 +1,22 @@
 {
   "id": "foundation",
   "chapter": 2,
-  "title": { "ru": "Фундамент", "en": "The Foundation" },
-  "tags": ["story", "key", "vaults", "no_combat"],
-  "available": { "kind": "counter", "counter": "vault_depth", "op": "gte", "value": 3 },
+  "title": {
+    "ru": "Фундамент",
+    "en": "The Foundation"
+  },
+  "tags": [
+    "story",
+    "key",
+    "vaults",
+    "no_combat"
+  ],
+  "available": {
+    "kind": "counter",
+    "counter": "vault_depth",
+    "op": "gte",
+    "value": 3
+  },
   "entry": "below_water",
   "nodes": [
     {
@@ -22,13 +35,24 @@
         "ru": "Два удара в минуту. Насосы стоят в нишах по всей длине хода, и колена у них вытерты до блеска руками, которых давно нет. Их слышно с Того берега, и там думают, что это водокачка.",
         "en": "Two beats to the minute. The pumps stand in niches the whole length of the passage, their elbows worn to a shine by hands long gone. They can be heard on the Other Bank, where people take them for the water pump."
       },
-      "keywords": [{ "match": { "ru": "Два удара в минуту", "en": "Two beats to the minute" }, "tone": "lore" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "Два удара в минуту",
+            "en": "Two beats to the minute"
+          },
+          "tone": "lore"
+        }
+      ],
       "next": "lore_pumps"
     },
     {
       "kind": "lore",
       "id": "lore_pumps",
-      "title": { "ru": "Смета на водоотлив, статья единственная", "en": "Estimate for pumping, the sole entry" },
+      "title": {
+        "ru": "Смета на водоотлив, статья единственная",
+        "en": "Estimate for pumping, the sole entry"
+      },
       "text": {
         "ru": "Расход на водоотлив равен всей выручке верхних ярусов и вносится в смету одной строкой без разбивки. На памяти цеха эту строку не обсуждали ни разу: обсудить — значит спросить, что именно держат сухим. За четыреста лет вопрос задавали дважды, оба раза младшие оценщики, оба раза в один и тот же четверг.",
         "en": "The cost of pumping equals the entire takings of the upper tiers and goes into the estimate as a single line with no breakdown. Within the guild's memory that line has never once been discussed: to discuss it would be to ask what exactly is being kept dry. In four hundred years the question was put twice, both times by junior appraisers, both times on the same Thursday."
@@ -48,7 +72,15 @@
     {
       "kind": "branch",
       "id": "lamp_router",
-      "branches": [{ "when": { "kind": "flag", "flag": "klyost_named" }, "to": "boy_lamp" }],
+      "branches": [
+        {
+          "when": {
+            "kind": "flag",
+            "flag": "klyost_named"
+          },
+          "to": "boy_lamp"
+        }
+      ],
       "fallback": "wall_appears"
     },
     {
@@ -77,7 +109,15 @@
         "ru": "Кладка не каменная. В растворе стоят короба, связки и склянки, уложенные плашмя, ряд за рядом, и бирки торчат наружу, чтобы их было видно. Кто-то укладывал их так, чтобы можно было прочесть, не разбирая стену.",
         "en": "The masonry is not of stone. Set in the mortar are crates, bundles and jars, laid flat, course upon course, with the tags left sticking out so they can be seen. Somebody laid them so they could be read without taking the wall apart."
       },
-      "keywords": [{ "match": { "ru": "бирки торчат наружу", "en": "tags left sticking out" }, "tone": "memory" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "бирки торчат наружу",
+            "en": "tags left sticking out"
+          },
+          "tone": "memory"
+        }
+      ],
       "next": "wall_pylons"
     },
     {
@@ -96,7 +136,15 @@
         "ru": "У каждой расписки Заклада есть оборот, и на обороте стоит цифра от одного до пяти. Разделы в городе номеров не имеют: номер есть только здесь, на пилонах, и у тебя в кармане. Ты платил этими расписками весь месяц и ни разу не перевернул.",
         "en": "Every note of Zaklad has a reverse, and on the reverse stands a figure from one to five. Up in the city the sections carry no numbers: the number exists only here, on the pilasters, and in your pocket. You have been paying with these notes all month and never once turned one over."
       },
-      "keywords": [{ "match": { "ru": "цифра от одного до пяти", "en": "a figure from one to five" }, "tone": "danger" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "цифра от одного до пяти",
+            "en": "a figure from one to five"
+          },
+          "tone": "danger"
+        }
+      ],
       "next": "storozh_2"
     },
     {
@@ -119,75 +167,209 @@
       "options": [
         {
           "id": "read_all",
-          "text": { "ru": "Читать все пять по порядку.", "en": "Read all five in order." },
+          "text": {
+            "ru": "Читать все пять по порядку.",
+            "en": "Read all five in order."
+          },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": -3 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -3
+            }
+          ],
           "to": "r_all"
         },
         {
           "id": "read_near",
-          "text": { "ru": "Читать ближнюю. Ту, что под лампой.", "en": "Read the near one. The one under the lamp." },
+          "text": {
+            "ru": "Читать ближнюю. Ту, что под лампой.",
+            "en": "Read the near one. The one under the lamp."
+          },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 8 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": 8
+            }
+          ],
           "to": "r_fourth"
         },
         {
           "id": "look_sixth",
-          "text": { "ru": "Не читать. Искать шестой пилон.", "en": "Not read. Look for a sixth pilaster." },
+          "text": {
+            "ru": "Не читать. Искать шестой пилон.",
+            "en": "Not read. Look for a sixth pilaster."
+          },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": -8 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -8
+            }
+          ],
           "to": "r_sixth"
         },
         {
           "id": "read_first",
-          "chip": { "icon": "fire", "label": { "ru": "Смолокур", "en": "Smolokur" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "smolokur" },
-          "text": { "ru": "Первый. Войны Тихой Воды.", "en": "Section one. The Quiet Water Wars." },
-          "effects": [{ "kind": "fragment", "memory": "ples_gorit", "amount": 2 }],
+          "chip": {
+            "icon": "fire",
+            "label": {
+              "ru": "Смолокур",
+              "en": "Smolokur"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "smolokur"
+          },
+          "text": {
+            "ru": "Первый. Войны Тихой Воды.",
+            "en": "Section one. The Quiet Water Wars."
+          },
+          "effects": [
+            {
+              "kind": "fragment",
+              "memory": "ples_gorit",
+              "amount": 2
+            }
+          ],
           "to": "r_first",
           "priority": 6
         },
         {
           "id": "read_second",
-          "chip": { "icon": "heal", "label": { "ru": "Ключарь", "en": "Klyuchar" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "klyuchar" },
-          "text": { "ru": "Второй. Сушьи годы.", "en": "Section two. The drought years." },
-          "effects": [{ "kind": "fragment", "memory": "ochered_k_kolodtsu", "amount": 2 }],
+          "chip": {
+            "icon": "heal",
+            "label": {
+              "ru": "Ключарь",
+              "en": "Klyuchar"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "klyuchar"
+          },
+          "text": {
+            "ru": "Второй. Сушьи годы.",
+            "en": "Section two. The drought years."
+          },
+          "effects": [
+            {
+              "kind": "fragment",
+              "memory": "ochered_k_kolodtsu",
+              "amount": 2
+            }
+          ],
           "to": "r_second",
           "priority": 6
         },
         {
           "id": "read_third",
-          "chip": { "icon": "coin", "label": { "ru": "Посульщик", "en": "Posulshchik" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "posulshchik" },
-          "text": { "ru": "Третий. Бумажный век.", "en": "Section three. The Paper Age." },
-          "effects": [{ "kind": "fragment", "memory": "zima_bez_khleba", "amount": 2 }],
+          "chip": {
+            "icon": "coin",
+            "label": {
+              "ru": "Посульщик",
+              "en": "Posulshchik"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "posulshchik"
+          },
+          "text": {
+            "ru": "Третий. Бумажный век.",
+            "en": "Section three. The Paper Age."
+          },
+          "effects": [
+            {
+              "kind": "fragment",
+              "memory": "zima_bez_khleba",
+              "amount": 2
+            }
+          ],
           "to": "r_third",
           "priority": 6
         },
         {
           "id": "read_fourth",
-          "chip": { "icon": "book", "label": { "ru": "Чистописец", "en": "Chistopisets" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "chistopisets" },
-          "text": { "ru": "Четвёртый. Год Голой Правды.", "en": "Section four. The Year of Bare Truth." },
-          "effects": [{ "kind": "fragment", "memory": "khronika_bez_popravok", "amount": 2 }],
+          "chip": {
+            "icon": "book",
+            "label": {
+              "ru": "Чистописец",
+              "en": "Chistopisets"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "chistopisets"
+          },
+          "text": {
+            "ru": "Четвёртый. Год Голой Правды.",
+            "en": "Section four. The Year of Bare Truth."
+          },
+          "effects": [
+            {
+              "kind": "fragment",
+              "memory": "khronika_bez_popravok",
+              "amount": 2
+            }
+          ],
           "to": "r_fourth",
           "priority": 6
         },
         {
           "id": "read_fifth",
-          "chip": { "icon": "hourglass", "label": { "ru": "Перечень", "en": "Perechen" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "perechen" },
-          "text": { "ru": "Пятый. Первый Учёт.", "en": "Section five. The First Reckoning." },
-          "effects": [{ "kind": "fragment", "memory": "opis_vsego_sushchego", "amount": 2 }],
+          "chip": {
+            "icon": "hourglass",
+            "label": {
+              "ru": "Перечень",
+              "en": "Perechen"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "perechen"
+          },
+          "text": {
+            "ru": "Пятый. Первый Учёт.",
+            "en": "Section five. The First Reckoning."
+          },
+          "effects": [
+            {
+              "kind": "fragment",
+              "memory": "opis_vsego_sushchego",
+              "amount": 2
+            }
+          ],
           "to": "r_fifth",
           "priority": 6
         },
         {
           "id": "read_by_card",
-          "conditions": { "kind": "flag", "flag": "catalog_card_read" },
-          "text": { "ru": "Искать то, на что ссылалась карточка.", "en": "Look for what the card referred to." },
-          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": -8 }],
+          "conditions": {
+            "kind": "flag",
+            "flag": "catalog_card_read"
+          },
+          "text": {
+            "ru": "Искать то, на что ссылалась карточка.",
+            "en": "Look for what the card referred to."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -8
+            }
+          ],
           "to": "r_card",
           "priority": 5
         }
@@ -272,7 +454,15 @@
         "ru": "Имена на табличках разные, и почерки разные: первый режет, второй круглит, третий давит на конце, четвёртый ставит буквы отвесно, пятый пишет мелко. Все пятеро сокращают «которого» тремя знаками с точкой посередине. У всех пятерых недотянут хвост у «у».",
         "en": "The names on the plates differ, and so do the hands: the first cuts, the second rounds, the third presses at the end, the fourth stands its letters upright, the fifth writes small. All five economise on the word \"whereof\" with three strokes and a dot in the middle. On all five the tail of the \"y\" is short."
       },
-      "keywords": [{ "match": { "ru": "Все пятеро", "en": "All five" }, "tone": "memory" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "Все пятеро",
+            "en": "All five"
+          },
+          "tone": "memory"
+        }
+      ],
       "next": "mason_mark"
     },
     {
@@ -300,7 +490,15 @@
         "ru": "Ломбард не хранит твой архив. Ломбард на нём стоит, и стоял до того, как вокруг него встал город. Ревизия сверяет не Заклад: сверять Заклад незачем, Заклад — это то, что сверху.",
         "en": "The Pawnshop does not store your archive. The Pawnshop stands on it, and stood on it before the city stood around it. The Audit is not reconciling Zaklad: there is no point reconciling Zaklad, Zaklad is what is on top."
       },
-      "keywords": [{ "match": { "ru": "Ломбард на нём стоит", "en": "The Pawnshop stands on it" }, "tone": "danger" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "Ломбард на нём стоит",
+            "en": "The Pawnshop stands on it"
+          },
+          "tone": "danger"
+        }
+      ],
       "next": "chalk"
     },
     {
@@ -310,7 +508,7 @@
         "ru": "На первом пилоне мелом свежая строка: «сверено: раздел первый. расхождение: раздел первый». Мел ещё сыплется, если провести пальцем ниже надписи.",
         "en": "On the first pilaster, a fresh line in chalk: \"reconciled: section one. discrepancy: section one\". The chalk still crumbles if you run a finger below the writing."
       },
-      "next": "the_hole"
+      "next": "crew_lamps"
     },
     {
       "kind": "narration",
@@ -331,86 +529,218 @@
       "options": [
         {
           "id": "put_back",
-          "text": { "ru": "Поставить короб обратно в дыру.", "en": "Put the crate back in the hole." },
+          "text": {
+            "ru": "Поставить короб обратно в дыру.",
+            "en": "Put the crate back in the hole."
+          },
           "fallback": true,
-          "effects": [ { "kind": "axis", "axis": "reason_obsession", "delta": 8 },{ "kind": "axis", "axis": "grasp_release", "delta": -8 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": 8
+            },
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": -8
+            }
+          ],
           "to": "r_put_back"
         },
         {
           "id": "take_sheet",
-          "text": { "ru": "Взять из короба один лист.", "en": "Take one sheet out of the crate." },
+          "text": {
+            "ru": "Взять из короба один лист.",
+            "en": "Take one sheet out of the crate."
+          },
           "fallback": true,
           "effects": [
-            { "kind": "counter", "counter": "lots_held", "delta": 1 },
-            { "kind": "axis", "axis": "grasp_release", "delta": 15 }
+            {
+              "kind": "counter",
+              "counter": "lots_held",
+              "delta": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": 15
+            }
           ],
           "to": "r_took_sheet"
         },
         {
           "id": "read_names_aloud",
-          "text": { "ru": "Прочитать все пять имён вслух.", "en": "Read all five names out loud." },
+          "text": {
+            "ru": "Прочитать все пять имён вслух.",
+            "en": "Read all five names out loud."
+          },
           "fallback": true,
           "effects": [
-            { "kind": "fragment", "memory": "god_goloy_pravdy", "amount": 1 },
-            { "kind": "axis", "axis": "honesty_deceit", "delta": 8 }
+            {
+              "kind": "fragment",
+              "memory": "god_goloy_pravdy",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 8
+            }
           ],
           "to": "r_aloud"
         },
         {
           "id": "count_the_groschen",
-          "chip": { "icon": "hourglass", "label": { "ru": "Перечень", "en": "Perechen" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "perechen" },
-          "text": { "ru": "Посчитать, сколько города обеспечено мной.", "en": "Count how much of the city I secure." },
+          "chip": {
+            "icon": "hourglass",
+            "label": {
+              "ru": "Перечень",
+              "en": "Perechen"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "perechen"
+          },
+          "text": {
+            "ru": "Посчитать, сколько города обеспечено мной.",
+            "en": "Count how much of the city I secure."
+          },
           "effects": [
-            { "kind": "fragment", "memory": "eda_ne_vnesena", "amount": 2 },
-            { "kind": "axis", "axis": "reason_obsession", "delta": -15 }
+            {
+              "kind": "fragment",
+              "memory": "eda_ne_vnesena",
+              "amount": 2
+            },
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -15
+            }
           ],
           "to": "r_counted_city",
           "priority": 6
         },
         {
           "id": "send_boy_up",
-          "conditions": { "kind": "flag", "flag": "klyost_named" },
-          "text": { "ru": "Отослать мальчика наверх. Сейчас же.", "en": "Send the boy up. Right now." },
+          "conditions": {
+            "kind": "flag",
+            "flag": "klyost_named"
+          },
+          "text": {
+            "ru": "Отослать мальчика наверх. Сейчас же.",
+            "en": "Send the boy up. Right now."
+          },
           "effects": [
-            { "kind": "counter", "counter": "klyost_seen", "delta": 1 },
-            { "kind": "axis", "axis": "mercy_cruelty", "delta": 8 }
+            {
+              "kind": "counter",
+              "counter": "klyost_seen",
+              "delta": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": 8
+            }
           ],
           "to": "r_boy_up",
           "priority": 6
         },
         {
           "id": "call_tminny",
-          "conditions": { "kind": "flag", "flag": "tminny_trust" },
-          "text": { "ru": "Крикнуть наверх оценщику. Пусть спускается.", "en": "Call up to the appraiser. Let him come down." },
-          "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": 3 }],
+          "conditions": {
+            "kind": "flag",
+            "flag": "tminny_trust"
+          },
+          "text": {
+            "ru": "Крикнуть наверх оценщику. Пусть спускается.",
+            "en": "Call up to the appraiser. Let him come down."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 3
+            }
+          ],
           "to": "r_tminny",
           "priority": 5
         },
         {
           "id": "sign_again",
-          "conditions": { "kind": "axis", "axis": "honesty_deceit", "op": "lte", "value": -30 },
-          "text": { "ru": "Расписаться на стене ещё раз.", "en": "Sign the wall one more time." },
+          "conditions": {
+            "kind": "axis",
+            "axis": "honesty_deceit",
+            "op": "lte",
+            "value": -30
+          },
+          "text": {
+            "ru": "Расписаться на стене ещё раз.",
+            "en": "Sign the wall one more time."
+          },
           "effects": [
-            { "kind": "fragment", "memory": "luchshie_gody", "amount": 1 },
-            { "kind": "axis", "axis": "honesty_deceit", "delta": -8 }
+            {
+              "kind": "fragment",
+              "memory": "luchshie_gody",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": -8
+            }
           ],
           "to": "r_signed_wall",
           "priority": 5
         },
         {
           "id": "count_with_watchman",
-          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "gte", "value": 25 },
-          "text": { "ru": "Позвать сторожа считать вместе.", "en": "Call the watchman to count together." },
-          "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": 8 }],
+          "conditions": {
+            "kind": "axis",
+            "axis": "mercy_cruelty",
+            "op": "gte",
+            "value": 25
+          },
+          "text": {
+            "ru": "Позвать сторожа считать вместе.",
+            "en": "Call the watchman to count together."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": 8
+            }
+          ],
           "to": "r_with_watchman",
           "priority": 5
         },
         {
           "id": "touch_nothing",
-          "conditions": { "kind": "axis", "axis": "grasp_release", "op": "lte", "value": -30 },
-          "text": { "ru": "Не трогать ничего. Идти наверх.", "en": "Touch nothing. Go back up." },
-          "effects": [ { "kind": "axis", "axis": "reason_obsession", "delta": 8 },{ "kind": "axis", "axis": "grasp_release", "delta": -8 }],
+          "conditions": {
+            "kind": "axis",
+            "axis": "grasp_release",
+            "op": "lte",
+            "value": -30
+          },
+          "text": {
+            "ru": "Не трогать ничего. Идти наверх.",
+            "en": "Touch nothing. Go back up."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": 8
+            },
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": -8
+            }
+          ],
           "to": "r_touch_nothing",
           "priority": 5
         }
@@ -503,7 +833,13 @@
     {
       "kind": "effects",
       "id": "set_foundation",
-      "effects": [{ "kind": "flag", "flag": "foundation", "value": true }],
+      "effects": [
+        {
+          "kind": "flag",
+          "flag": "foundation",
+          "value": true
+        }
+      ],
       "next": "stair_gives"
     },
     {
@@ -522,19 +858,51 @@
         "ru": "Из стены вынули один короб, и один короб оказался несущим. Кладка идёт вниз рядами, ряд за рядом, не быстро; склянки бьются каждая по отдельности, и слышно каждую.",
         "en": "One crate was taken out of the wall, and one crate turned out to be load-bearing. The masonry comes down course by course, unhurried; the jars break one at a time, and you hear each of them."
       },
-      "keywords": [{ "match": { "ru": "оказался несущим", "en": "turned out to be load-bearing" }, "tone": "danger" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "оказался несущим",
+            "en": "turned out to be load-bearing"
+          },
+          "tone": "danger"
+        }
+      ],
       "next": "dying_shelf"
     },
     {
       "kind": "effects",
       "id": "dying_shelf",
       "effects": [
-        { "kind": "flag", "flag": "death_cause_shelf", "value": true },
-        { "kind": "flag", "flag": "death_cause_guard", "value": false },
-        { "kind": "flag", "flag": "death_cause_scavengers", "value": false },
-        { "kind": "flag", "flag": "death_cause_guild", "value": false },
-        { "kind": "flag", "flag": "death_cause_sluza", "value": false },
-        { "kind": "flag", "flag": "death_cause_vytsvet", "value": false }
+        {
+          "kind": "flag",
+          "flag": "death_cause_shelf",
+          "value": true
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_guard",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_scavengers",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_guild",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_sluza",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_vytsvet",
+          "value": false
+        }
       ],
       "next": "last_thing"
     },
@@ -544,6 +912,305 @@
       "text": {
         "ru": "Последним доходит звук насосов: они не останавливаются. Их никто не останавливал четыреста лет, и то, что сверху лёг ещё один человек, для сметы ничего не меняет.",
         "en": "The last thing to reach you is the sound of the pumps: they do not stop. Nobody has stopped them in four hundred years, and one more man settling on top changes nothing in the estimate."
+      },
+      "next": "scene:silver_counter#queue_entry"
+    },
+    {
+      "kind": "narration",
+      "id": "crew_lamps",
+      "text": {
+        "ru": "Дальше по стене на полу стоят три лампы, и ни одну не держат в руках. Возле них работают: клин, кувалда с тряпкой на бойке, и удары ложатся в такт насосам, чтобы их не было слышно отдельно.",
+        "en": "Further along the wall three lamps stand on the floor, and not one is being held. There is work going on beside them: a wedge, a sledge with rag bound round the head, and the blows fall in time with the pumps so as not to be heard apart from them."
+      },
+      "next": "crew_1"
+    },
+    {
+      "kind": "say",
+      "id": "crew_1",
+      "speaker": "marodyor",
+      "text": {
+        "ru": "Ревизия пометила мелом: раздел первый. Мы читаем чужие пометки — это дешевле, чем искать самим, и точнее.",
+        "en": "The Audit chalked it: section one. We read other people's marks — it comes cheaper than searching yourself, and more exact."
+      },
+      "next": "crew_2"
+    },
+    {
+      "kind": "say",
+      "id": "crew_2",
+      "speaker": "marodyor",
+      "text": {
+        "ru": "Берём один короб. Один короб из четырёхсот лет — это не кража, это округление, и округляют здесь все.",
+        "en": "We take one crate. One crate out of four hundred years is not theft, it is rounding, and everyone here rounds."
+      },
+      "next": "crew_storozh"
+    },
+    {
+      "kind": "say",
+      "id": "crew_storozh",
+      "speaker": "storozh_arkhiva",
+      "text": {
+        "ru": "Пять. Я считаю пилоны, а не людей: люди в описи не стоят, и сбить меня ими нельзя. Пять.",
+        "en": "Five. I count pylons, not people: people are not entered in the inventory, and they cannot put me off. Five."
+      },
+      "next": "crew_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "crew_choice",
+      "prompt": {
+        "ru": "Клин уже сидит в шве. Кувалда поднята и ждёт удара насоса.",
+        "en": "The wedge is already seated in the joint. The sledge is up and waiting for the pumps to strike."
+      },
+      "options": [
+        {
+          "id": "stand_at_wall",
+          "text": {
+            "ru": "Встать между клином и стеной.",
+            "en": "Stand between the wedge and the wall."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": 8
+            }
+          ],
+          "to": "r_crew_stand"
+        },
+        {
+          "id": "read_them_the_plate",
+          "text": {
+            "ru": "Прочитать им табличку раздела вслух.",
+            "en": "Read them the section tablet aloud."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 5
+            }
+          ],
+          "to": "r_crew_plate"
+        },
+        {
+          "id": "ask_buyer",
+          "text": {
+            "ru": "Спросить, кто заказчик и по какой описи.",
+            "en": "Ask who the buyer is, and by what inventory."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -5
+            }
+          ],
+          "to": "r_crew_plate"
+        },
+        {
+          "id": "pull_the_wedge",
+          "text": {
+            "ru": "Выбить клин из шва первым.",
+            "en": "Knock the wedge out of the joint first."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": -5
+            }
+          ],
+          "to": "r_crew_first"
+        },
+        {
+          "id": "let_them_take",
+          "text": {
+            "ru": "Отойти. Один короб из четырёхсот лет.",
+            "en": "Step aside. One crate out of four hundred years."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": -8
+            },
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": 3
+            }
+          ],
+          "to": "r_crew_left"
+        },
+        {
+          "id": "name_myself",
+          "text": {
+            "ru": "Сказать, чьё это обеспечение. Своё имя первым.",
+            "en": "Say whose holding this is. Your own name first."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 8
+            }
+          ],
+          "to": "r_crew_stand"
+        },
+        {
+          "id": "count_the_crates",
+          "text": {
+            "ru": "Сосчитать, сколько коробов уже вынуто.",
+            "en": "Count how many crates are out already."
+          },
+          "chip": {
+            "icon": "hourglass",
+            "label": {
+              "ru": "Перечень",
+              "en": "Perechen"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "perechen"
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -8
+            }
+          ],
+          "to": "r_crew_plate"
+        },
+        {
+          "id": "tar_the_lamps",
+          "text": {
+            "ru": "Опрокинуть лампы. Внизу сухо.",
+            "en": "Tip the lamps over. It is dry down here."
+          },
+          "chip": {
+            "icon": "fire",
+            "label": {
+              "ru": "Смолокур",
+              "en": "Smolokur"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "smolokur"
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": -8
+            }
+          ],
+          "to": "r_crew_first"
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "r_crew_stand",
+      "speaker": "marodyor",
+      "text": {
+        "ru": "Между клином и стеной уже стояли. Их обвело мелом и вписало в смету на водоотлив, отдельной строкой, без разбивки.",
+        "en": "People have stood between the wedge and the wall before. They were chalked round and entered in the drainage estimate, one line, no breakdown."
+      },
+      "next": "fight_crew"
+    },
+    {
+      "kind": "say",
+      "id": "r_crew_plate",
+      "speaker": "marodyor",
+      "text": {
+        "ru": "Табличку мы прочли раньше вас. Заказчик — тот, кто платит вперёд и не приходит смотреть; других заказчиков на такую глубину не бывает.",
+        "en": "We read the tablet before you did. The buyer is the one who pays in advance and never comes to look; at this depth there are no other kinds."
+      },
+      "next": "fight_crew"
+    },
+    {
+      "kind": "narration",
+      "id": "r_crew_first",
+      "text": {
+        "ru": "Насосы бьют два раза в минуту, и между ударами есть тишина, в которую всё слышно. Клин выходит из шва со звуком, который слышат все четверо сразу.",
+        "en": "The pumps strike twice a minute, and between the strokes there is a silence in which everything carries. The wedge comes out of the joint with a sound all four of them hear at once."
+      },
+      "next": "fight_crew"
+    },
+    {
+      "kind": "battle",
+      "id": "fight_crew",
+      "battle": "battle_wall_crew",
+      "onWin": "crew_after",
+      "onLose": "dying_crew"
+    },
+    {
+      "kind": "narration",
+      "id": "crew_after",
+      "text": {
+        "ru": "Лампы они оставляют, а короб бросают там, где держали. Сторож досчитывает до пяти и начинает сначала, потому что при нём вслух назвали число, которого в описи нет.",
+        "en": "They leave the lamps and drop the crate where they were holding it. The watchman counts to five and starts again, because in his hearing someone said aloud a number the inventory does not have."
+      },
+      "next": "the_hole"
+    },
+    {
+      "kind": "say",
+      "id": "r_crew_left",
+      "speaker": "marodyor",
+      "text": {
+        "ru": "Разумно. Короб мы оставим тут же: наверх его не поднять вдвоём, а звать четвёртого — это уже делить на четверых.",
+        "en": "Sensible. We will leave the crate right here: two men cannot get it up top, and calling a fourth means dividing by four."
+      },
+      "next": "the_hole"
+    },
+    {
+      "kind": "effects",
+      "id": "dying_crew",
+      "effects": [
+        {
+          "kind": "flag",
+          "flag": "death_cause_guild",
+          "value": true
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_scavengers",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_sluza",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_guard",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_shelf",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_vytsvet",
+          "value": false
+        }
+      ],
+      "next": "crew_falling"
+    },
+    {
+      "kind": "narration",
+      "id": "crew_falling",
+      "text": {
+        "ru": "Тебя оттаскивают от стены, чтобы не мешал, и укладывают у ниши с насосом. Сторож считает пилоны в третий раз, и в третий раз выходит пять: людей он и правда не считает.",
+        "en": "They drag you off the wall so as not to be in the way and lay you by the pump niche. The watchman counts the pylons a third time, and a third time it comes out five: he really does not count people."
       },
       "next": "scene:silver_counter#queue_entry"
     }

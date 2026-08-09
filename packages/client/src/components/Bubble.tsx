@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import type { Keyword, Lang, LocalizedText, SceneNode } from '@nameless/engine';
 import { loc, t } from '../i18n';
-import { portraitImage, portraitSvg, svgDataUri } from '../lib/art';
+import { portraitImage } from '../lib/art';
+import { speakerEmblem } from '../lib/emblems';
 
 /** Подсветка ключевых слов внутри пузыря. Цвета — смысловые, не декоративные. */
 function highlight(text: string, keywords: Keyword[] | undefined, lang: Lang) {
@@ -49,10 +50,16 @@ export function SayBubble({
   keywords?: Keyword[];
   lang: Lang;
 }) {
-  const img = portraitImage(speakerId) ?? svgDataUri(portraitSvg(speakerId));
+  // Арт-слот пользователя главнее всего: положил картинку в assets/portraits/<id>
+  // — она вытесняет знак. Иначе рисуем знак роли (docs/ART_PASS.md §1).
+  const img = portraitImage(speakerId);
   return (
     <div className="bubble-row">
-      <img className="portrait" src={img} alt="" draggable={false} />
+      {img ? (
+        <img className="portrait" src={img} alt="" draggable={false} />
+      ) : (
+        <span className="portrait portrait-mark" style={speakerEmblem(speakerId)} aria-hidden="true" />
+      )}
       <div className="bubble">
         <div className="bubble-name">{speakerName}</div>
         <div className="bubble-text">{highlight(loc(text, lang), keywords, lang)}</div>

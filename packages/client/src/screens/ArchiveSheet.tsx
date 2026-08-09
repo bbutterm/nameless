@@ -3,6 +3,7 @@ import { lifeProgress, type GameState, type Lang } from '@nameless/engine';
 import { Icon } from '../components/Icon';
 import { loc, t } from '../i18n';
 import { cardImage, svgDataUri, unitCardSvg } from '../lib/art';
+import { placeEmblemByKey, unitEmblem } from '../lib/emblems';
 import { content } from '../store/content';
 import { useGame } from '../store/game';
 import { vibrate } from '../lib/haptics';
@@ -29,6 +30,10 @@ export function ArchiveSheet({
   return (
     <div className="sheet-backdrop" onClick={onClose}>
       <div className="sheet" onClick={(e) => e.stopPropagation()}>
+        {/* Свиток описи: лист называет сам себя. Лежит под вкладками и телом,
+            видно его только там, где пусто, — то есть в первую очередь на
+            пустом отряде, где раньше была одна серая строка. */}
+        <span className="sheet-mark" style={placeEmblemByKey('ledger')} aria-hidden="true" />
         <div className="sheet-tabs">
           <button className={tab === 'party' ? 'on' : ''} onClick={() => setTab('party')}>
             {t(lang, 'party')}
@@ -56,7 +61,9 @@ export function ArchiveSheet({
                   )
                   .map((u) => {
                   const def = defs.get(u.defId);
-                  const art = def ? (cardImage(def.id) ?? svgDataUri(unitCardSvg(def.id, def.tier, def.faction))) : '';
+                  const custom = def ? cardImage(def.id) : undefined;
+                  const art = def ? (custom ?? svgDataUri(unitCardSvg(def.id, def.tier, def.faction))) : '';
+                  const mark = custom ? undefined : unitEmblem(def?.id, def?.faction);
                   return (
                     <button
                       key={u.uid}
@@ -75,6 +82,7 @@ export function ArchiveSheet({
                     >
                       <div className="party-thumb">
                         <img src={art} alt="" draggable={false} />
+                        {mark && <span className="card-mark" style={mark} aria-hidden="true" />}
                       </div>
                       <div className="party-name">{def ? loc(def.name, lang) : u.defId}</div>
                       <div className="party-blurb">{def ? loc(def.blurb, lang) : ''}</div>

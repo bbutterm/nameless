@@ -1,20 +1,42 @@
 {
   "id": "brotherhood_shelter",
   "chapter": 2,
-  "title": { "ru": "Укрытие на Том берегу", "en": "Shelter on the Other Bank" },
-  "tags": ["errand", "vaults", "brotherhood"],
+  "title": {
+    "ru": "Укрытие на Том берегу",
+    "en": "Shelter on the Other Bank"
+  },
+  "tags": [
+    "errand",
+    "vaults",
+    "brotherhood"
+  ],
   "available": {
     "kind": "all",
     "of": [
       {
         "kind": "any",
         "of": [
-          { "kind": "flag", "flag": "brotherhood_welcome" },
-          { "kind": "flag", "flag": "beggar_helped" },
-          { "kind": "flag", "flag": "dust_buried" }
+          {
+            "kind": "flag",
+            "flag": "brotherhood_welcome"
+          },
+          {
+            "kind": "flag",
+            "flag": "beggar_helped"
+          },
+          {
+            "kind": "flag",
+            "flag": "dust_buried"
+          }
         ]
       },
-      { "kind": "not", "of": { "kind": "flag", "flag": "brotherhood_gate_shut" } }
+      {
+        "kind": "not",
+        "of": {
+          "kind": "flag",
+          "flag": "brotherhood_gate_shut"
+        }
+      }
     ]
   },
   "entry": "river_cross",
@@ -54,7 +76,15 @@
         "ru": "Наряд идёт по берегу от двора к двору, впереди старшая с описью. Опись у них на имущество: короба, лопаты, чайники. Людей в описи нет.",
         "en": "The detail works along the bank from yard to yard, the senior officer out front with an inventory. Their inventory is of property: crates, spades, teapots. There are no people in it."
       },
-      "keywords": [{ "match": { "ru": "Людей в описи нет", "en": "no people in it" }, "tone": "lore" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "Людей в описи нет",
+            "en": "no people in it"
+          },
+          "tone": "lore"
+        }
+      ],
       "next": "ogorodnik_count"
     },
     {
@@ -97,7 +127,15 @@
         "ru": "Брат-огородник уже пишет бирку. В графе «наименование» — «человек серый, один, невостребован». В графе «срок хранения» прочерк: сколько тебя не будут востребовать, он не знает.",
         "en": "The brother gardener is already writing the tag. Under \"description\": \"man, grey, one, unclaimed\". Under \"term of storage\", a dash: he does not know how long you will go unclaimed."
       },
-      "keywords": [{ "match": { "ru": "невостребован", "en": "unclaimed" }, "tone": "memory" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "невостребован",
+            "en": "unclaimed"
+          },
+          "tone": "memory"
+        }
+      ],
       "next": "hide_choice"
     },
     {
@@ -110,83 +148,205 @@
       "options": [
         {
           "id": "lie_in_grave",
-          "text": { "ru": "Лечь в яму. Бирку на запястье.", "en": "Lie in the hole. Tag on the wrist." },
+          "text": {
+            "ru": "Лечь в яму. Бирку на запястье.",
+            "en": "Lie in the hole. Tag on the wrist."
+          },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -8 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": -8
+            }
+          ],
           "to": "r_grave"
         },
         {
           "id": "go_out",
-          "text": { "ru": "Выйти к наряду. Говорить как есть.", "en": "Go out to the detail. Speak plainly." },
+          "text": {
+            "ru": "Выйти к наряду. Говорить как есть.",
+            "en": "Go out to the detail. Speak plainly."
+          },
           "fallback": true,
           "effects": [
-            { "kind": "fragment", "memory": "khronika_bez_popravok", "amount": 1 },
-            { "kind": "axis", "axis": "honesty_deceit", "delta": 12 }
+            {
+              "kind": "fragment",
+              "memory": "khronika_bez_popravok",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 12
+            }
           ],
           "to": "r_out"
         },
         {
           "id": "leave_river",
-          "text": { "ru": "Уйти водой. Их не втягивать.", "en": "Leave by water. Keep them out of it." },
+          "text": {
+            "ru": "Уйти водой. Их не втягивать.",
+            "en": "Leave by water. Keep them out of it."
+          },
           "fallback": true,
           "effects": [
-            { "kind": "fragment", "memory": "ochered_k_kolodtsu", "amount": 1 },
-            { "kind": "axis", "axis": "mercy_cruelty", "delta": 8 }
+            {
+              "kind": "fragment",
+              "memory": "ochered_k_kolodtsu",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": 8
+            }
           ],
           "to": "r_river"
         },
         {
           "id": "false_name",
-          "conditions": { "kind": "axis", "axis": "honesty_deceit", "op": "lte", "value": -20 },
-          "text": { "ru": "Вписать в бирку чужое имя.", "en": "Put another man's name on the tag." },
+          "conditions": {
+            "kind": "axis",
+            "axis": "honesty_deceit",
+            "op": "lte",
+            "value": -20
+          },
+          "text": {
+            "ru": "Вписать в бирку чужое имя.",
+            "en": "Put another man's name on the tag."
+          },
           "effects": [
-            { "kind": "fragment", "memory": "zima_bez_khleba", "amount": 1 },
-            { "kind": "axis", "axis": "honesty_deceit", "delta": -8 }
+            {
+              "kind": "fragment",
+              "memory": "zima_bez_khleba",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": -8
+            }
           ],
           "to": "r_grave_false",
           "priority": 5
         },
         {
           "id": "count_tags",
-          "chip": { "icon": "hourglass", "label": { "ru": "Перечень", "en": "Perechen" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "perechen" },
-          "text": { "ru": "Переписать бирки. Всё кладбище вещей.", "en": "Copy the tags. The whole thing-cemetery." },
+          "chip": {
+            "icon": "hourglass",
+            "label": {
+              "ru": "Перечень",
+              "en": "Perechen"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "perechen"
+          },
+          "text": {
+            "ru": "Переписать бирки. Всё кладбище вещей.",
+            "en": "Copy the tags. The whole thing-cemetery."
+          },
           "effects": [
-            { "kind": "fragment", "memory": "opis_vsego_sushchego", "amount": 1 },
-            { "kind": "axis", "axis": "reason_obsession", "delta": -8 }
+            {
+              "kind": "fragment",
+              "memory": "opis_vsego_sushchego",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -8
+            }
           ],
           "to": "r_tags",
           "priority": 6
         },
         {
           "id": "carry_water",
-          "chip": { "icon": "heal", "label": { "ru": "Ключарь", "en": "Klyuchar" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "klyuchar" },
-          "text": { "ru": "Вынести наряду воды. Пусть пьют и ищут.", "en": "Bring the detail water. Let them drink and search." },
+          "chip": {
+            "icon": "heal",
+            "label": {
+              "ru": "Ключарь",
+              "en": "Klyuchar"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "klyuchar"
+          },
+          "text": {
+            "ru": "Вынести наряду воды. Пусть пьют и ищут.",
+            "en": "Bring the detail water. Let them drink and search."
+          },
           "effects": [
-            { "kind": "fragment", "memory": "ochered_k_kolodtsu", "amount": 1 },
-            { "kind": "axis", "axis": "mercy_cruelty", "delta": 8 }
+            {
+              "kind": "fragment",
+              "memory": "ochered_k_kolodtsu",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": 8
+            }
           ],
           "to": "r_water",
           "priority": 6
         },
         {
           "id": "burn_brush",
-          "chip": { "icon": "fire", "label": { "ru": "Смолокур", "en": "Smolokur" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "smolokur" },
-          "text": { "ru": "Запалить сушняк у калитки. Пусть тушат.", "en": "Fire the brushwood by the gate. Let them douse it." },
+          "chip": {
+            "icon": "fire",
+            "label": {
+              "ru": "Смолокур",
+              "en": "Smolokur"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "smolokur"
+          },
+          "text": {
+            "ru": "Запалить сушняк у калитки. Пусть тушат.",
+            "en": "Fire the brushwood by the gate. Let them douse it."
+          },
           "effects": [
-            { "kind": "fragment", "memory": "ples_gorit", "amount": 2 },
-            { "kind": "axis", "axis": "mercy_cruelty", "delta": -15 }
+            {
+              "kind": "fragment",
+              "memory": "ples_gorit",
+              "amount": 2
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": -15
+            }
           ],
           "to": "r_fire",
           "priority": 6
         },
         {
           "id": "call_in_debt",
-          "conditions": { "kind": "flag", "flag": "dratva_debt" },
-          "text": { "ru": "Напомнить капралу про мостки.", "en": "Remind the corporal about the boardwalk." },
-          "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": 3 }],
+          "conditions": {
+            "kind": "flag",
+            "flag": "dratva_debt"
+          },
+          "text": {
+            "ru": "Напомнить капралу про мостки.",
+            "en": "Remind the corporal about the boardwalk."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 3
+            }
+          ],
           "to": "r_debt",
           "priority": 5
         }
@@ -294,7 +454,15 @@
         "ru": "Гражданин невостребованный. По описи вы не значитесь, беспокоить вас не имею права. Извините за доску.",
         "en": "Citizen unclaimed. You are not listed in the inventory, and I have no right to disturb you. My apologies for the plank."
       },
-      "keywords": [{ "match": { "ru": "не значитесь", "en": "not listed" }, "tone": "danger" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "не значитесь",
+            "en": "not listed"
+          },
+          "tone": "danger"
+        }
+      ],
       "next": "dratva_knows"
     },
     {
@@ -326,76 +494,188 @@
       "options": [
         {
           "id": "say_as_was",
-          "text": { "ru": "Сказать как было. Включая решётку.", "en": "Tell it as it was. Grate included." },
+          "text": {
+            "ru": "Сказать как было. Включая решётку.",
+            "en": "Tell it as it was. Grate included."
+          },
           "fallback": true,
           "effects": [
-            { "kind": "fragment", "memory": "khronika_bez_popravok", "amount": 1 },
-            { "kind": "axis", "axis": "honesty_deceit", "delta": 12 }
+            {
+              "kind": "fragment",
+              "memory": "khronika_bez_popravok",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 12
+            }
           ],
           "to": "r_told_true"
         },
         {
           "id": "say_nothing",
-          "text": { "ru": "Молчать. Пусть читает опись.", "en": "Say nothing. Let her read the inventory." },
+          "text": {
+            "ru": "Молчать. Пусть читает опись.",
+            "en": "Say nothing. Let her read the inventory."
+          },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -3 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": -3
+            }
+          ],
           "to": "r_silent"
         },
         {
           "id": "fight_them",
-          "text": { "ru": "Не ждать, пока кольцо сойдётся.", "en": "Not wait for the ring to close." },
+          "text": {
+            "ru": "Не ждать, пока кольцо сойдётся.",
+            "en": "Not wait for the ring to close."
+          },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": -8 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": -8
+            }
+          ],
           "to": "battle_squad"
         },
         {
           "id": "blame_brothers",
-          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -25 },
-          "text": { "ru": "Указать на братьев. Копали они.", "en": "Point at the brothers. They did the digging." },
+          "conditions": {
+            "kind": "axis",
+            "axis": "mercy_cruelty",
+            "op": "lte",
+            "value": -25
+          },
+          "text": {
+            "ru": "Указать на братьев. Копали они.",
+            "en": "Point at the brothers. They did the digging."
+          },
           "effects": [
-            { "kind": "fragment", "memory": "schet_za_sezon", "amount": 1 },
-            { "kind": "axis", "axis": "mercy_cruelty", "delta": -15 }
+            {
+              "kind": "fragment",
+              "memory": "schet_za_sezon",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": -15
+            }
           ],
           "to": "r_blamed",
           "priority": 5
         },
         {
           "id": "promise_paper",
-          "chip": { "icon": "coin", "label": { "ru": "Посульщик", "en": "Posulshchik" }, "tone": "life" },
-          "conditions": { "kind": "life", "life": "posulshchik" },
-          "text": { "ru": "Выписать ей бумагу на пойманного. К четвергу.", "en": "Write her a note for the man caught. By Thursday." },
+          "chip": {
+            "icon": "coin",
+            "label": {
+              "ru": "Посульщик",
+              "en": "Posulshchik"
+            },
+            "tone": "life"
+          },
+          "conditions": {
+            "kind": "life",
+            "life": "posulshchik"
+          },
+          "text": {
+            "ru": "Выписать ей бумагу на пойманного. К четвергу.",
+            "en": "Write her a note for the man caught. By Thursday."
+          },
           "effects": [
-            { "kind": "fragment", "memory": "zima_bez_khleba", "amount": 1 },
-            { "kind": "axis", "axis": "honesty_deceit", "delta": -12 },
-            { "kind": "counter", "counter": "promises_given", "delta": 1 }
+            {
+              "kind": "fragment",
+              "memory": "zima_bez_khleba",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": -12
+            },
+            {
+              "kind": "counter",
+              "counter": "promises_given",
+              "delta": 1
+            }
           ],
           "to": "r_promised",
           "priority": 6
         },
         {
           "id": "cite_clause",
-          "conditions": { "kind": "axis", "axis": "reason_obsession", "op": "gte", "value": 25 },
-          "text": { "ru": "Процитировать ей лист первый предписания.", "en": "Quote her sheet one of the order." },
-          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 3 }],
+          "conditions": {
+            "kind": "axis",
+            "axis": "reason_obsession",
+            "op": "gte",
+            "value": 25
+          },
+          "text": {
+            "ru": "Процитировать ей лист первый предписания.",
+            "en": "Quote her sheet one of the order."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": 3
+            }
+          ],
           "to": "r_quoted",
           "priority": 5
         },
         {
           "id": "give_up_lots",
-          "conditions": { "kind": "counter", "counter": "lots_held", "op": "gte", "value": 1 },
-          "text": { "ru": "Отдать ей всё чужое из карманов.", "en": "Hand over everything of others' from your pockets." },
+          "conditions": {
+            "kind": "counter",
+            "counter": "lots_held",
+            "op": "gte",
+            "value": 1
+          },
+          "text": {
+            "ru": "Отдать ей всё чужое из карманов.",
+            "en": "Hand over everything of others' from your pockets."
+          },
           "effects": [
-            { "kind": "counter", "counter": "lots_held", "delta": -1 },
-            { "kind": "axis", "axis": "grasp_release", "delta": -8 }
+            {
+              "kind": "counter",
+              "counter": "lots_held",
+              "delta": -1
+            },
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": -8
+            }
           ],
           "to": "r_gave_lots",
           "priority": 5
         },
         {
           "id": "warned_before",
-          "conditions": { "kind": "flag", "flag": "dratva_warned" },
-          "text": { "ru": "Напомнить: посулов при ней не было.", "en": "Remind her: no promise notes in her presence." },
-          "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": 3 }],
+          "conditions": {
+            "kind": "flag",
+            "flag": "dratva_warned"
+          },
+          "text": {
+            "ru": "Напомнить: посулов при ней не было.",
+            "en": "Remind her: no promise notes in her presence."
+          },
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 3
+            }
+          ],
           "to": "r_quoted",
           "priority": 5
         }
@@ -419,7 +699,7 @@
         "ru": "Молчание в протокол не вносится. Молчащих у меня в этом деле трое, и все трое молчат по-разному. Оцепить грядки.",
         "en": "Silence is not entered in the record. I have three silent ones in this case, and all three are silent differently. Cordon off the beds."
       },
-      "next": "detail_leaves"
+      "next": "silent_search"
     },
     {
       "kind": "say",
@@ -490,12 +770,36 @@
       "kind": "effects",
       "id": "dying_guard",
       "effects": [
-        { "kind": "flag", "flag": "death_cause_guard", "value": true },
-        { "kind": "flag", "flag": "death_cause_shelf", "value": false },
-        { "kind": "flag", "flag": "death_cause_scavengers", "value": false },
-        { "kind": "flag", "flag": "death_cause_guild", "value": false },
-        { "kind": "flag", "flag": "death_cause_sluza", "value": false },
-        { "kind": "flag", "flag": "death_cause_vytsvet", "value": false }
+        {
+          "kind": "flag",
+          "flag": "death_cause_guard",
+          "value": true
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_shelf",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_scavengers",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_guild",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_sluza",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_vytsvet",
+          "value": false
+        }
       ],
       "next": "guard_dust"
     },
@@ -525,7 +829,15 @@
         "ru": "Слышишь? Это не водокачка. Это у них внизу качают воду, два удара в минуту, и так все ночи, сколько я тут... ну и слава.",
         "en": "Do you hear that? That is not the pump. That is them pumping water down below, two beats to the minute, every night for as long as I have been... well, thank goodness."
       },
-      "keywords": [{ "match": { "ru": "два удара в минуту", "en": "two beats to the minute" }, "tone": "lore" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "два удара в минуту",
+            "en": "two beats to the minute"
+          },
+          "tone": "lore"
+        }
+      ],
       "next": "proshchai_key_2"
     },
     {
@@ -541,7 +853,13 @@
     {
       "kind": "effects",
       "id": "deeper",
-      "effects": [{ "kind": "counter", "counter": "vault_depth", "delta": 1 }],
+      "effects": [
+        {
+          "kind": "counter",
+          "counter": "vault_depth",
+          "delta": 1
+        }
+      ],
       "next": "shelter_exit"
     },
     {
@@ -552,6 +870,25 @@
         "en": "They give you turnips for the road and take nothing for the crossing: the ferryman is back and now asks nothing at all. From the water you can see one lit window in the Pawnshop, and it is below the waterline."
       },
       "next": "scene:vaults_hub"
+    },
+    {
+      "kind": "say",
+      "id": "silent_search",
+      "speaker": "dratva",
+      "text": {
+        "ru": "Осмотр. Начинаем с дальнего ряда: там земля свежая, а бирка на верхнем холмике написана сегодня и ещё не высохла.",
+        "en": "Search. We start with the far row: the earth there is fresh, and the tag on the top mound was written today and has not dried yet."
+      },
+      "next": "silent_search_2"
+    },
+    {
+      "kind": "narration",
+      "id": "silent_search_2",
+      "text": {
+        "ru": "Прощай встаёт между лопатой и рядом, и это первый раз за вечер, когда он не улыбается. Братья становятся рядом с ним по одному, молча, и заднего ряда у них по-прежнему нет.",
+        "en": "Proshchai steps between the spade and the row, and it is the first time this evening that he is not smiling. The brothers take their places beside him one by one, in silence, and they still have no back row."
+      },
+      "next": "battle_squad"
     }
   ]
 }
