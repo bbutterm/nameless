@@ -189,6 +189,7 @@ export function BattleScreen() {
             threatened={threatened.get(u.uid)}
             covered={covered}
             coveredLabel={t(lang, 'coveredShort')}
+            hideIntent={over}
             preview={previews.get(u.uid)}
             anim={anims[u.uid]}
             floats={floats.filter((f) => f.uid === u.uid)}

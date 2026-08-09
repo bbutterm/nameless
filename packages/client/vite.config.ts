@@ -7,6 +7,13 @@ export default defineConfig({
   server: { port: 5173 },
   build: {
     target: 'es2020',
+    // Кладём сборку в корневой dist/, а не в packages/client/dist.
+    // Vercel в монорепо ищет выходную папку от корня репозитория и наш
+    // outputDirectory из vercel.json игнорировал — сборка проходила, а деплой
+    // падал с «No Output Directory named "dist" found». Теперь путь совпадает
+    // с тем, что Vercel ожидает по умолчанию, и расхождению взяться неоткуда.
+    outDir: '../../dist',
+    emptyOutDir: true,
     // Игра целиком статическая: чем меньше чанков, тем меньше сетевых круговых на телефоне.
     chunkSizeWarningLimit: 900,
     rollupOptions: {

@@ -35,7 +35,7 @@ export const ui = {
     /* Бой: очередь, намерения, разбор способности */
     turnOf: 'Ходит',
     nextRound: 'новый раунд',
-    holdForInfo: 'удержи способность — подробности',
+    holdForInfo: 'удержи — разбор',
     chooseAbility: 'Выбери способность',
     aimsAt: 'бьёт',
     targetFront: 'первый ряд',
@@ -114,7 +114,7 @@ export const ui = {
     round: 'Round',
     turnOf: 'Acting',
     nextRound: 'new round',
-    holdForInfo: 'hold an ability for details',
+    holdForInfo: 'hold for details',
     chooseAbility: 'Pick an ability',
     aimsAt: 'strikes',
     targetFront: 'front row',
