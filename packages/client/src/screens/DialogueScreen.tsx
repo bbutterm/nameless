@@ -48,6 +48,15 @@ export function DialogueScreen() {
   const releasing = (state.axes['grasp_release'] ?? 0) <= -40;
   const greyness = Math.min(0.72, state.deaths * (releasing ? 0.06 : 0.11));
 
+  /*
+   * То же самое, но для лиц: у игрока серость растёт со смертями и замедляется
+   * вдвое на краю отпускания, у Клёста наоборот — он проявляется от главы к
+   * главе, потому что игрок его помнит (docs/PORTRAITS.md §2.2). Состояние
+   * передаётся явным аргументом: рисунок обязан остаться чистой функцией,
+   * иначе рушится детерминизм STYLE §7.6.
+   */
+  const portraitState = { deaths: state.deaths, releaseEdge: releasing, chapter: state.chapter };
+
   return (
     <div
       className="screen dialogue"
@@ -100,6 +109,7 @@ export function DialogueScreen() {
                 text={node.text}
                 keywords={node.keywords}
                 lang={lang}
+                portraitState={portraitState}
               />
             );
           }

@@ -435,7 +435,10 @@ const ECHO_FACES: Record<string, FaceSpec> = {
   gar: {
     house: 'memory', echo: true,
     long: 1, jaw: 0.3, cheek: 0.6, brow: 0.6, age: 0.5,
-    hair: 'bald', shoulders: 0.25, mouth: -1, mouthW: 0.45,
+    // Плечи есть, но пустые: Гарь — высокий столб, а не сутулый писец. Вместе
+    // с выцветанием это даёт вторую и третью позицию различия со Свидетелем,
+    // которых требует §1.3: до правки они расходились только предметом.
+    hair: 'bald', shoulders: 0.8, fade: 0.9, mouth: -1, mouthW: 0.45,
   },
   /** Водонос: широкие плечи и линия коромысла поперёк них. */
   vodonos: {
@@ -454,7 +457,9 @@ const ECHO_FACES: Record<string, FaceSpec> = {
   svidetel: {
     house: 'memory', echo: true,
     long: 0.55, jaw: 0.45, cheek: 0.55, brow: 0.45, age: 0.55,
-    hair: 'bald', shoulders: 0.15, tilt: -1, gaze: 'down',
+    // Свидетель держится в мире крепче прочих отголосков: он записывает, а
+    // записанное не выцветает так быстро. Отсюда выцветание ниже.
+    hair: 'bald', shoulders: 0.15, fade: 0.68, tilt: -1, gaze: 'down',
     mouth: -1, mouthW: 0.4, prop: 'pen_ear',
   },
 };

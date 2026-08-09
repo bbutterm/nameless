@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { Keyword, Lang, LocalizedText, SceneNode } from '@nameless/engine';
 import { loc, t } from '../i18n';
+import { hasPortrait, portraitSvg, type PortraitState } from '@nameless/content/portraits';
 import { portraitImage } from '../lib/art';
 import { speakerEmblem } from '../lib/emblems';
 
@@ -43,20 +44,36 @@ export function SayBubble({
   text,
   keywords,
   lang,
+  portraitState,
 }: {
   speakerId: string;
   speakerName: string;
   text: LocalizedText;
   keywords?: Keyword[];
   lang: Lang;
+  /** Лицо игрока сереет со смертями, Клёста — проявляется по главам. */
+  portraitState: PortraitState;
 }) {
   // Арт-слот пользователя главнее всего: положил картинку в assets/portraits/<id>
-  // — она вытесняет знак. Иначе рисуем знак роли (docs/ART_PASS.md §1).
+  // — она вытесняет всё. Дальше лицо-гравюра (docs/PORTRAITS.md), и только для
+  // ролей без лица — знак роли (docs/ART_PASS.md §1). Порядок именно такой:
+  // знак говорит «кто это по должности», лицо — «кто это».
   const img = portraitImage(speakerId);
+  const drawn = !img && hasPortrait(speakerId) ? portraitSvg(speakerId, portraitState) : undefined;
   return (
     <div className="bubble-row">
       {img ? (
         <img className="portrait" src={img} alt="" draggable={false} />
+      ) : drawn ? (
+        <span
+          className="portrait portrait-face"
+          // Лицо — данные, а не разметка от пользователя: строка собирается
+          // чистой функцией из id и состояния игры, снаружи в неё не попадает
+          // ничего. Разбирать её в DOM-узлы ради ритуала значит платить за
+          // каждый пузырь ленты, а их на экране до трёх десятков.
+          dangerouslySetInnerHTML={{ __html: drawn }}
+          aria-hidden="true"
+        />
       ) : (
         <span className="portrait portrait-mark" style={speakerEmblem(speakerId)} aria-hidden="true" />
       )}
