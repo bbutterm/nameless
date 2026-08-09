@@ -1,0 +1,326 @@
+[
+  {
+    "id": "vdova_shcherb",
+    "kind": "person",
+    "name": {
+      "ru": "Вдова из Щерби",
+      "en": "The Widow of Shcherb"
+    },
+    "blurb": {
+      "ru": "Хозяйка двора у Засеки",
+      "en": "Mistress of a homestead by the Zaseka"
+    },
+    "signs": {
+      "ru": "Фартук чистый, будто к гостю. На притолоке была зарубка по дням — брошена на середине.",
+      "en": "Apron clean, as if for a guest. A day-tally on the doorframe, abandoned halfway."
+    },
+    "lines": [
+      {
+        "id": "vdova_shcherb_l1",
+        "text": {
+          "ru": "Стол накрыт на двоих каждый вечер, хотя в доме она одна. Второй прибор моют наравне с первым.",
+          "en": "The table is set for two every evening, though she lives alone. Both plates are washed alike."
+        },
+        "source": "seen",
+        "unlock": { "kind": "meet", "speaker": "vdova_shcherb" }
+      },
+      {
+        "id": "vdova_shcherb_l2",
+        "text": {
+          "ru": "Со слов соседей: три зимы назад во дворе не досчитались батрака. С тех пор калитку на ночь не запирает.",
+          "en": "By neighbours' account: three winters back the yard came up short a hired hand. She has not latched the gate at night since."
+        },
+        "source": "heard",
+        "unlock": { "kind": "meet", "speaker": "vdova_shcherb" }
+      }
+    ]
+  },
+  {
+    "id": "khranitel_kartoteki",
+    "kind": "person",
+    "name": {
+      "ru": "Хранитель картотеки",
+      "en": "Keeper of the Files"
+    },
+    "blurb": {
+      "ru": "Держит картотеку дыр",
+      "en": "Keeps the catalogue of holes"
+    },
+    "signs": {
+      "ru": "Пальцы обкусаны у ногтя от вечного перебирания бумаги. В кармане три огрызка мела разного цвета.",
+      "en": "Fingertips bitten raw from endless leafing through paper. Three stubs of chalk, each a different colour, in his pocket."
+    },
+    "lines": [
+      {
+        "id": "khranitel_kartoteki_l1",
+        "text": {
+          "ru": "Три одинаковые тетради лежат в разных домах прихода. Ни одна не подписана его именем.",
+          "en": "Three identical notebooks sit in three different houses of the parish. None bears his name."
+        },
+        "source": "seen",
+        "unlock": { "kind": "meet", "speaker": "khranitel_kartoteki" }
+      },
+      {
+        "id": "khranitel_kartoteki_l2",
+        "text": {
+          "ru": "Со слов помощницы: каждую весну переписывает старые графы заново — будто чернила выцветают быстрее людей.",
+          "en": "By his assistant's account: every spring he recopies the old entries, as if the ink were fading faster than the people."
+        },
+        "source": "heard",
+        "unlock": { "kind": "meet", "speaker": "khranitel_kartoteki" }
+      }
+    ]
+  },
+  {
+    "id": "yamshchik_gonby",
+    "kind": "person",
+    "name": {
+      "ru": "Ямщик Гоньбы",
+      "en": "Relay Coachman"
+    },
+    "blurb": {
+      "ru": "Возит письма трактом Гоньбы",
+      "en": "Carries letters along the Relay road"
+    },
+    "signs": {
+      "ru": "Кнут воткнут в передок, а не в руке. На отвороте кафтана — медная бляха станции с номером.",
+      "en": "The whip stands driven into the box, never in his hand. A brass station tag with a number on his coat lapel."
+    },
+    "lines": [
+      {
+        "id": "yamshchik_gonby_l1",
+        "text": {
+          "ru": "В станционном сундуке под его печатью — три письма без адресата. По весне он пересчитывает их и не вскрывает ни одного.",
+          "en": "Under his seal in the station chest sit three letters with no addressee. Each spring he counts them and opens none."
+        },
+        "source": "seen",
+        "unlock": { "kind": "meet", "speaker": "yamshchik_gonby" }
+      },
+      {
+        "id": "yamshchik_gonby_l2",
+        "text": {
+          "ru": "Со слов смотрителя станции: платит из своих за ночлег лошади, если в санях — чужие письма, а не товар.",
+          "en": "By the stationmaster's account: he pays out of pocket for the horse's night stay when the sled carries letters, not goods."
+        },
+        "source": "heard",
+        "unlock": { "kind": "meet", "speaker": "yamshchik_gonby" }
+      }
+    ]
+  },
+  {
+    "id": "bagorshchik_sluzy",
+    "kind": "person",
+    "name": {
+      "ru": "Багорщик с Слузы",
+      "en": "Hook-Man of the Sluza"
+    },
+    "blurb": {
+      "ru": "Тянет из Слузы то, за что платят",
+      "en": "Hooks out of the Sluza whatever pays"
+    },
+    "signs": {
+      "ru": "Багор просмолённым концом всегда к себе. Ладони в мозолях от каната, не от рукояти.",
+      "en": "The hook always turned tarred end toward himself. Palms calloused from rope, not from the shaft."
+    },
+    "lines": [
+      {
+        "id": "bagorshchik_sluzy_l1",
+        "text": {
+          "ru": "Над его лежанкой висит пустая склянка на шнурке — единственная вещь, за которую он не взял денег.",
+          "en": "An empty flask on a cord hangs over his cot — the one thing he ever pulled from the water and took no payment for."
+        },
+        "source": "seen",
+        "unlock": { "kind": "meet", "speaker": "bagorshchik_sluzy" }
+      },
+      {
+        "id": "bagorshchik_sluzy_l2",
+        "text": {
+          "ru": "Со слов соседей по пристани: цену называет раньше, чем груз всплывёт, и ни разу не ошибся.",
+          "en": "By the pier neighbours' account: he quotes the price before the load surfaces, and has never once been wrong."
+        },
+        "source": "heard",
+        "unlock": { "kind": "meet", "speaker": "bagorshchik_sluzy" }
+      }
+    ]
+  },
+  {
+    "id": "paromshchitsa",
+    "kind": "person",
+    "name": {
+      "ru": "Паромщица",
+      "en": "The Ferrywoman"
+    },
+    "blurb": {
+      "ru": "Держит канатный паром через Слузу",
+      "en": "Runs the rope ferry over the Sluza"
+    },
+    "signs": {
+      "ru": "На середине каждой переправы касается каната ладонью. Считает пассажиров вслух дважды за рейс.",
+      "en": "Touches the rope with her palm at mid-crossing, every time. Counts passengers aloud twice a run."
+    },
+    "lines": [
+      {
+        "id": "paromshchitsa_l1",
+        "text": {
+          "ru": "На планшире парома — зарубка ножом после каждой полной переправы. Три года без пропуска.",
+          "en": "Along the ferry's rail, one knife-notch per full crossing. Three years without a gap."
+        },
+        "source": "seen",
+        "unlock": { "kind": "meet", "speaker": "paromshchitsa" }
+      },
+      {
+        "id": "paromshchitsa_l2",
+        "text": {
+          "ru": "Со слов рыбака с того берега: три года назад при высадке недосчитались одного. С тех пор считает оба раза вслух.",
+          "en": "By a fisherman's account from the far bank: three years ago the landing came up one short. She has counted aloud both times since."
+        },
+        "source": "heard",
+        "unlock": { "kind": "meet", "speaker": "paromshchitsa" }
+      }
+    ]
+  },
+  {
+    "id": "serzhant_zastavy",
+    "kind": "person",
+    "name": {
+      "ru": "Сержант заставы",
+      "en": "Outpost Sergeant"
+    },
+    "blurb": {
+      "ru": "Держит сторожевой огонь на Засеке",
+      "en": "Keeps a watch-fire on the Zaseka line"
+    },
+    "signs": {
+      "ru": "Голос сорван криком оклика. На рукаве нашивка с оттиснутым, наполовину стёртым именем поста.",
+      "en": "Voice worn hoarse from the hail. A sleeve patch with the post's name stamped, half rubbed away."
+    },
+    "lines": [
+      {
+        "id": "serzhant_zastavy_l1",
+        "text": {
+          "ru": "Учит новых одной фразой — окликнуть первым, думать потом — и заставляет повторить оклик трижды за смену.",
+          "en": "Trains new men with one line — hail first, think after — and makes them repeat the hail three times a watch."
+        },
+        "source": "seen",
+        "unlock": { "kind": "meet", "speaker": "serzhant_zastavy" }
+      },
+      {
+        "id": "serzhant_zastavy_l2",
+        "text": {
+          "ru": "Со слов сослуживцев: однажды пропустил своего без оклика, узнав лицо. К вечеру на посту недосчитались одного.",
+          "en": "By fellow guards' account: once he waved a man through by his face, skipping the hail. By evening the post was one man short."
+        },
+        "source": "heard",
+        "unlock": { "kind": "meet", "speaker": "serzhant_zastavy" }
+      }
+    ]
+  },
+  {
+    "id": "mat_sheptunya",
+    "kind": "person",
+    "name": {
+      "ru": "Мать-шептунья",
+      "en": "The Whispering Mother"
+    },
+    "blurb": {
+      "ru": "Знает шёпот, каким зовут Гладеня",
+      "en": "Knows the whisper that calls the Smoother"
+    },
+    "signs": {
+      "ru": "На подоконнике всегда полная плошка воды. Руки не находят себе места при разговоре о сыновьях.",
+      "en": "A full bowl of water always on the windowsill. Her hands find nothing to hold when sons come up in talk."
+    },
+    "lines": [
+      {
+        "id": "mat_sheptunya_l1",
+        "text": {
+          "ru": "Со слов её самой: сын вернулся с войны не весь, и она позвала того, кто заберёт остальное. Кого именно — не назвала.",
+          "en": "By her own account: her son came back from the war not whole, and she called the one who takes the rest. She never says who."
+        },
+        "source": "heard",
+        "unlock": { "kind": "meet", "speaker": "mat_sheptunya" }
+      },
+      {
+        "id": "mat_sheptunya_l2",
+        "text": {
+          "ru": "Соседний двор, где жила прежде, стоит пустым второй год. Сама объясняет это переездом и меняет разговор.",
+          "en": "The next-door yard, where she used to live, has stood empty two years. She calls it a move and changes the subject."
+        },
+        "source": "seen",
+        "unlock": { "kind": "meet", "speaker": "mat_sheptunya" }
+      }
+    ]
+  },
+  {
+    "id": "skupshchik_tsekha",
+    "kind": "person",
+    "name": {
+      "ru": "Скупщик Цеха",
+      "en": "Guild Buyer"
+    },
+    "blurb": {
+      "ru": "Скупает ношеное с задней комнаты",
+      "en": "Buys worn memory out of a back room"
+    },
+    "signs": {
+      "ru": "Весы на прилавке для вида — цену определяет на глаз. В кармане склянка, которую не выставляет.",
+      "en": "Scales on the counter for show — he prices by eye. A flask in his pocket that never goes on display."
+    },
+    "lines": [
+      {
+        "id": "skupshchik_tsekha_l1",
+        "text": {
+          "ru": "Одну склянку держит под прилавком месяцами. За неё предлагали втрое обычной цены — не продал.",
+          "en": "One flask he has kept under the counter for months. Offered thrice the going rate for it, he has not sold."
+        },
+        "source": "seen",
+        "unlock": { "kind": "meet", "speaker": "skupshchik_tsekha" }
+      },
+      {
+        "id": "skupshchik_tsekha_l2",
+        "text": {
+          "ru": "Со слов постоянного покупателя: единственный в ряду, кто спрашивает имя владельца склянки — и сам торопится его забыть.",
+          "en": "By a regular customer's account: the only trader on the row who asks a flask's owner's name — then hurries to forget it."
+        },
+        "source": "heard",
+        "unlock": { "kind": "meet", "speaker": "skupshchik_tsekha" }
+      }
+    ]
+  },
+  {
+    "id": "gladen",
+    "kind": "person",
+    "name": {
+      "ru": "Гладень",
+      "en": "The Smoother"
+    },
+    "blurb": {
+      "ru": "Вежливый попутчик в пыльном сюртуке",
+      "en": "A polite fellow traveller in a dusty coat"
+    },
+    "signs": {
+      "ru": "Сапоги стёрты изнутри голенища. Лицо, которое никто не может описать на следующий день. Входит уже доедая.",
+      "en": "Boots worn thin on the inside of the shaft. A face no one can describe the next day. Enters already chewing."
+    },
+    "lines": [
+      {
+        "id": "gladen_l1",
+        "text": {
+          "ru": "Со слов хозяев дальнего двора: заходил, попросил воды, что-то доедал. После его ухода дом пересчитали дважды — оба раза на одного меньше.",
+          "en": "By a far homestead's account: he came in, asked for water, was finishing something off. After he left, the house was counted twice — one short both times."
+        },
+        "source": "heard",
+        "unlock": { "kind": "meet", "speaker": "gladen" }
+      },
+      {
+        "id": "gladen_l2",
+        "text": {
+          "ru": "Слушает дольше всех, кого ты знал, и ни разу не перебивает — единственная примета, которую замечают уже потом.",
+          "en": "He listens longer than anyone you have known, and never once interrupts — the one sign noticed only afterward."
+        },
+        "source": "seen",
+        "unlock": { "kind": "meet", "speaker": "gladen" }
+      }
+    ]
+  }
+]

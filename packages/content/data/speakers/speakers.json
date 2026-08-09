@@ -166,5 +166,77 @@
       "en": "Detail Sergeant"
     },
     "art": ""
+  },
+  {
+    "id": "vdova_shcherb",
+    "art": "",
+    "name": {
+      "ru": "Вдова из Щерби",
+      "en": "The Widow of Shcherb"
+    }
+  },
+  {
+    "id": "khranitel_kartoteki",
+    "art": "",
+    "name": {
+      "ru": "Хранитель картотеки",
+      "en": "Keeper of the Files"
+    }
+  },
+  {
+    "id": "yamshchik_gonby",
+    "art": "",
+    "name": {
+      "ru": "Ямщик Гоньбы",
+      "en": "Relay Coachman"
+    }
+  },
+  {
+    "id": "bagorshchik_sluzy",
+    "art": "",
+    "name": {
+      "ru": "Багорщик с Слузы",
+      "en": "Hook-Man of the Sluza"
+    }
+  },
+  {
+    "id": "paromshchitsa",
+    "art": "",
+    "name": {
+      "ru": "Паромщица",
+      "en": "The Ferrywoman"
+    }
+  },
+  {
+    "id": "serzhant_zastavy",
+    "art": "",
+    "name": {
+      "ru": "Сержант заставы",
+      "en": "Outpost Sergeant"
+    }
+  },
+  {
+    "id": "mat_sheptunya",
+    "art": "",
+    "name": {
+      "ru": "Мать-шептунья",
+      "en": "The Whispering Mother"
+    }
+  },
+  {
+    "id": "skupshchik_tsekha",
+    "art": "",
+    "name": {
+      "ru": "Скупщик Цеха",
+      "en": "Guild Buyer"
+    }
+  },
+  {
+    "id": "gladen",
+    "art": "",
+    "name": {
+      "ru": "Гладень",
+      "en": "The Smoother"
+    }
   }
 ]

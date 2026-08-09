@@ -1,0 +1,67 @@
+[
+  {
+    "id": "relay_driver",
+    "name": {
+      "ru": "Ямщик",
+      "en": "Relay Driver"
+    },
+    "blurb": {
+      "ru": "Гонит тракт быстрее слухов.",
+      "en": "Drives the tract faster than rumour."
+    },
+    "art": "",
+    "faction": "gonba",
+    "tier": 1,
+    "row": "front",
+    "stats": {
+      "hp": 40,
+      "atk": 10,
+      "def": 6,
+      "initiative": 10
+    },
+    "abilities": [
+      "whip_from_the_box",
+      "barefoot_rush"
+    ],
+    "evolvesTo": "ferry_hook",
+    "evolveAt": 250,
+    "recruitable": {
+      "kind": "never"
+    },
+    "traits": [
+      "fighter"
+    ]
+  },
+  {
+    "id": "ferry_hook",
+    "name": {
+      "ru": "Плотовщик",
+      "en": "Ferry Hook"
+    },
+    "blurb": {
+      "ru": "Багром берёт своё со дна Слузы.",
+      "en": "Hooks his due off the Sluza's bed."
+    },
+    "art": "",
+    "faction": "gonba",
+    "tier": 2,
+    "row": "back",
+    "stats": {
+      "hp": 52,
+      "atk": 17,
+      "def": 7,
+      "initiative": 12
+    },
+    "abilities": [
+      "hook_from_the_raft",
+      "coin_sling",
+      "plain_strike"
+    ],
+    "recruitable": {
+      "kind": "never"
+    },
+    "traits": [
+      "shooter"
+    ]
+  }
+]

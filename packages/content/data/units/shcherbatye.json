@@ -1,0 +1,67 @@
+[
+  {
+    "id": "chalk_marker",
+    "name": {
+      "ru": "Меловщик",
+      "en": "Chalk Marker"
+    },
+    "blurb": {
+      "ru": "Обводит мелом место, где был человек.",
+      "en": "Circles in chalk where a person stood."
+    },
+    "art": "",
+    "faction": "shcherbatye",
+    "tier": 1,
+    "row": "back",
+    "stats": {
+      "hp": 32,
+      "atk": 9,
+      "def": 4,
+      "initiative": 11
+    },
+    "abilities": [
+      "chalk_circle",
+      "pick_the_pocket"
+    ],
+    "evolvesTo": "hole_reader",
+    "evolveAt": 250,
+    "recruitable": {
+      "kind": "never"
+    },
+    "traits": [
+      "breaker"
+    ]
+  },
+  {
+    "id": "hole_reader",
+    "name": {
+      "ru": "Чтец дыр",
+      "en": "Reader of Holes"
+    },
+    "blurb": {
+      "ru": "Читает пустоту вместо лица.",
+      "en": "Reads the emptiness instead of a face."
+    },
+    "art": "",
+    "faction": "shcherbatye",
+    "tier": 2,
+    "row": "back",
+    "stats": {
+      "hp": 50,
+      "atk": 16,
+      "def": 7,
+      "initiative": 11
+    },
+    "abilities": [
+      "card_file_read",
+      "chalk_circle",
+      "pick_the_pocket"
+    ],
+    "recruitable": {
+      "kind": "never"
+    },
+    "traits": [
+      "breaker"
+    ]
+  }
+]

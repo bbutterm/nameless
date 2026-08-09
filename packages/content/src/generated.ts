@@ -74,6 +74,7 @@ import axes_0_axes from './../data/axes/axes.json';
 import speakers_0_speakers from './../data/speakers/speakers.json';
 import codex_0_codex from './../data/codex/lives.json';
 import codex_1_codex from './../data/codex/people.json';
+import codex_2_codex from './../data/codex/storon.json';
 
 export const scenes: unknown[] = ([scenes_0_scenes, scenes_1_scenes, scenes_2_scenes, scenes_3_scenes, scenes_4_scenes, scenes_5_scenes, scenes_6_scenes, scenes_7_scenes, scenes_8_scenes, scenes_9_scenes, scenes_10_scenes, scenes_11_scenes, scenes_12_scenes, scenes_13_scenes, scenes_14_scenes, scenes_15_scenes, scenes_16_scenes, scenes_17_scenes, scenes_18_scenes, scenes_19_scenes, scenes_20_scenes, scenes_21_scenes, scenes_22_scenes, scenes_23_scenes, scenes_24_scenes, scenes_25_scenes, scenes_26_scenes, scenes_27_scenes, scenes_28_scenes, scenes_29_scenes, scenes_30_scenes, scenes_31_scenes, scenes_32_scenes, scenes_33_scenes, scenes_34_scenes, scenes_35_scenes, scenes_36_scenes, scenes_37_scenes, scenes_38_scenes, scenes_39_scenes, scenes_40_scenes] as unknown[]).flatMap((x) => (Array.isArray(x) ? x : [x]));
 export const units: unknown[] = ([units_0_units, units_1_units, units_2_units, units_3_units, units_4_units, units_5_units, units_6_units, units_7_units, units_8_units, units_9_units] as unknown[]).flatMap((x) => (Array.isArray(x) ? x : [x]));
@@ -85,4 +86,4 @@ export const deaths: unknown[] = ([deaths_0_deaths] as unknown[]).flatMap((x) =>
 export const chapters: unknown[] = ([chapters_0_chapters] as unknown[]).flatMap((x) => (Array.isArray(x) ? x : [x]));
 export const axes: unknown[] = ([axes_0_axes] as unknown[]).flatMap((x) => (Array.isArray(x) ? x : [x]));
 export const speakers: unknown[] = ([speakers_0_speakers] as unknown[]).flatMap((x) => (Array.isArray(x) ? x : [x]));
-export const codex: unknown[] = ([codex_0_codex, codex_1_codex] as unknown[]).flatMap((x) => (Array.isArray(x) ? x : [x]));
+export const codex: unknown[] = ([codex_0_codex, codex_1_codex, codex_2_codex] as unknown[]).flatMap((x) => (Array.isArray(x) ? x : [x]));
