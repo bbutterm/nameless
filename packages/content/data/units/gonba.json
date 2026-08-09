@@ -47,10 +47,10 @@
     "tier": 2,
     "row": "back",
     "stats": {
-      "hp": 52,
-      "atk": 17,
+      "hp": 48,
+      "atk": 14,
       "def": 7,
-      "initiative": 12
+      "initiative": 11
     },
     "abilities": [
       "hook_from_the_raft",

@@ -11,12 +11,12 @@
     },
     "icon": "eye",
     "target": "enemy_any",
-    "power": 1.0,
+    "power": 1.15,
     "cooldown": 1,
     "effects": [
       {
         "kind": "damage",
-        "power": 1.0
+        "power": 1.15
       },
       {
         "kind": "debuff",
@@ -139,12 +139,12 @@
     },
     "icon": "fire",
     "target": "enemy_row",
-    "power": 0.85,
+    "power": 0.75,
     "cooldown": 3,
     "effects": [
       {
         "kind": "damage",
-        "power": 0.85
+        "power": 0.75
       },
       {
         "kind": "dot",

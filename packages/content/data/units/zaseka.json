@@ -47,9 +47,9 @@
     "tier": 2,
     "row": "front",
     "stats": {
-      "hp": 65,
-      "atk": 17,
-      "def": 10,
+      "hp": 56,
+      "atk": 14,
+      "def": 9,
       "initiative": 10
     },
     "abilities": [
