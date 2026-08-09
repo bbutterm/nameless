@@ -580,16 +580,6 @@ export function planAction(
     const dead = fallen(state, actor.side).sort((a, b) => b.maxHp - a.maxHp)[0];
     if (dead) return { ability: raiser.id, targetUid: dead.uid };
   }
-  const healer = ready.find(
-    (a) => !isRevive(a) && (a.effects?.some((e) => e.kind === 'heal') || a.target === 'ally_one'),
-  );
-  if (healer) {
-    const hurt = allies
-      .filter((u) => u.hp < u.maxHp * 0.55)
-      .sort((a, b) => a.hp / a.maxHp - b.hp / b.maxHp)[0];
-    if (hurt) return { ability: healer.id, targetUid: hurt.uid };
-  }
-
   // Самая «дорогая» готовая способность — но не тратим AoE на одну цель.
   const foesAlive = living(state, actor.side === 'player' ? 'enemy' : 'player').length;
   const scored = ready
@@ -601,6 +591,41 @@ export function planAction(
       return { a, score };
     })
     .sort((x, y) => y.score - x.score);
+
+  const healer = ready.find(
+    (a) => !isRevive(a) && (a.effects?.some((e) => e.kind === 'heal') || a.target === 'ally_one'),
+  );
+  if (healer) {
+    const hurt = allies
+      .filter((u) => u.hp < u.maxHp * 0.55)
+      .sort((a, b) => a.hp / a.maxHp - b.hp / b.maxHp)[0];
+    // Лечение — тоже размен: ход, потраченный на лечение, не наносит урона.
+    // Раньше бот лечил, как только у кого-то падало ниже 55% HP, не глядя,
+    // сколько это лечение вернёт. Групповое «Чтение белой книги» возвращает
+    // 0.3 атаки на союзника — около пяти HP, — а пропущенный удар стоит
+    // восемнадцати. Юнит с таким набором проигрывал турнир, играя «правильно»
+    // по старому правилу, и это читалось как слабость юнита, хотя слаб был
+    // выбор бота. Считаем, сколько HP реально вернётся (лечение сверх
+    // максимума не считается), и сравниваем с ценой пропущенного удара.
+    // Порог 0.7, а не 1.0: у лечения есть довесок — снятие эффектов, щит,
+    // усиление, — который в этой оценке не учитывается.
+    if (hurt) {
+      const atk = effectiveStat(actor, 'atk');
+      const healPower = (healer.effects ?? [])
+        .filter((e) => e.kind === 'heal')
+        .reduce((sum, e) => sum + (e.kind === 'heal' ? e.power : 0), 0);
+      const perAlly = atk * healPower;
+      const touched = healer.target === 'ally_all' ? allies : [hurt];
+      const restored = touched.reduce((sum, u) => sum + Math.min(perAlly, u.maxHp - u.hp), 0);
+      const strikeValue = atk * (scored[0]?.a.power ?? 1);
+      // Союзник на грани — ход стоит потратить независимо от арифметики:
+      // ценность здесь не в HP, а в том, что он останется на доске.
+      const dying = hurt.hp <= hurt.maxHp * 0.25;
+      if (dying || restored >= strikeValue * 0.7) {
+        return { ability: healer.id, targetUid: hurt.uid };
+      }
+    }
+  }
 
   const chosen = scored[0]?.a ?? ready[0];
   if (!chosen) return undefined;

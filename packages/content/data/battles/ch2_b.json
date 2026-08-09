@@ -170,7 +170,7 @@
         "unit": "debt_bailiff",
         "row": "front",
         "index": 0,
-        "level": 3
+        "level": 4
       },
       {
         "unit": "borrowed_face",
@@ -188,13 +188,13 @@
         "unit": "pawn_appraiser_dusk",
         "row": "back",
         "index": 0,
-        "level": 3
+        "level": 4
       },
       {
         "unit": "flask_hoarder",
         "row": "back",
         "index": 1,
-        "level": 2
+        "level": 3
       }
     ],
     "turnLimit": 10,
