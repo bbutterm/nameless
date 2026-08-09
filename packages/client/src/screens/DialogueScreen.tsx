@@ -7,7 +7,8 @@ import { loc, t } from '../i18n';
 import { useGame } from '../store/game';
 import { content, idx } from '../store/content';
 import { backgroundSvg, svgDataUri } from '../lib/art';
-import { placeEmblem, placeTone } from '../lib/emblems';
+import { placeEmblem, placeKey, placeTone } from '../lib/emblems';
+import { setAir } from '../lib/sound';
 import { ArchiveSheet } from './ArchiveSheet';
 import { TutorialHint } from '../components/Tutorial';
 
@@ -35,6 +36,13 @@ export function DialogueScreen() {
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
   }, [log.length, step]);
+
+  // Воздух места. Ключ считается тем же правилом, что и знак места, поэтому
+  // картинка и звук не могут разойтись: зал Учёта всегда звучит залом Учёта.
+  const scene = state?.scene;
+  useEffect(() => {
+    if (scene) setAir(placeKey(scene));
+  }, [scene]);
 
   if (!state) return null;
   const bg = svgDataUri(backgroundSvg(state.scene, placeTone(state.scene)));

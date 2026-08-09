@@ -26,7 +26,22 @@ export function setSound(on: boolean): void {
     // не критично
   }
   if (on) void resume();
+  // Воздух гасится сразу: выключатель звука обязан выключать и то, что уже
+  // играет, иначе подложка тянется ещё минуту после нажатия.
+  else stopAir();
 }
+
+// Свёрнутая вкладка не должна шуметь в кармане: это мобильная игра, её
+// сворачивают, не закрывая.
+if (typeof document !== 'undefined') {
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stopAir();
+    else if (enabled && lastPlace) setAir(lastPlace);
+  });
+}
+
+/** Последнее место — чтобы вернуть тот же воздух после сворачивания. */
+let lastPlace: string | undefined;
 
 /** Контекст создаётся лениво: браузеры не дают звук до первого жеста. */
 function audio(): AudioContext | undefined {
@@ -135,5 +150,136 @@ export function playSfx(kind: Sfx): void {
       break;
     default:
       break;
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Воздух места
+//
+// События звучали, а комната — нет, и от этого игра оставалась экраном с
+// текстом. Двенадцать мест канона получают свой воздух: не мелодию и не
+// «эмбиент-трек», а то, что слышно, когда все замолчали. Синтезом, как и всё
+// остальное: шумовая подложка через фильтр плюс редкие одиночные звуки,
+// которые в этом месте и должны раздаваться, — костяшка счётов в зале Учёта,
+// капля в подвалах, ветер на дороге в Выцветь, шорох бумаги в читальне.
+//
+// Громкость нарочно на границе слышимого (0.006–0.02 против 0.05–0.13 у
+// событий): воздух не должен спорить с репликой. Проверять его надо не на
+// колонках, а в наушниках на телефоне — там он и живёт.
+// ─────────────────────────────────────────────────────────────────────────────
+
+interface Air {
+  /** Частота среза подложки: ниже — глуше и теснее помещение. */
+  hz: number;
+  /** Громкость подложки. */
+  bed: number;
+  /** Редкое событие места и как часто оно случается (секунды между). */
+  every: [number, number];
+  drop: () => void;
+}
+
+const AIR: Record<string, Air> = {
+  // Зал Учёта: сухо, тесно, где-то считают.
+  hall: { hz: 520, bed: 0.012, every: [2.5, 7], drop: () => tone({ freq: 1500, to: 1180, dur: 0.03, type: 'triangle', gain: 0.02 }) },
+  counter: { hz: 480, bed: 0.011, every: [3, 8], drop: () => tone({ freq: 1320, to: 990, dur: 0.035, type: 'triangle', gain: 0.018 }) },
+  // Подвалы: гулко и капает.
+  vault: { hz: 260, bed: 0.018, every: [3.5, 9], drop: () => { tone({ freq: 2100, to: 620, dur: 0.06, type: 'sine', gain: 0.03 }); noise(0.05, 0.012, 400, 0.05); } },
+  archive: { hz: 340, bed: 0.013, every: [4, 11], drop: () => noise(0.22, 0.016, 3200) },
+  lowest: { hz: 200, bed: 0.02, every: [4, 10], drop: () => tone({ freq: 90, to: 55, dur: 0.5, type: 'sine', gain: 0.025 }) },
+  // Двор и ворота: улица за стеной.
+  gate: { hz: 700, bed: 0.014, every: [2.5, 6], drop: () => noise(0.3, 0.014, 900) },
+  // Дорога в Выцветь: ветер и ничего больше.
+  road: { hz: 900, bed: 0.02, every: [3, 7], drop: () => noise(0.9, 0.014, 700) },
+  garden: { hz: 1100, bed: 0.012, every: [2, 6], drop: () => noise(0.35, 0.01, 4200) },
+  // Цех: чужая память шуршит по-своему, выше и суше.
+  guild: { hz: 800, bed: 0.013, every: [2.5, 6], drop: () => tone({ freq: 2400, to: 1700, dur: 0.05, type: 'sine', gain: 0.014 }) },
+  audit: { hz: 420, bed: 0.012, every: [3, 8], drop: () => tone({ freq: 240, to: 190, dur: 0.12, type: 'square', gain: 0.016 }) },
+  ledger: { hz: 560, bed: 0.011, every: [3, 9], drop: () => noise(0.16, 0.013, 2800) },
+  // Чулан: срок идёт.
+  hourglass: { hz: 300, bed: 0.014, every: [1.6, 3.2], drop: () => noise(0.035, 0.012, 1800) },
+  tower: { hz: 600, bed: 0.012, every: [3, 8], drop: () => noise(0.25, 0.012, 1200) },
+};
+
+let bedSrc: AudioBufferSourceNode | undefined;
+let bedGain: GainNode | undefined;
+let bedFilter: BiquadFilterNode | undefined;
+let dropTimer: ReturnType<typeof setTimeout> | undefined;
+let airNow: string | undefined;
+
+/** Одна секунда розоватого шума в петле — подложка любого места. */
+function bedBuffer(a: AudioContext): AudioBuffer {
+  const buf = a.createBuffer(1, a.sampleRate, a.sampleRate);
+  const d = buf.getChannelData(0);
+  let last = 0;
+  for (let i = 0; i < d.length; i++) {
+    const white = Math.random() * 2 - 1;
+    // Простое сглаживание: белый шум режет ухо, «дыхание помещения» — нет.
+    last = last * 0.96 + white * 0.04;
+    d[i] = last * 6;
+  }
+  return buf;
+}
+
+function scheduleDrop(air: Air): void {
+  if (dropTimer) clearTimeout(dropTimer);
+  const [lo, hi] = air.every;
+  const wait = (lo + Math.random() * (hi - lo)) * 1000;
+  dropTimer = setTimeout(() => {
+    if (enabled && !document.hidden) air.drop();
+    scheduleDrop(air);
+  }, wait);
+}
+
+/**
+ * Включить воздух места. Зовётся с id сцены или боя — ключ места считается тем
+ * же правилом, что и знак места, чтобы картинка и звук никогда не разошлись.
+ */
+export function setAir(placeKey: string): void {
+  lastPlace = placeKey;
+  if (!enabled) {
+    stopAir();
+    return;
+  }
+  const air = AIR[placeKey] ?? AIR['tower']!;
+  const a = audio();
+  if (!a) return;
+
+  if (!bedSrc || !bedGain || !bedFilter) {
+    bedGain = a.createGain();
+    bedGain.gain.setValueAtTime(0.0001, a.currentTime);
+    bedFilter = a.createBiquadFilter();
+    bedFilter.type = 'lowpass';
+    bedSrc = a.createBufferSource();
+    bedSrc.buffer = bedBuffer(a);
+    bedSrc.loop = true;
+    bedSrc.connect(bedFilter).connect(bedGain).connect(a.destination);
+    bedSrc.start();
+  }
+  if (airNow === placeKey) return;
+  airNow = placeKey;
+
+  // Переход между местами — не переключатель, а сквозняк: полторы секунды.
+  const t = a.currentTime;
+  bedFilter.frequency.cancelScheduledValues(t);
+  bedFilter.frequency.setValueAtTime(bedFilter.frequency.value || air.hz, t);
+  bedFilter.frequency.linearRampToValueAtTime(air.hz, t + 1.5);
+  bedGain.gain.cancelScheduledValues(t);
+  bedGain.gain.setValueAtTime(Math.max(0.0001, bedGain.gain.value), t);
+  bedGain.gain.linearRampToValueAtTime(air.bed, t + 1.5);
+
+  scheduleDrop(air);
+}
+
+/** Заглушить воздух: выключенный звук, свёрнутая вкладка, конец игры. */
+export function stopAir(): void {
+  if (dropTimer) clearTimeout(dropTimer);
+  dropTimer = undefined;
+  airNow = undefined;
+  const a = ctx;
+  if (a && bedGain) {
+    const t = a.currentTime;
+    bedGain.gain.cancelScheduledValues(t);
+    bedGain.gain.setValueAtTime(Math.max(0.0001, bedGain.gain.value), t);
+    bedGain.gain.linearRampToValueAtTime(0.0001, t + 0.4);
   }
 }

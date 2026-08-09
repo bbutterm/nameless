@@ -1121,17 +1121,21 @@ function drawEcho(f: Face, uid: string): string {
 
   // Штриховка НЕ обрезана по черепу — она и должна выходить наружу.
   const strokes = Array.from({ length: 11 }, (_, i) =>
-    `<line x1="${num(CX + 2 + i * 3.6)}" y1="${num(g.top - 20)}" x2="${num(CX - 16 + i * 3.6)}" y2="${num(g.chin + 24)}" stroke="${line}" stroke-width="1.6" opacity="${num(0.05 + i * 0.028)}"/>`,
+    `<line x1="${num(CX + 2 + i * 3.6)}" y1="${num(g.top - 20)}" x2="${num(CX - 16 + i * 3.6)}" y2="${num(g.chin + 24)}" stroke="${line}" stroke-width="1.6" opacity="${num(0.06 + i * 0.034)}"/>`,
   ).join('');
 
   const tilt = f.tilt !== 0 ? ` transform="rotate(${num(f.tilt * 7)} ${CX} ${num(g.chin)})"` : '';
 
   return `<g${tilt}>
+    <!-- Подложка силуэта: на 44px один разорванный контур в 1.6px исчезает
+         совсем, и отголосок в ленте читается как пустая плашка. Заливка тусклая
+         и БЕЗ черт — форму видно, а «нарушенная гравюра» остаётся нарушенной. -->
+    <path d="${g.head}" fill="${line}" opacity="0.07"/>
     <path d="M ${num(CX - (34 + f.shoulders * 30))} ${H} C ${num(CX - (34 + f.shoulders * 30) + 6)} ${num(g.chin + 6 + (1 - f.shoulders) * 18)}, ${num(CX - 20)} ${num(g.chin + 2)}, ${CX} ${num(g.chin + 2)}
       C ${num(CX + 20)} ${num(g.chin + 2)}, ${num(CX + (34 + f.shoulders * 30) - 6)} ${num(g.chin + 6 + (1 - f.shoulders) * 18)}, ${num(CX + (34 + f.shoulders * 30))} ${H}"
-      fill="none" stroke="${line}" stroke-width="1.6" opacity="0.4" stroke-dasharray="${dash}" stroke-dashoffset="${offset}"/>
+      fill="none" stroke="${line}" stroke-width="2" opacity="0.55" stroke-dasharray="${dash}" stroke-dashoffset="${offset}"/>
     ${strokes}
-    <path d="${g.head}" fill="none" stroke="${line}" stroke-width="1.6" opacity="0.62" stroke-dasharray="${dash}" stroke-dashoffset="${offset}"/>
+    <path d="${g.head}" fill="none" stroke="${line}" stroke-width="2.4" opacity="0.85" stroke-dasharray="${dash}" stroke-dashoffset="${offset}"/>
     <path d="${nosePath(f, g)}" stroke="${line}" stroke-width="1.4" fill="none" opacity="0.34" stroke-linecap="round"/>
     <path d="M ${num(CX - (5 + f.mouthW * 11))} ${num(g.mouthY)} q ${num(5 + f.mouthW * 11)} ${num(-f.mouth)} ${num((5 + f.mouthW * 11) * 2)} 0" stroke="${line}" stroke-width="1.4" fill="none" opacity="0.34" stroke-linecap="round"/>
     ${propPath(f, g, line)}
