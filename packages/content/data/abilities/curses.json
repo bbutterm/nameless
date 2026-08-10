@@ -90,8 +90,8 @@
       "en": "Pledge"
     },
     "description": {
-      "ru": "Берёт в залог руку, которой бьют.",
-      "en": "Takes the striking hand as collateral."
+      "ru": "Хватает руку, которой бьют.",
+      "en": "Seizes the hand that strikes."
     },
     "icon": "lock",
     "target": "enemy_any",

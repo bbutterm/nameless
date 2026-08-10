@@ -29,7 +29,7 @@
   },
   {
     "id": "memory_promise",
-    "name": { "ru": "Выписать посул", "en": "Write Out a Promise" },
+    "name": { "ru": "Сулить", "en": "Make a Promise" },
     "description": {
       "ru": "Бумага держит, пока её никто не предъявил.",
       "en": "Paper holds while nobody presents it."
