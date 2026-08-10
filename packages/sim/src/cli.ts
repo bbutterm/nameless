@@ -5,6 +5,7 @@ import { derivePlayerPowers, type PartyUnit, type UnitDef } from '@nameless/engi
 import {
   determinismCheck,
   CORRIDOR_HALF_WIDTH,
+  powerLadder,
   ROUNDS_MAX,
   ROUNDS_MIN,
   scriptedBattles,
@@ -164,6 +165,103 @@ if (!only || only === 'battles') {
       summary['scriptedBattlesWithPowers'] = withPowers;
     }
 
+    // ── Лестница ступеней: каждое умение по трём ступеням ────────────────────
+    // Раздел справочный по тем же причинам, что и потолок выше: коридор 60–85
+    // описывает встречу боя с игроком, который до него доходит, а «умение
+    // третьей ступени» — конец прохождения. Красная строка здесь заставляла бы
+    // резать умения до незаметности. Зато три числа печатаются всегда:
+    // применяемость (иначе цифры выше — цифры боя БЕЗ умения), длина боя и
+    // отклики (иначе сродство мертво и об этом никто не узнает).
+    const ladderLives = [...new Set(content.memories.map((m) => m.life))].sort();
+    if (ladderLives.length > 0) {
+      head('Умения памяти: три ступени каждой жизни');
+      // Порядок ступеней — по цене (2 → 3 → 4), как объявлено в MEMORY_POWERS
+      // §A.1, а НЕ по алфавиту id. Алфавит здесь не безобиден: у трёх жизней
+      // из пяти первым по алфавиту идёт усиливающее воспоминание, и «ступень I»
+      // получалась усилением без дающего, то есть пустым набором. Отчёт при
+      // этом выглядел правдоподобно — просто мерил бой без умения.
+      const memoriesOf = (life: string): string[] =>
+        content.memories
+          .filter((m) => m.life === life)
+          .slice()
+          .sort((a, b) => a.cost - b.cost || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0))
+          .map((m) => m.id);
+      const ladder = powerLadder(
+        content,
+        (id) => {
+          const def = content.battles.find((b) => b.id === id);
+          if (def?.expectParty?.length) return namedParty(content.units, def.expectParty);
+          const ch = battleChapter.get(id) ?? 1;
+          return defaultParty(content.units, ch === 1 ? 1 : ch === 2 ? 2 : 3, ch);
+        },
+        (life, tier) =>
+          derivePlayerPowers(memoriesOf(life).slice(0, tier), content).abilities,
+        ladderLives,
+        Math.max(10, Math.floor(runs / 10)),
+      );
+      // База считается по ТОМУ ЖЕ набору боёв, что и лестница, иначе строка
+      // «без умений» сравнивалась бы с другим множеством и разница врала бы.
+      const base = rep.filter((r) => {
+        const def = content.battles.find((b) => b.id === r.battle);
+        return !def?.tags?.includes('lethal') && !def?.tags?.includes('tutorial');
+      });
+      const baseWin = base.reduce((a, r) => a + r.winrate, 0) / Math.max(1, base.length);
+      const baseRounds = base.reduce((a, r) => a + r.avgRounds, 0) / Math.max(1, base.length);
+      const baseOut = base.filter((r) => r.winrate < 0.6 || r.winrate > 0.85).length;
+      console.log(
+        `   без умений: побед ${(baseWin * 100).toFixed(0)}%, раундов ${baseRounds.toFixed(1)}, ` +
+          `вне 60–85: ${baseOut} из ${base.length}`,
+      );
+      for (const r of ladder) {
+        const d = (r.winrate - baseWin) * 100;
+        console.log(
+          `   ${r.life.padEnd(13)} ст.${r.tier}  побед ${(r.winrate * 100).toFixed(0)}% ` +
+            `(${d >= 0 ? '+' : ''}${d.toFixed(0)}, разброс ${(r.minWinrate * 100).toFixed(0)}–${(r.maxWinrate * 100).toFixed(0)}, ` +
+            `вне 60–85: ${r.outOfCorridor})  раундов ${r.avgRounds.toFixed(1)}  ` +
+            `${r.passiveOnly ? 'пассив, заряда нет      ' : `заряд потрачен в ${(r.usedShare * 100).toFixed(0)}% боёв`}  ` +
+            `откликов ${r.responsesPerBattle.toFixed(1)}/бой`,
+        );
+      }
+      summary['powerLadder'] = ladder;
+      summary['powerLadderBaseline'] = { winrate: baseWin, avgRounds: baseRounds };
+
+      // ── Сродство: влияет ли оно на выбор отряда (MEMORY_POWERS §D.3) ───────
+      // Две политики сборки отряда встречаются на одних и тех же боях с одним
+      // и тем же умением второй ступени: «набери сродственных» против «набери
+      // сильнейших». Если первая не отличается от второй ни винрейтом, ни
+      // числом откликов — сродство мертво, сколько бы трейтов ни стояло в данных.
+      head('Сродство: отряд под умение против отряда по силе');
+      for (const life of ladderLives) {
+        const powers = derivePlayerPowers(memoriesOf(life).slice(0, 2), content).abilities;
+        const byStrength = powerLadder(
+          content,
+          // Второй тир, второй уровень: на шести сильнейших юнитах третьего
+          // тира обе политики упираются в 96–99% и сравнивать нечего.
+          () => defaultParty(content.units, 2, 2),
+          () => powers,
+          [life],
+          Math.max(10, Math.floor(runs / 10)),
+        )[0];
+        const byAffinity = powerLadder(
+          content,
+          () => affinityParty(content.units, life, 2, 2),
+          () => powers,
+          [life],
+          Math.max(10, Math.floor(runs / 10)),
+        )[0];
+        if (!byStrength || !byAffinity) continue;
+        const d = (byAffinity.winrate - byStrength.winrate) * 100;
+        console.log(
+          `   ${life.padEnd(13)} по силе: побед ${(byStrength.winrate * 100).toFixed(0)}%, ` +
+            `откликов ${byStrength.responsesPerBattle.toFixed(1)}  →  ` +
+            `под умение: побед ${(byAffinity.winrate * 100).toFixed(0)}%, ` +
+            `откликов ${byAffinity.responsesPerBattle.toFixed(1)}  ` +
+            `(${d >= 0 ? '+' : ''}${d.toFixed(0)} пунктов)`,
+        );
+        summary[`affinity:${life}`] = { byStrength, byAffinity };
+      }
+    }
+
     // Воспроизводимость проверяется И с умениями: они такой же участник боя.
     const det = determinismCheck(content, party, allPowers);
     console.log(det.ok ? 'Детерминизм: OK' : `Детерминизм НАРУШЕН в бою ${det.battle}`);
@@ -293,6 +391,39 @@ function namedParty(units: UnitDef[], ids: string[]): PartyUnit[] {
     if (index > 2) continue;
     out.push({ uid: `n${out.length}`, defId: u.id, hp: u.stats.hp, xp: 0, level: 1, slot: { row, index } });
   }
+  return out;
+}
+
+/**
+ * Отряд, собранный ПОД УМЕНИЕ: сначала сродственные этой жизни, потом добор
+ * сильнейшими. Ровно та политика бота, которую требует MEMORY_POWERS §D.3 —
+ * «максимум сродственных при равном тире».
+ */
+function affinityParty(units: UnitDef[], life: string, maxTier: number, level: number): PartyUnit[] {
+  const trait = `life_${life}`;
+  const pool = units.filter((u) => u.tier <= maxTier);
+  const rank = (a: UnitDef, b: UnitDef): number => {
+    const ka = (a.traits ?? []).includes(trait) ? 1 : 0;
+    const kb = (b.traits ?? []).includes(trait) ? 1 : 0;
+    // Сродство важнее тира — иначе политика вырождается в «по силе».
+    // Ничьи разводятся строковым сравнением id, не localeCompare.
+    return kb - ka || b.tier - a.tier || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
+  };
+  const front = pool.filter((u) => u.row === 'front').sort(rank).slice(0, 3);
+  const back = pool.filter((u) => u.row === 'back').sort(rank).slice(0, 3);
+  const out: PartyUnit[] = [];
+  const push = (u: UnitDef, row: 'front' | 'back', i: number): void => {
+    out.push({
+      uid: `a${out.length}`,
+      defId: u.id,
+      hp: Math.round(u.stats.hp * (1 + 0.12 * (level - 1))),
+      xp: 0,
+      level,
+      slot: { row, index: i },
+    });
+  };
+  front.forEach((u, i) => push(u, 'front', i));
+  back.forEach((u, i) => push(u, 'back', i));
   return out;
 }
 

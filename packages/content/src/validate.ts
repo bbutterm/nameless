@@ -536,6 +536,10 @@ export function validateBundle(bundle: ContentBundle): Issue[] {
   const revokedAbilities = new Map<string, string[]>();
   /** Умения, объявленные «вне очереди хода»: им нужна перезарядка ≥1. */
   const freeAbilities = new Map<string, string[]>();
+  /** Умение → жизни воспоминаний, которые его дают: одна жизнь — одно умение. */
+  const lifeOfAbility = new Map<string, Set<string>>();
+  /** Умение → поправки цели, пришедшие от усилений (для проверки на разнобой). */
+  const targetShifts = new Map<string, { memory: string; target: string }[]>();
   for (const m of bundle.memories) {
     for (const p of m.powers ?? []) {
       if (!abilityIds.has(p.ability)) {
@@ -547,12 +551,21 @@ export function validateBundle(bundle: ContentBundle): Issue[] {
       }
       if (p.kind === 'grant') {
         grantedAbilities.add(p.ability);
+        const lives = lifeOfAbility.get(p.ability) ?? new Set<string>();
+        lives.add(m.life);
+        lifeOfAbility.set(p.ability, lives);
         if (p.costsTurn === false) {
           freeAbilities.set(p.ability, [...(freeAbilities.get(p.ability) ?? []), m.id]);
         }
       }
       if (p.kind === 'amplify') {
         amplifiedAbilities.set(p.ability, [...(amplifiedAbilities.get(p.ability) ?? []), m.id]);
+        if (p.amplify.target) {
+          targetShifts.set(p.ability, [
+            ...(targetShifts.get(p.ability) ?? []),
+            { memory: m.id, target: p.amplify.target },
+          ]);
+        }
       }
       if (p.kind === 'revoke') {
         revokedAbilities.set(p.ability, [...(revokedAbilities.get(p.ability) ?? []), m.id]);
@@ -598,6 +611,91 @@ export function validateBundle(bundle: ContentBundle): Issue[] {
           level: 'warn',
           where: `ability:${ability}`,
           message: 'Умение игрока и способность юнита делят один id: в бою победит способность юнита',
+        });
+      }
+    }
+
+    // ── Умения памяти: то, что схема проверить не может ─────────────────────
+    const sideOf = (t: string): 'ally' | 'enemy' => (t.startsWith('enemy') ? 'enemy' : 'ally');
+    const BREADTH: Record<string, number> = {
+      self: 0,
+      ally_one: 1,
+      enemy_front: 1,
+      enemy_any: 1,
+      ally_row: 2,
+      enemy_row: 2,
+      ally_all: 3,
+      enemy_all: 3,
+    };
+
+    for (const [ability, lives] of lifeOfAbility) {
+      if (lives.size > 1) {
+        issues.push({
+          level: 'warn',
+          where: `ability:${ability}`,
+          message: `Умение дают воспоминания разных жизней (${[...lives].sort().join(', ')}): отклик сродства сработает только по одной из них`,
+        });
+      }
+    }
+
+    for (const [ability, shifts] of targetShifts) {
+      const base = abilityByIdEarly.get(ability);
+      if (!base) continue;
+      for (const s of shifts) {
+        if (sideOf(s.target) !== sideOf(base.target)) {
+          issues.push({
+            level: 'error',
+            where: `memory:${s.memory}`,
+            message: `Усиление переводит умение «${ability}» с «${base.target}» на «${s.target}» — с чужих на своих или наоборот. Ступень расширяет цель, а не разворачивает её`,
+          });
+        }
+        if ((BREADTH[s.target] ?? 0) < (BREADTH[base.target] ?? 0)) {
+          issues.push({
+            level: 'warn',
+            where: `memory:${s.memory}`,
+            message: `Усиление сужает цель умения «${ability}»: «${base.target}» → «${s.target}». Слияние поправок берёт более широкую цель, и это усиление ничего не изменит`,
+          });
+        }
+      }
+      // Две поправки одинаковой ширины разводятся строковым сравнением —
+      // итог детерминирован, но выбран движком, а не автором.
+      const widest = Math.max(...shifts.map((s) => BREADTH[s.target] ?? 0));
+      const tied = new Set(shifts.filter((s) => (BREADTH[s.target] ?? 0) === widest).map((s) => s.target));
+      if (tied.size > 1) {
+        issues.push({
+          level: 'warn',
+          where: `ability:${ability}`,
+          message: `Разные цели одинаковой ширины (${[...tied].sort().join(', ')}): какая победит, решит движок, а не канон`,
+        });
+      }
+    }
+
+    // Пассив применяется без носителя: считать «долю атаки» ему не от кого.
+    // Такие эффекты в пассиве молча считались бы от atk самой цели.
+    for (const a of bundle.abilities) {
+      const scalesFromCarrier =
+        a.power > 0 || (a.effects ?? []).some((e) => e.kind === 'heal' || e.kind === 'damage');
+      if (a.passive && scalesFromCarrier) {
+        issues.push({
+          level: 'error',
+          where: `ability:${a.id}`,
+          message: 'Пассив считает силу от атаки носителя, а носителя у пассива нет — только фиксированные числа',
+        });
+      }
+      const modeOnly = (a.effects ?? []).some((e) => e.kind === 'reveal' || e.kind === 'idle_toll');
+      if (modeOnly && !a.passive) {
+        issues.push({
+          level: 'warn',
+          where: `ability:${a.id}`,
+          message: '«reveal» и «idle_toll» — режимы боя, они читаются только у пассивов',
+        });
+      }
+      const refund = (a.effects ?? []).some((e) => e.kind === 'shield_refund');
+      if (refund && !(a.effects ?? []).some((e) => e.kind === 'shield')) {
+        issues.push({
+          level: 'warn',
+          where: `ability:${a.id}`,
+          message: '«shield_refund» без щита: возвращать нечего',
         });
       }
     }

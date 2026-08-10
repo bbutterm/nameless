@@ -154,10 +154,27 @@ export const zScene = z.object({
   nodes: z.array(zSceneNode).min(1),
 });
 
+export const zTargetKind = z.enum([
+  'enemy_front',
+  'enemy_any',
+  'enemy_row',
+  'enemy_all',
+  'ally_one',
+  'ally_row',
+  'ally_all',
+  'self',
+]);
+
 export const zBattleEffect = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('damage'), power: z.number() }),
   z.object({ kind: z.literal('heal'), power: z.number() }),
-  z.object({ kind: z.literal('shield'), amount: z.number(), turns: z.number() }),
+  z.object({ kind: z.literal('heal_flat'), amount: z.number().min(0) }),
+  z.object({
+    kind: z.literal('shield'),
+    amount: z.number(),
+    turns: z.number(),
+    tag: z.string().optional(),
+  }),
   z.object({
     kind: z.literal('buff'),
     stat: z.enum(['atk', 'def', 'initiative']),
@@ -173,6 +190,19 @@ export const zBattleEffect = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('dot'), amount: z.number(), turns: z.number(), tag: z.string() }),
   z.object({ kind: z.literal('stun'), turns: z.number() }),
   z.object({ kind: z.literal('cleanse') }),
+  z.object({ kind: z.literal('purge') }),
+  z.object({ kind: z.literal('recorded'), turns: z.number().int().min(1) }),
+  z.object({ kind: z.literal('shield_refund') }),
+  z.object({
+    kind: z.literal('rally'),
+    stat: z.enum(['atk', 'def', 'initiative']),
+    amount: z.number().min(0),
+    turns: z.number().int().min(1),
+  }),
+  z.object({ kind: z.literal('spare_worst_foe'), amount: z.number().min(0) }),
+  z.object({ kind: z.literal('bare_truth'), turns: z.number().int().min(1) }),
+  z.object({ kind: z.literal('reveal') }),
+  z.object({ kind: z.literal('idle_toll'), amount: z.number().min(0) }),
   z.object({ kind: z.literal('revive'), hpPercent: z.number() }),
 ]);
 
@@ -181,20 +211,14 @@ export const zAbility = z.object({
   name: zLocalized,
   description: zLocalized,
   icon: z.string(),
-  target: z.enum([
-    'enemy_front',
-    'enemy_any',
-    'enemy_row',
-    'enemy_all',
-    'ally_one',
-    'ally_all',
-    'self',
-  ]),
+  target: zTargetKind,
   power: z.number().min(0),
   cooldown: z.number().int().min(0),
   initialCooldown: z.number().int().min(0).optional(),
   effects: z.array(zBattleEffect).optional(),
   piercing: z.boolean().optional(),
+  /** Пассив: кнопки нет, применяется один раз в начале боя. */
+  passive: z.boolean().optional(),
   anim: z.enum(['lunge', 'shot', 'cast', 'aoe', 'buff']).optional(),
 });
 
@@ -268,8 +292,11 @@ export const zAbilityAmplify = z
     power: z.number().optional(),
     cooldown: z.number().int().optional(),
     effectScale: z.number().min(0).optional(),
+    effectAmount: z.number().optional(),
     turns: z.number().int().optional(),
     piercing: z.boolean().optional(),
+    target: zTargetKind.optional(),
+    addEffects: z.array(zBattleEffect).min(1).optional(),
   })
   .refine((a) => Object.values(a).some((v) => v !== undefined), {
     message: 'Усиление пустое: ни одно поле не задано',

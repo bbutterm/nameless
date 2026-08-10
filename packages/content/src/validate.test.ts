@@ -708,4 +708,122 @@ describe('умения от воспоминаний', () => {
     });
     expect(has(validateBundle(b), 'делят один id')).toBe(true);
   });
+
+  // ── Ступени: поправка цели и пассивы ──────────────────────────────────────
+  // Всё, что схема проверить не может, потому что смысл лежит не в форме
+  // записи, а в её отношении к базовой способности.
+
+  const laddered = (
+    baseTarget: Ability['target'],
+    shift: Ability['target'],
+    extraAbility: Partial<Ability> = {},
+  ): ContentBundle =>
+    bundle({
+      abilities: [ability('hit'), ability('pw', { target: baseTarget, ...extraAbility })],
+      units: [unit('u', { abilities: ['hit'] })],
+      lives: [life('l1', ['m1', 'm2'])],
+      memories: [
+        { ...memory('m1', 'l1', 2), powers: [{ kind: 'grant', ability: 'pw' }] },
+        {
+          ...memory('m2', 'l1', 3),
+          powers: [{ kind: 'amplify', ability: 'pw', amplify: { target: shift } }],
+        },
+      ],
+    });
+
+  it('молчит на здоровом расширении цели: один → ряд', () => {
+    const issues = validateBundle(laddered('ally_one', 'ally_row'));
+    expect(has(issues, 'разворачивает')).toBe(false);
+    expect(has(issues, 'сужает цель')).toBe(false);
+  });
+
+  it('ловит поправку, переводящую умение со своих на чужих', () => {
+    expect(has(validateBundle(laddered('ally_one', 'enemy_all')), 'а не разворачивает её')).toBe(true);
+  });
+
+  it('ловит поправку, сужающую цель: слияние всё равно возьмёт широкую', () => {
+    expect(has(validateBundle(laddered('enemy_all', 'enemy_any')), 'сужает цель')).toBe(true);
+  });
+
+  it('ловит две поправки одинаковой ширины: выбор достанется движку', () => {
+    const b = bundle({
+      abilities: [ability('hit'), ability('pw', { target: 'ally_one' })],
+      units: [unit('u', { abilities: ['hit'] })],
+      lives: [life('l1', ['m1', 'm2', 'm3'])],
+      memories: [
+        { ...memory('m1', 'l1', 2), powers: [{ kind: 'grant', ability: 'pw' }] },
+        {
+          ...memory('m2', 'l1', 3),
+          powers: [{ kind: 'amplify', ability: 'pw', amplify: { target: 'ally_all' } }],
+        },
+        {
+          ...memory('m3', 'l1', 4),
+          powers: [{ kind: 'amplify', ability: 'pw', amplify: { target: 'enemy_all' } }],
+        },
+      ],
+    });
+    expect(has(validateBundle(b), 'одинаковой ширины')).toBe(true);
+  });
+
+  it('ловит умение, которое дают воспоминания разных жизней', () => {
+    const b = bundle({
+      abilities: [ability('hit'), ability('pw')],
+      units: [unit('u', { abilities: ['hit'] })],
+      lives: [life('l1', ['m1']), life('l2', ['m2'])],
+      memories: [
+        { ...memory('m1', 'l1', 2), powers: [{ kind: 'grant', ability: 'pw' }] },
+        { ...memory('m2', 'l2', 2), powers: [{ kind: 'grant', ability: 'pw' }] },
+      ],
+    });
+    expect(has(validateBundle(b), 'разных жизней')).toBe(true);
+  });
+
+  it('ловит пассив, считающий силу от атаки носителя', () => {
+    const b = bundle({
+      abilities: [ability('hit'), ability('pw', { passive: true, power: 1 })],
+      units: [unit('u', { abilities: ['hit'] })],
+      lives: [life('l1', ['m1'])],
+      memories: [withPowers([{ kind: 'grant', ability: 'pw' }])],
+    });
+    expect(has(validateBundle(b), 'носителя у пассива нет')).toBe(true);
+  });
+
+  it('молчит на пассиве с фиксированными числами', () => {
+    const b = bundle({
+      abilities: [
+        ability('hit'),
+        ability('pw', {
+          passive: true,
+          power: 0,
+          target: 'enemy_all',
+          effects: [{ kind: 'reveal' }, { kind: 'debuff', stat: 'def', amount: 2, turns: 2 }],
+        }),
+      ],
+      units: [unit('u', { abilities: ['hit'] })],
+      lives: [life('l1', ['m1'])],
+      memories: [withPowers([{ kind: 'grant', ability: 'pw' }])],
+    });
+    expect(has(validateBundle(b), 'носителя у пассива нет')).toBe(false);
+    expect(has(validateBundle(b), 'читаются только у пассивов')).toBe(false);
+  });
+
+  it('ловит режимный эффект в обычной способности', () => {
+    const b = bundle({
+      abilities: [ability('hit'), ability('pw', { power: 0, effects: [{ kind: 'idle_toll', amount: 4 }] })],
+      units: [unit('u', { abilities: ['hit'] })],
+      lives: [life('l1', ['m1'])],
+      memories: [withPowers([{ kind: 'grant', ability: 'pw' }])],
+    });
+    expect(has(validateBundle(b), 'читаются только у пассивов')).toBe(true);
+  });
+
+  it('ловит возврат щита без щита', () => {
+    const b = bundle({
+      abilities: [ability('hit'), ability('pw', { power: 0, effects: [{ kind: 'shield_refund' }] })],
+      units: [unit('u', { abilities: ['hit'] })],
+      lives: [life('l1', ['m1'])],
+      memories: [withPowers([{ kind: 'grant', ability: 'pw' }])],
+    });
+    expect(has(validateBundle(b), 'возвращать нечего')).toBe(true);
+  });
 });

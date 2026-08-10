@@ -239,6 +239,96 @@ export function scriptedBattles(
 }
 
 /**
+ * Замер одной ступени одного умения (MEMORY_POWERS §D.1–D.3, D.6).
+ *
+ * Что здесь меряется и почему именно это:
+ * - `winrate`/`avgRounds` — коридоры 60–85 и 6–14 обязаны держаться на каждой
+ *   ступени, иначе умение чинится, а не коридор;
+ * - `usedShare` — доля боёв, где заряд вообще потрачен. Умение, которое бот
+ *   не применяет, замерено не было: цифры выше означали бы «бой без умения»;
+ * - `responsesPerBattle` — 1–3 по канону. Ноль значит, что сродство мертво;
+ *   больше четырёх — что отряд собирается только под него.
+ */
+export interface PowerLadderReport {
+  life: string;
+  tier: number;
+  battles: number;
+  winrate: number;
+  avgRounds: number;
+  usedShare: number;
+  responsesPerBattle: number;
+  /** Набор состоит только из пассивов: тратить нечего, `usedShare` бессмыслен. */
+  passiveOnly: boolean;
+  /** Худший и лучший бой набора — по ним видно выход за коридор 60–85. */
+  minWinrate: number;
+  maxWinrate: number;
+  /** Сколько боёв вышло за коридор 60–85. */
+  outOfCorridor: number;
+}
+
+export function powerLadder(
+  content: ContentBundle,
+  partyForBattle: (battleId: string) => PartyUnit[],
+  powersFor: (life: string, tier: number) => readonly PlayerAbility[],
+  lives: readonly string[],
+  runs = 40,
+): PowerLadderReport[] {
+  const idx = indexCombat(content);
+  const out: PowerLadderReport[] = [];
+  // Сюжетно летальные бои из замера исключены: их исход задан сценарием, и
+  // умение в них не меряет ничего. Бои-знакомства — тоже: они выигрываются в
+  // 99–100% и без умений, и их средняя длина (2–4 раунда) утягивает вниз
+  // цифру, по которой судят о коридоре 6–14.
+  const battles = content.battles.filter(
+    (b) => !b.tags?.includes('lethal') && !b.tags?.includes('tutorial'),
+  );
+  for (const life of lives) {
+    for (let tier = 1; tier <= 3; tier++) {
+      const powers = powersFor(life, tier);
+      const ids = new Set(powers.filter((p) => !p.ability.passive).map((p) => p.id));
+      const passiveOnly = powers.length > 0 && ids.size === 0;
+      let wins = 0;
+      let rounds = 0;
+      let used = 0;
+      let responses = 0;
+      let played = 0;
+      const perBattle: number[] = [];
+      for (const b of battles) {
+        const party = partyForBattle(b.id);
+        let localWins = 0;
+        for (let i = 0; i < runs; i++) {
+          const st = runAuto(idx, startBattle(idx, b, party, `ladder:${life}:${tier}:${b.id}:${i}`, powers));
+          played++;
+          rounds += st.round;
+          if (st.outcome === 'win') {
+            wins++;
+            localWins++;
+          }
+          if (st.events.some((e) => e.type === 'act' && ids.has(e.ability))) used++;
+          responses += st.events.filter((e) => e.type === 'response').length;
+        }
+        perBattle.push(localWins / Math.max(1, runs));
+      }
+      const n = Math.max(1, played);
+      out.push({
+        life,
+        tier,
+        battles: played,
+        winrate: wins / n,
+        avgRounds: rounds / n,
+        usedShare: used / n,
+        responsesPerBattle: responses / n,
+        passiveOnly,
+        minWinrate: perBattle.length ? Math.min(...perBattle) : 0,
+        maxWinrate: perBattle.length ? Math.max(...perBattle) : 0,
+        outOfCorridor: perBattle.filter((w) => w < 0.6 || w > 0.85).length,
+      });
+    }
+  }
+  return out;
+}
+
+/**
  * Детерминизм: один сид → один и тот же лог событий. Красный тест = баг движка.
  *
  * `powers` проверяется тем же прогоном, а не отдельным: умение игрока — такой
