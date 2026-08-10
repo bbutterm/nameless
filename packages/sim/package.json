@@ -6,6 +6,7 @@
   "scripts": {
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "sim": "pnpm --filter @nameless/content gen && tsx src/cli.ts",
+    "sim:baseline": "pnpm --filter @nameless/content gen && tsx src/cli.ts --update-baseline",
     "sim:battles": "tsx src/cli.ts --only=battles",
     "sim:dialogue": "tsx src/cli.ts --only=dialogue",
     "test": "vitest run --passWithNoTests"

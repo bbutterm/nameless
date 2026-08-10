@@ -173,4 +173,32 @@ describe('restore() и вырожденное состояние', () => {
   it('new Rng(0) по-прежнему защищён от вырождения', () => {
     expect(new Rng(0).snapshot().seed).toBe(1);
   });
+
+  it('сид снимка беззнаковый на всей длине цепочки', () => {
+    // `& 0xffffffff` в JS возвращает ЗНАКОВОЕ число: примерно в половине шагов
+    // состояние уходило в минус и в таком виде уезжало в сейв.
+    for (const label of ['minus', 'zaklad', 'shcherb']) {
+      const rng = new Rng(label);
+      for (let i = 0; i < 200; i++) {
+        rng.next();
+        const { seed } = rng.snapshot();
+        expect(seed, `сид ${label}, вызов ${i}`).toBeGreaterThanOrEqual(0);
+        expect(seed).toBeLessThanOrEqual(0xffffffff);
+        expect(Number.isInteger(seed)).toBe(true);
+      }
+    }
+  });
+
+  it('fork() после restore() совпадает с fork() живого прогона', () => {
+    // Метка форка склеивается со СТРОКОЙ состояния. Пока состояние бывало
+    // отрицательным, живой прогон форкался от «-1294967296:ai», а реплей —
+    // от «3000000000:ai» (restore приводит сид к беззнаковому), и бой после
+    // загрузки шёл иначе, чем до неё.
+    for (let i = 0; i < 64; i++) {
+      const live = new Rng(`fork-save:${i}`);
+      for (let k = 0; k <= i % 7; k++) live.next();
+      const replay = Rng.restore(JSON.parse(JSON.stringify(live.snapshot())));
+      expect(take(replay.fork('ai'), 6), `сид fork-save:${i}`).toEqual(take(live.fork('ai'), 6));
+    }
+  });
 });

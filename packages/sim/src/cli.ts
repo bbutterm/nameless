@@ -1,5 +1,6 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { content, validateBundle } from '@nameless/content';
 import { derivePlayerPowers, type PartyUnit, type UnitDef } from '@nameless/engine';
 import {
@@ -22,6 +23,13 @@ import {
   TIER_GAIN_MIN,
   unitWinrates,
 } from './battle-sim.js';
+import {
+  loadBaseline,
+  verdict,
+  writeBaseline,
+  type Finding,
+  type FindingKind,
+} from './baseline.js';
 import { fuzzDialogue } from './dialogue-fuzz.js';
 import {
   battleRhythm,
@@ -42,12 +50,27 @@ const personas = Number(args.find((a) => a.startsWith('--personas='))?.split('='
 // это не ускорение симулятора, а понижение его разрешающей способности до уровня
 // шума, замаскированное тем, что шум воспроизводимый и выглядит как сигнал.
 const runs = Number(args.find((a) => a.startsWith('--runs='))?.split('=')[1] ?? 300);
-const reportDir = join(process.cwd(), '..', '..', 'sim-reports');
+const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
+const reportDir = join(root, 'sim-reports');
+const baselinePath = join(root, 'sim-baseline.json');
+// Снять базу заново по текущему прогону. Ручка НЕ для «сделать зелёным»:
+// каждая запись потом дописывается причиной, иначе база превращается в список
+// цифр, по которому нельзя ни починить, ни решить, что чинить не надо.
+const updateBaseline = args.includes('--update-baseline');
 
 const STAND_NEUTRAL = ['beacon_warden', 'cold_reckoner', 'gravedigger_of_things', 'pale_deacon'];
 const STAND_KIN = 2;
 
-let failed = false;
+/**
+ * Красные строки прогона. Раньше здесь стоял один флаг `failed`, и прогон умел
+ * сказать только «красный» — а он красный третий месяц подряд, и под этим
+ * ответом спокойно жили новые дефекты. Теперь каждая красная строка называет
+ * себя парой `kind:id` и сверяется с `sim-baseline.json`.
+ */
+const findings: Finding[] = [];
+function red(kind: FindingKind, id: string, note: string, value?: number): void {
+  findings.push({ kind, id, note, ...(value === undefined ? {} : { value }) });
+}
 const summary: Record<string, unknown> = {};
 
 function head(title: string): void {
@@ -65,7 +88,7 @@ for (const i of errors.slice(0, 20)) console.log(`  ОШИБКА ${i.where}: ${i
 for (const i of issues.filter((x) => x.level !== 'error').slice(0, 20)) {
   console.log(`  ПРЕДУПРЕЖДЕНИЕ ${i.where}: ${i.message}`);
 }
-if (errors.length > 0) failed = true;
+for (const i of errors) red('content', i.where, i.message);
 summary['contentErrors'] = errors.length;
 summary['contentWarnings'] = issues.length - errors.length;
 
@@ -96,9 +119,24 @@ if (!only || only === 'battles') {
         `(коридор ${ROUNDS_MIN}–${ROUNDS_MAX})`,
     );
     summary['avgRounds'] = avgRounds;
-    if (!roundsOk) failed = true;
+    if (!roundsOk) {
+      red(
+        'tournamentRounds',
+        'all',
+        `средняя длина боя ${avgRounds.toFixed(1)} вне коридора ${ROUNDS_MIN}–${ROUNDS_MAX}`,
+        Number(avgRounds.toFixed(2)),
+      );
+    }
     summary['unitsOutOfCorridor'] = out.map((w) => ({ unit: w.unit, winrate: w.winrate }));
-    if (out.length > 0) failed = true;
+    for (const w of out) {
+      red(
+        'unitWinrate',
+        w.unit,
+        `винрейт ${(w.winrate * 100).toFixed(1)}% вне ±${(CORRIDOR_HALF_WIDTH * 100).toFixed(0)} ` +
+          `пунктов от нормы тира ${(w.neutral * 100).toFixed(0)}%`,
+        Number((w.winrate * 100).toFixed(1)),
+      );
+    }
 
     head('Сюжетные бои');
     // Отряд подбирается под главу боя: к главе 2 игрок приходит с прокачанными
@@ -141,7 +179,17 @@ if (!only || only === 'battles') {
           `раундов ${r.avgRounds.toFixed(1)}  выжило ${(r.avgSurvivors * 100).toFixed(0)}%` +
           `${lethal ? '  (сюжетно летальный)' : ''}${tutorial ? '  (знакомство)' : ''}`,
       );
-      if (!ok) failed = true;
+      if (!ok) {
+        red(
+          'storyBattle',
+          r.battle,
+          tutorial
+            ? `бой-знакомство выигрывается лишь в ${(r.winrate * 100).toFixed(0)}% (нужно ≥85%)`
+            : `побед ${(r.winrate * 100).toFixed(0)}% вне коридора ` +
+              `${(BASE_MIN * 100).toFixed(0)}–${(BASE_MAX * 100).toFixed(0)} без умений`,
+          Number((r.winrate * 100).toFixed(1)),
+        );
+      }
     }
     const storyWinrates = rep.filter((r) => storyIds.includes(r.battle)).map((r) => r.winrate);
     const storyMedian = median(storyWinrates);
@@ -151,7 +199,15 @@ if (!only || only === 'battles') {
         `(коридор ${(BASE_MEDIAN_MIN * 100).toFixed(0)}–${(BASE_MEDIAN_MAX * 100).toFixed(0)}), ` +
         `коридор боя ${(BASE_MIN * 100).toFixed(0)}–${(BASE_MAX * 100).toFixed(0)} без умений`,
     );
-    if (!medianOk) failed = true;
+    if (!medianOk) {
+      red(
+        'storyMedian',
+        'all',
+        `медиана по сюжетным боям ${(storyMedian * 100).toFixed(1)}% вне коридора ` +
+          `${(BASE_MEDIAN_MIN * 100).toFixed(0)}–${(BASE_MEDIAN_MAX * 100).toFixed(0)}`,
+        Number((storyMedian * 100).toFixed(1)),
+      );
+    }
     summary['scriptedBattles'] = rep;
     summary['scriptedBattlesMedian'] = storyMedian;
 
@@ -250,7 +306,37 @@ if (!only || only === 'battles') {
         const gainOk = d >= TIER_GAIN_MIN && d <= TIER_GAIN_MAX;
         const roundsOk2 = r.avgRounds >= ROUNDS_MIN && r.avgRounds <= ROUNDS_MAX;
         const ok = gainOk && roundsOk2 && r.outOfCorridor === 0;
-        if (!ok) failed = true;
+        // Три разных дефекта — три разные записи: строка бывает красной по
+        // прибавке, по длине боя и по числу боёв вне коридора порознь, и
+        // общий ключ «строка красная» прятал бы появление нового дефекта под
+        // уже известным.
+        const step = `${r.life}:${r.tier}`;
+        if (!gainOk) {
+          red(
+            'ladderGain',
+            step,
+            `прибавка ступени ${d >= 0 ? '+' : ''}${d.toFixed(1)} вне допуска ` +
+              `${TIER_GAIN_MIN}–${TIER_GAIN_MAX} (§D.1)`,
+            Number(d.toFixed(1)),
+          );
+        }
+        if (!roundsOk2) {
+          red(
+            'ladderRounds',
+            step,
+            `длина боя ${r.avgRounds.toFixed(1)} вне ${ROUNDS_MIN}–${ROUNDS_MAX} (§D.2)`,
+            Number(r.avgRounds.toFixed(2)),
+          );
+        }
+        if (r.outOfCorridor > 0) {
+          red(
+            'ladderCorridor',
+            step,
+            `${r.outOfCorridor} боёв вне ${(POWER_MIN * 100).toFixed(0)}–` +
+              `${(POWER_MAX * 100).toFixed(0)} при игроке с умением (§D.1)`,
+            r.outOfCorridor,
+          );
+        }
         console.log(
           `${ok ? '  ' : '!!'} ${r.life.padEnd(13)} ст.${r.tier}  побед ${(r.winrate * 100).toFixed(0)}% ` +
             `(${d >= 0 ? '+' : ''}${d.toFixed(0)}, разброс ${(r.minWinrate * 100).toFixed(0)}–${(r.maxWinrate * 100).toFixed(0)}, ` +
@@ -350,7 +436,22 @@ if (!only || only === 'battles') {
         // Несравнимую строку прибор роняет так же, как вышедшую за предел:
         // «не смог измерить» — это не «всё в порядке».
         const ok = comparable && d <= EMPTY_POWER_GAIN_MAX;
-        if (!ok) failed = true;
+        if (!comparable) {
+          red(
+            'emptyPowerStand',
+            life,
+            `в стенд встало лишь ${kinMin} сродственных из ${STAND_KIN}: строка несравнима`,
+            kinMin,
+          );
+        } else if (d > EMPTY_POWER_GAIN_MAX) {
+          red(
+            'emptyPower',
+            life,
+            `пустышка даёт +${d.toFixed(1)} над базой при пределе +${EMPTY_POWER_GAIN_MAX}: ` +
+              `прибавку платит отклик сродственных, а не умение`,
+            Number(d.toFixed(1)),
+          );
+        }
         console.log(
           `${ok ? '  ' : '!!'} ${life.padEnd(13)} побед ${(rowRep.winrate * 100).toFixed(0)}% ` +
             `(${d >= 0 ? '+' : ''}${d.toFixed(1)} над базой, предел +${EMPTY_POWER_GAIN_MAX})  ` +
@@ -412,7 +513,9 @@ if (!only || only === 'battles') {
     // Воспроизводимость проверяется И с умениями: они такой же участник боя.
     const det = determinismCheck(content, party, allPowers);
     console.log(det.ok ? 'Детерминизм: OK' : `Детерминизм НАРУШЕН в бою ${det.battle}`);
-    if (!det.ok) failed = true;
+    if (!det.ok) {
+      red('determinism', det.battle ?? 'unknown', 'один сид дал два разных боя');
+    }
   }
 }
 
@@ -433,7 +536,22 @@ if (!only || only === 'dialogue' || only === 'pacing') {
         `${p.reachedBattle} из ${p.runs}`,
     );
     summary['pacing'] = p;
-    if (!p.ok) failed = true;
+    if (p.median > BUBBLES_TO_BATTLE_MAX) {
+      red(
+        'pacing',
+        'timeToFirstBattle',
+        `до первого боя ${p.median} реплик при пределе ${BUBBLES_TO_BATTLE_MAX}`,
+        p.median,
+      );
+    }
+    if (p.reachedBattle < p.runs * 0.9) {
+      red(
+        'pacing',
+        'reachedFirstBattle',
+        `до боя дошли ${p.reachedBattle} прогонов из ${p.runs} (нужно ≥90%)`,
+        p.reachedBattle,
+      );
+    }
 
     const rh = battleRhythm(content, 60);
     console.log(
@@ -443,7 +561,24 @@ if (!only || only === 'dialogue' || only === 'pacing') {
     );
     console.log(`   боёв за прохождение: ${rh.battlesPerRun}; длинных промежутков: ${rh.overP90}`);
     summary['rhythm'] = rh;
-    if (!rh.ok) failed = true;
+    if (rh.p90 > BUBBLES_BETWEEN_BATTLES_P90) {
+      red(
+        'rhythm',
+        'p90',
+        `девять из десяти промежутков в ${rh.p90} реплик при коридоре ` +
+          `${BUBBLES_BETWEEN_BATTLES_P90}`,
+        rh.p90,
+      );
+    }
+    if (rh.max > BUBBLES_BETWEEN_BATTLES_MAX) {
+      red(
+        'rhythm',
+        'max',
+        `самый длинный промежуток между боями ${rh.max} реплик при пределе ` +
+          `${BUBBLES_BETWEEN_BATTLES_MAX}`,
+        rh.max,
+      );
+    }
   }
 }
 
@@ -467,7 +602,14 @@ if (!only || only === 'dialogue') {
     for (const o of r.neverVisibleOptions.slice(0, 15)) {
       console.log(`  НЕ ВИДЕН ${o.scene}#${o.node}/${o.option}`);
     }
-    if (r.neverVisibleOptions.length > 0) failed = true;
+    for (const o of r.neverVisibleOptions) {
+      red(
+        'invisibleOption',
+        `${o.scene}#${o.node}/${o.option}`,
+        'вариант проходит по условиям, но обрезка по приоритету не пускает его на экран ' +
+          'ни одной личности: мёртвый текст и всё, что за ним',
+      );
+    }
     console.log(`условия, срабатывающие всегда: ${r.alwaysShownConditional.length}`);
     console.log(`недостижимые узлы: ${r.unreachableNodes.length}`);
     for (const n of r.unreachableNodes.slice(0, 15)) console.log(`  НЕДОСТИЖИМ ${n.scene}#${n.node}`);
@@ -497,13 +639,67 @@ if (!only || only === 'dialogue') {
       cleanCoverage: r.cleanCoverage,
       cleanOnlyUnreachable: r.cleanOnlyUnreachable.length,
     };
-    if (r.deadEnds.length > 0 || r.errors.length > 0) failed = true;
+    for (const key of dedupe(r.deadEnds.map((d) => `${d.scene}#${d.node}`))) {
+      const worst = Math.min(...r.deadEnds.filter((d) => `${d.scene}#${d.node}` === key).map((d) => d.passing));
+      red('deadEnd', key, `у части личностей в узле остаётся ${worst} вариант(ов) без страховки`, worst);
+    }
+    for (const key of dedupe(r.errors.map((e) => `${e.scene}#${e.node}`))) {
+      const message = r.errors.find((e) => `${e.scene}#${e.node}` === key)?.message ?? '';
+      red('walkError', key, `проход обрывается ошибкой: ${message}`);
+    }
     if (r.lineCoverage < 0.9) {
       console.log('!! охват реплик ниже 90%');
-      failed = true;
+      red(
+        'lineCoverage',
+        'all',
+        `охват реплик ${(r.lineCoverage * 100).toFixed(1)}% ниже 90%`,
+        Number((r.lineCoverage * 100).toFixed(1)),
+      );
     }
   }
 }
+
+// ── Сверка с базой известного красного ───────────────────────────────────────
+head('Сверка с базой известного красного');
+if (updateBaseline && only) {
+  // Иначе база сохранила бы половину списка, а вторая половина при следующем
+  // полном прогоне приехала бы как «новое красное».
+  console.log('!! --update-baseline вместе с --only запрещён: база снимается только полным прогоном');
+  process.exit(2);
+}
+if (updateBaseline) {
+  writeBaseline(
+    baselinePath,
+    findings,
+    'Известное красное симулятора. Прогон сверяется с этим списком: запись отсюда ' +
+      'печатается как известная и НЕ роняет прогон, всё остальное красное — падение. ' +
+      'Причина у каждой записи обязательна: список без причин нельзя ни починить, ни ' +
+      'осознанно оставить.',
+  );
+  console.log(`база снята заново: ${findings.length} записей в ${baselinePath}`);
+  console.log('   ПРОВЕРЬ причины у каждой записи руками — снимок пишет их машинными словами');
+}
+const { baseline, error: baselineError } = loadBaseline(baselinePath);
+// Частичный прогон (`--only=...`) сверять с базой нельзя: разделы, которых он
+// не считал, выглядели бы починенными, и «база устарела» печаталось бы про
+// половину записей. Такой прогон судит по-старому — любое красное роняет.
+const v = only
+  ? {
+      exitCode: findings.length > 0 ? 1 : 0,
+      comparison: { fresh: findings, known: [], stale: [] },
+      lines: [
+        `частичный прогон (--only=${only}): с базой не сверяется, красных строк ${findings.length}`,
+        ...findings.map((f) => `!! ${f.kind}:${f.id} — ${f.note}`),
+      ],
+    }
+  : verdict(findings, baseline, updateBaseline ? undefined : baselineError);
+for (const line of v.lines) console.log(line);
+summary['findings'] = findings;
+summary['baseline'] = {
+  entries: baseline.known.length,
+  fresh: v.comparison.fresh,
+  stale: v.comparison.stale,
+};
 
 try {
   mkdirSync(reportDir, { recursive: true });
@@ -512,8 +708,10 @@ try {
   // отчёт — приятный бонус, не повод падать
 }
 
-head(failed ? 'ИТОГ: КРАСНЫЙ' : 'ИТОГ: зелёный');
-process.exit(failed ? 1 : 0);
+// Прогон падает ТОЛЬКО на новом красном. Известное красное — не падение:
+// иначе прибор третий месяц отвечает «красный» и перестаёт что-либо сообщать.
+head(v.exitCode === 0 ? 'ИТОГ: зелёный' : 'ИТОГ: КРАСНЫЙ (новое красное)');
+process.exit(v.exitCode);
 
 function dedupe(items: string[]): string[] {
   return [...new Set(items)];

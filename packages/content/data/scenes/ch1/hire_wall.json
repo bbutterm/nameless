@@ -88,7 +88,7 @@
               }
             ]
           },
-          "priority": 5,
+          "priority": 4,
           "effects": [
             {
               "kind": "recruit",
@@ -110,7 +110,7 @@
                 "kind": "axis",
                 "axis": "mercy_cruelty",
                 "op": "gte",
-                "value": 40
+                "value": 60
               },
               {
                 "kind": "not",
@@ -148,7 +148,7 @@
                 "kind": "axis",
                 "axis": "mercy_cruelty",
                 "op": "gte",
-                "value": 40
+                "value": 80
               },
               {
                 "kind": "not",
@@ -164,7 +164,7 @@
               }
             ]
           },
-          "priority": 5,
+          "priority": 6,
           "effects": [
             {
               "kind": "recruit",
@@ -202,7 +202,7 @@
               }
             ]
           },
-          "priority": 5,
+          "priority": 4,
           "effects": [
             {
               "kind": "recruit",
@@ -224,7 +224,7 @@
                 "kind": "axis",
                 "axis": "mercy_cruelty",
                 "op": "lte",
-                "value": -40
+                "value": -60
               },
               {
                 "kind": "not",
@@ -262,7 +262,7 @@
                 "kind": "axis",
                 "axis": "mercy_cruelty",
                 "op": "lte",
-                "value": -40
+                "value": -80
               },
               {
                 "kind": "not",
@@ -278,7 +278,7 @@
               }
             ]
           },
-          "priority": 5,
+          "priority": 6,
           "effects": [
             {
               "kind": "recruit",
@@ -316,7 +316,7 @@
               }
             ]
           },
-          "priority": 5,
+          "priority": 4,
           "effects": [
             {
               "kind": "recruit",
@@ -338,7 +338,7 @@
                 "kind": "axis",
                 "axis": "honesty_deceit",
                 "op": "gte",
-                "value": 40
+                "value": 60
               },
               {
                 "kind": "not",
@@ -376,7 +376,7 @@
                 "kind": "axis",
                 "axis": "honesty_deceit",
                 "op": "gte",
-                "value": 40
+                "value": 80
               },
               {
                 "kind": "not",
@@ -392,7 +392,7 @@
               }
             ]
           },
-          "priority": 5,
+          "priority": 6,
           "effects": [
             {
               "kind": "recruit",
@@ -430,7 +430,7 @@
               }
             ]
           },
-          "priority": 5,
+          "priority": 4,
           "effects": [
             {
               "kind": "recruit",
@@ -452,7 +452,7 @@
                 "kind": "axis",
                 "axis": "honesty_deceit",
                 "op": "lte",
-                "value": -40
+                "value": -60
               },
               {
                 "kind": "not",
@@ -490,7 +490,7 @@
                 "kind": "axis",
                 "axis": "honesty_deceit",
                 "op": "lte",
-                "value": -40
+                "value": -80
               },
               {
                 "kind": "not",
@@ -506,7 +506,7 @@
               }
             ]
           },
-          "priority": 5,
+          "priority": 6,
           "effects": [
             {
               "kind": "recruit",
@@ -544,7 +544,7 @@
               }
             ]
           },
-          "priority": 5,
+          "priority": 4,
           "effects": [
             {
               "kind": "recruit",
@@ -566,7 +566,7 @@
                 "kind": "axis",
                 "axis": "reason_obsession",
                 "op": "gte",
-                "value": 40
+                "value": 60
               },
               {
                 "kind": "not",
@@ -604,7 +604,7 @@
                 "kind": "axis",
                 "axis": "reason_obsession",
                 "op": "gte",
-                "value": 40
+                "value": 80
               },
               {
                 "kind": "not",
@@ -620,7 +620,7 @@
               }
             ]
           },
-          "priority": 5,
+          "priority": 6,
           "effects": [
             {
               "kind": "recruit",
@@ -658,7 +658,7 @@
               }
             ]
           },
-          "priority": 5,
+          "priority": 4,
           "effects": [
             {
               "kind": "recruit",
@@ -680,7 +680,7 @@
                 "kind": "axis",
                 "axis": "reason_obsession",
                 "op": "lte",
-                "value": -40
+                "value": -60
               },
               {
                 "kind": "not",
@@ -718,7 +718,7 @@
                 "kind": "axis",
                 "axis": "reason_obsession",
                 "op": "lte",
-                "value": -40
+                "value": -80
               },
               {
                 "kind": "not",
@@ -734,7 +734,7 @@
               }
             ]
           },
-          "priority": 5,
+          "priority": 6,
           "effects": [
             {
               "kind": "recruit",
@@ -772,7 +772,7 @@
               }
             ]
           },
-          "priority": 5,
+          "priority": 4,
           "effects": [
             {
               "kind": "recruit",
@@ -794,7 +794,7 @@
                 "kind": "axis",
                 "axis": "grasp_release",
                 "op": "gte",
-                "value": 40
+                "value": 60
               },
               {
                 "kind": "not",
@@ -832,7 +832,7 @@
                 "kind": "axis",
                 "axis": "grasp_release",
                 "op": "gte",
-                "value": 40
+                "value": 80
               },
               {
                 "kind": "not",
@@ -886,7 +886,7 @@
               }
             ]
           },
-          "priority": 5,
+          "priority": 4,
           "effects": [
             {
               "kind": "recruit",
@@ -908,7 +908,7 @@
                 "kind": "axis",
                 "axis": "grasp_release",
                 "op": "lte",
-                "value": -40
+                "value": -60
               },
               {
                 "kind": "not",
@@ -946,7 +946,7 @@
                 "kind": "axis",
                 "axis": "grasp_release",
                 "op": "lte",
-                "value": -40
+                "value": -80
               },
               {
                 "kind": "not",
@@ -977,7 +977,6 @@
             "ru": "Постоять и послушать, о чём торгуются.",
             "en": "Stand a while and listen to the haggling."
           },
-          "priority": 9,
           "fallback": true,
           "effects": [
             {
