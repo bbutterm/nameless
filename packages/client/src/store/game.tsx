@@ -30,6 +30,7 @@ import {
   type GameState,
   type Lang,
   type Memory,
+  type PartyUnit,
   type PastLife,
   type Step,
 } from '@nameless/engine';
@@ -70,6 +71,8 @@ interface GameApi {
   battle: BattleState | undefined;
   reveal: DeathReveal | undefined;
   spoils: BattleSpoils | undefined;
+  /** Очередь бирок вербовки: кто вошёл в отряд и ещё не показан игроку. */
+  recruits: PartyUnit[];
   lang: Lang;
   error: string | undefined;
   hasSave: boolean;
@@ -84,6 +87,7 @@ interface GameApi {
   swapSlots(a: string, b: string): void;
   finishBattle(): void;
   ackDeath(): void;
+  ackRecruit(): void;
   toTitle(): void;
 }
 
@@ -186,10 +190,19 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const [battle, setBattle] = useState<BattleState>();
   const [reveal, setReveal] = useState<DeathReveal>();
   const [spoils, setSpoils] = useState<BattleSpoils>();
+  const [recruits, setRecruits] = useState<PartyUnit[]>([]);
   const [lang, setLangState] = useState<Lang>(detectLang());
   const [error, setError] = useState<string>();
   const [saveExists, setSaveExists] = useState(false);
   const battleReturn = useRef<{ onWin: string; onLose: string }>();
+  /*
+   * Кто уже стоял в отряде на прошлом показанном шаге. Единственный способ
+   * поймать вербовку в клиенте: эффект `recruit` срабатывает внутри `resolve`,
+   * между двумя видимыми шагами, и наружу отдаётся только готовое состояние.
+   * Диффом ловятся ВСЕ вербовки разом — из выбора, из узла-эффекта, из наград
+   * боя — и ни одна не требует ни строчки про конкретного юнита.
+   */
+  const knownParty = useRef<Set<string>>(new Set());
   const settledRef = useRef<{ from: GameState; battle: BattleState; result: Settled }>();
 
   useEffect(() => {
@@ -202,6 +215,11 @@ export function GameProvider({ children }: { children: ReactNode }) {
     const r = present(next);
     setState(r.state);
     setStep(r.step);
+    // Бирки — до разбора шага: вербовать могут и в узле перед боем, и наградой
+    // за бой, и на церемонии смерти. Показать их обязаны в любом из случаев.
+    const fresh = r.state.party.filter((u) => !knownParty.current.has(u.uid));
+    knownParty.current = new Set(r.state.party.map((u) => u.uid));
+    if (fresh.length > 0) setRecruits((q) => [...q, ...fresh]);
     if (r.step.kind === 'error') {
       setError(r.step.message);
       setMode('error');
@@ -289,6 +307,8 @@ export function GameProvider({ children }: { children: ReactNode }) {
     setBattle(undefined);
     setError(undefined);
     setSaveExists(true);
+    setRecruits([]);
+    knownParty.current = new Set(fresh.party.map((u) => u.uid));
     commit(fresh);
   }, [commit]);
 
@@ -300,6 +320,9 @@ export function GameProvider({ children }: { children: ReactNode }) {
       return;
     }
     setError(undefined);
+    // Отряд из сейва — не вербовка: по «Продолжить» бирки не всплывают.
+    setRecruits([]);
+    knownParty.current = new Set(loaded.state.party.map((u) => u.uid));
     commit(loaded.state);
   }, [commit]);
 
@@ -399,6 +422,11 @@ export function GameProvider({ children }: { children: ReactNode }) {
     commit(state);
   }, [state, commit]);
 
+  /** Бирка прочитана. Вербовок в узле бывает две подряд — снимаем по одной. */
+  const ackRecruit = useCallback(() => {
+    setRecruits((q) => q.slice(1));
+  }, []);
+
   const setLang = useCallback((l: Lang) => {
     setLangState(l);
     saveLang(l);
@@ -418,6 +446,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
       battle,
       reveal,
       spoils,
+      recruits,
       lang,
       error,
       hasSave: saveExists,
@@ -432,6 +461,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
       swapSlots,
       finishBattle,
       ackDeath,
+      ackRecruit,
       toTitle,
     }),
     [
@@ -441,6 +471,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
       battle,
       reveal,
       spoils,
+      recruits,
       lang,
       error,
       saveExists,
@@ -455,6 +486,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
       swapSlots,
       finishBattle,
       ackDeath,
+      ackRecruit,
       toTitle,
     ],
   );

@@ -40,10 +40,24 @@ let choices = 0;
 let battles = 0;
 let battleTaps = 0;
 let deathSeen = false;
+let recruitTags = 0;
 let shots = 0;
 const seenScenes = new Set();
 
 for (let step = 0; step < 1600; step++) {
+  // Бирка вербовки: перекрывает весь экран и ждёт тапа (КАНОН_КРАТКО §9.2).
+  // Стоит первой в цикле — под ней может быть любой экран, включая бой.
+  if (await page.locator('.recruit-tag').count()) {
+    // Бирка не принимает тап первые ~450ms — иначе тап, занесённый для ленты,
+    // гасил бы её непрочитанной. Ждём, как ждал бы человек.
+    await page.waitForTimeout(520);
+    if (recruitTags === 0) await page.screenshot({ path: `${outDir}/play-recruit.png` });
+    recruitTags++;
+    await page.locator('.tag-close').click();
+    await page.waitForTimeout(240);
+    continue;
+  }
+
   // Церемония смерти — цель прогона.
   if (await page.locator('.memory-card, .death-stage').count()) {
     if (!deathSeen) {
@@ -138,6 +152,7 @@ await page.screenshot({ path: `${outDir}/play-final.png` });
 console.log(`пузырей протапано: ${bubbles}`);
 console.log(`выборов сделано:   ${choices}`);
 console.log(`боёв начато:       ${battles}, ходов в бою: ${battleTaps}`);
+console.log(`бирок вербовки:    ${recruitTags}`);
 console.log(`церемония смерти:  ${deathSeen ? 'показана' : 'НЕ ДОСТИГНУТА'}`);
 console.log(`ошибок в консоли:  ${errors.length}`);
 for (const e of errors.slice(0, 5)) console.log(`   ${e}`);

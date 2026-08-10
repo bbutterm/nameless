@@ -21,6 +21,7 @@ import {
   type BattleUnitState,
   type Lang,
   type TargetKind,
+  type UnitDef,
 } from '@nameless/engine';
 import { t } from '../i18n';
 
@@ -40,19 +41,22 @@ function damageEffects(ability: Ability): BattleEffect[] {
     : [{ kind: 'damage', power: ability.power }];
 }
 
+/** Края разброса урона по голым числам — общий корень боевого и небоевого чтения. */
+function spanFromStats(atk: number, armor: number, power: number): { min: number; max: number } {
+  const mitigated = atk * power * (ARMOR_K / (ARMOR_K + armor));
+  return {
+    min: Math.max(1, Math.round(mitigated * (1 - DAMAGE_VARIANCE))),
+    max: Math.max(1, Math.round(mitigated * (1 + DAMAGE_VARIANCE))),
+  };
+}
+
 /** Края разброса урона: min/max того же выражения, что считает computeDamage. */
 export function damageRange(
   attacker: BattleUnitState,
   target: BattleUnitState,
   power: number,
 ): { min: number; max: number } {
-  const atk = effectiveStat(attacker, 'atk');
-  const def = effectiveStat(target, 'def');
-  const mitigated = atk * power * (ARMOR_K / (ARMOR_K + def));
-  return {
-    min: Math.max(1, Math.round(mitigated * (1 - DAMAGE_VARIANCE))),
-    max: Math.max(1, Math.round(mitigated * (1 + DAMAGE_VARIANCE))),
-  };
+  return spanFromStats(effectiveStat(attacker, 'atk'), effectiveStat(target, 'def'), power);
 }
 
 /** Лечение разброса не имеет — движок считает его ровно. */
@@ -118,6 +122,58 @@ export function effectWord(eff: BattleEffect, lang: Lang): string {
     default:
       return '';
   }
+}
+
+/**
+ * Опорная броня для чисел ВНЕ боя — медиана `def` по всему ростеру.
+ *
+ * Бирка вербовки показывает способности до того, как у них появилась цель, а
+ * урон в этой игре считается только против чьей-то брони (`ARMOR_K`). Врать
+ * «уроном без брони» нельзя — он завышает на 12–15% против любого настоящего
+ * врага. Медиана ростера — единственное число, которое здесь не выдумано:
+ * оно взято из тех же данных, по которым потом пойдёт бой, и меняется вместе
+ * с ними. Приблизительность видна и без оговорок: урон на бирке всегда стоит
+ * вилкой («урон 10–12»), а не одним числом (см. `abilityDeed`).
+ */
+export function referenceArmor(units: readonly UnitDef[]): number {
+  const ds = units.map((u) => u.stats.def).sort((a, b) => a - b);
+  return ds.length > 0 ? (ds[Math.floor(ds.length / 2)] ?? 0) : 0;
+}
+
+/**
+ * «Глагол и число» одной способности — то, чем канон велит подписывать юнита
+ * при вербовке (КАНОН_КРАТКО §9.2): «урон 9–12», «лечит 11», «щит 16».
+ *
+ * Считается по атаке самого юнита (её передают уже с поправкой на уровень) и
+ * по опорной броне: ни одного числа, которого нет в данных. Лечение движок
+ * считает ровно, поэтому оно стоит точным числом, а урон — вилкой ±12%.
+ * Куда бьёт, как часто и что оставляет после себя — по-прежнему `abilityChips`.
+ */
+export function abilityDeed(
+  atk: number,
+  ability: Ability,
+  lang: Lang,
+  armor: number,
+): Preview | undefined {
+  const effects = damageEffects(ability);
+  const dmg = effects.find((e) => e.kind === 'damage');
+  if (dmg && dmg.kind === 'damage' && dmg.power > 0) {
+    const { min, max } = spanFromStats(atk, armor, dmg.power);
+    return {
+      text: `${t(lang, 'damageWord')} ${min === max ? min : `${min}–${max}`}`,
+      tone: 'damage',
+    };
+  }
+  const heal = effects.find((e) => e.kind === 'heal');
+  if (heal && heal.kind === 'heal') {
+    return {
+      text: `${t(lang, 'healsWord')} ${Math.max(1, Math.round(atk * heal.power))}`,
+      tone: 'heal',
+    };
+  }
+  const first = effects.find((e) => e.kind !== 'damage');
+  const word = first ? effectWord(first, lang) : '';
+  return word ? { text: word, tone: 'effect' } : undefined;
 }
 
 export function targetWord(kind: TargetKind, lang: Lang): string {

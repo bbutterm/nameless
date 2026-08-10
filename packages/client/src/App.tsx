@@ -1,4 +1,5 @@
 import { OrientationGate } from './components/OrientationGate';
+import { RecruitTag } from './components/RecruitTag';
 import { BattleScreen } from './screens/BattleScreen';
 import { DeathScreen } from './screens/DeathScreen';
 import { DialogueScreen } from './screens/DialogueScreen';
@@ -39,10 +40,17 @@ function Router() {
 }
 
 function Shell() {
-  const { lang } = useGame();
+  const { lang, recruits, ackRecruit } = useGame();
+  const joined = recruits[0];
   return (
     <OrientationGate lang={lang}>
       <Router />
+      {/* Бирка вербовки живёт СНАРУЖИ экрана, а не внутри него: диалог
+          продвигается тапом по всему `.screen`, и вложенная бирка отдавала бы
+          свой клик ленте — игрок закрывал бы бирку и одновременно проматывал
+          реплику. Экран под ней остаётся любым: вербовать может и узел перед
+          боем, и награда за бой. */}
+      {joined && <RecruitTag key={joined.uid} unit={joined} lang={lang} onClose={ackRecruit} />}
     </OrientationGate>
   );
 }

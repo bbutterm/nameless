@@ -87,7 +87,7 @@ export const ui = {
     emptyParty: 'Отряд пуст',
     rowFront: 'перёд',
     rowBack: 'зад',
-    swapHint: 'Тапни двоих, чтобы поменять их местами.',
+    swapHint: 'Тапни двоих — поменяются местами. Удержи — бирка.',
     levelUp: 'Уровень',
     evolved: 'Превращение',
     noMemories: 'Ни одного лота не выкуплено.',
@@ -107,6 +107,10 @@ export const ui = {
     codexSourceAfterDeath: 'после твоей смерти',
     codexSourceLast: 'последняя',
     codexAdded: 'В Помянник дописано',
+    /* Бирка вербовки (КАНОН_КРАТКО §9, REVIEW_GAMEPLAY §2.П1) */
+    recruitCan: 'Что умеет в бою',
+    recruitPlace: 'Место в строю',
+    recruitNoAbilities: 'В драку не лезет.',
   },
   en: {
     title: 'The Nameless',
@@ -183,7 +187,7 @@ export const ui = {
     emptyParty: 'No one follows you',
     rowFront: 'front',
     rowBack: 'back',
-    swapHint: 'Tap two of them to swap their places.',
+    swapHint: 'Tap two to swap their places. Hold one for its tag.',
     levelUp: 'Level',
     evolved: 'Turned',
     noMemories: 'Not a single lot redeemed.',
@@ -203,8 +207,38 @@ export const ui = {
     codexSourceAfterDeath: 'after your death',
     codexSourceLast: 'last',
     codexAdded: 'Recorded in the Book',
+    /* Recruit tag (КАНОН_КРАТКО §9, REVIEW_GAMEPLAY §2.П1) */
+    recruitCan: 'What they do in a fight',
+    recruitPlace: 'Place in the line',
+    recruitNoAbilities: 'Keeps out of the fighting.',
   },
 } as const;
+
+/**
+ * Слова нрава для бирки вербовки: трейт юнита → одно-два слова.
+ *
+ * Названы только те трейты, которые игроку и правда что-то говорят. Служебные
+ * (`life_*`, `pole_*` — привязка к прошлой жизни и к полюсу оси) сюда не
+ * попадают намеренно: числа и оси личности игроку не показываются никогда
+ * (КАНОН_КРАТКО §7). Незнакомый трейт просто не показывается — новый тег в
+ * данных ничего не ломает.
+ */
+export const traitWords: Record<string, LocalizedText> = {
+  fighter: { ru: 'бьётся', en: 'fights' },
+  breaker: { ru: 'крушит', en: 'breaks things' },
+  shield: { ru: 'прикрывает', en: 'shields' },
+  guard: { ru: 'сторожит', en: 'guards' },
+  healer: { ru: 'лечит', en: 'mends' },
+  shooter: { ru: 'бьёт издали', en: 'strikes from afar' },
+  mage: { ru: 'ворожит', en: 'works charms' },
+  echo: { ru: 'из памяти', en: 'out of memory' },
+  starter: { ru: 'с тобой с начала', en: 'with you from the start' },
+  no_back_row: { ru: 'только впереди', en: 'front row only' },
+  fear: { ru: 'пугает', en: 'frightens' },
+  mirage: { ru: 'морочит', en: 'deceives the eye' },
+  reveals_intent: { ru: 'видит наперёд', en: 'sees it coming' },
+  heals_enemies: { ru: 'лечит и чужих', en: 'mends foes too' },
+};
 
 export type UiKey = keyof (typeof ui)['ru'];
 

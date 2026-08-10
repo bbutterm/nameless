@@ -21,6 +21,7 @@
 .big-button::after,
 .ability::after,
 .party-item::after,
+.tag-face::after,
 .memory-card::after,
 .sheet-tabs button::after,
 .archive-button::after {
@@ -1511,6 +1512,133 @@
   color: var(--text-dim);
 }
 .spoil.evolve { color: var(--tier-3); }
+
+/* ── Бирка вербовки ──────────────────────────────────────────────────────────
+ *
+ * Одна карточка на все `recruit` (КАНОН_КРАТКО §9.2): лицо, имя, слова нрава,
+ * способности строками «название — глагол и число», ряд. Лежит по центру, а не
+ * шторкой снизу, как опись: опись — лист, который листают, бирка — предмет,
+ * который держат в руках, и она обязана читаться как отдельный такт игры.
+ * ------------------------------------------------------------------------- */
+.tag-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  background: rgba(6, 5, 7, 0.86);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(16px + var(--safe-top)) 16px calc(16px + var(--safe-bottom));
+  animation: rise 240ms ease-out;
+}
+.recruit-tag {
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 14px;
+  background: var(--bg-1);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: 0 10px 30px rgba(6, 5, 7, 0.8);
+  text-align: center;
+}
+.tag-kicker {
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+/* Лицо — та же карта, что игрок увидит в бою, тем же кадром и в той же рамке
+   тира: узнавание строится на повторе, а не на втором изображении. */
+.tag-face {
+  position: relative;
+  width: 116px;
+  flex-shrink: 0;
+  aspect-ratio: 3/4;
+  overflow: hidden;
+  border-radius: var(--r-sm);
+  background: var(--bg-2);
+}
+.tag-face img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Тот же зум, что в .card-art: гасим собственную рамку процедурного арта. */
+  transform: scale(1.16);
+}
+.tag-face .card-mark { --mark-s: 44px; }
+.tag-face::after {
+  border-width: 7px;
+  border-image-source: url('../../content/assets/ui/nameless/frame-tier-1.png');
+  border-image-width: 7px;
+}
+.tag-face.tier-2::after {
+  border-width: 9px;
+  border-image-source: url('../../content/assets/ui/nameless/frame-tier-2.png');
+  border-image-width: 9px;
+}
+.tag-face.tier-3::after {
+  border-width: 11px;
+  border-image-source: url('../../content/assets/ui/nameless/frame-tier-3.png');
+  border-image-width: 11px;
+}
+.tag-name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 22px;
+  line-height: 1.15;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+.tag-traits { display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; }
+.tag-trait {
+  padding: 1px 8px;
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  font-size: 12px;
+  color: var(--text-dim);
+}
+.tag-blurb { font-size: 14px; line-height: 1.3; color: var(--text-faint); font-style: italic; }
+.tag-label {
+  align-self: flex-start;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+/* Способностей у юнита две-три, но бирка обязана пережить и пятую: список
+   скроллится сам, кнопка «Дальше» остаётся на экране на 360×640. */
+.tag-deeds {
+  width: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 2px 0;
+  text-align: left;
+}
+.tag-deed { display: flex; align-items: flex-start; gap: 8px; }
+.deed-body { min-width: 0; flex: 1; }
+.deed-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px; font-size: 16px; }
+.deed-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 3px; }
+.chip-deed {
+  flex-shrink: 0;
+  padding: 1px 6px;
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  font-size: 12px;
+}
+.deed-damage { color: var(--danger); }
+.deed-heal { color: var(--hp-ally); }
+.deed-effect { color: var(--shield); }
+.tag-place { font-size: 14px; color: var(--text-dim); }
+.tag-place b { color: var(--text); font-weight: 700; }
+.tag-close { width: 100%; margin-top: 2px; }
 
 .swap-hint { font-size: 13px; color: var(--text-faint); font-style: italic; padding: 0 2px 2px; }
 .party-item { text-align: left; }
