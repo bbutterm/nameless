@@ -1,7 +1,7 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { content, validateBundle } from '@nameless/content';
-import type { PartyUnit, UnitDef } from '@nameless/engine';
+import { derivePlayerPowers, type PartyUnit, type UnitDef } from '@nameless/engine';
 import {
   determinismCheck,
   CORRIDOR_HALF_WIDTH,
@@ -125,7 +125,47 @@ if (!only || only === 'battles') {
     }
     summary['scriptedBattles'] = rep;
 
-    const det = determinismCheck(content, party);
+    // ── Умения игрока ────────────────────────────────────────────────────────
+    // Потолок: игрок, вспомнивший ВСЁ. Раздел справочный и не краснит прогон.
+    //
+    // Почему не краснит. Коридор сюжетных боёв (60–85%) описывает встречу боя с
+    // тем игроком, который до него доходит; игрок с полной памятью — это конец
+    // прохождения, и то, что он проходит бой первой главы насквозь, не дефект
+    // баланса, а обещание игры. Красная строка здесь заставляла бы автора
+    // канона резать умения до незаметности. Раздел печатает разницу — по ней
+    // видно, какие бои умения переворачивают, — а решение остаётся за автором.
+    const allPowers = derivePlayerPowers(
+      content.memories.map((m) => m.id),
+      content,
+    ).abilities;
+    if (allPowers.length > 0) {
+      head('Умения игрока (потолок: вспомнил всё)');
+      console.log(`умений ${allPowers.length}: ${allPowers.map((p) => p.id).join(', ')}`);
+      const withPowers = scriptedBattles(
+        content,
+        (id) => {
+          const def = content.battles.find((b) => b.id === id);
+          if (def?.expectParty?.length) return namedParty(content.units, def.expectParty);
+          const ch = battleChapter.get(id) ?? 1;
+          return defaultParty(content.units, ch === 1 ? 1 : ch === 2 ? 2 : 3, ch);
+        },
+        Math.max(20, Math.floor(runs / 2)),
+        () => allPowers,
+      );
+      const before = new Map(rep.map((r) => [r.battle, r.winrate]));
+      for (const r of withPowers) {
+        const was = before.get(r.battle) ?? 0;
+        const delta = (r.winrate - was) * 100;
+        console.log(
+          `   ${r.battle.padEnd(24)} побед ${(r.winrate * 100).toFixed(0)}%  ` +
+            `(без умений ${(was * 100).toFixed(0)}%, ${delta >= 0 ? '+' : ''}${delta.toFixed(0)} пунктов)`,
+        );
+      }
+      summary['scriptedBattlesWithPowers'] = withPowers;
+    }
+
+    // Воспроизводимость проверяется И с умениями: они такой же участник боя.
+    const det = determinismCheck(content, party, allPowers);
     console.log(det.ok ? 'Детерминизм: OK' : `Детерминизм НАРУШЕН в бою ${det.battle}`);
     if (!det.ok) failed = true;
   }

@@ -6,5 +6,6 @@ export * from './conditions.js';
 export * from './codex.js';
 export * from './dialogue.js';
 export * from './combat.js';
+export * from './powers.js';
 export * from './progression.js';
 export * from './save.js';

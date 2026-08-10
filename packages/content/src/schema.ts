@@ -253,6 +253,33 @@ export const zLife = z.object({
   grants: z.array(zEffect).optional(),
 });
 
+/**
+ * Поправка к умению игрока. Пустой объект отклоняется: запись, которая ничего
+ * не делает, — это не «нейтральное усиление», а забытая строка канона.
+ */
+export const zAbilityAmplify = z
+  .object({
+    power: z.number().optional(),
+    cooldown: z.number().int().optional(),
+    effectScale: z.number().min(0).optional(),
+    turns: z.number().int().optional(),
+    piercing: z.boolean().optional(),
+  })
+  .refine((a) => Object.values(a).some((v) => v !== undefined), {
+    message: 'Усиление пустое: ни одно поле не задано',
+  });
+
+/** Что воспоминание делает с умениями игрока: даёт / усиливает / отнимает. */
+export const zMemoryPower = z.discriminatedUnion('kind', [
+  z.object({
+    kind: z.literal('grant'),
+    ability: z.string().min(1),
+    costsTurn: z.boolean().optional(),
+  }),
+  z.object({ kind: z.literal('amplify'), ability: z.string().min(1), amplify: zAbilityAmplify }),
+  z.object({ kind: z.literal('revoke'), ability: z.string().min(1), note: zLocalized.optional() }),
+]);
+
 export const zMemory = z.object({
   id: z.string().min(1),
   life: z.string(),
@@ -261,6 +288,8 @@ export const zMemory = z.object({
   icon: z.string(),
   cost: z.number().int().min(1),
   grants: z.array(zEffect).optional(),
+  /** Необязательно: воспоминания, написанные до умений, валидны как есть. */
+  powers: z.array(zMemoryPower).min(1).optional(),
 });
 
 export const zDeath = z.object({

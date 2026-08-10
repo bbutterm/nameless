@@ -6,6 +6,8 @@ import type {
   BattleUnitState,
   ContentBundle,
   PartyUnit,
+  PlayerAbility,
+  PlayerLoadout,
   Row,
   Side,
   StatusEffect,
@@ -46,7 +48,18 @@ export interface BattleState {
   events: BattleEvent[];
   outcome: BattleOutcome;
   turnLimit: number;
+  /**
+   * Умения самого игрока на этот бой (от закреплённых воспоминаний).
+   *
+   * Живут в состоянии боя, а не в `CombatIndex`, по двум причинам: у них есть
+   * изменяемая часть (перезарядка), и бой обязан быть самодостаточным —
+   * реплей по сиду не должен зависеть от того, какой контент подсунули рядом.
+   */
+  player: PlayerLoadout;
 }
+
+/** Пустой набор: бой без умений игрока ведёт себя ровно как до их появления. */
+const EMPTY_LOADOUT: PlayerLoadout = { abilities: [], cooldowns: {} };
 
 export interface CombatIndex {
   units: Map<string, UnitDef>;
@@ -107,11 +120,17 @@ function makeUnit(
   };
 }
 
+/**
+ * @param powers умения игрока (из `derivePlayerPowers`). Не передали — бой
+ * идёт как раньше: параметр необязателен намеренно, чтобы симулятор, тесты и
+ * старые вызовы клиента продолжали мерить ровно то, что мерили.
+ */
 export function startBattle(
   idx: CombatIndex,
   battle: BattleDef,
   party: PartyUnit[],
   seed: string,
+  powers?: readonly PlayerAbility[],
 ): BattleState {
   const rng = new Rng(`${seed}:${battle.id}`);
   const units: BattleUnitState[] = [];
@@ -136,6 +155,21 @@ export function startBattle(
     }
   }
 
+  // Умения игрока входят в бой готовыми (с поправкой на initialCooldown).
+  // Перезарядка МЕЖДУ боями не переносится, и это решение, а не упущение:
+  // 1) состояние боя нигде не сохраняется, перенос потребовал бы нового поля в
+  //    GameState и подъёма версии сейва — платы за то, чего канон не просил;
+  // 2) воспоминание — не расходник: оно закреплено навсегда, и «умение ещё не
+  //    отдохнуло с прошлой драки» противоречит тому, чем оно является;
+  // 3) симулятор гоняет бои независимо друг от друга; перенос сделал бы
+  //    прогоны зависимыми, и балансовый коридор перестал бы что-либо значить.
+  // Если канон захочет ресурс, переживающий бой (DIRECTION_COMBAT C2), это
+  // будет отдельное поле GameState с миграцией, а не тихая правка здесь.
+  const loadout: PlayerLoadout = { abilities: [...(powers ?? [])], cooldowns: {} };
+  for (const p of loadout.abilities) {
+    loadout.cooldowns[p.id] = p.ability.initialCooldown ?? 0;
+  }
+
   const state: BattleState = {
     battleId: battle.id,
     rng: rng.snapshot(),
@@ -145,6 +179,7 @@ export function startBattle(
     units,
     events: [],
     outcome: 'ongoing',
+    player: loadout,
     // 0 в данных означает «без лимита» (так объявлено в BattleDef), а не «ноль ходов»:
     // буквальное чтение превращало такой бой в мгновенное поражение.
     turnLimit: battle.turnLimit === undefined ? DEFAULT_TURN_LIMIT : battle.turnLimit || Number.MAX_SAFE_INTEGER,
@@ -197,6 +232,18 @@ export function beginRound(idx: CombatIndex, state: BattleState): BattleState {
     }
   }
 
+  // Перезарядка умений игрока тикает теми же раундами боя, что и у юнитов:
+  // другого счёта времени в бою нет, а два разных счёта игрок бы не свёл.
+  // Список умений копируется по ссылке сознательно — он неизменяем внутри боя,
+  // меняются только числа перезарядки, и они копируются поштучно.
+  const player: PlayerLoadout = {
+    abilities: (state.player ?? EMPTY_LOADOUT).abilities,
+    cooldowns: { ...(state.player ?? EMPTY_LOADOUT).cooldowns },
+  };
+  for (const key of Object.keys(player.cooldowns)) {
+    player.cooldowns[key] = Math.max(0, (player.cooldowns[key] ?? 0) - 1);
+  }
+
   const alive = units.filter((u) => u.alive);
   const order = alive
     .map((u) => ({ uid: u.uid, init: effectiveStat(u, 'initiative') + rng.float(0, 0.999) }))
@@ -207,6 +254,7 @@ export function beginRound(idx: CombatIndex, state: BattleState): BattleState {
     ...state,
     round,
     units,
+    player,
     order,
     turnIndex: 0,
     events: [...state.events, ...events],
@@ -248,6 +296,55 @@ export function unitAbilities(idx: CombatIndex, u: BattleUnitState): Ability[] {
 
 export function readyAbilities(idx: CombatIndex, u: BattleUnitState): Ability[] {
   return unitAbilities(idx, u).filter((a) => (u.cooldowns[a.id] ?? 0) <= 0);
+}
+
+/**
+ * Умения игрока, готовые прямо сейчас, — для конкретного носителя.
+ *
+ * Носителем может быть ЛЮБАЯ живая карта своей стороны: умение принадлежит
+ * игроку, карта только даёт руку. Перезарядка при этом одна на всех.
+ */
+export function readyPlayerAbilities(state: BattleState, u: BattleUnitState): PlayerAbility[] {
+  const loadout = state.player ?? EMPTY_LOADOUT;
+  if (u.side !== 'player' || !u.alive) return [];
+  return loadout.abilities.filter((p) => (loadout.cooldowns[p.id] ?? 0) <= 0);
+}
+
+/**
+ * Разбор действия: чьё это умение, каким оно вышло после усилений, откуда
+ * читать перезарядку и тратит ли оно ход.
+ *
+ * Способность СВОЕГО юнита имеет приоритет над одноимённым умением игрока:
+ * у неё своя перезарядка на карте, и подмена её общей была бы тихим изменением
+ * поведения существующих юнитов. Совпадение id — повод для предупреждения
+ * валидатора, а не для догадок движка.
+ */
+function resolveAction(
+  idx: CombatIndex,
+  state: BattleState,
+  actor: BattleUnitState,
+  abilityId: AbilityId,
+): { ability: Ability; fromPlayer: boolean; cooldown: number; spendsTurn: boolean } | undefined {
+  const owns = idx.units.get(actor.defId)?.abilities.includes(abilityId) ?? false;
+  if (owns) {
+    const ability = idx.abilities.get(abilityId);
+    if (!ability) return undefined;
+    return { ability, fromPlayer: false, cooldown: actor.cooldowns[abilityId] ?? 0, spendsTurn: true };
+  }
+  if (actor.side !== 'player') return undefined;
+  const loadout = state.player ?? EMPTY_LOADOUT;
+  const power = loadout.abilities.find((p) => p.id === abilityId);
+  if (!power) return undefined;
+  return {
+    ability: power.ability,
+    fromPlayer: true,
+    cooldown: loadout.cooldowns[abilityId] ?? 0,
+    // Умение вне очереди обязано иметь перезарядку: иначе носитель применял бы
+    // его бесконечно, очередь не двигалась бы, и бой замирал. Контент с такой
+    // ошибкой валидатор краснит, а движок здесь не падает и не зависает — он
+    // просто берёт плату ходом.
+    spendsTurn: power.costsTurn || power.ability.cooldown <= 0,
+  };
 }
 
 /**
@@ -367,15 +464,16 @@ export function act(idx: CombatIndex, state: BattleState, action: Action): Battl
 
   // Способность должна существовать, принадлежать актору и быть готовой:
   // без проверки владения кулдаун чужой способности читался как 0,
-  // и любой юнит мог применить что угодно из общего реестра.
-  const ability = idx.abilities.get(action.ability);
-  const owns = ability ? (idx.units.get(actor.defId)?.abilities.includes(ability.id) ?? false) : false;
-  if (!ability || !owns || (actor.cooldowns[ability.id] ?? 0) > 0) {
+  // и любой юнит мог применить что угодно из общего реестра. «Принадлежать» —
+  // это либо своя способность карты, либо умение игрока у карты своей стороны.
+  const resolved = resolveAction(idx, state, actor, action.ability);
+  if (!resolved || resolved.cooldown > 0) {
     return advanceTurn(idx, {
       ...state,
       events: [...state.events, { type: 'blocked', uid: actor.uid, reason: 'ability' }],
     });
   }
+  const { ability, fromPlayer, spendsTurn } = resolved;
 
   // Одноцелевые способности обязаны бить по легальной живой цели. Раньше
   // мёртвая цель давала «пустой» ход со сгоревшим кулдауном, а прямой uid
@@ -424,16 +522,28 @@ export function act(idx: CombatIndex, state: BattleState, action: Action): Battl
     }
   }
 
-  self.cooldowns = { ...self.cooldowns, [ability.id]: ability.cooldown };
-  self.acted = true;
+  // Перезарядка умения игрока пишется в общий счёт, а не на карту носителя:
+  // иначе умение можно было бы «перезарядить», произнеся его другой картой.
+  const loadout = state.player ?? EMPTY_LOADOUT;
+  const player: PlayerLoadout = fromPlayer
+    ? { abilities: loadout.abilities, cooldowns: { ...loadout.cooldowns, [ability.id]: ability.cooldown } }
+    : loadout;
+  if (!fromPlayer) self.cooldowns = { ...self.cooldowns, [ability.id]: ability.cooldown };
+  if (spendsTurn) self.acted = true;
 
   const next: BattleState = {
     ...state,
     units,
+    player,
     events: [...state.events, ...events],
     rng: rng.snapshot(),
   };
-  return advanceTurn(idx, checkOutcome(next));
+  const settled = checkOutcome(next);
+  // Умение вне очереди хода не двигает очередь: носитель применил его и всё
+  // ещё ходит. Бесконечности нет — такое умение обязано иметь перезарядку
+  // (см. resolveAction), а исход боя проверен до возврата.
+  if (!spendsTurn && settled.outcome === 'ongoing') return settled;
+  return advanceTurn(idx, settled);
 }
 
 function applyBattleEffect(
@@ -569,7 +679,22 @@ export function planAction(
   state: BattleState,
   actor: BattleUnitState,
 ): Action | undefined {
-  const ready = readyAbilities(idx, actor);
+  // Бот-игрок ПОЛЬЗУЕТСЯ умениями игрока — сознательно.
+  //
+  // Живым игроком бот не управляет; обе стороны ботами гоняет только симулятор.
+  // Не дай мы боту умения — балансовый коридор не измерил бы их НИКОГДА:
+  // сюжетные бои считались бы отрядом без умений, автор канона получал бы
+  // зелёный отчёт на умение любой силы, и первым, кто заметил бы перекос, был
+  // бы игрок. Поэтому умения входят в общий список готовых наравне со
+  // способностями карты и оцениваются той же эвристикой.
+  //
+  // На сегодняшние цифры это не влияет: симулятор загрузку не передаёт, набор
+  // пуст, список готовых прежний. Когда канон принесёт умения, симулятор
+  // начнёт передавать ожидаемый набор главы — и коридор поедет честно.
+  const ready = [
+    ...readyAbilities(idx, actor),
+    ...readyPlayerAbilities(state, actor).map((p) => p.ability),
+  ];
   if (ready.length === 0) return undefined;
   const rng = Rng.restore(state.rng).fork(`ai:${actor.uid}:${state.round}:${state.turnIndex}`);
 
@@ -677,14 +802,66 @@ export function autoAct(idx: CombatIndex, state: BattleState): BattleState {
   if (!plan) {
     return act(idx, state, { ability: '__pass__' });
   }
-  // Цель могла умереть до хода — переприцеливаемся.
-  const ab = idx.abilities.get(plan.ability);
+  // Цель могла умереть до хода — переприцеливаемся. Способность берём
+  // разобранной: у умения игрока `piercing` может быть добавлен усилением,
+  // и запись из общего реестра дала бы неверный список законных целей.
+  const ab = resolveAction(idx, state, actor, plan.ability)?.ability;
   const target = state.units.find((u) => u.uid === plan.targetUid);
   if (ab && (!target || !target.alive)) {
     const alt = legalTargets(state, actor.uid, ab).sort((a, b) => a.hp - b.hp)[0];
     return act(idx, state, { ability: plan.ability, targetUid: alt?.uid });
   }
   return act(idx, state, plan);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Панель умений игрока: что отдать клиенту
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Почему умение нельзя нажать прямо сейчас.
+ * `revoked` тут нет намеренно: отнятое в бой не попадает вовсе, и его место —
+ * на экране памяти (`derivePlayerPowers(...).revoked`), а не в панели боя.
+ */
+export type PlayerAbilityState =
+  | { kind: 'ready' }
+  | { kind: 'cooldown'; turns: number }
+  | { kind: 'unavailable'; reason: 'battleOver' | 'notYourTurn' | 'noTargets' };
+
+export interface PlayerAbilitySlot {
+  power: PlayerAbility;
+  state: PlayerAbilityState;
+  /** Кто произнесёт умение, если нажать сейчас. */
+  actorUid?: string;
+  /** Законные цели — клиенту не надо звать legalTargets отдельно. */
+  targets: string[];
+}
+
+/**
+ * Состояние умений игрока для нижней панели. Чистая функция от состояния боя:
+ * ничего не решает и ничего не меняет — клиент рисует ровно то, что здесь.
+ *
+ * Порядок стабилен (умения отсортированы ещё в `derivePlayerPowers`), поэтому
+ * кнопки не прыгают между ходами.
+ */
+export function playerAbilityBar(state: BattleState): PlayerAbilitySlot[] {
+  const loadout = state.player ?? EMPTY_LOADOUT;
+  const actor = currentActor(state);
+  const over = state.outcome !== 'ongoing';
+  const mine = !over && actor?.side === 'player';
+  return loadout.abilities.map((power) => {
+    const cd = loadout.cooldowns[power.id] ?? 0;
+    if (over) return { power, state: { kind: 'unavailable', reason: 'battleOver' }, targets: [] };
+    // Перезарядка называется раньше «не твой ход»: игрок и так видит, чей ход,
+    // а вот сколько ждать умение — только здесь.
+    if (cd > 0) return { power, state: { kind: 'cooldown', turns: cd }, targets: [] };
+    if (!mine || !actor) return { power, state: { kind: 'unavailable', reason: 'notYourTurn' }, targets: [] };
+    const targets = legalTargets(state, actor.uid, power.ability).map((u) => u.uid);
+    if (targets.length === 0) {
+      return { power, state: { kind: 'unavailable', reason: 'noTargets' }, actorUid: actor.uid, targets };
+    }
+    return { power, state: { kind: 'ready' }, actorUid: actor.uid, targets };
+  });
 }
 
 /** Прогон боя до конца обеими сторонами-ботами. Используется симулятором. */
