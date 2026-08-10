@@ -48,6 +48,8 @@ export function evalCondition(cond: Condition | undefined, state: GameState): bo
       return compare(state.counters[cond.counter] ?? 0, cond.op, cond.value);
     case 'memory':
       return state.lockedMemories.includes(cond.memory);
+    case 'fragments':
+      return compare(state.fragments[cond.memory] ?? 0, cond.op, cond.value);
     case 'life':
       return state.awakenedLives.includes(cond.life);
     case 'visited':
@@ -89,6 +91,7 @@ export function collectRefs(cond: Condition | undefined, out: ConditionRefs = em
       out.counters.add(cond.counter);
       break;
     case 'memory':
+    case 'fragments':
       out.memories.add(cond.memory);
       break;
     case 'life':
