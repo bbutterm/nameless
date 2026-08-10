@@ -43,6 +43,18 @@ import {
 export const COUNTER_SCENE = 'silver_counter';
 export const LADDER_ENTRY = 'resonance';
 
+/**
+ * Единственное место в игре, которое умеет отказать, и единственный узел,
+ * которым оно отказывает. Прилавок Заклада платит всегда — это разница
+ * между конторой, которая обязана выдать, и сходом, который вправе не
+ * подтвердить. Обе константы читаются метриками ниже: отказ в другой сцене
+ * считается ошибкой, а не чертой.
+ */
+export const REFUSAL_SCENE = 'skhod';
+export const REFUSAL_NODE = 'golos_empty';
+/** Отказать можно только пустому: два осколка поступками уже обязывают выдать. */
+export const REFUSAL_MAX_DEEDS = 2;
+
 /** Представители классов эквивалентности оси: пороги мира — ±20/±40/±60 и 0. */
 export const AXIS_CLASS_REPS = [-60, -40, -20, -10, 0, 20, 40, 60];
 
@@ -330,8 +342,29 @@ export interface PersonaRun {
   lots: number;
   /** Смертей, на которых архив не отозвался (реплика + неустойка). */
   noEcho: number;
-  /** Смертей без лота и без реплики — этого быть не должно. */
+  /**
+   * Смертей без следа — этого быть не должно.
+   *
+   * След — это лот ИЛИ запись отказа. Отличать их важно: смерть без лота
+   * не всегда молчалива. Сход умеет отказать пришедшему пустым, и отказ
+   * он проговаривает вслух и заносит в Помянник — то есть церемония
+   * ответила, просто ответила «нет». Молчалива смерть, на которой не
+   * случилось ни того, ни другого.
+   */
   silent: number;
+  /**
+   * Смертей, где Сход отказал пустому. Не ошибка, а черта первой главы:
+   * забег, за который игрок не набрал и двух осколков поступками,
+   * заканчивается ничем, и это единственное место в игре, где так можно.
+   */
+  refused: number;
+  /**
+   * Отказ при двух и более осколках поступками — вот это уже ошибка:
+   * заработанное не отдали.
+   */
+  refusedWithDeeds: number;
+  /** Отказ не на Сходе. Отказывать умеет только он, Прилавок платит всегда. */
+  refusedElsewhere: number;
   /** Лестница досыпала, а лот не закрепился — этого быть не должно. */
   fundedButNoLot: number;
   /** Осока сказала «не отзывается», а лот всё же вышел — шов. */
@@ -402,6 +435,9 @@ export function personaRun(
     lots: 0,
     noEcho: 0,
     silent: 0,
+    refused: 0,
+    refusedWithDeeds: 0,
+    refusedElsewhere: 0,
     fundedButNoLot: 0,
     seam: 0,
     deedShards: {},
@@ -413,10 +449,15 @@ export function personaRun(
   // личность может ходить кругами сколько угодно. Застрявшую отправляем в
   // очередь сами — мерим церемонию, а не проходимость.
   let stall = 0;
+  // Прошёл ли забег через отказ Схода. Считается по узлу, а не по строке
+  // Помянника: `codexPending` копится через смерти и после первого отказа
+  // отвечал бы «да» всегда.
+  let refusedHere: { scene: string } | undefined;
 
   for (let step = 0; step < 200_000 && run.deaths < targetDeaths; step++) {
     const r = resolve(idx, state);
     state = r.state;
+    if (state.node === REFUSAL_NODE) refusedHere = { scene: state.scene };
     if (r.step.kind === 'error' || r.step.kind === 'end' || ++stall > 400) {
       stall = 0;
       state = normalizeEntry(idx, goTo(state, `scene:${COUNTER_SCENE}#queue_entry`));
@@ -467,10 +508,21 @@ export function personaRun(
       // больше. Ноль означает, что лестница не сделала ничего.
       const granted = resonanceTotal(state) - resSeen;
       resSeen += granted;
+      // Осколки поступками считаются ДО церемонии: после неё лот уже
+      // закреплён, и вопрос «заработал ли игрок отказ» стал бы неотвечаем.
+      const deedsBefore = content.memories.reduce((sum, m) => sum + deedFragments(state, m), 0);
+      const refusal = refusedHere;
+      refusedHere = undefined;
       const out = applyDeath(state, content, death, idx.effectCtx);
       state = out.state;
       run.deaths++;
       stall = 0;
+      if (refusal) {
+        run.refused++;
+        // Отказ разрешён ровно одному месту в игре и ровно одной причине.
+        if (refusal.scene !== REFUSAL_SCENE) run.refusedElsewhere++;
+        if (deedsBefore >= REFUSAL_MAX_DEEDS) run.refusedWithDeeds++;
+      }
       if (granted >= 2) {
         if (out.memory) run.lots++;
         else run.fundedButNoLot++;
@@ -479,7 +531,8 @@ export function personaRun(
         if (out.memory) run.seam++;
       } else if (out.memory) {
         run.lots++;
-      } else {
+      } else if (!refusal) {
+        // Ни лота, ни отказа — церемония промолчала. Вот это и запрещено.
         run.silent++;
       }
       continue;

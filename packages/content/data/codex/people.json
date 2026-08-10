@@ -452,6 +452,19 @@
           "kind": "meet",
           "speaker": "golos_iz_trukhi"
         }
+      },
+      {
+        "id": "golos_iz_trukhi_l3",
+        "text": {
+          "ru": "Сход, не подтвердивший никого, она заносит отдельно — теми же словами, что и подтверждённых, только короче: «не подтвердил ничего». Пустое, говорит, помнить труднее всего: его никто не оспорит.",
+          "en": "A gathering that confirmed no one she records apart, in the same words as the confirmed, only shorter: \"confirmed nothing\". The empty, she says, is hardest to remember: no one disputes it."
+        },
+        "source": "after_death",
+        "unlock": {
+          "kind": "node",
+          "scene": "skhod",
+          "node": "golos_empty"
+        }
       }
     ]
   },
