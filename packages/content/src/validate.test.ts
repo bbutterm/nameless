@@ -809,7 +809,7 @@ describe('умения от воспоминаний', () => {
 
   it('ловит режимный эффект в обычной способности', () => {
     const b = bundle({
-      abilities: [ability('hit'), ability('pw', { power: 0, effects: [{ kind: 'idle_toll', amount: 4 }] })],
+      abilities: [ability('hit'), ability('pw', { power: 0, effects: [{ kind: 'heal_tax', factor: 0.75 }] })],
       units: [unit('u', { abilities: ['hit'] })],
       lives: [life('l1', ['m1'])],
       memories: [withPowers([{ kind: 'grant', ability: 'pw' }])],

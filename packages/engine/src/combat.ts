@@ -78,11 +78,13 @@ export interface BattleState {
    */
   reveal: boolean;
   /**
-   * Сколько раундов действует общий запрет статусов («Год Голой Правды»,
-   * Чистописец III). Пока больше нуля — ни одна сторона не может наложить ни
-   * бафа, ни щита, ни дота, ни дебафа, ни оглушения. Урон и лечение работают.
+   * «Первая закрытая строка» (MEMORY_POWERS §C.1) уже прозвучала.
+   *
+   * У пассива жеста нет, и сродственные ему юниты не могли откликнуться
+   * никогда — умение не применяют. Их момент другой: первая гибель врага в
+   * бою. Флаг держит обещание «раз в бой».
    */
-  statusLock: number;
+  firstLine: boolean;
   /**
    * Умения самого игрока на этот бой (от закреплённых воспоминаний).
    *
@@ -216,7 +218,7 @@ export function startBattle(
     outcome: 'ongoing',
     player: loadout,
     reveal: false,
-    statusLock: 0,
+    firstLine: false,
     // 0 в данных означает «без лимита» (так объявлено в BattleDef), а не «ноль ходов»:
     // буквальное чтение превращало такой бой в мгновенное поражение.
     turnLimit: battle.turnLimit === undefined ? DEFAULT_TURN_LIMIT : battle.turnLimit || Number.MAX_SAFE_INTEGER,
@@ -240,37 +242,49 @@ function applyPassives(idx: CombatIndex, state: BattleState): BattleState {
   const events: BattleEvent[] = [];
   let reveal = state.reveal;
 
+  const tax = healTax(state);
   for (const p of passives) {
     for (const eff of p.ability.effects ?? []) {
       if (eff.kind === 'reveal') {
         reveal = true;
         continue;
       }
-      // Пеня за бездействие читается в конце каждого раунда прямо из набора
+      // Пошлина на лечение читается в момент каждого лечения прямо из набора
       // умений — отдельного поля состояния под неё не заводится.
-      if (eff.kind === 'idle_toll') continue;
+      if (eff.kind === 'heal_tax') continue;
       const side: Side = p.ability.target.startsWith('enemy') ? 'enemy' : 'player';
       for (const t of units.filter((u) => u.alive && u.side === side)) {
         // Носителя у пассива нет: умение принадлежит игроку, а не карте.
         // Для эффектов, считающих от atk носителя, это значило бы «от atk цели»,
         // поэтому пассивам разрешены только фиксированные числа (см. валидатор).
-        applyBattleEffect(rng, t, t, eff, events, state.statusLock > 0);
+        applyBattleEffect(rng, t, t, eff, events, tax);
       }
     }
   }
   return { ...state, units, reveal, events: [...state.events, ...events], rng: rng.snapshot() };
 }
 
-/** Пеня за бездействие, объявленная пассивами игрока (Перечень III). */
-function idleToll(state: BattleState): number {
-  let toll = 0;
+/**
+ * Множитель лечения союзников, объявленный пассивами игрока (Перечень III).
+ *
+ * Перемножается, а не складывается: два умения, каждое «×0.75», обязаны дать
+ * ×0.5625, а не «−50%». Пассивов с пошлиной сегодня один, но правило свёртки
+ * лучше задать до того, как появится второй.
+ */
+export function healTax(state: BattleState): number {
+  let factor = 1;
   for (const p of (state.player ?? EMPTY_LOADOUT).abilities) {
     if (!p.ability.passive) continue;
     for (const eff of p.ability.effects ?? []) {
-      if (eff.kind === 'idle_toll') toll += eff.amount;
+      if (eff.kind === 'heal_tax') factor *= eff.factor;
     }
   }
-  return toll;
+  return factor;
+}
+
+/** Лечение с учётом пошлины. Округление ВНИЗ — так объявлено в §A.6. */
+function taxed(amount: number, tax: number): number {
+  return tax === 1 ? amount : Math.floor(amount * tax);
 }
 
 function living(state: BattleState, side?: Side): BattleUnitState[] {
@@ -297,22 +311,7 @@ export function beginRound(idx: CombatIndex, state: BattleState): BattleState {
   // Урон/лечение от статусов, тик длительностей.
   const events: BattleEvent[] = [{ type: 'round', round }];
 
-  // Пеня за бездействие — это конец ПРОШЛОГО раунда, поэтому читается по
-  // `acted` предыдущего состояния и только начиная со второго раунда: в первом
-  // ещё никто не мог бездействовать (MEMORY_POWERS §A.6, ступень III).
-  const toll = idleToll(state);
-  if (toll > 0 && state.round >= 1) {
-    const before = new Map(state.units.map((u) => [u.uid, u.acted]));
-    for (const u of units) {
-      if (!u.alive || u.side !== 'player' || before.get(u.uid)) continue;
-      u.hp = Math.max(0, u.hp - toll);
-      events.push({ type: 'damage', uid: u.uid, amount: toll, hpAfter: u.hp, crit: false });
-      if (u.hp === 0) {
-        u.alive = false;
-        events.push({ type: 'death', uid: u.uid });
-      }
-    }
-  }
+  const tax = healTax(state);
 
   for (const u of units) {
     if (!u.alive) continue;
@@ -336,9 +335,13 @@ export function beginRound(idx: CombatIndex, state: BattleState): BattleState {
       for (const st of ticked) {
         if (st.turns > 0) continue;
         if (st.kind !== 'shield' || st.tag !== SHIELD_REFUND_TAG || st.amount <= 0) continue;
-        if (!accepts(u, 'heal_flat', false)) continue;
-        u.hp = Math.min(u.maxHp, u.hp + st.amount);
-        events.push({ type: 'heal', uid: u.uid, amount: st.amount, hpAfter: u.hp });
+        if (!accepts(u, 'heal_flat')) continue;
+        // Возврат посула — тоже лечение, и опись берёт свою четверть и с него:
+        // иначе цена Перечня обходилась бы вторым умением.
+        const back = u.side === 'player' ? taxed(st.amount, tax) : st.amount;
+        if (back <= 0) continue;
+        u.hp = Math.min(u.maxHp, u.hp + back);
+        events.push({ type: 'heal', uid: u.uid, amount: back, hpAfter: u.hp });
       }
     }
     u.statuses = ticked.filter((st) => st.turns > 0);
@@ -372,8 +375,6 @@ export function beginRound(idx: CombatIndex, state: BattleState): BattleState {
     player,
     order,
     turnIndex: 0,
-    // Запрет статусов живёт раундами боя — тем же счётом, что и всё остальное.
-    statusLock: Math.max(0, (state.statusLock ?? 0) - 1),
     events: [...state.events, ...events],
     rng: rng.snapshot(),
   };
@@ -381,6 +382,11 @@ export function beginRound(idx: CombatIndex, state: BattleState): BattleState {
   // очередь пуста, и skipDeadOrStunned заводил бы новые раунды рекурсивно —
   // при turnLimit «без лимита» это переполняло стек, а с лимитом ничья
   // ошибочно превращалась в поражение по лимиту.
+  next = checkOutcome(next);
+  if (next.outcome !== 'ongoing') return next;
+  // Дот мог закрыть строку описи не хуже удара: первую гибель врага ловим и
+  // здесь, иначе отклик Перечня зависел бы от того, кто именно добил.
+  next = firstLineResponses(idx, next);
   next = checkOutcome(next);
   if (next.outcome !== 'ongoing') return next;
   next = rollIntents(idx, next);
@@ -636,14 +642,14 @@ export function act(idx: CombatIndex, state: BattleState, action: Action): Battl
   ];
 
   const { perTarget, wide } = splitEffects(ability);
-  let statusLock = state.statusLock ?? 0;
+  const tax = healTax(state);
 
   for (const eff of perTarget) {
     for (const tRef of targets) {
       const t = units.find((u) => u.uid === tRef.uid);
       // Мёртвая цель пропускается всем, кроме воскрешения: оно ради неё и есть.
       if (!t || (!t.alive && eff.kind !== 'revive')) continue;
-      applyBattleEffect(rng, self, t, eff, events, statusLock > 0);
+      applyBattleEffect(rng, self, t, eff, events, tax);
       if (t.hp <= 0 && t.alive) {
         t.alive = false;
         t.hp = 0;
@@ -652,9 +658,10 @@ export function act(idx: CombatIndex, state: BattleState, action: Action): Battl
     }
   }
 
-  // Всеобщие эффекты — после поцелевых: «Год Голой Правды» обязан снять и то,
-  // что умение только что повесило само, иначе правда выбирала бы сторону.
-  statusLock = applyWideEffects(units, self, wide, events, statusLock);
+  // Всеобщие эффекты — после поцелевых: цена «Года Голой Правды» снимает бафы
+  // и щиты со своих ПОСЛЕ того, как протокол лёг на чужих. Собственную работу
+  // умение при этом не смывает — хроника переживает год печати.
+  applyWideEffects(units, self, wide, events, tax);
 
   // Перезарядка умения игрока пишется в общий счёт, а не на карту носителя:
   // иначе умение можно было бы «перезарядить», произнеся его другой картой.
@@ -688,8 +695,9 @@ export function act(idx: CombatIndex, state: BattleState, action: Action): Battl
     // цель под него — под то, что применить уже нельзя.
     affinityResponses(
       idx,
-      { ...state, units, statusLock, player },
-      self,
+      { ...state, units, player },
+      self.side,
+      self.uid,
       resolved.life,
       action.targetUid,
       rng,
@@ -697,14 +705,16 @@ export function act(idx: CombatIndex, state: BattleState, action: Action): Battl
     );
   }
 
-  const next: BattleState = {
+  let next: BattleState = {
     ...state,
     units,
     player,
-    statusLock,
     events: [...state.events, ...events],
     rng: rng.snapshot(),
   };
+  // Первая закрытая строка — отклик пассива (§C.1). Считается после всего
+  // остального в ходе: строка закрывается гибелью, а не намерением.
+  next = firstLineResponses(idx, next);
   const settled = checkOutcome(next);
   // Умение вне очереди хода не двигает очередь: носитель применил его и всё
   // ещё ходит. Бесконечности нет — такое умение обязано иметь перезарядку
@@ -712,16 +722,6 @@ export function act(idx: CombatIndex, state: BattleState, action: Action): Battl
   if (!spendsTurn && settled.outcome === 'ongoing') return settled;
   return advanceTurn(idx, settled);
 }
-
-/** Статусы, которые «Год Голой Правды» запрещает накладывать кому бы то ни было. */
-const STATUS_KINDS: ReadonlySet<BattleEffect['kind']> = new Set([
-  'buff',
-  'debuff',
-  'shield',
-  'dot',
-  'stun',
-  'recorded',
-]);
 
 /**
  * Приписки, которые запрещает протокол: «без прибавления».
@@ -739,11 +739,9 @@ export function isRecorded(u: BattleUnitState): boolean {
   return u.statuses.some((s) => s.kind === 'recorded' && s.turns > 0);
 }
 
-/** Примет ли цель этот эффект прямо сейчас — с учётом протокола и общего запрета. */
-function accepts(target: BattleUnitState, kind: BattleEffect['kind'], locked: boolean): boolean {
-  if (locked && STATUS_KINDS.has(kind)) return false;
-  if (ADDITIONS.has(kind) && isRecorded(target)) return false;
-  return true;
+/** Примет ли цель этот эффект прямо сейчас — с учётом протокола. */
+function accepts(target: BattleUnitState, kind: BattleEffect['kind']): boolean {
+  return !(ADDITIONS.has(kind) && isRecorded(target));
 }
 
 function applyBattleEffect(
@@ -752,12 +750,18 @@ function applyBattleEffect(
   target: BattleUnitState,
   eff: BattleEffect,
   events: BattleEvent[],
-  locked: boolean,
+  /**
+   * Множитель лечения союзников (Перечень III). Единица — «пошлины нет», и
+   * тогда путь исполнения ровно тот же, что был до появления умений.
+   */
+  healFactor = 1,
 ): void {
-  if (!accepts(target, eff.kind, locked)) {
-    events.push({ type: 'blocked', uid: target.uid, reason: locked ? 'bare_truth' : 'recorded' });
+  if (!accepts(target, eff.kind)) {
+    events.push({ type: 'blocked', uid: target.uid, reason: 'recorded' });
     return;
   }
+  // Пошлина берётся только со своих: «еда не внесена» — про свой стол.
+  const tax = (v: number): number => (target.side === 'player' ? taxed(v, healFactor) : v);
   switch (eff.kind) {
     case 'damage': {
       const { amount, crit } = computeDamage(rng, actor, target, eff.power);
@@ -776,15 +780,17 @@ function applyBattleEffect(
       break;
     }
     case 'heal': {
-      const amount = Math.max(1, Math.round(effectiveStat(actor, 'atk') * eff.power));
+      const amount = tax(Math.max(1, Math.round(effectiveStat(actor, 'atk') * eff.power)));
+      if (amount <= 0) break;
       target.hp = Math.min(target.maxHp, target.hp + amount);
       events.push({ type: 'heal', uid: target.uid, amount, hpAfter: target.hp });
       break;
     }
     case 'heal_flat': {
-      if (eff.amount <= 0) break;
-      target.hp = Math.min(target.maxHp, target.hp + eff.amount);
-      events.push({ type: 'heal', uid: target.uid, amount: eff.amount, hpAfter: target.hp });
+      const amount = tax(eff.amount);
+      if (amount <= 0) break;
+      target.hp = Math.min(target.maxHp, target.hp + amount);
+      events.push({ type: 'heal', uid: target.uid, amount, hpAfter: target.hp });
       break;
     }
     case 'shield':
@@ -832,7 +838,7 @@ function applyBattleEffect(
     case 'revive':
       if (!target.alive) {
         target.alive = true;
-        target.hp = Math.max(1, Math.round(target.maxHp * eff.hpPercent));
+        target.hp = Math.max(1, tax(Math.round(target.maxHp * eff.hpPercent)));
         events.push({ type: 'heal', uid: target.uid, amount: target.hp, hpAfter: target.hp });
       }
       break;
@@ -844,7 +850,7 @@ function applyBattleEffect(
     case 'spare_worst_foe':
     case 'bare_truth':
     case 'reveal':
-    case 'idle_toll':
+    case 'heal_tax':
     case 'shield_refund':
       break;
     default: {
@@ -861,7 +867,7 @@ function isWideEffect(e: BattleEffect): boolean {
     e.kind === 'spare_worst_foe' ||
     e.kind === 'bare_truth' ||
     e.kind === 'reveal' ||
-    e.kind === 'idle_toll' ||
+    e.kind === 'heal_tax' ||
     e.kind === 'shield_refund'
   );
 }
@@ -889,22 +895,21 @@ function splitEffects(ability: Ability): { perTarget: BattleEffect[]; wide: Batt
   return { perTarget, wide };
 }
 
-/** Исполняет всеобщие эффекты. Возвращает новое значение общего запрета статусов. */
+/** Исполняет всеобщие эффекты: у них своя публика, цель способности их не касается. */
 function applyWideEffects(
   units: BattleUnitState[],
   self: BattleUnitState,
   wide: readonly BattleEffect[],
   events: BattleEvent[],
-  statusLock: number,
-): number {
-  let lock = statusLock;
+  healFactor = 1,
+): void {
   for (const eff of wide) {
     switch (eff.kind) {
       case 'rally': {
         for (const u of units) {
           if (!u.alive || u.side !== self.side) continue;
-          if (!accepts(u, 'buff', lock > 0)) {
-            events.push({ type: 'blocked', uid: u.uid, reason: lock > 0 ? 'bare_truth' : 'recorded' });
+          if (!accepts(u, 'buff')) {
+            events.push({ type: 'blocked', uid: u.uid, reason: 'recorded' });
             continue;
           }
           if (eff.amount <= 0) continue;
@@ -922,30 +927,37 @@ function applyWideEffects(
           .slice()
           .sort((a, b) => a.hp / a.maxHp - b.hp / b.maxHp || (a.uid < b.uid ? -1 : 1))[0];
         if (!worst || eff.amount <= 0) break;
-        if (!accepts(worst, 'heal_flat', lock > 0)) {
+        if (!accepts(worst, 'heal_flat')) {
           events.push({ type: 'blocked', uid: worst.uid, reason: 'recorded' });
           break;
         }
-        worst.hp = Math.min(worst.maxHp, worst.hp + eff.amount);
-        events.push({ type: 'heal', uid: worst.uid, amount: eff.amount, hpAfter: worst.hp });
+        // Пошлина описи берётся только со своих, а этот — чужой: подлечить
+        // врага дешевле от того, что герой считает еду, не становится.
+        const back = worst.side === 'player' ? taxed(eff.amount, healFactor) : eff.amount;
+        if (back <= 0) break;
+        worst.hp = Math.min(worst.maxHp, worst.hp + back);
+        events.push({ type: 'heal', uid: worst.uid, amount: back, hpAfter: worst.hp });
         break;
       }
       case 'bare_truth': {
+        // Цена «Года Голой Правды» (§A.5): бафы и щиты слетают и со СВОИХ —
+        // однократно, в момент печати. Хронику, которую умение только что
+        // положило на чужих, оно за собой не смывает: протокол — не прибавление.
         for (const u of units) {
-          if (u.statuses.length === 0) continue;
-          u.statuses = [];
-          events.push({ type: 'status', uid: u.uid, status: 'cleanse', turns: 0 });
+          if (!u.alive || u.side !== self.side) continue;
+          const before = u.statuses.length;
+          u.statuses = u.statuses.filter((s) => s.kind !== 'buff' && s.kind !== 'shield');
+          if (u.statuses.length === before) continue;
+          events.push({ type: 'status', uid: u.uid, status: 'purge', turns: 0 });
         }
-        lock = Math.max(lock, eff.turns);
         break;
       }
       default:
-        // reveal / idle_toll / shield_refund — режимы, а не действия: они уже
+        // reveal / heal_tax / shield_refund — режимы, а не действия: они уже
         // прочитаны там, где имеют смысл (пассивы, тег щита).
         break;
     }
   }
-  return lock;
 }
 
 /** Половина силы, округление ВНИЗ — так объявлено в MEMORY_POWERS §C.1. */
@@ -986,7 +998,13 @@ function halveEffect(eff: BattleEffect): BattleEffect {
 function affinityResponses(
   idx: CombatIndex,
   view: BattleState,
-  donor: BattleUnitState,
+  side: Side,
+  /**
+   * Кто отдал ход за жест героя — он не откликается, он уже заплатил.
+   * У «первой закрытой строки» донора нет: пассив ничьего хода не берёт,
+   * и откликаются все сродственные без исключения.
+   */
+  donorUid: string | undefined,
   life: LifeId,
   heroTargetUid: string | undefined,
   rng: Rng,
@@ -997,8 +1015,8 @@ function affinityResponses(
     .filter(
       (u) =>
         u.alive &&
-        u.side === donor.side &&
-        u.uid !== donor.uid &&
+        u.side === side &&
+        u.uid !== donorUid &&
         (idx.units.get(u.defId)?.traits ?? []).includes(trait),
     )
     // Инициатива — жёсткий порядок (DIRECTION_COMBAT §E.2). Ничьи разводятся
@@ -1036,7 +1054,7 @@ function affinityResponses(
       for (const tRef of targets) {
         const t = view.units.find((u) => u.uid === tRef.uid);
         if (!t || (!t.alive && eff.kind !== 'revive')) continue;
-        applyBattleEffect(rng, r, t, eff, events, view.statusLock > 0);
+        applyBattleEffect(rng, r, t, eff, events, healTax(view));
         if (t.hp <= 0 && t.alive) {
           t.alive = false;
           t.hp = 0;
@@ -1044,8 +1062,46 @@ function affinityResponses(
         }
       }
     }
-    applyWideEffects(view.units, r, wide.map(halveEffect), events, view.statusLock);
+    applyWideEffects(view.units, r, wide.map(halveEffect), events, healTax(view));
   }
+}
+
+/**
+ * «Первая закрытая строка» (MEMORY_POWERS §C.1).
+ *
+ * У Перечня жеста нет — умение пассивное, и до этой правки его сродственные
+ * не откликались НИКОГДА: отклик был привязан к применению, а применять
+ * пассив нельзя. Момент отклика другой: первая гибель врага в бою. Раз в бой,
+ * то же полудействие, ход при этом не тратит никто.
+ *
+ * Правило записано не «если жизнь = Перечень», а «если умение пассивное»:
+ * причина в устройстве умения, а не в его имени, и следующий пассив получит
+ * тот же отклик без правки движка.
+ */
+function firstLineResponses(idx: CombatIndex, state: BattleState): BattleState {
+  if (state.firstLine || state.outcome !== 'ongoing') return state;
+  const passives = (state.player ?? EMPTY_LOADOUT).abilities.filter(
+    (p) => p.ability.passive && p.life,
+  );
+  if (passives.length === 0) return state;
+  // Строка закрывается гибелью врага, а не намерением её закрыть.
+  if (!state.units.some((u) => u.side === 'enemy' && !u.alive)) return state;
+
+  const rng = Rng.restore(state.rng);
+  const units = state.units.map((u) => ({ ...u, statuses: u.statuses.map((st) => ({ ...st })) }));
+  const events: BattleEvent[] = [];
+  const view: BattleState = { ...state, units, firstLine: true };
+  for (const p of passives) {
+    if (!p.life) continue;
+    affinityResponses(idx, view, 'player', undefined, p.life, undefined, rng, events);
+  }
+  return {
+    ...state,
+    units,
+    firstLine: true,
+    events: [...state.events, ...events],
+    rng: rng.snapshot(),
+  };
 }
 
 function advanceTurn(idx: CombatIndex, state: BattleState): BattleState {
@@ -1215,6 +1271,7 @@ export function planAction(
 
 /** Куда бот направит умение героя. Цель выбирается по смыслу эффекта, не по power. */
 function heroTargetUid(
+  idx: CombatIndex,
   state: BattleState,
   actor: BattleUnitState,
   ability: Ability,
@@ -1229,16 +1286,32 @@ function heroTargetUid(
     case 'self':
       return actor.uid;
     case 'ally_one':
-    case 'ally_row':
     case 'ally_all':
       // И кружка, и посул идут туда, где тоньше: самый раненый по доле hp.
-      // Для рядных умений этот выбор заодно выбирает ряд.
       return legal.slice().sort(byFraction)[0]?.uid;
+    // Ряд выбирается ПО ЦЕНЕ РЯДА, а не по его населённости.
+    //
+    // Прежнее правило («ряд, где больше народу», а при равенстве — передний)
+    // делало ступень II Чистописца строго хуже ступени I: протокол на весь ряд
+    // всегда ложился на передних мордоворотов, тогда как одноцелевая ступень I
+    // выбирала самого ценного врага — лекаря или щитоносца из заднего ряда.
+    // Замер показывал −3 пункта там, где умение расширяется, — и это была
+    // неспособность бота играть, а не свойство умения (DIRECTION_COMBAT §E.6).
+    case 'ally_row':
     case 'enemy_row': {
-      const front = legal.filter((u) => u.row === 'front');
-      const back = legal.filter((u) => u.row === 'back');
-      const row = front.length >= back.length ? front : back;
-      return (row.length > 0 ? row : legal).slice().sort(byHp)[0]?.uid;
+      const rows: Row[] = ['front', 'back'];
+      let best: { uid: string; v: number } | undefined;
+      for (const row of rows) {
+        const inRow = legal.filter((u) => u.row === row);
+        if (inRow.length === 0) continue;
+        // Представитель ряда: самый раненый — им же и разрешаются ничьи.
+        const rep = inRow.slice().sort(ability.target === 'ally_row' ? byFraction : byHp)[0];
+        if (!rep) continue;
+        const targets = resolveTargets(state, actor, ability, rep.uid);
+        const v = heroValue(idx, state, actor, ability, targets);
+        if (!best || v > best.v) best = { uid: rep.uid, v };
+      }
+      return best?.uid ?? legal.slice().sort(byHp)[0]?.uid;
     }
     default:
       return legal.slice().sort(byHp)[0]?.uid;
@@ -1246,41 +1319,36 @@ function heroTargetUid(
 }
 
 /**
- * Насколько сторона живёт статусами — в HP-эквиваленте того, что она умеет
- * вешать. Считается по способностям, а не по тому, что висит сейчас: запрет
- * бьёт по будущему, а не по настоящему.
+ * Чем цель живёт по части ПРИБАВЛЕНИЙ — в HP-эквиваленте одного захода.
  *
- * Именно вес, а не счёт носителей. Счёт врал в обе стороны: щит на 34 и
- * дебаф «−2 атаки на два раунда» — оба «один носитель», хотя первый решает
- * бой, а второй его слегка подкрашивает. Отряд, живущий щитами, платит за
- * «Год Голой Правды» несравнимо дороже, чем отряд, живущий ударами, — и это
- * ровно то различие, которое вершина обязана спрашивать у игрока.
+ * Нужно ровно для протокола: «занесено в протокол» стоит столько, сколько
+ * враг не сможет себе и своим прибавить, пока запись висит. Считается по
+ * СПОСОБНОСТЯМ, а не по тому, что висит сейчас: запрет бьёт по будущему.
+ * Без этого бот оценивал протокол по числу целей и клал ступень II всегда на
+ * передний ряд — на тех, кто ничего не прибавляет, — и расширение умения
+ * оказывалось хуже его же ступени I.
  */
-function statusWeight(idx: CombatIndex, side: readonly BattleUnitState[]): number {
+function additionsWeight(idx: CombatIndex, u: BattleUnitState): number {
   let w = 0;
-  for (const u of side) {
-    for (const a of unitAbilities(idx, u)) {
-      for (const e of a.effects ?? []) {
-        // Всё приводится к HP: щит — сколько урона он съест, атака — сколько
-        // урона добавит или отнимет, броня — примерно втрое дешевле атаки при
-        // ARMOR_K=50, оглушение — целый чужой ход.
-        switch (e.kind) {
-          case 'shield':
-            w += e.amount;
-            break;
-          case 'buff':
-          case 'debuff':
-            w += e.amount * e.turns * (e.stat === 'atk' ? 1 : 0.35);
-            break;
-          case 'dot':
-            w += e.amount * e.turns;
-            break;
-          case 'stun':
-            w += 15 * e.turns;
-            break;
-          default:
-            break;
-        }
+  const atk = effectiveStat(u, 'atk');
+  for (const a of unitAbilities(idx, u)) {
+    for (const e of a.effects ?? []) {
+      switch (e.kind) {
+        case 'heal':
+          w += atk * e.power;
+          break;
+        case 'heal_flat':
+          w += e.amount;
+          break;
+        case 'shield':
+          w += e.amount;
+          break;
+        case 'buff':
+        case 'rally':
+          w += e.amount * e.turns * (e.stat === 'atk' ? 1 : 0.35);
+          break;
+        default:
+          break;
       }
     }
   }
@@ -1301,14 +1369,13 @@ function heroValue(
   const foes = living(state, actor.side === 'player' ? 'enemy' : 'player');
   const withStatus = (u: BattleUnitState, kinds: BattleEffect['kind'][]): boolean =>
     u.statuses.some((s) => kinds.includes(s.kind));
-  // Умение, в котором есть «Год Голой Правды», смывает то, что само же успело
-  // повесить: протокол на ряду доживает до конца применения и исчезает вместе
-  // со всем остальным. Считать эту работу в плюс — считать деньги, которые сам
-  // же и сожжёшь; именно на этом бот жёг вершину Чистописца в каждом бою.
-  const wipesOwnWork = wide.some((e) => e.kind === 'bare_truth');
+  // Пошлина описи (Перечень III) удешевляет ЧУЖИЕ руки тоже: бот, считающий
+  // кружку по номиналу, переоценивал бы её на четверть в каждом бою, где
+  // вспомнены обе жизни. Лечение врага пошлиной не облагается — оно чужое.
+  const tax = healTax(state);
+  const mine = (v: number): number => (actor.side === 'player' ? taxed(v, tax) : v);
   let v = 0;
   for (const e of perTarget) {
-    if (wipesOwnWork && (e.kind === 'recorded' || e.kind === 'purge')) continue;
     switch (e.kind) {
       case 'damage':
         v += targets.reduce(
@@ -1317,12 +1384,12 @@ function heroValue(
         );
         break;
       case 'heal':
-        v += targets.reduce((s, t) => s + Math.min(atk * e.power, t.maxHp - t.hp), 0);
+        v += targets.reduce((s, t) => s + Math.min(mine(atk * e.power), t.maxHp - t.hp), 0);
         break;
       // Лечение сверх максимума не считается — иначе бот подавал бы кружку
       // здоровым и «тратил заряд» в 100% боёв, красиво и бессмысленно.
       case 'heal_flat':
-        v += targets.reduce((s, t) => s + Math.min(e.amount, t.maxHp - t.hp), 0);
+        v += targets.reduce((s, t) => s + Math.min(mine(e.amount), t.maxHp - t.hp), 0);
         break;
       // Дот проходит мимо брони — считается в лоб.
       case 'dot':
@@ -1348,9 +1415,14 @@ function heroValue(
       case 'purge':
         v += 6 * targets.filter((t) => withStatus(t, ['buff', 'shield'])).length;
         break;
-      // Протокол ценен ровно против тех, кто живёт прибавлениями.
+      // Протокол ценен ровно против тех, кто живёт прибавлениями. Доля 0.5 —
+      // сколько из объявленного арсенала цель успела бы применить за два
+      // запрещённых раунда: примерно один заход.
       case 'recorded':
-        v += targets.reduce((s, t) => s + (withStatus(t, ['buff', 'shield']) ? 8 : 3), 0);
+        v += targets.reduce(
+          (s, t) => s + Math.max(withStatus(t, ['buff', 'shield']) ? 8 : 3, 0.5 * additionsWeight(idx, t)),
+          0,
+        );
         break;
       default:
         break;
@@ -1365,32 +1437,13 @@ function heroValue(
       case 'spare_worst_foe':
         v -= e.amount;
         break;
-      case 'bare_truth': {
-        // Правда выгодна ровно настолько, насколько враг живёт прибавлениями,
-        // а ты — нет. Считается НЕ «статусы на враге против статусов на своих»:
-        // дот и дебаф, висящие на враге, — это твоя работа, и смывает их та же
-        // правда. Поэтому стороны разбираются по природе статуса, а не по тому,
-        // на ком он висит: снести чужой баф — прибыль, снести свой дот с
-        // чужого горла — убыток.
-        const good = (u: BattleUnitState, mine: boolean): number =>
-          u.statuses.filter((s) =>
-            mine ? s.kind === 'dot' || s.kind === 'debuff' || s.kind === 'stun' : s.kind === 'buff' || s.kind === 'shield',
-          ).length;
-        const gain =
-          foes.reduce((s, u) => s + good(u, false), 0) + allies.reduce((s, u) => s + good(u, true), 0);
-        const loss =
-          foes.reduce((s, u) => s + good(u, true), 0) + allies.reduce((s, u) => s + good(u, false), 0);
-        v += 5 * (gain - loss);
-        // И ГЛАВНОЕ — запрет на N раундов вперёд. Он симметричен по правилам и
-        // несимметричен по последствиям: платит та сторона, которая живёт
-        // статусами. Без этого слагаемого бот видел только сиюминутную стирку
-        // и жёг вершину в боях, где она была чистым убытком (замер: −27 пунктов
-        // винрейта), — то есть «умел применять», но не умел играть.
-        // Доля 0.25 — сколько из объявленного арсенала сторона успела бы
-        // применить за два запрещённых раунда: примерно один заход каждой.
-        v += 0.25 * e.turns * 0.5 * (statusWeight(idx, foes) - statusWeight(idx, allies));
+      case 'bare_truth':
+        // Чистая цена: свои бафы и щиты слетают в момент печати. Цена тем
+        // выше, чем больше своих прибавлений сейчас висит, — и ровно ноль,
+        // когда посулы уже истрачены. Это и есть решение, которое умение
+        // ставит перед игроком: применять, когда своё отработало.
+        v -= 6 * allies.filter((u) => withStatus(u, ['buff', 'shield'])).length;
         break;
-      }
       default:
         break;
     }
@@ -1438,7 +1491,7 @@ function heroPlan(
   if (powers.length === 0) return undefined;
   let best: { action: Action; score: number } | undefined;
   for (const p of powers) {
-    const targetUid = heroTargetUid(state, actor, p.ability);
+    const targetUid = heroTargetUid(idx, state, actor, p.ability);
     const targets = resolveTargets(state, actor, p.ability, targetUid);
     if (targets.length === 0) continue;
     const score =
@@ -1451,7 +1504,20 @@ function heroPlan(
   // Ход не отдаётся за убыток ни при каких порогах: заряд, потраченный в
   // минус, хуже заряда, не потраченного вовсе.
   if (best.score <= 0) return undefined;
-  const need = strikeValue * (state.round >= 4 ? 0.6 : 1.15);
+
+  // Порог падает по ходу боя: неиспользованный заряд к концу стоит ноль, а в
+  // первом раунде он стоит дороже всего — там ещё не видно ни чужих посулов,
+  // ни своих ран, и умение, чья цена растёт, сгорает впустую.
+  //
+  // Первый раунд отделён от второго-третьего по замеру. Ступень II Чистописца
+  // мерилась НИЖЕ своей же ступени I (61% против 73%): расширение умения
+  // поднимало его сиюминутную оценку ровно настолько, чтобы перейти порог в
+  // первом раунде, и протокол ложился на ещё пустых врагов — а ступень I,
+  // оценённая скромнее, дожидалась четвёртого раунда и била по живому.
+  // Это была неспособность бота играть, а не свойство умения (§E.6).
+  // Прямой запрет на первый раунд (ручка §D.6) замерен и отвергнут: он
+  // выключал заряд и у тех умений, которым первый раунд как раз годится.
+  const need = strikeValue * (state.round >= 4 ? 0.6 : state.round >= 2 ? 1.15 : 2.2);
   return best.score >= need ? best.action : undefined;
 }
 

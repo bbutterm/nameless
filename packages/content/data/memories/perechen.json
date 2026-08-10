@@ -78,8 +78,8 @@
           "turns": 1,
           "addEffects": [
             {
-              "kind": "idle_toll",
-              "amount": 4
+              "kind": "heal_tax",
+              "factor": 0.75
             }
           ]
         }

@@ -74,10 +74,10 @@
         "kind": "amplify",
         "ability": "memory_protocol",
         "amplify": {
+          "target": "enemy_all",
           "addEffects": [
             {
-              "kind": "bare_truth",
-              "turns": 2
+              "kind": "bare_truth"
             }
           ]
         }

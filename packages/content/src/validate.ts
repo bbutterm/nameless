@@ -682,12 +682,12 @@ export function validateBundle(bundle: ContentBundle): Issue[] {
           message: 'Пассив считает силу от атаки носителя, а носителя у пассива нет — только фиксированные числа',
         });
       }
-      const modeOnly = (a.effects ?? []).some((e) => e.kind === 'reveal' || e.kind === 'idle_toll');
+      const modeOnly = (a.effects ?? []).some((e) => e.kind === 'reveal' || e.kind === 'heal_tax');
       if (modeOnly && !a.passive) {
         issues.push({
           level: 'warn',
           where: `ability:${a.id}`,
-          message: '«reveal» и «idle_toll» — режимы боя, они читаются только у пассивов',
+          message: '«reveal» и «heal_tax» — режимы боя, они читаются только у пассивов',
         });
       }
       const refund = (a.effects ?? []).some((e) => e.kind === 'shield_refund');

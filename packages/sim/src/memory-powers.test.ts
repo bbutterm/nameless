@@ -100,26 +100,42 @@ describe('лестницы ступеней собраны из воспомин
 });
 
 describe('§A.2 Смолокур — «Развести смолу»', () => {
-  it('I: ряд врагов, dot 5 на 2 раунда, мгновенного урона нет', () => {
+  it('I: ряд врагов, dot 4 на 2 раунда, мгновенного урона нет', () => {
     const p = atTier('smolokur', 1);
     expect(p.ability.target).toBe('enemy_row');
     expect(p.ability.power).toBe(0);
-    expect(effects(p)).toEqual([{ kind: 'dot', amount: 5, turns: 2, tag: 'smola' }]);
+    expect(effects(p)).toEqual([{ kind: 'dot', amount: 4, turns: 2, tag: 'smola' }]);
   });
 
-  it('II: все враги, dot растёт до 6 на 3 раунда', () => {
+  // Ступень II стоит на 3, а не на 4: это ручка, заранее выданная §A.2
+  // («если II после пересборки базы всё ещё выше допуска — {3, turns: 2}»).
+  // Замер её потребовал: при 4 ступень давала +20 пунктов над базой при
+  // допуске §D.1 в 10 и выносила девять боёв из четырнадцати выше 85%.
+  it('II: все враги, dot 3 — ступень расширяет, а не углубляет', () => {
     const p = atTier('smolokur', 2);
     expect(p.ability.target).toBe('enemy_all');
-    expect(effects(p)).toEqual([{ kind: 'dot', amount: 6, turns: 3, tag: 'smola' }]);
+    expect(effects(p)).toEqual([{ kind: 'dot', amount: 3, turns: 2, tag: 'smola' }]);
   });
 
-  it('III: то же плюс +3 атаки на 2 раунда каждому живому своему', () => {
+  it('III: dot 5 плюс +2 атаки на 2 раунда каждому живому своему', () => {
     const p = atTier('smolokur', 3);
     expect(p.ability.target).toBe('enemy_all');
     expect(effects(p)).toEqual([
-      { kind: 'dot', amount: 6, turns: 3, tag: 'smola' },
-      { kind: 'rally', stat: 'atk', amount: 3, turns: 2 },
+      { kind: 'dot', amount: 5, turns: 2, tag: 'smola' },
+      { kind: 'rally', stat: 'atk', amount: 2, turns: 2 },
     ]);
+  });
+
+  // Бюджет §A.1: уронное умение не дороже 50 чистых hp на пятерых. Доты идут
+  // мимо брони, поэтому «чистые hp» считаются в лоб, без ARMOR_K.
+  it('бюджет §A.1 соблюдён: не больше 50 чистых hp на пятерых врагов', () => {
+    for (let tier = 1; tier <= 3; tier++) {
+      const p = atTier('smolokur', tier);
+      const dot = effects(p).find((e) => e.kind === 'dot');
+      if (!dot || dot.kind !== 'dot') throw new Error('нет дота');
+      const hit = p.ability.target === 'enemy_all' ? 5 : 3;
+      expect(dot.amount * dot.turns * hit, `ступень ${tier}`).toBeLessThanOrEqual(50);
+    }
   });
 });
 
@@ -183,12 +199,13 @@ describe('§A.5 Чистописец — «Занести в протокол»'
     expect(effects(p)).toEqual([{ kind: 'purge' }, { kind: 'recorded', turns: 2 }]);
   });
 
-  it('III: всем обеим сторонам — чистый лист и два раунда без статусов', () => {
+  it('III: ступень II на весь строй, цена — свои бафы и щиты', () => {
     const p = atTier('chistopisets', 3);
+    expect(p.ability.target).toBe('enemy_all');
     expect(effects(p)).toEqual([
       { kind: 'purge' },
       { kind: 'recorded', turns: 2 },
-      { kind: 'bare_truth', turns: 2 },
+      { kind: 'bare_truth' },
     ]);
   });
 });
@@ -213,12 +230,12 @@ describe('§A.6 Перечень — «Опись» (пассив)', () => {
     ]);
   });
 
-  it('III: −4 брони на 3 раунда и пеня 4 hp бездействовавшему', () => {
+  it('III: −4 брони на 3 раунда и лечение союзников ×0.75', () => {
     const p = atTier('perechen', 3);
     expect(effects(p)).toEqual([
       { kind: 'reveal' },
       { kind: 'debuff', stat: 'def', amount: 4, turns: 3 },
-      { kind: 'idle_toll', amount: 4 },
+      { kind: 'heal_tax', factor: 0.75 },
     ]);
   });
 

@@ -10,7 +10,7 @@
         "unit": "debt_bailiff",
         "row": "front",
         "index": 0,
-        "level": 7
+        "level": 6
       },
       {
         "unit": "debt_bailiff",
@@ -28,13 +28,13 @@
         "unit": "pawn_appraiser_dusk",
         "row": "back",
         "index": 0,
-        "level": 6
+        "level": 7
       },
       {
         "unit": "pawn_appraiser_dusk",
         "row": "back",
         "index": 1,
-        "level": 5
+        "level": 6
       }
     ],
     "turnLimit": 7,
@@ -61,7 +61,7 @@
         "unit": "debt_bailiff",
         "row": "front",
         "index": 0,
-        "level": 6
+        "level": 7
       },
       {
         "unit": "vault_lock",
@@ -79,7 +79,7 @@
         "unit": "pawn_appraiser_dusk",
         "row": "back",
         "index": 0,
-        "level": 6
+        "level": 7
       },
       {
         "unit": "flask_hoarder",

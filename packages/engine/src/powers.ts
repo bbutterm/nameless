@@ -121,7 +121,6 @@ function scaleEffect(
       return { ...eff, amount: n(eff.amount), turns: t(eff.turns) };
     case 'stun':
     case 'recorded':
-    case 'bare_truth':
       return { ...eff, turns: t(eff.turns) };
     case 'revive':
       return { ...eff, hpPercent: Math.min(1, Math.max(0, eff.hpPercent * scale)) };
@@ -129,10 +128,12 @@ function scaleEffect(
       return { ...eff, amount: n(eff.amount), turns: t(eff.turns) };
     case 'spare_worst_foe':
       return { ...eff, amount: n(eff.amount) };
-    // Цена и режимы усилению не подлежат. `idle_toll` — плата за одержимость
+    // Цена и режимы усилению не подлежат. `heal_tax` — плата за одержимость
     // учётом, и «усиленная плата» была бы двойным наказанием за одну зарубку;
-    // `reveal`, `purge`, `cleanse`, `shield_refund` не содержат чисел вовсе.
-    case 'idle_toll':
+    // `bare_truth` — цена вершины Чистописца, у неё нет чисел вовсе, как и у
+    // `reveal`, `purge`, `cleanse`, `shield_refund`.
+    case 'heal_tax':
+    case 'bare_truth':
     case 'reveal':
     case 'purge':
     case 'shield_refund':

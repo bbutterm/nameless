@@ -60,7 +60,7 @@
         "unit": "debt_bailiff",
         "row": "front",
         "index": 0,
-        "level": 5
+        "level": 6
       },
       {
         "unit": "debt_bailiff",
@@ -72,7 +72,7 @@
         "unit": "hollow_sergeant",
         "row": "front",
         "index": 2,
-        "level": 5
+        "level": 6
       },
       {
         "unit": "pawn_appraiser_dusk",
@@ -115,7 +115,7 @@
         "unit": "borrowed_face",
         "row": "front",
         "index": 0,
-        "level": 4
+        "level": 5
       },
       {
         "unit": "pocket_cutter",
@@ -170,7 +170,7 @@
         "unit": "debt_bailiff",
         "row": "front",
         "index": 0,
-        "level": 4
+        "level": 5
       },
       {
         "unit": "borrowed_face",
@@ -182,7 +182,7 @@
         "unit": "pocket_cutter",
         "row": "front",
         "index": 2,
-        "level": 4
+        "level": 5
       },
       {
         "unit": "pawn_appraiser_dusk",
@@ -194,7 +194,7 @@
         "unit": "flask_hoarder",
         "row": "back",
         "index": 1,
-        "level": 3
+        "level": 4
       }
     ],
     "turnLimit": 10,

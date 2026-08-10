@@ -10,7 +10,7 @@
     "target": "enemy_row",
     "power": 0,
     "cooldown": 99,
-    "effects": [{ "kind": "dot", "amount": 5, "turns": 2, "tag": "smola" }],
+    "effects": [{ "kind": "dot", "amount": 4, "turns": 2, "tag": "smola" }],
     "anim": "aoe"
   },
   {

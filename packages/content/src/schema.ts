@@ -200,9 +200,12 @@ export const zBattleEffect = z.discriminatedUnion('kind', [
     turns: z.number().int().min(1),
   }),
   z.object({ kind: z.literal('spare_worst_foe'), amount: z.number().min(0) }),
-  z.object({ kind: z.literal('bare_truth'), turns: z.number().int().min(1) }),
+  z.object({ kind: z.literal('bare_truth') }),
   z.object({ kind: z.literal('reveal') }),
-  z.object({ kind: z.literal('idle_toll'), amount: z.number().min(0) }),
+  // Множитель, а не «сколько отнять»: пошлина описи задана долей (0.75), и
+  // единица означает «пошлины нет». Верхняя граница — 1: опись умеет только
+  // недодавать, лечить сверх написанного она не может.
+  z.object({ kind: z.literal('heal_tax'), factor: z.number().min(0).max(1) }),
   z.object({ kind: z.literal('revive'), hpPercent: z.number() }),
 ]);
 

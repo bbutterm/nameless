@@ -4,11 +4,20 @@ import { content, validateBundle } from '@nameless/content';
 import { derivePlayerPowers, type PartyUnit, type UnitDef } from '@nameless/engine';
 import {
   determinismCheck,
+  BASE_MAX,
+  BASE_MEDIAN_MAX,
+  BASE_MEDIAN_MIN,
+  BASE_MIN,
   CORRIDOR_HALF_WIDTH,
+  median,
+  POWER_MAX,
+  POWER_MIN,
   powerLadder,
   ROUNDS_MAX,
   ROUNDS_MIN,
   scriptedBattles,
+  TIER_GAIN_MAX,
+  TIER_GAIN_MIN,
   unitWinrates,
 } from './battle-sim.js';
 import { fuzzDialogue } from './dialogue-fuzz.js';
@@ -110,13 +119,18 @@ if (!only || only === 'battles') {
       },
       Math.max(20, Math.floor(runs / 2)),
     );
+    // Коридор БЕЗ умений — 55–75 (MEMORY_POWERS §D.1). Прежние 60–85 остались
+    // за боем при игроке с умениями и проверяются ниже, на лестнице ступеней.
+    const storyIds: string[] = [];
     for (const r of rep) {
       const def = content.battles.find((b) => b.id === r.battle);
       // Бой, помеченный `lethal`, игрок по сюжету не переживает — коридор к нему неприменим.
       const lethal = def?.tags?.includes('lethal') ?? false;
       // Бой-знакомство должен почти всегда выигрываться: это обучение, а не проверка.
       const tutorial = def?.tags?.includes('tutorial') ?? false;
-      const ok = lethal || (tutorial ? r.winrate >= 0.85 : r.winrate >= 0.6 && r.winrate <= 0.85);
+      if (!lethal && !tutorial) storyIds.push(r.battle);
+      const ok =
+        lethal || (tutorial ? r.winrate >= 0.85 : r.winrate >= BASE_MIN && r.winrate <= BASE_MAX);
       console.log(
         `${lethal ? '~~' : ok ? '  ' : '!!'} ${r.battle.padEnd(24)} побед ${(r.winrate * 100).toFixed(0)}%  ` +
           `раундов ${r.avgRounds.toFixed(1)}  выжило ${(r.avgSurvivors * 100).toFixed(0)}%` +
@@ -124,7 +138,17 @@ if (!only || only === 'battles') {
       );
       if (!ok) failed = true;
     }
+    const storyWinrates = rep.filter((r) => storyIds.includes(r.battle)).map((r) => r.winrate);
+    const storyMedian = median(storyWinrates);
+    const medianOk = storyMedian >= BASE_MEDIAN_MIN && storyMedian <= BASE_MEDIAN_MAX;
+    console.log(
+      `${medianOk ? '  ' : '!!'} медиана по сюжетным боям ${(storyMedian * 100).toFixed(1)}% ` +
+        `(коридор ${(BASE_MEDIAN_MIN * 100).toFixed(0)}–${(BASE_MEDIAN_MAX * 100).toFixed(0)}), ` +
+        `коридор боя ${(BASE_MIN * 100).toFixed(0)}–${(BASE_MAX * 100).toFixed(0)} без умений`,
+    );
+    if (!medianOk) failed = true;
     summary['scriptedBattles'] = rep;
+    summary['scriptedBattlesMedian'] = storyMedian;
 
     // ── Умения игрока ────────────────────────────────────────────────────────
     // Потолок: игрок, вспомнивший ВСЁ. Раздел справочный и не краснит прогон.
@@ -166,12 +190,12 @@ if (!only || only === 'battles') {
     }
 
     // ── Лестница ступеней: каждое умение по трём ступеням ────────────────────
-    // Раздел справочный по тем же причинам, что и потолок выше: коридор 60–85
-    // описывает встречу боя с игроком, который до него доходит, а «умение
-    // третьей ступени» — конец прохождения. Красная строка здесь заставляла бы
-    // резать умения до незаметности. Зато три числа печатаются всегда:
-    // применяемость (иначе цифры выше — цифры боя БЕЗ умения), длина боя и
-    // отклики (иначе сродство мертво и об этом никто не узнает).
+    //
+    // РАЗДЕЛ КРАСНЫЙ. До этой итерации он печатал цифры и молчал, и зелёные
+    // ворота прикрывали сломанный баланс: прибор, который не умеет краснеть,
+    // ничего не доказывает. Теперь падают три вещи (MEMORY_POWERS §D.1–D.2):
+    // бой при игроке с умением вне 60–85, прибавка ступени над базой вне
+    // 3–10 пунктов, средняя длина боя вне 6–14 раундов.
     const ladderLives = [...new Set(content.memories.map((m) => m.life))].sort();
     if (ladderLives.length > 0) {
       head('Умения памяти: три ступени каждой жизни');
@@ -197,7 +221,11 @@ if (!only || only === 'battles') {
         (life, tier) =>
           derivePlayerPowers(memoriesOf(life).slice(0, tier), content).abilities,
         ladderLives,
-        Math.max(10, Math.floor(runs / 10)),
+        // Прогонов на бой: пятая часть общего числа, а не десятая. При тридцати
+        // прогонах биномиальная ошибка на бой — девять пунктов, то есть счётчик
+        // «вне 60–85» показывал бы в основном свой же шум, а допуск 3–10 шириной
+        // в семь пунктов мерился бы прибором с погрешностью в два.
+        Math.max(20, Math.floor(runs / 5)),
       );
       // База считается по ТОМУ ЖЕ набору боёв, что и лестница, иначе строка
       // «без умений» сравнивалась бы с другим множеством и разница врала бы.
@@ -207,58 +235,75 @@ if (!only || only === 'battles') {
       });
       const baseWin = base.reduce((a, r) => a + r.winrate, 0) / Math.max(1, base.length);
       const baseRounds = base.reduce((a, r) => a + r.avgRounds, 0) / Math.max(1, base.length);
-      const baseOut = base.filter((r) => r.winrate < 0.6 || r.winrate > 0.85).length;
+      const baseOut = base.filter((r) => r.winrate < BASE_MIN || r.winrate > BASE_MAX).length;
       console.log(
         `   без умений: побед ${(baseWin * 100).toFixed(0)}%, раундов ${baseRounds.toFixed(1)}, ` +
-          `вне 60–85: ${baseOut} из ${base.length}`,
+          `вне ${(BASE_MIN * 100).toFixed(0)}–${(BASE_MAX * 100).toFixed(0)}: ${baseOut} из ${base.length}`,
       );
       for (const r of ladder) {
         const d = (r.winrate - baseWin) * 100;
+        const gainOk = d >= TIER_GAIN_MIN && d <= TIER_GAIN_MAX;
+        const roundsOk2 = r.avgRounds >= ROUNDS_MIN && r.avgRounds <= ROUNDS_MAX;
+        const ok = gainOk && roundsOk2 && r.outOfCorridor === 0;
+        if (!ok) failed = true;
         console.log(
-          `   ${r.life.padEnd(13)} ст.${r.tier}  побед ${(r.winrate * 100).toFixed(0)}% ` +
+          `${ok ? '  ' : '!!'} ${r.life.padEnd(13)} ст.${r.tier}  побед ${(r.winrate * 100).toFixed(0)}% ` +
             `(${d >= 0 ? '+' : ''}${d.toFixed(0)}, разброс ${(r.minWinrate * 100).toFixed(0)}–${(r.maxWinrate * 100).toFixed(0)}, ` +
-            `вне 60–85: ${r.outOfCorridor})  раундов ${r.avgRounds.toFixed(1)}  ` +
+            `вне ${(POWER_MIN * 100).toFixed(0)}–${(POWER_MAX * 100).toFixed(0)}: ${r.outOfCorridor})  раундов ${r.avgRounds.toFixed(1)}  ` +
             `${r.passiveOnly ? 'пассив, заряда нет      ' : `заряд потрачен в ${(r.usedShare * 100).toFixed(0)}% боёв`}  ` +
             `откликов ${r.responsesPerBattle.toFixed(1)}/бой`,
         );
+        if (!gainOk) {
+          console.log(
+            `   ↳ прибавка ступени ${d >= 0 ? '+' : ''}${d.toFixed(1)} вне допуска ` +
+              `${TIER_GAIN_MIN}–${TIER_GAIN_MAX} (§D.1)`,
+          );
+        }
+        if (!roundsOk2) console.log(`   ↳ длина боя ${r.avgRounds.toFixed(1)} вне ${ROUNDS_MIN}–${ROUNDS_MAX} (§D.2)`);
+        for (const pb of r.perBattle) {
+          if (pb.winrate >= POWER_MIN && pb.winrate <= POWER_MAX) continue;
+          console.log(`   ↳ ${pb.battle.padEnd(24)} ${(pb.winrate * 100).toFixed(0)}% вне ${(POWER_MIN * 100).toFixed(0)}–${(POWER_MAX * 100).toFixed(0)}`);
+        }
       }
       summary['powerLadder'] = ladder;
       summary['powerLadderBaseline'] = { winrate: baseWin, avgRounds: baseRounds };
 
-      // ── Сродство: влияет ли оно на выбор отряда (MEMORY_POWERS §D.3) ───────
-      // Две политики сборки отряда встречаются на одних и тех же боях с одним
-      // и тем же умением второй ступени: «набери сродственных» против «набери
-      // сильнейших». Если первая не отличается от второй ни винрейтом, ни
-      // числом откликов — сродство мертво, сколько бы трейтов ни стояло в данных.
-      head('Сродство: отряд под умение против отряда по силе');
+      // ── Сродство: маржинальный критерий (MEMORY_POWERS §D.3, новая редакция)
+      //
+      // Первый критерий («отряд под умение обыгрывает отряд по силе на ≥4»)
+      // отозван автором канона: он мерил доминирование состава, а не сродство —
+      // отряд из трёх лекарей Ключаря проигрывал −13 из-за трёх лекарей.
+      // Новая мерка — маржинальная: в ТИПОВОМ отряде один несродственный юнит
+      // меняется на сродственного РАВНОГО ТИРА, и меряется, что это дало.
+      // Канон ждёт +2..+6 пункта в боях с умением и не хуже −1 без умения.
+      head('Сродство: замена одного юнита на сродственного равного тира');
       for (const life of ladderLives) {
+        const swap = affinitySwap(content.units, life, 2, 2);
+        if (!swap) {
+          console.log(`   ${life.padEnd(13)} менять некого: сродственных равного тира вне отряда нет`);
+          continue;
+        }
         const powers = derivePlayerPowers(memoriesOf(life).slice(0, 2), content).abilities;
-        const byStrength = powerLadder(
-          content,
-          // Второй тир, второй уровень: на шести сильнейших юнитах третьего
-          // тира обе политики упираются в 96–99% и сравнивать нечего.
-          () => defaultParty(content.units, 2, 2),
-          () => powers,
-          [life],
-          Math.max(10, Math.floor(runs / 10)),
-        )[0];
-        const byAffinity = powerLadder(
-          content,
-          () => affinityParty(content.units, life, 2, 2),
-          () => powers,
-          [life],
-          Math.max(10, Math.floor(runs / 10)),
-        )[0];
-        if (!byStrength || !byAffinity) continue;
-        const d = (byAffinity.winrate - byStrength.winrate) * 100;
+        const ladderRuns = Math.max(20, Math.floor(runs / 5));
+        const withSkill = (p: PartyUnit[]) => powerLadder(content, () => p, () => powers, [life], ladderRuns)[0];
+        const noSkill = (p: PartyUnit[]) => powerLadder(content, () => p, () => [], [life], ladderRuns)[0];
+        const a = withSkill(swap.before);
+        const b = withSkill(swap.after);
+        const a0 = noSkill(swap.before);
+        const b0 = noSkill(swap.after);
+        if (!a || !b || !a0 || !b0) continue;
+        const dSkill = (b.winrate - a.winrate) * 100;
+        const dPlain = (b0.winrate - a0.winrate) * 100;
+        // Раздел справочный: сродство — свойство ростера и таблицы §C.4, а её
+        // правка запрещена. Красная строка здесь требовала бы менять то, что
+        // менять нельзя, поэтому цифры печатаются, а вердикт остаётся автору.
         console.log(
-          `   ${life.padEnd(13)} по силе: побед ${(byStrength.winrate * 100).toFixed(0)}%, ` +
-            `откликов ${byStrength.responsesPerBattle.toFixed(1)}  →  ` +
-            `под умение: побед ${(byAffinity.winrate * 100).toFixed(0)}%, ` +
-            `откликов ${byAffinity.responsesPerBattle.toFixed(1)}  ` +
-            `(${d >= 0 ? '+' : ''}${d.toFixed(0)} пунктов)`,
+          `   ${life.padEnd(13)} ${swap.out} → ${swap.in} (тир ${swap.tier})  ` +
+            `с умением ${dSkill >= 0 ? '+' : ''}${dSkill.toFixed(1)} (ждём +2..+6), ` +
+            `без умения ${dPlain >= 0 ? '+' : ''}${dPlain.toFixed(1)} (ждём ≥ −1), ` +
+            `откликов ${a.responsesPerBattle.toFixed(1)} → ${b.responsesPerBattle.toFixed(1)}`,
         );
-        summary[`affinity:${life}`] = { byStrength, byAffinity };
+        summary[`affinity:${life}`] = { swap, dSkill, dPlain, responses: b.responsesPerBattle };
       }
     }
 
@@ -395,36 +440,48 @@ function namedParty(units: UnitDef[], ids: string[]): PartyUnit[] {
 }
 
 /**
- * Отряд, собранный ПОД УМЕНИЕ: сначала сродственные этой жизни, потом добор
- * сильнейшими. Ровно та политика бота, которую требует MEMORY_POWERS §D.3 —
- * «максимум сродственных при равном тире».
+ * Замена одного юнита на сродственного РАВНОГО ТИРА — маржинальная мерка
+ * сродства (MEMORY_POWERS §D.3, новая редакция).
+ *
+ * Берётся типовой отряд главы, из него уходит один несродственный юнит и
+ * приходит сродственный того же тира и того же ряда. Всё остальное в отряде
+ * не двигается — иначе меряется состав, а не сродство, на чём и погорел
+ * прежний критерий («собери отряд под умение»): три лекаря Ключаря
+ * проигрывали −13 пунктов из-за трёх лекарей, а не из-за отклика.
+ *
+ * Выбор пары детерминирован: самый сильный подходящий пришелец, самый слабый
+ * подходящий уходящий, ничьи — обычным строковым сравнением id.
  */
-function affinityParty(units: UnitDef[], life: string, maxTier: number, level: number): PartyUnit[] {
+function affinitySwap(
+  units: UnitDef[],
+  life: string,
+  maxTier: number,
+  level: number,
+): { before: PartyUnit[]; after: PartyUnit[]; in: string; out: string; tier: number } | undefined {
   const trait = `life_${life}`;
-  const pool = units.filter((u) => u.tier <= maxTier);
-  const rank = (a: UnitDef, b: UnitDef): number => {
-    const ka = (a.traits ?? []).includes(trait) ? 1 : 0;
-    const kb = (b.traits ?? []).includes(trait) ? 1 : 0;
-    // Сродство важнее тира — иначе политика вырождается в «по силе».
-    // Ничьи разводятся строковым сравнением id, не localeCompare.
-    return kb - ka || b.tier - a.tier || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
-  };
-  const front = pool.filter((u) => u.row === 'front').sort(rank).slice(0, 3);
-  const back = pool.filter((u) => u.row === 'back').sort(rank).slice(0, 3);
-  const out: PartyUnit[] = [];
-  const push = (u: UnitDef, row: 'front' | 'back', i: number): void => {
-    out.push({
-      uid: `a${out.length}`,
-      defId: u.id,
-      hp: Math.round(u.stats.hp * (1 + 0.12 * (level - 1))),
-      xp: 0,
-      level,
-      slot: { row, index: i },
-    });
-  };
-  front.forEach((u, i) => push(u, 'front', i));
-  back.forEach((u, i) => push(u, 'back', i));
-  return out;
+  const before = defaultParty(units, maxTier, level);
+  const byId = new Map(units.map((u) => [u.id, u]));
+  const inParty = new Set(before.map((p) => p.defId));
+  const byIdAsc = (a: UnitDef, b: UnitDef): number => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
+  const newcomers = units
+    .filter((u) => u.tier <= maxTier && !inParty.has(u.id) && (u.traits ?? []).includes(trait))
+    .sort((a, b) => b.tier - a.tier || byIdAsc(a, b));
+  for (const arrival of newcomers) {
+    const victim = before
+      .filter((p) => {
+        const d = byId.get(p.defId);
+        return !!d && d.tier === arrival.tier && d.row === arrival.row && !(d.traits ?? []).includes(trait);
+      })
+      .sort((x, y) => (x.defId < y.defId ? -1 : x.defId > y.defId ? 1 : 0))[0];
+    if (!victim) continue;
+    const after = before.map((p) =>
+      p.uid === victim.uid
+        ? { ...p, defId: arrival.id, hp: Math.round(arrival.stats.hp * (1 + 0.12 * (level - 1))) }
+        : p,
+    );
+    return { before, after, in: arrival.id, out: victim.defId, tier: arrival.tier };
+  }
+  return undefined;
 }
 
 /** Отряд «среднего игрока» заданной главы: потолок тира и уровень. */

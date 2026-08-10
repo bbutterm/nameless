@@ -17,6 +17,36 @@ import {
 export const WINRATE_MIN = 0.42;
 export const WINRATE_MAX = 0.58;
 /**
+ * Двойной коридор сюжетных боёв (MEMORY_POWERS §D.1).
+ *
+ * База БЕЗ умений — 55–75 при медиане главы 63–68. Прежние 60–85 остались
+ * коридором боя при игроке С умениями: одна вспомненная жизнь любой ступени —
+ * типовое состояние по B6, и мерить бой без умений тем же числом означало бы
+ * мерить состояние, в котором игрок почти не бывает.
+ */
+export const BASE_MIN = 0.55;
+export const BASE_MAX = 0.75;
+export const BASE_MEDIAN_MIN = 0.63;
+export const BASE_MEDIAN_MAX = 0.68;
+export const POWER_MIN = 0.6;
+export const POWER_MAX = 0.85;
+/**
+ * Допуск на ступень: насколько ступень умения поднимает винрейт над базой
+ * без умений. Прежние «5–15 на ступень» отменены §D.1 как несовместимые с
+ * потолком 85; новый допуск — 3–10 на каждую ступень (не на шаг между
+ * ступенями: шаг II→III у трёх вершин отрицателен по замыслу, §A.7).
+ */
+export const TIER_GAIN_MIN = 3;
+export const TIER_GAIN_MAX = 10;
+
+/** Медиана списка. Чётная длина — среднее двух средних, как принято в отчётах. */
+export function median(values: readonly number[]): number {
+  if (values.length === 0) return 0;
+  const xs = values.slice().sort((a, b) => a - b);
+  const mid = xs.length >> 1;
+  return xs.length % 2 === 1 ? (xs[mid] as number) : (((xs[mid - 1] as number) + (xs[mid] as number)) / 2);
+}
+/**
  * Полуширина коридора вокруг ИЗМЕРЕННОЙ нулевой точки турнира.
  *
  * Нулевая точка не равна 50%: враги телеграфируют намерения в начале раунда
@@ -264,6 +294,8 @@ export interface PowerLadderReport {
   maxWinrate: number;
   /** Сколько боёв вышло за коридор 60–85. */
   outOfCorridor: number;
+  /** Винрейты по боям — по ним видно, вверх бой вышел или вниз. */
+  perBattle: { battle: string; winrate: number }[];
 }
 
 export function powerLadder(
@@ -293,6 +325,7 @@ export function powerLadder(
       let responses = 0;
       let played = 0;
       const perBattle: number[] = [];
+      const perBattleIds: string[] = [];
       for (const b of battles) {
         const party = partyForBattle(b.id);
         let localWins = 0;
@@ -308,6 +341,7 @@ export function powerLadder(
           responses += st.events.filter((e) => e.type === 'response').length;
         }
         perBattle.push(localWins / Math.max(1, runs));
+        perBattleIds.push(b.id);
       }
       const n = Math.max(1, played);
       out.push({
@@ -319,9 +353,10 @@ export function powerLadder(
         usedShare: used / n,
         responsesPerBattle: responses / n,
         passiveOnly,
+        perBattle: perBattle.map((w, i) => ({ battle: perBattleIds[i] as string, winrate: w })),
         minWinrate: perBattle.length ? Math.min(...perBattle) : 0,
         maxWinrate: perBattle.length ? Math.max(...perBattle) : 0,
-        outOfCorridor: perBattle.filter((w) => w < 0.6 || w > 0.85).length,
+        outOfCorridor: perBattle.filter((w) => w < POWER_MIN || w > POWER_MAX).length,
       });
     }
   }

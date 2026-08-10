@@ -74,7 +74,7 @@
         "unit": "pocket_cutter",
         "row": "front",
         "index": 2,
-        "level": 1
+        "level": 2
       },
       {
         "unit": "hook_man",
@@ -158,7 +158,7 @@
         "unit": "wandering_debtor",
         "row": "front",
         "index": 1,
-        "level": 1
+        "level": 2
       },
       {
         "unit": "throat_taker",
@@ -239,7 +239,7 @@
         "unit": "ledger_clerk",
         "row": "back",
         "index": 2,
-        "level": 1
+        "level": 2
       }
     ],
     "turnLimit": 14,
