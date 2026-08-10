@@ -23,6 +23,12 @@ export const zCondition: z.ZodTypeAny = z.lazy(() =>
     z.object({ kind: z.literal('flag'), flag: z.string(), value: z.boolean().optional() }),
     z.object({ kind: z.literal('counter'), counter: z.string(), op: zCompareOp, value: z.number() }),
     z.object({ kind: z.literal('memory'), memory: z.string() }),
+    z.object({
+      kind: z.literal('fragments'),
+      memory: z.string(),
+      op: zCompareOp,
+      value: z.number(),
+    }),
     z.object({ kind: z.literal('life'), life: z.string() }),
     z.object({ kind: z.literal('visited'), scene: z.string() }),
     z.object({ kind: z.literal('deaths'), op: zCompareOp, value: z.number() }),
