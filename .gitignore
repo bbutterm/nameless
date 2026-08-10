@@ -5,8 +5,9 @@ build/
 *.tsbuildinfo
 .DS_Store
 coverage/
-sim-reports/*.json
+sim-reports/
 !sim-reports/.gitkeep
+screenshots/
 .env
 .env.local
 
