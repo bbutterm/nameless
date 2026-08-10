@@ -1,0 +1,253 @@
+{
+  "count": 31,
+  "portraits": [
+    {
+      "id": "bagorshchik_sluzy",
+      "path": "packages/content/assets/portraits/bagorshchik_sluzy.webp",
+      "width": 512,
+      "height": 512,
+      "bytes": 4398,
+      "format": "WEBP"
+    },
+    {
+      "id": "brat_ogorodnik",
+      "path": "packages/content/assets/portraits/brat_ogorodnik.webp",
+      "width": 512,
+      "height": 512,
+      "bytes": 6780,
+      "format": "WEBP"
+    },
+    {
+      "id": "dratva",
+      "path": "packages/content/assets/portraits/dratva.webp",
+      "width": 512,
+      "height": 512,
+      "bytes": 3410,
+      "format": "WEBP"
+    },
+    {
+      "id": "gladen",
+      "path": "packages/content/assets/portraits/gladen.webp",
+      "width": 512,
+      "height": 512,
+      "bytes": 3280,
+      "format": "WEBP"
+    },
+    {
+      "id": "golos_iz_trukhi",
+      "path": "packages/content/assets/portraits/golos_iz_trukhi.webp",
+      "width": 512,
+      "height": 512,
+      "bytes": 3260,
+      "format": "WEBP"
+    },
+    {
+      "id": "khranitel_kartoteki",
+      "path": "packages/content/assets/portraits/khranitel_kartoteki.webp",
+      "width": 512,
+      "height": 512,
+      "bytes": 3358,
+      "format": "WEBP"
+    },
+    {
+      "id": "klyost",
+      "path": "packages/content/assets/portraits/klyost.webp",
+      "width": 512,
+      "height": 512,
+      "bytes": 3582,
+      "format": "WEBP"
+    },
+    {
+      "id": "marodyor",
+      "path": "packages/content/assets/portraits/marodyor.webp",
+      "width": 512,
+      "height": 512,
+      "bytes": 2964,
+      "format": "WEBP"
+    },
+    {
+      "id": "marya",
+      "path": "packages/content/assets/portraits/marya.webp",
+      "width": 512,
+      "height": 512,
+      "bytes": 3380,
+      "format": "WEBP"
+    },
+    {
+      "id": "mat_sheptunya",
+      "path": "packages/content/assets/portraits/mat_sheptunya.webp",
+      "width": 512,
+      "height": 512,
+      "bytes": 3316,
+      "format": "WEBP"
+    },
+    {
+      "id": "mertvyy_v_ocheredi",
+      "path": "packages/content/assets/portraits/mertvyy_v_ocheredi.webp",
+      "width": 512,
+      "height": 512,
+      "bytes": 2862,
+      "format": "WEBP"
+    },
+    {
+      "id": "naryad_revizii",
+      "path": "packages/content/assets/portraits/naryad_revizii.webp",
+      "width": 512,
+      "height": 512,
+      "bytes": 4324,
+      "format": "WEBP"
+    },
+    {
+      "id": "ochered",
+      "path": "packages/content/assets/portraits/ochered.webp",
+      "width": 512,
+      "height": 512,
+      "bytes": 2048,
+      "format": "WEBP"
+    },
+    {
+      "id": "osoka",
+      "path": "packages/content/assets/portraits/osoka.webp",
+      "width": 512,
+      "height": 512,
+      "bytes": 2800,
+      "format": "WEBP"
+    },
+    {
+      "id": "otsenshchik",
+      "path": "packages/content/assets/portraits/otsenshchik.webp",
+      "width": 512,
+      "height": 512,
+      "bytes": 7870,
+      "format": "WEBP"
+    },
+    {
+      "id": "paromshchitsa",
+      "path": "packages/content/assets/portraits/paromshchitsa.webp",
+      "width": 512,
+      "height": 512,
+      "bytes": 3634,
+      "format": "WEBP"
+    },
+    {
+      "id": "pisar_chitalni",
+      "path": "packages/content/assets/portraits/pisar_chitalni.webp",
+      "width": 512,
+      "height": 512,
+      "bytes": 5298,
+      "format": "WEBP"
+    },
+    {
+      "id": "player",
+      "path": "packages/content/assets/portraits/player.webp",
+      "width": 512,
+      "height": 512,
+      "bytes": 2778,
+      "format": "WEBP"
+    },
+    {
+      "id": "poproshayka",
+      "path": "packages/content/assets/portraits/poproshayka.webp",
+      "width": 512,
+      "height": 512,
+      "bytes": 3142,
+      "format": "WEBP"
+    },
+    {
+      "id": "proshchai",
+      "path": "packages/content/assets/portraits/proshchai.webp",
+      "width": 512,
+      "height": 512,
+      "bytes": 2904,
+      "format": "WEBP"
+    },
+    {
+      "id": "revizor",
+      "path": "packages/content/assets/portraits/revizor.webp",
+      "width": 512,
+      "height": 512,
+      "bytes": 2236,
+      "format": "WEBP"
+    },
+    {
+      "id": "serzhant_zastavy",
+      "path": "packages/content/assets/portraits/serzhant_zastavy.webp",
+      "width": 512,
+      "height": 512,
+      "bytes": 7514,
+      "format": "WEBP"
+    },
+    {
+      "id": "skupshchik_tsekha",
+      "path": "packages/content/assets/portraits/skupshchik_tsekha.webp",
+      "width": 512,
+      "height": 512,
+      "bytes": 3824,
+      "format": "WEBP"
+    },
+    {
+      "id": "starosta",
+      "path": "packages/content/assets/portraits/starosta.webp",
+      "width": 512,
+      "height": 512,
+      "bytes": 8412,
+      "format": "WEBP"
+    },
+    {
+      "id": "storozh_arkhiva",
+      "path": "packages/content/assets/portraits/storozh_arkhiva.webp",
+      "width": 512,
+      "height": 512,
+      "bytes": 5516,
+      "format": "WEBP"
+    },
+    {
+      "id": "strazhnik",
+      "path": "packages/content/assets/portraits/strazhnik.webp",
+      "width": 512,
+      "height": 512,
+      "bytes": 3988,
+      "format": "WEBP"
+    },
+    {
+      "id": "svodchik",
+      "path": "packages/content/assets/portraits/svodchik.webp",
+      "width": 512,
+      "height": 512,
+      "bytes": 3828,
+      "format": "WEBP"
+    },
+    {
+      "id": "tminny",
+      "path": "packages/content/assets/portraits/tminny.webp",
+      "width": 512,
+      "height": 512,
+      "bytes": 4898,
+      "format": "WEBP"
+    },
+    {
+      "id": "vdova_shcherb",
+      "path": "packages/content/assets/portraits/vdova_shcherb.webp",
+      "width": 512,
+      "height": 512,
+      "bytes": 4280,
+      "format": "WEBP"
+    },
+    {
+      "id": "yamshchik_gonby",
+      "path": "packages/content/assets/portraits/yamshchik_gonby.webp",
+      "width": 512,
+      "height": 512,
+      "bytes": 4144,
+      "format": "WEBP"
+    },
+    {
+      "id": "zhichka",
+      "path": "packages/content/assets/portraits/zhichka.webp",
+      "width": 512,
+      "height": 512,
+      "bytes": 3074,
+      "format": "WEBP"
+    }
+  ]
+}
