@@ -54,8 +54,21 @@ export function cardImage(unitId: string): string | undefined {
   return cardArt.get(unitId);
 }
 
+/**
+ * Говорящие, которые ЕСТЬ в ростере под другим id: рисовать им отдельный
+ * портрет незачем — на карте юнита нарисован тот же человек. Список короткий
+ * и ведётся руками нарочно: совпадение имён проверяет человек, а не regexp,
+ * иначе «Оценщик» однажды приклеится не к тому оценщику.
+ */
+const PORTRAIT_FROM_CARD: Record<string, string> = {
+  otsenshchik: 'pawn_appraiser_dusk',
+  yamshchik_gonby: 'relay_driver',
+  bagorshchik_sluzy: 'hook_man',
+};
+
 export function portraitImage(speakerId: string): string | undefined {
-  return portraitArt.get(speakerId) ?? cardArt.get(speakerId);
+  const alias = PORTRAIT_FROM_CARD[speakerId];
+  return portraitArt.get(speakerId) ?? cardArt.get(speakerId) ?? (alias ? cardArt.get(alias) : undefined);
 }
 
 /**
