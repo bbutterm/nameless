@@ -35,6 +35,30 @@ await page.addInitScript(() => {
     window.__vibes.push(p);
     return true;
   };
+  /*
+   * Аудио-элементы игры живут ВНЕ DOM: `new Audio()` не добавляет ничего на
+   * страницу, а Web Audio тянет звук прямо из элемента. Через
+   * `querySelectorAll('audio')` их не найти никогда — первая версия этой
+   * проверки так и говорила «играет 0» при исправно играющей музыке.
+   * Поэтому запоминаем их в момент вызова `play()`.
+   */
+  window.__media = [];
+  const realPlay = HTMLMediaElement.prototype.play;
+  HTMLMediaElement.prototype.play = function () {
+    if (!window.__media.includes(this)) window.__media.push(this);
+    const p = realPlay.apply(this, arguments);
+    if (p && p.catch) p.catch((e) => window.__playErrors.push(`${e.name}: ${e.message}`));
+    return p;
+  };
+  window.__playErrors = [];
+});
+
+// Запросы за музыкой считаем отдельно: она обязана НЕ грузиться до того, как
+// понадобилась, — первая сцена тянет шесть килобайт, и это правило легко
+// потерять одной строкой `preload`.
+const musicHits = [];
+page.on('request', (r) => {
+  if (/\/assets\/.*\.(m4a|mp3|ogg|opus|webm|wav)(\?|$)/.test(r.url())) musicHits.push(r.url());
 });
 
 await page.goto(url, { waitUntil: 'networkidle' });
@@ -54,6 +78,8 @@ const state = async (label) => {
 };
 
 await state('до касания');
+console.log(`   запросов за музыкой до касания: ${musicHits.length}`);
+const beforeTouch = musicHits.length;
 await page.locator('.big-button').first().click();
 await page.waitForTimeout(500);
 await state('после «Новой игры»');
@@ -75,6 +101,28 @@ if (after.ctxs === 0) {
 } else {
   console.log('   звук: контекст запущен, звучать может');
 }
+console.log(
+  beforeTouch === 0
+    ? '   музыка: до касания не загружалась — верно'
+    : `!! музыка: ${beforeTouch} запросов ДО касания, первая загрузка потяжелела`,
+);
+// Даём звуку секунду: `play()` асинхронен, и «ещё не начало» выглядит
+// точно так же, как «не заиграет никогда».
+await page.waitForTimeout(1200);
+const music = await page.evaluate(() => ({
+  // Играет — это не «не на паузе», а «время идёт»: элемент с нулевым
+  // currentTime может стоять на паузе внутри и врать наружу.
+  playing: window.__media.filter((a) => !a.paused && a.currentTime > 0).length,
+  known: window.__media.length,
+  errors: window.__playErrors,
+}));
+console.log(
+  musicHits.length === 0
+    ? '   музыка: файлов нет — слот пуст, игра молчит как раньше'
+    : `   музыка: загружено ${musicHits.length}, элементов ${music.known}, ` +
+      `реально играет ${music.playing}`,
+);
+for (const e of music.errors) console.log(`   !! play() отказал: ${e}`);
 console.log(
   after.vibes > 0
     ? `   вибрация: игра просит её ${after.vibes} раз — код живой`

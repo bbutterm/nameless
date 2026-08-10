@@ -3,7 +3,7 @@ import type { Lang } from '@nameless/engine';
 import { t } from '../i18n';
 import { useGame } from '../store/game';
 import { hapticsEnabled, setHaptics } from '../lib/haptics';
-import { setSound, soundEnabled } from '../lib/sound';
+import { setMusic, setSound, soundEnabled } from '../lib/sound';
 import { Attribution } from '../components/Attribution';
 import { CodexScreen } from './CodexScreen';
 
@@ -14,8 +14,19 @@ export function TitleScreen() {
   const [sound, setS] = useState(soundEnabled());
   const [codexOpen, setCodexOpen] = useState(false);
 
+  /*
+   * Музыка титула включается ПО КАСАНИЮ, а не в эффекте на монтирование.
+   * Браузеры не дают звук до первого жеста: подложка, запущенная при
+   * появлении экрана, была бы обещанием, которого игра не может сдержать, —
+   * и молчала бы до конца забега, ничего об этом не сказав.
+   *
+   * Титул — первый экран, и касание на нём есть всегда: любая кнопка ведёт
+   * дальше. Поэтому вешаем на весь экран, а не на конкретную кнопку.
+   */
+  const wake = () => setMusic('title');
+
   return (
-    <div className="screen title">
+    <div className="screen title" onPointerDown={wake}>
       <div className="title-art">
         <div className="tower" />
       </div>
