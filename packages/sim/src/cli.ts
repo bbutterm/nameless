@@ -30,6 +30,18 @@ import {
   type Finding,
   type FindingKind,
 } from './baseline.js';
+import {
+  brief as plainwordsBrief,
+  checkPlainwords,
+  findings as plainwordsFindings,
+} from '../../../tools/plainwords.mjs';
+import {
+  DECISION_EPS,
+  DECISION_ROLLOUTS,
+  DECISION_RUNS,
+  decisionDensity,
+  NO_DECISION_MAX,
+} from './decisions.js';
 import { fuzzDialogue } from './dialogue-fuzz.js';
 import {
   battleRhythm,
@@ -91,6 +103,24 @@ for (const i of issues.filter((x) => x.level !== 'error').slice(0, 20)) {
 for (const i of errors) red('content', i.where, i.message);
 summary['contentErrors'] = errors.length;
 summary['contentWarnings'] = issues.length - errors.length;
+
+// ── Простые слова: канцелярский словарь ──────────────────────────────────────
+// Счёт живёт в `tools/plainwords.mjs` (запускается и в одиночку), а сюда
+// приходит потому, что база известного красного одна на всю игру и лежит
+// здесь: корпус сейчас красный по праву — тексты ещё не переехали в мир Б.
+if (!only || only === 'words') {
+  head('Простые слова (docs/ПЕРЕХОД.md §6)');
+  const words = checkPlainwords(root);
+  for (const line of plainwordsBrief(words)) console.log(line);
+  for (const f of plainwordsFindings(words)) red('plainwords', f.id, f.note, f.value);
+  summary['plainwords'] = {
+    tierAHits: words.tierAHits,
+    tierAScenes: words.tierAScenes.map((s) => s.id),
+    tierBScenes: words.tierBScenes.map((s) => ({ id: s.id, hits: s.tierB, limit: s.limit })),
+    perLineHits: words.perLineHits,
+    names: words.names.map((n) => ({ power: n.power, share: n.share })),
+  };
+}
 
 // ── Бои ──────────────────────────────────────────────────────────────────────
 if (!only || only === 'battles') {
@@ -508,6 +538,64 @@ if (!only || only === 'battles') {
         );
         summary[`affinity:${life}`] = { swap, dSkill, dPlain, responses: b.responsesPerBattle };
       }
+    }
+
+    // ── Ходы без решения (docs/БОЙ_ЗАМЕРЫ.md, метрика А) ─────────────────────
+    //
+    // Жалоба владельца «бой не динамичный и скучный» разобрана в
+    // DIRECTION_COMBAT §A.1 одной фразой: «лучший ход вычисляется, а не
+    // выбирается». Здесь эта фраза становится числом. На каждом ходу стороны
+    // игрока перечисляются все законные действия, лучшее из них отбирается на
+    // одной жеребьёвке и ПРОВЕРЯЕТСЯ на другой (иначе максимум шумных оценок
+    // сам себя завышает), и если доказанного превосходства над жадным ходом
+    // нет — ход записан как ход без решения.
+    head('Ходы без решения: жадный бот против перебора');
+    const dec = decisionDensity(
+      content,
+      (id) => {
+        const def = content.battles.find((b) => b.id === id);
+        if (def?.expectParty?.length) return namedParty(content.units, def.expectParty);
+        const ch = battleChapter.get(id) ?? 1;
+        return defaultParty(content.units, ch === 1 ? 1 : ch === 2 ? 2 : 3, ch);
+      },
+      { rollouts: DECISION_ROLLOUTS, runs: DECISION_RUNS },
+    );
+    const decOk = dec.noDecisionShare <= NO_DECISION_MAX;
+    for (const r of dec.perBattle) {
+      const share = r.turns > 0 ? r.noDecision / r.turns : 0;
+      console.log(
+        `   ${r.battle.padEnd(26)} ходов ${String(r.turns).padStart(3)}  без решения ` +
+          `${(share * 100).toFixed(0)}%  (вынужденных ${((r.forced / Math.max(1, r.turns)) * 100).toFixed(0)}%)  ` +
+          `выбор из ${r.branching.toFixed(1)}  потеря жадного ${r.regret.toFixed(3)}`,
+      );
+    }
+    console.log(
+      `${decOk ? '  ' : '!!'} доля ходов без решения ${(dec.noDecisionShare * 100).toFixed(1)}% ` +
+        `по ${dec.turns} ходам (предел ${(NO_DECISION_MAX * 100).toFixed(0)}%), ` +
+        `из них вынужденных ${(dec.forcedShare * 100).toFixed(1)}%`,
+    );
+    console.log(
+      `   ширина выбора ${dec.branching.toFixed(1)} действия на ход; средняя потеря жадного ` +
+        `${dec.regret.toFixed(3)} полосы отряда; прокатов на вариант ${DECISION_ROLLOUTS}`,
+    );
+    // Прибор обязан уметь сказать «я этого не различаю»: если шум разницы
+    // подобрался к порогу заметности, цифра выше — про жеребьёвку, а не про бой.
+    const decNoisy = dec.noise >= DECISION_EPS;
+    console.log(
+      `${decNoisy ? '!!' : '  '} шум разницы ${dec.noise.toFixed(3)} (худший бой ${dec.noiseMax.toFixed(3)}) ` +
+        `против порога заметности ${DECISION_EPS}` +
+        `${decNoisy ? ' — прибор различает хуже, чем судит: подними прокаты' : ''}`,
+    );
+    summary['decisions'] = dec;
+    if (!decOk) {
+      red(
+        'noDecision',
+        'all',
+        `${(dec.noDecisionShare * 100).toFixed(1)}% ходов игрока не содержат решения при пределе ` +
+          `${(NO_DECISION_MAX * 100).toFixed(0)}%: жадная эвристика совпадает с перебором, ` +
+          `и лучший ход вычисляется, а не выбирается (DIRECTION_COMBAT §A.1)`,
+        Number((dec.noDecisionShare * 100).toFixed(1)),
+      );
     }
 
     // Воспроизводимость проверяется И с умениями: они такой же участник боя.
