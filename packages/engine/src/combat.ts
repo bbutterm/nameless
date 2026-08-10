@@ -1002,15 +1002,18 @@ function responseRoleOf(def: UnitDef | undefined): 'heal' | 'shield' | 'debuff' 
  */
 export const RESPONSE_K = 5;
 /**
- * Урон-роль пишется тройкой, а не пятёркой (ветка В §D.1).
+ * Урон-роль: тройка, и она ОТЛОЖЕННАЯ — дот на один тик, а не удар сейчас.
  *
- * Чистый урон дороже прочих форм даже без премии за добивание: он снимает hp
- * насовсем, тогда как щит и лечение возвращают то, что и так вернулось бы, а
- * дебафф отнимает лишь то, что враг успеет не сделать. Замер: при пятёрке
- * жизнь, у которой все пятеро сродственных бьют, стоила на пять пунктов
- * дороже жизни, у которой все пятеро ломают.
+ * Закон калибровки, доказанный дважды: дорого «куда» и «когда», а не
+ * «сколько». Номинал резали двумя независимыми ручками и сняли 0.4 и 0.5
+ * пункта; одно прицеливание сняло 1.3. Мгновенность была последней премией
+ * урон-роли: удар сейчас закрывает чужой ход, дот — уже нет.
+ *
+ * Форма взята дословно из «Смолы на воде»: «вода занялась ровно так, как ты
+ * обещал совету, — с опозданием на два вдоха».
  */
 const RESPONSE_DAMAGE = 3;
+const RESPONSE_DOT_TAG = 'response';
 /**
  * Дебафф-роль: −3 к атаке на 2 раунда.
  *
@@ -1075,7 +1078,19 @@ function affinityResponses(
     } else if (role === 'debuff') {
       const named = heroTargetUid ? view.units.find((u) => u.uid === heroTargetUid) : undefined;
       target = named && named.alive && named.side !== side ? named : foes()[0];
+    } else if (role === 'shield') {
+      /*
+       * Щит идёт САМОМУ ЗДОРОВОМУ своему — «подпорка под рабочую руку».
+       * Щит раненому нёс премию предотвращения смерти, зеркальную той премии
+       * добивания, что снята у урона: и там и там отклик решал исход, а не
+       * подталкивал его.
+       */
+      target = allies()
+        .slice()
+        .sort((a, b) => b.hp - a.hp || (a.uid < b.uid ? -1 : 1))[0];
     } else {
+      // Лечение прицеливать незачем: его потолок — недостающие hp, и премии
+      // у него нет по устройству.
       target = mostHurt(allies()) ?? allies()[0];
     }
     if (!target) continue;
@@ -1083,15 +1098,16 @@ function affinityResponses(
     events.push({ type: 'response', uid: r.uid, ability: `response_${role}`, targetUid: target.uid, life });
 
     if (role === 'damage') {
-      // Пять ЧИСТЫХ: броня не считается. Отклик — не удар, а то, что рука
-      // сделала помимо удара, и торговаться с защитой ему нечем.
-      const before = target.hp;
-      target.hp = Math.max(0, target.hp - RESPONSE_DAMAGE);
-      events.push({ type: 'damage', uid: target.uid, amount: before - target.hp, hpAfter: target.hp, crit: false });
-      if (target.hp === 0 && target.alive) {
-        target.alive = false;
-        events.push({ type: 'death', uid: target.uid });
-      }
+      // Дот, а не удар: чистый урон, но в начале следующего раунда. Броня
+      // по-прежнему не считается — отклику нечем торговаться с защитой.
+      applyBattleEffect(
+        rng,
+        r,
+        target,
+        { kind: 'dot', amount: RESPONSE_DAMAGE, turns: 1, tag: RESPONSE_DOT_TAG },
+        events,
+        healTax(view),
+      );
     } else if (role === 'heal') {
       applyBattleEffect(rng, r, target, { kind: 'heal_flat', amount: RESPONSE_K }, events, healTax(view));
     } else if (role === 'shield') {

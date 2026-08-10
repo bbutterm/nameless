@@ -18,7 +18,7 @@ import { content } from './index.js';
 
 /** Канон §C.4, переписанный руками. Менять — только вслед за документом. */
 const AFFINITY: Record<string, string[]> = {
-  smolokur: ['gar', 'tar_burner', 'throat_taker', 'ferry_hook', 'hook_man'],
+  smolokur: ['gar', 'tar_burner', 'throat_taker', 'ferry_hook'],
   klyuchar: ['vodonos', 'almshouse_sister', 'grateful_debtor'],
   posulshchik: ['posul', 'promise_pedlar', 'borrowed_face', 'guild_hoarder_vey', 'memory_thief_orsa'],
   chistopisets: ['svidetel', 'sworn_witness', 'plain_speaker', 'chalk_marker', 'hole_reader'],
@@ -27,6 +27,11 @@ const AFFINITY: Record<string, string[]> = {
 
 /** Осознанно без сродства — §C.4, нижняя часть таблицы. */
 const NO_AFFINITY = [
+  // Багорщик сродство ПОТЕРЯЛ, и это решение прибора, а не вкуса: он был
+  // слабейшей строкой таблицы («достаёт из воды всё, за что платят» — связь
+  // с речной войной косвенная), а у Смолокура сродственных было больше всех,
+  // и его отклик стоил дороже прочих жизней.
+  'hook_man',
   'brother_ash',
   'pale_deacon',
   'empty_head_elder',
@@ -89,13 +94,13 @@ describe('сродство существ и личностей', () => {
       Object.entries(AFFINITY).map(([life, u]) => [life, u.length]),
     );
     expect(counts).toEqual({
-      smolokur: 5,
+      smolokur: 4,
       klyuchar: 3,
       posulshchik: 5,
       chistopisets: 5,
       perechen: 4,
     });
-    expect(NO_AFFINITY.length).toBe(18);
+    expect(NO_AFFINITY.length).toBe(19);
   });
 
   it('у каждой жизни есть хоть один сродственный юнит — иначе умение немо', () => {

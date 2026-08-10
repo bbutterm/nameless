@@ -44,6 +44,9 @@ const personas = Number(args.find((a) => a.startsWith('--personas='))?.split('='
 const runs = Number(args.find((a) => a.startsWith('--runs='))?.split('=')[1] ?? 300);
 const reportDir = join(process.cwd(), '..', '..', 'sim-reports');
 
+/** Сколько сродственных ставится в отряд контроля — одинаково для всех жизней. */
+const CONTROL_KIN = 2;
+
 let failed = false;
 const summary: Record<string, unknown> = {};
 
@@ -278,6 +281,21 @@ if (!only || only === 'battles') {
        *
        * Пустышка ничего не делает, но тратит ход и несёт живую жизнь. Всё, что
        * она набрала, — цена отклика и ничего больше.
+       *
+       * ОТРЯД ДЛЯ КОНТРОЛЯ СОБИРАЕТСЯ ОСОБО, и без этого прибор врал. Сначала
+       * он мерил каждую жизнь ТИПОВЫМ отрядом — а в типовом отряде у одной
+       * жизни оказывался один сродственный, у другой двое, у третьей ни
+       * одного, и это выходило случайно, по тирам и рядам. Пять чисел, которые
+       * канон сравнивает между собой требованием «разброс ≤4», были получены в
+       * разных условиях и сравнению не подлежали: у Смолокура отклик вообще
+       * жил в одном бою из четырнадцати, и три ручки подряд (отложенный урон,
+       * номинал 5→3, снятие сродства у Багорщика) сдвинули его ровно на ноль,
+       * потому что двигали то, чего в замере почти не было.
+       *
+       * Теперь в отряд принудительно ставится РОВНО ДВА сродственных нужной
+       * жизни — столько же для всех пятерых. Это единственный способ, при
+       * котором «разброс между жизнями» означает разницу ролей, а не разницу
+       * ростера. Замена идёт по тиру, чтобы не подменять заодно и силу отряда.
        */
       head('Контроль отклика: умение, которое ничего не делает');
       const emptyGains: Record<string, number> = {};
@@ -286,26 +304,84 @@ if (!only || only === 'battles') {
           content,
           (id) => {
             const def = content.battles.find((b) => b.id === id);
-            if (def?.expectParty?.length) return namedParty(content.units, def.expectParty);
-            const ch = battleChapter.get(id) ?? 1;
-            return defaultParty(content.units, ch === 1 ? 1 : ch === 2 ? 2 : 3, ch);
+            const base = def?.expectParty?.length
+              ? namedParty(content.units, def.expectParty)
+              : defaultParty(
+                  content.units,
+                  (battleChapter.get(id) ?? 1) === 1 ? 1 : (battleChapter.get(id) ?? 1) === 2 ? 2 : 3,
+                  battleChapter.get(id) ?? 1,
+                );
+            return withKin(content.units, base, life, CONTROL_KIN);
           },
           () => [emptyPower(life)],
           [life],
           Math.max(20, Math.floor(runs / 5)),
         )[0];
-        if (!rowRep) continue;
-        const d = (rowRep.winrate - baseWin) * 100;
+        /*
+         * База для контроля меряется ТЕМ ЖЕ отрядом, но без умения. Иначе в
+         * разницу попала бы сама подстановка сродственных: они меняют силу
+         * отряда, и прибор списал бы это на отклик.
+         */
+        const rowBase = powerLadder(
+          content,
+          (id) => {
+            const def = content.battles.find((b) => b.id === id);
+            const base = def?.expectParty?.length
+              ? namedParty(content.units, def.expectParty)
+              : defaultParty(
+                  content.units,
+                  (battleChapter.get(id) ?? 1) === 1 ? 1 : (battleChapter.get(id) ?? 1) === 2 ? 2 : 3,
+                  battleChapter.get(id) ?? 1,
+                );
+            return withKin(content.units, base, life, CONTROL_KIN);
+          },
+          () => [],
+          [life],
+          Math.max(20, Math.floor(runs / 5)),
+        )[0];
+        if (!rowRep || !rowBase) continue;
+        /*
+         * Сколько сродственных удалось поставить на самом деле. Подстановка
+         * идёт заменой РАВНОГО ПО ТИРУ, и у жизни, чьи сродственные все второго
+         * тира, в отряде первой главы менять некого. Строка, где до нормы не
+         * добрали, сравнению с прочими не подлежит — и обязана сказать это
+         * вслух, иначе один молчаливый перекос сменится другим.
+         */
+        const byId = new Map(content.units.map((u) => [u.id, u]));
+        const kinReached = content.battles
+          .filter((b) => !b.tags?.includes('lethal') && !b.tags?.includes('tutorial'))
+          .map((b) => {
+            const base = b.expectParty?.length
+              ? namedParty(content.units, b.expectParty)
+              : defaultParty(
+                  content.units,
+                  (battleChapter.get(b.id) ?? 1) === 1 ? 1 : (battleChapter.get(b.id) ?? 1) === 2 ? 2 : 3,
+                  battleChapter.get(b.id) ?? 1,
+                );
+            return withKin(content.units, base, life, CONTROL_KIN).filter((pu) =>
+              (byId.get(pu.defId)?.traits ?? []).includes(`life_${life}`),
+            ).length;
+          });
+        const kinMin = kinReached.length ? Math.min(...kinReached) : 0;
+        const comparable = kinMin >= CONTROL_KIN;
+        const d = (rowRep.winrate - rowBase.winrate) * 100;
         emptyGains[life] = d;
-        const ok = d <= EMPTY_POWER_GAIN_MAX;
+        // Несравнимую строку прибор роняет так же, как вышедшую за предел:
+        // «не смог измерить» — это не «всё в порядке».
+        const ok = comparable && d <= EMPTY_POWER_GAIN_MAX;
         if (!ok) failed = true;
         console.log(
           `${ok ? '  ' : '!!'} ${life.padEnd(13)} побед ${(rowRep.winrate * 100).toFixed(0)}% ` +
             `(${d >= 0 ? '+' : ''}${d.toFixed(1)} над базой, предел +${EMPTY_POWER_GAIN_MAX})  ` +
             `откликов ${rowRep.responsesPerBattle.toFixed(2)}/бой, ` +
-            `пустышка применена в ${(rowRep.usedShare * 100).toFixed(0)}% боёв`,
+            `сродственных в отряде ${kinMin}/${CONTROL_KIN}`,
         );
-        if (!ok) {
+        if (!comparable) {
+          console.log(
+            `   ↳ собрано лишь ${kinMin} сродственных из ${CONTROL_KIN}: строка НЕСРАВНИМА ` +
+              `с прочими, менять по ней нечего`,
+          );
+        } else if (d > EMPTY_POWER_GAIN_MAX) {
           console.log(
             `   ↳ отклик платит больше, чем весь допуск ступени: резать числа умений бессмысленно`,
           );
@@ -468,6 +544,37 @@ function dedupe(items: string[]): string[] {
  * проходится вдвоём, и мерить его шестью сильнейшими юнитами тира — мерить
  * не тот вход, там любой состав даёт 100%.
  */
+/**
+ * Доводит отряд до ровно `want` сродственных нужной жизни, вытесняя
+ * несродственных РАВНОГО ТИРА. Тир держится специально: иначе вместе со
+ * сродством в отряд въезжала бы сила, и контроль мерил бы её.
+ */
+function withKin(units: UnitDef[], party: PartyUnit[], life: string, want: number): PartyUnit[] {
+  const byId = new Map(units.map((u) => [u.id, u]));
+  const isKin = (defId: string): boolean =>
+    (byId.get(defId)?.traits ?? []).includes(`life_${life}`);
+  const out = party.map((p) => ({ ...p }));
+  let have = out.filter((p) => isKin(p.defId)).length;
+  if (have >= want) return out;
+
+  const pool = units
+    .filter((u) => (u.traits ?? []).includes(`life_${life}`))
+    .filter((u) => !out.some((p) => p.defId === u.id))
+    .sort((a, b) => a.id.localeCompare(b.id, 'ru'));
+  for (const kin of pool) {
+    if (have >= want) break;
+    // Вытесняем несродственного того же тира и того же ряда, если можно.
+    const victim =
+      out.find((p) => !isKin(p.defId) && byId.get(p.defId)?.tier === kin.tier && p.slot.row === kin.row) ??
+      out.find((p) => !isKin(p.defId) && byId.get(p.defId)?.tier === kin.tier);
+    if (!victim) continue;
+    victim.defId = kin.id;
+    victim.hp = kin.stats.hp;
+    have++;
+  }
+  return out;
+}
+
 function namedParty(units: UnitDef[], ids: string[]): PartyUnit[] {
   const byId = new Map(units.map((u) => [u.id, u]));
   const out: PartyUnit[] = [];

@@ -662,9 +662,14 @@ describe('отклик сродства', () => {
     // Пять чистых — и ни щита на 9, ни урона по силе способности: собственная
     // способность юнита в отклике не участвует вовсе.
     expect(shieldOf(unit(s, foeUid)!)).toBe(0);
-    // Три, а не пять: урон-роль пишется тройкой (ветка В §D.1) — чистый урон
-    // дороже прочих форм даже без премии за добивание.
-    expect(hpBefore - unit(s, foeUid)!.hp).toBe(3);
+    /*
+     * Урон отложен: сейчас на цели висит дот на тройку, а hp ещё целы. Так
+     * снята последняя премия урон-роли — мгновенность: удар сейчас закрывает
+     * чужой ход, дот уже нет. Форма из «Смолы на воде»: с опозданием на два
+     * вдоха.
+     */
+    expect(hpBefore - unit(s, foeUid)!.hp).toBe(0);
+    expect(unit(s, foeUid)!.statuses.find((st) => st.tag === 'response')?.amount).toBe(3);
     // Ход не потрачен и перезарядка не тронута: отклик — не ход.
     expect(kin.acted).toBe(false);
     expect(kin.cooldowns['echo_blow'] ?? 0).toBe(0);
@@ -697,7 +702,8 @@ describe('отклик сродства', () => {
     s = act(idx, s, { ability: 'tar' });
     const resp = s.events.find((e) => e.type === 'response');
     expect(resp && 'targetUid' in resp ? resp.targetUid : undefined).toBe(dummyUid);
-    expect(dummyHp - unit(s, dummyUid)!.hp).toBe(3);
+    expect(unit(s, dummyUid)!.statuses.find((st) => st.tag === 'response')?.amount).toBe(3);
+    expect(dummyHp - unit(s, dummyUid)!.hp).toBe(0);
     expect(strawUid).toBeDefined();
   });
 
