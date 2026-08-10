@@ -61,7 +61,8 @@
       "kind": "never"
     },
     "traits": [
-      "shooter"
+      "shooter",
+      "life_smolokur"
     ]
   }
 ]

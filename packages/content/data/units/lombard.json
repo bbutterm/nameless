@@ -69,7 +69,8 @@
     },
     "traits": [
       "fighter",
-      "guard"
+      "guard",
+      "life_perechen"
     ]
   },
   {
@@ -138,7 +139,8 @@
       "value": 40
     },
     "traits": [
-      "breaker"
+      "breaker",
+      "life_perechen"
     ]
   }
 ]
