@@ -37,6 +37,7 @@ export const FINDING_KINDS = [
   'ladderCorridor', // бои вне коридора при игроке с умением
   'emptyPower', // отклик сродственных платит больше допуска
   'emptyPowerStand', // стенд контроля не набрал сродственных: строка несравнима
+  'noDecision', // доля ходов игрока без решения выше предела (docs/БОЙ_ЗАМЕРЫ.md, А)
   'determinism', // один сид дал два разных боя
   'pacing', // темп до первого боя
   'rhythm', // промежутки между боями
@@ -44,6 +45,7 @@ export const FINDING_KINDS = [
   'deadEnd', // в узле выбора остаётся меньше двух вариантов
   'walkError', // проход по игре обрывается ошибкой
   'lineCoverage', // охват реплик ниже порога
+  'plainwords', // канцелярский словарь сверх нормы (docs/ПЕРЕХОД.md §6)
 ] as const;
 
 export type FindingKind = (typeof FINDING_KINDS)[number];

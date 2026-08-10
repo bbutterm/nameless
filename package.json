@@ -14,6 +14,7 @@
     "dev": "pnpm --filter @nameless/client dev",
     "sim": "pnpm --filter @nameless/sim sim",
     "validate": "pnpm --filter @nameless/content validate",
+    "plainwords": "node tools/plainwords.mjs",
     "ci": "pnpm typecheck && pnpm validate && pnpm test && pnpm sim && pnpm build"
   },
   "devDependencies": {
