@@ -3,6 +3,7 @@ import {
   currentActor,
   isPlayerTurn,
   legalTargets,
+  playerAbilityBar,
   readyAbilities,
   PARTY_SLOTS_PER_ROW,
   type Ability,
@@ -191,6 +192,18 @@ export function BattleScreen() {
   const actor = currentActor(battle);
   const myTurn = isPlayerTurn(battle);
   const abilities = actor && myTurn ? readyAbilities(combat, actor) : [];
+  /*
+   * Умения памяти — ромбы у левого края той же панели, и это не пятая
+   * способность юнита, а другая вещь другой формы (MEMORY_POWERS §B.3).
+   * Пассив («Опись») в панель не попадает вовсе: движок его отфильтровал,
+   * потому что кнопки у него нет — его интерфейс это сами цифры на врагах.
+   *
+   * Умение применяется вместо хода того юнита, чья очередь: герой отодвигает
+   * своего человека и делает сам. Поэтому ромб живёт в общей панели, а не в
+   * отдельной полосе — размен «чей ход я отдаю» должен быть виден рядом с
+   * тем, что этот ход мог бы сделать.
+   */
+  const powers = playerAbilityBar(battle);
   const legal = actor && selectedAbility && myTurn ? legalTargets(battle, actor.uid, selectedAbility) : [];
   const targets = legal.map((u) => u.uid);
   const over = battle.outcome !== 'ongoing';
@@ -453,6 +466,45 @@ export function BattleScreen() {
           <div className="battle-hint">{hint}</div>
 
           <div className="ability-bar">
+            {/* Ромбы стоят вне ветки myTurn: погашенное умение должно быть
+                видно и в чужой ход — иначе игрок узнаёт о нём только в свой,
+                и заряд, потраченный раунд назад, выглядит как пропажа. */}
+            {powers.map((slot) => {
+              const a = slot.power.ability;
+              const ready = slot.state.kind === 'ready';
+              const cd = slot.state.kind === 'cooldown' ? slot.state.turns : 0;
+              return (
+                <button
+                  key={slot.power.id}
+                  className={`memory-power ${selectedAbility?.id === a.id ? 'active' : ''} ${ready ? '' : 'spent'}`}
+                  aria-label={loc(a.name, lang)}
+                  disabled={!ready}
+                  onClick={() => {
+                    if (!ready) {
+                      // Молчащая кнопка учит только тому, что игра сломана.
+                      setReason(
+                        cd > 0
+                          ? t(lang, 'powerSpent')
+                          : slot.state.kind === 'unavailable' && slot.state.reason === 'noTargets'
+                            ? t(lang, 'powerNoTargets')
+                            : t(lang, 'powerNotYourTurn'),
+                      );
+                      return;
+                    }
+                    vibrate('tap');
+                    setPeek(undefined);
+                    setReason(undefined);
+                    setSelectedAbility(a);
+                  }}
+                >
+                  <span className="power-mark">
+                    <Icon name={a.icon} size={20} />
+                  </span>
+                  <span className="power-name">{loc(a.name, lang)}</span>
+                  {cd > 0 && <span className="power-spent">{t(lang, 'powerSpentShort')}</span>}
+                </button>
+              );
+            })}
             {myTurn ? (
               abilities.map((a) => (
                 <button

@@ -141,11 +141,27 @@ export function targetWord(kind: TargetKind, lang: Lang): string {
   }
 }
 
+/** Верх коридора длины боя: дольше него перезарядка означает «один раз». */
+const ONCE_PER_BATTLE_FROM = 14;
+
 /** Чипы разбора способности: куда бьёт, как часто, что оставляет после себя. */
 export function abilityChips(ability: Ability, lang: Lang): string[] {
   const chips = [targetWord(ability.target, lang)];
   if (ability.piercing) chips.push(t(lang, 'piercing'));
-  chips.push(ability.cooldown > 0 ? `${t(lang, 'cooldownN')} ${ability.cooldown}` : t(lang, 'everyTurn'));
+  /*
+   * «Раз за бой» умения памяти выражено в данных заведомо недостижимой
+   * перезарядкой, и это внутренняя уловка: боёв в 99 раундов не бывает при
+   * коридоре 6–14. Игроку она не адресована — он читал бы «перезарядка 99»
+   * и ждал бы её конца. Порог совпадает с верхом коридора длины боя: всё,
+   * что дольше самого длинного боя, — это «один раз», как ни называй.
+   */
+  chips.push(
+    ability.cooldown > ONCE_PER_BATTLE_FROM
+      ? t(lang, 'oncePerBattle')
+      : ability.cooldown > 0
+        ? `${t(lang, 'cooldownN')} ${ability.cooldown}`
+        : t(lang, 'everyTurn'),
+  );
   for (const eff of ability.effects ?? []) {
     // Урон уже показан диапазоном на самих картах — в чипах он лишний.
     if (eff.kind === 'damage') continue;

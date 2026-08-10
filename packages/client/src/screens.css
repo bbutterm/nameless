@@ -910,6 +910,49 @@
 .ability.active::after {
   border-image-source: url('../../content/assets/ui/nameless/frame-accent.png');
 }
+/* Умение памяти. Стоит в той же панели, что и способности юнита, и обязано
+   читаться как ДРУГАЯ вещь, а не как пятая кнопка: знак повёрнут ромбом,
+   цвет — памяти, рамки нет вовсе. Ширина меньше кнопки способности, потому
+   что до четырёх кнопок плюс ромб должны уместиться в 390px, и потому что
+   ромб — не равный им выбор, а вмешательство поверх выбора. */
+.memory-power {
+  position: relative;
+  width: 58px;
+  min-height: var(--tap);
+  padding: 6px 2px;
+  border: none;
+  background: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  font-size: 10.5px;
+  line-height: 1.1;
+  text-align: center;
+  color: var(--memory);
+  flex-shrink: 0;
+}
+.power-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  transform: rotate(45deg);
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--memory);
+}
+/* Знак внутри ромба разворачивается обратно — иначе он лежит на боку. */
+.power-mark > * { transform: rotate(-45deg); }
+.memory-power.active .power-mark { background: var(--surface-hi); box-shadow: inset 0 0 0 2px var(--memory); }
+.memory-power.active { color: var(--memory); }
+/* Потраченный заряд гаснет, но не исчезает: погашенная строка описи всё
+   ещё строка. Убрать кнопку значило бы соврать, что умения не было. */
+.memory-power.spent { color: var(--text-faint); }
+.memory-power.spent .power-mark { background: transparent; box-shadow: inset 0 0 0 1px var(--line); opacity: 0.6; }
+.power-name { max-width: 56px; overflow-wrap: anywhere; }
+.power-spent { font-size: 9.5px; color: var(--text-faint); }
+
 .waiting { min-height: var(--tap); display: flex; align-items: center; padding-left: 14px; color: var(--text-faint); }
 /* Пока ходит противник, панель пуста — но кто именно ходит, теперь написано
    строкой выше, а здесь только дыхание ожидания. */
