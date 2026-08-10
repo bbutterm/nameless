@@ -187,6 +187,24 @@ const units: UnitDef[] = [
     abilities: ['echo_blow', 'echo_cheap'],
     traits: ['life_test_life'],
   }),
+  // Ремёсла для разбора роли отклика. У «двурукого» два трейта сразу —
+  // проверяется, что порядок разбора однозначен, а не «как повезёт».
+  unitDef('kin_healer', {
+    row: 'back',
+    stats: { hp: 60, atk: 10, def: 5, initiative: 19 },
+    traits: ['life_test_life', 'healer'],
+  }),
+  unitDef('kin_two_hands', {
+    row: 'back',
+    stats: { hp: 60, atk: 10, def: 5, initiative: 18 },
+    traits: ['life_test_life', 'breaker', 'healer'],
+  }),
+  unitDef('kin_named', {
+    row: 'back',
+    stats: { hp: 60, atk: 10, def: 5, initiative: 17 },
+    traits: ['life_test_life', 'healer'],
+    responseRole: 'shield',
+  }),
   unitDef('kin_slow', {
     row: 'back',
     stats: { hp: 60, atk: 10, def: 5, initiative: 15 },
@@ -620,9 +638,14 @@ describe('отклик сродства', () => {
     expect(order[1]).toContain('kin_slow');
   });
 
-  it('отклик — сдвинутый ход: полная сила, перезарядка и отдышка следом', () => {
-    // Один откликающийся — чтобы числа читались без наложений: второй отклик
-    // бьёт в ту же цель и съедает щит, поставленный первым.
+  it('отклик — фиксированный микро-эффект, а не действие юнита', () => {
+    /*
+     * Четвёртая редакция §C.1. Три предыдущие выражали отклик через ДЕЙСТВИЕ
+     * откликающегося, и все три развалились на замере одинаково: чужое
+     * действие не может стоить одинаково у пяти ремёсел, потому что действие
+     * и есть ремесло. Здесь проверяется, что от действия не осталось ничего:
+     * ни выбора способности, ни перезарядки, ни потраченного хода.
+     */
     let s = startBattle(
       idx,
       battle('b_resp_solo'),
@@ -632,60 +655,64 @@ describe('отклик сродства', () => {
     );
     const kinUid = s.units.find((u) => u.defId === 'kin_fast')!.uid;
     const foeUid = s.units.find((u) => u.side === 'enemy' && u.row === 'front')!.uid;
+    const hpBefore = unit(s, foeUid)!.hp;
     s = act(idx, s, { ability: 'tar' });
     const kin = unit(s, kinUid)!;
-    /*
-     * Щит 9 приходит ЦЕЛИКОМ, а не половиной. Половинная сила была честной,
-     * пока отклик был лишним действием; раз ход сдвинут, а не подарен, полсилы
-     * стали бы двойным штрафом — и сродство превратилось бы в наказание
-     * (запрет §F.7).
-     */
-    expect(shieldOf(unit(s, foeUid)!)).toBe(9);
+
+    // Пять чистых — и ни щита на 9, ни урона по силе способности: собственная
+    // способность юнита в отклике не участвует вовсе.
+    expect(shieldOf(unit(s, foeUid)!)).toBe(0);
+    expect(hpBefore - unit(s, foeUid)!.hp).toBe(5);
+    // Ход не потрачен и перезарядка не тронута: отклик — не ход.
     expect(kin.acted).toBe(false);
-    /*
-     * И отдышка: ближайший плановый ход откликнувшийся простоит. Проверяется
-     * по СОБЫТИЮ, а не по остатку счётчика: очередь сродственного подходит в
-     * том же раунде, счётчик к этому моменту уже съеден — ноль в нём означает
-     * не «отдышки не было», а «она отработала». Ход, которого не случилось, —
-     * это событие, а не число.
-     */
-    expect(
-      s.events.some((e) => e.type === 'blocked' && e.uid === kinUid && e.reason === 'winded'),
-    ).toBe(true);
-    /*
-     * Перезарядка ЗАПИСЫВАЕТСЯ. Раньше здесь стоял ноль, и это была не
-     * придирка к числу, а дыра в цене: отклик выдавал дорогую способность
-     * бесплатно и в обход её же перезарядки. Замер на живом контенте:
-     * пустое умение с живым сродством давало +11.3 винрейта — почти всю
-     * прибавку ступени платило не умение, а отклик. Канон переписан
-     * (§C.2, §F.8), и половина рядового хода перестала быть бесплатной
-     * копией самого дорогого.
-     */
-    expect(kin.cooldowns['echo_blow']).toBe(3);
+    expect(kin.cooldowns['echo_blow'] ?? 0).toBe(0);
+    // И никакой отдышки: она была ценой сдвинутого хода, а хода больше нет.
+    expect(kin.statuses.some((st) => st.kind === 'winded' as unknown as string)).toBe(false);
   });
 
-  it('отклик — это обычный ход юнита, а не какой-то особенный', () => {
-    /*
-     * У сродственного две способности: дорогая сильная и дешёвая слабая.
-     * Отклик обязан взять ТУ ЖЕ, что юнит взял бы в свой черёд, — потому что
-     * это и есть его ход, только сдвинутый. Правило проверяется сравнением с
-     * `planAction`, а не сверкой с именем из фикстуры: меняться должно вместе
-     * с политикой бота, а не отдельно от неё.
-     */
+  it('роль отклика читается по ремеслу, и порядок разбора однозначен', () => {
+    // Лекарь лечит самого раненого своего, а не бьёт цель героя.
     let s = startBattle(
       idx,
-      battle('b_resp_plan'),
-      party(['lead', 'front', 0], ['kin_rich', 'back', 0]),
-      'plan',
+      battle('b_resp_heal'),
+      party(['lead', 'front', 0], ['kin_healer', 'back', 0]),
+      'heal',
       powersOf('m_tar'),
     );
-    const kin = s.units.find((u) => u.defId === 'kin_rich')!;
-    // Без умений героя: сдвигается ход юнита, а умение уже применено — иначе
-    // сродственный «откликнулся» бы вторым применением того же заряда.
-    const wouldPick = planAction(idx, s, kin, { hero: false })?.ability;
+    const leadUid = s.units.find((u) => u.defId === 'lead')!.uid;
+    s = {
+      ...s,
+      units: s.units.map((u) => (u.uid === leadUid ? { ...u, hp: u.maxHp - 20 } : u)),
+    };
     s = act(idx, s, { ability: 'tar' });
-    const used = s.events.find((e) => e.type === 'response');
-    expect(used && 'ability' in used ? used.ability : undefined).toBe(wouldPick);
+    expect(unit(s, leadUid)!.hp).toBe(unit(s, leadUid)!.maxHp - 15);
+
+    // Два ремесла сразу: лекарь старше ломающего, и это не жребий.
+    let two = startBattle(
+      idx,
+      battle('b_resp_two'),
+      party(['lead', 'front', 0], ['kin_two_hands', 'back', 0]),
+      'two',
+      powersOf('m_tar'),
+    );
+    two = act(idx, two, { ability: 'tar' });
+    expect(two.events.find((e) => e.type === 'response' && 'ability' in e)).toMatchObject({
+      ability: 'response_heal',
+    });
+
+    // Явная роль в данных старше трейтов: без неё отголоски молча стали бы
+    // бойцами — боевых трейтов у них нет вовсе.
+    let named = startBattle(
+      idx,
+      battle('b_resp_named'),
+      party(['lead', 'front', 0], ['kin_named', 'back', 0]),
+      'named',
+      powersOf('m_tar'),
+    );
+    named = act(idx, named, { ability: 'tar' });
+    expect(named.events.find((e) => e.type === 'response' && 'ability' in e)).toMatchObject({
+      ability: 'response_shield',
+    });
   });
 
   it('донор хода откликается наравне со всеми', () => {

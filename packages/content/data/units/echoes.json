@@ -27,7 +27,8 @@
       "echo",
       "life_smolokur",
       "fear"
-    ]
+    ],
+    "responseRole": "damage"
   },
   {
     "id": "vodonos",
@@ -57,7 +58,8 @@
       "echo",
       "life_klyuchar",
       "heals_enemies"
-    ]
+    ],
+    "responseRole": "heal"
   },
   {
     "id": "posul",
@@ -88,7 +90,8 @@
       "echo",
       "life_posulshchik",
       "mirage"
-    ]
+    ],
+    "responseRole": "shield"
   },
   {
     "id": "svidetel",
@@ -119,6 +122,7 @@
       "echo",
       "life_chistopisets",
       "reveals_intent"
-    ]
+    ],
+    "responseRole": "debuff"
   }
 ]

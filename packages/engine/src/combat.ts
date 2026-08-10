@@ -29,15 +29,6 @@ export const SHIELD_REFUND_TAG = 'posul_refund';
 export const AFFINITY_TRAIT_PREFIX = 'life_';
 
 /** Во сколько раз слабее отклик сродства (MEMORY_POWERS §C.1). */
-/**
- * Во сколько отклик ценится ботом.
- *
- * Отклик НЕ добавляет действие — он сдвигает ход на раньше, а следующий
- * плановый юнит простоит (отдышка). Значит, в размене ходов он стоит ноль, и
- * вся его цена — темп: ударить сейчас, а не через раунд. Четверть удара — та
- * оценка, при которой бот применяет умение не ради отклика, но и не мимо него.
- */
-export const RESPONSE_TEMPO_VALUE = 0.25;
 
 /** Смягчение урона бронёй: dmg = raw * K/(K+def). K подобран симулятором. */
 export const ARMOR_K = 50;
@@ -335,11 +326,7 @@ export function beginRound(idx: CombatIndex, state: BattleState): BattleState {
       u.alive = false;
       events.push({ type: 'death', uid: u.uid });
     }
-    // Отдышка считает ХОДЫ, а не раунды, и потому здесь не тикает: её
-    // счётчик уменьшается в тот момент, когда до юнита доходит очередь.
-    const ticked = u.statuses.map((st) =>
-      st.kind === 'winded' ? { ...st } : { ...st, turns: st.turns - 1 },
-    );
+    const ticked = u.statuses.map((st) => ({ ...st, turns: st.turns - 1 }));
     // Непредъявленный посул — чистая прибыль: щит с тегом возврата, истёкший
     // непробитым, отдаёт остаток лечением 1:1. Только помеченные щиты: чужие
     // щиты не должны менять цену от того, что игрок вспомнил Посульщика.
@@ -834,10 +821,6 @@ function applyBattleEffect(
       target.statuses.push({ kind: 'stun', amount: 0, turns: eff.turns });
       events.push({ type: 'status', uid: target.uid, status: 'stun', turns: eff.turns });
       break;
-    case 'winded':
-      target.statuses.push({ kind: 'winded', amount: 0, turns: eff.turns });
-      events.push({ type: 'status', uid: target.uid, status: 'winded', turns: eff.turns });
-      break;
     case 'cleanse':
       target.statuses = target.statuses.filter((s) => s.kind !== 'dot' && s.kind !== 'debuff' && s.kind !== 'stun');
       events.push({ type: 'status', uid: target.uid, status: 'cleanse', turns: 0 });
@@ -977,16 +960,48 @@ function applyWideEffects(
 
 
 /**
- * Отклик сродства (MEMORY_POWERS §C.1–C.2).
+ * Отклик сродства (MEMORY_POWERS §C.1–C.2, четвёртая редакция).
  *
- * Каждый живой союзник с трейтом `life_<жизнь>` — кроме донора хода, он уже
- * отдал ход — исполняет свою ПЕРВУЮ способность вполсилы: без траты хода, без
- * записи перезарядки, без `acted`. По инициативе.
+ * Отклик — НЕ ход и НЕ действие. Это фиксированный микро-эффект роли с одной
+ * константой: узнавание руки, а не второй боец на поле.
  *
- * Сродство читается ТРЕЙТОМ, а не новым полем юнита: у отголосков `life_*` и
- * так стоит, и конвенция трейтов прямо разрешена каноном (§C.2). Новое поле
- * потребовало бы двигать схему сорока юнитов ради значения, которое уже есть.
+ * Три предыдущие редакции сняты замером, и все три ошибались одинаково —
+ * пытались выразить отклик через ДЕЙСТВИЕ откликающегося:
+ *
+ *  1. «Первая способность, бесплатно, без кулдауна» — выдавала самый дорогой
+ *     ход юнита в обход перезарядки: пустышка давала +11.3 над базой.
+ *  2. «Самая дешёвая готовая, вполсилы, кулдаун пишется» — оставила лишнее
+ *     действие, и его цена оказалась ценой ремесла: от −2.5 у лекарей до
+ *     +7.7 у бойцов при одинаковом числе откликов. Множитель силы был
+ *     бессилен: 0.5 → 0.4 снимало один пункт из семи.
+ *  3. «Сдвинутый ход плюс отдышка» — обнулила экономику действий, но не цену:
+ *     разброс остался 14 пунктов (−6.6 у Ключаря, +7.6 у Смолокура), потому
+ *     что «ударить раньше» и «полечить раньше» стоят разного.
+ *
+ * Вывод, ради которого эта история тут записана: **чужое действие не может
+ * стоить одинаково у пяти ремёсел — действие И ЕСТЬ ремесло. Одинаково стоит
+ * только фиксированный эффект.** Смешивать редакции запрещено (§F.8).
  */
+function responseRoleOf(def: UnitDef | undefined): 'heal' | 'shield' | 'debuff' | 'damage' {
+  if (!def) return 'damage';
+  // Явная роль в данных старше трейтов: у отголосков боевых трейтов нет вовсе,
+  // и без неё все четверо молча стали бы бойцами.
+  if (def.responseRole) return def.responseRole;
+  const traits = def.traits ?? [];
+  // Порядок разбора задан каноном: лекарь важнее щитоносца, щитоносец важнее
+  // ломающего. Юнит с двумя трейтами обязан откликаться однозначно.
+  if (traits.includes('healer')) return 'heal';
+  if (traits.includes('shield') || traits.includes('guard')) return 'shield';
+  if (traits.includes('breaker')) return 'debuff';
+  return 'damage';
+}
+
+/** Одна константа на все роли (§C.1). Ручка балансировки — 5 → 4 или 5 → 6. */
+export const RESPONSE_K = 5;
+/** Дебафф считается своими числами: −2 к атаке на 2 раунда. */
+const RESPONSE_DEBUFF = 2;
+const RESPONSE_TURNS = 2;
+
 function affinityResponses(
   idx: CombatIndex,
   view: BattleState,
@@ -997,99 +1012,66 @@ function affinityResponses(
   events: BattleEvent[],
 ): void {
   const trait = `${AFFINITY_TRAIT_PREFIX}${life}`;
-  /*
-   * Донор ОТКЛИКАЕТСЯ наравне со всеми. Правило «донор молчит» отменено
-   * каноном после замера: бот отдаёт под умение самую дешёвую очередь, а
-   * дешевле всего очередь того, чьё собственное действие стало лишним, —
-   * то есть как раз сродственного. Механика съедала сама себя: у Ключаря
-   * второй лекарь не добавлял отклика, а отнимал (замерено — Водонос при
-   * одном сродственном откликался в 86% боёв, при двух становился донором
-   * в 100% и не откликался ни разу). Он платит ходом, но руки узнали руку,
-   * и молчать им не с чего.
-   */
   const responders = view.units
     .filter(
       (u) =>
         u.alive &&
         u.side === side &&
-        // Оглушённый не срывается следом: у него нет хода, который можно
-        // было бы сдвинуть.
+        // Оглушённый не откликается: рука узнала бы, да некому.
         !isStunned(u) &&
         (idx.units.get(u.defId)?.traits ?? []).includes(trait),
     )
-    // Инициатива — жёсткий порядок (DIRECTION_COMBAT §E.2). Ничьи разводятся
-    // строковым сравнением uid: без случайности, иначе реплей разъедется.
     .sort(
       (a, b) =>
         effectiveStat(b, 'initiative') - effectiveStat(a, 'initiative') || (a.uid < b.uid ? -1 : 1),
     );
 
+  const foes = () => living(view, side === 'player' ? 'enemy' : 'player');
+  const allies = () => living(view, side);
+  const mostHurt = (list: BattleUnitState[]): BattleUnitState | undefined =>
+    list.filter((u) => u.hp < u.maxHp).sort((a, b) => a.hp / a.maxHp - b.hp / b.maxHp)[0];
+
   for (const r of responders) {
     if (!r.alive) continue;
-    /*
-     * Отклик — СВОЙ ОБЫЧНЫЙ ХОД, сдвинутый на сейчас, и потому способность
-     * выбирает та же политика, что выбрала бы её в свой черёд.
-     *
-     * Здесь стояли последовательно два неверных правила, и оба стоили замера.
-     * Первое — «первая способность по списку»: нулевым в контенте часто стоит
-     * самое дорогое, и отклик выдавал площадной удар бесплатно и в обход
-     * перезарядки (+11.3 винрейта у пустышки). Второе — «самая дешёвая
-     * готовая»: оно годилось, пока отклик был подарком, но для сдвинутого хода
-     * оказалось двойным убытком — юнит ходил рано и дёшево, а пропускал ход, в
-     * котором сходил бы дорого. Замер: сродство ушло в минус до −6.6, то есть
-     * стало наказанием (запрет §F.7).
-     */
-    const plan = planAction(idx, view, r, { hero: false });
-    if (!plan) continue;
-    const ability = idx.abilities.get(plan.ability);
-    if (!ability) continue;
+    const role = responseRoleOf(idx.units.get(r.defId));
 
-    const legal = legalTargets(view, r.uid, ability);
-    if (legal.length === 0) continue;
-    // Цель героя — если она законна для этой способности: рука тянется туда же,
-    // куда указал герой. Иначе юнит бьёт туда, куда собирался сам.
-    let targetUid = heroTargetUid;
-    if (!targetUid || !legal.some((t) => t.uid === targetUid)) {
-      targetUid = plan.targetUid && legal.some((t) => t.uid === plan.targetUid) ? plan.targetUid : legal[0]?.uid;
+    // Цель микро-эффекта. Урон и дебафф тянутся к цели умения героя, если она
+    // враг; поддержка смотрит на своих и выбирает самого раненого.
+    let target: BattleUnitState | undefined;
+    if (role === 'damage' || role === 'debuff') {
+      const named = heroTargetUid ? view.units.find((u) => u.uid === heroTargetUid) : undefined;
+      target = named && named.alive && named.side !== side ? named : foes()[0];
+    } else {
+      target = mostHurt(allies()) ?? allies()[0];
     }
-    const targets = resolveTargets(view, r, ability, targetUid);
-    if (targets.length === 0) continue;
+    if (!target) continue;
 
-    const { perTarget, wide } = splitEffects(ability);
-    // Перезарядка записывается наравне со всеми (§F.8): отклик — половина
-    // рядового хода, а не бесплатная копия дорогого.
-    if (ability.cooldown > 0) r.cooldowns[ability.id] = ability.cooldown;
-    events.push({ type: 'response', uid: r.uid, ability: ability.id, targetUid, life });
-    events.push({
-      type: 'act',
-      uid: r.uid,
-      ability: ability.id,
-      targetUid,
-      anim: ability.anim ?? 'lunge',
-    });
-    for (const eff of perTarget) {
-      for (const tRef of targets) {
-        const t = view.units.find((u) => u.uid === tRef.uid);
-        if (!t || (!t.alive && eff.kind !== 'revive')) continue;
-        applyBattleEffect(rng, r, t, eff, events, healTax(view));
-        if (t.hp <= 0 && t.alive) {
-          t.alive = false;
-          t.hp = 0;
-          events.push({ type: 'death', uid: t.uid });
-        }
+    events.push({ type: 'response', uid: r.uid, ability: `response_${role}`, targetUid: target.uid, life });
+
+    if (role === 'damage') {
+      // Пять ЧИСТЫХ: броня не считается. Отклик — не удар, а то, что рука
+      // сделала помимо удара, и торговаться с защитой ему нечем.
+      const before = target.hp;
+      target.hp = Math.max(0, target.hp - RESPONSE_K);
+      events.push({ type: 'damage', uid: target.uid, amount: before - target.hp, hpAfter: target.hp, crit: false });
+      if (target.hp === 0 && target.alive) {
+        target.alive = false;
+        events.push({ type: 'death', uid: target.uid });
       }
+    } else if (role === 'heal') {
+      applyBattleEffect(rng, r, target, { kind: 'heal_flat', amount: RESPONSE_K }, events, healTax(view));
+    } else if (role === 'shield') {
+      applyBattleEffect(rng, r, target, { kind: 'shield', amount: RESPONSE_K, turns: RESPONSE_TURNS }, events, healTax(view));
+    } else {
+      applyBattleEffect(
+        rng,
+        r,
+        target,
+        { kind: 'debuff', stat: 'atk', amount: RESPONSE_DEBUFF, turns: RESPONSE_TURNS },
+        events,
+        healTax(view),
+      );
     }
-    applyWideEffects(view.units, r, wide, events, healTax(view));
-    /*
-     * И отдышка. Ход не подарен, а сдвинут: юнит сходил сейчас — значит, свой
-     * ближайший плановый ход простоит. Экономика действий отклика равна нулю,
-     * и это единственное, что удержало его в допуске: замером доказано, что
-     * платила не сила отклика, а сам факт лишнего действия (пустышка давала
-     * +7.7 у Смолокура и −2.5 у Ключаря при одинаковом числе откликов, а
-     * множитель силы 0.5 → 0.4 снимал один пункт из семи).
-     */
-    r.statuses.push({ kind: 'winded', amount: 0, turns: 1 });
-    events.push({ type: 'status', uid: r.uid, status: 'winded', turns: 1 });
   }
 }
 
@@ -1155,28 +1137,9 @@ function skipDeadOrStunned(idx: CombatIndex, state: BattleState): BattleState {
       return beginRound(idx, s);
     }
     const u = s.units.find((x) => x.uid === uid);
-    /*
-     * Отдышка съедает ход в момент, когда до юнита дошла очередь, и тут же
-     * убавляется на единицу. Считать её раундами было бы неверно: сродственный
-     * сорвался следом за рукой героя — значит, стоит РОВНО СВОЙ ближайший ход,
-     * а не «до конца раунда», сколько бы его ни оставалось.
-     */
-    const winded = u?.statuses.find((st) => st.kind === 'winded' && st.turns > 0);
-    if (u && u.alive && !isStunned(u) && !winded) return s;
+    if (u && u.alive && !isStunned(u)) return s;
     if (u && u.alive && isStunned(u)) {
       s = { ...s, events: [...s.events, { type: 'blocked', uid: u.uid, reason: 'stun' }] };
-    } else if (u && u.alive && winded) {
-      const units = s.units.map((x) =>
-        x.uid === u.uid
-          ? {
-              ...x,
-              statuses: x.statuses.map((st) =>
-                st.kind === 'winded' && st.turns > 0 ? { ...st, turns: st.turns - 1 } : st,
-              ),
-            }
-          : x,
-      );
-      s = { ...s, units, events: [...s.events, { type: 'blocked', uid: u.uid, reason: 'winded' }] };
     }
     s = { ...s, turnIndex: s.turnIndex + 1 };
     if (s.turnIndex >= s.order.length) {
@@ -1518,16 +1481,10 @@ function responseValue(
     // Донора не пропускаем: он откликается наравне со всеми (§C.1).
     if (isStunned(u)) continue;
     if (!(idx.units.get(u.defId)?.traits ?? []).includes(trait)) continue;
-    // Та же способность, которую отклик и возьмёт: самая дешёвая готовая.
-    const ready = readyAbilities(idx, u);
-    const cheapest = ready.reduce<Ability | undefined>(
-      (best, a) => (!best || a.cooldown < best.cooldown ? a : best),
-      undefined,
-    );
-    // Бездамажные способности (лекари, щитоносцы) оцениваются грубо в 0.8
-    // удара: точная оценка потребовала бы прогонять heroValue за чужой юнит,
-    // а решение это не переворачивает.
-    v += RESPONSE_TEMPO_VALUE * effectiveStat(u, 'atk') * (cheapest?.power || 0.8);
+    // Отклик один и тот же у всех: фиксированный микро-эффект в K единиц.
+    // Оценивать его чужой атакой больше нечем и незачем — в этом весь смысл
+    // четвёртой редакции.
+    v += RESPONSE_K;
   }
   return v;
 }

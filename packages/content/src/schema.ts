@@ -248,6 +248,8 @@ export const zUnit = z
     evolveAt: z.number().optional(),
     recruitable: zCondition.optional(),
     traits: z.array(z.string()).optional(),
+    /** Чем юнит отвечает на умение своей жизни, если ремесло не в трейтах. */
+    responseRole: z.enum(['heal', 'shield', 'debuff', 'damage']).optional(),
   })
   .refine((u) => wordCount(u.blurb.ru) <= MAX_BLURB_WORDS, {
     message: `Подпись на карте (ru) длиннее ${MAX_BLURB_WORDS} слов`,
