@@ -9,6 +9,8 @@ import {
   BASE_MEDIAN_MIN,
   BASE_MIN,
   CORRIDOR_HALF_WIDTH,
+  EMPTY_POWER_GAIN_MAX,
+  emptyPower,
   median,
   POWER_MAX,
   POWER_MIN,
@@ -267,6 +269,49 @@ if (!only || only === 'battles') {
       }
       summary['powerLadder'] = ladder;
       summary['powerLadderBaseline'] = { winrate: baseWin, avgRounds: baseRounds };
+
+      /*
+       * Контроль отклика (§D.1). Прибавка ступени — это сумма двух слагаемых,
+       * умения и отклика сродственных, и по общей цифре их не различить.
+       * Однажды на этом уже обожглись: пустышка давала +11.3, то есть почти всю
+       * прибавку платил отклик, — а резали числа умений, то есть не то.
+       *
+       * Пустышка ничего не делает, но тратит ход и несёт живую жизнь. Всё, что
+       * она набрала, — цена отклика и ничего больше.
+       */
+      head('Контроль отклика: умение, которое ничего не делает');
+      const emptyGains: Record<string, number> = {};
+      for (const life of ladderLives) {
+        const rowRep = powerLadder(
+          content,
+          (id) => {
+            const def = content.battles.find((b) => b.id === id);
+            if (def?.expectParty?.length) return namedParty(content.units, def.expectParty);
+            const ch = battleChapter.get(id) ?? 1;
+            return defaultParty(content.units, ch === 1 ? 1 : ch === 2 ? 2 : 3, ch);
+          },
+          () => [emptyPower(life)],
+          [life],
+          Math.max(20, Math.floor(runs / 5)),
+        )[0];
+        if (!rowRep) continue;
+        const d = (rowRep.winrate - baseWin) * 100;
+        emptyGains[life] = d;
+        const ok = d <= EMPTY_POWER_GAIN_MAX;
+        if (!ok) failed = true;
+        console.log(
+          `${ok ? '  ' : '!!'} ${life.padEnd(13)} побед ${(rowRep.winrate * 100).toFixed(0)}% ` +
+            `(${d >= 0 ? '+' : ''}${d.toFixed(1)} над базой, предел +${EMPTY_POWER_GAIN_MAX})  ` +
+            `откликов ${rowRep.responsesPerBattle.toFixed(2)}/бой, ` +
+            `пустышка применена в ${(rowRep.usedShare * 100).toFixed(0)}% боёв`,
+        );
+        if (!ok) {
+          console.log(
+            `   ↳ отклик платит больше, чем весь допуск ступени: резать числа умений бессмысленно`,
+          );
+        }
+      }
+      summary['emptyPowerGain'] = emptyGains;
 
       // ── Сродство: маржинальный критерий (MEMORY_POWERS §D.3, новая редакция)
       //

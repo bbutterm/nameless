@@ -697,7 +697,6 @@ export function act(idx: CombatIndex, state: BattleState, action: Action): Battl
       idx,
       { ...state, units, player },
       self.side,
-      self.uid,
       resolved.life,
       action.targetUid,
       rng,
@@ -999,25 +998,25 @@ function affinityResponses(
   idx: CombatIndex,
   view: BattleState,
   side: Side,
-  /**
-   * Кто отдал ход за жест героя — он не откликается, он уже заплатил.
-   * У «первой закрытой строки» донора нет: пассив ничьего хода не берёт,
-   * и откликаются все сродственные без исключения.
-   */
-  donorUid: string | undefined,
   life: LifeId,
   heroTargetUid: string | undefined,
   rng: Rng,
   events: BattleEvent[],
 ): void {
   const trait = `${AFFINITY_TRAIT_PREFIX}${life}`;
+  /*
+   * Донор ОТКЛИКАЕТСЯ наравне со всеми. Правило «донор молчит» отменено
+   * каноном после замера: бот отдаёт под умение самую дешёвую очередь, а
+   * дешевле всего очередь того, чьё собственное действие стало лишним, —
+   * то есть как раз сродственного. Механика съедала сама себя: у Ключаря
+   * второй лекарь не добавлял отклика, а отнимал (замерено — Водонос при
+   * одном сродственном откликался в 86% боёв, при двух становился донором
+   * в 100% и не откликался ни разу). Он платит ходом, но руки узнали руку,
+   * и молчать им не с чего.
+   */
   const responders = view.units
     .filter(
-      (u) =>
-        u.alive &&
-        u.side === side &&
-        u.uid !== donorUid &&
-        (idx.units.get(u.defId)?.traits ?? []).includes(trait),
+      (u) => u.alive && u.side === side && (idx.units.get(u.defId)?.traits ?? []).includes(trait),
     )
     // Инициатива — жёсткий порядок (DIRECTION_COMBAT §E.2). Ничьи разводятся
     // строковым сравнением uid: без случайности, иначе реплей разъедется.
@@ -1028,7 +1027,23 @@ function affinityResponses(
 
   for (const r of responders) {
     if (!r.alive) continue;
-    const ability = unitAbilities(idx, r)[0];
+    /*
+     * Отклик — рядовое действие, а не лучшее. Раньше здесь стояла первая
+     * способность по списку, и это оказалось ошибкой формулировки канона:
+     * «рядовое» превратилось в «нулевой индекс», а нулевым в контенте часто
+     * стоит самое дорогое. Отклик выдавал площадной удар с перезарядкой 4
+     * бесплатно и в обход самой перезарядки — замер показал, что пустое
+     * умение с живым сродством даёт +11.3 винрейта, то есть почти всю
+     * прибавку ступени платил не умение, а отклик.
+     *
+     * Теперь берётся САМАЯ ДЕШЁВАЯ из готовых, и перезарядка записывается
+     * наравне со всеми: бесплатных дорогих ходов больше нет.
+     */
+    const ready = readyAbilities(idx, r);
+    const ability = ready.reduce<Ability | undefined>(
+      (best, a) => (!best || a.cooldown < best.cooldown ? a : best),
+      undefined,
+    );
     if (!ability) continue;
 
     const legal = legalTargets(view, r.uid, ability);
@@ -1042,6 +1057,9 @@ function affinityResponses(
     if (targets.length === 0) continue;
 
     const { perTarget, wide } = splitEffects(ability);
+    // Перезарядка записывается наравне со всеми (§F.8): отклик — половина
+    // рядового хода, а не бесплатная копия дорогого.
+    if (ability.cooldown > 0) r.cooldowns[ability.id] = ability.cooldown;
     events.push({ type: 'response', uid: r.uid, ability: ability.id, targetUid, life });
     events.push({
       type: 'act',
@@ -1093,7 +1111,7 @@ function firstLineResponses(idx: CombatIndex, state: BattleState): BattleState {
   const view: BattleState = { ...state, units, firstLine: true };
   for (const p of passives) {
     if (!p.life) continue;
-    affinityResponses(idx, view, 'player', undefined, p.life, undefined, rng, events);
+    affinityResponses(idx, view, 'player', p.life, undefined, rng, events);
   }
   return {
     ...state,

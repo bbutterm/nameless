@@ -7,6 +7,7 @@ import {
   runAuto,
   startBattle,
   Rng,
+  type Ability,
   type BattleDef,
   type ContentBundle,
   type PartyUnit,
@@ -38,6 +39,18 @@ export const POWER_MAX = 0.85;
  */
 export const TIER_GAIN_MIN = 3;
 export const TIER_GAIN_MAX = 10;
+
+/**
+ * Контрольный прибор на отклик (§D.1): сколько даёт умение, которое НЕ ДЕЛАЕТ
+ * НИЧЕГО, но у которого живая жизнь и живые сродственные.
+ *
+ * Зачем он существует. Прибавка ступени складывается из двух слагаемых —
+ * самого умения и отклика сродственных, — и по общей цифре их не различить.
+ * Однажды на этом уже обожглись: пустое умение давало +11.3 винрейта, то есть
+ * почти всю прибавку платил отклик, а резали числа умений. Пустышка разводит
+ * слагаемые: всё, что она набрала, — цена отклика и ничего больше.
+ */
+export const EMPTY_POWER_GAIN_MAX = 4;
 
 /** Медиана списка. Чётная длина — среднее двух средних, как принято в отчётах. */
 export function median(values: readonly number[]): number {
@@ -296,6 +309,36 @@ export interface PowerLadderReport {
   outOfCorridor: number;
   /** Винрейты по боям — по ним видно, вверх бой вышел или вниз. */
   perBattle: { battle: string; winrate: number }[];
+}
+
+/**
+ * Умение-пустышка: цель законная, эффектов нет, жизнь настоящая.
+ *
+ * Ход носителя оно тратит наравне с настоящим — иначе замер сравнивал бы не
+ * «умение против отклика», а «умение против лишнего хода».
+ */
+export function emptyPower(life: string): PlayerAbility {
+  const ability: Ability = {
+    id: `__empty_${life}`,
+    name: { ru: 'пустое умение', en: 'empty power' },
+    description: { ru: 'ничего не делает', en: 'does nothing' },
+    icon: 'spark',
+    target: 'enemy_any',
+    power: 0,
+    cooldown: 99,
+    effects: [],
+  };
+  return {
+    id: ability.id,
+    ability,
+    grantedBy: [],
+    amplifiedBy: [],
+    amplify: {},
+    costsTurn: true,
+    life,
+    // Пустышка изображает первую ступень: ниже неё умений не бывает.
+    tier: 1,
+  };
 }
 
 export function powerLadder(
