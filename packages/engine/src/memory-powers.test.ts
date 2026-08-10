@@ -662,12 +662,43 @@ describe('отклик сродства', () => {
     // Пять чистых — и ни щита на 9, ни урона по силе способности: собственная
     // способность юнита в отклике не участвует вовсе.
     expect(shieldOf(unit(s, foeUid)!)).toBe(0);
-    expect(hpBefore - unit(s, foeUid)!.hp).toBe(5);
+    // Три, а не пять: урон-роль пишется тройкой (ветка В §D.1) — чистый урон
+    // дороже прочих форм даже без премии за добивание.
+    expect(hpBefore - unit(s, foeUid)!.hp).toBe(3);
     // Ход не потрачен и перезарядка не тронута: отклик — не ход.
     expect(kin.acted).toBe(false);
     expect(kin.cooldowns['echo_blow'] ?? 0).toBe(0);
     // И никакой отдышки: она была ценой сдвинутого хода, а хода больше нет.
     expect(kin.statuses.some((st) => st.kind === 'winded' as unknown as string)).toBe(false);
+  });
+
+  it('урон-отклик бьёт самого здорового врага, а не цель умения', () => {
+    /*
+     * Премия за добивание — то, из-за чего урон-роль стоила дороже прочих и
+     * не поддавалась номиналу: K 5 → 4 снимала 0.4 пункта из 6.3, потому что
+     * платил не размер отклика, а то, что он закрывал чужой удар. Цель
+     * «самый здоровый» снимает премию конструкцией. Проверка нужна именно
+     * здесь: правило легко потерять при следующей правке прицеливания.
+     */
+    let s = startBattle(
+      idx,
+      battle('b_resp_target', [
+        { unit: 'straw', row: 'front', index: 0 },
+        { unit: 'dummy', row: 'back', index: 0 },
+      ]),
+      party(['lead', 'front', 0], ['kin_fast', 'back', 0]),
+      'target',
+      powersOf('m_tar'),
+    );
+    const strawUid = s.units.find((u) => u.defId === 'straw')!.uid;
+    const dummyUid = s.units.find((u) => u.defId === 'dummy' && u.side === 'enemy')!.uid;
+    const dummyHp = unit(s, dummyUid)!.hp;
+    // Целью умения назначен доходяга — отклик всё равно обязан уйти мимо него.
+    s = act(idx, s, { ability: 'tar' });
+    const resp = s.events.find((e) => e.type === 'response');
+    expect(resp && 'targetUid' in resp ? resp.targetUid : undefined).toBe(dummyUid);
+    expect(dummyHp - unit(s, dummyUid)!.hp).toBe(3);
+    expect(strawUid).toBeDefined();
   });
 
   it('роль отклика читается по ремеслу, и порядок разбора однозначен', () => {
