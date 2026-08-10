@@ -315,14 +315,54 @@ const musicFiles = import.meta.glob(
   { eager: true, query: '?url', import: 'default' },
 ) as Record<string, string>;
 
-/** Имя файла без расширения → адрес. Расширений несколько нарочно: */
-/* исполнитель может принести `.m4a`, а может и `.opus` — обоим место одно. */
-const musicByName = new Map<string, string>();
+/**
+ * Имя файла без расширения → все найденные варианты этого трека.
+ *
+ * Форматов может быть несколько, и выбирать между ними по алфавиту нельзя:
+ * AAC не умеет ни одна сборка Chromium без проприетарных кодеков (в том числе
+ * та, которой гоняются проверки), а Opus до недавнего времени не умел Safari.
+ * Браузер знает про себя лучше — у него и спрашиваем.
+ */
+const MIME: Record<string, string> = {
+  m4a: 'audio/mp4; codecs="mp4a.40.2"',
+  mp3: 'audio/mpeg',
+  ogg: 'audio/ogg; codecs="vorbis"',
+  opus: 'audio/ogg; codecs="opus"',
+  webm: 'audio/webm; codecs="opus"',
+  wav: 'audio/wav',
+};
+/** При равной поддержке берём то, что легче качать. */
+const FORMAT_ORDER = ['webm', 'opus', 'm4a', 'ogg', 'mp3', 'wav'];
+
+const musicByName = new Map<string, { ext: string; url: string }[]>();
 for (const [path, url] of Object.entries(musicFiles)) {
-  const base = (path.split('/').pop() ?? '').replace(/\.[^.]+$/, '');
-  // Первый выигрывает: если рядом лежат `battle.m4a` и `battle.opus`, берётся
-  // тот, что раньше по алфавиту расширения, — оба звучат одинаково.
-  if (!musicByName.has(base)) musicByName.set(base, url);
+  const file = path.split('/').pop() ?? '';
+  const ext = (file.match(/\.([^.]+)$/)?.[1] ?? '').toLowerCase();
+  const base = file.replace(/\.[^.]+$/, '');
+  const list = musicByName.get(base) ?? [];
+  list.push({ ext, url });
+  musicByName.set(base, list);
+}
+
+let probe: HTMLAudioElement | undefined;
+/** Что из принесённого этот браузер вообще может играть. */
+function pickSource(track: Track): string | undefined {
+  const list = musicByName.get(track);
+  if (!list || list.length === 0) return undefined;
+  if (!probe) probe = document.createElement('audio');
+  const scored = list
+    .map((v) => {
+      const can = MIME[v.ext] ? probe!.canPlayType(MIME[v.ext] as string) : '';
+      const score = can === 'probably' ? 2 : can === 'maybe' ? 1 : 0;
+      const order = FORMAT_ORDER.indexOf(v.ext);
+      return { ...v, score, order: order < 0 ? FORMAT_ORDER.length : order };
+    })
+    .sort((a, b) => b.score - a.score || a.order - b.order);
+  const best = scored[0];
+  // Ни одного играбельного формата — молчим осознанно, а не роняем ошибку в
+  // консоль на каждой смене сцены.
+  if (!best || best.score === 0) return undefined;
+  return best.url;
 }
 
 export type Track = 'title' | 'dialogue_cold' | 'dialogue_low' | 'dialogue_out' | 'battle' | 'death';
@@ -406,8 +446,9 @@ export function setMusic(track: Track): void {
     return;
   }
   lastTrack = track;
-  const url = musicByName.get(track);
-  // Файла нет — и хорошо: слот пустой, игра звучит как звучала.
+  const url = pickSource(track);
+  // Файла нет или браузер не умеет ни один принесённый формат — слот молчит,
+  // и игра звучит как звучала.
   if (!url) return;
   if (musicNow === track) return;
   const a = audio();

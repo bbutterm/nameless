@@ -116,12 +116,32 @@ const music = await page.evaluate(() => ({
   known: window.__media.length,
   errors: window.__playErrors,
 }));
-console.log(
-  musicHits.length === 0
-    ? '   музыка: файлов нет — слот пуст, игра молчит как раньше'
-    : `   музыка: загружено ${musicHits.length}, элементов ${music.known}, ` +
+/*
+ * «Файлов нет» и «браузер их не умеет» выглядят снаружи одинаково — тишиной,
+ * а чинятся противоположным. Спрашиваем браузер, что он вообще может.
+ */
+const codecs = await page.evaluate(() => {
+  const a = document.createElement('audio');
+  const t = {
+    m4a: 'audio/mp4; codecs="mp4a.40.2"',
+    webm: 'audio/webm; codecs="opus"',
+    ogg: 'audio/ogg; codecs="vorbis"',
+    mp3: 'audio/mpeg',
+  };
+  return Object.fromEntries(Object.entries(t).map(([k, v]) => [k, a.canPlayType(v) || '—']));
+});
+console.log(`   кодеки браузера: ${Object.entries(codecs).map(([k, v]) => `${k}=${v}`).join('  ')}`);
+if (musicHits.length === 0) {
+  console.log(
+    '   музыка: не загружалась. Либо файлов нет, либо браузер не умеет ни один ' +
+      'из принесённых форматов — смотри строку кодеков выше',
+  );
+} else {
+  console.log(
+    `   музыка: загружено ${musicHits.length}, элементов ${music.known}, ` +
       `реально играет ${music.playing}`,
-);
+  );
+}
 for (const e of music.errors) console.log(`   !! play() отказал: ${e}`);
 console.log(
   after.vibes > 0
