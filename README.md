@@ -26,7 +26,7 @@ pnpm typecheck    # TypeScript strict во всех пакетах
 pnpm validate     # схемы и ссылочная целостность контента
 pnpm test         # юнит-тесты движка
 pnpm sim          # винрейты юнитов + фаззер диалогов
-pnpm ci           # всё вместе
+pnpm run ci       # всё вместе (именно run: pnpm ci — своя команда pnpm)
 ```
 
 ## Свой арт
