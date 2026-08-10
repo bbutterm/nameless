@@ -51,6 +51,37 @@ await page.addInitScript(() => {
     return p;
   };
   window.__playErrors = [];
+
+  /*
+   * Главная проверка файла: ДОХОДИТ ЛИ ЗВУК ДО ВЫХОДА.
+   *
+   * «Контекст запущен» этого не значит — он бывает запущен и нем. Вешаем
+   * анализатор на всё, что подключается к `destination`, и меряем пик: ноль
+   * означает тишину при исправном коде, а больше единицы — обрезание, которое
+   * слышно как хрип.
+   */
+  window.__peak = 0;
+  const realConnect = AudioNode.prototype.connect;
+  AudioNode.prototype.connect = function (dest, ...rest) {
+    try {
+      if (dest && dest.constructor && /AudioDestinationNode/.test(dest.constructor.name)) {
+        const ac = dest.context;
+        if (!ac.__an) {
+          ac.__an = ac.createAnalyser();
+          ac.__an.fftSize = 2048;
+          ac.__buf = new Float32Array(ac.__an.fftSize);
+          setInterval(() => {
+            ac.__an.getFloatTimeDomainData(ac.__buf);
+            let m = 0;
+            for (const v of ac.__buf) m = Math.max(m, Math.abs(v));
+            if (m > window.__peak) window.__peak = m;
+          }, 50);
+        }
+        realConnect.call(this, ac.__an);
+      }
+    } catch {}
+    return realConnect.call(this, dest, ...rest);
+  };
 });
 
 // Запросы за музыкой считаем отдельно: она обязана НЕ грузиться до того, как
@@ -143,6 +174,14 @@ if (musicHits.length === 0) {
   );
 }
 for (const e of music.errors) console.log(`   !! play() отказал: ${e}`);
+const peak = await page.evaluate(() => window.__peak);
+if (peak < 0.0005) {
+  console.log(`!! на выход не приходит НИЧЕГО (пик ${peak.toFixed(5)}) — игра нема`);
+} else if (peak > 1) {
+  console.log(`!! пик ${peak.toFixed(2)} — выше единицы обрезается динамиком, это хрип`);
+} else {
+  console.log(`   звук доходит до выхода, пик ${peak.toFixed(2)} (обрезания нет)`);
+}
 console.log(
   after.vibes > 0
     ? `   вибрация: игра просит её ${after.vibes} раз — код живой`
