@@ -1,5 +1,6 @@
 import type { BattleState, Lang, UnitDef } from '@nameless/engine';
 import { loc, t } from '../i18n';
+import { cardImage } from '../lib/art';
 import { unitEmblem } from '../lib/emblems';
 
 /**
@@ -53,7 +54,12 @@ export function TurnQueue({
     <div className="turn-queue" aria-hidden="true">
       {win.map(({ u, done }) => {
         const def = defs.get(u.defId);
-        const mark = unitEmblem(def?.id, def?.faction);
+        // Лицо с карточки главнее знака: рисунок узнаётся быстрее абстрактного
+        // глифа и, в отличие от него, есть у КАЖДОГО юнита — новые силы мира B
+        // пришли без записи в спрайт-ленте знаков и падали на букву, то есть
+        // ровно в ту болезнь, ради которой очередь и переделывали.
+        const art = def ? cardImage(def.id) : undefined;
+        const mark = art ? undefined : unitEmblem(def?.id, def?.faction);
         const name = def ? loc(def.name, lang) : u.defId;
         return (
           <div
@@ -63,7 +69,9 @@ export function TurnQueue({
               .join(' ')}
             title={name}
           >
-            {mark ? (
+            {art ? (
+              <img className="queue-art" src={art} alt="" draggable={false} />
+            ) : mark ? (
               <span className="queue-mark" style={mark} />
             ) : (
               // Юнит без знака (такого в игре сейчас нет, но контент растёт) —

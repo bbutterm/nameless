@@ -1694,3 +1694,14 @@
   white-space: nowrap;
   max-width: 100%;
 }
+
+/* Лицо с карточки в делении очереди. Кадр смещён к верхней трети рисунка:
+   там на всех картах голова, а центр даёт грудь и руки — на 24px это пятно. */
+.queue-art {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 18%;
+  border-radius: inherit;
+  display: block;
+}
