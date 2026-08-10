@@ -62,11 +62,62 @@ function audio(): AudioContext | undefined {
     const Ctor = window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
     if (!Ctor) return undefined;
     ctx = new Ctor();
+    claimPlaybackSession();
   }
   return ctx;
 }
 
+/**
+ * Общая шина с ограничителем. Замер показал пик 1.48 на выходе — всё, что
+ * выше единицы, обрезается и хрипит: одновременные удар, крит и подложка
+ * складывались напрямую в `destination`, и никто их не сводил.
+ */
+function bus(): AudioNode | undefined {
+  const a = audio();
+  if (!a) return undefined;
+  if (!master) {
+    master = a.createDynamicsCompressor();
+    master.threshold.setValueAtTime(-8, a.currentTime);
+    master.ratio.setValueAtTime(12, a.currentTime);
+    master.attack.setValueAtTime(0.003, a.currentTime);
+    master.release.setValueAtTime(0.25, a.currentTime);
+    /*
+     * После ограничителя — выходная громкость. Одного компрессора мало:
+     * атака в три миллисекунды пропускает начало удара, и замер показывал
+     * 1.17 на выходе даже с ним. Всё, что выше единицы, обрезается динамиком.
+     */
+    masterGain = a.createGain();
+    masterGain.gain.setValueAtTime(0.7, a.currentTime);
+    master.connect(masterGain).connect(a.destination);
+  }
+  return master;
+}
+
+let master: DynamicsCompressorNode | undefined;
+let masterGain: GainNode | undefined;
+
+/**
+ * Сказать iOS, что это игра, а не фоновый звук страницы.
+ *
+ * На айфоне Web Audio по умолчанию идёт в «ambient»-сессию, и её глушит
+ * аппаратный переключатель «без звука» — целиком, вместе с эффектами. Снаружи
+ * это выглядит как «звука нет вообще никакого», и найти причину в коде нельзя,
+ * потому что её там нет: код исправно шлёт звук в выключенный динамик.
+ *
+ * `navigator.audioSession` появился в Safari 16.4; где его нет — вызов молча
+ * пропускается, поведение прежнее.
+ */
+function claimPlaybackSession(): void {
+  const nav = navigator as Navigator & { audioSession?: { type: string } };
+  try {
+    if (nav.audioSession) nav.audioSession.type = 'playback';
+  } catch {
+    // Тип не поддержан — не беда.
+  }
+}
+
 export async function resume(): Promise<void> {
+  claimPlaybackSession();
   const a = audio();
   if (a && a.state === 'suspended') {
     try {
@@ -98,7 +149,7 @@ function tone({ freq, to, dur, type = 'sine', gain = 0.12, delay = 0 }: ToneOpts
   env.gain.setValueAtTime(0.0001, t0);
   env.gain.exponentialRampToValueAtTime(gain, t0 + 0.008);
   env.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
-  osc.connect(env).connect(a.destination);
+  osc.connect(env).connect(bus() ?? a.destination);
   osc.start(t0);
   osc.stop(t0 + dur + 0.02);
 }
@@ -120,7 +171,7 @@ function noise(dur: number, gain = 0.1, filterHz = 1400, delay = 0): void {
   const env = a.createGain();
   env.gain.setValueAtTime(gain, t0);
   env.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
-  src.connect(filter).connect(env).connect(a.destination);
+  src.connect(filter).connect(env).connect(bus() ?? a.destination);
   src.start(t0);
 }
 
@@ -264,7 +315,7 @@ export function setAir(placeKey: string): void {
     bedSrc = a.createBufferSource();
     bedSrc.buffer = bedBuffer(a);
     bedSrc.loop = true;
-    bedSrc.connect(bedFilter).connect(bedGain).connect(a.destination);
+    bedSrc.connect(bedFilter).connect(bedGain).connect(bus() ?? a.destination);
     bedSrc.start();
   }
   if (airNow === placeKey) return;
@@ -421,7 +472,7 @@ function makeSlot(a: AudioContext): Slot | undefined {
     const src = a.createMediaElementSource(el);
     const gain = a.createGain();
     gain.gain.setValueAtTime(0.0001, a.currentTime);
-    src.connect(gain).connect(a.destination);
+    src.connect(gain).connect(bus() ?? a.destination);
     return { el, src, gain };
   } catch {
     // Старый браузер без MediaElementSource — игра просто останется без музыки.
