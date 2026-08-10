@@ -44,8 +44,8 @@ const personas = Number(args.find((a) => a.startsWith('--personas='))?.split('='
 const runs = Number(args.find((a) => a.startsWith('--runs='))?.split('=')[1] ?? 300);
 const reportDir = join(process.cwd(), '..', '..', 'sim-reports');
 
-/** Сколько сродственных ставится в отряд контроля — одинаково для всех жизней. */
-const CONTROL_KIN = 2;
+const STAND_NEUTRAL = ['beacon_warden', 'cold_reckoner', 'gravedigger_of_things', 'pale_deacon'];
+const STAND_KIN = 2;
 
 let failed = false;
 const summary: Record<string, unknown> = {};
@@ -298,21 +298,30 @@ if (!only || only === 'battles') {
        * ростера. Замена идёт по тиру, чтобы не подменять заодно и силу отряда.
        */
       head('Контроль отклика: умение, которое ничего не делает');
+      /*
+       * Эталонный набор боёв — только те, что рассчитаны на второй тир, то
+       * есть бои второй главы. Стенд собран из шестёрки второго тира, и
+       * гонять его по всему корпусу значило бы мерить не отклик, а то, как
+       * шестёрка второго тира держится против третьей главы: первые прогоны
+       * так и дали 36–48% побед и почти нулевую частоту отклика — бот просто
+       * не доживал до применения.
+       */
+      const standBattles = content.battles.filter(
+        (b) =>
+          (battleChapter.get(b.id) ?? 1) === 2 &&
+          !b.tags?.includes('lethal') &&
+          !b.tags?.includes('tutorial'),
+      );
+      const standContent = { ...content, battles: standBattles };
+      console.log(`   эталонный набор: ${standBattles.length} боёв второй главы`);
+
       const emptyGains: Record<string, number> = {};
       for (const life of ladderLives) {
         const rowRep = powerLadder(
-          content,
-          (id) => {
-            const def = content.battles.find((b) => b.id === id);
-            const base = def?.expectParty?.length
-              ? namedParty(content.units, def.expectParty)
-              : defaultParty(
-                  content.units,
-                  (battleChapter.get(id) ?? 1) === 1 ? 1 : (battleChapter.get(id) ?? 1) === 2 ? 2 : 3,
-                  battleChapter.get(id) ?? 1,
-                );
-            return withKin(content.units, base, life, CONTROL_KIN);
-          },
+          standContent,
+          // Стенд один и тот же во всех боях набора: контроль сравнивает жизни,
+          // а не главы, и подстраиваться под бой ему нечем и незачем.
+          () => standParty(content.units, life),
           () => [emptyPower(life)],
           [life],
           Math.max(20, Math.floor(runs / 5)),
@@ -323,47 +332,19 @@ if (!only || only === 'battles') {
          * отряда, и прибор списал бы это на отклик.
          */
         const rowBase = powerLadder(
-          content,
-          (id) => {
-            const def = content.battles.find((b) => b.id === id);
-            const base = def?.expectParty?.length
-              ? namedParty(content.units, def.expectParty)
-              : defaultParty(
-                  content.units,
-                  (battleChapter.get(id) ?? 1) === 1 ? 1 : (battleChapter.get(id) ?? 1) === 2 ? 2 : 3,
-                  battleChapter.get(id) ?? 1,
-                );
-            return withKin(content.units, base, life, CONTROL_KIN);
-          },
+          standContent,
+          // Стенд один и тот же во всех боях набора: контроль сравнивает жизни,
+          // а не главы, и подстраиваться под бой ему нечем и незачем.
+          () => standParty(content.units, life),
           () => [],
           [life],
           Math.max(20, Math.floor(runs / 5)),
         )[0];
         if (!rowRep || !rowBase) continue;
-        /*
-         * Сколько сродственных удалось поставить на самом деле. Подстановка
-         * идёт заменой РАВНОГО ПО ТИРУ, и у жизни, чьи сродственные все второго
-         * тира, в отряде первой главы менять некого. Строка, где до нормы не
-         * добрали, сравнению с прочими не подлежит — и обязана сказать это
-         * вслух, иначе один молчаливый перекос сменится другим.
-         */
-        const byId = new Map(content.units.map((u) => [u.id, u]));
-        const kinReached = content.battles
-          .filter((b) => !b.tags?.includes('lethal') && !b.tags?.includes('tutorial'))
-          .map((b) => {
-            const base = b.expectParty?.length
-              ? namedParty(content.units, b.expectParty)
-              : defaultParty(
-                  content.units,
-                  (battleChapter.get(b.id) ?? 1) === 1 ? 1 : (battleChapter.get(b.id) ?? 1) === 2 ? 2 : 3,
-                  battleChapter.get(b.id) ?? 1,
-                );
-            return withKin(content.units, base, life, CONTROL_KIN).filter((pu) =>
-              (byId.get(pu.defId)?.traits ?? []).includes(`life_${life}`),
-            ).length;
-          });
-        const kinMin = kinReached.length ? Math.min(...kinReached) : 0;
-        const comparable = kinMin >= CONTROL_KIN;
+        // Строка без нормы сродственных сравнению не подлежит и обязана
+        // сказать это вслух: «не смог измерить» — не «всё в порядке».
+        const kinMin = standKinCount(content.units, life);
+        const comparable = kinMin >= STAND_KIN;
         const d = (rowRep.winrate - rowBase.winrate) * 100;
         emptyGains[life] = d;
         // Несравнимую строку прибор роняет так же, как вышедшую за предел:
@@ -374,11 +355,11 @@ if (!only || only === 'battles') {
           `${ok ? '  ' : '!!'} ${life.padEnd(13)} побед ${(rowRep.winrate * 100).toFixed(0)}% ` +
             `(${d >= 0 ? '+' : ''}${d.toFixed(1)} над базой, предел +${EMPTY_POWER_GAIN_MAX})  ` +
             `откликов ${rowRep.responsesPerBattle.toFixed(2)}/бой, ` +
-            `сродственных в отряде ${kinMin}/${CONTROL_KIN}`,
+            `сродственных в стенде ${kinMin}/${STAND_KIN}`,
         );
         if (!comparable) {
           console.log(
-            `   ↳ собрано лишь ${kinMin} сродственных из ${CONTROL_KIN}: строка НЕСРАВНИМА ` +
+            `   ↳ в стенд встало лишь ${kinMin} сродственных из ${STAND_KIN}: строка НЕСРАВНИМА ` +
               `с прочими, менять по ней нечего`,
           );
         } else if (d > EMPTY_POWER_GAIN_MAX) {
@@ -545,34 +526,62 @@ function dedupe(items: string[]): string[] {
  * не тот вход, там любой состав даёт 100%.
  */
 /**
- * Доводит отряд до ровно `want` сродственных нужной жизни, вытесняя
- * несродственных РАВНОГО ТИРА. Тир держится специально: иначе вместе со
- * сродством в отряд въезжала бы сила, и контроль мерил бы её.
+ * Стенд для контроля отклика (§D.1).
+ *
+ * Шесть юнитов второго тира: ровно два сродственных замеряемой жизни и одна и
+ * та же нейтральная четвёрка на все пять стендов. Состав НАЗНАЧЕН, а не
+ * унаследован у типового отряда, и в этом всё дело: пока контроль мерил каждую
+ * жизнь типовым отрядом, сродственных в нём оказывалось сколько придётся — у
+ * одной жизни один, у другой двое, у третьей один и только в боях второй
+ * главы. Пять чисел, которые канон сравнивает требованием «разброс ≤4», были
+ * получены в разных условиях, и три ручки подряд двигали строку Смолокура
+ * ровно на ноль, потому что двигали то, чего в замере почти не было.
+ *
+ * Тир один на всех, чтобы вместе со сродством в стенд не въезжала сила.
  */
-function withKin(units: UnitDef[], party: PartyUnit[], life: string, want: number): PartyUnit[] {
-  const byId = new Map(units.map((u) => [u.id, u]));
-  const isKin = (defId: string): boolean =>
-    (byId.get(defId)?.traits ?? []).includes(`life_${life}`);
-  const out = party.map((p) => ({ ...p }));
-  let have = out.filter((p) => isKin(p.defId)).length;
-  if (have >= want) return out;
 
-  const pool = units
-    .filter((u) => (u.traits ?? []).includes(`life_${life}`))
-    .filter((u) => !out.some((p) => p.defId === u.id))
-    .sort((a, b) => a.id.localeCompare(b.id, 'ru'));
-  for (const kin of pool) {
-    if (have >= want) break;
-    // Вытесняем несродственного того же тира и того же ряда, если можно.
-    const victim =
-      out.find((p) => !isKin(p.defId) && byId.get(p.defId)?.tier === kin.tier && p.slot.row === kin.row) ??
-      out.find((p) => !isKin(p.defId) && byId.get(p.defId)?.tier === kin.tier);
-    if (!victim) continue;
-    victim.defId = kin.id;
-    victim.hp = kin.stats.hp;
-    have++;
+function standParty(units: UnitDef[], life: string): PartyUnit[] {
+  const kin = units
+    .filter((u) => u.tier === 2 && (u.traits ?? []).includes(`life_${life}`))
+    .sort((a, b) => (a.id < b.id ? -1 : 1))
+    .slice(0, STAND_KIN);
+  const neutral = STAND_NEUTRAL.map((id) => units.find((u) => u.id === id)).filter(
+    (u): u is UnitDef => !!u,
+  );
+  /*
+   * Раскладка своя, а не `namedParty`: тот молча отбрасывает всё, что не влезло
+   * в три клетки ряда, и три стенда из пяти выходили пятёрками против шестёрок
+   * — прибор снова сравнивал бы разное. Переполнение ряда уходит в соседний,
+   * как в бою и бывает.
+   *
+   * Уровень 2, а не 1: эталонный набор — бои второй главы, и они рассчитаны на
+   * прокачанный отряд. Стенд первого уровня проигрывал их в ноль, и отклик в
+   * нём не срабатывал вовсе — мерить было нечего.
+   */
+  const front: UnitDef[] = [];
+  const back: UnitDef[] = [];
+  for (const u of [...kin, ...neutral]) {
+    const prefer = u.row === 'front' ? front : back;
+    const other = u.row === 'front' ? back : front;
+    if (prefer.length < 3) prefer.push(u);
+    else if (other.length < 3) other.push(u);
   }
+  const out: PartyUnit[] = [];
+  front.forEach((u, i) =>
+    out.push({ uid: `s${out.length}:${u.id}`, defId: u.id, hp: u.stats.hp, xp: 0, level: 2, slot: { row: 'front', index: i } }),
+  );
+  back.forEach((u, i) =>
+    out.push({ uid: `s${out.length}:${u.id}`, defId: u.id, hp: u.stats.hp, xp: 0, level: 2, slot: { row: 'back', index: i } }),
+  );
   return out;
+}
+
+/** Сколько сродственных реально встало в стенд — строка без нормы несравнима. */
+function standKinCount(units: UnitDef[], life: string): number {
+  const byId = new Map(units.map((u) => [u.id, u]));
+  return standParty(units, life).filter((p) =>
+    (byId.get(p.defId)?.traits ?? []).includes(`life_${life}`),
+  ).length;
 }
 
 function namedParty(units: UnitDef[], ids: string[]): PartyUnit[] {
