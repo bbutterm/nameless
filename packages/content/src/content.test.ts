@@ -29,6 +29,7 @@ import {
   type UnitDef,
 } from '@nameless/engine';
 import { content, validateBundle } from './index.js';
+import { FACTION_HUES } from '../assets/procedural/procedural.js';
 
 const scenesById = new Map(content.scenes.map((s) => [s.id, s]));
 const unitsById = new Map(content.units.map((u) => [u.id, u]));
@@ -507,5 +508,18 @@ describe('настоящий контент: Помянник', () => {
       }
     }
     expect(dup).toEqual([]);
+  });
+});
+
+describe('графика знает про фракции', () => {
+  it('у каждой фракции ростера задан свой оттенок карточки', () => {
+    // Оттенок незнакомой фракции берётся из хэша id, то есть врёт: два юнита
+    // одной силы выходят разного цвета, а разные силы могут совпасть. На этом
+    // уже спотыкались, когда таблица знала три фракции из шести, — и снова,
+    // когда мир B привёл три новые.
+    const unknown = [...new Set(content.units.map((u) => u.faction))].filter(
+      (f) => !(f in FACTION_HUES),
+    );
+    expect(unknown).toEqual([]);
   });
 });

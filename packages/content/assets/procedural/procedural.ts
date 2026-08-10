@@ -416,13 +416,19 @@ export function frameSvg(tier: 1 | 2 | 3): string {
  * совпасть. Теперь перечислены все шесть, и тон согласован со знаком дома
  * на карточке (`assets/ui/nameless/emblems.py`, таблица UNITS).
  */
-const FACTION_HUES: Record<string, number> = {
+export const FACTION_HUES: Record<string, number> = {
   great_pawnshop: 42, // тёплое золото Учёта
   clear_head_brotherhood: 48, // блёклый пергамент Братства
   greedy_memory_guild: 265, // ворованный фиолет ностальгии Цеха
   street: 8, // тон угрозы: улица объясняет коротко
   echo: 178, // бирюза памяти: отголосок не человек, а её след
   companion: 278, // тон самой игры (--surface): свой не спорит с фоном
+  // Силы мира B (docs/WORLD_B.md §E). Без них оттенок брался из хэша id, то
+  // есть врал: два щербатых выходили разного цвета, а ямщик мог совпасть с
+  // засечной стражей. Тот же дефект уже ловили на шести старых фракциях.
+  shcherbatye: 4, // засохшая кровь: дыра, которую расковыривают
+  zaseka_watch: 250, // холодная сталь черты
+  gonba: 285, // тусклый лиловый дороги
 };
 
 function factionHue(faction: string, rng: Rng): number {
