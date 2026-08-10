@@ -2,8 +2,8 @@
   {
     "id": "appraisal",
     "name": {
-      "ru": "Оценить",
-      "en": "Appraise"
+      "ru": "Сбить цену",
+      "en": "Cut the Price"
     },
     "description": {
       "ru": "Названная вслух цена унижает: броня дешевеет.",
@@ -30,8 +30,8 @@
   {
     "id": "inventory",
     "name": {
-      "ru": "Опись",
-      "en": "Inventory"
+      "ru": "Переписать ряд",
+      "en": "Tally the Row"
     },
     "description": {
       "ru": "Внесённый в опись ряд бьёт вяло: всё уже посчитано.",
@@ -86,8 +86,8 @@
   {
     "id": "pledge",
     "name": {
-      "ru": "Заклад",
-      "en": "Pledge"
+      "ru": "Схватить",
+      "en": "Seize the Arm"
     },
     "description": {
       "ru": "Хватает руку, которой бьют.",
@@ -114,8 +114,8 @@
   {
     "id": "key_in_the_lock",
     "name": {
-      "ru": "Ключ в замке",
-      "en": "Key in the Lock"
+      "ru": "Запереть",
+      "en": "Turn the Key"
     },
     "description": {
       "ru": "Замок щёлкает, и человек стоит слушает.",
@@ -156,8 +156,8 @@
   {
     "id": "smoke_of_ples",
     "name": {
-      "ru": "Гарь Плёса",
-      "en": "Smoke of Ples"
+      "ru": "Задымить",
+      "en": "Smoke Them Out"
     },
     "description": {
       "ru": "Пахнет прошлой войной. Руки помнят раньше головы.",
@@ -184,8 +184,8 @@
   {
     "id": "borrowed_grief",
     "name": {
-      "ru": "Ношеное горе",
-      "en": "Worn Grief"
+      "ru": "Навьючить горем",
+      "en": "Load With Grief"
     },
     "description": {
       "ru": "Чужая тоска велика, но носится на всех.",
@@ -212,8 +212,8 @@
   {
     "id": "grey_dust",
     "name": {
-      "ru": "Труха",
-      "en": "Grey Dust"
+      "ru": "Стереть в труху",
+      "en": "Grind to Dust"
     },
     "description": {
       "ru": "То, что остаётся, когда забывают целиком.",

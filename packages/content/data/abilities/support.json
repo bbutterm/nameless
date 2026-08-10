@@ -2,8 +2,8 @@
   {
     "id": "promise_note",
     "name": {
-      "ru": "Посул",
-      "en": "Promise Note"
+      "ru": "Поручиться",
+      "en": "Vouch for Him"
     },
     "description": {
       "ru": "Обещание держит удары, пока не лопнет.",
@@ -54,8 +54,8 @@
   {
     "id": "bucket_round",
     "name": {
-      "ru": "Обход с ведром",
-      "en": "Bucket Round"
+      "ru": "Отпоить своих",
+      "en": "Water Your Own"
     },
     "description": {
       "ru": "Ведро идёт по ряду и не спрашивает.",
@@ -76,8 +76,8 @@
   {
     "id": "the_well_asks_nothing",
     "name": {
-      "ru": "Колодец не спрашивает",
-      "en": "The Well Asks Nothing"
+      "ru": "Напоить всех",
+      "en": "Water Everyone"
     },
     "description": {
       "ru": "Глубокая вода на всех. Имён не требуют.",
@@ -98,8 +98,8 @@
   {
     "id": "burst_for_him",
     "name": {
-      "ru": "Лопнуть за него",
-      "en": "Burst in His Stead"
+      "ru": "Принять удар за него",
+      "en": "Take the Blow for Him"
     },
     "description": {
       "ru": "Мираж встаёт под удар, лопается — и часть чужой раны уходит в бумагу.",
@@ -125,8 +125,8 @@
   {
     "id": "indiscriminate_mercy",
     "name": {
-      "ru": "Без разбора",
-      "en": "Without Discrimination"
+      "ru": "Напоить и врага",
+      "en": "Water the Enemy Too"
     },
     "description": {
       "ru": "Поит и того, кто сожжёт колодец.",
@@ -147,8 +147,8 @@
   {
     "id": "rag_bandage",
     "name": {
-      "ru": "Ветошь и вода",
-      "en": "Rag and Water"
+      "ru": "Перевязать",
+      "en": "Bandage the Wound"
     },
     "description": {
       "ru": "Дёшево, грязно, держится до вечера.",
@@ -169,8 +169,8 @@
   {
     "id": "white_book_reading",
     "name": {
-      "ru": "Чтение Белой Книги",
-      "en": "Reading the White Book"
+      "ru": "Отчитать хвори",
+      "en": "Lecture the Wounds"
     },
     "description": {
       "ru": "Страницы пусты, и раны слушают внимательнее головы.",
@@ -200,8 +200,8 @@
   {
     "id": "raise_the_rate",
     "name": {
-      "ru": "Поднять курс",
-      "en": "Raise the Rate"
+      "ru": "Поднять ставку",
+      "en": "Raise the Stakes"
     },
     "description": {
       "ru": "Одному называют цену повыше — и он дерётся по ней.",
@@ -224,8 +224,8 @@
   {
     "id": "i_will_hold_it",
     "name": {
-      "ru": "Подержу",
-      "en": "I'll Hold That"
+      "ru": "Взять на себя",
+      "en": "Take It On"
     },
     "description": {
       "ru": "Берёт чужое на себя. Вещи при нём не теряются, люди тоже.",
