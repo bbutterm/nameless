@@ -198,6 +198,683 @@
           "tone": "memory"
         }
       ],
+      "next": "zarubka_ladder"
+    },
+    {
+      "kind": "branch",
+      "id": "zarubka_ladder",
+      "branches": [
+        {
+          "when": {
+            "kind": "axis",
+            "axis": "mercy_cruelty",
+            "op": "lte",
+            "value": -20
+          },
+          "to": "zar_smolokur"
+        },
+        {
+          "when": {
+            "kind": "axis",
+            "axis": "mercy_cruelty",
+            "op": "gte",
+            "value": 20
+          },
+          "to": "zar_klyuchar"
+        },
+        {
+          "when": {
+            "kind": "axis",
+            "axis": "honesty_deceit",
+            "op": "lte",
+            "value": -20
+          },
+          "to": "zar_posulshchik"
+        },
+        {
+          "when": {
+            "kind": "axis",
+            "axis": "honesty_deceit",
+            "op": "gte",
+            "value": 20
+          },
+          "to": "zar_chistopisets"
+        },
+        {
+          "when": {
+            "kind": "axis",
+            "axis": "reason_obsession",
+            "op": "lte",
+            "value": -20
+          },
+          "to": "zar_perechen"
+        }
+      ],
+      "fallback": "zar_any"
+    },
+    {
+      "kind": "branch",
+      "id": "zar_smolokur",
+      "branches": [
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "smola_na_vode"
+            }
+          },
+          "to": "zar_full_smola_na_vode"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "ples_gorit"
+            }
+          },
+          "to": "zar_full_ples_gorit"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "schet_za_sezon"
+            }
+          },
+          "to": "zar_full_schet_za_sezon"
+        }
+      ],
+      "fallback": "zar_any"
+    },
+    {
+      "kind": "branch",
+      "id": "zar_klyuchar",
+      "branches": [
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "pervoye_vedro"
+            }
+          },
+          "to": "zar_full_pervoye_vedro"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "ochered_k_kolodtsu"
+            }
+          },
+          "to": "zar_full_ochered_k_kolodtsu"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "poslednyaya_kruzhka"
+            }
+          },
+          "to": "zar_full_poslednyaya_kruzhka"
+        }
+      ],
+      "fallback": "zar_any"
+    },
+    {
+      "kind": "branch",
+      "id": "zar_posulshchik",
+      "branches": [
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "pervyy_posul"
+            }
+          },
+          "to": "zar_full_pervyy_posul"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "zima_bez_khleba"
+            }
+          },
+          "to": "zar_full_zima_bez_khleba"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "luchshie_gody"
+            }
+          },
+          "to": "zar_full_luchshie_gody"
+        }
+      ],
+      "fallback": "zar_any"
+    },
+    {
+      "kind": "branch",
+      "id": "zar_chistopisets",
+      "branches": [
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "pervaya_stroka"
+            }
+          },
+          "to": "zar_full_pervaya_stroka"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "khronika_bez_popravok"
+            }
+          },
+          "to": "zar_full_khronika_bez_popravok"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "god_goloy_pravdy"
+            }
+          },
+          "to": "zar_full_god_goloy_pravdy"
+        }
+      ],
+      "fallback": "zar_any"
+    },
+    {
+      "kind": "branch",
+      "id": "zar_perechen",
+      "branches": [
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "punkt_pervyy"
+            }
+          },
+          "to": "zar_full_punkt_pervyy"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "opis_vsego_sushchego"
+            }
+          },
+          "to": "zar_full_opis_vsego_sushchego"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "eda_ne_vnesena"
+            }
+          },
+          "to": "zar_full_eda_ne_vnesena"
+        }
+      ],
+      "fallback": "zar_any"
+    },
+    {
+      "kind": "branch",
+      "id": "zar_any",
+      "branches": [
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "smola_na_vode"
+            }
+          },
+          "to": "zar_full_smola_na_vode"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "ples_gorit"
+            }
+          },
+          "to": "zar_full_ples_gorit"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "schet_za_sezon"
+            }
+          },
+          "to": "zar_full_schet_za_sezon"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "pervoye_vedro"
+            }
+          },
+          "to": "zar_full_pervoye_vedro"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "ochered_k_kolodtsu"
+            }
+          },
+          "to": "zar_full_ochered_k_kolodtsu"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "poslednyaya_kruzhka"
+            }
+          },
+          "to": "zar_full_poslednyaya_kruzhka"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "pervyy_posul"
+            }
+          },
+          "to": "zar_full_pervyy_posul"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "zima_bez_khleba"
+            }
+          },
+          "to": "zar_full_zima_bez_khleba"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "luchshie_gody"
+            }
+          },
+          "to": "zar_full_luchshie_gody"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "pervaya_stroka"
+            }
+          },
+          "to": "zar_full_pervaya_stroka"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "khronika_bez_popravok"
+            }
+          },
+          "to": "zar_full_khronika_bez_popravok"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "god_goloy_pravdy"
+            }
+          },
+          "to": "zar_full_god_goloy_pravdy"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "punkt_pervyy"
+            }
+          },
+          "to": "zar_full_punkt_pervyy"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "opis_vsego_sushchego"
+            }
+          },
+          "to": "zar_full_opis_vsego_sushchego"
+        },
+        {
+          "when": {
+            "kind": "not",
+            "of": {
+              "kind": "memory",
+              "memory": "eda_ne_vnesena"
+            }
+          },
+          "to": "zar_full_eda_ne_vnesena"
+        }
+      ],
+      "fallback": "zarubka_full"
+    },
+    {
+      "kind": "effects",
+      "id": "zar_full_smola_na_vode",
+      "effects": [
+        {
+          "kind": "fragment",
+          "memory": "smola_na_vode",
+          "amount": 2
+        },
+        {
+          "kind": "counter",
+          "counter": "_res:smola_na_vode",
+          "delta": 2
+        }
+      ],
+      "next": "zarubka_notch"
+    },
+    {
+      "kind": "effects",
+      "id": "zar_full_ples_gorit",
+      "effects": [
+        {
+          "kind": "fragment",
+          "memory": "ples_gorit",
+          "amount": 3
+        },
+        {
+          "kind": "counter",
+          "counter": "_res:ples_gorit",
+          "delta": 3
+        }
+      ],
+      "next": "zarubka_notch"
+    },
+    {
+      "kind": "effects",
+      "id": "zar_full_schet_za_sezon",
+      "effects": [
+        {
+          "kind": "fragment",
+          "memory": "schet_za_sezon",
+          "amount": 4
+        },
+        {
+          "kind": "counter",
+          "counter": "_res:schet_za_sezon",
+          "delta": 4
+        }
+      ],
+      "next": "zarubka_notch"
+    },
+    {
+      "kind": "effects",
+      "id": "zar_full_pervoye_vedro",
+      "effects": [
+        {
+          "kind": "fragment",
+          "memory": "pervoye_vedro",
+          "amount": 2
+        },
+        {
+          "kind": "counter",
+          "counter": "_res:pervoye_vedro",
+          "delta": 2
+        }
+      ],
+      "next": "zarubka_notch"
+    },
+    {
+      "kind": "effects",
+      "id": "zar_full_ochered_k_kolodtsu",
+      "effects": [
+        {
+          "kind": "fragment",
+          "memory": "ochered_k_kolodtsu",
+          "amount": 3
+        },
+        {
+          "kind": "counter",
+          "counter": "_res:ochered_k_kolodtsu",
+          "delta": 3
+        }
+      ],
+      "next": "zarubka_notch"
+    },
+    {
+      "kind": "effects",
+      "id": "zar_full_poslednyaya_kruzhka",
+      "effects": [
+        {
+          "kind": "fragment",
+          "memory": "poslednyaya_kruzhka",
+          "amount": 4
+        },
+        {
+          "kind": "counter",
+          "counter": "_res:poslednyaya_kruzhka",
+          "delta": 4
+        }
+      ],
+      "next": "zarubka_notch"
+    },
+    {
+      "kind": "effects",
+      "id": "zar_full_pervyy_posul",
+      "effects": [
+        {
+          "kind": "fragment",
+          "memory": "pervyy_posul",
+          "amount": 2
+        },
+        {
+          "kind": "counter",
+          "counter": "_res:pervyy_posul",
+          "delta": 2
+        }
+      ],
+      "next": "zarubka_notch"
+    },
+    {
+      "kind": "effects",
+      "id": "zar_full_zima_bez_khleba",
+      "effects": [
+        {
+          "kind": "fragment",
+          "memory": "zima_bez_khleba",
+          "amount": 3
+        },
+        {
+          "kind": "counter",
+          "counter": "_res:zima_bez_khleba",
+          "delta": 3
+        }
+      ],
+      "next": "zarubka_notch"
+    },
+    {
+      "kind": "effects",
+      "id": "zar_full_luchshie_gody",
+      "effects": [
+        {
+          "kind": "fragment",
+          "memory": "luchshie_gody",
+          "amount": 4
+        },
+        {
+          "kind": "counter",
+          "counter": "_res:luchshie_gody",
+          "delta": 4
+        }
+      ],
+      "next": "zarubka_notch"
+    },
+    {
+      "kind": "effects",
+      "id": "zar_full_pervaya_stroka",
+      "effects": [
+        {
+          "kind": "fragment",
+          "memory": "pervaya_stroka",
+          "amount": 2
+        },
+        {
+          "kind": "counter",
+          "counter": "_res:pervaya_stroka",
+          "delta": 2
+        }
+      ],
+      "next": "zarubka_notch"
+    },
+    {
+      "kind": "effects",
+      "id": "zar_full_khronika_bez_popravok",
+      "effects": [
+        {
+          "kind": "fragment",
+          "memory": "khronika_bez_popravok",
+          "amount": 3
+        },
+        {
+          "kind": "counter",
+          "counter": "_res:khronika_bez_popravok",
+          "delta": 3
+        }
+      ],
+      "next": "zarubka_notch"
+    },
+    {
+      "kind": "effects",
+      "id": "zar_full_god_goloy_pravdy",
+      "effects": [
+        {
+          "kind": "fragment",
+          "memory": "god_goloy_pravdy",
+          "amount": 4
+        },
+        {
+          "kind": "counter",
+          "counter": "_res:god_goloy_pravdy",
+          "delta": 4
+        }
+      ],
+      "next": "zarubka_notch"
+    },
+    {
+      "kind": "effects",
+      "id": "zar_full_punkt_pervyy",
+      "effects": [
+        {
+          "kind": "fragment",
+          "memory": "punkt_pervyy",
+          "amount": 2
+        },
+        {
+          "kind": "counter",
+          "counter": "_res:punkt_pervyy",
+          "delta": 2
+        }
+      ],
+      "next": "zarubka_notch"
+    },
+    {
+      "kind": "effects",
+      "id": "zar_full_opis_vsego_sushchego",
+      "effects": [
+        {
+          "kind": "fragment",
+          "memory": "opis_vsego_sushchego",
+          "amount": 3
+        },
+        {
+          "kind": "counter",
+          "counter": "_res:opis_vsego_sushchego",
+          "delta": 3
+        }
+      ],
+      "next": "zarubka_notch"
+    },
+    {
+      "kind": "effects",
+      "id": "zar_full_eda_ne_vnesena",
+      "effects": [
+        {
+          "kind": "fragment",
+          "memory": "eda_ne_vnesena",
+          "amount": 4
+        },
+        {
+          "kind": "counter",
+          "counter": "_res:eda_ne_vnesena",
+          "delta": 4
+        }
+      ],
+      "next": "zarubka_notch"
+    },
+    {
+      "kind": "narration",
+      "id": "zarubka_notch",
+      "text": {
+        "ru": "Голос берёт щепку двумя пальцами и режет зарубку сам — коротко, поперёк волокна, как метят не своё. Щепка возвращается в кулак тёплой. Считать зарубки ты не начинаешь: их пока меньше, чем нужно, чтобы сбиться.",
+        "en": "The Voice takes the splinter between two fingers and cuts the notch itself — short, across the grain, the way people mark what is not theirs. The splinter comes back to your fist warm. You do not start counting the notches: there are still fewer than it takes to lose count."
+      },
+      "keywords": [
+        {
+          "match": {
+            "ru": "зарубку",
+            "en": "the notch"
+          },
+          "tone": "lore"
+        }
+      ],
+      "next": "death_oklik"
+    },
+    {
+      "kind": "say",
+      "id": "zarubka_full",
+      "speaker": "golos_iz_trukhi",
+      "text": {
+        "ru": "Места нет. Щепка вся в зарубках, и резать больше некуда — не потому, что ты закончил, а потому, что мы закончили. Дальше тебя подтверждать будет кто-то другой.",
+        "en": "There is no room. The splinter is all notches, and there is nowhere left to cut — not because you are finished, but because we are. Someone else will be confirming you from here on."
+      },
       "next": "death_oklik"
     },
     {
