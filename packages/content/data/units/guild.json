@@ -69,7 +69,8 @@
       "value": -40
     },
     "traits": [
-      "mage"
+      "mage",
+      "life_posulshchik"
     ]
   },
   {
@@ -106,7 +107,8 @@
     },
     "traits": [
       "mage",
-      "breaker"
+      "breaker",
+      "life_posulshchik"
     ]
   }
 ]

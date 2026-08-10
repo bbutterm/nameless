@@ -29,7 +29,8 @@
       "kind": "never"
     },
     "traits": [
-      "breaker"
+      "breaker",
+      "life_chistopisets"
     ]
   },
   {
@@ -61,7 +62,8 @@
       "kind": "never"
     },
     "traits": [
-      "breaker"
+      "breaker",
+      "life_chistopisets"
     ]
   }
 ]

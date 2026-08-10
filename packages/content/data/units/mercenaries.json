@@ -33,7 +33,8 @@
     },
     "traits": [
       "fighter",
-      "pole_mercy"
+      "pole_mercy",
+      "life_klyuchar"
     ]
   },
   {
@@ -69,7 +70,8 @@
     },
     "traits": [
       "healer",
-      "pole_mercy"
+      "pole_mercy",
+      "life_klyuchar"
     ]
   },
   {
@@ -104,7 +106,8 @@
     },
     "traits": [
       "fighter",
-      "pole_cruelty"
+      "pole_cruelty",
+      "life_smolokur"
     ]
   },
   {
@@ -139,7 +142,8 @@
     },
     "traits": [
       "mage",
-      "pole_cruelty"
+      "pole_cruelty",
+      "life_smolokur"
     ]
   },
   {
@@ -174,7 +178,8 @@
     },
     "traits": [
       "breaker",
-      "pole_honesty"
+      "pole_honesty",
+      "life_chistopisets"
     ]
   },
   {
@@ -210,7 +215,8 @@
     },
     "traits": [
       "breaker",
-      "pole_honesty"
+      "pole_honesty",
+      "life_chistopisets"
     ]
   },
   {
@@ -245,7 +251,8 @@
     },
     "traits": [
       "shield",
-      "pole_deceit"
+      "pole_deceit",
+      "life_posulshchik"
     ]
   },
   {
@@ -280,7 +287,8 @@
     },
     "traits": [
       "breaker",
-      "pole_deceit"
+      "pole_deceit",
+      "life_posulshchik"
     ]
   },
   {
@@ -388,7 +396,8 @@
     },
     "traits": [
       "fighter",
-      "pole_obsession"
+      "pole_obsession",
+      "life_perechen"
     ]
   },
   {
@@ -424,7 +433,8 @@
     },
     "traits": [
       "mage",
-      "pole_obsession"
+      "pole_obsession",
+      "life_perechen"
     ]
   },
   {

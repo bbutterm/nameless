@@ -61,7 +61,8 @@
       "value": -40
     },
     "traits": [
-      "shooter"
+      "shooter",
+      "life_smolokur"
     ]
   }
 ]
