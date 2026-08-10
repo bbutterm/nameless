@@ -19,7 +19,13 @@ import type {
 import { content as gameContent } from '@nameless/content';
 import { fuzzDialogue, makePersonalities } from './dialogue-fuzz.js';
 import { determinismCheck, scriptedBattles, unitWinrates } from './battle-sim.js';
-import { exhaustiveLadderCheck, personaRun, PERSONAS } from './resonance.js';
+import {
+  exhaustiveLadderCheck,
+  personaRun,
+  PERSONAS,
+  REFUSAL_NODE,
+  REFUSAL_SCENE,
+} from './resonance.js';
 
 const L = (s: string) => ({ ru: s, en: s });
 
@@ -497,5 +503,43 @@ describe('резонанс: архив узнаёт не всех (B6)', () => {
       expect(r.fundedButNoLot).toBe(0);
       expect(r.seam).toBe(0);
     }
+  });
+
+  /*
+   * Отказ Схода — не дыра в правиле «молчаливых смертей не бывает», а
+   * уточнение слова «молчаливая». Смерть без лота не молчалива, если
+   * церемония проговорила отказ и занесла его в Помянник: она ответила,
+   * просто ответила «нет».
+   *
+   * Уточнение термина само по себе ничего не доказывает — оно только
+   * переносит нагрузку на три проверки ниже. Поэтому они здесь и стоят:
+   * без них «silent» превратился бы в метрику, которую нельзя провалить.
+   */
+  it('отказать умеет только Сход и только пустому', () => {
+    const runs = PERSONAS.map((p) => personaRun(gameContent, p, 16));
+    for (const r of runs) {
+      // Заработанное отдают: два осколка поступками уже обязывают выдать.
+      expect(r.refusedWithDeeds).toBe(0);
+      // Прилавок Заклада не отказывает никогда — контора обязана выдать.
+      expect(r.refusedElsewhere).toBe(0);
+    }
+    // И сам отказ обязан быть достижим: правило, которое ни разу не
+    // сработало, доказывает не канон, а недосягаемость ветки.
+    expect(runs.reduce((sum, r) => sum + r.refused, 0)).toBeGreaterThan(0);
+  });
+
+  it('строка Помянника про отказ существует и открывается тем же узлом', () => {
+    // След отказа — не метафора: без строки в книге смерть действительно
+    // молчалива, и тогда переопределение выше было бы подгонкой.
+    const line = gameContent.codex
+      .flatMap((e) => e.lines)
+      .find(
+        (l) =>
+          l.unlock.kind === 'node' &&
+          l.unlock.scene === REFUSAL_SCENE &&
+          l.unlock.node === REFUSAL_NODE,
+      );
+    expect(line, `нет строки Помянника на ${REFUSAL_SCENE}#${REFUSAL_NODE}`).toBeDefined();
+    expect(line?.source).toBe('after_death');
   });
 });
