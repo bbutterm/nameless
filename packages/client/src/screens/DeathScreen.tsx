@@ -4,7 +4,7 @@ import { useGame } from '../store/game';
 import { content } from '../store/content';
 import { Icon } from '../components/Icon';
 import { vibrate } from '../lib/haptics';
-import { playSfx } from '../lib/sound';
+import { playSfx, setMusic } from '../lib/sound';
 import { placeEmblemByKey } from '../lib/emblems';
 import { CodexScreen } from './CodexScreen';
 
@@ -27,6 +27,8 @@ export function DeathScreen() {
       setPhase(2);
       vibrate('memory');
       playSfx('memory');
+      // Церемония — единственное место, где музыка звучит вместо разговора.
+      setMusic('death');
     }, 2800);
     return () => {
       clearTimeout(a);

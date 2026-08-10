@@ -26,22 +26,34 @@ export function setSound(on: boolean): void {
     // не критично
   }
   if (on) void resume();
-  // Воздух гасится сразу: выключатель звука обязан выключать и то, что уже
-  // играет, иначе подложка тянется ещё минуту после нажатия.
-  else stopAir();
+  // Воздух и музыка гасятся сразу: выключатель звука обязан выключать и то,
+  // что уже играет, иначе подложка тянется ещё минуту после нажатия.
+  else {
+    stopAir();
+    stopMusic();
+  }
 }
 
 // Свёрнутая вкладка не должна шуметь в кармане: это мобильная игра, её
 // сворачивают, не закрывая.
 if (typeof document !== 'undefined') {
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) stopAir();
-    else if (enabled && lastPlace) setAir(lastPlace);
+    if (document.hidden) {
+      stopAir();
+      stopMusic();
+    } else if (enabled) {
+      if (lastPlace) setAir(lastPlace);
+      // Музыку возвращаем ту же: `setMusic` сравнивает с текущей, а её мы
+      // только что сбросили, — поэтому играет заново, а не молчит.
+      if (lastTrack) setMusic(lastTrack);
+    }
   });
 }
 
 /** Последнее место — чтобы вернуть тот же воздух после сворачивания. */
 let lastPlace: string | undefined;
+/** То же для музыки: свёрнутая вкладка молчит, развёрнутая продолжает. */
+let lastTrack: Track | undefined;
 
 /** Контекст создаётся лениво: браузеры не дают звук до первого жеста. */
 function audio(): AudioContext | undefined {
@@ -281,5 +293,178 @@ export function stopAir(): void {
     bedGain.gain.cancelScheduledValues(t);
     bedGain.gain.setValueAtTime(Math.max(0.0001, bedGain.gain.value), t);
     bedGain.gain.linearRampToValueAtTime(0.0001, t + 0.4);
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Музыка
+//
+// Файлов в игре пока нет ни одного, и это нормальное состояние: слот пустой,
+// игра звучит ровно как звучала. Как только файл лёг в
+// `packages/content/assets/music/`, он молча начинает играть — тем же приёмом,
+// каким устроены арт-слоты (`lib/art.ts`).
+//
+// Почему музыка живёт здесь, а не в своём модуле: она обязана слушаться того же
+// выключателя и того же сворачивания вкладки, что и остальной звук. Отдельный
+// файл дал бы кольцевой импорт (звук → музыка → звук), а дублировать
+// выключатель — значит однажды его рассинхронить.
+// ─────────────────────────────────────────────────────────────────────────────
+
+const musicFiles = import.meta.glob(
+  '../../../content/assets/music/*.{m4a,mp3,ogg,opus,webm,wav}',
+  { eager: true, query: '?url', import: 'default' },
+) as Record<string, string>;
+
+/** Имя файла без расширения → адрес. Расширений несколько нарочно: */
+/* исполнитель может принести `.m4a`, а может и `.opus` — обоим место одно. */
+const musicByName = new Map<string, string>();
+for (const [path, url] of Object.entries(musicFiles)) {
+  const base = (path.split('/').pop() ?? '').replace(/\.[^.]+$/, '');
+  // Первый выигрывает: если рядом лежат `battle.m4a` и `battle.opus`, берётся
+  // тот, что раньше по алфавиту расширения, — оба звучат одинаково.
+  if (!musicByName.has(base)) musicByName.set(base, url);
+}
+
+export type Track = 'title' | 'dialogue_cold' | 'dialogue_low' | 'dialogue_out' | 'battle' | 'death';
+
+/**
+ * Тринадцать мест сведены в три подложки. Тринадцать треков — это вес и каша:
+ * игрок за забег проходит все места, и тринадцать разных мелодий превратились
+ * бы в перебор радиостанций.
+ */
+const PLACE_TRACK: Record<string, Track> = {
+  hall: 'dialogue_cold',
+  counter: 'dialogue_cold',
+  archive: 'dialogue_cold',
+  ledger: 'dialogue_cold',
+  audit: 'dialogue_cold',
+  vault: 'dialogue_low',
+  lowest: 'dialogue_low',
+  hourglass: 'dialogue_low',
+  tower: 'dialogue_low',
+  gate: 'dialogue_out',
+  road: 'dialogue_out',
+  garden: 'dialogue_out',
+  guild: 'dialogue_out',
+};
+
+/** Какая подложка у этого места. Ключ считает `placeKey` — тот же, что у знака. */
+export function trackForPlace(placeKey: string): Track {
+  return PLACE_TRACK[placeKey] ?? 'dialogue_low';
+}
+
+/** Громче воздуха (0.011–0.02), тише реплики. */
+const MUSIC_GAIN = 0.06;
+/** Переход между подложками — сквозняк, а не переключатель. */
+const FADE_S = 1.4;
+
+interface Slot {
+  el: HTMLAudioElement;
+  src: MediaElementAudioSourceNode;
+  gain: GainNode;
+  track?: Track;
+}
+
+let slotA: Slot | undefined;
+let slotB: Slot | undefined;
+let live: 'a' | 'b' = 'a';
+let musicNow: Track | undefined;
+
+function makeSlot(a: AudioContext): Slot | undefined {
+  try {
+    const el = new Audio();
+    el.loop = true;
+    // Ничего не качаем, пока трек не понадобился: первая сцена обязана
+    // оставаться в своих шести килобайтах.
+    el.preload = 'none';
+    el.crossOrigin = 'anonymous';
+    const src = a.createMediaElementSource(el);
+    const gain = a.createGain();
+    gain.gain.setValueAtTime(0.0001, a.currentTime);
+    src.connect(gain).connect(a.destination);
+    return { el, src, gain };
+  } catch {
+    // Старый браузер без MediaElementSource — игра просто останется без музыки.
+    return undefined;
+  }
+}
+
+function fade(slot: Slot, to: number, a: AudioContext): void {
+  const t = a.currentTime;
+  slot.gain.gain.cancelScheduledValues(t);
+  slot.gain.gain.setValueAtTime(Math.max(0.0001, slot.gain.gain.value), t);
+  slot.gain.gain.linearRampToValueAtTime(Math.max(0.0001, to), t + FADE_S);
+}
+
+/**
+ * Включить подложку. Повторный вызов с тем же треком ничего не делает —
+ * иначе смена сцены внутри одного места перезапускала бы музыку с начала.
+ */
+export function setMusic(track: Track): void {
+  if (!enabled) {
+    stopMusic();
+    return;
+  }
+  lastTrack = track;
+  const url = musicByName.get(track);
+  // Файла нет — и хорошо: слот пустой, игра звучит как звучала.
+  if (!url) return;
+  if (musicNow === track) return;
+  const a = audio();
+  if (!a) return;
+  void resume();
+
+  if (!slotA) slotA = makeSlot(a);
+  if (!slotB) slotB = makeSlot(a);
+  if (!slotA || !slotB) return;
+
+  const next = live === 'a' ? slotB : slotA;
+  const prev = live === 'a' ? slotA : slotB;
+
+  if (next.track !== track) {
+    next.el.src = url;
+    next.track = track;
+  } else {
+    /*
+     * Перемотка в начало — только для УЖЕ загруженного файла. Свежему `src`
+     * ставить `currentTime` нельзя: данных ещё нет, `readyState` нулевой, и
+     * браузер бросает InvalidStateError — вместе с ним падает и `play()`,
+     * который стоит следом. Файл при этом качается, а музыка молчит: ровно
+     * этот случай и поймал `soundcheck` — «загружено 1, играет 0».
+     */
+    try {
+      if (next.el.readyState > 0) next.el.currentTime = 0;
+    } catch {
+      // Не перемоталось — не беда, начнём с того места, где стояли.
+    }
+  }
+  void next.el.play().catch(() => {
+    // Браузер ещё не дал добро — музыка появится со следующего касания.
+  });
+  fade(next, MUSIC_GAIN, a);
+  fade(prev, 0, a);
+  // Прошлую останавливаем не сразу, а когда она уже неслышна.
+  const stopping = prev.el;
+  window.setTimeout(() => {
+    if (stopping.paused) return;
+    if ((live === 'a' ? slotA : slotB)?.el === stopping) return;
+    stopping.pause();
+  }, FADE_S * 1000 + 200);
+
+  live = live === 'a' ? 'b' : 'a';
+  musicNow = track;
+}
+
+/** Заглушить музыку: выключенный звук, свёрнутая вкладка, конец игры. */
+export function stopMusic(): void {
+  musicNow = undefined;
+  const a = ctx;
+  for (const slot of [slotA, slotB]) {
+    if (!slot) continue;
+    if (a) fade(slot, 0, a);
+    const el = slot.el;
+    window.setTimeout(() => {
+      if (!el.paused) el.pause();
+    }, FADE_S * 1000 + 200);
   }
 }

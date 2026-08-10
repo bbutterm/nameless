@@ -16,7 +16,7 @@ import { loc, t } from '../i18n';
 import { useGame } from '../store/game';
 import { combat, content } from '../store/content';
 import { vibrate } from '../lib/haptics';
-import { playSfx, setAir } from '../lib/sound';
+import { playSfx, setAir, setMusic } from '../lib/sound';
 import { backgroundImage, backgroundSvg, svgDataUri } from '../lib/art';
 import { placeEmblem, placeKey, placeTone, unitEmblem } from '../lib/emblems';
 import { TutorialHint } from '../components/Tutorial';
@@ -98,7 +98,9 @@ export function BattleScreen() {
   // Воздух боя берётся от самого боя, а не от сцены, из которой в него вошли:
   // драка на мостках звучит дорогой в Выцветь, а не залом, где о ней говорили.
   useEffect(() => {
-    if (battleId) setAir(placeKey(battleId));
+    if (!battleId) return;
+    setAir(placeKey(battleId));
+    setMusic('battle');
   }, [battleId]);
 
   // Новые события боя превращаем в анимацию карточек и всплывающие цифры.

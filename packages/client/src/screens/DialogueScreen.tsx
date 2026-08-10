@@ -8,7 +8,7 @@ import { useGame } from '../store/game';
 import { content, idx } from '../store/content';
 import { backgroundImage, backgroundSvg, svgDataUri } from '../lib/art';
 import { placeEmblem, placeKey, placeTone } from '../lib/emblems';
-import { setAir } from '../lib/sound';
+import { setAir, setMusic, trackForPlace } from '../lib/sound';
 import { ArchiveSheet } from './ArchiveSheet';
 import { CodexScreen } from './CodexScreen';
 import { TutorialHint } from '../components/Tutorial';
@@ -43,7 +43,12 @@ export function DialogueScreen() {
   // картинка и звук не могут разойтись: зал Учёта всегда звучит залом Учёта.
   const scene = state?.scene;
   useEffect(() => {
-    if (scene) setAir(placeKey(scene));
+    if (!scene) return;
+    const key = placeKey(scene);
+    setAir(key);
+    // Подложка выбирается тем же ключом места, что воздух и знак: разойтись
+    // они не могут по построению.
+    setMusic(trackForPlace(key));
   }, [scene]);
 
   if (!state) return null;
