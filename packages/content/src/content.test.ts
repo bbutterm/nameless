@@ -13,6 +13,7 @@ import {
   applyDeath,
   applyEffects,
   createInitialState,
+  derivePlayerPowers,
   indexCombat,
   indexContent,
   parseRef,
@@ -360,6 +361,54 @@ describe('настоящий контент: память', () => {
       expect(res.memory?.id, `воспоминание ${m.id}`).toBe(m.id);
       expect(res.state.lockedMemories, `воспоминание ${m.id} не закрепилось`).toContain(m.id);
       expect(res.state.awakenedLives, `жизнь ${m.life} не проснулась`).toContain(m.life);
+    }
+  });
+
+  /**
+   * Каркас умений игрока против НАСТОЯЩЕГО контента. Канон умений пишется
+   * параллельно, поэтому тест проверяет не наличие умений, а то, что каркас
+   * не ломает контент без них и честно собирает контент с ними.
+   */
+  it('умения игрока выводятся из любого набора закреплённых воспоминаний', () => {
+    const all = content.memories.map((m) => m.id);
+    const set = derivePlayerPowers(all, content);
+    // Ни одно умение не может быть выдано дважды и ни одно не может ссылаться
+    // на способность вне реестра.
+    const abilityIds = new Set(content.abilities.map((a) => a.id));
+    const seen = new Set<string>();
+    for (const p of set.abilities) {
+      expect(seen.has(p.id), `умение ${p.id} выдано дважды`).toBe(false);
+      seen.add(p.id);
+      expect(abilityIds.has(p.id), `умение ${p.id} вне реестра способностей`).toBe(true);
+      expect(p.grantedBy.length, `умение ${p.id} без источника`).toBeGreaterThan(0);
+    }
+    // Порядок закрепления не влияет: обратный список даёт тот же расклад.
+    expect(JSON.stringify(derivePlayerPowers([...all].reverse(), content))).toEqual(
+      JSON.stringify(set),
+    );
+  });
+
+  it('бой с полным набором умений игрока доигрывается и остаётся воспроизводимым', () => {
+    const powers = derivePlayerPowers(
+      content.memories.map((m) => m.id),
+      content,
+    ).abilities;
+    const combat = indexCombat(content);
+    for (const b of content.battles.slice(0, 4)) {
+      const party = content.units.slice(0, 3).map((u, i) => ({
+        uid: `t${i}`,
+        defId: u.id,
+        hp: u.stats.hp,
+        xp: 0,
+        level: 1,
+        slot: { row: u.row, index: i % 3 },
+      }));
+      const one = runAuto(combat, startBattle(combat, b, party, `pw:${b.id}`, powers));
+      const two = runAuto(combat, startBattle(combat, b, party, `pw:${b.id}`, powers));
+      expect(one.outcome, `бой ${b.id} не завершился`).not.toBe('ongoing');
+      expect(JSON.stringify(one.events), `бой ${b.id} невоспроизводим`).toEqual(
+        JSON.stringify(two.events),
+      );
     }
   });
 

@@ -16,6 +16,7 @@ import {
   autoAct,
   choose,
   createInitialState,
+  derivePlayerPowers,
   goTo,
   grantXp,
   isPlayerTurn,
@@ -219,7 +220,10 @@ export function GameProvider({ children }: { children: ReactNode }) {
         return;
       }
       battleReturn.current = { onWin: node.onWin, onLose: node.onLose };
-      setBattle(startBattle(combat, battleDef, r.state.party, r.state.seed));
+      // Умения игрока выводятся из закреплённых воспоминаний в момент входа в
+      // бой: хранить их между боями негде и незачем — источник правды один.
+      const powers = derivePlayerPowers(r.state.lockedMemories, content).abilities;
+      setBattle(startBattle(combat, battleDef, r.state.party, r.state.seed, powers));
       setMode('battle');
       saveGame(r.state);
       return;

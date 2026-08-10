@@ -10,6 +10,7 @@ import {
   type BattleDef,
   type ContentBundle,
   type PartyUnit,
+  type PlayerAbility,
   type UnitDef,
 } from '@nameless/engine';
 
@@ -198,20 +199,28 @@ export function unitWinrates(content: ContentBundle, runsPerUnit = 60): UnitWinr
  * Целевой коридор для боёв главы — 60–85% побед у бота-игрока
  * (живой игрок играет лучше бота, значит бой будет ощущаться посильным).
  */
+/**
+ * @param powersForBattle умения игрока, с которыми мерить бой. Не передали —
+ * бой меряется без умений, ровно как раньше: сегодня это и есть правда, потому
+ * что ни одно воспоминание умений не даёт. Когда канон их принесёт, отсюда
+ * поедет честная цифра — бот-игрок умеет ими пользоваться (см. `planAction`).
+ */
 export function scriptedBattles(
   content: ContentBundle,
   partyForBattle: (battleId: string) => PartyUnit[],
   runs = 40,
+  powersForBattle?: (battleId: string) => readonly PlayerAbility[],
 ): BattleReport[] {
   const idx = indexCombat(content);
   const out: BattleReport[] = [];
   for (const b of content.battles) {
     const party = partyForBattle(b.id);
+    const powers = powersForBattle?.(b.id);
     let wins = 0;
     let rounds = 0;
     let survivors = 0;
     for (let i = 0; i < runs; i++) {
-      const st = runAuto(idx, startBattle(idx, b, party, `scripted:${b.id}:${i}`));
+      const st = runAuto(idx, startBattle(idx, b, party, `scripted:${b.id}:${i}`, powers));
       rounds += st.round;
       if (st.outcome === 'win') wins++;
       const alivePlayers = st.units.filter((u) => u.side === 'player' && u.alive).length;
@@ -229,12 +238,22 @@ export function scriptedBattles(
   return out;
 }
 
-/** Детерминизм: один сид → один и тот же лог событий. Красный тест = баг движка. */
-export function determinismCheck(content: ContentBundle, party: PartyUnit[]): { ok: boolean; battle?: string } {
+/**
+ * Детерминизм: один сид → один и тот же лог событий. Красный тест = баг движка.
+ *
+ * `powers` проверяется тем же прогоном, а не отдельным: умение игрока — такой
+ * же участник боя, как способность юнита, и воспроизводимость с ним обязана
+ * быть той же самой. Пустой набор даёт ровно прежнюю проверку.
+ */
+export function determinismCheck(
+  content: ContentBundle,
+  party: PartyUnit[],
+  powers?: readonly PlayerAbility[],
+): { ok: boolean; battle?: string } {
   const idx = indexCombat(content);
   for (const b of content.battles) {
-    const a = runAuto(idx, startBattle(idx, b, party, 'det'));
-    const c = runAuto(idx, startBattle(idx, b, party, 'det'));
+    const a = runAuto(idx, startBattle(idx, b, party, 'det', powers));
+    const c = runAuto(idx, startBattle(idx, b, party, 'det', powers));
     if (JSON.stringify(a.events) !== JSON.stringify(c.events)) return { ok: false, battle: b.id };
   }
   return { ok: true };

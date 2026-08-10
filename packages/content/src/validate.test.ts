@@ -623,3 +623,89 @@ describe('старые проверки на месте', () => {
     expect(has(validateBundle(b), 'Узел недостижим из entry сцены')).toBe(true);
   });
 });
+
+/**
+ * Умения игрока, приходящие от воспоминаний. Каркас: ни одного настоящего
+ * умения тут нет и быть не должно — только форма и её проверки.
+ */
+describe('умения от воспоминаний', () => {
+  const withPowers = (powers: NonNullable<Memory['powers']>): Memory => ({
+    ...memory('m1', 'l1', 1),
+    powers,
+  });
+
+  const base = (powers: NonNullable<Memory['powers']>, extra: Partial<ContentBundle> = {}) =>
+    bundle({
+      abilities: [ability('hit'), ability('pw')],
+      units: [unit('u', { abilities: ['hit'] })],
+      lives: [life('l1', ['m1'])],
+      memories: [withPowers(powers)],
+      ...extra,
+    });
+
+  it('молчит на здоровом: воспоминание даёт умение из реестра', () => {
+    const issues = validateBundle(base([{ kind: 'grant', ability: 'pw' }]));
+    expect(has(issues, 'Умение «pw» не найдено')).toBe(false);
+    expect(has(issues, 'не привязана ни к одному юниту')).toBe(false);
+  });
+
+  it('воспоминания без powers валидны — старые файлы править не надо', () => {
+    const b = bundle({
+      abilities: [ability('hit')],
+      units: [unit('u', { abilities: ['hit'] })],
+      lives: [life('l1', ['m1'])],
+      memories: [memory('m1', 'l1', 1)],
+    });
+    expect(has(validateBundle(b), 'Умение')).toBe(false);
+  });
+
+  it('ловит умение, которого нет в реестре способностей', () => {
+    expect(has(validateBundle(base([{ kind: 'grant', ability: 'net_takoy' }])), 'Умение «net_takoy» не найдено')).toBe(
+      true,
+    );
+  });
+
+  it('ловит усиление умения, которого никто не даёт', () => {
+    const issues = validateBundle(base([{ kind: 'amplify', ability: 'pw', amplify: { power: 1 } }]));
+    expect(has(issues, 'Усиление умения «pw», которого не даёт ни одно воспоминание')).toBe(true);
+  });
+
+  it('молчит, когда усиление опирается на выданное умение', () => {
+    const issues = validateBundle(
+      base([
+        { kind: 'grant', ability: 'pw' },
+        { kind: 'amplify', ability: 'pw', amplify: { power: 1 } },
+      ]),
+    );
+    expect(has(issues, 'Усиление умения')).toBe(false);
+  });
+
+  it('ловит отнимание того, чего никто не давал', () => {
+    expect(has(validateBundle(base([{ kind: 'revoke', ability: 'pw' }])), 'отнимать нечего')).toBe(true);
+  });
+
+  it('ловит умение вне очереди хода с нулевой перезарядкой', () => {
+    const b = base([{ kind: 'grant', ability: 'pw', costsTurn: false }]);
+    expect(has(validateBundle(b), 'нужна ≥1')).toBe(true);
+  });
+
+  it('молчит, когда у умения вне очереди есть перезарядка', () => {
+    const b = bundle({
+      abilities: [ability('hit'), ability('pw', { cooldown: 3 })],
+      units: [unit('u', { abilities: ['hit'] })],
+      lives: [life('l1', ['m1'])],
+      memories: [withPowers([{ kind: 'grant', ability: 'pw', costsTurn: false }])],
+    });
+    expect(has(validateBundle(b), 'нужна ≥1')).toBe(false);
+  });
+
+  it('ловит столкновение id умения игрока и способности юнита', () => {
+    const b = bundle({
+      abilities: [ability('hit')],
+      units: [unit('u', { abilities: ['hit'] })],
+      lives: [life('l1', ['m1'])],
+      memories: [withPowers([{ kind: 'grant', ability: 'hit' }])],
+    });
+    expect(has(validateBundle(b), 'делят один id')).toBe(true);
+  });
+});

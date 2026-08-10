@@ -528,6 +528,81 @@ export function validateBundle(bundle: ContentBundle): Issue[] {
     noteNoOps(`battle:${b.id}`, b.rewards, issues);
   }
 
+  // ── Умения игрока, приходящие от воспоминаний ─────────────────────────────
+  /** Умения, которые хоть одно воспоминание ДАЁТ. */
+  const grantedAbilities = new Set<string>();
+  /** Умение → воспоминания, которые его усиливают/отнимают (для внятных сообщений). */
+  const amplifiedAbilities = new Map<string, string[]>();
+  const revokedAbilities = new Map<string, string[]>();
+  /** Умения, объявленные «вне очереди хода»: им нужна перезарядка ≥1. */
+  const freeAbilities = new Map<string, string[]>();
+  for (const m of bundle.memories) {
+    for (const p of m.powers ?? []) {
+      if (!abilityIds.has(p.ability)) {
+        issues.push({
+          level: 'error',
+          where: `memory:${m.id}`,
+          message: `Умение «${p.ability}» не найдено среди способностей`,
+        });
+      }
+      if (p.kind === 'grant') {
+        grantedAbilities.add(p.ability);
+        if (p.costsTurn === false) {
+          freeAbilities.set(p.ability, [...(freeAbilities.get(p.ability) ?? []), m.id]);
+        }
+      }
+      if (p.kind === 'amplify') {
+        amplifiedAbilities.set(p.ability, [...(amplifiedAbilities.get(p.ability) ?? []), m.id]);
+      }
+      if (p.kind === 'revoke') {
+        revokedAbilities.set(p.ability, [...(revokedAbilities.get(p.ability) ?? []), m.id]);
+      }
+    }
+  }
+  for (const [ability, memories] of amplifiedAbilities) {
+    if (grantedAbilities.has(ability)) continue;
+    issues.push({
+      level: 'warn',
+      where: `memory:${memories.join(', ')}`,
+      message: `Усиление умения «${ability}», которого не даёт ни одно воспоминание, — мёртвая запись`,
+    });
+  }
+  for (const [ability, memories] of revokedAbilities) {
+    if (grantedAbilities.has(ability)) continue;
+    issues.push({
+      level: 'warn',
+      where: `memory:${memories.join(', ')}`,
+      message: `Отнимается умение «${ability}», которого не даёт ни одно воспоминание, — отнимать нечего`,
+    });
+  }
+  {
+    const abilityByIdEarly = new Map(bundle.abilities.map((a) => [a.id, a]));
+    for (const [ability, memories] of freeAbilities) {
+      const def = abilityByIdEarly.get(ability);
+      // Умение вне очереди хода с нулевой перезарядкой применялось бы
+      // бесконечно: очередь не сдвинулась бы, и бой замер бы навсегда.
+      // Движок от такого страхуется (берёт плату ходом), но контент обязан
+      // быть честным, поэтому здесь ошибка, а не предупреждение.
+      if (def && def.cooldown < 1) {
+        issues.push({
+          level: 'error',
+          where: `memory:${memories.join(', ')}`,
+          message: `Умение «${ability}» объявлено вне очереди хода (costsTurn: false), но его перезарядка ${def.cooldown}: нужна ≥1, иначе ход никогда не перейдёт дальше`,
+        });
+      }
+    }
+    for (const ability of grantedAbilities) {
+      const carriedByUnit = bundle.units.some((u) => u.abilities.includes(ability));
+      if (carriedByUnit) {
+        issues.push({
+          level: 'warn',
+          where: `ability:${ability}`,
+          message: 'Умение игрока и способность юнита делят один id: в бою победит способность юнита',
+        });
+      }
+    }
+  }
+
   const lifeByMemory = new Map<string, string[]>();
   for (const l of bundle.lives) {
     for (const m of l.memories) {
@@ -756,12 +831,19 @@ export function validateBundle(bundle: ContentBundle): Issue[] {
     }
   }
 
-  // Способность, не привязанная ни к одному юниту, никогда не попадёт в бой.
+  // Способность, которую никто не носит, никогда не попадёт в бой. Носитель —
+  // юнит ИЛИ воспоминание, дающее умение игроку: иначе каждое умение памяти
+  // краснело бы здесь как «ничья способность».
   const usedAbilities = new Set<string>();
   for (const u of bundle.units) for (const a of u.abilities) usedAbilities.add(a);
+  for (const a of grantedAbilities) usedAbilities.add(a);
   for (const a of bundle.abilities) {
     if (!usedAbilities.has(a.id)) {
-      issues.push({ level: 'warn', where: `ability:${a.id}`, message: 'Способность не привязана ни к одному юниту' });
+      issues.push({
+        level: 'warn',
+        where: `ability:${a.id}`,
+        message: 'Способность не привязана ни к одному юниту и не даётся ни одним воспоминанием',
+      });
     }
   }
 
