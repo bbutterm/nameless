@@ -138,10 +138,18 @@ const geom = await page.evaluate(() => {
     cards,
     abilities,
     common,
-    barScroll: (() => {
-      const b = document.querySelector('.ability-bar');
-      return b ? { scrollW: b.scrollWidth, clientW: b.clientWidth } : null;
-    })(),
+    /*
+     * Мерятся РЯДЫ панели, а не панель. Панель стала колонкой из двух рядов,
+     * и её собственная ширина теперь всегда равна экрану: замер по ней
+     * печатал бы «влезает целиком» даже тогда, когда ряд обрезан правым
+     * краем. Прибор, который не умеет показать красное, не сообщает ничего.
+     */
+    barRows: [...document.querySelectorAll('.bar-row')].map((r) => ({
+      cls: r.className.replace('bar-row ', ''),
+      scrollW: r.scrollWidth,
+      clientW: r.clientWidth,
+      items: r.childElementCount,
+    })),
     hint: document.querySelector('.battle-hint')?.textContent ?? '',
     top: document.querySelector('.battle-top')?.textContent ?? '',
     fieldOverflow: (() => {
@@ -175,11 +183,12 @@ console.log('общие действия боя:', geom.common.length ? '' : 'Н
 for (const a of geom.common) {
   console.log(`  «${a.text}»${a.barred ? ' [гаснет, сейчас нельзя]' : ''} ${a.w}×${a.h} aria=«${a.aria}»`);
 }
-if (geom.barScroll) {
-  const over = geom.barScroll.scrollW - geom.barScroll.clientW;
+if (!geom.barRows?.length) console.log('панель кнопок: рядов не видно — разметка изменилась, прибор ослеп');
+for (const r of geom.barRows ?? []) {
+  const over = r.scrollW - r.clientW;
   console.log(
-    `панель кнопок: ${geom.barScroll.scrollW}px в окне ${geom.barScroll.clientW}px` +
-      `${over > 1 ? ` — ПРОКРУЧИВАЕТСЯ ВБОК на ${over}px` : ' — влезает целиком'}`,
+    `ряд ${r.cls} (${r.items} кнопок): ${r.scrollW}px в окне ${r.clientW}px` +
+      `${over > 1 ? ` — ОБРЕЗАН на ${over}px` : ' — влезает целиком'}`,
   );
 }
 

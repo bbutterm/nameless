@@ -119,6 +119,18 @@ const report = await page.evaluate(() => {
       ...r(p),
     })),
     abilities: abilities.map((a) => ({ name: a.querySelector('.ability-name')?.textContent ?? '', ...r(a) })),
+    /*
+     * Мерить надо РЯДЫ, а не панель. С тех пор как панель стала колонкой из
+     * двух рядов, её собственная ширина всегда равна экрану — и замер по ней
+     * печатал бы «влезло» даже тогда, когда ряд обрезан правым краем. Прибор,
+     * который не может показать красное, ничего не сообщает.
+     */
+    rows: [...document.querySelectorAll('.bar-row')].map((r) => ({
+      cls: r.className.replace('bar-row ', ''),
+      client: r.clientWidth,
+      scroll: r.scrollWidth,
+      items: r.childElementCount,
+    })),
     barScroll: bar ? { client: bar.clientWidth, scroll: bar.scrollWidth } : undefined,
     bodyOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
   };
@@ -130,8 +142,14 @@ for (const p of report.powers) {
   console.log(`   ${p.name.padEnd(18)} ${p.w}×${p.h} @${p.x}${p.spent ? '  (погашен)' : ''}`);
 }
 console.log(`   кнопок способностей: ${report.abilities.length}`);
-console.log(`   панель: видно ${report.barScroll?.client}, содержимое ${report.barScroll?.scroll}` +
-  (report.barScroll && report.barScroll.scroll > report.barScroll.client ? '  — ПРОКРУЧИВАЕТСЯ' : ''));
+for (const r of report.rows ?? []) {
+  const over = r.scroll > r.client;
+  console.log(
+    `   ряд ${r.cls.padEnd(12)} кнопок ${r.items}: видно ${r.client}, содержимое ${r.scroll}` +
+      (over ? `  — ОБРЕЗАН на ${r.scroll - r.client}px` : ''),
+  );
+}
+if (!report.rows?.length) console.log('   !! рядов панели на экране нет — разметка изменилась, прибор ослеп');
 console.log(`   горизонтальная прокрутка страницы: ${report.bodyOverflow ? 'ЕСТЬ — плохо' : 'нет'}`);
 
 // Тап по ромбу: умение должно выделиться и подсветить цели.
