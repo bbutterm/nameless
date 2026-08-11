@@ -87,19 +87,22 @@ export function RangeScreen() {
                 className={setup.chapter === c ? 'on' : ''}
                 onClick={() => change({ chapter: c })}
               >
-                гл. {c}
+                {c === 'бот' ? 'как у бота' : `гл. ${c}`}
               </button>
             ))}
           </div>
         </div>
-        <div className="range-pick">
+        <div className={`range-pick${setup.chapter === 'бот' ? ' range-pick-off' : ''}`}>
           <span>уровень</span>
           <div className="seg">
+            {/* При «как у бота» уровень назначает сам бой (он равен номеру
+                главы) — ручка гаснет. Оставить её живой значило бы дать
+                покрутить то, что ни на что не влияет. */}
             {RANGE_LEVELS.map((l) => (
               <button
                 key={l}
-                className={setup.level === l ? 'on' : ''}
-                onClick={() => change({ level: l })}
+                className={setup.chapter !== 'бот' && setup.level === l ? 'on' : ''}
+                onClick={() => change({ chapter: setup.chapter === 'бот' ? 1 : setup.chapter, level: l })}
               >
                 {l}
               </button>
@@ -174,9 +177,21 @@ export function RangeScreen() {
             главы, пятый уровень или память — и разрыв внизу перестанет быть
             разрывом «человек против эвристики», а станет разрывом «сильный
             отряд против слабого». Прибор обязан сказать об этом сам. */}
+        {/* Прогоны, которые в разрыв НЕ вошли, называются поимённо. Молча
+            выброшенные прогоны — это прибор, который врёт вежливо: цифра
+            внизу выглядит как «всё, что ты сыграл», и по ней принимают
+            решение о сложности всей игры. */}
+        {(totals.lethal > 0 || totals.offSetup > 0 || totals.unmeasured > 0) && (
+          <div className="range-total-note">
+            в разрыв не вошли:
+            {totals.lethal > 0 && ` ${totals.lethal} прогонов летальных боёв (их проигрывают по сюжету)`}
+            {totals.offSetup > 0 && ` ${totals.offSetup} прогонов при настройке не как у бота`}
+            {totals.unmeasured > 0 && ` ${totals.unmeasured} прогонов боёв вне снимка`}
+          </div>
+        )}
         <div className="range-total-note">
-          бот мерен {BOT_MEASURED}: отряд главы, уровень = глава, без памяти — сравнивай так же
-          {totals.unmeasured > 0 && ` · ${totals.unmeasured} прогонов вне снимка`}
+          бот мерен {BOT_MEASURED}: отряд главы, уровень = глава, без памяти. Настройка «как у
+          бота» держит эти условия сама — при любой другой разрыв мерит силу отряда, а не игру.
         </div>
         <button
           className="range-reset"

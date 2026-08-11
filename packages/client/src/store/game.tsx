@@ -40,6 +40,7 @@ import {
   attemptsOf,
   isRangeHash,
   loadScore,
+  rangeChapterOf,
   rangeParty,
   rangePowers,
   rangeSeed,
@@ -230,7 +231,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
    * `settleBattle` — то есть до ран, опыта и наград сюжетного отряда, — а
    * оттуда одним шагом до записи в сейв. Полигон сейва не касается вовсе.
    */
-  const rangeBout = useRef<string>();
+  const rangeBout = useRef<{ battleId: string; setup: RangeSetup }>();
 
   useEffect(() => {
     const loaded = loadGame();
@@ -427,7 +428,9 @@ export function GameProvider({ children }: { children: ReactNode }) {
     if (bout) {
       if (!battle || battle.outcome === 'ongoing') return;
       rangeBout.current = undefined;
-      recordResult(bout, battle.outcome === 'win');
+      // Настройка запоминается ВМЕСТЕ с боем: счёт ведётся по паре, и записать
+      // исход надо туда же, откуда брали номер попытки.
+      recordResult(bout.battleId, battle.outcome === 'win', bout.setup);
       setSpoils(undefined);
       setBattle(undefined);
       setMode('range');
@@ -500,14 +503,15 @@ export function GameProvider({ children }: { children: ReactNode }) {
     if (!def) return;
     void resumeAudio();
     preloadSfx(BATTLE_SFX);
-    const attempt = attemptsOf(loadScore(), battleId);
-    rangeBout.current = battleId;
+    const chapter = rangeChapterOf(battleId);
+    const attempt = attemptsOf(loadScore(), battleId, setup);
+    rangeBout.current = { battleId, setup };
     setSpoils(undefined);
     setBattle(
       startBattle(
         combat,
         def,
-        rangeParty(def, setup),
+        rangeParty(def, setup, chapter),
         rangeSeed(battleId, attempt),
         rangePowers(setup.tier),
       ),

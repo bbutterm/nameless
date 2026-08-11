@@ -92,8 +92,8 @@ describe('отряд', () => {
   it('уровень поднимает и уровень юнита, и его hp', () => {
     const def = content.battles.find((b) => !b.expectParty?.length);
     if (!def) return;
-    const l1 = rangeParty(def, { ...RANGE_DEFAULT, level: 1 });
-    const l5 = rangeParty(def, { ...RANGE_DEFAULT, level: 5 });
+    const l1 = rangeParty(def, { chapter: 1, level: 1, tier: 0 });
+    const l5 = rangeParty(def, { chapter: 1, level: 5, tier: 0 });
     expect(l5.every((p) => p.level === 5)).toBe(true);
     expect(l5[0]!.hp).toBeGreaterThan(l1[0]!.hp);
   });
@@ -101,8 +101,8 @@ describe('отряд', () => {
   it('уровень слушается и названным отрядом — ручку прибора не игнорируют', () => {
     const def = content.battles.find((b) => b.expectParty?.length);
     if (!def) return;
-    const l1 = rangeParty(def, { ...RANGE_DEFAULT, level: 1 });
-    const l5 = rangeParty(def, { ...RANGE_DEFAULT, level: 5 });
+    const l1 = rangeParty(def, { chapter: 1, level: 1, tier: 0 });
+    const l5 = rangeParty(def, { chapter: 1, level: 5, tier: 0 });
     expect(l5[0]!.hp).toBeGreaterThan(l1[0]!.hp);
   });
 });
@@ -145,22 +145,34 @@ describe('счёт', () => {
   });
 
   it('исходы копятся и переживают перечитывание', () => {
-    recordResult('battle_x', true);
-    recordResult('battle_x', false);
-    recordResult('battle_x', true);
-    expect(loadScore().battles.battle_x).toEqual({ played: 3, won: 2 });
-    expect(attemptsOf(loadScore(), 'battle_x')).toBe(3);
+    recordResult('battle_x', true, RANGE_DEFAULT);
+    recordResult('battle_x', false, RANGE_DEFAULT);
+    recordResult('battle_x', true, RANGE_DEFAULT);
+    expect(attemptsOf(loadScore(), 'battle_x', RANGE_DEFAULT)).toBe(3);
+  });
+
+  it('счёт не смешивает серии, снятые разной настройкой', () => {
+    // Ради этого ключ и включает настройку: десять прогонов первой главой и
+    // десять третьей — два разных замера, и «ты 12/20» было бы неправдой про
+    // оба сразу.
+    const легко = { chapter: 1, level: 1, tier: 0 } as const;
+    const тяжело = { chapter: 3, level: 5, tier: 3 } as const;
+    recordResult('battle_x', true, легко);
+    recordResult('battle_x', true, легко);
+    recordResult('battle_x', false, тяжело);
+    expect(attemptsOf(loadScore(), 'battle_x', легко)).toBe(2);
+    expect(attemptsOf(loadScore(), 'battle_x', тяжело)).toBe(1);
   });
 
   it('обнуление стирает счёт', () => {
-    recordResult('battle_x', true);
+    recordResult('battle_x', true, RANGE_DEFAULT);
     clearScore();
     expect(loadScore().battles).toEqual({});
   });
 
   it('настройка переживает бой, а обнуление счёта её не сбивает', () => {
     saveSetup({ chapter: 3, level: 4, tier: 2 });
-    recordResult('battle_x', true);
+    recordResult('battle_x', true, RANGE_DEFAULT);
     expect(loadScore().setup).toEqual({ chapter: 3, level: 4, tier: 2 });
   });
 
@@ -176,7 +188,7 @@ describe('счёт', () => {
     // Железное правило: владелец проходит игру и гоняет полигон в один вечер.
     // Полигон, стерший прохождение, обесценил бы оба замера сразу.
     saveSetup({ chapter: 2, level: 3, tier: 1 });
-    recordResult('battle_x', true);
+    recordResult('battle_x', true, RANGE_DEFAULT);
     loadScore();
     clearScore();
     rangeRows(loadScore());
@@ -192,6 +204,7 @@ describe('итог', () => {
       bot: botWinrate === undefined ? undefined : { winrate: botWinrate, rounds: 7, runs: 150 },
       tally: { played, won },
       lethal: false,
+      comparable: true,
     }) as RangeRow;
 
   it('доля бота взвешена ТВОИМИ прогонами, а не усреднена по боям', () => {

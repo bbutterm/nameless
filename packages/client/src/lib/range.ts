@@ -25,12 +25,21 @@ import {
   type PlayerAbility,
 } from '@nameless/engine';
 
-/** Глава, под которую собирается отряд. Тот же выбор, что и у симулятора. */
-export type RangeChapter = 1 | 2 | 3;
+/**
+ * Глава, под которую собирается отряд.
+ *
+ * `'бот'` — не глава, а СОВПАДЕНИЕ С ЗАМЕРОМ: отряд берётся по главе самого
+ * боя, уровень равен её номеру, память не выдаётся. Ровно так снят снимок
+ * винрейтов, с которым прибор сравнивает. Значение по умолчанию, и это не
+ * удобство: при любой другой настройке разрыв внизу перестаёт быть разрывом
+ * «человек против эвристики» и становится разрывом «сильный отряд против
+ * слабого» — цифра такая же убедительная и ничего не значащая.
+ */
+export type RangeChapter = 1 | 2 | 3 | 'бот';
 /** Ступень памяти: 0 — «нет», дальше I/II/III. */
 export type RangeTier = 0 | 1 | 2 | 3;
 
-export const RANGE_CHAPTERS: readonly RangeChapter[] = [1, 2, 3];
+export const RANGE_CHAPTERS: readonly RangeChapter[] = ['бот', 1, 2, 3];
 export const RANGE_TIERS: readonly RangeTier[] = [0, 1, 2, 3];
 /** Уровень отряда. Выше пятого игрок к третьей главе не доходит. */
 export const RANGE_LEVELS: readonly number[] = [1, 2, 3, 4, 5];
@@ -41,7 +50,24 @@ export interface RangeSetup {
   tier: RangeTier;
 }
 
-export const RANGE_DEFAULT: RangeSetup = { chapter: 1, level: 1, tier: 0 };
+export const RANGE_DEFAULT: RangeSetup = { chapter: 'бот', level: 1, tier: 0 };
+
+/**
+ * Настройка, при которой сравнение с ботом законно, — для КОНКРЕТНОГО боя.
+ * Снимок снят так: отряд по главе боя, уровень равен номеру главы, памяти нет.
+ */
+export function matchesBot(setup: RangeSetup, chapter: number): boolean {
+  if (setup.tier !== 0) return false;
+  if (setup.chapter === 'бот') return true;
+  return setup.chapter === chapter && setup.level === chapter;
+}
+
+/** Настройка, действующая для этого боя: `'бот'` разворачивается в его главу. */
+export function setupFor(setup: RangeSetup, chapter: number): { tier: number; level: number } {
+  if (setup.chapter !== 'бот') return { tier: setup.chapter, level: setup.level };
+  const c = chapter >= 1 && chapter <= 3 ? chapter : 1;
+  return { tier: c, level: c };
+}
 
 /**
  * Адрес полигона. Хеш, а не тайный жест по титулу: жест, о котором надо
@@ -73,9 +99,10 @@ export function isRangeHash(hash: string): boolean {
  * полигоне его крутит рука, и «почему ползунок ничего не делает на первом бое
  * главы» — вопрос, на который прибор отвечать не должен.
  */
-export function rangeParty(def: BattleDef, setup: RangeSetup): PartyUnit[] {
-  if (def.expectParty?.length) return namedParty(content.units, def.expectParty, setup.level);
-  return defaultParty(content.units, setup.chapter, setup.level);
+export function rangeParty(def: BattleDef, setup: RangeSetup, chapter = 1): PartyUnit[] {
+  const { tier, level } = setupFor(setup, chapter);
+  if (def.expectParty?.length) return namedParty(content.units, def.expectParty, level);
+  return defaultParty(content.units, tier, level);
 }
 
 /** Слушается ли выбор главы этим боем, или состав ему продиктован. */
@@ -127,7 +154,19 @@ export function rangeSeed(battleId: string, attempt: number): string {
  * запись.
  */
 const KEY = 'nameless:range:v1';
-const VERSION = 1;
+const VERSION = 2;
+
+/**
+ * Ключ счёта включает НАСТРОЙКУ, а не только бой.
+ *
+ * Пока ключом был один id, десять прогонов на первой главе и десять на третьей
+ * с пятым уровнем складывались в одну строку «ты 12/20» — и разделить их можно
+ * было только обнулением. Счёт, который молча смешивает два разных замера,
+ * хуже пустого: он выглядит как данные.
+ */
+function tallyKey(battleId: string, setup: RangeSetup): string {
+  return `${battleId}@${setup.chapter}/${setup.level}/${setup.tier}`;
+}
 
 export interface RangeTally {
   played: number;
@@ -170,6 +209,9 @@ export function loadScore(): RangeScore {
     return emptyScore();
   }
   if (!isRecord(data) || !isRecord(data.battles)) return emptyScore();
+  // Счёт прошлой версии не переносится: в его ключах нет настройки, и
+  // приписать её задним числом — значит выдумать условия чужого замера.
+  if (data.version !== VERSION) return { ...emptyScore(), setup: readSetup(data.setup) };
   const battles: Record<string, RangeTally> = {};
   for (const [id, tally] of Object.entries(data.battles)) {
     if (!isRecord(tally)) continue;
@@ -200,19 +242,20 @@ function writeScore(score: RangeScore): void {
 }
 
 /** Сколько раз этот бой уже отыгран. Он же — номер следующей попытки для сида. */
-export function attemptsOf(score: RangeScore, battleId: string): number {
-  return score.battles[battleId]?.played ?? 0;
+export function attemptsOf(score: RangeScore, battleId: string, setup: RangeSetup): number {
+  return score.battles[tallyKey(battleId, setup)]?.played ?? 0;
 }
 
 /** Записывает исход и возвращает обновлённый счёт (для мгновенной перерисовки). */
-export function recordResult(battleId: string, won: boolean): RangeScore {
+export function recordResult(battleId: string, won: boolean, setup: RangeSetup): RangeScore {
   const score = loadScore();
-  const prev = score.battles[battleId] ?? { played: 0, won: 0 };
+  const key = tallyKey(battleId, setup);
+  const prev = score.battles[key] ?? { played: 0, won: 0 };
   const next: RangeScore = {
     ...score,
     battles: {
       ...score.battles,
-      [battleId]: { played: prev.played + 1, won: prev.won + (won ? 1 : 0) },
+      [key]: { played: prev.played + 1, won: prev.won + (won ? 1 : 0) },
     },
   };
   writeScore(next);
@@ -245,6 +288,13 @@ export interface RangeRow {
   tally: RangeTally | undefined;
   /** Бой, который по сюжету проигрывают: балансовый коридор к нему неприменим. */
   lethal: boolean;
+  /** Текущая настройка совпадает с той, при которой мерен бот. */
+  comparable: boolean;
+}
+
+/** Глава этого боя — её же спрашивает стор, чтобы развернуть настройку «бот». */
+export function rangeChapterOf(battleId: string): number {
+  return chapterOfBattle().get(battleId) ?? 1;
 }
 
 /** Глава каждого боя — по сцене, из которой в него входят. */
@@ -263,7 +313,7 @@ function chapterOfBattle(): Map<string, number> {
  * с порядком файлов, то есть примерно с порядком прохождения, и это полезнее
  * алфавита. `localeCompare` не используется нигде — он зависит от локали среды.
  */
-export function rangeRows(score: RangeScore): RangeRow[] {
+export function rangeRows(score: RangeScore, setup: RangeSetup = score.setup): RangeRow[] {
   const chapters = chapterOfBattle();
   return content.battles
     .map((def, i) => ({
@@ -271,11 +321,19 @@ export function rangeRows(score: RangeScore): RangeRow[] {
       i,
       chapter: chapters.get(def.id) ?? 0,
       bot: botrates.battles[def.id],
-      tally: score.battles[def.id],
+      tally: score.battles[tallyKey(def.id, setup)],
       lethal: !!def.tags?.includes('lethal'),
+      comparable: matchesBot(setup, chapters.get(def.id) ?? 0),
     }))
     .sort((a, b) => a.chapter - b.chapter || a.i - b.i)
-    .map(({ def, chapter, bot, tally, lethal }) => ({ def, chapter, bot, tally, lethal }));
+    .map(({ def, chapter, bot, tally, lethal, comparable }) => ({
+      def,
+      chapter,
+      bot,
+      tally,
+      lethal,
+      comparable,
+    }));
 }
 
 export interface RangeTotals {
@@ -295,6 +353,10 @@ export interface RangeTotals {
   gapPoints: number;
   /** Прогоны боёв, которых нет в снимке бота: в сравнение они не вошли. */
   unmeasured: number;
+  /** Прогоны летальных боёв: считаются, но в разрыв не входят. */
+  lethal: number;
+  /** Прогоны при настройке, не совпадающей с замером бота. Тоже вне разрыва. */
+  offSetup: number;
 }
 
 export function rangeTotals(rows: readonly RangeRow[]): RangeTotals {
@@ -303,8 +365,25 @@ export function rangeTotals(rows: readonly RangeRow[]): RangeTotals {
   let botWeighted = 0;
   let botWeight = 0;
   let unmeasured = 0;
+  let lethal = 0;
+  let offSetup = 0;
   for (const r of rows) {
     if (!r.tally || r.tally.played === 0) continue;
+    /*
+     * Летальный бой проигрывают по сюжету: у бота там 0% и у человека будет
+     * столько же. В общем итоге такая пара даёт разрыв в десятки пунктов из
+     * одной строки — число впечатляющее и пустое. Считаем отдельно.
+     */
+    if (r.lethal) {
+      lethal += r.tally.played;
+      continue;
+    }
+    // Прогон при чужой настройке сравнивать не с чем: снимок бота снят одной,
+    // и «разрыв +40» на третьей главе пятого уровня означает силу отряда.
+    if (!r.comparable) {
+      offSetup += r.tally.played;
+      continue;
+    }
     played += r.tally.played;
     won += r.tally.won;
     if (r.bot) {
@@ -317,6 +396,8 @@ export function rangeTotals(rows: readonly RangeRow[]): RangeTotals {
   const human = played > 0 ? won / played : 0;
   const bot = botWeight > 0 ? botWeighted / botWeight : 0;
   return {
+    lethal,
+    offSetup,
     played,
     won,
     human,
