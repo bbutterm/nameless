@@ -290,6 +290,54 @@ const ARM_TAP = () => {
   lab.frame = null;
 };
 
+/**
+ * Разбор ожидания по причинам.
+ *
+ * Метрика (б) говорит «ожидание 48% боя», но не говорит, ЧЕМ занято это время,
+ * а резать константы, не зная этого, — гадание. Разница, которая решает всё:
+ * рывок карточки (420 мс) и цифра урона (900 мс) идут ВНУТРИ паузы хода бота
+ * (480 мс), а не после неё, поэтому укоротить их — не ускорить бой ни на кадр.
+ * Значит, мерить надо не длительности анимаций, а долю ожидания, в которой на
+ * экране НИЧЕГО НЕ ДВИЖЕТСЯ: это и есть «мёртвая пауза» из задачи Б10.
+ *
+ * Сэмплер живёт в странице и считает время по кадрам, а не опросом из Node:
+ * канал управления браузером стоит миллисекунды, и на 25-миллисекундном опросе
+ * они попали бы в замер как время игры.
+ */
+const ARM_TEMPO = () => {
+  const T = {
+    last: performance.now(),
+    bucket: Object.create(null),
+    /** Рывки чужих карточек — по одному на действие бота. */
+    botActs: 0,
+    down: false,
+  };
+  window.__tempo = T;
+  const add = (name, dt) => {
+    T.bucket[name] = (T.bucket[name] ?? 0) + dt;
+  };
+  const tick = () => {
+    // Сэмплер предыдущего боя должен замолчать, а не удваивать цифры.
+    if (window.__tempo !== T) return;
+    const now = performance.now();
+    const dt = now - T.last;
+    T.last = now;
+    const down = !!document.querySelector('.anim-lunge-down');
+    if (down && !T.down) T.botActs++;
+    T.down = down;
+    if (!document.querySelector('.screen.battle')) add('вне боя', dt);
+    else if (document.querySelector('.battle-over')) add('итог', dt);
+    // Кнопка, готовая к нажатию, — право хода: время тут принадлежит игроку.
+    else if (document.querySelector('.ability:not(.cooling)')) add('ход игрока', dt);
+    else if (document.querySelector('.anim-lunge-down, .anim-lunge-up, .anim-hit, .anim-die'))
+      add('рывок карточки', dt);
+    else if (document.querySelector('.float')) add('висит цифра', dt);
+    else add('НИЧЕГО НЕ ДВИЖЕТСЯ', dt);
+    requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+};
+
 const feelPage = await ctx.newPage();
 /** Сколько боёв подряд мерить. Первый бой — обучающий и короче прочих. */
 const FEEL_BATTLES = Number(process.env.BATTLELAB_BATTLES ?? 4);
@@ -302,6 +350,7 @@ for (let bi = 0; bi < FEEL_BATTLES; bi++) {
     break;
   }
   await feelPage.evaluate(ARM_TAP);
+  await feelPage.evaluate(ARM_TEMPO);
   let tapCount = 0;
   let turns = 0;
   /** Сколько миллисекунд игрок сидел, не имея права хода. */
@@ -358,8 +407,11 @@ for (let bi = 0; bi < FEEL_BATTLES; bi++) {
     const m = /Раунд\s+(\d+)/.exec(document.querySelector('.battle-top')?.textContent ?? '');
     return m ? Number(m[1]) : null;
   });
+  const tempo = await feelPage
+    .evaluate(() => (window.__tempo ? { bucket: window.__tempo.bucket, botActs: window.__tempo.botActs } : null))
+    .catch(() => null);
   if (bi === 0) await feelPage.screenshot({ path: `${outDir}/battle-feel-${tag}.png` });
-  battlesMeasured.push({ ms, rounds, tapCount, turns, waitingMs, finished });
+  battlesMeasured.push({ ms, rounds, tapCount, turns, waitingMs, finished, tempo });
 }
 
 const q = (xs, p) => {
@@ -395,6 +447,31 @@ if (battlesMeasured.length === 0) {
     `   ожидание без права хода ${((totalWait / Math.max(1, totalMs)) * 100).toFixed(0)}% времени боя; ` +
       `тапы шли мгновенно, так что это НИЖНЯЯ ГРАНИЦА — живой игрок ещё и думает`,
   );
+  // Разбор ожидания: не «сколько ждём», а «чем занято ожидание».
+  const buckets = Object.create(null);
+  let botActs = 0;
+  for (const b of battlesMeasured) {
+    if (!b.tempo) continue;
+    botActs += b.tempo.botActs;
+    for (const [k, v] of Object.entries(b.tempo.bucket)) buckets[k] = (buckets[k] ?? 0) + v;
+  }
+  const sampled = Object.values(buckets).reduce((a, v) => a + v, 0);
+  if (sampled > 0) {
+    const order = ['ход игрока', 'рывок карточки', 'висит цифра', 'НИЧЕГО НЕ ДВИЖЕТСЯ', 'итог', 'вне боя'];
+    const keys = [...new Set([...order.filter((k) => k in buckets), ...Object.keys(buckets)])];
+    console.log('   чем занято время боя (по кадрам страницы):');
+    for (const k of keys) {
+      const v = buckets[k] ?? 0;
+      console.log(`      ${k.padEnd(20)} ${(v / 1000).toFixed(1)} с  ${((v / sampled) * 100).toFixed(0)}%`);
+    }
+    const dead = buckets['НИЧЕГО НЕ ДВИЖЕТСЯ'] ?? 0;
+    console.log(
+      `   действий ботов ${botActs}` +
+        (botActs ? `, мёртвой паузы на действие ${(dead / botActs).toFixed(0)} мс` : '') +
+        ' — рывок и цифра идут ВНУТРИ паузы хода бота (480 мс), укоротить их значит',
+    );
+    console.log('   убрать движение, а не время: время держит именно эта пауза');
+  }
   console.log(
     `В тапов ${totalTaps} на ${totalTurns} ходов = ${(totalTaps / Math.max(1, totalTurns)).toFixed(2)} тапа на ход`,
   );
