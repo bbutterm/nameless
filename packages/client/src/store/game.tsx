@@ -39,7 +39,7 @@ import { clearSave, loadGame, saveGame } from '../lib/storage';
 import { bumpRuns, commitPending, loadCodex } from '../lib/codex';
 import { detectLang, saveLang } from '../i18n';
 import { vibrate } from '../lib/haptics';
-import { playSfx, resume as resumeAudio } from '../lib/sound';
+import { BATTLE_SFX, playSfx, preloadSfx, resume as resumeAudio } from '../lib/sound';
 
 export type Mode = 'title' | 'dialogue' | 'battle' | 'death' | 'end' | 'error';
 
@@ -238,6 +238,13 @@ export function GameProvider({ children }: { children: ReactNode }) {
         return;
       }
       battleReturn.current = { onWin: node.onWin, onLose: node.onLose };
+      /*
+       * Звуки боя качаются здесь, а не на первом ударе: качать по нужде —
+       * значит промолчать ровно на нём, а первый удар первого боя игрок и
+       * помнит. Это на шаг раньше, чем появляется экран боя, и на этот шаг
+       * файлы успевают. Пока файлов нет, вызов не делает ничего.
+       */
+      preloadSfx(BATTLE_SFX);
       // Умения игрока выводятся из закреплённых воспоминаний в момент входа в
       // бой: хранить их между боями негде и незачем — источник правды один.
       const powers = derivePlayerPowers(r.state.lockedMemories, content).abilities;
