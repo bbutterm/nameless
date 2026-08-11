@@ -2,8 +2,8 @@
   "id": "silver_counter",
   "chapter": 1,
   "title": {
-    "ru": "Серебряный Прилавок",
-    "en": "The Silver Counter"
+    "ru": "Сход",
+    "en": "The Gathering"
   },
   "tags": [
     "death",
@@ -3826,6 +3826,15 @@
       "kind": "death",
       "id": "death_vytsvet_night",
       "death": "death_vytsvet_night"
+    },
+    {
+      "kind": "narration",
+      "id": "queue_entry",
+      "text": {
+        "ru": "Последний удар остаётся среди живых. Ты приходишь туда, где мёртвые ждут своей очереди.",
+        "en": "The final blow remains among the living. You arrive where the dead wait their turn."
+      },
+      "next": "scene:skhod"
     }
   ]
 }

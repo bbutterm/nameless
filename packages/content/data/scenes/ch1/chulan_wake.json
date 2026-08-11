@@ -2,7 +2,7 @@
   "id": "chulan_wake",
   "chapter": 1,
   "title": {
-    "ru": "Чулан невостребованного",
+    "ru": "Чулан бережёных вещей",
     "en": "The Unclaimed Room"
   },
   "tags": [
@@ -68,7 +68,7 @@
       "kind": "narration",
       "id": "wake_shelves",
       "text": {
-        "ru": "Вокруг полки невыкупленного: детские санки, свадебное платье, банка с чем-то, что уже не пахнет. На каждой вещи бирка и срок.",
+        "ru": "Вокруг полки с чужими бережёными вещами: детские санки, свадебное платье, банка с чем-то, что уже не пахнет. На каждой вещи записка от руки.",
         "en": "Around you, shelves of the unredeemed: a child's sled, a wedding dress, a jar of something that no longer smells. Every item has a tag and a deadline."
       },
       "keywords": [
@@ -143,8 +143,8 @@
         "en": "Tag on the sled, no. 4417"
       },
       "text": {
-        "ru": "Санки детские, одни. Хранение — три гроша в месяц. Просрочка — четыре года и два месяца. Владелец приходит по средам, платит один грош и уходит. Ломбард считает это долгом и санки не выдаёт. Ломбард прав.",
-        "en": "Child's sled, one. Storage: three groschen a month. Overdue: four years and two months. The owner comes on Wednesdays, pays one groschen and leaves. The Pawnshop counts this as a debt and does not release the sled. The Pawnshop is correct."
+        "ru": "«Санки детские. Хозяин приходит по средам, садится рядом и чинит верёвку. Не отдавать чужим». Ниже сорок две короткие черты — по одной за каждую среду.",
+        "en": "Child's sled, one. Storage: three groschen a month. Overdue: four years and two months. The owner comes on Wednesdays, pays one groschen and leaves. The old tower counts this as a debt and does not release the sled. The old tower is correct."
       },
       "next": "wake_grey"
     },
@@ -162,14 +162,14 @@
       "id": "osoka_greet",
       "speaker": "osoka",
       "text": {
-        "ru": "Вы собрались. Опись при мне.",
-        "en": "You are assembled. I have the inventory."
+        "ru": "Вы собрались. Ваши вещи при мне.",
+        "en": "You are assembled. I have the list."
       },
       "keywords": [
         {
           "match": {
-            "ru": "Опись",
-            "en": "inventory"
+            "ru": "список",
+            "en": "list"
           },
           "tone": "lore"
         }
@@ -219,8 +219,8 @@
       "id": "opis_list2",
       "speaker": "osoka",
       "text": {
-        "ru": "Почерк мелкий. Разбор в опись не входит.",
-        "en": "The handwriting is small. Deciphering is not part of the inventory."
+        "ru": "Почерк мелкий. Читала дважды — имени нет.",
+        "en": "The handwriting is small. Deciphering is not part of the list."
       },
       "next": "opis_choice"
     },
@@ -228,7 +228,7 @@
       "kind": "choice",
       "id": "opis_choice",
       "prompt": {
-        "ru": "Четыре кучки на ящике. По бумаге всё это твоё.",
+        "ru": "Четыре кучки на ящике. Осока ждёт, что ты признаешь их своими.",
         "en": "Four heaps on the crate. By the paper, all of it is yours."
       },
       "options": [
@@ -290,7 +290,7 @@
         {
           "id": "perechen_recount",
           "text": {
-            "ru": "Сверить кучки с бумагой по пунктам.",
+            "ru": "Сверить кучки с бумагой по строкам.",
             "en": "Check the heaps against the paper, item by item."
           },
           "chip": {
@@ -354,8 +354,8 @@
         {
           "id": "posul_sign",
           "text": {
-            "ru": "Расписаться за то, чего в описи нет.",
-            "en": "Sign for something the inventory omits."
+            "ru": "Расписаться за то, чего в списке нет.",
+            "en": "Sign for something the list omits."
           },
           "chip": {
             "icon": "coin",
@@ -442,8 +442,8 @@
       "id": "r_take_all",
       "speaker": "osoka",
       "text": {
-        "ru": "Принято. По описи — всё.",
-        "en": "Accepted. By the inventory, everything."
+        "ru": "Принято. По списку — всё.",
+        "en": "Accepted. By the list, everything."
       },
       "next": "recount_choice"
     },
@@ -462,8 +462,8 @@
       "id": "r_leave",
       "speaker": "osoka",
       "text": {
-        "ru": "Отказ от описи оформляется молча. Вы оформили.",
-        "en": "A refusal of inventory is filed in silence. You have filed it."
+        "ru": "От списка можно отказаться молча. Вы отказались.",
+        "en": "A refusal of list is filed in silence. You have filed it."
       },
       "next": "recount_choice"
     },
@@ -471,15 +471,15 @@
       "kind": "choice",
       "id": "recount_choice",
       "prompt": {
-        "ru": "Она ждёт. Ждать — тоже пункт её работы.",
+        "ru": "Она ждёт. Ждать — тоже строка её работы.",
         "en": "She waits. Waiting is also a clause of her job."
       },
       "options": [
         {
           "id": "recount",
           "text": {
-            "ru": "Пересчитать опись вслух.",
-            "en": "Count the inventory out loud."
+            "ru": "Пересчитать список вслух.",
+            "en": "Count the list out loud."
           },
           "effects": [
             {
@@ -528,8 +528,8 @@
         {
           "id": "write_it_myself",
           "text": {
-            "ru": "Переписать опись своей рукой.",
-            "en": "Copy the inventory in my own hand."
+            "ru": "Переписать список своей рукой.",
+            "en": "Copy the list in my own hand."
           },
           "chip": {
             "icon": "book",
@@ -629,8 +629,8 @@
       "id": "r_recount2",
       "speaker": "osoka",
       "text": {
-        "ru": "По описи — три. Четвёртая ничья.",
-        "en": "By the inventory, three. The fourth is nobody's."
+        "ru": "По списку — три. Четвёртая ничья.",
+        "en": "By the list, three. The fourth is nobody's."
       },
       "next": "osoka_last"
     },
@@ -639,13 +639,13 @@
       "id": "r_who",
       "speaker": "osoka",
       "text": {
-        "ru": "Составлял Учёт. Учёт не подписывается.",
+        "ru": "Составлял тот, кто считал вещи. Он не подписался.",
         "en": "The Reckoning drew it up. The Reckoning does not sign."
       },
       "keywords": [
         {
           "match": {
-            "ru": "Учёт",
+            "ru": "счёт",
             "en": "Reckoning"
           },
           "tone": "lore"
@@ -724,7 +724,7 @@
       "kind": "narration",
       "id": "again_no_osoka",
       "text": {
-        "ru": "Осоки нет и сегодня. На её месте стопка дел, перевязанная бечёвкой, и бечёвка новая: дела перевязали, чтобы не перепутать в сверке.",
+        "ru": "Осоки нет и сегодня. На её месте стопка дел, перевязанная новой бечёвкой: кто-то боялся перепутать их ночью.",
         "en": "Osoka is not here today either. In her place is a stack of cases tied with twine, and the twine is new: the cases were tied so they would not be muddled in the reconciliation."
       },
       "next": "again_unprocessed"
@@ -733,8 +733,8 @@
       "kind": "narration",
       "id": "again_unprocessed",
       "text": {
-        "ru": "Расписываться не в чем. Ты уходишь, не оформившись, и это первый раз, когда Ломбард не возражает.",
-        "en": "There is nothing to sign. You leave unprocessed, and it is the first time the Pawnshop has not objected."
+        "ru": "Расписываться не в чем. Ты уходишь, не оформившись, и это первый раз, когда старая башня не возражает.",
+        "en": "There is nothing to sign. You leave unprocessed, and it is the first time the old tower has not objected."
       },
       "keywords": [
         {
@@ -752,8 +752,8 @@
       "id": "again_osoka1",
       "speaker": "osoka",
       "text": {
-        "ru": "Опись прежняя. Пуговицы — три.",
-        "en": "The inventory is unchanged. Buttons: three."
+        "ru": "Список прежний. Пуговицы — три.",
+        "en": "The list is unchanged. Buttons: three."
       },
       "next": "again_osoka2"
     },
@@ -778,8 +778,8 @@
         {
           "id": "demand",
           "text": {
-            "ru": "Потребовать опись моего архива.",
-            "en": "Demand the inventory of my archive."
+            "ru": "Потребовать список моего архива.",
+            "en": "Demand the list of my archive."
           },
           "effects": [
             {
@@ -798,8 +798,8 @@
         {
           "id": "just_take",
           "text": {
-            "ru": "Взять опись и выйти.",
-            "en": "Take the inventory and go."
+            "ru": "Взять список и выйти.",
+            "en": "Take the list and go."
           },
           "effects": [
             {
@@ -826,8 +826,8 @@
         {
           "id": "say_number",
           "text": {
-            "ru": "Назвать номер своего вклада.",
-            "en": "State the number of my deposit."
+            "ru": "Назвать номер своего свёртка.",
+            "en": "State the number of my bundle."
           },
           "chip": {
             "icon": "hourglass",
@@ -940,7 +940,7 @@
       "id": "r_count_visits",
       "speaker": "osoka",
       "text": {
-        "ru": "Учёт считает дела. Не людей.",
+        "ru": "Здесь считают дела. Не людей.",
         "en": "The Reckoning counts cases. Not people."
       },
       "next": "again_exit"
@@ -998,7 +998,7 @@
       "kind": "narration",
       "id": "again_exit_ledger",
       "text": {
-        "ru": "В зале Учёта свечи всё ещё горят все разом. За те сутки, что тебя не было, сверка не сдвинулась ни на позицию: расхождение по-прежнему одно, и оно опять пришло само.",
+        "ru": "В соседнем зале свечи всё ещё горят все разом. За сутки стопка бумаг не сдвинулась, а человек, которого ищут, опять пришёл сам.",
         "en": "In the Ledger Hall every candle is still burning at once. In the day you were gone the reconciliation has not moved by a single entry: the discrepancy is still the one, and it has walked in again by itself."
       },
       "keywords": [
@@ -1016,8 +1016,8 @@
       "kind": "narration",
       "id": "end_of_chapter",
       "text": {
-        "ru": "Осока закрывает книгу на середине строки и уходит, не дочитав. По этому делу описи больше не будет.",
-        "en": "Osoka shuts the book mid-line and leaves without finishing. There will be no more inventories on this case."
+        "ru": "Осока закрывает книгу на середине строки и уходит, не дочитав. Этого списка больше никто не продолжит.",
+        "en": "Osoka shuts the book mid-line and leaves without finishing. No one will continue this list."
       },
       "next": "end_tag"
     },
@@ -1111,17 +1111,17 @@
       "kind": "lore",
       "id": "vaults_note",
       "title": {
-        "ru": "Бумажка на ящике, вместо описи",
-        "en": "A slip on the crate, in place of the inventory"
+        "ru": "Бумажка на ящике, вместо списка",
+        "en": "A slip on the crate, in place of the list"
       },
       "text": {
-        "ru": "«Опись по делу № 1 изъята в сверку. До окончания сверки имущество не описывается, не выдаётся и не принимается. Расписываться не в чем и нечем». Ниже, карандашом, чужой рукой: «Почерк не мой. Проверял».",
-        "en": "\"The inventory on case no. 1 has been taken into reconciliation. Until the reconciliation is complete, property is not inventoried, not released and not accepted. There is nothing to sign and nothing to sign with.\" Below, in pencil, in another hand: \"The writing is not mine. I checked.\""
+        "ru": "«Вещи из чулана не выдавать. Книга унесена». Ниже, карандашом, чужой рукой: «Почерк не мой. Проверял».",
+        "en": "\"The list on case no. 1 has been taken into reconciliation. Until the reconciliation is complete, property is not list, not released and not accepted. There is nothing to sign and nothing to sign with.\" Below, in pencil, in another hand: \"The writing is not mine. I checked.\""
       },
       "keywords": [
         {
           "match": {
-            "ru": "сверку",
+            "ru": "Книга унесена",
             "en": "reconciliation"
           },
           "tone": "lore"
@@ -1147,14 +1147,14 @@
       "kind": "narration",
       "id": "vaults_card",
       "text": {
-        "ru": "Карточка называлась «Вклад Первый», и графа вкладчика в ней была пустой. Внизу, под несущей стеной, стало понятно почему: имя вписывают, когда вклад можно выдать.",
-        "en": "The card was headed \"The First Deposit\", and the depositor's line on it was blank. Down below, under the load-bearing wall, it became clear why: the name is entered when the deposit can be released."
+        "ru": "На карточке стояло «Первый», а место для имени пустовало. Внизу, под несущей стеной, стало понятно почему: имя вписывают, когда спрятанное можно вернуть.",
+        "en": "The card was headed \"The First bundle\", and the bundle's line on it was blank. Down below, under the load-bearing wall, it became clear why: the name is entered when the bundle can be released."
       },
       "keywords": [
         {
           "match": {
-            "ru": "Вклад Первый",
-            "en": "The First Deposit"
+            "ru": "свёрток Первый",
+            "en": "The First bundle"
           },
           "tone": "memory"
         }
@@ -1209,12 +1209,12 @@
       "kind": "lore",
       "id": "pledge_tag",
       "title": {
-        "ru": "Бирка на залоге",
-        "en": "The tag on the pledge"
+        "ru": "Записка на Забытыше",
+        "en": "The tag on the Forgotten One"
       },
       "text": {
-        "ru": "«Залог невостребованный. Срок хранения истёк четырежды. Предъявителя нет». Ниже, карандашом, чужой рукой: «Не выбрасывать. Оно ходит».",
-        "en": "\"Pledge unclaimed. Storage term expired four times over. No claimant.\" Below, in pencil, in another hand: \"Do not discard. It walks.\""
+        "ru": "«Имени нет. Хозяина нет. Четыре зимы стоит у двери». Ниже, карандашом, чужой рукой: «Не прогонять. Оно ходит».",
+        "en": "\"Forgotten One unclaimed. Storage term expired four times over. No owner.\" Below, in pencil, in another hand: \"Do not discard. It walks.\""
       },
       "next": "pledge_join"
     },
@@ -1233,8 +1233,8 @@
       "kind": "narration",
       "id": "pledge_after",
       "text": {
-        "ru": "Оно идёт следом и держится на два шага позади. Никто в Закладе не считает это странным: невостребованное здесь ищет предъявителя само.",
-        "en": "It follows, keeping two steps behind. Nobody in Zaklad finds this odd: here the unclaimed goes looking for its claimant."
+        "ru": "Оно идёт следом и держится на два шага позади. Никто в Закладе не считает это странным: забытый здесь ищет хозяина сам.",
+        "en": "It follows, keeping two steps behind. Nobody in Zaklad finds this odd: here the unclaimed goes looking for its owner."
       },
       "next": "wake_exit"
     }
