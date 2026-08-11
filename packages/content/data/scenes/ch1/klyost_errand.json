@@ -31,8 +31,8 @@
       "kind": "narration",
       "id": "stairs_start",
       "text": {
-        "ru": "Клёст сворачивает в щель между стеной Ломбарда и водосточной трубой, и в щели оказывается дверь. Ступени за ней стоптаны посередине до блеска: по этой лестнице ходят чаще, чем по парадной.",
-        "en": "Crossbill turns into the gap between the Pawnshop wall and the drainpipe, and in the gap there is a door. The steps behind it are worn shiny down the middle: this stairway sees more traffic than the front one."
+        "ru": "Клёст сворачивает в щель между старой башней и водосточной трубой, и в щели оказывается дверь. Ступени за ней стоптаны посередине до блеска: здесь ходят чаще, чем по парадной.",
+        "en": "Crossbill turns into the gap between the old tower and the drainpipe, and in the gap there is a door. The steps behind it are worn shiny down the middle: this stairway sees more traffic than the front one."
       },
       "next": "klyost_hello"
     },
@@ -54,8 +54,8 @@
         "en": "Notice on the second landing"
       },
       "text": {
-        "ru": "«Лестница служебная. Посторонним воспрещается. Посыльным Ломбарда разрешается при наличии поручения; поручение предъявляется по требованию, а при отсутствии требования предъявляется всё равно». Ниже, карандашом и другой рукой: «Никто ни у кого не спрашивал с позапрошлой ревизии».",
-        "en": "\"Service stairway. No admittance to outsiders. Pawnshop messengers are admitted if carrying an errand order; the order is to be produced on demand, and in the absence of a demand it is to be produced anyway.\" Below, in pencil and another hand: \"Nobody has demanded anything off anybody since the audit before last.\""
+        "ru": "«Служебная лестница. Посторонним нельзя». Ниже, карандашом и другой рукой: «Клёсту можно. Он всё равно пройдёт».",
+        "en": "\"Service stairway. No admittance to outsiders.\" Below, in pencil and another hand: \"Crossbill may enter. He will get through anyway.\""
       },
       "next": "stairs_dark"
     },
@@ -348,7 +348,7 @@
       "kind": "narration",
       "id": "door_reach",
       "text": {
-        "ru": "Лестница упирается в железную дверь с номерным замком и белой краской по железу: «Приёмный двор — 3». За дверью кто-то перекладывает ящики и вслух жалуется на опись.",
+        "ru": "Лестница упирается в железную дверь с номерным замком и белой надписью: «Задний двор — 3». За дверью кто-то перекладывает ящики и вслух жалуется на список.",
         "en": "The stairs end at an iron door with a number lock and white paint on the iron: \"Intake Yard — 3\". Behind it somebody is shifting crates and complaining out loud about the inventory."
       },
       "next": "klyost_key"
@@ -358,7 +358,7 @@
       "id": "klyost_key",
       "speaker": "klyost",
       "text": {
-        "ru": "У меня от неё ключ. Второй. Первый у сторожа, а второй в опись не внесли.",
+        "ru": "У меня от неё ключ. Второй. Первый у сторожа, а про второй забыли.",
         "en": "I have got a key to it. The second one. The first is the watchman's, and the second never made the inventory."
       },
       "keywords": [
@@ -512,7 +512,7 @@
             "life": "perechen"
           },
           "text": {
-            "ru": "Ключи считают по описи. Твоего там нет.",
+            "ru": "Ключи считают по списку. Твоего там нет.",
             "en": "Keys are counted by inventory. Yours is not."
           },
           "effects": [
@@ -546,7 +546,7 @@
       "kind": "narration",
       "id": "key_taken",
       "text": {
-        "ru": "Ключ тёплый: он носил его на голом теле. На бирке процарапана тройка, свежая, поверх старой семёрки — кто-то переписал дверь и не сказал описи.",
+        "ru": "Ключ тёплый: он носил его на голом теле. На бирке процарапана свежая тройка поверх старой семёрки — кто-то сменил дверь и никому не сказал.",
         "en": "The key is warm: he wore it against his skin. A three is scratched into the tag, fresh, over an older seven — somebody renumbered the door and did not tell the inventory."
       },
       "next": "farewell"
@@ -748,7 +748,7 @@
       "kind": "narration",
       "id": "r_snuff_first",
       "text": {
-        "ru": "Мешок идёт вниз через ступень и звенит на каждой второй. Звон слышно до самого низа, и внизу его никто не считает: за лестницей числится сторож, а сторож числится за описью.",
+        "ru": "Мешок идёт вниз через ступень и звенит на каждой второй. Звон слышно до самого низа, но сторож не выходит: он давно привык.",
         "en": "The sack goes down every other step and clinks on every second one. The clinking carries all the way to the bottom, and down there nobody counts it: the stairs are entered against a watchman, and the watchman is entered against the inventory."
       },
       "next": "fight_snuffers"

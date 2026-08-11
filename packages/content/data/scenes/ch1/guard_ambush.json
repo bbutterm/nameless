@@ -20,8 +20,8 @@
       "id": "dratva_article",
       "speaker": "dratva",
       "text": {
-        "ru": "Порча залогового имущества, статья восьмая. Вынос залогового имущества, она же, пункт грустный. Стойте где стоите.",
-        "en": "Damage to pledged property, article eight. Removal of pledged property, same article, sad clause. Stay where you are."
+        "ru": "Чужие вещи не трогать. Найденные бумаги положить на землю. Стойте где стоите.",
+        "en": "Do not touch another's things. Put the found papers on the ground. Stay where you are."
       },
       "keywords": [{ "match": { "ru": "статья восьмая", "en": "article eight" }, "tone": "lore" }],
       "next": "lore_ustav"
@@ -30,12 +30,12 @@
       "kind": "lore",
       "id": "lore_ustav",
       "title": {
-        "ru": "Устав стражи залоговых споров, статья восьмая",
-        "en": "Regulations of the Pledge-Dispute Guard, article eight"
+        "ru": "Правила стражи, восьмой лист",
+        "en": "Guard rules, sheet eight"
       },
       "text": {
-        "ru": "«Пункт первый: залоговое имущество неприкосновенно. Пункт второй: неприкосновенность распространяется на владельца имущества в той мере, в какой он от имущества отделим. Пункт грустный: отделимость устанавливает старший по наряду на месте».",
-        "en": "\"Clause one: pledged property is inviolable. Clause two: the inviolability extends to the owner of the property insofar as he is separable from it. Sad clause: separability is established on the spot by the senior officer present.\""
+        "ru": "«Чужие вещи не трогать. Если хозяин рядом, спросить его. Если хозяина никто не видит, решает старший по наряду».",
+        "en": "\"Do not touch another's things. If the owner is near, ask them. If no one sees an owner, the senior guard decides.\""
       },
       "next": "dratva_terms"
     },
@@ -44,7 +44,7 @@
       "id": "dratva_terms",
       "speaker": "dratva",
       "text": {
-        "ru": "Кладите связку на пол и отойдите на два шага. Дальше пойдёте с нами, а связка пойдёт по описи, отдельно.",
+        "ru": "Кладите связку на пол и отойдите на два шага. Дальше пойдёте с нами, а бумаги останутся отдельно.",
         "en": "Put the bundle on the floor and step back two paces. You come with us; the bundle goes by inventory, separately."
       },
       "next": "debt_router"
@@ -199,7 +199,7 @@
       "id": "boy_named",
       "speaker": "dratva",
       "text": {
-        "ru": "Кого назвали? Во дворе, кроме нас, никого. Запишу как «оклик в пустоту», пункт грустный.",
+        "ru": "Кого назвали? Во дворе, кроме нас, никого. Запишу: «оклик в пустоту».",
         "en": "Named whom? There is nobody in the yard but us. I will record it as \"a call into empty air\", sad clause."
       },
       "next": "dratva_order"
@@ -209,7 +209,7 @@
       "id": "dratva_order",
       "speaker": "dratva",
       "text": {
-        "ru": "Наряд, к изъятию. Связку — в опись, владельца — по обстоятельствам.",
+        "ru": "Наряд, забрать связку. Владельца — по обстоятельствам.",
         "en": "Detail, prepare to seize. The bundle to the inventory, the owner as circumstances allow."
       },
       "mood": "flat",
@@ -269,7 +269,7 @@
         {
           "id": "quote_back",
           "text": {
-            "ru": "Прочитать ей пункт второй статьи восьмой.",
+            "ru": "Прочитать ей второе правило.",
             "en": "Read her clause two of article eight."
           },
           "fallback": true,
@@ -293,7 +293,7 @@
       "kind": "narration",
       "id": "ring_familiar",
       "text": {
-        "ru": "Наряд не окружает — наряд расступается и пропускает тебя внутрь кольца, как пропускают в контору. Кольцо смыкается уже за спиной, ровно, на счёт.",
+        "ru": "Наряд расступается и пропускает тебя внутрь кольца. Кольцо смыкается уже за спиной, ровно, на счёт.",
         "en": "The detail does not surround you — it opens and lets you inside the ring, the way you are let into an office. The ring closes behind you, evenly, on a count."
       },
       "next": "familiar_sheet"
@@ -312,7 +312,7 @@
       "kind": "narration",
       "id": "familiar_bundle",
       "text": {
-        "ru": "Под мышкой у неё связка в шестнадцать листов, изъятая из читальни по описи. Шнур перетёрся не о её рукав.",
+        "ru": "Под мышкой у неё связка в шестнадцать листов, забранная из читальни. Шнур перетёрся не о её рукав.",
         "en": "Under her arm is a bundle of sixteen sheets, taken from the reading room by inventory. The lacing wore through on somebody else's sleeve."
       },
       "keywords": [{ "match": { "ru": "связка", "en": "bundle" }, "tone": "memory" }],
@@ -323,8 +323,8 @@
       "id": "familiar_reads",
       "speaker": "dratva",
       "text": {
-        "ru": "Читаю верхний лист. «Вклад первый, оптом, бессрочно».",
-        "en": "Reading the top sheet. \"Deposit one, in bulk, no term.\""
+        "ru": "Читаю верхний лист. «Связка первая. Хранить бессрочно».",
+        "en": "Reading the top sheet. \"Bundle one. Keep indefinitely.\""
       },
       "next": "familiar_hand"
     },

@@ -37,7 +37,7 @@
       "id": "dratva_2",
       "speaker": "dratva",
       "text": {
-        "ru": "Статья восьмая, пункт грустный. Виновных нет, ответственный есть, и он лежит.",
+        "ru": "Восьмое правило, грустное. Виновных нет, ответственный есть, и он лежит.",
         "en": "Article eight, the sad clause. There are no guilty parties, there is a responsible party, and he is lying down."
       },
       "next": "pier_article"
@@ -45,9 +45,9 @@
     {
       "kind": "lore",
       "id": "pier_article",
-      "title": { "ru": "Устав стражи залоговых споров, ст. 8", "en": "Charter of the Pledge-Dispute Watch, art. 8" },
+      "title": { "ru": "Правила стражи, лист восьмой", "en": "Guard rules, sheet eight" },
       "text": {
-        "ru": "«Если выцветший не оставил описи, имущество его считается ничьим по истечении шести часов. До истечения шести часов имущество считается его, но взыскивать некому». Пункт «грустный» внесён капралом Дратвой в позапрошлом году. В типографском издании устава его нет. На это никто не жалуется: пункт удобный.",
+        "ru": "«Вещи выцветшего не трогать шесть часов. Вдруг за ними придут». Приписку оставила Дратва в позапрошлом году. В печатных правилах её нет. Никто не жалуется: так честнее.",
         "en": "\"Where the faded left no inventory, his property is deemed nobody's after six hours have passed. Before six hours have passed the property is deemed his, but there is nobody to claim from.\" The \"sad clause\" was entered by Corporal Dratva the year before last. It does not appear in the printed charter. Nobody complains: the clause is convenient."
       },
       "next": "pier_marauders"
@@ -66,7 +66,7 @@
       "id": "marodyor_1",
       "speaker": "marodyor",
       "text": {
-        "ru": "Я не граблю. Я опережаю опись. Через шесть часов это ничьё и стоит вдвое дешевле.",
+        "ru": "Я не граблю. Я жду шестой час. Потом это ничьё и стоит вдвое дешевле.",
         "en": "I am not robbing. I am outrunning the inventory. In six hours this is nobody's and worth half."
       },
       "next": "klyost_pier"
@@ -378,7 +378,7 @@
       "id": "lot_grab",
       "speaker": "marodyor",
       "text": {
-        "ru": "Из рук берёшь? Из рук — это уже не опись, это разговор.",
+        "ru": "Из рук берёшь? Из рук — это уже разговор.",
         "en": "Out of my hands? Out of the hands is not an inventory any more, that is a conversation."
       },
       "next": "fight_scavengers"
@@ -506,7 +506,7 @@
       "id": "r_finished",
       "speaker": "dratva",
       "text": {
-        "ru": "Вторая труха. Оформлю по тому же пункту: бумаги меньше, а грустно одинаково.",
+        "ru": "Вторая труха. Запишу рядом: бумаги меньше, а грустно одинаково.",
         "en": "A second lot of dust. I will file it under the same clause: less paperwork, equally sad."
       },
       "next": "pier_no_fight"
@@ -516,7 +516,7 @@
       "id": "r_spared",
       "speaker": "dratva",
       "text": {
-        "ru": "Ушёл на своих. Значит, придёт ещё раз, и уже с людьми. Это статья про весну.",
+        "ru": "Ушёл на своих. Значит, придёт ещё раз, и уже с людьми. Так бывает весной.",
         "en": "He left on his own legs. So he will be back, and with company. That is the article about spring."
       },
       "next": "pier_no_fight"
@@ -532,7 +532,7 @@
       "id": "dratva_knows",
       "speaker": "dratva",
       "text": {
-        "ru": "Вас видели утром у задних ворот. Кормили должника по бланку двенадцать-бис. Показания давать умеете?",
+        "ru": "Вас видели утром у задних ворот. Кормили голодного мальчишку. Показания давать умеете?",
         "en": "You were seen at the rear gate this morning. Feeding a debtor on form twelve-bis. Do you know how to give a statement?"
       },
       "next": "testimony_choice"
@@ -550,7 +550,7 @@
     {
       "kind": "choice",
       "id": "testimony_choice",
-      "prompt": { "ru": "Она держит протокол на весу и пишет стоя.", "en": "She holds the report in the air and writes standing up." },
+      "prompt": { "ru": "Она держит тетрадь на весу и пишет стоя.", "en": "She holds her notebook in the air and writes standing up." },
       "options": [
         {
           "id": "as_it_was",
@@ -580,7 +580,7 @@
         },
         {
           "id": "dictate_verbatim",
-          "text": { "ru": "Продиктовать протокол дословно.", "en": "Dictate the report word for word." },
+          "text": { "ru": "Продиктовать всё дословно.", "en": "Dictate everything word for word." },
           "chip": { "icon": "book", "label": { "ru": "Чистописец", "en": "Chistopisets" }, "tone": "life" },
           "conditions": { "kind": "life", "life": "chistopisets" },
           "effects": [
@@ -637,7 +637,7 @@
       "id": "r_test_true",
       "speaker": "dratva",
       "text": {
-        "ru": "Сходится с досками и с водой. Записала как есть, включая вас. За вами теперь моя услуга, и я её отдаю только по описи.",
+        "ru": "Сходится с досками и с водой. Записала как есть, включая вас. Теперь вы мне должны услугу.",
         "en": "It agrees with the boards and with the water. Written down as it stands, you included. I owe you a favour now, and I pay those only by inventory."
       },
       "next": "leave_pier"
@@ -647,7 +647,7 @@
       "id": "r_test_lie",
       "speaker": "dratva",
       "text": {
-        "ru": "Статья о посулах. Пункт: не при мне. Предупреждаю один раз. Один.",
+        "ru": "Обещайте без меня. Предупреждаю один раз. Один.",
         "en": "The article on promise notes. Clause: not in front of me. I warn once. Once."
       },
       "next": "leave_pier"
@@ -657,7 +657,7 @@
       "id": "r_test_silent",
       "speaker": "dratva",
       "text": {
-        "ru": "Молчание в протокол не заносится. Заносится «отказался», и это длиннее.",
+        "ru": "Молчание не запишешь. Запишу «отказался» — это длиннее.",
         "en": "Silence does not go into the report. \"Refused\" goes in, and that is longer."
       },
       "next": "leave_pier"
