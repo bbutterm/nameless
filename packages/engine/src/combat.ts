@@ -47,6 +47,21 @@ export const DEFAULT_TURN_LIMIT = 30;
  */
 export const COVER_ABILITY_ID = 'cover';
 
+/**
+ * «Наддать» (DIRECTION_COMBAT §B.C2) — заём темпа под процент.
+ *
+ * Удар усиливается в полтора раза, а платит за это следующий ход того же
+ * юнита: он его пропускает. Слово из торга — платишь сверх названного, — и
+ * заём здесь настоящий: полтора хода сейчас стоят двух потом.
+ *
+ * Почему это не способность и не статус в данных: наддача ничего не делает
+ * сама, она меняет цену уже выбранного удара. Приписать её в набор значило
+ * бы отдать слот кнопки (§E.8) и сдвинуть норму всего тира разом.
+ */
+export const SURGE_POWER = 1.5;
+/** Сколько СВОИХ ходов пропускает наддавший. */
+export const SURGE_SKIPS = 1;
+
 export type BattleOutcome = 'ongoing' | 'win' | 'lose' | 'draw';
 
 export type BattleEvent =
@@ -72,6 +87,8 @@ export type BattleEvent =
   | { type: 'cover'; uid: string; targetUid: string }
   | { type: 'death'; uid: string }
   | { type: 'blocked'; uid: string; reason: string }
+  /** Наддал: удар пошёл дороже, следующий свой ход будет пропущен. */
+  | { type: 'surge'; uid: string }
   | { type: 'outcome'; result: BattleOutcome };
 
 export interface BattleState {
@@ -342,7 +359,12 @@ export function beginRound(idx: CombatIndex, state: BattleState): BattleState {
       u.alive = false;
       events.push({ type: 'death', uid: u.uid });
     }
-    const ticked = u.statuses.map((st) => ({ ...st, turns: st.turns - 1 }));
+    // Отдышка НЕ тикает раундами: она про свои ходы, а не про чужие. Тикни
+    // она здесь, наддача медленного юнита стоила бы дешевле наддачи быстрого
+    // — просто потому, что до его хода раунд успевает смениться.
+    const ticked = u.statuses.map((st) =>
+      st.kind === 'winded' ? { ...st } : { ...st, turns: st.turns - 1 },
+    );
     // Непредъявленный посул — чистая прибыль: щит с тегом возврата, истёкший
     // непробитым, отдаёт остаток лечением 1:1. Только помеченные щиты: чужие
     // щиты не должны менять цену от того, что игрок вспомнил Посульщика.
@@ -671,6 +693,39 @@ export function computeDamage(
 export interface Action {
   ability: AbilityId;
   targetUid?: string;
+  /**
+   * Наддать: удар сильнее в `SURGE_POWER` раз, а следующий свой ход юнит
+   * пропускает. Флаг на действии, а не отдельное действие: наддача — это цена
+   * уже выбранного удара, и отдельной кнопкой она превратилась бы в ход,
+   * который сам по себе ничего не делает.
+   *
+   * Незаконная наддача (у способности нет урона, `surge: false`, юнит уже в
+   * отдышке) молча гаснет: удар проходит обычным. Ронять ход из-за неё нельзя
+   * — это отнимало бы у игрока ход за нажатие, которого он не понял.
+   */
+  surge?: boolean;
+}
+
+/**
+ * Можно ли наддать этим ударом. Три запрета, и каждый из них — про смысл, а
+ * не про баланс:
+ *
+ * 1. Наддавать можно только УРОН. Полтора лечения или полтора щита — это не
+ *    заём темпа, а просто числа побольше; заём должен быть слышен в ударе.
+ * 2. `surge: false` в данных — для способностей, которым наддача запрещена
+ *    по канону (странности отголосков не трогаем).
+ * 3. В отдышке наддать нельзя. Заняв ход, второй раз занимать нечего: долг
+ *    брали бы у хода, который уже отдан.
+ */
+export function canSurge(ability: Ability, actor: BattleUnitState): boolean {
+  if (ability.surge === false) return false;
+  if (isWinded(actor)) return false;
+  return (ability.effects ?? []).some((e) => e.kind === 'damage');
+}
+
+/** Юнит в отдышке — он пропустит свой ход. */
+export function isWinded(u: BattleUnitState): boolean {
+  return u.statuses.some((st) => st.kind === 'winded' && st.turns > 0);
 }
 
 export function currentActor(state: BattleState): BattleUnitState | undefined {
@@ -741,8 +796,22 @@ export function act(idx: CombatIndex, state: BattleState, action: Action): Battl
     { type: 'act', uid: self.uid, ability: ability.id, targetUid: action.targetUid, anim: ability.anim ?? 'lunge' },
   ];
 
-  const { perTarget, wide } = splitEffects(ability);
+  const { perTarget: rawPerTarget, wide } = splitEffects(ability);
   const tax = healTax(state);
+
+  /*
+   * Наддача (§B.C2). Незаконную гасим молча: удар проходит обычным, ход не
+   * теряется. Ронять ход за непонятое нажатие — худшее, что панель может
+   * сделать с игроком, который только учится.
+   *
+   * Усиливается ТОЛЬКО урон, даже если в способности есть и лечение: заём
+   * темпа слышен в ударе, а полтора щита — это просто число побольше.
+   */
+  const surged = action.surge === true && canSurge(ability, self);
+  const perTarget = surged
+    ? rawPerTarget.map((e) => (e.kind === 'damage' ? { ...e, power: e.power * SURGE_POWER } : e))
+    : rawPerTarget;
+  if (surged) events.push({ type: 'surge', uid: self.uid });
 
   // Заслон перенаправляет только ОДНОЦЕЛЕВОЙ урон (§B.C1). Площадь и дот идут
   // мимо: подставить тело можно под удар, но не под пожар и не под яд.
@@ -802,6 +871,15 @@ export function act(idx: CombatIndex, state: BattleState, action: Action): Battl
     self.cooldowns = { ...self.cooldowns, [ability.id]: ability.cooldown };
   }
   if (spendsTurn) self.acted = true;
+
+  /*
+   * Долг за наддачу записывается ПОСЛЕ удара, а не до: до удара юнит ещё не
+   * наддал, и умри он от отклика собственной способности — платить было бы
+   * некому. Срок стоит в `turns` и тикает не раундами, а СВОИМИ ходами (см.
+   * `beginRound` и `skipDeadOrStunned`): иначе быстрый юнит платил бы за заём
+   * дешевле медленного просто потому, что раунд для него короче.
+   */
+  if (surged) self.statuses = [...self.statuses, { kind: 'winded', amount: 0, turns: SURGE_SKIPS }];
 
   // Отклик сродства: руки узнают руки (MEMORY_POWERS §C.1). Только от умения
   // героя и только один раз — цепочек «отклик от отклика» нет (§F.8).
@@ -1321,9 +1399,28 @@ function skipDeadOrStunned(idx: CombatIndex, state: BattleState): BattleState {
       return beginRound(idx, s);
     }
     const u = s.units.find((x) => x.uid === uid);
-    if (u && u.alive && !isStunned(u)) return s;
+    if (u && u.alive && !isStunned(u) && !isWinded(u)) return s;
     if (u && u.alive && isStunned(u)) {
       s = { ...s, events: [...s.events, { type: 'blocked', uid: u.uid, reason: 'stun' }] };
+    } else if (u && u.alive && isWinded(u)) {
+      /*
+       * Долг за наддачу гасится ЗДЕСЬ — в тот момент, когда очередь дошла до
+       * должника. Это и значит «пропустить свой ход», а не «пересидеть раунд».
+       * Оглушение проверяется первым: если юнит и оглушён, и в отдышке, ход
+       * съедает оглушение, а долг остаётся — иначе чужое оглушение бесплатно
+       * списывало бы твой заём.
+       */
+      const units = s.units.map((x) =>
+        x.uid === u.uid
+          ? {
+              ...x,
+              statuses: x.statuses
+                .map((st) => (st.kind === 'winded' ? { ...st, turns: st.turns - 1 } : { ...st }))
+                .filter((st) => st.turns > 0),
+            }
+          : x,
+      );
+      s = { ...s, units, events: [...s.events, { type: 'blocked', uid: u.uid, reason: 'winded' }] };
     }
     s = { ...s, turnIndex: s.turnIndex + 1 };
     if (s.turnIndex >= s.order.length) {
@@ -1371,7 +1468,7 @@ export function planAction(
    * функции, что собирается делать противник, и зовёт её с `cover: false`:
    * без этого «кого мне заслонить» уходило бы в бесконечную взаимную вежливость.
    */
-  options: { hero?: boolean; cover?: boolean } = {},
+  options: { hero?: boolean; cover?: boolean; surge?: SurgePolicy } = {},
 ): Action | undefined {
   const useHero = options.hero !== false;
   const useCover = options.cover !== false;
@@ -1479,7 +1576,89 @@ export function planAction(
   const finishable = targets.find((t) => t.hp <= effectiveStat(actor, 'atk') * chosen.power * 0.5);
   const weakest = targets.slice().sort((a, b) => a.hp - b.hp)[0];
   const target = finishable ?? (rng.chance(0.15) ? rng.pick(targets) : weakest);
-  return { ability: chosen.id, targetUid: target?.uid };
+  const policy = options.surge ?? 'finish';
+
+  /*
+   * Наддача выбирает ЦЕЛЬ, а не только силу удара, — и без этого механика
+   * почти не появлялась на доске.
+   *
+   * Первая редакция политики спрашивала «наддать ли по той цели, которую и так
+   * выбрали». Замер дал 0.32 наддачи за бой при каноне 1–3 и превосходство над
+   * крайностями в 2.0 пункта при обещанных 4. Причина оказалась не в силе
+   * механики: обычный выбор берёт САМОГО СЛАБОГО, а самый слабый чаще всего
+   * добивается и без наддачи. Тот, кого наддача действительно достаёт, стоит
+   * на шаг дальше — и его никто не рассматривал.
+   *
+   * Канон (§B.C2) называет два случая, и второй как раз про это: «добить
+   * лекаря сейчас ценой немоты потом; сорвать объявленное намерение врага до
+   * его хода». Объявленное намерение — это и есть причина предпочесть цель, до
+   * которой обычным ударом не дотянуться.
+   *
+   * Свободное добивание идёт первым: если цель падает и без наддачи, платить
+   * за неё ходом незачем.
+   */
+  if (!finishable && policy === 'finish' && canSurge(chosen, actor)) {
+    const onlyBySurge = targets.filter((t) => wantsSurge(actor, chosen, t, 'finish'));
+    const pick = onlyBySurge.find((t) => t.intent) ?? onlyBySurge[0];
+    if (pick) return { ability: chosen.id, targetUid: pick.uid, surge: true };
+  }
+  const surge = target && wantsSurge(actor, chosen, target, policy);
+  return { ability: chosen.id, targetUid: target?.uid, ...(surge ? { surge: true } : {}) };
+}
+
+/**
+ * Политика наддачи (DIRECTION_COMBAT §B.C2, §E.6). Три штуки, и они заведены
+ * не для настройки, а для ЗАМЕРА: если «всегда» не проигрывает «никогда», у
+ * наддачи нет цены, а если «на добивание» не обыгрывает обеих — нет решения.
+ * Механику, в которую бот не умеет играть, нельзя замерить.
+ */
+export type SurgePolicy = 'never' | 'always' | 'finish';
+
+/**
+ * Политика может быть разной у сторон. Это не удобство, а условие честного
+ * замера: в симуляторе обе стороны — боты, и общая политика меняла бы обе
+ * разом. Сравнение «наддаю против не наддаю» тогда сравнивало бы два разных
+ * мира, а не два решения игрока в одном.
+ */
+export type SurgePolicyBySide = SurgePolicy | { player?: SurgePolicy; enemy?: SurgePolicy };
+
+function policyFor(p: SurgePolicyBySide | undefined, side: Side): SurgePolicy {
+  if (p === undefined) return 'finish';
+  if (typeof p === 'string') return p;
+  return p[side] ?? 'finish';
+}
+
+/**
+ * Стоит ли наддать этим ударом по этой цели.
+ *
+ * Наддача — размен: полтора удара сейчас за целый ход потом. Значит, выгодна
+ * она ровно тогда, когда полтора удара делают то, чего целый не сделает, — а
+ * такое в бою одно: цель уходит с доски. Обычным ударом не добить, наддачей
+ * добить — вот и весь случай. Всё остальное («побольше урона») размен
+ * проигрывает: следующий ход этого юнита стоит целого удара, а наддача
+ * прибавляет половину.
+ *
+ * Считается по ожиданию без разброса и без крита: политика бота не имеет права
+ * зависеть от того, повезёт ли броску, — иначе она перестанет быть политикой и
+ * станет ставкой. Щит цели входит в её живучесть: наддать в щит и не пробить —
+ * значит заплатить ходом ни за что.
+ */
+function wantsSurge(
+  actor: BattleUnitState,
+  ability: Ability,
+  target: BattleUnitState,
+  policy: SurgePolicy,
+): boolean {
+  if (policy === 'never') return false;
+  if (!canSurge(ability, actor)) return false;
+  if (policy === 'always') return true;
+  const atk = effectiveStat(actor, 'atk');
+  const def = effectiveStat(target, 'def');
+  const power = (ability.effects ?? []).reduce((sum, e) => sum + (e.kind === 'damage' ? e.power : 0), 0);
+  if (power <= 0) return false;
+  const plain = Math.max(1, Math.round(atk * power * (ARMOR_K / (ARMOR_K + def))));
+  const alive = target.hp + shieldOf(target);
+  return plain < alive && plain * SURGE_POWER >= alive;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1784,7 +1963,7 @@ function heroValue(
   const { perTarget, wide } = splitEffects(ability);
   const allies = living(state, actor.side);
   const foes = living(state, actor.side === 'player' ? 'enemy' : 'player');
-  const withStatus = (u: BattleUnitState, kinds: BattleEffect['kind'][]): boolean =>
+  const withStatus = (u: BattleUnitState, kinds: StatusEffect['kind'][]): boolean =>
     u.statuses.some((s) => kinds.includes(s.kind));
   // Пошлина описи (Перечень III) удешевляет ЧУЖИЕ руки тоже: бот, считающий
   // кружку по номиналу, переоценивал бы её на четверть в каждом бою, где
@@ -1963,8 +2142,13 @@ export function rollIntents(idx: CombatIndex, state: BattleState): BattleState {
 }
 
 /** Ход бота (враг или обе стороны в симуляции). */
-export function autoAct(idx: CombatIndex, state: BattleState): BattleState {
+export function autoAct(
+  idx: CombatIndex,
+  state: BattleState,
+  options: { surge?: SurgePolicyBySide } = {},
+): BattleState {
   const actor = currentActor(state);
+  const policy = policyFor(options.surge, actor?.side ?? 'player');
   // Очередь указывает в пустоту (юнит пал вне очереди хода, состояние пришло
   // из сейва или было поправлено эффектом) — раньше autoAct возвращал ТО ЖЕ
   // состояние, и runAuto молча крутил холостые итерации до maxSteps, отдавая
@@ -1972,7 +2156,7 @@ export function autoAct(idx: CombatIndex, state: BattleState): BattleState {
   if (!actor) return act(idx, state, { ability: '__pass__' });
   const plan = actor.side === 'enemy' && actor.intent
     ? { ability: actor.intent.ability, targetUid: actor.intent.targetUid }
-    : planAction(idx, state, actor);
+    : planAction(idx, state, actor, { surge: policy });
   if (!plan) {
     return act(idx, state, { ability: '__pass__' });
   }
@@ -1983,9 +2167,29 @@ export function autoAct(idx: CombatIndex, state: BattleState): BattleState {
   const target = state.units.find((u) => u.uid === plan.targetUid);
   if (ab && (!target || !target.alive)) {
     const alt = legalTargets(state, actor.uid, ab).sort((a, b) => a.hp - b.hp)[0];
-    return act(idx, state, { ability: plan.ability, targetUid: alt?.uid });
+    return act(idx, state, { ability: plan.ability, targetUid: alt?.uid, ...surgeFlag(actor, ab, alt, policy) });
   }
-  return act(idx, state, plan);
+  /*
+   * Наддача решается ЗДЕСЬ, а не при объявлении намерения. Враг объявляет
+   * намерение в начале раунда, а бьёт своим ходом — и к этому моменту цель уже
+   * могла получить чужой удар и стать добиваемой. Решать заранее значило бы
+   * решать по устаревшей доске.
+   *
+   * Наддают обе стороны. Иначе у игрока была бы вещь, которой в мире нет, — а
+   * правило, действующее в одну сторону, перестаёт быть правилом мира.
+   */
+  return act(idx, state, { ...plan, ...surgeFlag(actor, ab, target, policy) });
+}
+
+/** Флаг наддачи для готового плана: `{}` или `{ surge: true }`. */
+function surgeFlag(
+  actor: BattleUnitState,
+  ability: Ability | undefined,
+  target: BattleUnitState | undefined,
+  policy: SurgePolicy,
+): { surge?: true } {
+  if (!ability || !target) return {};
+  return wantsSurge(actor, ability, target, policy) ? { surge: true } : {};
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -2040,11 +2244,16 @@ export function playerAbilityBar(state: BattleState): PlayerAbilitySlot[] {
 }
 
 /** Прогон боя до конца обеими сторонами-ботами. Используется симулятором. */
-export function runAuto(idx: CombatIndex, state: BattleState, maxSteps = 2000): BattleState {
+export function runAuto(
+  idx: CombatIndex,
+  state: BattleState,
+  maxSteps = 2000,
+  options: { surge?: SurgePolicyBySide } = {},
+): BattleState {
   let s = state;
   let steps = 0;
   while (s.outcome === 'ongoing' && steps++ < maxSteps) {
-    s = autoAct(idx, s);
+    s = autoAct(idx, s, options);
   }
   return s;
 }

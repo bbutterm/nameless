@@ -13,6 +13,7 @@ import {
   type ContentBundle,
   type PartyUnit,
   type PlayerAbility,
+  type SurgePolicyBySide,
   type UnitDef,
 } from '@nameless/engine';
 
@@ -106,6 +107,13 @@ export interface BattleReport {
   coversPlayer: number;
   coversEnemy: number;
   coversFired: number;
+  /**
+   * Наддач за бой — по той же причине, что и заслонов (§E.6). Ноль означает,
+   * что все цифры выше сняты в бою БЕЗ наддачи, и сила механики тут ни при
+   * чём: её просто не было на доске.
+   */
+  surgesPlayer: number;
+  surgesEnemy: number;
 }
 
 /**
@@ -265,6 +273,12 @@ export function scriptedBattles(
   partyForBattle: (battleId: string) => PartyUnit[],
   runs = 40,
   powersForBattle?: (battleId: string) => readonly PlayerAbility[],
+  /**
+   * Политика наддачи. По умолчанию — та же, что в живой игре («на добивание»
+   * у обеих сторон): замер обязан мерить ту игру, в которую играют, а не
+   * удобную. Разные политики по сторонам нужны контролю в `cli.ts`.
+   */
+  surge?: SurgePolicyBySide,
 ): BattleReport[] {
   const idx = indexCombat(content);
   const out: BattleReport[] = [];
@@ -277,8 +291,10 @@ export function scriptedBattles(
     let coversPlayer = 0;
     let coversEnemy = 0;
     let coversFired = 0;
+    let surgesPlayer = 0;
+    let surgesEnemy = 0;
     for (let i = 0; i < runs; i++) {
-      const st = runAuto(idx, startBattle(idx, b, party, `scripted:${b.id}:${i}`, powers));
+      const st = runAuto(idx, startBattle(idx, b, party, `scripted:${b.id}:${i}`, powers), 2000, { surge });
       rounds += st.round;
       if (st.outcome === 'win') wins++;
       const alivePlayers = st.units.filter((u) => u.side === 'player' && u.alive).length;
@@ -291,6 +307,10 @@ export function scriptedBattles(
           else coversEnemy++;
         }
         if (e.type === 'cover') coversFired++;
+        if (e.type === 'surge') {
+          if (sideOf.get(e.uid) === 'player') surgesPlayer++;
+          else surgesEnemy++;
+        }
       }
     }
     out.push({
@@ -302,6 +322,8 @@ export function scriptedBattles(
       coversPlayer: coversPlayer / runs,
       coversEnemy: coversEnemy / runs,
       coversFired: coversFired / runs,
+      surgesPlayer: surgesPlayer / runs,
+      surgesEnemy: surgesEnemy / runs,
     });
   }
   return out;

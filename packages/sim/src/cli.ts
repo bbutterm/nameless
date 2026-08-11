@@ -277,6 +277,109 @@ if (!only || only === 'battles') {
       );
     }
 
+    // ── Наддача: есть ли у заёма цена и есть ли решение (§B.C2, §E.6) ────────
+    //
+    // Две разные проверки, и путать их нельзя.
+    //
+    // ПЕРВАЯ — пользуется ли механикой бот. Ноль наддач у стороны игрока
+    // значит, что все коридоры выше сняты с боя БЕЗ наддачи, какой бы сильной
+    // она ни была: то же правило §E.6, что и у заслона.
+    //
+    // ВТОРАЯ — три политики против одной доски. Наддача заявлена как ЗАЁМ под
+    // процент, и это проверяемое утверждение: «всегда наддаю» обязано
+    // проигрывать «никогда» — иначе процента нет и заём бесплатный, — а «наддаю
+    // на добивание» обязано обыгрывать обе крайности, иначе решать нечего и
+    // кнопка лишняя. Меняется политика ТОЛЬКО у игрока: враг во всех трёх
+    // прогонах играет одинаково, иначе сравнивались бы два разных мира.
+    head('Наддача: есть ли цена и есть ли решение');
+    const surgeMine = storyReps.reduce((a, r) => a + r.surgesPlayer, 0) / Math.max(1, storyReps.length);
+    const surgeTheirs = storyReps.reduce((a, r) => a + r.surgesEnemy, 0) / Math.max(1, storyReps.length);
+    for (const r of storyReps) {
+      if (r.surgesPlayer + r.surgesEnemy === 0) continue;
+      console.log(
+        `   ${r.battle.padEnd(24)} игрок ${r.surgesPlayer.toFixed(2)}/бой  враг ${r.surgesEnemy.toFixed(2)}/бой`,
+      );
+    }
+    console.log(
+      `${surgeMine > 0 ? '  ' : '!!'} по сюжетным боям: игрок ${surgeMine.toFixed(2)}/бой, ` +
+        `враг ${surgeTheirs.toFixed(2)}/бой (канон просит 1–3 у персоны)`,
+    );
+    if (surgeMine === 0) {
+      red(
+        'surgeUnused',
+        'all',
+        'бот-игрок ни разу не наддал: механика в замер не вошла, и коридоры выше ' +
+          'сняты с боя без неё (DIRECTION_COMBAT §E.6)',
+        0,
+      );
+    }
+
+    // Прогонов у контроля меньше, чем у основного замера: он сравнивает три
+    // политики между собой, и его точность нужна на разнице, а не на числе.
+    const surgeRuns = Math.max(12, Math.floor(runs / 4));
+    const policyWinrate = (player: 'never' | 'always' | 'finish'): number => {
+      const r = scriptedBattles(
+        content,
+        (id) => {
+          const def = content.battles.find((b) => b.id === id);
+          if (def?.expectParty?.length) return namedParty(content.units, def.expectParty);
+          const ch = battleChapter.get(id) ?? 1;
+          return defaultParty(content.units, ch === 1 ? 1 : ch === 2 ? 2 : 3, ch);
+        },
+        surgeRuns,
+        undefined,
+        { player, enemy: 'finish' },
+      );
+      return median(r.filter((x) => storyIds.includes(x.battle)).map((x) => x.winrate));
+    };
+    const pNever = policyWinrate('never');
+    const pAlways = policyWinrate('always');
+    const pFinish = policyWinrate('finish');
+    const pct = (v: number) => `${(v * 100).toFixed(1)}%`;
+    console.log(
+      `   медиана по сюжетным боям, ${surgeRuns} прогонов: никогда ${pct(pNever)}, ` +
+        `всегда ${pct(pAlways)}, на добивание ${pct(pFinish)}`,
+    );
+    summary['surge'] = {
+      player: surgeMine,
+      enemy: surgeTheirs,
+      never: pNever,
+      always: pAlways,
+      finish: pFinish,
+    };
+    // Цена заёма: «всегда» обязано быть ХУЖЕ «никогда». Порог в один пункт —
+    // это не запас прочности, а признание погрешности: при таком числе
+    // прогонов разница меньше пункта неотличима от шума.
+    const priceGap = (pNever - pAlways) * 100;
+    console.log(
+      `${priceGap >= 1 ? '  ' : '!!'} цена заёма: «всегда» хуже «никогда» на ${priceGap.toFixed(1)} пункта`,
+    );
+    if (priceGap < 1) {
+      red(
+        'surgePrice',
+        'all',
+        `«всегда наддаю» не проигрывает «никогда» (разница ${priceGap.toFixed(1)} пункта): ` +
+          'заём выходит бесплатным, и наддача — не решение, а всегда верный ход',
+        Number(priceGap.toFixed(1)),
+      );
+    }
+    // Решение: «на добивание» обязано обыгрывать обе крайности. Канон просит
+    // ≥4 пунктов над обеими (DIRECTION_COMBAT §B.C2, «Успех»).
+    const decisionGap = (pFinish - Math.max(pNever, pAlways)) * 100;
+    console.log(
+      `${decisionGap >= 4 ? '  ' : '!!'} решение: «на добивание» лучше обеих крайностей на ` +
+        `${decisionGap.toFixed(1)} пункта (канон просит ≥4)`,
+    );
+    if (decisionGap < 4) {
+      red(
+        'surgeDecision',
+        'all',
+        `«наддаю на добивание» обыгрывает крайности лишь на ${decisionGap.toFixed(1)} пункта ` +
+          'при требуемых 4 (§B.C2): решения в наддаче меньше, чем обещано каноном',
+        Number(decisionGap.toFixed(1)),
+      );
+    }
+
     // ── Умения игрока ────────────────────────────────────────────────────────
     // Потолок: игрок, вспомнивший ВСЁ. Раздел справочный и не краснит прогон.
     //
