@@ -89,7 +89,7 @@ for (let step = 0; step < 1600; step++) {
       continue;
     }
     // Свой ход: выбрать способность, затем цель.
-    const ability = page.locator('.ability').first();
+    const ability = page.locator('.ability:not(.cooling)').first();
     if (await ability.count()) {
       await ability.click();
       await page.waitForTimeout(80);

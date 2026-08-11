@@ -69,6 +69,14 @@ for (let i = 0; i < 600; i++) {
     reached = true;
     break;
   }
+  // Бирка новобранца (В2) перекрывает экран подложкой — до её закрытия любой
+  // тап уходит в подложку.
+  const backdrop = page.locator('.tag-backdrop');
+  if (await backdrop.count()) {
+    await backdrop.first().click({ position: { x: 5, y: 5 } });
+    await page.waitForTimeout(150);
+    continue;
+  }
   const ch = page.locator('.choice');
   if (await ch.count()) {
     const texts = await page.evaluate(() =>
@@ -78,7 +86,13 @@ for (let i = 0; i < 600; i++) {
     if (idx < 0) idx = 0;
     await ch.nth(idx).click();
   } else {
-    await page.mouse.click(width / 2, height * 0.4);
+    // Раньше здесь был слепой клик «по центру на 40% высоты». Он промахивался
+    // мимо зоны продолжения (`.tap-area` занимает нижнюю полосу экрана), и до
+    // боя инструмент не доходил вовсе — дефект, записанный в итоге Б7.
+    // Жмём тот же элемент, что и остальные проходы.
+    const hint = page.locator('.tap-hint');
+    if (await hint.count()) await hint.first().click();
+    else await page.mouse.click(width / 2, height - 24);
   }
   await page.waitForTimeout(40);
 }

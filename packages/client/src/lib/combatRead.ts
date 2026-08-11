@@ -228,6 +228,35 @@ export function abilityChips(ability: Ability, lang: Lang): string[] {
 }
 
 /**
+ * Слово «раунд» в нужном числе. Русский требует трёх форм, английский — двух,
+ * и ни одну из них нельзя собрать конкатенацией «раунд(ов)»: строка вида
+ * «через 2 раунд(ов)» читается как недоделанный интерфейс, а не как срок.
+ */
+function roundsWord(n: number, lang: Lang): string {
+  if (lang !== 'ru') return n === 1 ? t(lang, 'roundsOne') : t(lang, 'roundsMany');
+  const tail = n % 100;
+  if (tail >= 11 && tail <= 14) return t(lang, 'roundsMany');
+  const last = n % 10;
+  if (last === 1) return t(lang, 'roundsOne');
+  if (last >= 2 && last <= 4) return t(lang, 'roundsFew');
+  return t(lang, 'roundsMany');
+}
+
+/**
+ * Почему эта кнопка серая. Перезарядка тикает РАУНДАМИ боя (`endRound` в
+ * combat.ts вычитает единицу из всех `cooldowns` один раз за круг), поэтому
+ * срок и называется раундами, а не ходами: сказать «через 2 хода» значило бы
+ * соврать вдвое в бою на троих.
+ *
+ * Раньше неготовая способность просто пропадала с панели (`readyAbilities`
+ * её отфильтровывал), и с точки зрения игрока состав кнопок был случаен —
+ * `REVIEW_GAMEPLAY.md` §1, шаг 4. Ждать её или нет, теперь написано словами.
+ */
+export function coolingReason(name: string, turns: number, lang: Lang): string {
+  return `${t(lang, 'coolingNow')}: ${name} — ${t(lang, 'coolingIn')} ${turns} ${roundsWord(turns, lang)}.`;
+}
+
+/**
  * Общий разброс урона выбранной способности по всем законным целям —
  * строка вида «урон 12–17» над панелью, до того как цель выбрана.
  */

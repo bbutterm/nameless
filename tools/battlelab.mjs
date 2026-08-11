@@ -101,10 +101,14 @@ const geom = await page.evaluate(() => {
       selected: c.classList.contains('selected'),
     };
   });
+  // В опись идут ВСЕ кнопки, включая серые: с Б2 способность на перезарядке
+  // не исчезает, а стоит на месте с числом, и «сколько кнопок на панели» —
+  // это теперь весь набор юнита, а не только готовое.
   const abilities = [...document.querySelectorAll('.ability')].map((a) => {
     const r = a.getBoundingClientRect();
     return {
       text: a.textContent,
+      cooling: a.classList.contains('cooling'),
       w: +r.width.toFixed(1),
       h: +r.height.toFixed(1),
       font: parseFloat(getComputedStyle(a.querySelector('span')).fontSize),
@@ -142,12 +146,14 @@ for (const c of geom.cards) {
 }
 console.log('способности:');
 for (const a of geom.abilities) {
-  console.log(`  «${a.text}» ${a.w}×${a.h}, шрифт ${a.font}px, title=«${a.title}» aria=«${a.aria}»`);
+  console.log(
+    `  «${a.text}»${a.cooling ? ' [серая, перезарядка]' : ''} ${a.w}×${a.h}, шрифт ${a.font}px, title=«${a.title}» aria=«${a.aria}»`,
+  );
 }
 
 // Выбираем способность и смотрим, кто подсветился целью.
 if (geom.abilities.length) {
-  await page.locator('.ability').first().click();
+  await page.locator('.ability:not(.cooling)').first().click();
   await page.waitForTimeout(200);
   await page.screenshot({ path: `${outDir}/battle-targets-${tag}.png` });
   const t = await page.evaluate(() => ({
@@ -321,7 +327,14 @@ for (let bi = 0; bi < FEEL_BATTLES; bi++) {
   for (let step = 0; step < 900; step++) {
     if (await feelPage.locator('.battle-over').count()) break;
     if (!(await feelPage.locator('.screen.battle').count())) break;
-    const ability = feelPage.locator('.ability').first();
+    /*
+     * Жмём только ГОТОВУЮ кнопку. До Б2 панель отдавала одни готовые, и
+     * `.ability` значило то же самое; с Б2 серая кнопка стоит на своём месте
+     * и на нажатие отвечает сроком, а не ходом. Без `:not(.cooling)` прибор
+     * упирался бы в неё и считал бы лишние тапы — то есть замер (в) тапов на
+     * ход перестал бы мерить игрока и начал мерить дефект прибора.
+     */
+    const ability = feelPage.locator('.ability:not(.cooling)').first();
     if (await ability.count()) {
       if (lastIdleStart !== null) {
         waitingMs += Date.now() - lastIdleStart;

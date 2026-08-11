@@ -75,7 +75,7 @@ for (let step = 0; step < 4000 && results.length < tries; step++) {
         hp: c.querySelector('.card-hp')?.textContent ?? '',
         enemy: c.className.includes('enemy'),
       }));
-      const ab = [...document.querySelectorAll('.ability')].map((a) => a.textContent.toLowerCase());
+      const ab = [...document.querySelectorAll('.ability:not(.cooling)')].map((a) => a.textContent.toLowerCase());
       return { cards, ab };
     });
     const hurt = info.cards
@@ -90,7 +90,7 @@ for (let step = 0; step < 4000 && results.length < tries; step++) {
       const atk = info.ab.findIndex((t) => !HEALS.some((h) => t.includes(h)));
       return atk >= 0 ? atk : 0;
     })();
-    const ab = page.locator('.ability');
+    const ab = page.locator('.ability:not(.cooling)');
     if (await ab.count()) {
       await ab.nth(Math.min(idx, (await ab.count()) - 1)).click();
       await page.waitForTimeout(90);

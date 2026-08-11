@@ -30,6 +30,15 @@ await page.locator('.big-button').first().click();
 const FIGHT = ['на мостки', 'не вмешиваться'];
 for (let i = 0; i < 400; i++) {
   if (await page.locator('.screen.battle').count()) break;
+  // Бирка новобранца (В2) перекрывает экран подложкой — до её закрытия любой
+  // тап уходит в подложку, и проход падал на «tag-backdrop intercepts pointer
+  // events». Ветка та же, что в `battlelab.mjs`.
+  const backdrop = page.locator('.tag-backdrop');
+  if (await backdrop.count()) {
+    await backdrop.first().click({ position: { x: 5, y: 5 } });
+    await page.waitForTimeout(150);
+    continue;
+  }
   const ch = page.locator('.choice');
   if (await ch.count()) {
     const texts = await page.evaluate(() =>
@@ -48,7 +57,7 @@ for (let i = 0; i < 400; i++) {
 let shots = 0;
 for (let turn = 0; turn < 6; turn++) {
   if (await page.locator('.battle-over').count()) break;
-  const ab = page.locator('.ability');
+  const ab = page.locator('.ability:not(.cooling)');
   if ((await ab.count()) === 0) {
     await page.waitForTimeout(400);
     continue;
@@ -57,7 +66,7 @@ for (let turn = 0; turn < 6; turn++) {
     () => document.querySelector('.card.selected .card-name')?.textContent ?? '(никто не подсвечен)',
   );
   const abilities = await page.evaluate(() =>
-    [...document.querySelectorAll('.ability')].map((a) => a.textContent),
+    [...document.querySelectorAll('.ability:not(.cooling)')].map((a) => a.textContent),
   );
   for (let a = 0; a < (await ab.count()); a++) {
     await ab.nth(a).click();

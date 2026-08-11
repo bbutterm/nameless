@@ -37,7 +37,7 @@ for (let i = 0; i < 700; i++) {
       await page.waitForTimeout(400);
       continue;
     }
-    const ab = page.locator('.ability');
+    const ab = page.locator('.ability:not(.cooling)');
     if (await ab.count()) {
       await ab.first().click();
       await page.waitForTimeout(80);

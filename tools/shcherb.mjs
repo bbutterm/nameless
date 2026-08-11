@@ -72,7 +72,7 @@ for (let step = 0; step < 400; step++) {
       await page.waitForTimeout(400);
       continue;
     }
-    const ab = page.locator('.ability');
+    const ab = page.locator('.ability:not(.cooling)');
     if (await ab.count()) {
       await ab.first().click();
       await page.waitForTimeout(80);

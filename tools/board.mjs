@@ -51,6 +51,16 @@ await page.locator('.big-button').first().click();
 const FIGHT = ['не отдавать', 'драться', 'встать', 'бить', 'не вмешиваться', 'на мостки', 'не мешать'];
 for (let i = 0; i < 400; i++) {
   if (await page.locator('.screen.battle').count()) break;
+  // Бирка новобранца (В2) перекрывает экран подложкой, и до её закрытия любой
+  // тап уходит в подложку, а не в кнопку: проход падал на «tag-backdrop
+  // intercepts pointer events». Ветка та же, что в `battlelab.mjs`, — это
+  // хвост, честно записанный в итоге В2.
+  const backdrop = page.locator('.tag-backdrop');
+  if (await backdrop.count()) {
+    await backdrop.first().click({ position: { x: 5, y: 5 } });
+    await page.waitForTimeout(150);
+    continue;
+  }
   const ch = page.locator('.choice');
   if (await ch.count()) {
     const texts = await page.evaluate(() =>
