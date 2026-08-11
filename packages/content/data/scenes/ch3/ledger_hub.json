@@ -1,7 +1,7 @@
 {
   "id": "ledger_hub",
   "chapter": 3,
-  "title": { "ru": "Зал Учёта, дальний конец", "en": "The Ledger Hall, Far End" },
+  "title": { "ru": "Дальний конец зала", "en": "The Far End of the Hall" },
   "tags": ["hub", "chapter3"],
   "available": { "kind": "visited", "scene": "audit_arrives" },
   "entry": "hub_router",
@@ -25,7 +25,7 @@
       "kind": "narration",
       "id": "hub_first",
       "text": {
-        "ru": "Дальний конец зала отгорожен канатом, и канат сегодня лежит на полу: отгораживать некого. Столы сдвинуты в один длинный, на нём разложена сверка, и разложена она по разделам, а не по годам.",
+        "ru": "Дальний конец зала отгорожен канатом, и канат сегодня лежит на полу: отгораживать некого. Столы сдвинуты в один длинный, на нём разложена встреча, и разложена она по разделам, а не по годам.",
         "en": "The far end of the hall is roped off, and today the rope lies on the floor: there is nobody to rope out. The tables have been pushed into one long one, and the reconciliation is laid out on it by sections, not by years."
       },
       "next": "hub_first2"
@@ -45,7 +45,7 @@
       "id": "hub_svodchik_1",
       "speaker": "svodchik",
       "text": {
-        "ru": "Сверка идёт с трёх сторон: зал Учёта, книга наследования, нижняя полка. Сойтись должно в одной точке.",
+        "ru": "Встреча идёт с трёх сторон: главный зал, книга наследования, нижняя полка. Сойтись должно в одной точке.",
         "en": "The reconciliation runs from three sides: the Ledger Hall, the book of inheritance, the lowest shelf. It is to meet at one point."
       },
       "next": "hub_svodchik_2"
@@ -74,7 +74,7 @@
       "id": "hub_again_2",
       "speaker": "svodchik",
       "text": {
-        "ru": "Позиций осталось: одна. Свечей осталось: девять. Сходятся эти два числа только у нас в смете.",
+        "ru": "Позиций осталось: одна. Свечей осталось: девять. Сходятся эти два числа только у нас в расчёте.",
         "en": "Entries left: one. Candles left: nine. Those two figures tally only in our estimate."
       },
       "next": "hub_choice"
@@ -83,7 +83,7 @@
       "kind": "narration",
       "id": "hub_deep",
       "text": {
-        "ru": "Сверку со стола убрали и свернули в трубку. На столе остались три листа, придавленные бирками, и все три сходятся в одной строке — той, что уходит вниз, под здание.",
+        "ru": "Встречу со стола убрали и свернули в трубку. На столе остались три листа, придавленные бирками, и все три сходятся в одной строке — той, что уходит вниз, под здание.",
         "en": "The reconciliation has been cleared off the table and rolled up. Three sheets are left, weighted down with tags, and all three come together on one line: the one that goes down, under the building."
       },
       "next": "hub_deep_2"
@@ -108,7 +108,7 @@
       "options": [
         {
           "id": "read_board",
-          "text": { "ru": "Прочитать доску сверки.", "en": "Read the reconciliation board." },
+          "text": { "ru": "Прочитать доску встречи.", "en": "Read the reconciliation board." },
           "fallback": true,
           "to": "hub_board"
         },
@@ -120,7 +120,7 @@
         },
         {
           "id": "to_reckoning",
-          "text": { "ru": "К Ревизору, на сверку лицом к лицу.", "en": "To the Auditor, to be reconciled face to face." },
+          "text": { "ru": "К Сличиле, говорить лицом к лицу.", "en": "To the Collator, face to face." },
           "conditions": { "kind": "not", "of": { "kind": "visited", "scene": "reckoning_hall" } },
           "to": "scene:reckoning_hall",
           "priority": 7
@@ -155,7 +155,7 @@
         },
         {
           "id": "to_tminny",
-          "text": { "ru": "К оценщику, который сегодня без прейскуранта.", "en": "To the appraiser, who has no price list today." },
+          "text": { "ru": "К Глазомеру, который сегодня без ценника.", "en": "To the appraiser, who has no price card today." },
           "conditions": {
             "kind": "any",
             "of": [
@@ -180,10 +180,10 @@
     {
       "kind": "lore",
       "id": "hub_board",
-      "title": { "ru": "Доска сверки, зал Учёта", "en": "Reconciliation board, Ledger Hall" },
+      "title": { "ru": "Доска встречи, главный зал", "en": "Reconciliation board, Ledger Hall" },
       "text": {
-        "ru": "«Сверено разделов: пять из пяти. Расхождений: одно. Сумма расхождения: см. обеспечение. Ответственный: см. обеспечение. Обеспечение: см. вкладчика». Ниже, карандашом: «Круг замкнулся на третьей строке. Сверщики просят указаний». Ещё ниже, чернилами: «Указание: продолжайте».",
-        "en": "\"Sections reconciled: five of five. Discrepancies: one. Amount of the discrepancy: see holdings. Party responsible: see holdings. Holdings: see depositor.\" Below, in pencil: \"The circle closed on the third line. The reconcilers request instructions.\" Below that, in ink: \"Instruction: continue.\""
+        "ru": "«Сверено разделов: пять из пяти. Расхождений: одно. Сумма расхождения: см. стена. Ответственный: см. стена. Стена: см. хозяина». Ниже, карандашом: «Круг замкнулся на третьей строке. Сверщики просят указаний». Ещё ниже, чернилами: «Указание: продолжайте».",
+        "en": "\"Sections reconciled: five of five. Discrepancies: one. Amount of the discrepancy: see holdings. Party responsible: see holdings. Holdings: see owner.\" Below, in pencil: \"The circle closed on the third line. The reconcilers request instructions.\" Below that, in ink: \"Instruction: continue.\""
       },
       "next": "hub_choice"
     },
@@ -192,8 +192,8 @@
       "id": "hub_ask",
       "speaker": "svodchik",
       "text": {
-        "ru": "Кончится актом. Акт подписывают двое: Ревизия и вкладчик. Второй подписи в природе ещё не было.",
-        "en": "It ends with a certificate. A certificate is signed by two: the Audit and the depositor. The second signature has never yet existed in nature."
+        "ru": "Кончится листом. Лист подписывают двое: Сличила и хозяин. Второй подписи в природе ещё не было.",
+        "en": "It ends with a certificate. A certificate is signed by two: the Collator and the owner. The second signature has never yet existed in nature."
       },
       "next": "hub_choice"
     },
@@ -202,8 +202,8 @@
       "id": "hub_tminny",
       "speaker": "tminny",
       "text": {
-        "ru": "Прейскуранты сняты со стен, позвольте-с. Цена сегодня одна на всё, и она мне не нравится: цена сегодня — «см. обеспечение».",
-        "en": "The price lists have been taken off the walls, if you please. Today there is one price for everything, and I do not care for it: today the price is \"see holdings\"."
+        "ru": "Ценникы сняты со стен, позвольте-с. Цена сегодня одна на всё, и она мне не нравится: цена сегодня — «см. стена».",
+        "en": "The price cards have been taken off the walls, if you please. Today there is one price for everything, and I do not care for it: today the price is \"see holdings\"."
       },
       "next": "hub_tminny_2"
     },

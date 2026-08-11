@@ -1,7 +1,7 @@
 {
   "id": "reckoning_hall",
   "chapter": 3,
-  "title": { "ru": "Сверка лицом к лицу", "en": "Reconciled Face to Face" },
+  "title": { "ru": "Встреча лицом к лицу", "en": "Reconciled Face to Face" },
   "tags": ["story", "chapter3", "revizor"],
   "available": { "kind": "visited", "scene": "ledger_hub" },
   "entry": "table_set",
@@ -19,8 +19,8 @@
       "kind": "narration",
       "id": "his_face",
       "text": {
-        "ru": "Сводчик, проходя, описывает Ревизора вслух для протокола: рост средний, лет около сорока, волос тёмный. Дочитывает и замолкает, потому что уже писал это сегодня в другом деле.",
-        "en": "Passing by, the reconciler describes the Auditor aloud for the record: middling height, about forty years of age, dark hair. He finishes and stops, because he has already written that today, in another file."
+        "ru": "Сводчик, проходя, описывает Сличилу вслух для записи: рост средний, лет около сорока, волос тёмный. Дочитывает и замолкает: сегодня он уже писал это в другом деле.",
+        "en": "Passing by, the reconciler describes the Collator aloud for the record: middling height, about forty years of age, dark hair. He finishes and stops, because he has already written that today, in another file."
       },
       "keywords": [{ "match": { "ru": "в другом деле", "en": "in another file" }, "tone": "danger" }],
       "next": "revizor_opens"
@@ -30,8 +30,8 @@
       "id": "revizor_opens",
       "speaker": "revizor",
       "text": {
-        "ru": "Сверка вкладчика. Присутствуют: двое. Заинтересованных: двое.",
-        "en": "Reconciliation of the depositor. Present: two. Interested parties: two."
+        "ru": "Проверка хозяина. Присутствуют: двое. Заинтересованных: двое.",
+        "en": "Reconciliation of the owner. Present: two. Interested parties: two."
       },
       "next": "path_router"
     },
@@ -67,7 +67,7 @@
       "kind": "narration",
       "id": "marks_read_2",
       "text": {
-        "ru": "Знак похож на птичку, у которой не дотянут левый хвост. В инструкции приёмщика такого знака нет; она поставила его, когда ей не хватило графы, и потом ставила ещё трижды.",
+        "ru": "Знак похож на птичку, у которой не дотянут левый хвост. В инструкции приёмщика такого знака нет; она поставила его, когда ей не хватило строки, и потом ставила ещё трижды.",
         "en": "The sign is like a tick with the left tail left short. There is no such sign in the receiving officer's instructions; she made it the first time when a column ran out on her, and then made it three more times."
       },
       "next": "marks_read_3"
@@ -87,7 +87,7 @@
       "id": "as_document",
       "speaker": "revizor",
       "text": {
-        "ru": "Вы записались «Неоплатный». Графа заполнена верно. Первый раз за всю книгу.",
+        "ru": "Вы записались «Серый». Строка заполнена верно. Первый раз за всю книгу.",
         "en": "You signed yourself \"the Insolvent\". The column is filled in correctly. The first time in the whole book."
       },
       "next": "as_document_2"
@@ -97,7 +97,7 @@
       "id": "as_document_2",
       "speaker": "revizor",
       "text": {
-        "ru": "Вопрос не по описи: вам холодно в этом зале?",
+        "ru": "Вопрос не по списку: вам холодно в этом зале?",
         "en": "A question not on the record: are you cold in this hall?"
       },
       "next": "as_document_3"
@@ -132,7 +132,7 @@
       "id": "burned_line",
       "speaker": "revizor",
       "text": {
-        "ru": "Стеллаж третьего яруса, дым. Убыток посчитан: девять чужих лотов. Владельцы: уведомлены не будут.",
+        "ru": "Стеллаж третьего яруса, дым. Сгорели девять чужих свёртков. Хозяев уведомить некому.",
         "en": "The third-tier shelving, smoke. Loss counted: nine lots belonging to others. Owners: will not be notified."
       },
       "next": "sverka_choice"
@@ -184,7 +184,7 @@
           "id": "witness_hand",
           "chip": { "icon": "book", "label": { "ru": "Чистописец", "en": "Chistopisets" }, "tone": "life" },
           "conditions": { "kind": "life", "life": "chistopisets" },
-          "text": { "ru": "Вести протокол за него. Без поправок.", "en": "Keep the record for him. Without corrections." },
+          "text": { "ru": "Вести запись за него. Без поправок.", "en": "Keep the record for him. Without corrections." },
           "effects": [
             { "kind": "fragment", "memory": "god_goloy_pravdy", "amount": 3 },
             { "kind": "axis", "axis": "honesty_deceit", "delta": 15 }
@@ -196,7 +196,7 @@
           "id": "count_him",
           "chip": { "icon": "hourglass", "label": { "ru": "Перечень", "en": "Perechen" }, "tone": "life" },
           "conditions": { "kind": "life", "life": "perechen" },
-          "text": { "ru": "Внести Ревизора в опись. Пункт первый.", "en": "Enter the Auditor in an inventory. Item one." },
+          "text": { "ru": "Внести Сличилу в список. Строка первая.", "en": "Enter the Collator in the list. Item one." },
           "effects": [
             { "kind": "fragment", "memory": "eda_ne_vnesena", "amount": 3 },
             { "kind": "axis", "axis": "reason_obsession", "delta": -15 }
@@ -219,7 +219,7 @@
         {
           "id": "hurry_him",
           "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -30 },
-          "text": { "ru": "Кончайте сверку. Наряд ждать не будет.", "en": "Finish the reconciling. The detail will not wait." },
+          "text": { "ru": "Кончайте разговор. Наряд ждать не будет.", "en": "Finish the reconciling. The detail will not wait." },
           "effects": [
             { "kind": "fragment", "memory": "schet_za_sezon", "amount": 2 },
             { "kind": "axis", "axis": "mercy_cruelty", "delta": -8 }
@@ -234,7 +234,7 @@
       "id": "r_answered",
       "speaker": "revizor",
       "text": {
-        "ru": "Сходится всё. Кроме первого пункта. Первый пункт сходится с вами.",
+        "ru": "Сходится всё, кроме первой строки. Первая строка сходится с вами.",
         "en": "Everything tallies. Except the first entry. The first entry tallies with you."
       },
       "next": "offer_intro"
@@ -243,7 +243,7 @@
       "kind": "narration",
       "id": "r_his_face",
       "text": {
-        "ru": "Ты смотришь на него в упор и запоминаешь по частям: линия рта, ширина скулы, как лежит воротник. Всё это ты уже где-то держал в руках — в описи, где графа «особых примет не имеет» была заполнена твоей рукой.",
+        "ru": "Ты смотришь на него в упор и запоминаешь по частям: линию рта, ширину скулы, складку воротника. Эти приметы ты уже записывал собственной рукой.",
         "en": "You look him straight in the face and take it in by parts: the line of the mouth, the width of the cheekbone, the way the collar sits. You have held all this somewhere before, in a record where the column \"no distinguishing marks\" was filled in by your own hand."
       },
       "next": "offer_intro"
@@ -290,7 +290,7 @@
       "kind": "narration",
       "id": "r_cup",
       "text": {
-        "ru": "Он смотрит на кружку так, как смотрят на предмет, которому не назначена графа. Потом придвигает её на два пальца обратно к тебе и продолжает с того числа, на котором остановился.",
+        "ru": "Он смотрит на кружку так, как смотрят на предмет, которому не назначена строка. Потом придвигает её на два пальца обратно к тебе и продолжает с того числа, на котором остановился.",
         "en": "He looks at the cup the way you look at an object no column has been assigned to. Then he pushes it two fingers back towards you and goes on from the number he stopped at."
       },
       "next": "offer_intro"
@@ -300,7 +300,7 @@
       "id": "r_hurried",
       "speaker": "revizor",
       "text": {
-        "ru": "Метод: понятен. Метод: не помогает. Наряд ждёт по бланку, бланк действует семь ударов насоса.",
+        "ru": "Метод: понятен. Метод: не помогает. Наряд ждёт по листу, лист действует семь ударов насоса.",
         "en": "The method: understood. The method: does not help. The detail waits by a form, and the form runs for seven beats of the pump."
       },
       "next": "offer_intro"
@@ -309,11 +309,11 @@
       "kind": "narration",
       "id": "offer_intro",
       "text": {
-        "ru": "Он развязывает связку и вынимает один лист, отпечатанный в единственном экземпляре. В шапке стоит: «Акт о списании вклада, добровольный». Дальше пусто до самого низа.",
-        "en": "He unties the bundle and takes out a single sheet, printed in one copy only. The heading reads: \"Certificate of write-off of a deposit, voluntary\". Below that it is blank all the way down."
+        "ru": "Он развязывает связку и вынимает единственный лист. Наверху написано: «Отдать добровольно». Дальше пусто до самого низа.",
+        "en": "He unties the bundle and takes out a single sheet, printed in one copy only. The heading reads: \"Certificate of loss of a bundle, voluntary\". Below that it is blank all the way down."
       },
       "keywords": [
-        { "match": { "ru": "Акт о списании вклада, добровольный", "en": "Certificate of write-off of a deposit, voluntary" }, "tone": "danger" }
+        { "match": { "ru": "Отдать добровольно", "en": "Certificate of loss of a bundle, voluntary" }, "tone": "danger" }
       ],
       "next": "offer_terms"
     },
@@ -322,8 +322,8 @@
       "id": "offer_terms",
       "speaker": "revizor",
       "text": {
-        "ru": "Условие: ваша подпись. Следствие: расхождение устранено. Ревизия при этом заканчивается тоже.",
-        "en": "Condition: your signature. Consequence: the discrepancy is removed. The Audit ends along with it."
+        "ru": "Условие: ваша подпись. Следствие: расхождение устранено. Сличила при этом заканчивается тоже.",
+        "en": "Condition: your signature. Consequence: the discrepancy is removed. The Collator ends along with it."
       },
       "next": "promises_router"
     },
@@ -343,8 +343,8 @@
       "id": "offer_promises",
       "speaker": "revizor",
       "text": {
-        "ru": "Посулов выдано вами: два и более. Предъявителей: ждут. Их долг Ревизия спишет вместе с вами.",
-        "en": "Promise notes issued by you: two or more. Bearers: waiting. The Audit will write off their claim along with you."
+        "ru": "Обещаний выдано вами: два и более. Предъявителей: ждут. Их долг Сличила спишет вместе с вами.",
+        "en": "Promise notes issued by you: two or more. Bearers: waiting. The Collator will write off their claim along with you."
       },
       "next": "offer_choice"
     },
@@ -418,7 +418,7 @@
       "id": "offer_taken",
       "speaker": "revizor",
       "text": {
-        "ru": "Предложение: остаётся в силе. Срок: до конца сверки. Конец сверки: близко.",
+        "ru": "Предложение: остаётся в силе. Срок: до конца разговора. Конец разговора: близко.",
         "en": "The offer: stands. Term: until the reconciliation closes. The close of the reconciliation: near."
       },
       "next": "guard_arrives"
@@ -437,7 +437,7 @@
       "kind": "narration",
       "id": "guard_arrives",
       "text": {
-        "ru": "В зал входит наряд: трое приставов и двое оценщиков при них, потому что оценщик обязан присутствовать при изъятии обеспечения. Старший разворачивает бланк и читает с листа, не поднимая глаз.",
+        "ru": "В зал входит наряд: трое приставов и двое глазомеров при них, потому что Глазомер обязан присутствовать при отборе вещей. Старший разворачивает лист и читает с листа, не поднимая глаз.",
         "en": "A detail comes into the hall: three bailiffs with two appraisers, because an appraiser must be present when holdings are taken. The sergeant unrolls a form and reads from the sheet without looking up."
       },
       "next": "guard_reads"
@@ -447,18 +447,18 @@
       "id": "guard_reads",
       "speaker": "naryad_revizii",
       "text": {
-        "ru": "Задержание обеспечения до окончания сверки. Бланк двадцать семь, срок действия — семь ударов насоса. Обеспечение, руки перед собой.",
+        "ru": "Задержать вещи до окончания разговора. Лист двадцать семь, срок действия — семь ударов насоса. Стена, руки перед собой.",
         "en": "Detention of holdings pending the close of the reconciliation. Form twenty-seven, valid for seven beats of the pump. Holdings, hands where I can see them."
       },
-      "keywords": [{ "match": { "ru": "Обеспечение, руки перед собой", "en": "Holdings, hands where I can see them" }, "tone": "danger" }],
+      "keywords": [{ "match": { "ru": "Стена, руки перед собой", "en": "Holdings, hands where I can see them" }, "tone": "danger" }],
       "next": "guard_choice"
     },
     {
       "kind": "choice",
       "id": "guard_choice",
       "prompt": {
-        "ru": "Ревизор сел. Он никогда не садится при работе.",
-        "en": "The Auditor has sat down. He never sits while working."
+        "ru": "Сличила сел. Он никогда не садится при работе.",
+        "en": "The Collator has sat down. He never sits while working."
       },
       "options": [
         {
@@ -476,7 +476,7 @@
         },
         {
           "id": "fight_first",
-          "text": { "ru": "Бить по оценщикам. Они считают.", "en": "Go for the appraisers. They do the counting." },
+          "text": { "ru": "Бить по глазомерам. Они считают.", "en": "Go for the keen-eyed ones. They do the counting." },
           "fallback": true,
           "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": -3 }],
           "to": "naryad"
@@ -496,7 +496,7 @@
           "id": "gar_forward",
           "chip": { "icon": "fire", "label": { "ru": "Смолокур", "en": "Smolokur" }, "tone": "life" },
           "conditions": { "kind": "life", "life": "smolokur" },
-          "text": { "ru": "Пустить Гарь вперёд бланка.", "en": "Let the Smoke go before the form does." },
+          "text": { "ru": "Пустить Гарь вперёд листа.", "en": "Let the Smoke go before the form does." },
           "effects": [
             { "kind": "fragment", "memory": "schet_za_sezon", "amount": 3 },
             { "kind": "axis", "axis": "mercy_cruelty", "delta": -8 }
@@ -507,7 +507,7 @@
         {
           "id": "cite_clause",
           "conditions": { "kind": "flag", "flag": "contract_read" },
-          "text": { "ru": "Сослаться на пункт седьмой. Вслух.", "en": "Cite item seven. Out loud." },
+          "text": { "ru": "Сослаться на строку седьмую. Вслух.", "en": "Cite item seven. Out loud." },
           "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": 3 }],
           "to": "clause_cited",
           "priority": 6
@@ -519,8 +519,8 @@
       "id": "clause_cited",
       "speaker": "naryad_revizii",
       "text": {
-        "ru": "Пункт седьмой про списание. Про задержание в нём ничего. Бланк двадцать семь остаётся в силе.",
-        "en": "Item seven is about write-off. It says nothing about detention. Form twenty-seven stands."
+        "ru": "Строка седьмая про утрату. Про задержание в ней ничего. Лист двадцать семь остаётся в силе.",
+        "en": "Item seven is about loss. It says nothing about detention. Form twenty-seven stands."
       },
       "next": "naryad"
     },
@@ -548,7 +548,7 @@
       "kind": "narration",
       "id": "dying_text",
       "text": {
-        "ru": "Свечи гасят раньше, чем ты падаешь: расход на свечи в смете, а ты в другой графе. Оценщик при наряде успевает записать, сколько тебя было, и это последнее, что ты слышишь в зале.",
+        "ru": "Свечи гасят раньше, чем ты падаешь: расход на свечи в расчёте, а ты в другой строке. Глазомер при наряде успевает записать, сколько тебя было, и это последнее, что ты слышишь в зале.",
         "en": "The candles are put out before you go down: candles are in the estimate and you are in another column. The appraiser with the detail manages to enter how much of you there was, and that is the last thing you hear in the hall."
       },
       "next": "scene:silver_counter#queue_entry"
@@ -557,7 +557,7 @@
       "kind": "narration",
       "id": "after_win",
       "text": {
-        "ru": "Бланк действует семь ударов насоса, и седьмой удар приходит раньше, чем наряд успевает кончить дело. Старший сворачивает лист, отмечает время и уводит своих: без бланка они тут никто, и они это знают лучше тебя.",
+        "ru": "Лист действует семь ударов насоса, и седьмой удар приходит раньше, чем наряд успевает кончить дело. Старший сворачивает лист, отмечает время и уводит своих: без листа они тут никто, и они это знают лучше тебя.",
         "en": "The form runs for seven beats of the pump, and the seventh beat comes before the detail is done. The sergeant rolls up the sheet, notes the time and takes his men away: without the form they are nobody here, and they know it better than you do."
       },
       "next": "revizor_after"
@@ -567,7 +567,7 @@
       "id": "revizor_after",
       "speaker": "revizor",
       "text": {
-        "ru": "Задержание: снято. Сверка со стороны зала: закончена. Осталось две стороны.",
+        "ru": "Задержание: снято. Проверка со стороны зала: закончена. Осталось две стороны.",
         "en": "Detention: lifted. Reconciliation from the hall's side: complete. Two sides remain."
       },
       "next": "depth_up"
@@ -582,7 +582,7 @@
       "kind": "narration",
       "id": "back_to_hub",
       "text": {
-        "ru": "Связку он завязывает обратно двумя узлами, как было. Акт остаётся сверху, чтобы его было видно с любой стороны стола.",
+        "ru": "Связку он завязывает обратно двумя узлами, как было. Лист остаётся сверху, чтобы его было видно с любой стороны стола.",
         "en": "He ties the bundle back up in two knots, the way it was. The certificate stays on top, so it can be seen from any side of the table."
       },
       "next": "scene:ledger_hub"

@@ -43,14 +43,14 @@
       "kind": "narration",
       "id": "the_grate",
       "text": {
-        "ru": "Решётка перегораживает лестницу целиком: прутья в руку, кладка вокруг них старше кладки наверху. Табличка одна: «Нижние хранилища. Обеспечение. Вход по особому распоряжению».",
-        "en": "The grate blocks the whole stairway: bars as thick as an arm, the masonry around them older than the masonry above. There is one plate: \"Lower Vaults. Security holdings. Entry by special order only.\""
+        "ru": "Решётка перегораживает лестницу целиком: прутья в руку, кладка вокруг них старше кладки наверху. Табличка одна: «Нижние хранилища. Спрятанное. Вход по особому распоряжению».",
+        "en": "The grate blocks the whole stairway: bars as thick as an arm, the masonry around them older than the masonry above. There is one plate: \"Lower Rooms. No Entry.\""
       },
       "keywords": [
         {
           "match": {
-            "ru": "Обеспечение",
-            "en": "Security holdings"
+            "ru": "Спрятанное",
+            "en": "Lower Rooms"
           },
           "tone": "lore"
         }
@@ -93,8 +93,8 @@
       "kind": "narration",
       "id": "cold_from_below",
       "text": {
-        "ru": "Снизу тянет холодом и бумажной пылью. Пыль поднимается ровно, без сквозняка, будто там внизу что-то большое дышит описью.",
-        "en": "Cold air and paper dust come up from below. The dust rises evenly, with no draught behind it, as if something large down there were breathing in inventory."
+        "ru": "Снизу тянет холодом и бумажной пылью. Пыль поднимается ровно, без сквозняка, будто там внизу что-то большое дышит списком.",
+        "en": "Cold air and paper dust come up from below. The dust rises evenly, with no draught behind it, as if something large down there were breathing in list."
       },
       "next": "guard_stool"
     },
@@ -102,13 +102,13 @@
       "kind": "narration",
       "id": "guard_stool",
       "text": {
-        "ru": "У решётки стоит табурет, на табурете лампа, при лампе стражник и журнал спусков. Графы две: кто спустился и когда поднялся. Вторая графа за сегодня пустая.",
+        "ru": "У решётки стоит табурет, на табурете лампа, при лампе стражник и тетрадь спусков. Строки две: кто спустился и когда поднялся. Вторая строка за сегодня пустая.",
         "en": "By the grate stands a stool, on the stool a lamp, at the lamp a guard and a descent journal. There are two columns: who went down and when he came back up. The second column is empty for today."
       },
       "keywords": [
         {
           "match": {
-            "ru": "журнал спусков",
+            "ru": "тетрадь спусков",
             "en": "descent journal"
           },
           "tone": "lore"
@@ -121,7 +121,7 @@
       "id": "strazhnik_1",
       "speaker": "strazhnik",
       "text": {
-        "ru": "Спуск не воспрещён. Проход воспрещён. Разница оформляется бланком двадцать семь.",
+        "ru": "Спуск не воспрещён. Проход воспрещён. Разница оформляется листом двадцать семь.",
         "en": "Descent is not prohibited. Passage is prohibited. The difference is processed on form twenty-seven."
       },
       "next": "strazhnik_2"
@@ -131,7 +131,7 @@
       "id": "strazhnik_2",
       "speaker": "strazhnik",
       "text": {
-        "ru": "Фамилию в журнал. Без фамилии пишу «предъявитель», и тогда вас не найдут даже мы.",
+        "ru": "Фамилию в тетрадь. Без фамилии пишу «пришедший», и тогда вас не найдут даже мы.",
         "en": "Surname for the journal. Without a surname I write \"the bearer\", and then not even we will find you."
       },
       "next": "klyost_arrives"
@@ -150,12 +150,12 @@
       "kind": "lore",
       "id": "ustav_obespecheniya",
       "title": {
-        "ru": "Устав хранения обеспечения, лист первый",
-        "en": "Regulations on the Keeping of Security Holdings, sheet one"
+        "ru": "Правила нижних комнат, лист первый",
+        "en": "Rules of the Lower Rooms, sheet one"
       },
       "text": {
-        "ru": "«Обеспечением именуется память, которой обеспечена монета. Обеспечение хранится ниже уровня воды и ниже уровня спроса. Обеспечение не выдаётся на руки ни при каких обстоятельствах, включая обстоятельство „предъявитель есть вкладчик“. Сумма обеспечения на листе не указывается: лист один, а сумма не помещается».",
-        "en": "\"Security holdings means the memory by which the coin is secured. Holdings are kept below the level of the water and below the level of demand. Holdings are released into no one's hands under any circumstances, including the circumstance 'the bearer is the depositor'. The amount of the holdings is not entered on this sheet: the sheet is one and the amount does not fit.\""
+        "ru": "«Внизу лежит память одного человека. Её не выносят и не показывают. Даже тому, кто её оставил. На одном листе она не помещается».",
+        "en": "\"One person's memory lies below. It is neither removed nor shown, even to the one who left it. It does not fit on one sheet.\""
       },
       "next": "grate_choice"
     },
@@ -188,7 +188,7 @@
         {
           "id": "give_name",
           "text": {
-            "ru": "Назваться в журнал: Неоплатный.",
+            "ru": "Назваться в тетрадь: Невзятый.",
             "en": "Give the journal a name: Insolvent."
           },
           "fallback": true,
@@ -347,7 +347,7 @@
       "id": "r_knock",
       "speaker": "strazhnik",
       "text": {
-        "ru": "Не звенит. Прутья литые, внутри такие же. Стучать разрешено: в бланке двадцать семь стука нет.",
+        "ru": "Не звенит. Прутья литые, внутри такие же. Стучать разрешено: в листе двадцать семь стука нет.",
         "en": "No ring to it. The bars are cast solid, the same all the way through. Knocking is permitted: form twenty-seven does not mention knocking."
       },
       "next": "after_grate"
@@ -357,7 +357,7 @@
       "id": "r_last",
       "speaker": "strazhnik",
       "text": {
-        "ru": "Предъявитель, третьего числа, по особому распоряжению. Обратно графа не заполнена. Заполняю её я, а не он.",
+        "ru": "Пришедший, третьего числа, по особому распоряжению. Обратно строка не заполнена. Заполняю её я, а не он.",
         "en": "The bearer, on the third, by special order. The return column is not filled in. I am the one who fills it in, not him."
       },
       "next": "after_grate"
@@ -367,7 +367,7 @@
       "id": "r_name",
       "speaker": "strazhnik",
       "text": {
-        "ru": "«Неоплатный» — это не фамилия, это состояние счёта. Пишу как продиктовано: за верность записи отвечаете вы.",
+        "ru": "«Невзятый» — это не фамилия, это состояние счёта. Пишу как продиктовано: за верность записи отвечаете вы.",
         "en": "\"Insolvent\" is not a surname, it is a state of account. I write it as dictated: you answer for the accuracy of the entry."
       },
       "next": "after_grate"
@@ -404,7 +404,7 @@
       "id": "r_exact",
       "speaker": "strazhnik",
       "text": {
-        "ru": "«Отказано в проходе, основание не названо». Вы это вписали, вы и подписали. Такой строки в журнале за четыре года не было.",
+        "ru": "«Отказано в проходе, основание не названо». Вы это вписали, вы и подписали. Такой строки в тетради за четыре года не было.",
         "en": "\"Passage refused, grounds not stated.\" You entered it and you signed it. There has been no line like that in the journal in four years."
       },
       "next": "after_grate"
@@ -434,8 +434,8 @@
       "id": "after_grate",
       "speaker": "klyost",
       "text": {
-        "ru": "Вам записка. От оценщика, который с «-с». Он велел отдать в руки и не читать, я и не читал, честно, только начало.",
-        "en": "There's a note for you. From the appraiser who talks with the \"if you please\". He said hand it over and don't read it, so I didn't, honest, only the start."
+        "ru": "Вам записка. От Глазомера, который с «-с». Он велел отдать в руки и не читать, я и не читал, честно, только начало.",
+        "en": "There's a note for you. From the Keen Eye who talks with the \"if you please\". He said hand it over and don't read it, so I didn't, honest, only the start."
       },
       "next": "note_text"
     },
@@ -443,7 +443,7 @@
       "kind": "narration",
       "id": "note_text",
       "text": {
-        "ru": "На обороте расписки, торопливо: «Особое распоряжение выписывается наверху, а не внизу. Цену назову при встрече; прошу не спрашивать её через мальчика».",
+        "ru": "На обороте записки, торопливо: «Особое распоряжение выписывается наверху, а не внизу. Цену назову при встрече; прошу не спрашивать её через мальчика».",
         "en": "On the back of a receipt, in a hurry: \"The special order is issued upstairs, not down here. I shall name the price in person; kindly do not ask it through the boy.\""
       },
       "keywords": [
@@ -479,7 +479,7 @@
       "kind": "choice",
       "id": "tag_choice",
       "prompt": {
-        "ru": "Бирка номер один нагрелась от запястья. Журнал внизу открыт на сегодняшней странице.",
+        "ru": "Бирка номер один нагрелась от запястья. Тетрадь внизу открыт на сегодняшней странице.",
         "en": "Tag number one has gone warm against your wrist. Below, the journal lies open at today's page."
       },
       "options": [
@@ -523,7 +523,7 @@
         {
           "id": "show_journal",
           "text": {
-            "ru": "Показать бирку и потребовать сверки.",
+            "ru": "Показать бирку и потребовать сравнения.",
             "en": "Show the tag and demand a check."
           },
           "fallback": true,
@@ -661,7 +661,7 @@
         {
           "id": "copy_journal",
           "text": {
-            "ru": "Переписать журнал спусков за неделю.",
+            "ru": "Переписать тетрадь спусков за неделю.",
             "en": "Copy out a week of the descent journal."
           },
           "conditions": {
@@ -691,7 +691,7 @@
       "kind": "narration",
       "id": "r_keep",
       "text": {
-        "ru": "Бирка сидит плотно, шнурок казённый, узел казённый. Снять её можно только вместе с делом, а дело пока не закрыто.",
+        "ru": "Бирка сидит пвещьно, шнурок казённый, узел казённый. Снять её можно только вместе с делом, а дело пока не закрыто.",
         "en": "The tag sits tight, government cord, government knot. It comes off only together with the case, and the case is not closed yet."
       },
       "next": "after_tag"
@@ -710,7 +710,7 @@
       "id": "r_show",
       "speaker": "strazhnik",
       "text": {
-        "ru": "Дело номер один в журнале не заводится. Журнал начинается с двойки, и так заведено до меня.",
+        "ru": "Дело номер один в тетради не заводится. Тетрадь начинается с двойки, и так заведено до меня.",
         "en": "Case number one is not opened in the journal. The journal begins at two, and it was set up that way before my time."
       },
       "next": "after_tag"
@@ -730,7 +730,7 @@
       "id": "r_promise",
       "speaker": "strazhnik",
       "text": {
-        "ru": "Записал: «обещал бумагу». Обещания идут в третью графу, третью графу читают раз в год и никого по ней не ищут.",
+        "ru": "Записал: «обещал бумагу». Обещания идут в третью строку, третью строку читают раз в год и никого по ней не ищут.",
         "en": "Entered: \"promised paper\". Promises go in the third column, the third column is read once a year, and nobody is ever looked for by it."
       },
       "next": "after_tag"
@@ -750,7 +750,7 @@
       "id": "r_window",
       "speaker": "strazhnik",
       "text": {
-        "ru": "Через окошко — по вторникам и прописью. Цену вам прокричат в форточку, и торг в форточку не проходит.",
+        "ru": "Через окошко — по вторникам и прсписком. Цену вам прокричат в форточку, и торг в форточку не проходит.",
         "en": "Through the window, on Tuesdays and in words. They will call the price at you through the pane, and haggling does not fit through a pane."
       },
       "next": "after_tag"
@@ -759,14 +759,14 @@
       "kind": "narration",
       "id": "r_copy",
       "text": {
-        "ru": "За неделю вниз спускались одиннадцать человек, поднялись девять, и обе недостачи проходят по графе «остались при обеспечении». Графа предусмотрена бланком, значит, случай не первый.",
-        "en": "In one week eleven people went down and nine came up, and both shortfalls are booked under the column \"remained with the holdings\". The column is provided for on the form, so the case is not the first."
+        "ru": "За неделю вниз спускались одиннадцать человек, поднялись девять. Возле двух имён написано: «остались внизу». Значит, случай не первый.",
+        "en": "In one week eleven people went down and nine came up, and both shortfalls are booked under the column \"remained with the hidden things\". The column is provided for on the form, so the case is not the first."
       },
       "keywords": [
         {
           "match": {
-            "ru": "остались при обеспечении",
-            "en": "remained with the holdings"
+            "ru": "остались внизу",
+            "en": "remained with the hidden things"
           },
           "tone": "danger"
         }
@@ -777,8 +777,8 @@
       "kind": "narration",
       "id": "after_tag",
       "text": {
-        "ru": "Подъёмник в полу площадки уходит вниз без каната: канат намотан на барабан внизу, и барабан тянет к себе. Наверх он поднимает только пустые ящики и опись.",
-        "en": "The hoist in the landing floor goes down without a rope above it: the rope is wound on a drum below, and the drum pulls towards itself. It brings back up only empty crates and an inventory."
+        "ru": "Подъёмник в полу площадки уходит вниз без каната: канат намотан на барабан внизу, и барабан тянет к себе. Наверх он поднимает только пустые ящики и список.",
+        "en": "The hoist in the landing floor goes down without a rope above it: the rope is wound on a drum below, and the drum pulls towards itself. It brings back up only empty crates and a list."
       },
       "next": "gate_exit"
     },
@@ -786,8 +786,8 @@
       "kind": "narration",
       "id": "gate_exit",
       "text": {
-        "ru": "Подвалы Ломбарда глубже, чем башня высока: это знает в Закладе каждый ребёнок и никто не спрашивает почему. Ты стоишь у стола с биркой номер один и уже знаешь, чей почерк ждёт внизу.",
-        "en": "The Pawnshop's cellars run deeper than its tower is tall: every child in Zaklad knows it and nobody asks why. You stand at the table with tag number one, and you already know whose handwriting is waiting down there."
+        "ru": "Подвалы дома вещей глубже, чем башня высока: это знает в Закладе каждый ребёнок и никто не спрашивает почему. Ты стоишь у стола с биркой номер один и уже знаешь, чей почерк ждёт внизу.",
+        "en": "The house's cellars run deeper than its tower is tall: every child in Zaklad knows it and nobody asks why. You stand at the table with tag number one, and you already know whose handwriting is waiting down there."
       },
       "keywords": [
         {
@@ -824,7 +824,7 @@
       "id": "takers_2",
       "speaker": "marodyor",
       "text": {
-        "ru": "Мы не про вас. Мы про бирку. Шнурок срежем ровно, узел казённый — узел вернём отдельно, под расписку.",
+        "ru": "Мы не про вас. Мы про бирку. Шнурок срежем ровно, узел казённый — узел вернём отдельно, под записку.",
         "en": "We are not about you. We are about the tag. We will cut the cord clean; the knot is state property, and the knot we will return separately, against a receipt."
       },
       "next": "takers_3"
@@ -843,7 +843,7 @@
       "kind": "choice",
       "id": "stair_choice",
       "prompt": {
-        "ru": "Вниз — решётка и журнал. Вверх — площадка и трое. Перил нет ни там, ни там.",
+        "ru": "Вниз — решётка и тетрадь. Вверх — площадка и трое. Перил нет ни там, ни там.",
         "en": "Down there is the grate and the journal. Up there is the landing and the three. There is no handrail either way."
       },
       "options": [
@@ -895,8 +895,8 @@
         {
           "id": "name_tminny",
           "text": {
-            "ru": "Назвать оценщика, который прислал записку.",
-            "en": "Name the appraiser who sent the note."
+            "ru": "Назвать Глазомера, который прислал записку.",
+            "en": "Name the Keen Eye who sent the note."
           },
           "conditions": {
             "kind": "flag",
@@ -914,7 +914,7 @@
         {
           "id": "shout_down",
           "text": {
-            "ru": "Крикнуть вниз стражнику. Он с журналом.",
+            "ru": "Крикнуть вниз стражнику. Он с тетрадью.",
             "en": "Shout down to the guard. He has the journal."
           },
           "effects": [
@@ -988,8 +988,8 @@
       "id": "r_stair_price",
       "speaker": "marodyor",
       "text": {
-        "ru": "Цена такая, что её называют не вслух, а на пальцах, и пальцев не хватает. Оценщика вашего мы знаем: он у нас проходит по трём разным именам, и все три должны.",
-        "en": "The price is the kind you name on your fingers, not out loud, and the fingers run out. Your appraiser we know: he goes under three different names with us, and all three are in debt."
+        "ru": "Цена такая, что её называют не вслух, а на пальцах, и пальцев не хватает. Глазомера вашего мы знаем: он у нас проходит по трём разным именам, и все три должны.",
+        "en": "The price is the kind you name on your fingers, not out loud, and the fingers run out. Your Keen Eye we know: he goes under three different names with us, and all three are in debt."
       },
       "next": "fight_takers"
     },
@@ -1007,7 +1007,7 @@
       "id": "r_stair_guard",
       "speaker": "strazhnik",
       "text": {
-        "ru": "Слышу. Спуск не воспрещён, подъём не воспрещён, драка на лестнице оформляется бланком двадцать девять, а бланков двадцать девять у меня нет с прошлого года.",
+        "ru": "Слышу. Спуск не воспрещён, подъём не воспрещён, драка на лестнице оформляется листом двадцать девять, а листов двадцать девять у меня нет с прошлого года.",
         "en": "I hear you. Going down is not forbidden, going up is not forbidden, a brawl on the stairs is filed on form twenty-nine, and I have had no form twenty-nine since last year."
       },
       "next": "fight_takers"
@@ -1032,7 +1032,7 @@
       "kind": "narration",
       "id": "takers_after",
       "text": {
-        "ru": "Уходят они вверх, не вниз: внизу журнал, а в журнале вторая графа за сегодня пустая. Бирка на запястье цела, шнурок надрезан в одном месте, и надрез теперь тоже примета.",
+        "ru": "Уходят они вверх, не вниз: внизу тетрадь, а в тетради вторая строка за сегодня пустая. Бирка на запястье цела, шнурок надрезан в одном месте, и надрез теперь тоже примета.",
         "en": "They leave upwards, not down: downstairs there is the journal, and today the journal's second column is empty. The tag on your wrist is whole, the cord nicked in one place, and the nick is a distinguishing mark now too."
       },
       "next": "landing_above"
@@ -1078,7 +1078,7 @@
       "kind": "narration",
       "id": "takers_falling",
       "text": {
-        "ru": "Лестница без перил считает быстрее стражника. Последним доходит, что бирку так и не срезали: её снимут внизу, вместе с делом, и обе графы журнала заполнят одной рукой.",
+        "ru": "Лестница без перил считает быстрее стражника. Последним доходит, что бирку так и не срезали: её снимут внизу, вместе с делом, и обе строки тетради заполнят одной рукой.",
         "en": "Stairs without a handrail count faster than the guard does. The last thing to reach you is that the tag was never cut off: they will take it downstairs, together with the case, and both columns of the journal will be filled in by one hand."
       },
       "next": "scene:silver_counter#queue_entry"

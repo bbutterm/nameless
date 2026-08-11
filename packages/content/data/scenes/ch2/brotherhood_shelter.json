@@ -73,8 +73,8 @@
       "kind": "narration",
       "id": "raid",
       "text": {
-        "ru": "Наряд идёт по берегу от двора к двору, впереди старшая с описью. Опись у них на имущество: короба, лопаты, чайники. Людей в описи нет.",
-        "en": "The detail works along the bank from yard to yard, the senior officer out front with an inventory. Their inventory is of property: crates, spades, teapots. There are no people in it."
+        "ru": "Наряд идёт по берегу от двора к двору, впереди старшая со списком вещей: короба, лопаты, чайники. Людей в списке нет.",
+        "en": "The detail works along the bank from yard to yard, the senior officer out front with a list of things: crates, spades, teapots. There are no people in it."
       },
       "keywords": [
         {
@@ -105,8 +105,8 @@
         "en": "Order for the Search of the Other Bank, sheet one"
       },
       "text": {
-        "ru": "«Осмотру подлежит имущество, поименованное в описи. Лица, в описи не поименованные, осмотру не подлежат и в протокол не вносятся». Пункт стоит в предписаниях четвёртый век и укрыл больше народу, чем стража взяла. Отменять его не берутся: отменить — значит признать, что его читают.",
-        "en": "\"Subject to search is property named in the inventory. Persons not named in the inventory are not subject to search and are not entered in the record.\" The clause has stood in the orders for four centuries and has sheltered more people than the guard has ever taken. Nobody undertakes to strike it: to strike it would be to admit that it gets read."
+        "ru": "«Ищите вещи. Людей не трогайте». Эти четыре слова стоят в приказе четвёртый век и укрыли больше народу, чем стража взяла. Вычеркнуть их никто не решается.",
+        "en": "\"Search for things. Do not touch people.\" Those four words have stood in the order for four centuries and sheltered more people than the guard has taken. Nobody dares strike them."
       },
       "next": "proshchai_offer"
     },
@@ -124,7 +124,7 @@
       "kind": "narration",
       "id": "tag_written",
       "text": {
-        "ru": "Брат-огородник уже пишет бирку. В графе «наименование» — «человек серый, один, невостребован». В графе «срок хранения» прочерк: сколько тебя не будут востребовать, он не знает.",
+        "ru": "Брат-огородник уже пишет бирку: «человек серый, один, без имени». Срока нет: сколько тебя будут искать, он не знает.",
         "en": "The brother gardener is already writing the tag. Under \"description\": \"man, grey, one, unclaimed\". Under \"term of storage\", a dash: he does not know how long you will go unclaimed."
       },
       "keywords": [
@@ -394,7 +394,7 @@
       "id": "r_water",
       "speaker": "dratva",
       "text": {
-        "ru": "Воду принял весь наряд. Статья двадцать вторая: содействие при осмотре. Пункт грустный: содействуют обычно те, кому есть что показать.",
+        "ru": "Воду принял весь наряд. Помогают при поиске обычно те, кому есть что показать. Это грустное правило.",
         "en": "The whole detail has taken water. Article twenty-two: assistance during a search. The sad clause: those who assist usually have something to show."
       },
       "next": "dratva_face"
@@ -404,7 +404,7 @@
       "id": "r_debt",
       "speaker": "dratva",
       "text": {
-        "ru": "Мостки помню. Показания ваши помню. Долг помню лучше всего — он в протоколе, а протокол мой.",
+        "ru": "Мостки помню. Ваши слова помню. Долг помню лучше всего — своей рукой записала.",
         "en": "I remember the boardwalk. I remember your statement. The debt I remember best of all: it is in the record, and the record is mine."
       },
       "next": "dratva_face"
@@ -441,7 +441,7 @@
       "kind": "narration",
       "id": "river_wait",
       "text": {
-        "ru": "Через час наряд уходит на паром, и с ним уходит опись, в которую тебя так и не внесли. Прощай ждёт тебя у калитки с сухой рубахой и не спрашивает, где ты был.",
+        "ru": "Через час наряд уходит на паром, и с ним уходит список, в который тебя так и не внесли. Прощай ждёт тебя у калитки с сухой рубахой и не спрашивает, где ты был.",
         "en": "An hour later the detail leaves for the ferry, and the inventory you never got entered in leaves with it. Farewell is waiting at the gate with a dry shirt and does not ask where you were."
       },
       "next": "proshchai_key"
@@ -451,7 +451,7 @@
       "id": "dratva_pit",
       "speaker": "dratva",
       "text": {
-        "ru": "Гражданин невостребованный. По описи вы не значитесь, беспокоить вас не имею права. Извините за доску.",
+        "ru": "Человек без имени. Вас среди вещей нет, беспокоить не имею права. Извините за доску.",
         "en": "Citizen unclaimed. You are not listed in the inventory, and I have no right to disturb you. My apologies for the plank."
       },
       "keywords": [
@@ -479,8 +479,8 @@
       "id": "dratva_face",
       "speaker": "dratva",
       "text": {
-        "ru": "Статья восьмая: порча залогового имущества. Разыскивается один, спускавшийся ниже решётки. Приметы: серый. Тут все серые, и это меня в вас и раздражает.",
-        "en": "Article eight: damage to pledged property. Wanted, one, having descended below the grate. Description: grey. Everyone here is grey, and that is what irritates me about you."
+        "ru": "Ищу того, кто спускался ниже решётки. Приметы: серый. Тут все серые, и это меня в вас и раздражает.",
+        "en": "I am looking for whoever went below the grate. Description: grey. Everyone here is grey, and that is what irritates me about you."
       },
       "next": "answer_choice"
     },
@@ -516,7 +516,7 @@
         {
           "id": "say_nothing",
           "text": {
-            "ru": "Молчать. Пусть читает опись.",
+            "ru": "Молчать. Пусть читает список.",
             "en": "Say nothing. Let her read the inventory."
           },
           "fallback": true,
@@ -666,7 +666,7 @@
             "flag": "dratva_warned"
           },
           "text": {
-            "ru": "Напомнить: посулов при ней не было.",
+            "ru": "Напомнить: обещаний при ней не было.",
             "en": "Remind her: no promise notes in her presence."
           },
           "effects": [
@@ -686,7 +686,7 @@
       "id": "r_told_true",
       "speaker": "dratva",
       "text": {
-        "ru": "Записано слово в слово. Спускавшийся сознался, а взять его я не могу: он не имущество, и он не в описи. Оформлю по грустному пункту.",
+        "ru": "Записала слово в слово. Вы сознались, а взять вас не могу: вы человек, не вещь. Идите.",
         "en": "Recorded word for word. The man who descended has confessed, and I cannot take him: he is not property and he is not in the inventory. I will file it under the sad clause."
       },
       "next": "detail_leaves"
@@ -696,7 +696,7 @@
       "id": "r_silent",
       "speaker": "dratva",
       "text": {
-        "ru": "Молчание в протокол не вносится. Молчащих у меня в этом деле трое, и все трое молчат по-разному. Оцепить грядки.",
+        "ru": "Молчание я не записываю. Молчащих у меня трое, и все трое молчат по-разному. Оцепить грядки.",
         "en": "Silence is not entered in the record. I have three silent ones in this case, and all three are silent differently. Cordon off the beds."
       },
       "next": "silent_search"
@@ -706,7 +706,7 @@
       "id": "r_blamed",
       "speaker": "dratva",
       "text": {
-        "ru": "Братьев внесу в протокол поимённо. Имён у них нет, внесу по числу лопат. Восемь лопат, шесть братьев.",
+        "ru": "Братьев запишу поимённо. Имён у них нет, запишу по числу лопат. Восемь лопат, шесть братьев.",
         "en": "The brothers go into the record by name. They have no names, so they go in by the count of spades. Eight spades, six brothers."
       },
       "next": "blamed_after"
@@ -715,7 +715,7 @@
       "kind": "narration",
       "id": "blamed_after",
       "text": {
-        "ru": "Прощай смотрит на тебя ровно столько, сколько нужно, чтобы запомнить, и отворачивается к вёдрам. Калитку он не запирает: она подпёрта лопатой, а лопата теперь в протоколе.",
+        "ru": "Прощай смотрит на тебя ровно столько, сколько нужно, чтобы запомнить, и отворачивается к вёдрам. Калитка остаётся подпёрта лопатой.",
         "en": "Farewell looks at you exactly as long as it takes to remember, and turns back to the buckets. He does not shut the gate: it is propped with a spade, and the spade is in the record now."
       },
       "next": "battle_squad"
@@ -725,7 +725,7 @@
       "id": "r_promised",
       "speaker": "dratva",
       "text": {
-        "ru": "Статья о посулах. Пункт: не при мне. Предупреждаю один раз, и это был он.",
+        "ru": "Обещали не при мне. Предупреждаю один раз, и это был он.",
         "en": "The article on promise notes. The clause: not in my presence. I warn once, and that was it."
       },
       "next": "detail_leaves"
@@ -745,7 +745,7 @@
       "id": "r_gave_lots",
       "speaker": "dratva",
       "text": {
-        "ru": "Принято до выяснения. Выясню честно, и это дольше ареста. Расписку выпишу на обороте предписания, бланков не осталось.",
+        "ru": "Возьму до выяснения. Выясню честно, и это дольше ареста. Подтверждение напишу на обороте приказа.",
         "en": "Accepted pending inquiry. I inquire honestly, and that takes longer than an arrest. Your receipt goes on the back of the order, we are out of forms."
       },
       "next": "detail_leaves"
@@ -761,7 +761,7 @@
       "kind": "narration",
       "id": "r_squad_won",
       "text": {
-        "ru": "Наряд отходит к парому, унося двоих. Капрал уходит последней и по дороге поднимает с земли чужую бирку, читает и кладёт в карман: имущество в описи, а имущество терять нельзя.",
+        "ru": "Наряд отходит к парому, унося двоих. Капрал уходит последней, поднимает с земли чужую бирку, читает и кладёт в карман: вещи терять нельзя.",
         "en": "The detail falls back to the ferry, carrying two of its own. The corporal leaves last and picks a stray tag off the ground on her way, reads it and pockets it: property is in the inventory, and property must not be lost."
       },
       "next": "detail_leaves"
@@ -816,7 +816,7 @@
       "kind": "narration",
       "id": "detail_leaves",
       "text": {
-        "ru": "Паром отходит с нарядом и с описью, в которой шесть чайников, восемь лопат и ни одного человека. На берегу становится так тихо, что слышно водокачку через реку.",
+        "ru": "Паром отходит с нарядом. Они увозят шесть чайников, восемь лопат и ни одного человека. Слышно водокачку через реку.",
         "en": "The ferry leaves with the detail and with an inventory holding six teapots, eight spades and not one person. It goes so quiet on the bank that you can hear the pump across the river."
       },
       "next": "proshchai_key"
@@ -866,8 +866,8 @@
       "kind": "narration",
       "id": "shelter_exit",
       "text": {
-        "ru": "Тебе дают репу с собой и не берут за перевоз: перевозчик вернулся и теперь не спрашивает вовсе. С воды видно, что в Ломбарде горит одно окно, и оно ниже уровня воды.",
-        "en": "They give you turnips for the road and take nothing for the crossing: the ferryman is back and now asks nothing at all. From the water you can see one lit window in the Pawnshop, and it is below the waterline."
+        "ru": "Тебе дают репу с собой и не берут за перевоз: перевозчик вернулся и теперь не спрашивает вовсе. С воды видно одно горящее окно на том берегу, и оно ниже уровня воды.",
+        "en": "They give you turnips for the road and take nothing for the crossing: the ferryman is back and asks nothing. From the water you can see one lit window on the other bank, below the waterline."
       },
       "next": "scene:vaults_hub"
     },

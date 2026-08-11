@@ -61,8 +61,8 @@
       "id": "rules_lore",
       "title": { "ru": "Правила закрытого торга, стена у входа", "en": "Rules of the closed sale, on the wall by the door" },
       "text": {
-        "ru": "«Происхождение лота не обсуждается. Владелец лота не разыскивается. Имя внутри лота заменой не подлежит. Покупатель, надевший лот до расчёта, считается расплатившимся». Ниже мелом: «Плакать над лотом можно, цену это не сбивает. Проверено на девятом».",
-        "en": "\"The provenance of a lot is not discussed. The owner of a lot is not sought. A name inside a lot is not subject to replacement. A buyer who puts a lot on before settlement is deemed to have paid.\" Below in chalk: \"Weeping over a lot is allowed and does not bring the price down. Tested on lot nine.\""
+        "ru": "«Откуда склянка — не спрашивать. Хозяина не искать. Имя внутри не менять. Кто надел чужое до оплаты, тот купил». Ниже мелом: «Плакать можно, цену это не сбивает. Проверено на девятой».",
+        "en": "\"Do not ask where a jar came from. Do not seek its owner. Do not change the name inside. Whoever wears another life before paying has bought it.\" Below: \"Weeping is allowed and does not lower the price. Tested on the ninth.\""
       },
       "next": "lot_nine"
     },
@@ -70,8 +70,8 @@
       "kind": "narration",
       "id": "lot_nine",
       "text": {
-        "ru": "«Лот девятый: детство зимнее, комплект из четырёх зим. Третья зима отсутствует, отсутствие учтено в цене». Лот уходит за девятнадцать грошей человеку в чужом лице, и человек надевает его тут же, у стола.",
-        "en": "\"Lot nine: a winter childhood, a set of four winters. The third winter is missing; the absence is reflected in the price.\" It goes for nineteen groschen to a man in somebody else's face, and the man puts it on there and then, at the table."
+        "ru": "«Девятая склянка: зимнее детство, четыре зимы. Третьей нет, поэтому дешевле». Её берёт за девятнадцать грошей человек в чужом лице и надевает тут же, у стола.",
+        "en": "\"Ninth jar: a winter childhood, four winters. The third is missing, so it is cheaper.\" A man in somebody else's face pays nineteen groschen and puts it on at the table."
       },
       "next": "cruel_router"
     },
@@ -95,8 +95,8 @@
       "kind": "narration",
       "id": "lot_forty",
       "text": {
-        "ru": "«Лот сороковой: опись нижних ярусов Великого Ломбарда, список разделов, писано с оригинала». Склянки под этот лот нет — есть сложенный вчетверо лист, и по залу проходит то молчание, которое дороже торга.",
-        "en": "\"Lot forty: an inventory of the Great Pawnshop's lower tiers, the list of sections, copied from the original.\" There is no jar for this lot, only a sheet folded in four, and the room falls into the kind of silence that is worth more than bidding."
+        "ru": "«Сороковой: список того, что спрятано под городом, переписан с камня». Склянки нет — только сложенный вчетверо лист, и весь зал разом замолкает.",
+        "en": "\"Forty: a list of what is hidden beneath the city, copied from stone.\" There is no jar, only a sheet folded in four, and the whole room falls silent at once."
       },
       "keywords": [{ "match": { "ru": "список разделов", "en": "the list of sections" }, "tone": "danger" }],
       "next": "slip_router"
@@ -111,8 +111,8 @@
       "kind": "narration",
       "id": "price_rose",
       "text": {
-        "ru": "Начальную цену объявляют вдвое против объявленной вчера. Причину называют вслух и без стеснения: старший оценщик Ломбарда на этой неделе сказал кому-то, сколько там разделов.",
-        "en": "The opening price is announced at twice yesterday's. The reason is stated out loud and without embarrassment: the Pawnshop's senior appraiser told somebody this week how many sections there are."
+        "ru": "Начальную цену объявляют вдвое против вчерашней. Причину называют вслух: старик Глазомер проговорился, сколько внизу частей.",
+        "en": "The opening price is twice yesterday's. The reason is stated aloud: old Keen Eye let slip how many parts lie below."
       },
       "next": "bid_choice"
     },
@@ -155,7 +155,7 @@
         },
         {
           "id": "bid_promise",
-          "text": { "ru": "Дать цену посулом на предъявителя.", "en": "Bid with a promise note to bearer." },
+          "text": { "ru": "Пообещать услугу тому, кто продаст.", "en": "Promise a favour to whoever sells." },
           "chip": { "icon": "coin", "label": { "ru": "Посульщик", "en": "Posulshchik" }, "tone": "life" },
           "conditions": { "kind": "life", "life": "posulshchik" },
           "effects": [
@@ -169,7 +169,7 @@
         },
         {
           "id": "bid_truth",
-          "text": { "ru": "Сказать залу, чья это опись.", "en": "Tell the room whose inventory that is." },
+          "text": { "ru": "Сказать залу, чьё прошлое в списке.", "en": "Tell the room whose past is listed." },
           "chip": { "icon": "book", "label": { "ru": "Чистописец", "en": "Chistopisets" }, "tone": "life" },
           "conditions": { "kind": "life", "life": "chistopisets" },
           "effects": [
@@ -181,7 +181,7 @@
         },
         {
           "id": "bid_fire",
-          "text": { "ru": "Опрокинуть лампу на стол с лотами.", "en": "Tip the lamp over onto the table of lots." },
+          "text": { "ru": "Опрокинуть лампу на стол со склянками.", "en": "Tip the lamp over onto the jars." },
           "chip": { "icon": "fire", "label": { "ru": "Смолокур", "en": "Smolokur" }, "tone": "life" },
           "conditions": { "kind": "life", "life": "smolokur" },
           "effects": [
@@ -193,7 +193,7 @@
         },
         {
           "id": "buy_back_lot",
-          "text": { "ru": "Выкупить девятый лот и вернуть хозяину.", "en": "Buy lot nine back and return it to its owner." },
+          "text": { "ru": "Купить девятую склянку для хозяина.", "en": "Buy the ninth jar for its owner." },
           "chip": { "icon": "heal", "label": { "ru": "Ключарь", "en": "Klyuchar" }, "tone": "life" },
           "conditions": { "kind": "life", "life": "klyuchar" },
           "effects": [
@@ -219,7 +219,7 @@
         },
         {
           "id": "pay_with_glove",
-          "text": { "ru": "Расплатиться распиской за проданную перчатку.", "en": "Pay with the receipt for the glove I sold." },
+          "text": { "ru": "Отдать деньги за проданную перчатку.", "en": "Pay with the money from the glove." },
           "conditions": { "kind": "flag", "flag": "pocket_lot_sold" },
           "effects": [
             { "kind": "axis", "axis": "honesty_deceit", "delta": -3 },
@@ -255,8 +255,8 @@
       "id": "r_bid_promise",
       "speaker": "zhichka",
       "text": {
-        "ru": "Бумага на предъявителя, за бумагу на предъявителя. Цех такое любит: обе стороны ушли ни с чем и обе довольны.",
-        "en": "Paper to bearer for paper to bearer. The Guild loves that: both sides leave with nothing and both are pleased."
+        "ru": "Услуга за чужую тайну. Цех такое любит: обе стороны ушли с пустыми руками и обе довольны.",
+        "en": "A favour for somebody else's secret. The Guild loves that: both sides leave empty-handed and pleased."
       },
       "next": "unfold_router"
     },
@@ -264,8 +264,8 @@
       "kind": "narration",
       "id": "r_bid_truth",
       "text": {
-        "ru": "Ты называешь вслух, чья это опись, и торг останавливается. Через полминуты цену объявляют заново и на треть выше: происхождение поднимает цену, даже когда его называют не для продажи.",
-        "en": "You say out loud whose inventory it is, and the bidding stops. Half a minute later the price is called again, a third higher: provenance raises the price, even when it is stated for reasons other than selling."
+        "ru": "Ты называешь вслух, чьё прошлое в списке, и торг останавливается. Через полминуты цену объявляют заново и на треть выше: чужая боль стоит дороже безымянной.",
+        "en": "You say aloud whose past is listed, and bidding stops. Half a minute later the price rises by a third: named pain costs more than nameless pain."
       },
       "next": "unfold_router"
     },
@@ -274,8 +274,8 @@
       "id": "r_buy_back",
       "speaker": "zhichka",
       "text": {
-        "ru": "Хозяина девятого лота я знаю, он на Мокрых рядах, он про третью зиму даже не спросит. Ты добрый. Добрых у нас держат для тяжёлого.",
-        "en": "I know the owner of lot nine, he is over in the Wet Rows, he will not even ask about the third winter. You are a kind one. We keep the kind ones for the heavy work."
+        "ru": "Хозяина девятой склянки я знаю, он на Мокрых рядах. Про третью зиму даже не спросит. Ты добрый. Добрых у нас держат для тяжёлого.",
+        "en": "I know the owner of the ninth jar. He is in the Wet Rows and will not even ask about the third winter. You are kind. We keep the kind ones for heavy work."
       },
       "next": "unfold_router"
     },
@@ -284,8 +284,8 @@
       "id": "r_send_boy",
       "speaker": "klyost",
       "text": {
-        "ru": "Короче, я им сказал, что покупаю для одного оценщика, и они поверили. Врать легко, если тебя всё равно не запомнят.",
-        "en": "So, I told them I was buying for a certain appraiser, and they believed it. Lying's easy when they won't remember you anyway."
+        "ru": "Короче, я им сказал, что покупаю для Глазомера, и они поверили. Врать легко, если тебя всё равно не запомнят.",
+        "en": "So, I told them I was buying for Keen Eye, and they believed it. Lying is easy when they will not remember you anyway."
       },
       "next": "unfold_router"
     },
@@ -294,8 +294,8 @@
       "id": "r_glove",
       "speaker": "zhichka",
       "text": {
-        "ru": "Расписка Ломбарда, одиннадцать грошей, перчатка правая. Беру со скидкой: правые у нас идут хуже, их ищут дольше, а нам ждать некогда.",
-        "en": "A Pawnshop receipt, eleven groschen, right-hand glove. I take it at a discount: right ones move badly here, they get hunted for longer, and we have no time to wait."
+        "ru": "Одиннадцать грошей за правую перчатку. Правые у нас идут хуже: хозяева ищут их дольше, а нам ждать некогда.",
+        "en": "Eleven groschen for a right-hand glove. Right ones move badly: their owners search longer, and we have no time to wait."
       },
       "next": "unfold_router"
     },
@@ -324,8 +324,8 @@
       "kind": "narration",
       "id": "dying_auction_text",
       "text": {
-        "ru": "Взыскание на закрытом торге производится на месте и без описи: описывать некому, продавцов сегодня нет. Последнее, что ты слышишь, — как объявляют лот сорок первый.",
-        "en": "Collection at a closed sale is carried out on the spot and without an inventory: there is nobody to draw one up, there are no sellers today. The last thing you hear is lot forty-one being announced."
+        "ru": "На закрытом торге убивают на месте: продавцов сегодня нет, вступаться некому. Последнее, что ты слышишь, — объявляют сорок первый номер.",
+        "en": "At a closed sale they kill on the spot: there are no sellers today and nobody to intervene. The last thing you hear is number forty-one."
       },
       "next": "scene:silver_counter#queue_entry"
     },
@@ -333,8 +333,8 @@
       "kind": "narration",
       "id": "after_battle",
       "text": {
-        "ru": "Четверо в чужих лицах лежат по разным углам, и лица на них уже не держатся: ношеное сползает первым. Лист сорокового лота остаётся на столе, никем не поднятый.",
-        "en": "Four men in other people's faces lie in different corners, and the faces are no longer holding: second-hand goods slide off first. The sheet of lot forty stays on the table, and nobody has picked it up."
+        "ru": "Четверо в чужих лицах лежат по разным углам, и лица на них уже не держатся: ношеное сползает первым. Сороковой лист остаётся на столе.",
+        "en": "Four men in other people's faces lie in different corners, and the faces no longer hold: second-hand things slide off first. The fortieth sheet remains on the table."
       },
       "next": "unfold_router"
     },
@@ -349,10 +349,10 @@
       "kind": "narration",
       "id": "unfold_yes",
       "text": {
-        "ru": "Лист развёрнут. Разделов пять, и все пять поименованы не номерами, а эпохами: война, засуха, бумага, хроника, Учёт. Под списком одна строка: «обеспечение единое, вкладчик один».",
-        "en": "The sheet is unfolded. There are five sections, and all five are named not by number but by age: a war, a drought, paper, a chronicle, the Reckoning. Under the list, one line: \"holdings undivided, depositor one\"."
+        "ru": "Лист развёрнут. Пять частей названы эпохами: война, засуха, бумага, хроника, зима без имени. Под списком одна строка: «всё снято с одного человека».",
+        "en": "The sheet is unfolded. Five parts are named by age: a war, a drought, paper, a chronicle, a winter without a name. Under the list: \"all taken from one person\"."
       },
-      "keywords": [{ "match": { "ru": "вкладчик один", "en": "depositor one" }, "tone": "danger" }],
+      "keywords": [{ "match": { "ru": "одного человека", "en": "one person" }, "tone": "danger" }],
       "next": "after_choice"
     },
     {
@@ -381,7 +381,7 @@
         },
         {
           "id": "ask_seller",
-          "text": { "ru": "Спросить, кто сдал сороковой лот.", "en": "Ask who put in lot forty." },
+          "text": { "ru": "Спросить, кто принёс сороковой лист.", "en": "Ask who brought the fortieth sheet." },
           "fallback": true,
           "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": -5 }],
           "to": "r_ask_seller"
@@ -432,7 +432,7 @@
         },
         {
           "id": "pay_for_dead",
-          "text": { "ru": "Заплатить за девятый лот тому, кто плакал.", "en": "Pay for lot nine for the man who wept." },
+          "text": { "ru": "Заплатить за девятую склянку плакавшему.", "en": "Pay for the ninth jar for the man who wept." },
           "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "gte", "value": 30 },
           "effects": [
             { "kind": "axis", "axis": "mercy_cruelty", "delta": 8 },
@@ -458,8 +458,8 @@
       "id": "r_ask_seller",
       "speaker": "zhichka",
       "text": {
-        "ru": "Сдал ломбардский, из младших, и ушёл через воду, а не через дверь. Больше не спрашивай: у меня на него чужая жалость, и она мне не по росту.",
-        "en": "A Pawnshop man put it in, junior grade, and he left by the water and not by the door. Do not ask further: I have somebody else's pity for him, and it does not fit me."
+        "ru": "Принёс молодой сторож и ушёл через воду, а не через дверь. Больше не спрашивай: у меня на него чужая жалость, и она мне не по росту.",
+        "en": "A young watchman brought it and left by the water, not the door. Do not ask further: I have somebody else's pity for him, and it does not fit me."
       },
       "next": "auction_depth"
     },
@@ -506,8 +506,8 @@
       "kind": "narration",
       "id": "r_pay_for_dead",
       "text": {
-        "ru": "Хозяину девятого лота девятнадцать грошей передают при тебе. Он пересчитывает их дважды и спрашивает, за что, а объяснять при закрытом торге не принято.",
-        "en": "The nineteen groschen are handed to the owner of lot nine in front of you. He counts them twice and asks what they are for, and explaining is not done at a closed sale."
+        "ru": "Хозяину девятой склянки передают девятнадцать грошей. Он пересчитывает их дважды и спрашивает, за что, а объяснять здесь не принято.",
+        "en": "The owner of the ninth jar receives nineteen groschen. He counts them twice and asks why, and explaining is not done here."
       },
       "next": "auction_depth"
     },

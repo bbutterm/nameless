@@ -1,7 +1,7 @@
 {
   "id": "first_lot",
   "chapter": 3,
-  "title": { "ru": "Сделка первая", "en": "Transaction One" },
+  "title": { "ru": "Свёрток", "en": "The Bundle" },
   "tags": ["story", "key", "chapter3", "no_combat"],
   "available": { "kind": "counter", "counter": "ledger_depth", "op": "gte", "value": 3 },
   "entry": "grate_opens",
@@ -10,8 +10,8 @@
       "kind": "narration",
       "id": "grate_opens",
       "text": {
-        "ru": "Ревизор снимает бирку с решётки и убирает её в портфель. Решётка после этого открывается от руки, и петли не скрипят: их смазывали, и смазывали недавно.",
-        "en": "The Auditor takes the tag off the grating and puts it away in his case. After that the grating opens to the hand, and the hinges do not creak: they have been oiled, and oiled lately."
+        "ru": "Сличила снимает бирку с решётки и убирает её в портфель. Решётка после этого открывается от руки, и петли не скрипят: их смазывали, и смазывали недавно.",
+        "en": "The Collator takes the tag off the grating and puts it away in his case. After that the grating opens to the hand, and the hinges do not creak: they have been oiled, and oiled lately."
       },
       "next": "revizor_present"
     },
@@ -20,7 +20,7 @@
       "id": "revizor_present",
       "speaker": "revizor",
       "text": {
-        "ru": "Присутствие: обеспечено. Бирка снята. Сверка: третья сторона.",
+        "ru": "Присутствие: обеспечено. Бирка снята. Встреча: третья сторона.",
         "en": "Presence: secured. Tag removed. Reconciliation: the third side."
       },
       "next": "the_bundle"
@@ -77,7 +77,7 @@
         {
           "id": "let_revizor",
           "conditions": { "kind": "flag", "flag": "revizor_offer" },
-          "text": { "ru": "Пусть развяжет Ревизия. Ей по описи.", "en": "Let the Audit untie it. It is their record." },
+          "text": { "ru": "Пусть развяжет Сличила. Ей по списку.", "en": "Let the Collator untie it. It is their record." },
           "to": "sheet_one",
           "priority": 5
         },
@@ -99,7 +99,7 @@
       "kind": "narration",
       "id": "sheet_one",
       "text": {
-        "ru": "Под свёртком подложен лист. Это не бланк: бланков тогда не было. Бланки печатали потом, и печатали с него, вместе с полями и с наклоном граф.",
+        "ru": "Под свёртком подложен лист. Это не лист: печатных листов тогда не было. Листы печатали потом, и печатали с него, вместе с полями и с наклоном граф.",
         "en": "Under the bundle a sheet is laid. It is not a form: there were no forms then. The forms were printed afterwards, and printed from this, margins, slanted columns and all."
       },
       "next": "numbering"
@@ -107,9 +107,9 @@
     {
       "kind": "lore",
       "id": "numbering",
-      "title": { "ru": "Нумерация Учёта, записка для новых сводчиков", "en": "Numbering of the Reckoning, note for new reconcilers" },
+      "title": { "ru": "Нумерация Зала, записка для новых сводчиков", "en": "Numbering of the Reckoning, note for new reconcilers" },
       "text": {
-        "ru": "«Настоящий лист принят за первый. Все последующие нумеруются от него». Оттого в этом городе всё, что считают, начинается с двойки: журналы спусков, дела, полки, приёмные книги. Единица занята. Новым сводчикам это объясняют в первый день и больше к вопросу не возвращаются — на второй день уже не спрашивают.",
+        "ru": "«Настоящий лист принят за первый. Все последующие нумеруются от него». Оттого в этом городе всё, что считают, начинается с двойки: тетради спусков, дела, полки, приёмные книги. Единица занята. Новым сводчикам это объясняют в первый день и больше к вопросу не возвращаются — на второй день уже не спрашивают.",
         "en": "\"The present sheet is taken as the first. All subsequent sheets are numbered from it.\" That is why in this city everything counted starts at two: descent journals, case files, shelves, intake books. The one is taken. New reconcilers are told this on their first day and the matter is not raised again: by the second day they no longer ask."
       },
       "next": "column_date"
@@ -118,7 +118,7 @@
       "kind": "narration",
       "id": "column_date",
       "text": {
-        "ru": "«Сделка № 1». Число проставлено, год — нет: годов тогда ещё не вели. В графе стоит «год первый Учёта», и почерк в этой строке ровный, как у человека, который никуда не спешит.",
+        "ru": "«Сделка № 1». Число проставлено, год — нет: годов тогда ещё не вели. В строке стоит «год первый Зала», и почерк в этой строке ровный, как у человека, который никуда не спешит.",
         "en": "\"Transaction No. 1.\" The day is entered, the year is not: years were not kept then. The column reads \"year one of the Reckoning\", and the hand in that line is level, like a man's who is in no hurry."
       },
       "next": "column_buyer"
@@ -127,7 +127,7 @@
       "kind": "narration",
       "id": "column_buyer",
       "text": {
-        "ru": "Графа «покупатель». Прочерк во всю ширину графы. Ниже, тем же пером: «покупатель не явился и не явится. Сделка признана состоявшейся по внесению платы».",
+        "ru": "Строка «покупатель». Прочерк во всю ширину строки. Ниже, тем же пером: «покупатель не явился и не явится. Сделка признана состоявшейся по внесению платы».",
         "en": "The column for \"purchaser\". A dash the full width of the column. Below it, in the same pen: \"the purchaser did not appear and will not appear. The transaction is deemed concluded upon payment being made\"."
       },
       "keywords": [{ "match": { "ru": "покупатель не явился", "en": "the purchaser did not appear" }, "tone": "danger" }],
@@ -137,7 +137,7 @@
       "kind": "narration",
       "id": "column_seller",
       "text": {
-        "ru": "Графа «продавец». В ней стоит имя, целиком, в три слога. Оно не открывает ничего: последний, кто произносил его вслух, стоит сейчас в этом коридоре и его не узнаёт.",
+        "ru": "Строка «продавец». В ней стоит имя, целиком, в три слога. Оно не открывает ничего: последний, кто произносил его вслух, стоит сейчас в этом коридоре и его не узнаёт.",
         "en": "The column for \"seller\". In it stands a name, entire, three syllables. It opens nothing: the last person to say it out loud is standing in this passage now and does not recognise it."
       },
       "next": "column_sign"
@@ -146,7 +146,7 @@
       "kind": "narration",
       "id": "column_sign",
       "text": {
-        "ru": "Под именем подпись. Её ты знаешь: ты сличал её с оборотом своей описи при свече и потом ещё раз, при дневном свете, надеясь на ошибку.",
+        "ru": "Под именем подпись. Её ты знаешь: ты сличал её с оборотом своей списку при свече и потом ещё раз, при дневном свете, надеясь на ошибку.",
         "en": "Under the name, a signature. That you know: you matched it against the back of your own inventory by candlelight, and then once more by daylight, hoping for a mistake."
       },
       "keywords": [{ "match": { "ru": "Её ты знаешь", "en": "That you know" }, "tone": "memory" }],
@@ -171,7 +171,7 @@
       "kind": "narration",
       "id": "column_regarding",
       "text": {
-        "ru": "Графа «в отношении кого». Одно слово, короткое, вписано без отчества и без прозвания, как пишут о своих. Осока.",
+        "ru": "Строка «в отношении кого». Одно слово, короткое, вписано без отчества и без прозвания, как пишут о своих. Осока.",
         "en": "The column for \"in respect of whom\". One word, short, entered with no patronymic and no surname, the way you write about your own. Osoka."
       },
       "keywords": [{ "match": { "ru": "Осока", "en": "Osoka" }, "tone": "name" }],
@@ -190,8 +190,8 @@
       "kind": "narration",
       "id": "column_lot",
       "text": {
-        "ru": "Графа «наименование изъятого»: «память вкладчицы о продавце — лицо, голос, имя, все дни до сего числа. Изъятие полное. Остаток не предусмотрен».",
-        "en": "The column \"description of what is removed\": \"the depositor's memory of the seller — face, voice, name, every day up to this date. Removal complete. No remainder provided for\"."
+        "ru": "Строка «наименование изъятого»: «память хозяйки о продавце — лицо, голос, имя, все дни до сего числа. Отбор полное. Остаток не предусмотрен».",
+        "en": "The column \"description of what is removed\": \"the owner's memory of the seller — face, voice, name, every day up to this date. Removal complete. No remainder provided for\"."
       },
       "next": "column_ground"
     },
@@ -199,17 +199,17 @@
       "kind": "narration",
       "id": "column_ground",
       "text": {
-        "ru": "Графа «основание изъятия». В ней одна строка: «плата за жизнь спасаемой, назначенная самым дорогим, что есть у плательщика».",
+        "ru": "Строка «основание отбора». В ней одна строка: «плата за жизнь спасаемой, назначенная самым дорогим, что есть у плательщика».",
         "en": "The column \"grounds of removal\". It holds one line: \"payment for the life of the one to be saved, assessed at the dearest thing the payer has\"."
       },
-      "keywords": [{ "match": { "ru": "основание изъятия", "en": "grounds of removal" }, "tone": "danger" }],
+      "keywords": [{ "match": { "ru": "основание отбора", "en": "grounds of removal" }, "tone": "danger" }],
       "next": "payer_list"
     },
     {
       "kind": "narration",
       "id": "payer_list",
       "text": {
-        "ru": "Опись плательщика подшита следом, отдельным листком в четверть. В ней один пункт. «Пункт первый: я, в её памяти».",
+        "ru": "Список плательщика подшита следом, отдельным листком в четверть. В ней один строка. «Строка первая: я, в её памяти».",
         "en": "The payer's inventory is filed next, on a separate quarter-sheet. It has one item. \"Item one: myself, in her memory\"."
       },
       "keywords": [{ "match": { "ru": "я, в её памяти", "en": "myself, in her memory" }, "tone": "memory" }],
@@ -219,8 +219,8 @@
       "kind": "narration",
       "id": "quiet_two",
       "text": {
-        "ru": "Ревизор не считает вслух. Он стоит в двух шагах, и портфель у него открыт, и он в него не смотрит.",
-        "en": "The Auditor is not counting aloud. He stands two paces off, his case open, and he is not looking into it."
+        "ru": "Сличила не считает вслух. Он стоит в двух шагах, и портфель у него открыт, и он в него не смотрит.",
+        "en": "The Collator is not counting aloud. He stands two paces off, his case open, and he is not looking into it."
       },
       "next": "postscript"
     },
@@ -228,8 +228,8 @@
       "kind": "narration",
       "id": "postscript",
       "text": {
-        "ru": "Внизу листа приписка, сделанная позже и той же рукой: «наследницей вклада назначена она же. Согласия не спрашивать: спрашивать нечем».",
-        "en": "At the foot of the sheet a note added later, in the same hand: \"the same person is appointed heir to the deposit. Consent is not to be asked: there is nothing left to ask it with\"."
+        "ru": "Внизу листа приписка, сделанная позже и той же рукой: «свёрток оставить ей. Согласия не спрашивать: спрашивать нечем».",
+        "en": "At the foot of the sheet a note added later, in the same hand: \"the same person is appointed heir to the bundle. Consent is not to be asked: there is nothing left to ask it with\"."
       },
       "next": "set_daughter"
     },
@@ -249,7 +249,7 @@
       "kind": "narration",
       "id": "seventh_here",
       "text": {
-        "ru": "Между этим листом и пунктом седьмым лежит весь город. Экономия на слове «которого» — три знака с точкой посередине — одна и та же на обоих.",
+        "ru": "Между этим листом и строкой седьмым лежит весь город. Экономия на слове «которого» — три знака с точкой посередине — одна и та же на обоих.",
         "en": "Between this sheet and item seven lies the whole city. The economy on the word \"whereof\" — three strokes with a dot in the middle — is the same on both."
       },
       "next": "the_jar"
@@ -258,7 +258,7 @@
       "kind": "narration",
       "id": "the_jar",
       "text": {
-        "ru": "В холсте склянка, залитая по горлу и запечатанная воском без оттиска: печати тогда ещё не резали. Внутри ничего не видно, и это правильно — смотреть в лот бесполезно, лот работает только изнутри головы.",
+        "ru": "В холсте склянка, залитая по горлу и запечатанная воском без оттиска: печати тогда ещё не резали. Внутри ничего не видно, и это правильно — смотреть в свёрток бесполезно, свёрток работает только изнутри головы.",
         "en": "Inside the cloth is a jar, filled to the neck and sealed with wax without a stamp: no seals had been cut yet. Nothing can be seen inside, and that is as it should be: looking into a lot is useless, a lot works only from inside a head."
       },
       "next": "lot_choice"
@@ -267,8 +267,8 @@
       "kind": "choice",
       "id": "lot_choice",
       "prompt": {
-        "ru": "«Выкуп разрешён продавцу». Выкуп оформляют в одном месте, и туда не ходят ногами.",
-        "en": "\"Redemption permitted to the seller.\" Redemption is registered in one place, and you do not get there on foot."
+        "ru": "«Возвращение разрешён продавцу». Возвращение оформляют в одном месте, и туда не ходят ногами.",
+        "en": "\"Return permitted to the seller.\" Return is registered in one place, and you do not get there on foot."
       },
       "options": [
         {
@@ -301,7 +301,7 @@
         {
           "id": "ask_ransom_price",
           "conditions": { "kind": "axis", "axis": "reason_obsession", "op": "lte", "value": -20 },
-          "text": { "ru": "Спросить у Ревизии цену выкупа.", "en": "Ask the Audit the price of redemption." },
+          "text": { "ru": "Спросить у Сличилы цену.", "en": "Ask the Collator the price." },
           "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": -8 }],
           "to": "r_price",
           "priority": 6
@@ -360,8 +360,8 @@
       "kind": "narration",
       "id": "r_aloud",
       "text": {
-        "ru": "Ты читаешь вслух, и на графе «в отношении кого» голос делает то же, что делал на слове «оптом». Ревизор слушает до конца и не поправляет ни одной цифры.",
-        "en": "You read aloud, and at the column \"in respect of whom\" your voice does what it did at the word \"bulk\". The Auditor listens to the end and does not correct a single figure."
+        "ru": "Ты читаешь вслух, и на строке «в отношении кого» голос делает то же, что делал на слове «оптом». Сличила слушает до конца и не поправляет ни одной цифры.",
+        "en": "You read aloud, and at the column \"in respect of whom\" your voice does what it did at the word \"bulk\". The Collator listens to the end and does not correct a single figure."
       },
       "next": "to_counter"
     },
@@ -370,8 +370,8 @@
       "id": "r_price",
       "speaker": "revizor",
       "text": {
-        "ru": "Цена выкупа: та же. Самое дорогое, что есть у плательщика. Опись плательщика с тех пор не пополнялась.",
-        "en": "Price of redemption: the same. The dearest thing the payer has. The payer's inventory has not been added to since."
+        "ru": "Цена та же: самое дорогое, что есть у плательщика. Его список с тех пор не пополнялся.",
+        "en": "Price of return: the same. The dearest thing the payer has. The payer's inventory has not been added to since."
       },
       "next": "to_counter"
     },
@@ -388,8 +388,8 @@
       "kind": "narration",
       "id": "r_name_aloud",
       "text": {
-        "ru": "Слово выходит хрипло и коротко, и коридор его не возвращает: внизу не отдаёт. Ревизор записывает в портфель что-то одной чертой и закрывает его.",
-        "en": "The word comes out hoarse and short, and the passage does not give it back: nothing carries down here. The Auditor writes something in his case with one stroke and shuts it."
+        "ru": "Слово выходит хрипло и коротко, и коридор его не возвращает: внизу не отдаёт. Сличила записывает в портфель что-то одной чертой и закрывает его.",
+        "en": "The word comes out hoarse and short, and the passage does not give it back: nothing carries down here. The Collator writes something in his case with one stroke and shuts it."
       },
       "next": "to_counter"
     },
@@ -407,8 +407,8 @@
       "kind": "narration",
       "id": "to_counter",
       "text": {
-        "ru": "Выкуп оформляют за Серебряным Прилавком, и другого места для него не завели ни разу за четыреста лет. Ты знаешь дорогу туда лучше всех живых.",
-        "en": "Redemption is registered at the Silver Counter, and in four hundred years no other place for it has ever been set up. You know the way there better than any living man."
+        "ru": "Возвращение оформляют за Серебряным Прилавком, и другого места для него не завели ни разу за четыреста лет. Ты знаешь дорогу туда лучше всех живых.",
+        "en": "Return is registered at the Silver Counter, and in four hundred years no other place for it has ever been set up. You know the way there better than any living man."
       },
       "next": "scene:last_death"
     }

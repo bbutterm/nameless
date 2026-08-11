@@ -77,8 +77,8 @@
       "kind": "narration",
       "id": "road_join",
       "text": {
-        "ru": "У поворота сидит парень с куском мела и доской, разграфлённой на дворы. Он ничего не спрашивает, встаёт и идёт следом — как идут за тем, кого можно вписать в свою графу.",
-        "en": "At the turning sits a lad with a piece of chalk and a board ruled off into households. He asks nothing, gets up and walks behind you — the way you follow someone you can enter in your own column."
+        "ru": "У поворота сидит парень с куском мела и доской, разграфлённой на дворы. Поднимает мел, ждёт и не начинает черту без твоего кивка.",
+        "en": "At the turning sits a lad with a piece of chalk and a board ruled off into households. He raises the chalk, waits, and does not start the mark without your nod."
       },
       "keywords": [
         {
@@ -89,19 +89,131 @@
           "tone": "lore"
         }
       ],
-      "next": "road_join_fx"
+      "next": "chalk_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "chalk_choice",
+      "prompt": {
+        "ru": "Парень ждёт разрешения вписать тебя.",
+        "en": "The lad waits for leave to enter you."
+      },
+      "options": [
+        {
+          "id": "chalk_accept",
+          "text": {
+            "ru": "Дать ему вписать себя.",
+            "en": "Let him enter you."
+          },
+          "fallback": true,
+          "to": "chalk_answers"
+        },
+        {
+          "id": "chalk_refuse",
+          "text": {
+            "ru": "Не давать ему имени.",
+            "en": "Give him no name."
+          },
+          "fallback": true,
+          "to": "chalk_refused"
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "chalk_answers",
+      "speaker": "chalk_marker",
+      "text": {
+        "ru": "Так вернее. Имя после допишем.",
+        "en": "Safer this way. We can add the name later."
+      },
+      "next": "chalk_join_fx"
     },
     {
       "kind": "effects",
-      "id": "road_join_fx",
+      "id": "chalk_join_fx",
       "effects": [
         {
           "kind": "recruit",
           "unit": "chalk_marker"
         },
         {
+          "kind": "flag",
+          "flag": "chalk_marker_joined",
+          "value": true
+        }
+      ],
+      "next": "road_cart"
+    },
+    {
+      "kind": "say",
+      "id": "chalk_refused",
+      "speaker": "chalk_marker",
+      "text": {
+        "ru": "Тогда пустое место оставлю. Пустое тоже надо беречь.",
+        "en": "Then I’ll leave the place empty. Empty places need keeping too."
+      },
+      "next": "road_cart"
+    },
+    {
+      "kind": "narration",
+      "id": "road_cart",
+      "text": {
+        "ru": "За поворотом стоит телега Гоньбы. Ямщик ждёт груз, которого не будет, и откидывает край рогожи: под ней свободно ровно одному.",
+        "en": "Beyond the turning stands a Relay cart. The coachman is waiting for a load that will not come and folds back the matting: beneath it is room for exactly one."
+      },
+      "next": "cart_choice"
+    },
+    {
+      "kind": "choice",
+      "id": "cart_choice",
+      "prompt": {
+        "ru": "Ямщик придерживает рогожу.",
+        "en": "The coachman holds back the matting."
+      },
+      "options": [
+        {
+          "id": "cart_accept",
+          "text": {
+            "ru": "Сесть среди чужого груза.",
+            "en": "Sit among another's cargo."
+          },
+          "fallback": true,
+          "to": "cart_answers"
+        },
+        {
+          "id": "cart_refuse",
+          "text": {
+            "ru": "Пойти дальше пешком.",
+            "en": "Walk on."
+          },
+          "fallback": true,
+          "to": "cart_refused"
+        }
+      ]
+    },
+    {
+      "kind": "say",
+      "id": "cart_answers",
+      "speaker": "yamshchik_gonby",
+      "text": {
+        "ru": "Садись. Клятв не надо. Доедем — сам решишь, куда дальше.",
+        "en": "Get in. No oaths needed. When we arrive, you can decide where next."
+      },
+      "next": "cart_join_fx"
+    },
+    {
+      "kind": "effects",
+      "id": "cart_join_fx",
+      "effects": [
+        {
           "kind": "recruit",
           "unit": "relay_driver"
+        },
+        {
+          "kind": "flag",
+          "flag": "relay_driver_joined",
+          "value": true
         },
         {
           "kind": "flag",
@@ -109,15 +221,28 @@
           "value": true
         }
       ],
-      "next": "road_cart"
+      "next": "road_cutters"
     },
     {
-      "kind": "narration",
-      "id": "road_cart",
+      "kind": "say",
+      "id": "cart_refused",
+      "speaker": "yamshchik_gonby",
       "text": {
-        "ru": "За поворотом стоит телега Гоньбы: ямщик ждёт груза, которого не будет, и от скуки соглашается подвезти. Груз он и так возит чужой, а кого везти — ему всё равно.",
-        "en": "Beyond the turning stands a Relay cart: the coachman is waiting for a load that will not come and, out of boredom, agrees to give a lift. The load he carries is another's anyway, and who he carries is all the same to him."
+        "ru": "Как знаешь. Пустое место тоже довезу.",
+        "en": "As you like. I’ll carry the empty place too."
       },
+      "next": "road_arrived_fx"
+    },
+    {
+      "kind": "effects",
+      "id": "road_arrived_fx",
+      "effects": [
+        {
+          "kind": "flag",
+          "flag": "shcherb_arrived",
+          "value": true
+        }
+      ],
       "next": "road_cutters"
     },
     {

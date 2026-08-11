@@ -192,6 +192,14 @@
     }
   },
   {
+    "id": "chalk_marker",
+    "art": "",
+    "name": {
+      "ru": "Меловщик",
+      "en": "Chalk Marker"
+    }
+  },
+  {
     "id": "bagorshchik_sluzy",
     "art": "",
     "name": {

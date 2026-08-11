@@ -2,7 +2,7 @@
   "id": "vault_first_tier",
   "chapter": 2,
   "title": {
-    "ru": "Первый ярус обеспечения",
+    "ru": "Первый ярус стены",
     "en": "The First Holding Tier"
   },
   "tags": [
@@ -19,8 +19,8 @@
       "kind": "narration",
       "id": "tier_in",
       "text": {
-        "ru": "Полок здесь нет. Есть стена, и стена сложена из связок описей вперемежку с камнем: бумага в раствор, склянка в бумагу, ряд за рядом. Обеспечение не лежит на полках, обеспечение держит потолок.",
-        "en": "There are no shelves here. There is a wall, and the wall is laid up out of bundled inventories mixed with stone: paper into mortar, jar into paper, course after course. The holdings do not sit on shelves, the holdings hold the ceiling up."
+        "ru": "Полок здесь нет. Есть стена, и стена сложена из связок описей вперемежку с камнем: бумага в раствор, склянка в бумагу, ряд за рядом. Спрятанное не лежит на полках, спрятанное держит потолок.",
+        "en": "There are no shelves here. There is a wall, and the wall is laid up out of bundled inventories mixed with stone: paper into mortar, jar into paper, course after course. The hidden things do not sit on shelves, the hidden things hold the ceiling up."
       },
       "keywords": [
         {
@@ -102,8 +102,8 @@
       "kind": "narration",
       "id": "watch_ahead",
       "text": {
-        "ru": "Пост стоит в проломе кладки: двое с древками, за ними двое с описью и лампой. Опись у них на цепочке, и цепочка длиннее, чем нужно человеку, чтобы отойти.",
-        "en": "The post is set in a gap in the masonry: two with shafts, and behind them two with an inventory and a lamp. Their inventory is on a chain, and the chain is longer than a man needs in order to step away."
+        "ru": "Пост стоит в проломе кладки: двое с древками, за ними двое с списком и лампой. Список у них на цепочке, и цепочка длиннее, чем нужно человеку, чтобы отойти.",
+        "en": "The post is set in a gap in the masonry: two with shafts, and behind them two with a list and a lamp. Their list is on a chain, and the chain is longer than a man needs in order to step away."
       },
       "next": "strazhnik_post"
     },
@@ -112,8 +112,8 @@
       "id": "strazhnik_post",
       "speaker": "strazhnik",
       "text": {
-        "ru": "Предъявитель, стойте на светлом. Обеспечение не выдаётся, обеспечение не показывается, обеспечение не называется вслух.",
-        "en": "Bearer, stand in the light. The holdings are not released, the holdings are not shown, the holdings are not named out loud."
+        "ru": "Пришедший, стойте на светлом. Спрятанное не выдаётся, спрятанное не показывается, спрятанное не называется вслух.",
+        "en": "Bearer, stand in the light. The hidden things are not released, the hidden things are not shown, the hidden things are not named out loud."
       },
       "next": "entry_choice"
     },
@@ -188,8 +188,8 @@
         {
           "id": "count_post",
           "text": {
-            "ru": "Назвать им опись их собственного поста.",
-            "en": "Recite the inventory of their own post to them."
+            "ru": "Назвать им список их собственного поста.",
+            "en": "Recite the list of their own post to them."
           },
           "chip": {
             "icon": "hourglass",
@@ -411,8 +411,8 @@
       "kind": "narration",
       "id": "tier_wait",
       "text": {
-        "ru": "Смена приходит через два с половиной часа и сдаёт пост по описи: четыре древка, лампа, опись, ключ от лампы. Про пролом в описи ничего нет, и оба наряда проходят мимо него, не сговариваясь.",
-        "en": "The relief comes in two and a half hours and takes the post over by inventory: four shafts, a lamp, an inventory, a key to the lamp. The gap in the wall is not on the inventory, and both details walk past it without any need to agree on it."
+        "ru": "Смена приходит через два с половиной часа и пересчитывает пост: четыре древка, лампа, список, ключ от лампы. Про пролом не написано, и оба наряда проходят мимо него, не сговариваясь.",
+        "en": "The relief comes in two and a half hours and takes the post over by list: four shafts, a lamp, a list, a key to the lamp. The gap in the wall is not on the list, and both details walk past it without any need to agree on it."
       },
       "next": "after_watch"
     },
@@ -421,7 +421,7 @@
       "id": "tier_count",
       "speaker": "strazhnik",
       "text": {
-        "ru": "Всё сходится, вплоть до ключа от лампы. Проверяющих у нас не бывает, а вы проверили; в наряде такой графы нет, и я вас пропущу, чтобы не заводить.",
+        "ru": "Всё сходится, впвещьь до ключа от лампы. Проверяющих у нас не бывает, а вы проверили; в наряде такой строки нет, и я вас пропущу, чтобы не заводить.",
         "en": "It all tallies, down to the key to the lamp. We never get inspectors, and you have inspected; there is no column for that on the detail sheet, so I shall let you through rather than open one."
       },
       "next": "after_watch"
@@ -431,7 +431,7 @@
       "id": "tier_promise",
       "speaker": "strazhnik",
       "text": {
-        "ru": "Бумага на предъявителя, срок четверг. Беру, потому что четверга у меня в наряде нет: в четверг я на воротах, и спросят не с меня.",
+        "ru": "Бумага на пришедшего, срок четверг. Беру, потому что четверга у меня в наряде нет: в четверг я на воротах, и спросят не с меня.",
         "en": "Paper to bearer, due Thursday. I take it, because Thursday is not on my detail: on Thursday I am at the gates and it will not be me they ask."
       },
       "next": "after_watch"
@@ -469,12 +469,12 @@
       "kind": "lore",
       "id": "lore_obespechenie",
       "title": {
-        "ru": "Опись обеспечения, раздел первый, лист последний",
-        "en": "Inventory of holdings, section one, final sheet"
+        "ru": "Список связок, раздел первый, лист последний",
+        "en": "List of hidden things, section one, final sheet"
       },
       "text": {
-        "ru": "«Раздел обеспечивает монету Заклада за годы с первого по восемьдесят четвёртый. Содержание раздела: одна война, одна река, один город на воде, один расчёт. Оценка раздела: не производилась. Основание: раздел изъятию не подлежит, следовательно, цена его не имеет применения». Ниже, тем же почерком: «Проверено. Сходится. Проверял вкладчик».",
-        "en": "\"This section secures the coin of Zaklad for years one through eighty-four. Contents of the section: one war, one river, one town upon the water, one calculation. Valuation of the section: not performed. Grounds: the section is not subject to removal, therefore its price has no application.\" Below, in the same hand: \"Checked. It tallies. Checked by the depositor.\""
+        "ru": "«Раздел обеспечивает монету Заклада за годы с первого по восемьдесят четвёртый. Содержание раздела: одна война, одна река, один город на воде, один расчёт. Оценка раздела: не производилась. Основание: раздел выносу не подлежит, следовательно, цена его не имеет применения». Ниже, тем же почерком: «Проверено. Сходится. Проверял отдавший».",
+        "en": "\"This section secures the coin of Zaklad for years one through eighty-four. Contents of the section: one war, one river, one town upon the water, one calculation. Valuation of the section: not performed. Grounds: the section is not subject to removal, therefore its price has no application.\" Below, in the same hand: \"Checked. It tallies. Checked by the giver.\""
       },
       "next": "plate_close"
     },
@@ -747,8 +747,8 @@
       "kind": "narration",
       "id": "r_copied_plate",
       "text": {
-        "ru": "Ты переписываешь обе строки на обороте описи карманов и на слове «которого» останавливаешься: рука уже сократила его сама, до того как ты решил сокращать.",
-        "en": "You copy both lines onto the back of the inventory of your pockets, and at the word \"whereof\" you stop: the hand has already shortened it by itself, before you decided to shorten anything."
+        "ru": "Ты переписываешь обе строки на обороте списка карманов и на слове «которого» останавливаешься: рука уже сократила его сама, до того как ты решил сокращать.",
+        "en": "You copy both lines onto the back of the list of your pockets, and at the word \"whereof\" you stop: the hand has already shortened it by itself, before you decided to shorten anything."
       },
       "next": "post_router"
     },
@@ -765,8 +765,8 @@
       "kind": "narration",
       "id": "r_aloud_plate",
       "text": {
-        "ru": "Ты читаешь вслух, и «проверял вкладчик» звучит в галерее дважды: второй раз возвращается от кладки на четверть тише. Мальчик за спиной повторяет одними губами, чтобы точнее.",
-        "en": "You read it aloud, and \"checked by the depositor\" sounds twice in the gallery: the second time it comes back off the masonry a quarter quieter. Behind you the boy repeats it with his lips only, to get it right."
+        "ru": "Ты читаешь вслух, и «проверял отдавший» звучит в галерее дважды: второй раз возвращается от кладки на четверть тише. Мальчик за спиной повторяет одними губами, чтобы точнее.",
+        "en": "You read it aloud, and \"checked by the giver\" sounds twice in the gallery: the second time it comes back off the masonry a quarter quieter. Behind you the boy repeats it with his lips only, to get it right."
       },
       "next": "post_router"
     },
@@ -774,7 +774,7 @@
       "kind": "narration",
       "id": "r_burn_bundle",
       "text": {
-        "ru": "Связка занимается медленно и пахнет смолой, а не бумагой: описи здесь пропитаны, чтобы не гнили. Кладка над выжженным местом оседает на палец и останавливается.",
+        "ru": "Связка занимается медленно и пахнет смолой, а не бумагой: листы здесь пропитаны, чтобы не гнили. Кладка над выжженным местом оседает на палец и останавливается.",
         "en": "The bundle catches slowly and smells of tar rather than paper: the inventories down here are steeped so they will not rot. The masonry above the burnt place settles by a finger's width and stops."
       },
       "next": "post_router"
@@ -958,8 +958,8 @@
       "id": "r_post_stand",
       "speaker": "strazhnik",
       "text": {
-        "ru": "Руки я вижу. В описи руки не значатся, значатся кисти — отдельной строкой и с левой начиная.",
-        "en": "I see the hands. Hands are not in the inventory; wrists are, on a separate line, starting from the left."
+        "ru": "Руки я вижу. В списке значатся кисти — отдельной строкой и с левой начиная.",
+        "en": "I see the hands. Hands are not in the list; wrists are, on a separate line, starting from the left."
       },
       "next": "watch_battle"
     },
@@ -968,8 +968,8 @@
       "id": "r_post_read",
       "speaker": "strazhnik",
       "text": {
-        "ru": "«Проверял вкладчик». Читать умею, потому и стою тут, а не наверху: наверху с такой строкой не служат.",
-        "en": "\"Checked by the depositor.\" I can read; that is why I stand here and not upstairs: upstairs they do not keep men who have read that line."
+        "ru": "«Проверял отдавший». Читать умею, потому и стою тут, а не наверху: наверху с такой строкой не служат.",
+        "en": "\"Checked by the giver.\" I can read; that is why I stand here and not upstairs: upstairs they do not keep men who have read that line."
       },
       "next": "watch_battle"
     },
@@ -977,8 +977,8 @@
       "kind": "narration",
       "id": "r_post_back",
       "text": {
-        "ru": "Пластина входит в шов криво и на палец глубже, чем стояла. Пост считает это возвратом, записывает «на месте» и в третий раз за смену сходится с описью, которой не верит.",
-        "en": "The plate goes into the joint crooked and a finger deeper than it stood. The post calls that a return, writes \"in place\" and for the third time this shift agrees with an inventory it does not believe."
+        "ru": "Пластина входит в шов криво и на палец глубже, чем стояла. Пост считает это возвратом, записывает «на месте» и в третий раз за смену сходится с списком, которой не верит.",
+        "en": "The plate goes into the joint crooked and a finger deeper than it stood. The post calls that a return, writes \"in place\" and for the third time this shift agrees with a list it does not believe."
       },
       "next": "depth_up"
     }

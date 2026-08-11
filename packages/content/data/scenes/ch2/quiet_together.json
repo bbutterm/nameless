@@ -208,8 +208,8 @@
       "kind": "narration",
       "id": "no_price",
       "text": {
-        "ru": "В прейскуранте Ломбарда есть строка на стыд, на храбрость, на четверг и на чувство, что забыл выключить утюг. На молчание строки нет.",
-        "en": "The Pawnshop's price list has a line for shame, for courage, for Thursdays and for the feeling that you left the iron on. There is no line for silence."
+        "ru": "На том берегу берут плату за стыд, за храбрость, за четверг и за чувство, что забыл погасить печь. Здесь за молчание не берут ничего.",
+        "en": "On the other bank they charge for shame, courage, Thursday, and the feeling that you forgot to put out the stove. Here silence costs nothing."
       },
       "keywords": [{ "match": { "ru": "На молчание строки нет", "en": "no line for silence" }, "tone": "lore" }],
       "next": "slava"

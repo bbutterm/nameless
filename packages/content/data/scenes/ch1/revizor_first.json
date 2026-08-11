@@ -1,9 +1,18 @@
 {
   "id": "revizor_first",
   "chapter": 1,
-  "title": { "ru": "Человек в сером пальто", "en": "The Man in the Grey Coat" },
-  "tags": ["story", "revizor"],
-  "available": { "kind": "visited", "scene": "contract_found" },
+  "title": {
+    "ru": "Человек в сером пальто",
+    "en": "The Man in the Grey Coat"
+  },
+  "tags": [
+    "story",
+    "revizor"
+  ],
+  "available": {
+    "kind": "visited",
+    "scene": "contract_found"
+  },
   "entry": "landing",
   "nodes": [
     {
@@ -23,7 +32,15 @@
         "ru": "Ступеней вниз: сто двенадцать. Пройдено: сто двенадцать. Присаживайтесь.",
         "en": "Steps down: one hundred twelve. Walked: one hundred twelve. Do sit down."
       },
-      "keywords": [{ "match": { "ru": "Присаживайтесь", "en": "Do sit down" }, "tone": "danger" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "Присаживайтесь",
+            "en": "Do sit down"
+          },
+          "tone": "danger"
+        }
+      ],
       "next": "face_try"
     },
     {
@@ -47,10 +64,13 @@
     {
       "kind": "lore",
       "id": "lore_audit",
-      "title": { "ru": "Уведомление о Ревизии, форма Р-1", "en": "Notice of Audit, form A-1" },
+      "title": {
+        "ru": "Лист из тетради Сличилы",
+        "en": "Notice of Collator, sheet A-1"
+      },
       "text": {
-        "ru": "«Настоящим уведомляется население города Заклад, что назначена сверка Учёта. Сроки: не установлены. Порядок: сплошной. Обжалование: предусмотрено формой Р-2. Форма Р-2 не отпечатана. Отпечатание формы Р-2 включено в сверку».",
-        "en": "\"The population of the city of Zaklad is hereby notified that a reconciliation of the Reckoning has been ordered. Duration: not established. Method: total. Appeals: provided for by form A-2. Form A-2 has not been printed. The printing of form A-2 is included in the reconciliation.\""
+        "ru": "«Настоящим уведомляется население города Заклад, что начат счёт пропавших. Сроки: не установлены. Порядок: сплошной. Обжалование: предусмотрено формой Р-2. Форма Р-2 не отпечатана. Отпечатание формы Р-2 отложено до конца счёта».",
+        "en": "\"The population of the city of Zaklad is hereby notified that a count of the notebook has been ordered. Duration: not established. Method: total. Appeals: provided for by sheet A-2. sheet A-2 has not been printed. The printing of sheet A-2 is included in the count.\""
       },
       "next": "rev_list"
     },
@@ -69,8 +89,8 @@
       "id": "rev_you",
       "speaker": "revizor",
       "text": {
-        "ru": "Возраст расхождения: весь. Ревизия полагает, что оно сейчас стоит напротив.",
-        "en": "Age of the discrepancy: all of it. The Audit holds that it is currently standing opposite."
+        "ru": "Возраст расхождения: весь. Сличила полагает, что оно сейчас стоит напротив.",
+        "en": "Age of the discrepancy: all of it. The Collator holds that it is currently standing opposite."
       },
       "mood": "flat",
       "next": "audit_choice"
@@ -86,13 +106,21 @@
         {
           "id": "by_inventory",
           "text": {
-            "ru": "Отвечать по описи. Все пункты.",
-            "en": "Answer by the inventory. Every item."
+            "ru": "Отвечать по списку. Все строки.",
+            "en": "Answer by the list. Every item."
           },
           "fallback": true,
           "effects": [
-            { "kind": "fragment", "memory": "pervaya_stroka", "amount": 1 },
-            { "kind": "axis", "axis": "honesty_deceit", "delta": 10 }
+            {
+              "kind": "fragment",
+              "memory": "pervaya_stroka",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 10
+            }
           ],
           "to": "rev_true"
         },
@@ -104,9 +132,21 @@
           },
           "fallback": true,
           "effects": [
-            { "kind": "fragment", "memory": "pervyy_posul", "amount": 1 },
-            { "kind": "axis", "axis": "honesty_deceit", "delta": -12 },
-            { "kind": "flag", "flag": "revizor_lied_to", "value": true }
+            {
+              "kind": "fragment",
+              "memory": "pervyy_posul",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": -12
+            },
+            {
+              "kind": "flag",
+              "flag": "revizor_lied_to",
+              "value": true
+            }
           ],
           "to": "rev_lie"
         },
@@ -118,8 +158,16 @@
           },
           "fallback": true,
           "effects": [
-            { "kind": "fragment", "memory": "punkt_pervyy", "amount": 1 },
-            { "kind": "axis", "axis": "reason_obsession", "delta": -10 }
+            {
+              "kind": "fragment",
+              "memory": "punkt_pervyy",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -10
+            }
           ],
           "to": "rev_ask"
         },
@@ -127,17 +175,31 @@
           "id": "penman",
           "chip": {
             "icon": "book",
-            "label": { "ru": "Чистописец", "en": "Chistopisets" },
+            "label": {
+              "ru": "Чистописец",
+              "en": "Chistopisets"
+            },
             "tone": "life"
           },
-          "conditions": { "kind": "life", "life": "chistopisets" },
+          "conditions": {
+            "kind": "life",
+            "life": "chistopisets"
+          },
           "text": {
             "ru": "Диктуйте. Запишу вместе с собственным участием.",
             "en": "Dictate. I will record my own part too."
           },
           "effects": [
-            { "kind": "fragment", "memory": "pervaya_stroka", "amount": 1 },
-            { "kind": "axis", "axis": "honesty_deceit", "delta": 10 }
+            {
+              "kind": "fragment",
+              "memory": "pervaya_stroka",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 10
+            }
           ],
           "to": "rev_true",
           "priority": 6
@@ -146,41 +208,79 @@
           "id": "promiser",
           "chip": {
             "icon": "coin",
-            "label": { "ru": "Посульщик", "en": "Posulshchik" },
+            "label": {
+              "ru": "обещаниеьщик",
+              "en": "Posulshchik"
+            },
             "tone": "life"
           },
-          "conditions": { "kind": "life", "life": "posulshchik" },
+          "conditions": {
+            "kind": "life",
+            "life": "posulshchik"
+          },
           "text": {
-            "ru": "Расхождение будет закрыто. Дайте расписку, подпишу.",
+            "ru": "Расхождение будет закрыто. Дайте записку, подпишу.",
             "en": "The discrepancy will close. Draw a note, I sign."
           },
           "effects": [
-            { "kind": "fragment", "memory": "pervyy_posul", "amount": 1 },
-            { "kind": "axis", "axis": "honesty_deceit", "delta": -12 },
-            { "kind": "flag", "flag": "revizor_lied_to", "value": true }
+            {
+              "kind": "fragment",
+              "memory": "pervyy_posul",
+              "amount": 1
+            },
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": -12
+            },
+            {
+              "kind": "flag",
+              "flag": "revizor_lied_to",
+              "value": true
+            }
           ],
           "to": "rev_lie",
           "priority": 6
         },
         {
           "id": "signed",
-          "conditions": { "kind": "flag", "flag": "signed_insolvent" },
+          "conditions": {
+            "kind": "flag",
+            "flag": "signed_insolvent"
+          },
           "text": {
             "ru": "Я записан в книге. Сверяйтесь с книгой.",
             "en": "I am entered in the book. Check the book."
           },
-          "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": 3 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 3
+            }
+          ],
           "to": "rev_signed",
           "priority": 5
         },
         {
           "id": "walk_past",
-          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -20 },
+          "conditions": {
+            "kind": "axis",
+            "axis": "mercy_cruelty",
+            "op": "lte",
+            "value": -20
+          },
           "text": {
             "ru": "Пройти мимо, не сбавляя шага.",
             "en": "Walk past him without slowing down."
           },
-          "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": -3 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": -3
+            }
+          ],
           "to": "rev_silent",
           "priority": 5
         }
@@ -191,8 +291,8 @@
       "id": "rev_true",
       "speaker": "revizor",
       "text": {
-        "ru": "Сходится. Пункт за пунктом. Ревизия отмечает: собеседник пригоден. Это редко и это не похвала.",
-        "en": "It tallies. Item by item. The Audit notes: interlocutor serviceable. That is rare and it is not praise."
+        "ru": "Сходится. Строка за строкой. Сличила отмечает: собеседник пригоден. Это редко и это не похвала.",
+        "en": "It tallies. Item by item. The Collator notes: interlocutor serviceable. That is rare and it is not praise."
       },
       "next": "rev_close"
     },
@@ -211,10 +311,18 @@
       "id": "rev_ask",
       "speaker": "revizor",
       "text": {
-        "ru": "В фундаменте: обеспечение. Обеспечение чего: всего. Дальше не отвечу — дальше не сведено.",
-        "en": "In the foundation: the security. Security for what: everything. No further — no further has been reconciled."
+        "ru": "В фундаменте: спрятанная память. Спрятанная память о ком: всего. Дальше не отвечу — дальше не сведено.",
+        "en": "In the foundation: the hidden memory. hidden memory for what: everything. No further — no further has been reconciled."
       },
-      "keywords": [{ "match": { "ru": "обеспечение", "en": "security" }, "tone": "lore" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "спрятанная память",
+            "en": "hidden memory"
+          },
+          "tone": "lore"
+        }
+      ],
       "next": "rev_close"
     },
     {
@@ -222,8 +330,8 @@
       "id": "rev_signed",
       "speaker": "revizor",
       "text": {
-        "ru": "Книга посетителей, лист сорок, строка десятая. Имя: должность. Ревизия так тоже делает.",
-        "en": "Visitors' book, sheet forty, line ten. Name given: a post. The Audit does that too."
+        "ru": "Книга посетителей, лист сорок, строка десятая. Имя: должность. Сличила так тоже делает.",
+        "en": "Visitors' book, sheet forty, line ten. Name given: a post. The Collator does that too."
       },
       "next": "rev_close"
     },
@@ -232,8 +340,8 @@
       "id": "rev_silent",
       "speaker": "revizor",
       "text": {
-        "ru": "Метод: понятен. Метод: не помогает. Ревизия подождёт, у неё сроки не установлены.",
-        "en": "Method: understood. Method: does not help. The Audit will wait, its duration is not established."
+        "ru": "Метод: понятен. Метод: не помогает. Сличила подождёт, у неё сроки не установлены.",
+        "en": "Method: understood. Method: does not help. The Collator will wait, its duration is not established."
       },
       "next": "rev_close"
     },
@@ -258,63 +366,132 @@
       "options": [
         {
           "id": "go_down",
-          "text": { "ru": "Идти вниз. Пятеро так пятеро.", "en": "Go down. Five is five." },
+          "text": {
+            "ru": "Идти вниз. Пятеро так пятеро.",
+            "en": "Go down. Five is five."
+          },
           "fallback": true,
-          "effects": [ { "kind": "axis", "axis": "reason_obsession", "delta": 3 },{ "kind": "axis", "axis": "grasp_release", "delta": 3 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": 3
+            },
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": 3
+            }
+          ],
           "to": "met"
         },
         {
           "id": "ask_name",
-          "text": { "ru": "Спросить, кто его сюда прислал.", "en": "Ask who sent him here." },
+          "text": {
+            "ru": "Спросить, кто его сюда прислал.",
+            "en": "Ask who sent him here."
+          },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 3 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": 3
+            }
+          ],
           "to": "rev_sender"
         },
         {
           "id": "give_back",
-          "conditions": { "kind": "flag", "flag": "contract_taken" },
+          "conditions": {
+            "kind": "flag",
+            "flag": "contract_taken"
+          },
           "text": {
             "ru": "Отдать связку ему. Пусть подошьёт.",
             "en": "Hand him the bundle. Let him file it."
           },
           "effects": [
-            { "kind": "flag", "flag": "contract_taken", "value": false },
-            { "kind": "counter", "counter": "lots_held", "delta": -1 },
-            { "kind": "axis", "axis": "grasp_release", "delta": -8 }
+            {
+              "kind": "flag",
+              "flag": "contract_taken",
+              "value": false
+            },
+            {
+              "kind": "counter",
+              "counter": "lots_held",
+              "delta": -1
+            },
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": -8
+            }
           ],
           "to": "rev_taken",
           "priority": 5
         },
         {
           "id": "warn_him",
-          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "gte", "value": 20 },
+          "conditions": {
+            "kind": "axis",
+            "axis": "mercy_cruelty",
+            "op": "gte",
+            "value": 20
+          },
           "text": {
             "ru": "Сказать, чтобы отошёл от лестницы.",
             "en": "Tell him to step away from the stairs."
           },
-          "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": 3 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": 3
+            }
+          ],
           "to": "met",
           "priority": 5
         },
         {
           "id": "count_five",
-          "conditions": { "kind": "axis", "axis": "reason_obsession", "op": "lte", "value": -20 },
+          "conditions": {
+            "kind": "axis",
+            "axis": "reason_obsession",
+            "op": "lte",
+            "value": -20
+          },
           "text": {
             "ru": "Уточнить: пятеро сейчас или пятеро всего.",
             "en": "Clarify: five now, or five in total."
           },
-          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": -3 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -3
+            }
+          ],
           "to": "rev_sender",
           "priority": 5
         },
         {
           "id": "read_aloud",
-          "conditions": { "kind": "flag", "flag": "contract_read" },
+          "conditions": {
+            "kind": "flag",
+            "flag": "contract_read"
+          },
           "text": {
-            "ru": "Назвать ему пункт седьмой наизусть.",
+            "ru": "Назвать ему строка седьмая наизусть.",
             "en": "Recite item seven to him from memory."
           },
-          "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": 8 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 8
+            }
+          ],
           "to": "rev_punkt",
           "priority": 5
         }
@@ -325,8 +502,8 @@
       "id": "rev_sender",
       "speaker": "revizor",
       "text": {
-        "ru": "Прислал: Учёт. Учёт — это книги. Книги никого не присылают, и всё же вот.",
-        "en": "Sent by: the Reckoning. The Reckoning is books. Books send nobody, and yet here it is."
+        "ru": "Прислала тетрадь. Тетрадь — это книги. Книги никого не присылают, и всё же вот.",
+        "en": "Sent by: the notebook. The notebook is books. Books send nobody, and yet here it is."
       },
       "next": "met"
     },
@@ -335,8 +512,8 @@
       "id": "rev_taken",
       "speaker": "revizor",
       "text": {
-        "ru": "Принято. Подошью. Ревизия отмечает: вернул сам. Таких строк в деле немного.",
-        "en": "Accepted. It will be filed. The Audit notes: returned voluntarily. There are few such lines in the case."
+        "ru": "Принято. Подошью. Сличила отмечает: вернул сам. Таких строк в деле немного.",
+        "en": "Accepted. It will be filed. The Collator notes: returned voluntarily. There are few such lines in the case."
       },
       "next": "met"
     },
@@ -345,15 +522,21 @@
       "id": "rev_punkt",
       "speaker": "revizor",
       "text": {
-        "ru": "Пункт седьмой. Вписан от руки. Ревизия читала его сто девять раз и всё ещё считает это ошибкой.",
-        "en": "Item seven. Entered by hand. The Audit has read it one hundred nine times and still considers it an error."
+        "ru": "строка седьмая. Вписан от руки. Сличила читала его сто девять раз и всё ещё считает это ошибкой.",
+        "en": "Item seven. Entered by hand. The Collator has read it one hundred nine times and still considers it an error."
       },
       "next": "met"
     },
     {
       "kind": "effects",
       "id": "met",
-      "effects": [{ "kind": "flag", "flag": "revizor_met", "value": true }],
+      "effects": [
+        {
+          "kind": "flag",
+          "flag": "revizor_met",
+          "value": true
+        }
+      ],
       "next": "scene:guard_ambush"
     }
   ]

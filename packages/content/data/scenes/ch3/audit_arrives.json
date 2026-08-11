@@ -2,8 +2,8 @@
   "id": "audit_arrives",
   "chapter": 3,
   "title": {
-    "ru": "Ревизия пришла",
-    "en": "The Audit Has Arrived"
+    "ru": "Стул для тебя",
+    "en": "The Collator Has Arrived"
   },
   "tags": [
     "story",
@@ -16,8 +16,8 @@
       "kind": "narration",
       "id": "pumps_faster",
       "text": {
-        "ru": "Насосы внизу бьют четыре удара в минуту вместо двух. Смету на водоотлив пересматривают впервые за четыреста лет, и в зале об этом говорят тише, чем о Ревизии.",
-        "en": "Down below the pumps beat four times to the minute instead of two. The estimate for pumping is being revised for the first time in four hundred years, and in the hall they speak of that more quietly than of the Audit."
+        "ru": "Насосы внизу бьют четыре удара в минуту вместо двух. Впервые за четыреста лет их заставили работать вдвое чаще, но в зале об этом говорят тише, чем о Сличиле.",
+        "en": "Down below the pumps beat four times to the minute instead of two. The estimate for pumping is being revised for the first time in four hundred years, and in the hall they speak of that more quietly than of the Collator."
       },
       "next": "no_queue"
     },
@@ -47,8 +47,8 @@
         "en": "Notice at the gates, sheet one"
       },
       "text": {
-        "ru": "«Приём вкладов приостановлен до окончания сверки. Выдача приостановлена. Оценка приостановлена. Горе принимается по записи; запись ведётся на бумаге; бумага находится в сверке». Ниже мелом, рукой стражника: «Меня не спрашивайте. Я тут тоже по описи».",
-        "en": "\"Acceptance of deposits is suspended until the reconciliation is complete. Issue is suspended. Appraisal is suspended. Grief is taken by appointment; appointments are kept on paper; the paper is in reconciliation.\" Below, in chalk, in a guard's hand: \"Do not ask me. I am here by inventory too.\""
+        "ru": "«Сегодня вещи не принимают и не отдают. Горе приносить завтра». Ниже мелом, рукой стражника: «Меня не спрашивайте. Я тут тоже жду».",
+        "en": "\"Acceptance of bundles is suspended until the reconciliation is complete. Issue is suspended. Appraisal is suspended. Grief is taken by appointment; appointments are kept on paper; the paper is in reconciliation.\" Below, in chalk, in a guard's hand: \"Do not ask me. I am here by inventory too.\""
       },
       "next": "candles"
     },
@@ -56,7 +56,7 @@
       "kind": "narration",
       "id": "candles",
       "text": {
-        "ru": "В зале Учёта горят все свечи разом, включая запасные. Расход на свечи внесён в смету сверки отдельной строкой и за три дня перекрыл месячную выручку зала.",
+        "ru": "В главном зале горят все свечи разом, включая запасные. Расход на свечи внесён в подсчёт проверки отдельной строкой и за три дня перекрыл месячную выручку зала.",
         "en": "In the Ledger Hall every candle is burning at once, the spares included. The cost of candles has gone into the reconciliation estimate as a separate line and in three days has passed the hall's takings for a month."
       },
       "keywords": [
@@ -75,7 +75,7 @@
       "id": "svodchik_1",
       "speaker": "svodchik",
       "text": {
-        "ru": "Сверено: четыре тысячи двести одиннадцать позиций. Не сходится: одна. Бланков на такой случай отпечатано ноль.",
+        "ru": "Сверено: четыре тысячи двести одиннадцать позиций. Не сходится: одна. Листов на такой случай отпечатано ноль.",
         "en": "Reconciled: four thousand two hundred and eleven entries. Not tallying: one. Forms printed for such a case: none."
       },
       "next": "svodchik_2"
@@ -118,8 +118,8 @@
       "kind": "narration",
       "id": "revizor_stands",
       "text": {
-        "ru": "Ревизор стоит у первой колонны, там, где обычно начинается очередь. Портфель у него закрыт. Закрытым ты его видишь впервые.",
-        "en": "The Auditor stands by the first column, where the queue usually starts. His case is shut. This is the first time you have seen it shut."
+        "ru": "Сличила стоит у первой колонны, там, где обычно начинается очередь. Портфель у него закрыт. Закрытым ты его видишь впервые.",
+        "en": "The Collator stands by the first column, where the queue usually starts. His case is shut. This is the first time you have seen it shut."
       },
       "next": "revizor_a1"
     },
@@ -147,7 +147,7 @@
       "kind": "narration",
       "id": "one_chair",
       "text": {
-        "ru": "Стульев в зале Учёта нет и не было: сверка стоя обходится дешевле, это записано в уставе зала третьим пунктом. Сегодня стул принесли. Один.",
+        "ru": "Стульев в главном зале нет и не было: встреча стоя обходится дешевле, это записано в уставе зала третьей строкой. Сегодня стул принесли. Один.",
         "en": "There are no chairs in the Ledger Hall and never have been: reconciling on your feet costs less, and that is the third clause of the hall's own rules. Today a chair was brought in. One."
       },
       "next": "revizor_a3"
@@ -157,8 +157,8 @@
       "id": "revizor_a3",
       "speaker": "revizor",
       "text": {
-        "ru": "Сверка города: закончена. Сверка вкладчика: начата.",
-        "en": "Reconciliation of the city: complete. Reconciliation of the depositor: begun."
+        "ru": "Проверка города: закончена. Проверка хозяина: начата.",
+        "en": "Reconciliation of the city: complete. Reconciliation of the owner: begun."
       },
       "next": "arrival_choice"
     },
@@ -173,7 +173,7 @@
         {
           "id": "by_inventory",
           "text": {
-            "ru": "Отвечать по описи. Все пункты.",
+            "ru": "Отвечать по списку. Все строки.",
             "en": "Answer by the inventory. Every entry."
           },
           "fallback": true,
@@ -248,8 +248,8 @@
             "value": -30
           },
           "text": {
-            "ru": "Вкладчик — другой человек. Я его знал.",
-            "en": "The depositor is another man. I knew him."
+            "ru": "Хозяин — другой человек. Я его знал.",
+            "en": "The owner is another man. I knew him."
           },
           "effects": [
             {
@@ -333,7 +333,7 @@
             "flag": "klyost_named"
           },
           "text": {
-            "ru": "Мальчишку в сверку не вносите.",
+            "ru": "Мальчишку в список не вносите.",
             "en": "Do not enter the boy in the reconciliation."
           },
           "effects": [
@@ -358,7 +358,7 @@
       "id": "r_inventory",
       "speaker": "revizor",
       "text": {
-        "ru": "Ответы: сходятся. Со всем, кроме одного пункта. Пункт назван в вашу честь.",
+        "ru": "Ответы: сходятся. Со всем, кроме одной строки. Строка названа в вашу честь.",
         "en": "Answers: they tally. With everything but one entry. The entry is named after you."
       },
       "next": "case_on_table"
@@ -367,8 +367,8 @@
       "kind": "narration",
       "id": "r_sat",
       "text": {
-        "ru": "Стул низкий, конторский, с продавленным сиденьем: его несли из комнаты приёма сделок, где на нём сидят продающие. Ревизор остаётся стоять и от этого оказывается выше на полторы головы.",
-        "en": "The chair is low, an office chair with a sagging seat: it was carried in from the room where deals are taken, the one the sellers sit on. The Auditor stays on his feet and by that stands a head and a half taller."
+        "ru": "Стул низкий, с продавленным сиденьем: его принесли из задней комнаты, где на нём сидят продающие. Сличила остаётся стоять и от этого оказывается выше на полторы головы.",
+        "en": "The chair is low, an office chair with a sagging seat: it was carried in from the room where deals are taken, the one the sellers sit on. The Collator stays on his feet and by that stands a head and a half taller."
       },
       "next": "case_on_table"
     },
@@ -387,7 +387,7 @@
       "id": "r_city",
       "speaker": "revizor",
       "text": {
-        "ru": "Город: производная. Производные сверке не подлежат.",
+        "ru": "Город: производная. Производные встрече не подлежат.",
         "en": "The city: a derivative. Derivatives are not subject to reconciliation."
       },
       "next": "case_on_table"
@@ -397,7 +397,7 @@
       "id": "r_denied",
       "speaker": "revizor",
       "text": {
-        "ru": "Знали. Это в описи есть. Знакомство с самим собой: пункт двенадцатый.",
+        "ru": "Знали. Это в списке есть. Знакомство с самим собой: строка двенадцатая.",
         "en": "You knew him. That is in the record. Acquaintance with oneself: entry twelve."
       },
       "next": "case_on_table"
@@ -427,7 +427,7 @@
       "id": "r_boy",
       "speaker": "revizor",
       "text": {
-        "ru": "Мальчик в сверке отсутствует. Строку под него держим пустой.",
+        "ru": "Мальчика здесь нет. Место под него держим пустым.",
         "en": "The boy is absent from the reconciliation. We are keeping a line empty for him."
       },
       "next": "case_on_table"
@@ -436,7 +436,7 @@
       "kind": "narration",
       "id": "case_on_table",
       "text": {
-        "ru": "На столе сводчика лежит раскрытое дело. Обложка жёсткая, углы обиты жестью, на корешке номер: 1. Журнал спусков начинается с двойки, журнал дел — тоже.",
+        "ru": "На столе сводчика лежит раскрытое дело. Обложка жёсткая, углы обиты жестью, на корешке номер: 1. Тетрадь спусков начинается с двойки, тетрадь дел — тоже.",
         "en": "On the reconciler's table lies an open case file. The cover is stiff, the corners bound in tin, and the number on the spine is 1. The descent journal starts at two, and so does the journal of cases."
       },
       "next": "case_marks"
@@ -445,7 +445,7 @@
       "kind": "narration",
       "id": "case_marks",
       "text": {
-        "ru": "В деле есть графа «приметы», и она заполнена. Заполнял её человек с той же экономной рукой, что и в договоре: «которого» тремя знаками с точкой посередине.",
+        "ru": "В деле есть строка «приметы», и она заполнена. Заполнял её человек с той же экономной рукой, что и в договоре: «которого» тремя знаками с точкой посередине.",
         "en": "The case has a column for \"description\", and it is filled in. It was filled in by a hand with the same economy as the deed: \"whereof\" in three strokes with a dot in the middle."
       },
       "keywords": [
@@ -470,7 +470,7 @@
         {
           "id": "read_marks",
           "text": {
-            "ru": "Прочитать графу «приметы».",
+            "ru": "Прочитать строку «приметы».",
             "en": "Read the column for \"description\"."
           },
           "fallback": true,
@@ -691,7 +691,7 @@
       "kind": "narration",
       "id": "r_closed",
       "text": {
-        "ru": "Обложка садится на место с сухим стуком, и на столе остаётся прямоугольник без пыли. Пыль в зале Учёта ложится за час: свечей много, воздуха мало.",
+        "ru": "Обложка садится на место с сухим стуком, и на столе остаётся прямоугольник без пыли. Пыль в главном зале ложится за час: свечей много, воздуха мало.",
         "en": "The cover comes down with a dry knock, leaving a dustless rectangle on the table. Dust settles in the Ledger Hall within the hour: many candles, little air."
       },
       "next": "securing"
@@ -700,8 +700,8 @@
       "kind": "narration",
       "id": "r_copied",
       "text": {
-        "ru": "Ты списываешь дело на оборот объявления, и рука сама сокращает «которого» тремя знаками с точкой посередине. Списанное дело в этом городе стоит ровно столько же, сколько подлинник, и это единственная скидка, которую Ломбард даёт даром.",
-        "en": "You copy the case onto the back of the notice, and your hand of itself puts \"whereof\" in three strokes with a dot in the middle. A copied case is worth exactly what the original is worth in this city, and that is the only discount the Pawnshop gives away free."
+        "ru": "Ты переписываешь дело на оборот объявления, и рука сама сокращает «которого» тремя знаками с точкой посередине. Копию здесь принимают наравне с подлинником.",
+        "en": "You copy the case onto the back of the notice, and your hand of itself puts \"whereof\" in three strokes with a dot in the middle. A copied case is worth exactly what the original is worth in this city, and that is the only discount the House of Things gives away free."
       },
       "next": "securing"
     },
@@ -728,8 +728,8 @@
       "id": "r_candle",
       "speaker": "svodchik",
       "text": {
-        "ru": "Второй экземпляр в сверке, третий у Ревизии. Жгите, если вам от этого легче: расход на свечу я уже внёс.",
-        "en": "The second copy is in reconciliation, the third is with the Audit. Burn it if it makes things easier: I have already entered the cost of the candle."
+        "ru": "Вторая копия здесь, третья у Сличилы. Жгите, если вам от этого легче: свечу я уже посчитал.",
+        "en": "The second copy is in reconciliation, the third is with the Collator. Burn it if it makes things easier: I have already entered the cost of the candle."
       },
       "next": "securing"
     },
@@ -757,8 +757,8 @@
       "kind": "narration",
       "id": "exit_hall",
       "text": {
-        "ru": "Зал Учёта длинный, и он весь сегодня твой. В дальнем конце сидят четверо сводчиков и один Ревизор, и все пятеро ждут, пока ты дойдёшь.",
-        "en": "The Ledger Hall is long, and today all of it is yours. At the far end sit four reconcilers and one Auditor, and all five are waiting for you to come the length of it."
+        "ru": "Зал длинный, и он весь сегодня твой. В дальнем конце сидят четверо сводчиков и один Сличила. Все пятеро ждут, пока ты дойдёшь.",
+        "en": "The Ledger Hall is long, and today all of it is yours. At the far end sit four reconcilers and one Collator, and all five are waiting for you to come the length of it."
       },
       "next": "scene:ledger_hub"
     },
@@ -776,7 +776,7 @@
       "id": "securing_1",
       "speaker": "naryad_revizii",
       "text": {
-        "ru": "Расхождение подлежит обеспечению сохранности до подписания акта. Обеспечение сохранности означает: не выпускать, не поить, не считать вслух.",
+        "ru": "Расхождение подлежит сохранению до подписания листа. Сохранить означает: не выпускать, не поить, не считать вслух.",
         "en": "The discrepancy is subject to safekeeping until the act is signed. Safekeeping means: do not let out, do not give water, do not count aloud."
       },
       "next": "securing_2"
@@ -796,7 +796,7 @@
       "id": "securing_3",
       "speaker": "svodchik",
       "text": {
-        "ru": "Сверка идёт с трёх сторон, а расхождение у нас одно и ходячее. Если его унесут в кладовую, сверка встанет, и свечи мы жгли зря.",
+        "ru": "Встреча идёт с трёх сторон, а расхождение у нас одно и ходячее. Если его унесут в кладовую, работа встанет, и свечи мы жгли зря.",
         "en": "The reconciliation runs from three sides, and our one discrepancy walks. If it is carried off to the store room the reconciliation stops, and we burned the candles for nothing."
       },
       "next": "securing_choice"
@@ -956,8 +956,8 @@
       "kind": "narration",
       "id": "sec_after",
       "text": {
-        "ru": "Наряд уходит своим ходом, забрав стул. Ревизор смотрит им вслед и записывает что-то в портфель, не открывая его: он держит портфель на весу и пишет по крышке.",
-        "en": "The detail leaves on its own feet, taking the chair. The Auditor watches them go and writes something into his case without opening it: he holds the case up and writes on the lid."
+        "ru": "Наряд уходит своим ходом, забрав стул. Сличила смотрит им вслед и записывает что-то в портфель, не открывая его: он держит портфель на весу и пишет по крышке.",
+        "en": "The detail leaves on its own feet, taking the chair. The Collator watches them go and writes something into his case without opening it: he holds the case up and writes on the lid."
       },
       "next": "exit_hall"
     },
@@ -966,7 +966,7 @@
       "id": "r_sec_taken",
       "speaker": "revizor",
       "text": {
-        "ru": "Обеспечено. Срок обеспечения: до подписания акта. Подписей требуется две, и вторая — ваша, поэтому обеспечение снимается через минуту. Инструкция этого не предусмотрела.",
+        "ru": "Обеспечено. Срок сохранения: до подписания листа. Подписей требуется две, и вторая — ваша, поэтому стена снимается через минуту. Инструкция этого не предусмотрела.",
         "en": "Secured. Term of safekeeping: until the act is signed. Two signatures are required, and the second is yours, so the safekeeping is lifted in a minute. The instruction did not foresee that."
       },
       "next": "exit_hall"
@@ -1012,7 +1012,7 @@
       "kind": "narration",
       "id": "hall_falling",
       "text": {
-        "ru": "Труху сметают к колонне, потому что в зале Учёта пыль ложится за час и уборщик приходит в шесть. Сводчик просит подождать с уборкой до конца сверки и получает отказ по смете.",
+        "ru": "Труху сметут к колонне, потому что в главном зале пыль ложится за час и уборщик приходит в шесть. Сводчик просит подождать с уборкой до конца разговора и получает отказ по расчёту.",
         "en": "They sweep the dust to the column, because in the hall of the Ledger dust settles within the hour and the cleaner comes at six. The reconciler asks for the sweeping to wait until the reconciliation is done and is refused on budget grounds."
       },
       "next": "scene:silver_counter#queue_entry"

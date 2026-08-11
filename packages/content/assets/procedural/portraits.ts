@@ -324,6 +324,16 @@ const FACES: Record<string, FaceSpec> = {
     gaze: 'straight', mouth: -1, mouthW: 0.5, lips: 'line', asym: 0.2,
   },
 
+  /** Меловщик: человек, который оставляет знак до того, как решится назвать себя. */
+  chalk_marker: {
+    house: 'steel',
+    jaw: 0.35, cheek: 0.55, brow: 0.35, long: 0.6, age: 0.3,
+    hair: 'kerchief', beard: 'none', collar: 'rag', shoulders: 0.35,
+    lid: 0.35, gaze: 'aside', nose: 'straight',
+    mouth: 0, mouthW: 0.45, lips: 'line', furrows: 0.2, asym: 0.3,
+    prop: 'chalk',
+  },
+
   // ── Ревизия ───────────────────────────────────────────────────────────────
 
   /** Ревизор: погрешность, отросшая до фигуры. Стадии — в `stageOf`. */

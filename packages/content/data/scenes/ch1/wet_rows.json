@@ -93,7 +93,7 @@
       "id": "zh_2",
       "speaker": "zhichka",
       "text": {
-        "ru": "Опись нижних ярусов в этом месяце заказывали трое. Одного продам, второго не продам, третий сам к тебе придёт.",
+        "ru": "Список вещей из нижнего подвала в этом месяце заказывали трое. Одного продам, второго не продам, третий сам к тебе придёт.",
         "en": "Three people ordered an inventory of the lower tiers this month. One I will sell you, one I will not, and the third will come to you himself."
       },
       "next": "zh_3"
@@ -464,7 +464,7 @@
         {
           "id": "buy_back",
           "text": {
-            "ru": "Выкупить чужой лот и вернуть владельцу.",
+            "ru": "Купить чужую склянку и вернуть владельцу.",
             "en": "Buy the stranger's lot back and return it."
           },
           "conditions": {
@@ -502,7 +502,7 @@
         {
           "id": "write_promise_note",
           "text": {
-            "ru": "Выписать посул на предъявителя.",
+            "ru": "Дать обещание тому, кто принесёт бумажку.",
             "en": "Write out a promise note to bearer."
           },
           "chip": {
@@ -615,7 +615,7 @@
       "id": "r_pay_full",
       "speaker": "zhichka",
       "text": {
-        "ru": "Заказчик — Тминный, старший оценщик. Заказ на своё же хранилище, третьего числа, за свои деньги.",
+        "ru": "Заказчик — Тминный. Заказ на свой же подвал, третьего числа, за свои деньги.",
         "en": "The man who ordered it is Tminny, senior appraiser. An order on his own vault, on the third, out of his own pocket."
       },
       "keywords": [
@@ -634,8 +634,8 @@
       "id": "r_haggle",
       "speaker": "zhichka",
       "text": {
-        "ru": "Ох, хорош. Ладно: заказчик из Ломбарда, из старших, и он платил за опись своего же хранилища. Имя — ещё восемь грошей, и это уже не торг.",
-        "en": "Oh, you are good. Fine: the buyer is Pawnshop, senior grade, and he paid for an inventory of his own vault. The name is eight groschen more, and that is not haggling any more."
+        "ru": "Ох, хорош. Ладно: заказчик из старой башни и платил за список вещей в своём же подвале. Имя — ещё восемь грошей, и это уже не торг.",
+        "en": "Oh, you are good. Fine: the buyer came from the old tower and paid for a list of things in his own cellar. The name is eight groschen more, and that is not haggling any more."
       },
       "next": "klyost_rows"
     },
@@ -644,7 +644,7 @@
       "id": "r_promise",
       "speaker": "zhichka",
       "text": {
-        "ru": "Бумажка на предъявителя. Родня! Держи имя: старший оценщик. Только знай — посул я не порву, я его перепродам.",
+        "ru": "Бумажка достанется тому, кто её принесёт. Родня! Держи имя: Тминный. Только знай — обещание я не порву, я его перепродам.",
         "en": "Paper to bearer. Kin! Take the name: senior appraiser. Only know this — I will not tear your note up, I will sell it on."
       },
       "next": "klyost_rows"
@@ -1217,7 +1217,7 @@
       "id": "collectors_2",
       "speaker": "marodyor",
       "text": {
-        "ru": "Имя вы вынесли, а вынос — отдельная статья. Товар описан на нас: заказчик, число, ярус. Вы несёте нашу опись в кармане и даже не завернули.",
+        "ru": "Имя вы вынесли отдельно. На товаре наши приметы: заказчик, число, подвал. Вы несёте нашу бумагу в кармане и даже не завернули.",
         "en": "You are carrying the name out, and carrying out is a separate line. The goods are entered against us: the client, the date, the tier. You have our inventory in your pocket and you did not even wrap it."
       },
       "next": "collectors_3"
@@ -1417,7 +1417,7 @@
       "id": "r_rows_paper",
       "speaker": "marodyor",
       "text": {
-        "ru": "Опись у меня в голове, а голова у меня не моя, и в ней вы уже записаны. Так что бумаги не будет.",
+        "ru": "Список у меня в голове, а голова у меня не моя, и в ней вы уже записаны. Так что бумаги не будет.",
         "en": "The inventory is in my head, and the head is not mine, and you are already entered in it. So there will be no paperwork."
       },
       "next": "fight_collectors_out"
@@ -1442,7 +1442,7 @@
       "kind": "narration",
       "id": "rows_out_after",
       "text": {
-        "ru": "Проход освобождается сам: тех, кто остался стоять, уводят под навес, а тех, кто не остался, оттаскивают за верёвку и там же описывают. Опись составляют вслух и без спешки.",
+        "ru": "Проход освобождается сам: тех, кто остался стоять, уводят под навес, остальных оттаскивают за верёвку. Их вещи перечисляют вслух и без спешки.",
         "en": "The passage clears itself: those still standing are led under the awning, and those who are not are dragged past the line and inventoried right there. The inventory is made out loud and without hurry."
       },
       "next": "leave_rows"

@@ -96,5 +96,35 @@
         }
       }
     ]
+  },
+  {
+    "id": "chalk_marker",
+    "kind": "person",
+    "name": {
+      "ru": "Меловщик",
+      "en": "Chalk Marker"
+    },
+    "blurb": {
+      "ru": "Ходит следом с мелом и доской",
+      "en": "Follows with chalk and a board"
+    },
+    "signs": {
+      "ru": "Не проводит черту без разрешения. Пустые места обводит старательнее занятых.",
+      "en": "He draws no line without permission. He circles empty places more carefully than filled ones."
+    },
+    "lines": [
+      {
+        "id": "chalk_marker_joined",
+        "text": {
+          "ru": "Оставил для тебя графу без имени и пошёл рядом: имя, сказал он, можно дописать после.",
+          "en": "He left you a nameless column and walked beside you: the name, he said, could be added later."
+        },
+        "source": "seen",
+        "unlock": {
+          "kind": "flag",
+          "flag": "chalk_marker_joined"
+        }
+      }
+    ]
   }
 ]

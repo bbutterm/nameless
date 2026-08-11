@@ -104,6 +104,18 @@
         },
         "source": "heard",
         "unlock": { "kind": "meet", "speaker": "yamshchik_gonby" }
+      },
+      {
+        "id": "relay_driver_joined",
+        "text": {
+          "ru": "Посадил тебя среди чужого груза и поехал рядом без клятвы: до места, где каждый снова выбирает дорогу.",
+          "en": "He seated you among another's cargo and rode beside you without an oath: as far as the place where each chooses the road again."
+        },
+        "source": "seen",
+        "unlock": {
+          "kind": "flag",
+          "flag": "relay_driver_joined"
+        }
       }
     ]
   },

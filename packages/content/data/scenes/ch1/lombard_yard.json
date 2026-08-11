@@ -2,8 +2,8 @@
   "id": "lombard_yard",
   "chapter": 1,
   "title": {
-    "ru": "Задний двор Великого Ломбарда",
-    "en": "Back Yard of the Great Pawnshop"
+    "ru": "Задний двор у весов",
+    "en": "The Back Yard"
   },
   "tags": [
     "street",
@@ -34,7 +34,7 @@
       "kind": "narration",
       "id": "yard_return",
       "text": {
-        "ru": "Тачку выкупают заново каждое утро, а разбирают всё ту же. В списке вычеркнуто на две строки больше, чем вчера.",
+        "ru": "Каждое утро к весам привозят ту же тачку. Сегодня в ней на две вещи меньше, чем вчера.",
         "en": "The barrow is bought afresh every morning, and it is the same barrow they work through. Two more lines are struck off the list than yesterday."
       },
       "next": "yard_scale"
@@ -43,8 +43,8 @@
       "kind": "narration",
       "id": "yard_in",
       "text": {
-        "ru": "Задний двор: весы для тяжёлого, тачка, лужа. В луже помещается семь этажей Ломбарда и не помещается башня целиком.",
-        "en": "The back yard: a scale for heavy goods, a barrow, a puddle. The puddle fits seven storeys of the Pawnshop and does not fit the tower."
+        "ru": "Задний двор: весы для тяжёлого, тачка, лужа. В луже помещается семь этажей старой башни, но верхушка не помещается.",
+        "en": "The back yard holds a scale for heavy goods, a barrow, and a puddle. Seven storeys of the old tower fit in the puddle, but the tower itself does not."
       },
       "next": "klyost_bump"
     },
@@ -101,7 +101,7 @@
       "kind": "narration",
       "id": "yard_scale",
       "text": {
-        "ru": "У весов двое из Цеха разбирают тачку невостребованного. Один кладёт вещь на чашку, второй вычёркивает строку. Вычёркивает он заметно быстрее, чем первый взвешивает.",
+        "ru": "У весов двое делят вещи из тачки. Один кладёт на чашку детский башмак, второй уже тянется за следующим.",
         "en": "Two men of the Guild are working through a barrow of unclaimed goods by the scale. One puts an item on the pan, the other strikes a line off a list. He strikes them out noticeably faster than the first one weighs."
       },
       "keywords": [
@@ -120,7 +120,7 @@
       "id": "marodyor_yard_1",
       "speaker": "marodyor",
       "text": {
-        "ru": "Тачка выкуплена оптом, до полудня. Что вышло из чулана своим ходом — тоже строка в ней.",
+        "ru": "Ничейное делим до полудня. То, что вышло из чулана своим ходом, тоже ничейное.",
         "en": "The barrow was bought as a lot, good until noon. What walked out of the storeroom on its own is a line in it too."
       },
       "next": "marodyor_yard_2"
@@ -130,8 +130,8 @@
       "id": "marodyor_yard_2",
       "speaker": "marodyor",
       "text": {
-        "ru": "Ходячее в прейскуранте не значится. Значит, пойдёт по весу.",
-        "en": "Walking goods are not on the price list. So it goes by weight."
+        "ru": "Ходячего раньше не было. Значит, взвесим вместе с остальным.",
+        "en": "Walking goods are not on the notice board. So it goes by weight."
       },
       "keywords": [
         {
@@ -148,15 +148,15 @@
       "kind": "choice",
       "id": "yard_fight_choice",
       "prompt": {
-        "ru": "Залог останавливается у тебя за плечом. Чашка весов пустая и ждёт.",
-        "en": "The pledge halts at your shoulder. The empty pan of the scale is waiting."
+        "ru": "Забытыш останавливается у тебя за плечом. Чашка весов пустая и ждёт.",
+        "en": "The Forgotten One halts at your shoulder. The empty pan of the scale is waiting."
       },
       "options": [
         {
           "id": "by_my_inventory",
           "text": {
-            "ru": "Сказать, что залог мой по описи.",
-            "en": "Say the pledge is mine by the inventory."
+            "ru": "Сказать, что он пришёл со мной.",
+            "en": "Say the Forgotten One is mine by the list."
           },
           "effects": [
             {
@@ -170,8 +170,8 @@
         {
           "id": "stand_between",
           "text": {
-            "ru": "Встать между списком и залогом.",
-            "en": "Stand between the list and the pledge."
+            "ru": "Встать между ними и Забытышем.",
+            "en": "Stand between the list and the Forgotten One."
           },
           "effects": [
             {
@@ -200,8 +200,8 @@
         {
           "id": "hold_it_tight",
           "text": {
-            "ru": "Взять залог за плечо и не отпускать.",
-            "en": "Take the pledge by the shoulder and not let go."
+            "ru": "Взять Забытыша за плечо.",
+            "en": "Grip the Forgotten One's shoulder and hold on."
           },
           "conditions": {
             "kind": "axis",
@@ -333,8 +333,8 @@
       "id": "r_yard_paper",
       "speaker": "marodyor",
       "text": {
-        "ru": "Опись у тебя устная. Устное мы принимаем руками.",
-        "en": "Your inventory is spoken. Spoken goods we take in by hand."
+        "ru": "Бумага у тебя устная. Устное мы принимаем руками.",
+        "en": "Your list is spoken. Spoken goods we take in by hand."
       },
       "next": "fight_yard_marauders"
     },
@@ -343,7 +343,7 @@
       "id": "r_yard_between",
       "speaker": "marodyor",
       "text": {
-        "ru": "Двое на одного — это не драка, а переучёт. Переучёт мы оформляем сами.",
+        "ru": "Двое на одного — это не драка, а пересчёт. Пересчёт мы оформляем сами.",
         "en": "Two against one is not a fight, it is a recount. We file our own recounts."
       },
       "next": "fight_yard_marauders"
@@ -541,8 +541,8 @@
         {
           "id": "enter_in_list",
           "text": {
-            "ru": "Внести мальчишку в опись.",
-            "en": "Enter the boy into the inventory."
+            "ru": "Внести мальчишку в список.",
+            "en": "Enter the boy into the list."
           },
           "chip": {
             "icon": "hourglass",
@@ -697,14 +697,14 @@
       "id": "guard_out",
       "speaker": "strazhnik",
       "text": {
-        "ru": "Приём окончен. Бланк двенадцать-бис выдан на руки. Двор не приёмная.",
-        "en": "Intake is closed. Form twelve-bis has been issued to you. The yard is not a waiting room."
+        "ru": "Приём окончен. Лист двенадцать-бис выдан на руки. Двор не приёмная.",
+        "en": "Intake is closed. sheet twelve-bis has been issued to you. The yard is not a waiting room."
       },
       "keywords": [
         {
           "match": {
-            "ru": "Бланк двенадцать-бис",
-            "en": "Form twelve-bis"
+            "ru": "Лист двенадцать-бис",
+            "en": "sheet twelve-bis"
           },
           "tone": "lore"
         }
@@ -716,8 +716,8 @@
       "id": "beggar_1",
       "speaker": "poproshayka",
       "text": {
-        "ru": "У меня расписка. Я не помню, за что расписка.",
-        "en": "I have a receipt. I do not remember what the receipt is for."
+        "ru": "У меня записка. Я не помню, за что она.",
+        "en": "I have a note. I do not remember what the note is for."
       },
       "next": "guard_out2"
     },
@@ -765,8 +765,8 @@
         "en": "The board by the rear gate"
       },
       "text": {
-        "ru": "«Приём горя — с шести до полудня, в порядке живой очереди. Горе свежее принимается только с сопровождающим. Стыд детский, невыношенный, — по прейскуранту листа второго. Плакать в очереди разрешается: слёзы к приёму не принимаются и цены не сбивают».",
-        "en": "\"Grief received from six until noon, in order of the queue. Fresh grief accepted only with an escort. Childhood shame, unripened — per the price list, sheet two. Weeping in the queue is permitted: tears are not accepted for intake and do not affect the price.\""
+        "ru": "«Приём горя — с шести до полудня, в порядке живой очереди. Горе свежее принимается только с сопровождающим. Детский стыд оставлять у второй доски. Плакать в очереди разрешается».",
+        "en": "\"Grief received from six until noon, in order of the queue. Fresh grief accepted only with an escort. Childhood shame, unripened — per the notice board, sheet two. Weeping in the queue is permitted: tears are not accepted for intake and do not affect the price.\""
       },
       "next": "beggar_2"
     },
@@ -774,8 +774,8 @@
       "kind": "narration",
       "id": "beggar_2",
       "text": {
-        "ru": "Попрошайка садится у стены и разглаживает расписку на колене. Он делает это очень аккуратно, как делают с тем, что придётся показывать.",
-        "en": "The beggar sits by the wall and smooths the receipt on his knee. He does it very carefully, the way one handles a thing that will have to be shown."
+        "ru": "Попрошайка садится у стены и разглаживает запискау на колене. Он делает это очень аккуратно, как делают с тем, что придётся показывать.",
+        "en": "The beggar sits by the wall and smooths the note on his knee. He does it very carefully, the way one handles a thing that will have to be shown."
       },
       "next": "beggar_choice"
     },
@@ -790,8 +790,8 @@
         {
           "id": "give_own",
           "text": {
-            "ru": "Отдать ему что-нибудь из своей описи.",
-            "en": "Give him something from my own inventory."
+            "ru": "Отдать ему что-нибудь из своих вещей.",
+            "en": "Give him something from my own list."
           },
           "effects": [
             {
@@ -902,8 +902,8 @@
         {
           "id": "posul_thursday",
           "text": {
-            "ru": "Пообещать ему выкуп к четвергу.",
-            "en": "Promise him a redemption by Thursday."
+            "ru": "Пообещать ему возврат к четвергу.",
+            "en": "Promise him a return by Thursday."
           },
           "chip": {
             "icon": "coin",
@@ -929,8 +929,8 @@
         {
           "id": "pay_his_form",
           "text": {
-            "ru": "Оплатить ему обратный бланк.",
-            "en": "Pay for his return form."
+            "ru": "Оплатить ему обратный лист.",
+            "en": "Pay for his return sheet."
           },
           "conditions": {
             "kind": "axis",
@@ -955,8 +955,8 @@
         {
           "id": "ask_article",
           "text": {
-            "ru": "Спросить стражника, по какой статье.",
-            "en": "Ask the guard under which article."
+            "ru": "Спросить стражника, по какому правилу.",
+            "en": "Ask the guard under which rule."
           },
           "conditions": {
             "kind": "axis",
@@ -976,8 +976,8 @@
         {
           "id": "take_receipt",
           "text": {
-            "ru": "Забрать у него расписку.",
-            "en": "Take the receipt off him."
+            "ru": "Забрать у него запискау.",
+            "en": "Take the note off him."
           },
           "conditions": {
             "kind": "axis",
@@ -1015,8 +1015,8 @@
       "kind": "narration",
       "id": "r_beggar_gave2",
       "text": {
-        "ru": "Он говорит это и сам замолкает на середине. Запоминать ему нечем: верхнюю треть приняли по бланку сегодня утром.",
-        "en": "He says it and stops himself halfway. He has nothing to remember with: the upper third was taken in on a form this morning."
+        "ru": "Он говорит это и сам замолкает на середине. Запоминать ему нечем: верхнюю треть приняли по листу сегодня утром.",
+        "en": "He says it and stops himself halfway. He has nothing to remember with: the upper third was taken in on a sheet this morning."
       },
       "next": "yard_exit"
     },
@@ -1054,8 +1054,8 @@
       "id": "r_beggar_article",
       "speaker": "strazhnik",
       "text": {
-        "ru": "Восьмая, пункт грустный. По нему у нас всё, что нельзя оформить иначе.",
-        "en": "Article eight, the sad clause. Everything we cannot file otherwise goes under it."
+        "ru": "Восьмое, грустное. По нему у нас всё, чему другого места не нашлось.",
+        "en": "rule eight, the sad clause. Everything we cannot file otherwise goes under it."
       },
       "next": "yard_exit"
     },
@@ -1063,7 +1063,7 @@
       "kind": "narration",
       "id": "yard_exit",
       "text": {
-        "ru": "Он уносится в проулок. Дверь в зал оценщиков открыта, и оттуда пахнет чернилами и чем-то сладким, чего в чернилах не бывает.",
+        "ru": "Он уносится в проулок. Дверь в зал глазомеров открыта, и оттуда пахнет чернилами и чем-то сладким, чего в чернилах не бывает.",
         "en": "He tears off into the alley. The door to the appraisers' hall stands open, smelling of ink and of something sweet that ink does not contain."
       },
       "next": "scene:appraiser_hall"

@@ -52,8 +52,8 @@
         "en": "Rules for storing the unclaimed, sheet three"
       },
       "text": {
-        "ru": "«Плата за хранение начисляется до полного погашения либо до перехода вещи в собственность Ломбарда». После перехода начисление не прекращается: Ломбард начинает брать плату за хранение с самого себя, левым карманом с правого, и обе строки сходятся. Пункт о положении вещи на полке в правилах отсутствует, потому что до сих пор не требовался.",
-        "en": "\"Storage charges accrue until full redemption or until the item passes into the Pawnshop's ownership.\" After the transfer the accrual does not stop: the Pawnshop begins charging itself for storage, the left pocket billing the right, and both lines tally. There is no clause about which way an item faces on the shelf, because until now none was needed."
+        "ru": "«Плата за хранение начисляется до полного погашения либо до перехода вещи в собственность дома вещей». После перехода начисление не прекращается: дом вещей начинает брать плату за хранение с самого себя, левым карманом с правого, и обе строки сходятся. Строка о положении вещи на полке в правилах отсутствует, потому что до сих пор не требовался.",
+        "en": "\"Storage charges accrue until full return or until the item passes into the house's ownership.\" After the transfer the accrual does not stop: the house of things begins charging itself for storage, the left pocket billing the right, and both lines tally. There is no clause about which way an item faces on the shelf, because until now none was needed."
       },
       "next": "the_comb"
     },
@@ -80,7 +80,7 @@
       "kind": "choice",
       "id": "turn_choice",
       "prompt": {
-        "ru": "Срок хранения на бирке кончился раньше, чем ты научился читать здешние бланки.",
+        "ru": "Срок хранения на бирке кончился раньше, чем ты научился читать здешние листы.",
         "en": "The term of storage on the tag ran out before you learned to read the local forms."
       },
       "options": [
@@ -115,7 +115,7 @@
           "id": "list_room",
           "chip": { "icon": "hourglass", "label": { "ru": "Перечень", "en": "Perechen" }, "tone": "life" },
           "conditions": { "kind": "life", "life": "perechen" },
-          "text": { "ru": "Переписать чулан целиком. По полкам.", "en": "Inventory the whole storeroom. Shelf by shelf." },
+          "text": { "ru": "Переписать чулан целиком. По полкам.", "en": "List the whole storeroom. Shelf by shelf." },
           "effects": [
             { "kind": "fragment", "memory": "opis_vsego_sushchego", "amount": 2 },
             { "kind": "axis", "axis": "reason_obsession", "delta": -8 },
@@ -128,7 +128,7 @@
           "id": "redeem_for_owner",
           "chip": { "icon": "heal", "label": { "ru": "Ключарь", "en": "Klyuchar" }, "tone": "life" },
           "conditions": { "kind": "life", "life": "klyuchar" },
-          "text": { "ru": "Выкупить гребень и снести на Тот берег.", "en": "Redeem the comb and carry it across." },
+          "text": { "ru": "Забрать гребень и снести на Тот берег.", "en": "Take back the comb and carry it across." },
           "effects": [
             { "kind": "fragment", "memory": "poslednyaya_kruzhka", "amount": 1 },
             { "kind": "counter", "counter": "debts_forgiven", "delta": 1 },
@@ -193,8 +193,8 @@
       "kind": "narration",
       "id": "r_took_all",
       "text": {
-        "ru": "Выносить приходится в два приёма. Ломбард в таких случаях оформляет убыток, но убытка не выходит: всё унесённое числится за Ломбардом, а Ломбард платит за хранение сам себе, и обе строки сходятся без тебя.",
-        "en": "It takes two trips to carry out. In such cases the Pawnshop draws up a loss, but no loss comes out: everything taken is booked to the Pawnshop, and the Pawnshop pays itself for storage, and both lines tally without you."
+        "ru": "Выносить приходится в два приёма. дом вещей в таких случаях оформляет убыток, но убытка не выходит: всё унесённое числится за домом вещей, а дом вещей платит за хранение сам себе, и обе строки сходятся без тебя.",
+        "en": "It takes two trips to carry out. In such cases the house of things draws up a loss, but no loss comes out: everything taken is booked to the house of things, and the house of things pays itself for storage, and both lines tally without you."
       },
       "next": "chulan_exit"
     },
@@ -202,8 +202,8 @@
       "kind": "narration",
       "id": "r_listed",
       "text": {
-        "ru": "Двести шесть предметов, из них сорок с пустыми бирками. Опись ты кончаешь к рассвету и тогда замечаешь, что вписал себя пунктом первым, не задумавшись, — как вписывают то, что и так на складе.",
-        "en": "Two hundred and six items, forty of them with blank tags. You finish the inventory at dawn and only then notice that you entered yourself as item one without thinking, the way you enter what is already in the warehouse."
+        "ru": "Двести шесть предметов, из них сорок с пустыми бирками. Список ты кончаешь к рассвету и тогда замечаешь, что вписал себя строкой первым, не задумавшись, — как вписывают то, что и так на складе.",
+        "en": "Two hundred and six items, forty of them with blank tags. You finish the list at dawn and only then notice that you entered yourself as item one without thinking, the way you enter what is already in the warehouse."
       },
       "next": "chulan_exit"
     },
@@ -211,8 +211,8 @@
       "kind": "narration",
       "id": "r_redeemed",
       "text": {
-        "ru": "Выкуп стоит четыре гроша и полчаса объяснений: вещь без имени владельца выдаче не подлежит, а с именем — тем более. Братья хоронят гребень по полному обряду и называют его по номеру бирки.",
-        "en": "The redemption costs four groschen and half an hour of explaining: an item with no owner's name may not be issued, and with a name even less so. The brothers bury the comb by the full rite and call it by its tag number."
+        "ru": "Возврат стоит четыре гроша и полчаса объяснений: вещь без имени владельца выдаче не подлежит, а с именем — тем более. Братья хоронят гребень по полному обряду и называют его по номеру бирки.",
+        "en": "The return costs four groschen and half an hour of explaining: an item with no owner's name may not be issued, and with a name even less so. The brothers bury the comb by the full rite and call it by its tag number."
       },
       "next": "chulan_exit"
     },
@@ -220,7 +220,7 @@
       "kind": "narration",
       "id": "r_filled",
       "text": {
-        "ru": "В сорока бирках ты пишешь то немногое, что успел узнать: чей чайник, кто приходил по средам, откуда санки. В графе гребня писать нечего, и ты оставляешь её пустой, потому что так и было.",
+        "ru": "В сорока бирках ты пишешь то немногое, что успел узнать: чей чайник, кто приходил по средам, откуда санки. В строке гребня писать нечего, и ты оставляешь её пустой, потому что так и было.",
         "en": "Into forty tags you write the little you have managed to learn: whose teapot, who came on Wednesdays, where the sledge is from. For the comb there is nothing to write, and you leave it blank, because that is how it was."
       },
       "next": "chulan_exit"

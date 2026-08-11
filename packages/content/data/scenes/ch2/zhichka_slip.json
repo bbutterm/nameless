@@ -392,8 +392,8 @@
       "id": "r_show_deed",
       "speaker": "zhichka",
       "text": {
-        "ru": "Тот же нажим, тот же хвост у «у». Значит, ты и в мельницу, и в ломбард, и в подпись — один. Я торгую чужим, а тут чужого нет вовсе.",
-        "en": "Same pressure, same short tail on the letter. So the mill and the pawnshop and the signature are all one man. I trade in what belongs to others, and here there is nothing that belongs to others at all."
+        "ru": "Тот же нажим, тот же хвост у «у». Значит, ты и в мельницу, и в ту башню, и в подпись — один. Я торгую чужим, а тут чужого нет вовсе.",
+        "en": "Same pressure, same short tail on the letter. So the mill and that tower and the signature are all one man. I trade in what belongs to others, and here there is nothing that belongs to others at all."
       },
       "next": "after_press"
     },

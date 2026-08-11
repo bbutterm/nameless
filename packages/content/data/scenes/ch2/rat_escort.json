@@ -393,8 +393,8 @@
       "id": "nest_2",
       "speaker": "marodyor",
       "text": {
-        "ru": "За четыре года из этого хода вынесено одиннадцать гнёзд. Три из них потом продали обратно Ломбарду, и Ломбард заплатил как за находку.",
-        "en": "In four years eleven nests have been carried out of this passage. Three of them were later sold back to the Pawnshop, and the Pawnshop paid for them as for a find."
+        "ru": "За четыре года из этого хода вынесли одиннадцать гнёзд. Три потом продали сторожам как находку. Сторожа узнали свою бумагу и всё равно заплатили.",
+        "en": "In four years eleven nests were carried from this passage. Three were sold to the watchmen as finds. The watchmen knew their own paper and paid anyway."
       },
       "next": "nest_choice"
     },

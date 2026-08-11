@@ -28,10 +28,10 @@
     {
       "kind": "lore",
       "id": "patch_lore",
-      "title": { "ru": "Смета на ремонт обеспечения", "en": "Estimate for repair of holdings" },
+      "title": { "ru": "Ремонт стены", "en": "Estimate for repair of holdings" },
       "text": {
-        "ru": "«Заделка шва производится однородным материалом. Однородным считается свежепринятое, не старше суток». Ниже приписка от руки: «Шесть штук взято из приёма за вторник; вторник закрыт досрочно, приём остановлен, вкладчикам объявлено об отсрочке». Отсрочку объявили тем, у кого уже приняли.",
-        "en": "\"Sealing of a seam is performed with homogeneous material. Homogeneous means freshly accepted, not older than one day.\" Below, in hand: \"Six taken from Tuesday's intake; Tuesday closed early, intake halted, depositors informed of a deferral.\" The deferral was announced to the ones whose deposits had already been taken."
+        "ru": "«Заделка шва производится однородным материалом. Однородным считается свежепринятое, не старше суток». Ниже приписка от руки: «Шесть штук взято из приёма за вторник; вторник закрыт досрочно, приём остановлен, хозяинам объявлено об отсрочке». Отсрочку объявили тем, у кого уже приняли.",
+        "en": "\"Sealing of a seam is performed with homogeneous material. Homogeneous means freshly accepted, not older than one day.\" Below, in hand: \"Six taken from Tuesday's intake; Tuesday closed early, intake halted, owners informed of a deferral.\" The deferral was announced to the ones whose bundles had already been taken."
       },
       "next": "storozh_here"
     },
@@ -49,7 +49,7 @@
       "kind": "narration",
       "id": "numbers",
       "text": {
-        "ru": "Полки считают снизу вверх, и счёт начинается с двойки. Самая нижняя номера не имеет: номер полке даёт опись, а описи на неё не заводили.",
+        "ru": "Полки считают снизу вверх, и счёт начинается с двойки. Самая нижняя полка номера не имеет: номер полке даёт список, а списка на неё не заводили.",
         "en": "The shelves are counted from the bottom up, and the count starts at two. The lowest has no number: a shelf is given its number by an inventory, and no inventory was ever opened for that one."
       },
       "next": "descent_choice"
@@ -181,7 +181,7 @@
       "kind": "narration",
       "id": "r_service",
       "text": {
-        "ru": "Служебная дверь открывается тем же ключом, что и наверху: замки внизу не меняли, потому что менять их дороже, чем поставить человека. Человека на этом посту сегодня нет — он в сверке.",
+        "ru": "Дверь открывается тем же ключом, что и наверху: замки внизу не меняли, потому что менять их дороже, чем поставить человека. Сегодня пост пуст.",
         "en": "The service door opens with the same key as the ones upstairs: the locks down here were never changed, because changing them costs more than posting a man. There is no man at the post today: he is in the reconciliation."
       },
       "next": "water_line"
@@ -218,8 +218,8 @@
       "kind": "narration",
       "id": "grate",
       "text": {
-        "ru": "Между тобой и полкой решётка от пола до свода, и на ней висит бирка: «выдаче не подлежит. Выкуп разрешён продавцу. Открывать при сведённой сверке, в присутствии Ревизии».",
-        "en": "Between you and the shelf is a grating from floor to vault, and on it hangs a tag: \"not for issue. Redemption permitted to the seller. To be opened when the reconciliation is closed, in the presence of the Audit\"."
+        "ru": "Между тобой и полкой решётка от пола до свода. На ней бирка: «не выдавать. Отдать только тому, кто принёс. Открывать в присутствии Сличилы».",
+        "en": "Between you and the shelf is a grating from floor to vault, and on it hangs a tag: \"not for issue. Return permitted to the seller. To be opened when the reconciliation is closed, in the presence of the Collator\"."
       },
       "next": "guards_wake"
     },
@@ -227,7 +227,7 @@
       "kind": "narration",
       "id": "guards_wake",
       "text": {
-        "ru": "Замок на решётке размером с человека и с человеком же и обходится: он поворачивается к свету раньше, чем ты подходишь. За ним из бокового хода выступают приставы, а с ними оценщик — оценщик обязан присутствовать при попытке изъятия.",
+        "ru": "Замок на решётке размером с человека и с человеком же и обходится: он поворачивается к свету раньше, чем ты подходишь. За ним из бокового хода выступают приставы, а с ними Глазомер — Глазомер обязан присутствовать при попытке отбора.",
         "en": "The lock on the grating is the size of a man and deals with men accordingly: it turns towards the light before you come near. Behind it bailiffs step out of a side passage, and an appraiser with them: an appraiser must be present at an attempted seizure."
       },
       "next": "guard_choice"
@@ -255,7 +255,7 @@
         },
         {
           "id": "fight_hard",
-          "text": { "ru": "Начать с оценщика. Он ведёт опись.", "en": "Start with the appraiser. He keeps the record." },
+          "text": { "ru": "Начать с Глазомера. Он ведёт список.", "en": "Start with the appraiser. He keeps the record." },
           "fallback": true,
           "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": -3 }],
           "to": "descent_battle"
@@ -264,7 +264,7 @@
           "id": "posul_first",
           "chip": { "icon": "coin", "label": { "ru": "Посульщик", "en": "Posulshchik" }, "tone": "life" },
           "conditions": { "kind": "life", "life": "posulshchik" },
-          "text": { "ru": "Выставить Посул вперёд. Пусть считают его.", "en": "Put the Promise out front. Let them count that." },
+          "text": { "ru": "Выставить Обещание вперёд. Пусть считают его.", "en": "Put the Promise out front. Let them count that." },
           "effects": [
             { "kind": "fragment", "memory": "luchshie_gody", "amount": 3 },
             { "kind": "axis", "axis": "honesty_deceit", "delta": -8 }
@@ -302,8 +302,8 @@
       "id": "tag_aloud",
       "speaker": "naryad_revizii",
       "text": {
-        "ru": "Слышали. «Выкуп разрешён продавцу» — а продавец у нас числится по описи, а не по голосу. Предъявите опись.",
-        "en": "We heard. \"Redemption permitted to the seller\" — and our seller is entered by record, not by voice. Produce the record."
+        "ru": "Слышали. «Возвращение разрешён продавцу» — а продавец у нас числится по списку, а не по голосу. Предъявите список.",
+        "en": "We heard. \"Return permitted to the seller\" — and our seller is entered by record, not by voice. Produce the record."
       },
       "next": "descent_battle"
     },
@@ -331,7 +331,7 @@
       "kind": "narration",
       "id": "dying_shelf_text",
       "text": {
-        "ru": "Замок разворачивается всей массой и садится на тебя, как садится потолок на стену. Последним ты слышишь, как оценщик просит подождать с уборкой: до описи трогать нельзя.",
+        "ru": "Замок разворачивается всей массой и садится на тебя, как садится потолок на стену. Последним ты слышишь, как Глазомер просит подождать с уборкой: до записи трогать нельзя.",
         "en": "The lock swings its whole weight round and settles on you the way a ceiling settles on a wall. The last thing you hear is the appraiser asking them to hold off clearing up: nothing may be touched before the record is made."
       },
       "next": "scene:silver_counter#queue_entry"
@@ -340,8 +340,8 @@
       "kind": "narration",
       "id": "after_descent",
       "text": {
-        "ru": "Замок стоит криво и больше не поворачивается. Решётку это не открывает: она держится не на замке, а на бирке, а бирку снимает Ревизия.",
-        "en": "The lock stands askew and no longer turns. That does not open the grating: the grating is held not by the lock but by the tag, and the tag comes off by the Audit's hand."
+        "ru": "Замок стоит криво и больше не поворачивается. Решётку это не открывает: она держится не на замке, а на бирке, а бирку снимает Сличила.",
+        "en": "The lock stands askew and no longer turns. That does not open the grating: the grating is held not by the lock but by the tag, and the tag comes off by the Collator's hand."
       },
       "next": "through_grate"
     },
