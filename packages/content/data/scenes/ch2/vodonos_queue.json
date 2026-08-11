@@ -30,7 +30,7 @@
       "id": "beggar_here",
       "speaker": "poproshayka",
       "text": {
-        "ru": "Я не за водой. Расписка при мне, вот, разгладил. Я не помню, за что она, но я стою... я стою.",
+        "ru": "Я не за водой. Записка при мне, вот, разгладил. Я не помню, за что она, но я стою... я стою.",
         "en": "I am not here for water. I have my receipt, look, I smoothed it out. I do not remember what it is for, but I am standing... I am standing."
       },
       "next": "lore_tariff"
@@ -38,10 +38,10 @@
     {
       "kind": "lore",
       "id": "lore_tariff",
-      "title": { "ru": "Прейскурант, лист девятый: надбавки", "en": "Price list, sheet nine: surcharges" },
+      "title": { "ru": "Ценник, лист девятый: лишней платы", "en": "Price board, sheet nine: surcharges" },
       "text": {
-        "ru": "«Доброта, подтверждённая свидетелями, — коэффициент 1,4 к базовому тарифу вкладчика». Обоснование в примечании: раздающий бесплатно располагает избытком, а избыток — признак платёжеспособности. Пункт введён давно и ни разу не оспорен: оспаривать его приходили только те, кому он начислен, и они, как правило, приходили не за себя.",
-        "en": "\"Kindness, attested by witnesses — coefficient 1.4 on the depositor's base rate.\" The note gives the grounds: one who gives away free of charge has a surplus, and a surplus indicates ability to pay. The clause was introduced long ago and never once contested: only those charged under it ever came to contest it, and they generally came on somebody else's behalf."
+        "ru": "«За доброту цена выше на четыре десятых». Бесплатно раздаёт тот, у кого есть лишнее, — так объясняет примечание. Правило старое; спорить приходили лишь те, кто помогал другим.",
+        "en": "\"Kindness, attested by witnesses — coefficient 1.4 on the giver's base rate.\" The note gives the grounds: one who gives away free of charge has a surplus, and a surplus indicates ability to pay. The clause was introduced long ago and never once contested: only those charged under it ever came to contest it, and they generally came on somebody else's behalf."
       },
       "next": "appraiser_here"
     },
@@ -50,7 +50,7 @@
       "id": "appraiser_here",
       "speaker": "otsenshchik",
       "text": {
-        "ru": "Пункт девятый, надбавка учтена со вчерашнего дня. Свидетелей девятнадцать, все стоят вон там и пьют. Оспаривание — через окошко.",
+        "ru": "Строка девятая, лишняя плата со вчерашнего дня. Свидетелей девятнадцать, все стоят вон там и пьют. Спорить — через окошко.",
         "en": "Item nine, the surcharge has been applied since yesterday. Nineteen witnesses, all standing over there drinking. Contest it at the window."
       },
       "next": "the_nineteen"
@@ -146,7 +146,7 @@
         {
           "id": "redeem_receipt",
           "conditions": { "kind": "flag", "flag": "beggar_helped" },
-          "text": { "ru": "Выкупить расписку у того, от ворот.", "en": "Redeem the receipt from the man from the gate." },
+          "text": { "ru": "Забрать записку у человека от ворот.", "en": "Take the gate man's note." },
           "effects": [
             { "kind": "counter", "counter": "debts_forgiven", "delta": 1 },
             { "kind": "axis", "axis": "mercy_cruelty", "delta": 8 },
@@ -161,8 +161,8 @@
       "kind": "narration",
       "id": "r_pouring",
       "text": {
-        "ru": "Отголосок подаёт по кружке в руки и не делает разницы. К девятому кругу к очереди пристраивается младший оценщик, выпивает и записывает себя в свидетели, потому что так положено.",
-        "en": "The echo hands out a cup per pair of hands and makes no distinction. By the ninth round the junior appraiser joins the queue, drinks, and enters himself as a witness, because that is the procedure."
+        "ru": "Отголосок подаёт по кружке в руки и не делает разницы. К девятому кругу к очереди пристраивается младший Глазомер, выпивает и записывает себя в свидетели, потому что так положено.",
+        "en": "The echo hands out a cup per pair of hands and makes no distinction. By the ninth round the junior Keen Eye joins the queue, drinks, and enters himself as a witness, because that is the procedure."
       },
       "next": "guard_comes"
     },
@@ -215,7 +215,7 @@
       "kind": "narration",
       "id": "r_promised_well",
       "text": {
-        "ru": "Колодец ты обещаешь на предъявителя и к четвергу, голосом твёрдым и с местом на выбор. Двое уходят готовить место. Четверг здесь у многих всякий день, так что ждать будут долго и хорошо.",
+        "ru": "Колодец ты обещаешь на пришедшего и к четвергу, голосом твёрдым и с местом на выбор. Двое уходят готовить место. Четверг здесь у многих всякий день, так что ждать будут долго и хорошо.",
         "en": "You promise the well to the bearer and by Thursday, in a firm voice and with a choice of site. Two of them go off to prepare the site. Thursday is every day for a good many here, so the waiting will be long and comfortable."
       },
       "next": "guard_comes"
@@ -225,8 +225,8 @@
       "id": "r_receipt",
       "speaker": "poproshayka",
       "text": {
-        "ru": "Выкупили? Тогда мне... тогда мне нечего разглаживать. Спасибо. Спасибо, я теперь просто...",
-        "en": "You redeemed it? Then I have... then I have nothing to smooth out. Thank you. Thank you, now I just..."
+        "ru": "Возвратили? Тогда мне... тогда мне нечего разглаживать. Спасибо. Спасибо, я теперь просто...",
+        "en": "You took it back? Then I have... then I have nothing to smooth out. Thank you. Thank you, now I just..."
       },
       "next": "guard_comes"
     },
@@ -235,7 +235,7 @@
       "id": "guard_comes",
       "speaker": "dratva",
       "text": {
-        "ru": "Скопление у водоразборной колонки. Статья четырнадцатая. Пункт грустный: расходиться им некуда, а стоять не положено.",
+        "ru": "Скопление у водоразборной колонки. Правило четырнадцатое. Строка грустная: расходиться им некуда, а стоять не положено.",
         "en": "Assembly at a water standpipe. Article fourteen. The sad clause: they have nowhere to disperse to, and standing is not permitted."
       },
       "next": "guard_drinks"
@@ -327,7 +327,7 @@
       "id": "r_let_her",
       "speaker": "dratva",
       "text": {
-        "ru": "Разошлись. Они всегда расходятся: у них нет статьи, по которой можно не расходиться. Через час соберутся у второй колонки.",
+        "ru": "Разошлись. Они всегда расходятся: у них нет правила, по которому можно остаться. Через час соберутся у второй колонки.",
         "en": "Dispersed. They always disperse: they have no article that lets them not to. In an hour they will gather at the second standpipe."
       },
       "next": "queue_exit"
@@ -337,7 +337,7 @@
       "id": "r_between",
       "speaker": "dratva",
       "text": {
-        "ru": "Между собой и мной вы поставили девятнадцать свидетелей. Плохой расчёт. Оформлю по грустному пункту, идите.",
+        "ru": "Между собой и мной вы поставили девятнадцать свидетелей. Плохой расчёт. Запишу в грустную строку, идите.",
         "en": "You have put nineteen witnesses between yourself and me. Poor reckoning. I will file it under the sad clause, go on."
       },
       "next": "queue_exit"
@@ -356,7 +356,7 @@
       "id": "r_poured_her",
       "speaker": "dratva",
       "text": {
-        "ru": "Третью не надо. Статья двадцать вторая, содействие. Я вас записала в содействующие, и это, к сожалению, надолго.",
+        "ru": "Третью не надо. Правило двадцать второе, содействие. Я вас записала в содействующие, и это, к сожалению, надолго.",
         "en": "No third one. Article twenty-two, assistance. I have entered you as assisting, and that, unfortunately, is a long-term entry."
       },
       "next": "queue_exit"
@@ -365,8 +365,8 @@
       "kind": "narration",
       "id": "r_took_along",
       "text": {
-        "ru": "Ты уходишь, и они идут за тобой, все девятнадцать, и на приёмном дворе Ломбарда их считают дважды, потому что с первого раза не поверили. Тариф тебе поднимают ещё раз, при них.",
-        "en": "You walk off and they come after you, all nineteen, and in the Pawnshop's intake yard they are counted twice, because nobody believed the first count. Your rate is raised again, in front of them."
+        "ru": "Ты уходишь, и они идут за тобой, все девятнадцать. Во дворе дома вещей их считают дважды: с первого раза не поверили. Цену тебе поднимают ещё раз, при них.",
+        "en": "You walk off and all nineteen follow. In the house yard they are counted twice because nobody believed the first count. Your price rises again, in front of them."
       },
       "next": "queue_exit"
     },
@@ -385,8 +385,8 @@
       "id": "r_explained",
       "speaker": "dratva",
       "text": {
-        "ru": "Коэффициент один и четыре. То есть за доброту с вас берут дороже. Устав такого не предусматривает, а прейскурант, значит, предусматривает.",
-        "en": "Coefficient one point four. So they charge you more for kindness. The regulations do not provide for that, and the price list, apparently, does."
+        "ru": "Множитель один и четыре. То есть за доброту с вас берут дороже. Устав такого не предусматривает, а ценник, значит, предусматривает.",
+        "en": "Coefficient one point four. So they charge you more for kindness. The regulations do not provide for that, and the price board, apparently, does."
       },
       "next": "queue_exit"
     },
@@ -394,8 +394,8 @@
       "kind": "narration",
       "id": "queue_exit",
       "text": {
-        "ru": "Ведро остаётся у колонки, полное. К вечеру его унесут, и Ломбард выпишет за него убыток в две строки: ведро и вода. Вода дороже.",
-        "en": "The bucket stays at the pump, full. By evening it will be taken, and the Pawnshop will draw up the loss in two lines: bucket and water. The water costs more."
+        "ru": "Ведро остаётся у колонки, полное. К вечеру его унесут, и дом вещей выпишет за него убыток в две строки: ведро и вода. Вода дороже.",
+        "en": "The bucket stays at the pump, full. By evening it will be taken, and the house of things will draw up the loss in two lines: bucket and water. The water costs more."
       },
       "next": "scene:vaults_hub"
     }

@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import {
   currentActor,
   isPlayerTurn,
   legalTargets,
-  readyAbilities,
+  playerAbilityBar,
+  unitAbilities,
   PARTY_SLOTS_PER_ROW,
   type Ability,
   type BattleEvent,
@@ -24,6 +25,7 @@ import {
   abilityChips,
   abilityGist,
   blockReason,
+  coolingReason,
   isCovered,
   previewFor,
   spanOverTargets,
@@ -42,6 +44,8 @@ const REASON_MS = 2600;
 const FLOAT_MS = 900;
 /** Столько держится рывок/тряска карточки. */
 const ANIM_MS = 420;
+/** Столько мигает кнопка, выбранная тапом по карте, — ровно длина .pick-flash. */
+const PICK_MS = 460;
 /** Ряд отряда — три слота; столько же у врага. */
 const SLOTS = Array.from({ length: PARTY_SLOTS_PER_ROW }, (_, i) => i);
 
@@ -52,6 +56,14 @@ export function BattleScreen() {
   const [reason, setReason] = useState<string>();
   const [anims, setAnims] = useState<Anim>({});
   const [floats, setFloats] = useState<FloatingNumber[]>([]);
+  /* Куда указывает стебель панели: середина карточки того, чей сейчас ход,
+     в координатах панели. undefined — карточки на доске нет (бой кончился). */
+  const [stemX, setStemX] = useState<number>();
+  /* Кнопка, которую только что выбрал тап по карте: она мигает, чтобы игрок
+     увидел, ЧТО именно выбрал его жест, а не гадал по подсказке. */
+  const [picked, setPicked] = useState<string>();
+  const panelRef = useRef<HTMLDivElement>(null);
+  const pickTimer = useRef<ReturnType<typeof setTimeout>>();
   const seenEvents = useRef(0);
   const holdTimer = useRef<ReturnType<typeof setTimeout>>();
   const heldOpen = useRef(false);
@@ -69,6 +81,8 @@ export function BattleScreen() {
     floatTimers.current = [];
     clearTimeout(animTimer.current);
     animTimer.current = undefined;
+    clearTimeout(pickTimer.current);
+    pickTimer.current = undefined;
   }, []);
 
   /** Забыть всё, что нарисовано от предыдущего боя. */
@@ -80,6 +94,7 @@ export function BattleScreen() {
     setSelectedAbility(undefined);
     setPeek(undefined);
     setReason(undefined);
+    setPicked(undefined);
   }, [clearViewTimers]);
 
   // Экран боя не размонтируется между боями: узел onWin может вести прямо в
@@ -184,6 +199,58 @@ export function BattleScreen() {
     clearTimeout(holdTimer.current);
   }, []);
 
+  /*
+   * Стебель панели — та самая связь «кнопка ↔ юнит», которой не было.
+   *
+   * Раньше панель висела внизу сама по себе, и чьи это кнопки, держалось на
+   * одной строке мелкого текста «Твой ход: <имя>» (REVIEW_GAMEPLAY §1, шаг 4).
+   * Слова тут не работают: панель полностью меняется каждый ход, и глаз ищет
+   * причину смены не в тексте, а в том, что на доске.
+   *
+   * Позицию берём измерением карточки, а не арифметикой по номеру слота:
+   * ширина карты выводится из ВЫСОТЫ ряда и aspect-ratio, ряды бывают одни и
+   * двое, а поле — с полями и зазорами. Любая формула здесь врала бы ровно на
+   * тех экранах, где связь важнее всего. `data-uid` на карточке уже был.
+   *
+   * В ЧУЖОЙ ход стебля нет, и это не экономия. Столбцы своих и вражеских рядов
+   * стоят один над другим: клин под карточкой врага из переднего ряда упирался
+   * снизу в свою карточку того же столбца — проверено живьём на 360×640, где
+   * стебель «Резчика карманов» вставал ровно под «Меловщика». Указатель,
+   * который на половине экранов показывает не на того, хуже отсутствующего;
+   * чей ход, в это время говорят очередь наверху и цвет бирки.
+   */
+  const stemActor = battle && battle.outcome === 'ongoing' ? currentActor(battle) : undefined;
+  const stemUid = stemActor && stemActor.side === 'player' ? stemActor.uid : undefined;
+  const eventCount = battle?.events.length ?? 0;
+  useLayoutEffect(() => {
+    const panel = panelRef.current;
+    if (!panel || !stemUid) {
+      setStemX(undefined);
+      return;
+    }
+    const measure = () => {
+      const card = document.querySelector<HTMLElement>(`.card[data-uid="${CSS.escape(stemUid)}"]`);
+      if (!card) {
+        setStemX(undefined);
+        return;
+      }
+      const c = card.getBoundingClientRect();
+      const p = panel.getBoundingClientRect();
+      const x = Math.round(c.left + c.width / 2 - p.left);
+      // Сравнение с прежним значением обязательно: эффект перезапускается на
+      // каждом событии боя, а лишний setState на том же числе — лишний кадр
+      // ровно в момент, когда игрок ждёт ответа на тап (замер Б1-г).
+      setStemX((prev) => (prev === x ? prev : x));
+    };
+    measure();
+    window.addEventListener('resize', measure);
+    window.addEventListener('orientationchange', measure);
+    return () => {
+      window.removeEventListener('resize', measure);
+      window.removeEventListener('orientationchange', measure);
+    };
+  }, [stemUid, battleId, eventCount]);
+
   if (!battle) return null;
   // Псевдоним под сужение типа: onTapUnit — объявление функции, и внутри него
   // TypeScript про проверку выше уже не помнит.
@@ -192,7 +259,32 @@ export function BattleScreen() {
 
   const actor = currentActor(battle);
   const myTurn = isPlayerTurn(battle);
-  const abilities = actor && myTurn ? readyAbilities(combat, actor) : [];
+  /*
+   * В панель идут ВСЕ способности актора, а не только готовые.
+   *
+   * Было: `readyAbilities` отфильтровывал неготовые, и применённое «Выбить
+   * долг» не серело, а пропадало с панели и возвращалось через два раунда.
+   * Игрок не знал ни того, что кнопка вернётся, ни того, когда, — с его точки
+   * зрения состав кнопок был случаен (REVIEW_GAMEPLAY §1, шаг 4). Перезарядка
+   * в движке уже лежит открыто (`u.cooldowns`), её просто никто не показывал.
+   */
+  const bar =
+    actor && myTurn
+      ? unitAbilities(combat, actor).map((a) => ({ a, cd: actor.cooldowns[a.id] ?? 0 }))
+      : [];
+  const abilities = bar.filter((x) => x.cd <= 0).map((x) => x.a);
+  /*
+   * Умения памяти — ромбы у левого края той же панели, и это не пятая
+   * способность юнита, а другая вещь другой формы (MEMORY_POWERS §B.3).
+   * Пассив («Опись») в панель не попадает вовсе: движок его отфильтровал,
+   * потому что кнопки у него нет — его интерфейс это сами цифры на врагах.
+   *
+   * Умение применяется вместо хода того юнита, чья очередь: герой отодвигает
+   * своего человека и делает сам. Поэтому ромб живёт в общей панели, а не в
+   * отдельной полосе — размен «чей ход я отдаю» должен быть виден рядом с
+   * тем, что этот ход мог бы сделать.
+   */
+  const powers = playerAbilityBar(battle);
   const legal = actor && selectedAbility && myTurn ? legalTargets(battle, actor.uid, selectedAbility) : [];
   const targets = legal.map((u) => u.uid);
   const over = battle.outcome !== 'ongoing';
@@ -297,20 +389,33 @@ export function BattleScreen() {
       setSelectedAbility(undefined);
       setPeek(undefined);
       setReason(undefined);
+      setPicked(undefined);
       return;
     }
     // Тап по своей карте = выбрать её базовое действие.
     //
     // Базовое — это удар, а не первое по списку. Единственная инструкция игры
-    // звучит «тапни свою карту, потом врага», и у стартового «Невостребованного
-    // залога» первой в наборе стоит «Подержу» — щит на союзника. Игрок делал
+    // звучит «тапни свою карту, потом врага», и у стартового «Забытыша»
+    // первой в наборе стоит «Подержу» — щит на союзника. Игрок делал
     // ровно то, что написано, тапал врага и получал отказ на первое же своё
     // самостоятельное действие. Берём первую готовую способность, которая
     // вообще умеет целиться во врага; если такой нет (чистый лекарь) — первую
     // любую, там инструкция и так не про него.
+    //
+    // И тап этот больше не слепой: выбранная кнопка мигает. Иначе жест
+    // «тапни свою карту» отвечал только строкой мелкого текста, и связь
+    // «карта → вот эта кнопка» игроку приходилось выводить самому.
     if (u.uid === actor.uid && abilities.length > 0) {
       const offensive = abilities.find((a) => a.target.startsWith('enemy'));
-      setSelectedAbility(offensive ?? abilities[0]);
+      const pick = offensive ?? abilities[0];
+      if (!pick) return;
+      vibrate('tap');
+      setSelectedAbility(pick);
+      setPeek(undefined);
+      setReason(undefined);
+      setPicked(pick.id);
+      clearTimeout(pickTimer.current);
+      pickTimer.current = setTimeout(() => setPicked(undefined), PICK_MS);
       return;
     }
     // Тап по недоступной цели раньше не делал ничего — игрок не понимал, сломалась
@@ -336,28 +441,44 @@ export function BattleScreen() {
   const shown = peek ?? selectedAbility;
   const shownSpan = shown && actor ? spanOverTargets(actor, legal, shown, lang) : undefined;
 
-  // Одна служебная строка над панелью отвечает на все три вопроса разом:
-  // чей ход, что делает выбранная способность и почему цель недоступна.
+  /*
+   * Бирка хозяина панели: знак дома и имя того, чей сейчас ход.
+   *
+   * Имя актора и раньше стояло в служебной строке — но только пока в ней не
+   * было ничего важнее: выбрал способность, тапнул мимо — и имя пропадало,
+   * ровно в тот момент, когда игрок разбирается, чьи это кнопки. Теперь бирка
+   * стоит слева всегда и меняется только вместе с ходом, а переменная часть
+   * подсказки живёт правее. Цвет говорит сторону: свой ход — цветом выбора,
+   * чужой — цветом опасности, тем же, что рамка угрозы на карточках.
+   */
+  const ownerMark = actor ? unitEmblem(defs.get(actor.defId)?.id, defs.get(actor.defId)?.faction) : undefined;
+  const owner = actor && !over && (
+    /* Знака нет у тех юнитов, у кого нет ни личного, ни домового (`unitEmblem`
+       возвращает undefined — «лучше пусто, чем чужой предмет»). Тогда левое
+       поле бирки выравнивается с правым, иначе имя висит не по центру пилюли. */
+    <span className={`hint-owner ${myTurn ? 'mine' : 'theirs'} ${ownerMark ? '' : 'no-mark'}`}>
+      {ownerMark && <span className="owner-mark" style={ownerMark} aria-hidden="true" />}
+      <b>{nameOf(actor)}</b>
+    </span>
+  );
+
+  // Переменная часть служебной строки: что делает выбранная способность,
+  // что готовит враг, почему по этой цели ударить нельзя.
   const hint = (() => {
     if (reason) return <span className="hint-block">{reason}</span>;
     if (!myTurn && actor) {
       const ab = actor.intent ? combat.abilities.get(actor.intent.ability) : undefined;
       const tgt = battle.units.find((u) => u.uid === actor.intent?.targetUid);
+      if (!ab) return <span className="hint-turn">{t(lang, 'turnOf')}</span>;
       return (
         <span className="hint-turn">
-          {t(lang, 'turnOf')}: <b>{nameOf(actor)}</b>
-          {ab && (
-            <>
-              {' · '}
-              <Icon name={ab.icon} size={12} />
-              <span className="hint-ability">{loc(ab.name, lang)}</span>
-              {tgt && (
-                <span className="hint-target">
-                  {' → '}
-                  {nameOf(tgt)}
-                </span>
-              )}
-            </>
+          <Icon name={ab.icon} size={12} />
+          <span className="hint-ability">{loc(ab.name, lang)}</span>
+          {tgt && (
+            <span className="hint-target">
+              {' → '}
+              {nameOf(tgt)}
+            </span>
           )}
         </span>
       );
@@ -378,7 +499,7 @@ export function BattleScreen() {
     }
     return (
       <span className="hint-turn">
-        {t(lang, 'yourTurn')}: <b>{nameOf(actor)}</b>
+        {t(lang, 'yourTurn')}
         <span className="hint-hold">· {t(lang, 'holdForInfo')}</span>
       </span>
     );
@@ -431,7 +552,13 @@ export function BattleScreen() {
       </div>
 
       {!over && (
-        <div className="battle-panel">
+        <div className={`battle-panel ${myTurn ? 'mine' : 'theirs'}`} ref={panelRef}>
+          {/* Стебель к карточке хозяина панели: клин ровно под тем, чей ход.
+              Абсолютный слой поверх верхней кромки — высоту панели не меняет,
+              доску не толкает. */}
+          {stemX !== undefined && (
+            <span className="panel-stem" style={{ left: `${stemX}px` }} aria-hidden="true" />
+          )}
           {/* Разбор способности по долгому тапу. Слой абсолютный: панель не
               прыгает, поле боя не сжимается. */}
           {peek && (
@@ -452,14 +579,73 @@ export function BattleScreen() {
             </div>
           )}
 
-          <div className="battle-hint">{hint}</div>
+          <div className="battle-hint">
+            {owner}
+            {hint}
+          </div>
 
           <div className="ability-bar">
+            {/* Ромбы стоят вне ветки myTurn: погашенное умение должно быть
+                видно и в чужой ход — иначе игрок узнаёт о нём только в свой,
+                и заряд, потраченный раунд назад, выглядит как пропажа. */}
+            {powers.map((slot) => {
+              const a = slot.power.ability;
+              const ready = slot.state.kind === 'ready';
+              const cd = slot.state.kind === 'cooldown' ? slot.state.turns : 0;
+              return (
+                <button
+                  key={slot.power.id}
+                  className={`memory-power ${selectedAbility?.id === a.id ? 'active' : ''} ${ready ? '' : 'spent'}`}
+                  aria-label={loc(a.name, lang)}
+                  disabled={!ready}
+                  onClick={() => {
+                    if (!ready) {
+                      // Молчащая кнопка учит только тому, что игра сломана.
+                      setReason(
+                        cd > 0
+                          ? t(lang, 'powerSpent')
+                          : slot.state.kind === 'unavailable' && slot.state.reason === 'noTargets'
+                            ? t(lang, 'powerNoTargets')
+                            : t(lang, 'powerNotYourTurn'),
+                      );
+                      return;
+                    }
+                    vibrate('tap');
+                    setPeek(undefined);
+                    setReason(undefined);
+                    setSelectedAbility(a);
+                  }}
+                >
+                  <span className="power-mark">
+                    <Icon name={a.icon} size={20} />
+                  </span>
+                  <span className="power-name">{loc(a.name, lang)}</span>
+                  {cd > 0 && <span className="power-spent">{t(lang, 'powerSpentShort')}</span>}
+                </button>
+              );
+            })}
             {myTurn ? (
-              abilities.map((a) => (
+              bar.map(({ a, cd }) => (
                 <button
                   key={a.id}
-                  className={`ability ${selectedAbility?.id === a.id ? 'active' : ''}`}
+                  className={[
+                    'ability',
+                    selectedAbility?.id === a.id ? 'active' : '',
+                    cd > 0 ? 'cooling' : '',
+                    picked === a.id ? 'pick-flash' : '',
+                  ]
+                    .filter(Boolean)
+                    .join(' ')}
+                  /* Неготовая кнопка НЕ отключена — ни `disabled`, ни
+                     `aria-disabled`: её всё ещё надо уметь разобрать долгим
+                     тапом и спросить, сколько ждать. Отключённая кнопка
+                     молчит, а молчание — то самое, из-за чего состав панели
+                     выглядел случайным. (`aria-disabled` тут ещё и врал бы
+                     вспомогательным технологиям и блокировал бы клик в
+                     Playwright — то есть слепил бы наши же инструменты.)
+                     Срок уходит в подпись целиком: «1» рядом с песочными
+                     часами голосом не читается. */
+                  aria-label={cd > 0 ? coolingReason(loc(a.name, lang), cd, lang) : undefined}
                   onPointerDown={() => startHold(a)}
                   onPointerUp={endHold}
                   onPointerLeave={endHold}
@@ -471,6 +657,12 @@ export function BattleScreen() {
                       heldOpen.current = false;
                       return;
                     }
+                    if (cd > 0) {
+                      vibrate('tap');
+                      setPeek(undefined);
+                      setReason(coolingReason(loc(a.name, lang), cd, lang));
+                      return;
+                    }
                     vibrate('tap');
                     setPeek(undefined);
                     setReason(undefined);
@@ -480,8 +672,17 @@ export function BattleScreen() {
                   <Icon name={a.icon} size={22} />
                   <span className="ability-name">{loc(a.name, lang)}</span>
                   {/* Что она делает — прямо на кнопке, а не по долгому нажатию:
-                      жест, о котором надо догадаться, объяснением не считается. */}
-                  <span className="ability-gist">{abilityGist(a, lang)}</span>
+                      жест, о котором надо догадаться, объяснением не считается.
+                      У серой кнопки на этом месте стоит срок: не «что делает»,
+                      а «когда вернётся» — сейчас игроку нужно именно это. */}
+                  {cd > 0 ? (
+                    <span className="ability-cd">
+                      <Icon name="hourglass" size={10} />
+                      {cd}
+                    </span>
+                  ) : (
+                    <span className="ability-gist">{abilityGist(a, lang)}</span>
+                  )}
                 </button>
               ))
             ) : (

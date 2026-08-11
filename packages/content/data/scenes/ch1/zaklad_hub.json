@@ -2,8 +2,8 @@
   "id": "zaklad_hub",
   "chapter": 1,
   "title": {
-    "ru": "Закладная сторона под вечер",
-    "en": "The Pledge Side Towards Evening"
+    "ru": "Заклад под вечер",
+    "en": "Zaklad Towards Evening"
   },
   "tags": [
     "hub"
@@ -76,8 +76,8 @@
       "kind": "narration",
       "id": "hub_pledge_front",
       "text": {
-        "ru": "Залог идёт теперь не позади, а впереди, и на каждом перекрёстке останавливается раньше тебя. Он видел, как тебя смели в мешок, и держит с тех пор ровно два шага между тобой и улицей.",
-        "en": "The pledge walks in front now, not behind, and stops at every crossing before you do. It watched you swept into a sack, and since then it keeps exactly two paces between you and the street."
+        "ru": "Забытыш идёт теперь впереди и на каждом перекрёстке останавливается раньше тебя. Он видел, как тебя смели в мешок, и с тех пор держит два шага между тобой и улицей.",
+        "en": "The Forgotten One walks in front now, not behind, and stops at every crossing before you do. It watched you swept into a sack, and since then it keeps exactly two paces between you and the street."
       },
       "next": "hub_party_router"
     },
@@ -161,8 +161,8 @@
       "kind": "narration",
       "id": "hub_in",
       "text": {
-        "ru": "Закладная сторона к вечеру пустеет: конторы закрываются по одной, и каждая вывешивает свой курс на завтра. Курсы разные — договориться они не успевают никогда.",
-        "en": "The Pledge Side empties towards evening: the offices shut one by one, each posting its rate for tomorrow. The rates differ — they never manage to agree in time."
+        "ru": "К вечеру Заклад пустеет. Лавки гасят огни одна за другой, а на мостках остаются те, кому некуда идти до утра.",
+        "en": "Zaklad empties towards evening. Shops put out their lights one by one, leaving the walkways to those with nowhere to sleep."
       },
       "next": "hub_klyost_seat"
     },
@@ -261,8 +261,8 @@
       "kind": "narration",
       "id": "hub_guard_waits",
       "text": {
-        "ru": "У водостока стоит наряд залоговых споров: четверо и старшая. Старшая держит бумагу на отлёте и сверяет с ней прохожих, не спеша, как сверяют опись.",
-        "en": "A pledge-dispute detail stands by the drain: four of them and their senior. She holds a sheet at arm's length and checks passers-by against it, unhurried, the way an inventory is checked."
+        "ru": "У водостока стоит пятеро стражников. Дратва держит лист с приметами и долго смотрит то на него, то на прохожих.",
+        "en": "Five guards stand by the drain. Dratva holds a page of descriptions and studies it, then the passers-by, for a long time."
       },
       "next": "hub_guard_dratva"
     },
@@ -567,7 +567,7 @@
       "kind": "narration",
       "id": "klyost_marks_two_look",
       "text": {
-        "ru": "Он ведёт две тумбы сразу и не путается ни разу. Это единственный учёт в Закладе, который сходится, и ведёт его тот, кого в Учёте нет.",
+        "ru": "Он ведёт две тумбы сразу и не путается ни разу. Это единственный счёт в Закладе, который сходится, и ведёт его тот, кого в счёте нет.",
         "en": "He keeps two bollards at once and never once muddles them. It is the only reckoning in Zaklad that balances, and it is kept by someone the Reckoning does not have."
       },
       "next": "hub_choice"
@@ -701,8 +701,8 @@
         "en": "The board by the lamp"
       },
       "text": {
-        "ru": "«Ревизия. Сверка Учёта начнётся в срок. Гражданам надлежит держать при себе описи имущества, памяти и долгов. Расхождения устраняются на месте». Ниже, мелом и другой рукой: «Никто не знает, что это значит. Спросили у Ломбарда — Ломбард сказал, что готов».",
-        "en": "\"The Audit. Reconciliation of the Reckoning will begin on schedule. Citizens are to keep with them inventories of property, memory and debt. Discrepancies are resolved on the spot.\" Below, in chalk and another hand: \"Nobody knows what this means. We asked the Pawnshop; the Pawnshop said it was ready.\""
+        "ru": "«Разыскивается человек без имени. Одежда серая, пуговицы чужие». Ниже мелом: «Стоит у доски и читает это».",
+        "en": "\"Wanted: a person with no name. Grey clothes, mismatched buttons.\" Below, in chalk: \"Standing by the board, reading this.\""
       },
       "next": "hub_choice"
     },

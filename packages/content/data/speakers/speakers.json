@@ -67,8 +67,8 @@
     "id": "revizor",
     "art": "",
     "name": {
-      "ru": "Ревизор",
-      "en": "The Auditor"
+      "ru": "Сличила",
+      "en": "The Collator"
     }
   },
   {
@@ -83,8 +83,8 @@
     "id": "otsenshchik",
     "art": "",
     "name": {
-      "ru": "Оценщик",
-      "en": "Appraiser"
+      "ru": "Глазомер",
+      "en": "Keen Eye"
     }
   },
   {
@@ -189,6 +189,14 @@
     "name": {
       "ru": "Ямщик Гоньбы",
       "en": "Relay Coachman"
+    }
+  },
+  {
+    "id": "chalk_marker",
+    "art": "",
+    "name": {
+      "ru": "Меловщик",
+      "en": "Chalk Marker"
     }
   },
   {

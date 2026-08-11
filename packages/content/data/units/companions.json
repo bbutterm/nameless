@@ -2,8 +2,8 @@
   {
     "id": "unclaimed_pledge",
     "name": {
-      "ru": "Невостребованный залог",
-      "en": "Unclaimed Pledge"
+      "ru": "Забытыш",
+      "en": "Left-Behind"
     },
     "blurb": {
       "ru": "Вещь, за которой не пришли. Пошла сама.",

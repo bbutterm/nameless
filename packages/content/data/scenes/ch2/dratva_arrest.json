@@ -2,7 +2,7 @@
   "id": "dratva_arrest",
   "chapter": 2,
   "title": {
-    "ru": "Изъятие до выяснения",
+    "ru": "Отбор до выяснения",
     "en": "Seized Pending Clarification"
   },
   "tags": [
@@ -31,8 +31,8 @@
       "kind": "narration",
       "id": "arrest_in",
       "text": {
-        "ru": "Стойка залоговых споров стоит под навесом между воротами и весами. На стойке лоток, в лотке чужие карманы, разложенные по описи, и над каждой кучкой бумажка с номером дела.",
-        "en": "The pledge-dispute desk stands under an awning between the gates and the scales. On the desk is a tray, in the tray other people's pockets laid out by inventory, and over each little heap a slip with a case number."
+        "ru": "Под навесом между воротами и весами стоит стол. На нём чужие карманы, разложенные кучками, и над каждой бумажка с именем.",
+        "en": "The property-dispute desk stands under an awning between the gates and the scales. On the desk is a tray, in the tray other people's pockets laid out by list, and over each little heap a slip with a case number."
       },
       "keywords": [
         {
@@ -50,8 +50,8 @@
       "id": "dratva_open",
       "speaker": "dratva",
       "text": {
-        "ru": "Статья одиннадцатая: имущество при себе. Пункт: если его больше, чем помещается в опись, опись переписывают под имущество. Выкладывайте.",
-        "en": "Article eleven: property carried on the person. Clause: where there is more of it than fits the inventory, the inventory is rewritten to fit the property. Put it out."
+        "ru": "Правило одиннадцатая: имущество при себе. Строка: если его больше, чем помещается в список, список переписывают под имущество. Выкладывайте.",
+        "en": "Rule eleven: property carried on the person. Rule: where there is more of it than fits the list, the list is rewritten to fit the property. Put it out."
       },
       "next": "debt_router"
     },
@@ -91,8 +91,8 @@
       "id": "dratva_reminds",
       "speaker": "dratva",
       "text": {
-        "ru": "Статья о посулах. Я предупреждала один раз, и один раз — это было. Сегодня не предупреждаю, сегодня описываю.",
-        "en": "The article on promise notes. I gave one warning, and the one has been given. Today I am not warning, today I am recording."
+        "ru": "Об обещаниях я предупреждала один раз. Сегодня не предупреждаю: сегодня забираю.",
+        "en": "The rule on promise notes. I gave one warning, and the one has been given. Today I am not warning, today I am recording."
       },
       "next": "dratva_procedure"
     },
@@ -111,14 +111,14 @@
       "id": "dratva_procedure",
       "speaker": "dratva",
       "text": {
-        "ru": "Изъятие до выяснения. Выяснение бессрочно: статья четвёртая, пункт про терпение. Я выясняю честно, и это дольше ареста.",
-        "en": "Seizure pending clarification. Clarification has no term: article four, the clause about patience. I clarify honestly, and that takes longer than an arrest."
+        "ru": "Забираю до выяснения. Срока нет: есть только правило про терпение. Я выясняю честно, и это дольше ареста.",
+        "en": "Seizure pending clarification. Clarification has no term: rule four, the rule about patience. I clarify honestly, and that takes longer than an arrest."
       },
       "keywords": [
         {
           "match": {
-            "ru": "пункт про терпение",
-            "en": "the clause about patience"
+            "ru": "строка про терпение",
+            "en": "the rule about patience"
           },
           "tone": "lore"
         }
@@ -129,12 +129,12 @@
       "kind": "lore",
       "id": "lore_ustav",
       "title": {
-        "ru": "Устав стражи залоговых споров, лист изъятий",
-        "en": "Regulations of the Pledge-Dispute Guard, seizure sheet"
+        "ru": "Устав стражи, лист о взятых вещах",
+        "en": "Regulations of the Property-Dispute Guard, seizure sheet"
       },
       "text": {
-        "ru": "«Опись изъятого составляется в трёх экземплярах. Первый — в дело, второй — в Ломбард, третий вручается изъятому. Изъятым именуется имущество, не лицо». Внизу бланка, мелко: «Срок хранения изъятого — до выяснения. Срок выяснения — см. срок хранения».",
-        "en": "\"An inventory of seized items is drawn up in three copies. The first goes to the case, the second to the Pawnshop, the third is handed to the seized. 'The seized' means the property, not the person.\" At the foot of the form, in small type: \"Seized items are held until clarified. Term of clarification: see term of holding.\""
+        "ru": "«Запишите взятые вещи трижды. Один лист оставьте себе, второй отдайте наверх, третий — тому, у кого взяли». Ниже мелко: «Вернуть, когда всё станет ясно».",
+        "en": "\"Write down the taken things three times. Keep one sheet, send one upstairs, give one to their owner.\" Below, in small letters: \"Return them when everything is clear.\""
       },
       "next": "seizure_choice"
     },
@@ -142,7 +142,7 @@
       "kind": "choice",
       "id": "seizure_choice",
       "prompt": {
-        "ru": "Она кладёт на стойку пустой лоток и разглаживает бланк ладонью.",
+        "ru": "Она кладёт на стойку пустой поднос и разглаживает лист ладонью.",
         "en": "She sets an empty tray on the desk and smooths the form flat with her palm."
       },
       "options": [
@@ -175,7 +175,7 @@
         {
           "id": "hold_one",
           "text": {
-            "ru": "Придержать один лот в рукаве.",
+            "ru": "Придержать один свёрток в рукаве.",
             "en": "Keep one lot back in my sleeve."
           },
           "fallback": true,
@@ -201,8 +201,8 @@
         {
           "id": "demand_form",
           "text": {
-            "ru": "Потребовать третий экземпляр описи.",
-            "en": "Demand the third copy of the inventory."
+            "ru": "Потребовать свой лист.",
+            "en": "Demand the third copy of the list."
           },
           "fallback": true,
           "effects": [
@@ -227,8 +227,8 @@
         {
           "id": "dictate_by_clause",
           "text": {
-            "ru": "Продиктовать опись самому, по пунктам.",
-            "en": "Dictate the inventory myself, clause by clause."
+            "ru": "Продиктовать список самому, по строкам.",
+            "en": "Dictate the list myself, rule by rule."
           },
           "chip": {
             "icon": "hourglass",
@@ -270,7 +270,7 @@
         {
           "id": "swap_promise",
           "text": {
-            "ru": "Подложить в лоток посул вместо лота.",
+            "ru": "Подложить обещание вместо свёртка.",
             "en": "Slip a promise note into the tray instead."
           },
           "chip": {
@@ -308,7 +308,7 @@
         {
           "id": "pay_others",
           "text": {
-            "ru": "Выкупить чужую кучку из лотка.",
+            "ru": "Оплатить чужую кучку.",
             "en": "Redeem somebody else's heap out of the tray."
           },
           "chip": {
@@ -350,8 +350,8 @@
         {
           "id": "by_inventory_mine",
           "text": {
-            "ru": "Оно моё по описи из чулана.",
-            "en": "It is mine by the storeroom inventory."
+            "ru": "В чулане сказали: оно моё.",
+            "en": "It is mine by the storeroom list."
           },
           "conditions": {
             "kind": "flag",
@@ -421,8 +421,8 @@
       "id": "r_sleeve",
       "speaker": "dratva",
       "text": {
-        "ru": "В рукаве у вас что-то есть, и я это вижу. Обыск при изъятии не положен, статья седьмая: обыскивают при задержании, а вас я не задерживаю.",
-        "en": "There is something in your sleeve and I can see it. A search is not permitted at seizure, article seven: they search at detention, and I am not detaining you."
+        "ru": "В рукаве у вас что-то есть, и я это вижу. Обыскивают задержанных, а вас я пока не задерживаю.",
+        "en": "There is something in your sleeve and I can see it. A search is not permitted at seizure, rule seven: they search at detention, and I am not detaining you."
       },
       "next": "contract_router"
     },
@@ -431,7 +431,7 @@
       "id": "r_form",
       "speaker": "dratva",
       "text": {
-        "ru": "Третий экземпляр. Держите. За четыре года его потребовали дважды, и оба раза потом искали меня, а не имущество.",
+        "ru": "Третья копия. Держите. За четыре года её потребовали дважды, и оба раза потом искали меня, а не вещи.",
         "en": "The third copy. Take it. In four years it has been asked for twice, and both times it was me they came looking for afterwards, not the property."
       },
       "next": "contract_router"
@@ -441,8 +441,8 @@
       "id": "r_dictate",
       "speaker": "dratva",
       "text": {
-        "ru": "Диктуете вы лучше, чем пишет мой писарь. Пункт девятый, «происхождение» — вы единственный, кто его заполнил.",
-        "en": "You dictate better than my clerk writes. Clause nine, \"provenance\" — you are the only person who has ever filled it in."
+        "ru": "Диктуете вы лучше, чем пишет мой писарь. Строку о происхождении вы заполнили первым.",
+        "en": "You dictate better than my clerk writes. Rule nine, \"provenance\" — you are the only person who has ever filled it in."
       },
       "next": "contract_router"
     },
@@ -451,7 +451,7 @@
       "id": "r_swap",
       "speaker": "dratva",
       "text": {
-        "ru": "Бумага на предъявителя, в лотке, среди чужих карманов. Я её опишу как бумагу. Когда предъявят — предъявят мне, и это будет разговор о вас.",
+        "ru": "Бумага без имени лежит среди чужих карманов. Когда за ней придут, придут ко мне, и это будет разговор о вас.",
         "en": "Paper to bearer, in the tray, among other people's pockets. I shall record it as paper. When it is presented, it will be presented to me, and that will be a conversation about you."
       },
       "next": "contract_router"
@@ -461,8 +461,8 @@
       "id": "r_pay_others",
       "speaker": "dratva",
       "text": {
-        "ru": "Выкуп чужого изъятого статьёй не предусмотрен и не запрещён. Оформлю по грустному пункту. Хозяин придёт в среду и не поймёт, за что.",
-        "en": "Redeeming another man's seized property is neither provided for nor forbidden by the articles. I shall file it under the sad clause. The owner will come on Wednesday and will not understand what for."
+        "ru": "За чужое платить не запрещено. Хозяин придёт в среду и не поймёт, за что ему вернули карманы.",
+        "en": "Paying for another man's seized property is neither provided for nor forbidden by the rules. I shall file it under the sad rule. The owner will come on Wednesday and will not understand what for."
       },
       "next": "contract_router"
     },
@@ -471,8 +471,8 @@
       "id": "r_by_opis",
       "speaker": "dratva",
       "text": {
-        "ru": "Опись чулана — документ Ломбарда, а мы стража. Документ приму, спорить не стану: спорят с людьми, а не с бумагой.",
-        "en": "The storeroom inventory is a Pawnshop document, and we are the guard. I shall accept the document and shall not argue: one argues with people, not with paper."
+        "ru": "Бумагу из чулана приму, спорить не стану: спорят с людьми, а не с бумагой.",
+        "en": "The storeroom list is a tower document, and we are the guard. I shall accept the document and shall not argue: one argues with people, not with paper."
       },
       "next": "contract_router"
     },
@@ -514,8 +514,8 @@
       "id": "dratva_deed",
       "speaker": "dratva",
       "text": {
-        "ru": "Вклад принят оптом. Приёмщик стёрт. Вкладчик расписался. Дело заводить не на что: обе стороны — одна.",
-        "en": "Deposit accepted in bulk. Receiving officer rubbed out. Depositor signed. There is nothing here to open a case on: both parties are one."
+        "ru": "Всё отдано разом. Принявший стёрт. Отдавший расписался. Обе стороны — один человек.",
+        "en": "Everything was handed over at once. The receiver was erased. The giver signed. Both sides are the same man."
       },
       "keywords": [
         {
@@ -532,7 +532,7 @@
       "kind": "narration",
       "id": "no_deed",
       "text": {
-        "ru": "Она пересчитывает лоток дважды и второй раз медленнее. Чужих карманов на стойке одиннадцать кучек, и три из них лежат тут с позапрошлой недели без движения.",
+        "ru": "Она пересчитывает поднос дважды и второй раз медленнее. Чужих карманов на стойке одиннадцать кучек, и три из них лежат тут с позапрошлой недели без движения.",
         "en": "She counts the tray through twice and the second time more slowly. There are eleven little heaps of other people's pockets on the desk, and three of them have lain there untouched since the week before last."
       },
       "next": "dratva_no_deed"
@@ -542,8 +542,8 @@
       "id": "dratva_no_deed",
       "speaker": "dratva",
       "text": {
-        "ru": "Носите вы много, а принадлежит вам ничего. Такое дело в уставе называется «имущество при отсутствии лица». Пункт грустный.",
-        "en": "You carry a great deal and none of it belongs to you. In the regulations a case like that is called \"property in the absence of a person\". The sad clause."
+        "ru": "Носите вы много, а не принадлежит вам ничего. В уставе это зовётся «вещи без человека». Грустная строка.",
+        "en": "You carry a great deal and none of it belongs to you. In the regulations a case like that is called \"property in the absence of a person\". The sad rule."
       },
       "next": "statement_choice"
     },
@@ -611,7 +611,7 @@
         {
           "id": "blame_ledger",
           "text": {
-            "ru": "Свалить на Учёт: он и завёл это дело.",
+            "ru": "Свалить на писарей: он и завёл это дело.",
             "en": "Put it on the Reckoning: it opened this case."
           },
           "chip": {
@@ -666,7 +666,7 @@
         {
           "id": "count_promises",
           "text": {
-            "ru": "Спросить, сколько посулов на меня подшито.",
+            "ru": "Спросить, сколько обещаниеов на меня подшито.",
             "en": "Ask how many notes are filed against me."
           },
           "conditions": {
@@ -722,7 +722,7 @@
       "id": "r_straight",
       "speaker": "dratva",
       "text": {
-        "ru": "Записала целиком, включая то, что мне мешает. Сходится с площадкой и с журналом спусков. Свидетель из вас неудобный и потому годный.",
+        "ru": "Записала целиком, включая то, что мне мешает. Сходится с площадкой и с книгаом спусков. Свидетель из вас неудобный и потому годный.",
         "en": "Written down entire, the parts that get in my way included. It agrees with the landing and with the descent journal. You make an inconvenient witness and therefore a usable one."
       },
       "next": "naryad_comes"
@@ -732,8 +732,8 @@
       "id": "r_short",
       "speaker": "dratva",
       "text": {
-        "ru": "Шесть вопросов, шесть ответов, ни одного лишнего слова. Так отвечают те, кому есть что не сказать. Это не статья, это опыт.",
-        "en": "Six questions, six answers, not one word over. That is how men answer who have something to leave out. That is not an article, that is experience."
+        "ru": "Шесть вопросов, шесть ответов, ни одного лишнего слова. Так отвечают те, кому есть что не сказать. Это не правило, это опыт.",
+        "en": "Six questions, six answers, not one word over. That is how men answer who have something to leave out. That is not an rule, that is experience."
       },
       "next": "naryad_comes"
     },
@@ -742,7 +742,7 @@
       "id": "r_silent",
       "speaker": "dratva",
       "text": {
-        "ru": "Молчание в протокол не заносится. Заносится «отказался», и это длиннее. Идите, пока я не дописала.",
+        "ru": "Молчание в запись не заносится. Заносится «отказался», и это длиннее. Идите, пока я не дописала.",
         "en": "Silence does not go into the report. \"Refused\" goes in, and that is longer. Go, before I finish writing it."
       },
       "next": "naryad_comes"
@@ -752,7 +752,7 @@
       "id": "r_blame",
       "speaker": "dratva",
       "text": {
-        "ru": "Учёт в свидетели не вызывают: у него нет ни адреса, ни спины. Записала как вашу версию. Версия ваша хорошая, и это её единственный недостаток.",
+        "ru": "писарей в свидетели не вызывают: у него нет ни адреса, ни спины. Записала как вашу версию. Версия ваша хорошая, и это её единственный недостаток.",
         "en": "The Reckoning is not called as a witness: it has neither an address nor a back. Recorded as your version. Your version is a good one, and that is its only fault."
       },
       "next": "naryad_comes"
@@ -762,7 +762,7 @@
       "id": "r_her_fear",
       "speaker": "dratva",
       "text": {
-        "ru": "Ничего. Это не храбрость, это отсутствие графы. Устав я ношу с собой по той же причине, по которой вы носите чужие карманы.",
+        "ru": "Ничего. Это не храбрость, это отсутствие месты. Устав я ношу с собой по той же причине, по которой вы носите чужие карманы.",
         "en": "Nothing. That is not courage, that is a missing column. I carry the regulations about with me for the same reason you carry other people's pockets."
       },
       "next": "naryad_comes"
@@ -772,7 +772,7 @@
       "id": "r_count_promises",
       "speaker": "dratva",
       "text": {
-        "ru": "Четыре, и два из них на четверг. Четвергов в неделе один, а посулов на него в городе триста. Считать это я не обязана и всё равно считаю.",
+        "ru": "Четыре, и два из них на четверг. Четвергов в неделе один, а обещаниеов на него в городе триста. Считать это я не обязана и всё равно считаю.",
         "en": "Four, and two of them for Thursday. There is one Thursday in a week and three hundred notes in this city drawn on it. Counting that is not my duty, and I count it anyway."
       },
       "next": "naryad_comes"
@@ -791,8 +791,8 @@
       "kind": "narration",
       "id": "arrest_out",
       "text": {
-        "ru": "Опись изъятого она дописывает при тебе и ставит время: четверть седьмого. Ниже, в графе «когда вернуть», стоит прочерк — не потому что не вернут, а потому что графу заполняет выяснение.",
-        "en": "She finishes the seizure inventory in front of you and enters the time: a quarter past six. Below, in the column \"when to return\", stands a dash — not because it will not be returned, but because that column is filled in by the clarification."
+        "ru": "Список она дописывает при тебе и ставит время: четверть седьмого. Напротив слов «когда вернуть» — прочерк.",
+        "en": "She finishes the seizure list in front of you and enters the time: a quarter past six. Below, in the column \"when to return\", stands a dash — not because it will not be returned, but because that column is filled in by the clarification."
       },
       "next": "scene:vaults_hub"
     },
@@ -810,7 +810,7 @@
       "id": "naryad_1",
       "speaker": "strazhnik",
       "text": {
-        "ru": "Изъятие переоформляется в задержание. Основание: имущество при отсутствии лица. Лицо, впрочем, налицо, и это отягчает.",
+        "ru": "Отбор переоформляется в задержание. Основание: имущество при отсутствии лица. Лицо, впрочем, налицо, и это отягчает.",
         "en": "The seizure is being re-filed as a detention. Grounds: property in the absence of a person. The person, however, is present, which is an aggravating factor."
       },
       "next": "naryad_2"
@@ -820,8 +820,8 @@
       "id": "naryad_2",
       "speaker": "dratva",
       "text": {
-        "ru": "Наряд не мой. Спорить с нарядом статьёй нельзя: статья у них та же, а людей больше. Лоток я закрою, а вас — как решите.",
-        "en": "The detail is not mine. You cannot argue a clause against a detail: the clause is the same one, and there are more of them. I will close the tray; you, as you decide."
+        "ru": "Наряд не мой. Спорить с ними бесполезно: людей у них больше. Вещи я закрою, а вас — как решите.",
+        "en": "The detail is not mine. You cannot argue a rule against a detail: the rule is the same one, and there are more of them. I will close the tray; you, as you decide."
       },
       "next": "naryad_choice"
     },
@@ -829,8 +829,8 @@
       "kind": "choice",
       "id": "naryad_choice",
       "prompt": {
-        "ru": "Лоток на стойке. Опись в трёх экземплярах, третий у тебя в руке.",
-        "en": "The tray on the desk. The inventory in three copies, the third one in your hand."
+        "ru": "Поднос на стойке. Список написан трижды, твой лист у тебя в руке.",
+        "en": "The tray on the desk. The list in three copies, the third one in your hand."
       },
       "options": [
         {
@@ -851,7 +851,7 @@
         {
           "id": "keep_third_copy",
           "text": {
-            "ru": "Не отдать третий экземпляр описи.",
+            "ru": "Не отдавать свой лист.",
             "en": "Not hand over the third copy."
           },
           "effects": [
@@ -871,8 +871,8 @@
         {
           "id": "cite_patience",
           "text": {
-            "ru": "Сослаться на статью четвёртую, пункт про терпение.",
-            "en": "Cite article four, the clause about patience."
+            "ru": "Напомнить им правило про терпение.",
+            "en": "Cite rule four, the rule about patience."
           },
           "conditions": {
             "kind": "flag",
@@ -925,8 +925,8 @@
         {
           "id": "strike_first",
           "text": {
-            "ru": "Бить первым, пока опись не подписана.",
-            "en": "Strike first, before the inventory is signed."
+            "ru": "Бить первым, пока список не подписана.",
+            "en": "Strike first, before the list is signed."
           },
           "conditions": {
             "kind": "axis",
@@ -946,7 +946,7 @@
         {
           "id": "promise_thursday",
           "text": {
-            "ru": "Выписать наряду посул на четверг.",
+            "ru": "Выписать наряду обещание на четверг.",
             "en": "Write the detail a promissory note for Thursday."
           },
           "chip": {
@@ -982,8 +982,8 @@
       "id": "r_naryad_stand",
       "speaker": "strazhnik",
       "text": {
-        "ru": "При ней так при ней. Она запишет, что мы действовали по статье, и это будет правдой: статью мы называем всегда, а называем её после.",
-        "en": "In front of her, then. She will write that we acted by the clause, and that will be true: we always name the clause, and we name it afterwards."
+        "ru": "При ней так при ней. Она запишет, что мы действовали по правилу. Мы всегда называем его после.",
+        "en": "In front of her, then. She will write that we acted by the rule, and that will be true: we always name the rule, and we name it afterwards."
       },
       "next": "fight_naryad"
     },
@@ -992,7 +992,7 @@
       "id": "r_naryad_paper",
       "speaker": "strazhnik",
       "text": {
-        "ru": "Третий экземпляр вручается изъятому. Изъятым именуется имущество, не лицо. Значит, экземпляр не ваш, и держите вы его незаконно уже четвёртую минуту.",
+        "ru": "Лист отдают тому, у кого взяли вещи. Значит, лист не ваш, и держите вы его зря уже четвёртую минуту.",
         "en": "The third copy is given to the seized. The seized means the property, not the person. So the copy is not yours, and you have been holding it unlawfully for four minutes now."
       },
       "next": "fight_naryad"
@@ -1011,8 +1011,8 @@
       "kind": "narration",
       "id": "r_naryad_first",
       "text": {
-        "ru": "Опись лежит на стойке неподписанной, и пока она неподписана, изъятия не было. Первым идёт тот, у кого перо: перо он не выпускает и после.",
-        "en": "The inventory lies unsigned on the desk, and while it is unsigned there has been no seizure. The first to go is the one with the pen: he does not let go of it afterwards either."
+        "ru": "Бумага лежит на столе неподписанной. Первым идёт тот, у кого перо: перо он не выпускает и после.",
+        "en": "The list lies unsigned on the desk, and while it is unsigned there has been no seizure. The first to go is the one with the pen: he does not let go of it afterwards either."
       },
       "next": "fight_naryad"
     },
@@ -1027,7 +1027,7 @@
       "kind": "narration",
       "id": "naryad_after",
       "text": {
-        "ru": "Наряд уходит своим ходом и уносит лоток, а стойку оставляет. Дратва дописывает строку, ставит время и добавляет ниже: «наряд прибыл без вызова». Такой строки в её деле ещё не было.",
+        "ru": "Наряд уходит своим ходом и уносит поднос, а стойку оставляет. Дратва дописывает строку, ставит время и добавляет ниже: «наряд прибыл без вызова». Такой строки в её деле ещё не было.",
         "en": "The detail leaves on its own feet, taking the tray and leaving the desk. Dratva finishes her line, marks the time and adds below it: \"detail arrived uncalled\". There has never been such a line in her file before."
       },
       "next": "arrest_out"
@@ -1083,8 +1083,8 @@
       "kind": "narration",
       "id": "naryad_falling",
       "text": {
-        "ru": "Труху сметают в лоток, потому что лоток уже стоит и в нём уже разложено по описи. Дратва диктует сама себе: «имущество при отсутствии лица», и на этот раз пункт сходится целиком.",
-        "en": "They sweep the dust into the tray, because the tray is already there and already laid out by inventory. Dratva dictates to herself: \"property in the absence of a person\", and this time the clause fits entirely."
+        "ru": "Труху сметают в поднос, потому что он уже стоит рядом. Дратва говорит сама себе: «вещи есть, человека нет», и на этот раз всё сходится.",
+        "en": "They sweep the dust into the tray, because the tray is already there and already laid out by list. Dratva dictates to herself: \"property in the absence of a person\", and this time the rule fits entirely."
       },
       "next": "scene:silver_counter#queue_entry"
     }

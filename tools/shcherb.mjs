@@ -40,10 +40,25 @@ const ROUTE = ['к марье', 'спросить прямо', 'к сходу', 
 const used = new Set();
 let bubbles = 0;
 let promiseAt = null;
-let shot = { marya: false, hail: false, battle: false };
+let recruitTags = 0;
+let shot = { marya: false, hail: false, battle: false, recruit: false };
 
 for (let step = 0; step < 400; step++) {
   if (await page.locator('.screen.death').count()) break;
+
+  // Бирка вербовки перекрывает экран до тапа (КАНОН_КРАТКО §9.2).
+  if (await page.locator('.recruit-tag').count()) {
+    // Бирка глуха к тапу первые ~450ms (см. RecruitTag): ждём, как человек.
+    await page.waitForTimeout(520);
+    if (!shot.recruit) {
+      await page.screenshot({ path: `${outDir}/02-recruit.png` });
+      shot.recruit = true;
+    }
+    recruitTags++;
+    await page.locator('.tag-close').click();
+    await page.waitForTimeout(240);
+    continue;
+  }
 
   if (await page.locator('.screen.battle').count()) {
     if (!shot.battle) {
@@ -57,7 +72,7 @@ for (let step = 0; step < 400; step++) {
       await page.waitForTimeout(400);
       continue;
     }
-    const ab = page.locator('.ability');
+    const ab = page.locator('.ability:not(.cooling)');
     if (await ab.count()) {
       await ab.first().click();
       await page.waitForTimeout(80);
@@ -101,6 +116,7 @@ for (let step = 0; step < 400; step++) {
 
 const died = (await page.locator('.screen.death').count()) > 0;
 console.log('дошли до смерти:', died ? 'да' : 'НЕТ');
+console.log('бирок вербовки:', recruitTags);
 console.log('обещание игры прозвучало на такте:', promiseAt ?? 'не прозвучало');
 if (died) {
   await page.waitForTimeout(3600);

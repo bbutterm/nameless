@@ -10,10 +10,10 @@
       "kind": "narration",
       "id": "cart_yard",
       "text": {
-        "ru": "У заставы стоит обоз из Выцвети: шесть подвод, на каждой короба с одинаковой биркой — «обеспечение, к оценке не подлежит». Разгружаться будут утром, а сегодня возчик едет обратно порожняком.",
-        "en": "A convoy from the Vytsvet stands at the toll gate: six carts, each loaded with crates carrying the same tag, \"security holdings, not for appraisal\". Unloading is tomorrow; today the carter drives back empty."
+        "ru": "У заставы стоит обоз из Выцвети: шесть подвод, на каждой короба с одинаковой биркой — «спрятанное, к оценке не подлежит». Разгружаться будут утром, а сегодня возчик едет обратно порожняком.",
+        "en": "A convoy from the Vytsvet stands at the toll gate: six carts, each loaded with crates carrying the same tag, \"hidden things, not for appraisal\". Unloading is tomorrow; today the carter drives back empty."
       },
-      "keywords": [{ "match": { "ru": "обеспечение", "en": "security holdings" }, "tone": "lore" }],
+      "keywords": [{ "match": { "ru": "спрятанное", "en": "hidden things" }, "tone": "lore" }],
       "next": "vozchik_1"
     },
     {
@@ -48,8 +48,8 @@
       "kind": "narration",
       "id": "why_going",
       "text": {
-        "ru": "Короба грузят там, откуда возят «обеспечение», а на решётке нижних хранилищ стоит то же слово тем же шрифтом. Возчик соглашается показать место за грош и половину репы.",
-        "en": "The crates are loaded where the \"security holdings\" come from, and the grate of the lower vaults carries the same word in the same type. The carter agrees to show you the place for a groschen and half a turnip."
+        "ru": "Короба грузят там, откуда возят «спрятанное», а на решётке нижних хранилищ стоит то же слово тем же шрифтом. Возчик соглашается показать место за грош и половину репы.",
+        "en": "The crates are loaded where the \"hidden things\" come from, and the grate of the lower vaults carries the same word in the same type. The carter agrees to show you the place for a groschen and half a turnip."
       },
       "next": "vozchik_2"
     },
@@ -230,7 +230,7 @@
       "kind": "narration",
       "id": "r_crate",
       "text": {
-        "ru": "В коробе солома и восемь склянок, залитых воском. На каждой ярлык: «раздел второй, лот без наименования, изъят при отсутствии владельца». Владельцев в этих местах не осталось, а разделов, судя по цифре, больше одного.",
+        "ru": "В коробе солома и восемь склянок, залитых воском. На каждой ярлык: «раздел второй, вещь без наименования, изъят при отсутствии владельца». Владельцев в этих местах не осталось, а разделов, судя по цифре, больше одного.",
         "en": "Straw in the crate, and eight jars sealed with wax. Each carries a label: \"section two, lot without description, taken in absence of owner\". No owners are left in these parts, and by the look of the figure there is more than one section."
       },
       "keywords": [{ "match": { "ru": "раздел второй", "en": "section two" }, "tone": "danger" }],
@@ -446,7 +446,7 @@
       "kind": "narration",
       "id": "r_promised_dawn",
       "text": {
-        "ru": "Голос у тебя твёрдый, и они останавливаются послушать — не все сразу, а по одному, как останавливаются у прилавка. Утро ты обещаешь на предъявителя, и предъявителей набирается больше, чем утр.",
+        "ru": "Голос у тебя твёрдый, и они останавливаются послушать — не все сразу, а по одному, как останавливаются у прилавка. Утро ты обещаешь на пришедшего, и предъявителей набирается больше, чем утр.",
         "en": "Your voice is firm and they stop to listen, not all at once but one by one, the way people stop at a counter. You promise the morning to the bearer, and there turn out to be more bearers than mornings."
       },
       "next": "they_come"
@@ -464,8 +464,8 @@
       "kind": "narration",
       "id": "walk_back",
       "text": {
-        "ru": "К заставе ты выходишь под утро, и застава долго не может понять, кого записывать: пришедший пешком в опись обоза не входит. Со стороны дороги за тобой не приезжает никто ни к полудню, ни к вечеру.",
-        "en": "You reach the toll gate towards morning, and the gate takes a long while working out whom to enter: an arrival on foot is not part of the convoy's inventory. From the road behind you nobody arrives, not by noon and not by evening."
+        "ru": "К заставе ты выходишь под утро, и застава долго не может понять, кого записывать: пришедший пешком в список обоза не входит. Со стороны дороги за тобой не приезжает никто ни к полудню, ни к вечеру.",
+        "en": "You reach the toll gate towards morning, and the gate takes a long while working out whom to enter: an arrival on foot is not part of the convoy's list. From the road behind you nobody arrives, not by noon and not by evening."
       },
       "next": "road_exit"
     },

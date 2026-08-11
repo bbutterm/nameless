@@ -37,8 +37,8 @@
   {
     "id": "debt_bailiff",
     "name": {
-      "ru": "Пристав по залогам",
-      "en": "Pledge Bailiff"
+      "ru": "Гвоздила",
+      "en": "Hammerhand"
     },
     "blurb": {
       "ru": "Приходит с описью и молотком.",
@@ -110,8 +110,8 @@
   {
     "id": "pawn_appraiser_dusk",
     "name": {
-      "ru": "Оценщик Сумерк",
-      "en": "Appraiser Dusk"
+      "ru": "Сумерк",
+      "en": "Dusk"
     },
     "blurb": {
       "ru": "Безошибочен в чужом. Своего не осталось.",

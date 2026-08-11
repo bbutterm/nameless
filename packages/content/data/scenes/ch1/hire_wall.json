@@ -37,8 +37,8 @@
         "en": "Notice on the wall"
       },
       "text": {
-        "ru": "«Наём производится по согласию обеих сторон. Задаток памятью не принимается: наниматель, платящий памятью, к утру забывает, кого нанял. Проверено дважды. Управа Мокрых рядов».",
-        "en": "“Hiring proceeds by consent of both parties. Deposits in memory are not accepted: an employer who pays in memory forgets by morning whom he hired. Verified twice. Wet Rows Board.”"
+        "ru": "«Сначала назовите друг другу имена. Плату отдавайте после дороги. Тот, кто забыл имя попутчика, ночует один».",
+        "en": "“Hiring proceeds by consent of both parties. bundle in memory are not accepted: an employer who pays in memory forgets by morning whom he hired. Verified twice. Wet Rows Board.”"
       },
       "next": "wall_who"
     },
@@ -88,7 +88,7 @@
               }
             ]
           },
-          "priority": 5,
+          "priority": 4,
           "effects": [
             {
               "kind": "recruit",
@@ -110,7 +110,7 @@
                 "kind": "axis",
                 "axis": "mercy_cruelty",
                 "op": "gte",
-                "value": 40
+                "value": 60
               },
               {
                 "kind": "not",
@@ -148,7 +148,7 @@
                 "kind": "axis",
                 "axis": "mercy_cruelty",
                 "op": "gte",
-                "value": 40
+                "value": 80
               },
               {
                 "kind": "not",
@@ -164,7 +164,7 @@
               }
             ]
           },
-          "priority": 5,
+          "priority": 6,
           "effects": [
             {
               "kind": "recruit",
@@ -202,7 +202,7 @@
               }
             ]
           },
-          "priority": 5,
+          "priority": 4,
           "effects": [
             {
               "kind": "recruit",
@@ -224,7 +224,7 @@
                 "kind": "axis",
                 "axis": "mercy_cruelty",
                 "op": "lte",
-                "value": -40
+                "value": -60
               },
               {
                 "kind": "not",
@@ -262,7 +262,7 @@
                 "kind": "axis",
                 "axis": "mercy_cruelty",
                 "op": "lte",
-                "value": -40
+                "value": -80
               },
               {
                 "kind": "not",
@@ -278,7 +278,7 @@
               }
             ]
           },
-          "priority": 5,
+          "priority": 6,
           "effects": [
             {
               "kind": "recruit",
@@ -316,7 +316,7 @@
               }
             ]
           },
-          "priority": 5,
+          "priority": 4,
           "effects": [
             {
               "kind": "recruit",
@@ -328,8 +328,8 @@
         {
           "id": "hire_pawn_appraiser_dusk",
           "text": {
-            "ru": "Взять оценщика Сумерка.",
-            "en": "Take Dusk the appraiser."
+            "ru": "Взять Глазомера Сумерка.",
+            "en": "Take Dusk the Keen Eye."
           },
           "conditions": {
             "kind": "all",
@@ -338,7 +338,7 @@
                 "kind": "axis",
                 "axis": "honesty_deceit",
                 "op": "gte",
-                "value": 40
+                "value": 60
               },
               {
                 "kind": "not",
@@ -376,7 +376,7 @@
                 "kind": "axis",
                 "axis": "honesty_deceit",
                 "op": "gte",
-                "value": 40
+                "value": 80
               },
               {
                 "kind": "not",
@@ -392,7 +392,7 @@
               }
             ]
           },
-          "priority": 5,
+          "priority": 6,
           "effects": [
             {
               "kind": "recruit",
@@ -404,7 +404,7 @@
         {
           "id": "hire_promise_pedlar",
           "text": {
-            "ru": "Взять разносчика посулов.",
+            "ru": "Взять Завтрашника.",
             "en": "Take the promise pedlar."
           },
           "conditions": {
@@ -430,7 +430,7 @@
               }
             ]
           },
-          "priority": 5,
+          "priority": 4,
           "effects": [
             {
               "kind": "recruit",
@@ -452,7 +452,7 @@
                 "kind": "axis",
                 "axis": "honesty_deceit",
                 "op": "lte",
-                "value": -40
+                "value": -60
               },
               {
                 "kind": "not",
@@ -490,7 +490,7 @@
                 "kind": "axis",
                 "axis": "honesty_deceit",
                 "op": "lte",
-                "value": -40
+                "value": -80
               },
               {
                 "kind": "not",
@@ -506,7 +506,7 @@
               }
             ]
           },
-          "priority": 5,
+          "priority": 6,
           "effects": [
             {
               "kind": "recruit",
@@ -544,7 +544,7 @@
               }
             ]
           },
-          "priority": 5,
+          "priority": 4,
           "effects": [
             {
               "kind": "recruit",
@@ -566,7 +566,7 @@
                 "kind": "axis",
                 "axis": "reason_obsession",
                 "op": "gte",
-                "value": 40
+                "value": 60
               },
               {
                 "kind": "not",
@@ -594,7 +594,7 @@
         {
           "id": "hire_debt_bailiff",
           "text": {
-            "ru": "Взять пристава по залогам.",
+            "ru": "Взять Гвоздилу.",
             "en": "Take the debt bailiff."
           },
           "conditions": {
@@ -604,7 +604,7 @@
                 "kind": "axis",
                 "axis": "reason_obsession",
                 "op": "gte",
-                "value": 40
+                "value": 80
               },
               {
                 "kind": "not",
@@ -620,7 +620,7 @@
               }
             ]
           },
-          "priority": 5,
+          "priority": 6,
           "effects": [
             {
               "kind": "recruit",
@@ -658,7 +658,7 @@
               }
             ]
           },
-          "priority": 5,
+          "priority": 4,
           "effects": [
             {
               "kind": "recruit",
@@ -680,7 +680,7 @@
                 "kind": "axis",
                 "axis": "reason_obsession",
                 "op": "lte",
-                "value": -40
+                "value": -60
               },
               {
                 "kind": "not",
@@ -718,7 +718,7 @@
                 "kind": "axis",
                 "axis": "reason_obsession",
                 "op": "lte",
-                "value": -40
+                "value": -80
               },
               {
                 "kind": "not",
@@ -734,7 +734,7 @@
               }
             ]
           },
-          "priority": 5,
+          "priority": 6,
           "effects": [
             {
               "kind": "recruit",
@@ -772,7 +772,7 @@
               }
             ]
           },
-          "priority": 5,
+          "priority": 4,
           "effects": [
             {
               "kind": "recruit",
@@ -784,8 +784,8 @@
         {
           "id": "hire_pledge_holder",
           "text": {
-            "ru": "Взять держателя заклада.",
-            "en": "Take the pledge holder."
+            "ru": "Взять Хвата.",
+            "en": "Take the Grip."
           },
           "conditions": {
             "kind": "all",
@@ -794,7 +794,7 @@
                 "kind": "axis",
                 "axis": "grasp_release",
                 "op": "gte",
-                "value": 40
+                "value": 60
               },
               {
                 "kind": "not",
@@ -832,7 +832,7 @@
                 "kind": "axis",
                 "axis": "grasp_release",
                 "op": "gte",
-                "value": 40
+                "value": 80
               },
               {
                 "kind": "not",
@@ -886,7 +886,7 @@
               }
             ]
           },
-          "priority": 5,
+          "priority": 4,
           "effects": [
             {
               "kind": "recruit",
@@ -908,7 +908,7 @@
                 "kind": "axis",
                 "axis": "grasp_release",
                 "op": "lte",
-                "value": -40
+                "value": -60
               },
               {
                 "kind": "not",
@@ -946,7 +946,7 @@
                 "kind": "axis",
                 "axis": "grasp_release",
                 "op": "lte",
-                "value": -40
+                "value": -80
               },
               {
                 "kind": "not",
@@ -977,7 +977,6 @@
             "ru": "Постоять и послушать, о чём торгуются.",
             "en": "Stand a while and listen to the haggling."
           },
-          "priority": 9,
           "fallback": true,
           "effects": [
             {
@@ -1011,8 +1010,8 @@
       "kind": "narration",
       "id": "hired",
       "text": {
-        "ru": "Договора не составляют. Слово здесь тоже валюта — просто мелкая, ходит без расписки.",
-        "en": "No contract is drawn. A word is currency here too — small change, and it circulates without a receipt."
+        "ru": "Договора не составляют. Двое называют друг другу имена и уходят от стены рядом.",
+        "en": "No contract is drawn. A word is currency here too — small change, and it circulates without a note."
       },
       "next": "scene:zaklad_hub"
     },

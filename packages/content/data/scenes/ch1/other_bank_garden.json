@@ -49,14 +49,14 @@
       "kind": "narration",
       "id": "burial_1",
       "text": {
-        "ru": "За грядками копают яму в две лопаты. На доске рядом лежит чайник, медный, с вмятиной на боку, и бирка ломбарда всё ещё на ручке.",
-        "en": "Beyond the beds they are digging a hole two spades wide. On a plank beside it lies a teapot, copper, dented on one side, the Pawnshop tag still on its handle."
+        "ru": "За грядками копают яму в две лопаты. На доске рядом лежит медный чайник с вмятиной на боку и выцветшей запиской на ручке.",
+        "en": "Beyond the beds they are digging a hole two spades wide. On a plank beside it lies a dented copper teapot with a faded note tied to its handle."
       },
       "keywords": [
         {
           "match": {
-            "ru": "бирка ломбарда",
-            "en": "Pawnshop tag"
+            "ru": "выцветшая записка",
+            "en": "faded note"
           },
           "tone": "lore"
         }
@@ -336,8 +336,8 @@
       "id": "r_water_ask",
       "speaker": "brat_ogorodnik",
       "text": {
-        "ru": "Они не скажут откуда. Не из скрытности — просто дорогу домой закладывают первой, она дороже всего.",
-        "en": "They will not say where from. Not out of secrecy — the way home is the first thing they pawn, it fetches the most."
+        "ru": "Они не скажут откуда. Не из скрытности — просто дорогу домой забывают первой, а без неё уже не объяснишь.",
+        "en": "They will not say where from. Not out of secrecy — the way home is the first thing they forget, and without it there is no explaining."
       },
       "next": "garden_choice"
     },
@@ -856,8 +856,8 @@
       "kind": "narration",
       "id": "garden_exit",
       "text": {
-        "ru": "Перевозчик берёт обратный грош и снова не спрашивает зачем. С воды видно, что в Ломбарде горят два окна: третий ярус и подвал.",
-        "en": "The ferryman takes the groschen back and again asks no reason. From the water you can see two lit windows in the Pawnshop: the third tier and the cellar."
+        "ru": "Перевозчик берёт обратный грош и снова не спрашивает зачем. С воды видно, что в старой башне горят два окна: наверху и в подвале.",
+        "en": "The ferryman takes the groschen back and again asks no reason. From the water, two windows burn in the old tower: one above and one in the cellar."
       },
       "next": "scene:zaklad_hub"
     },
@@ -986,7 +986,7 @@
         {
           "id": "buy_the_lot",
           "text": {
-            "ru": "Выкупить поднятое по их цене.",
+            "ru": "Заплатить за поднятое.",
             "en": "Buy back what they raised, at their price."
           },
           "conditions": {
@@ -1133,7 +1133,7 @@
       "id": "r_graves_price",
       "speaker": "marodyor",
       "text": {
-        "ru": "Цена простая: выкупают у хозяина. Хозяина нет — вот вам и вся цена. Четыре гроша за беспокойство приму, а лопату всё равно опустите.",
+        "ru": "Цена простая: платят хозяину. Хозяина нет — вот вам и вся цена. Четыре гроша за беспокойство приму, а лопату всё равно опустите.",
         "en": "The price is simple: you buy back from an owner. There is no owner — that is the whole price. Four groschen for the trouble I will take, and you will put the spade down anyway."
       },
       "next": "fight_graves"

@@ -1,12 +1,16 @@
-import { useMemo, useState } from 'react';
-import { lifeProgress, type GameState, type Lang } from '@nameless/engine';
+import { useMemo, useRef, useState } from 'react';
+import { lifeProgress, type GameState, type Lang, type PartyUnit } from '@nameless/engine';
 import { Icon } from '../components/Icon';
+import { RecruitTag } from '../components/RecruitTag';
 import { loc, t } from '../i18n';
 import { cardImage, svgDataUri, unitCardSvg } from '../lib/art';
 import { placeEmblemByKey, unitEmblem } from '../lib/emblems';
 import { content } from '../store/content';
 import { useGame } from '../store/game';
 import { vibrate } from '../lib/haptics';
+
+/** Столько держать карточку отряда, чтобы открылась бирка. Как в бою. */
+const HOLD_MS = 380;
 
 /**
  * «Опись» — отряд и мозаика памяти. Осей здесь нет и не будет:
@@ -24,8 +28,35 @@ export function ArchiveSheet({
 }) {
   const [tab, setTab] = useState<'party' | 'memories'>('party');
   const [picked, setPicked] = useState<string>();
+  /*
+   * «Бирка потом доступна по тапу вне боя» (КАНОН_КРАТКО §9.2). Тап в описи уже
+   * занят перестановкой строя, поэтому бирка открывается удержанием — тем же
+   * жестом, которым в бою открывается разбор способности («удержи — разбор»).
+   */
+  const [shown, setShown] = useState<PartyUnit>();
+  const holdTimer = useRef<ReturnType<typeof setTimeout>>();
+  /** uid карточки, которую держали достаточно долго; false — обычный тап. */
+  const heldOpen = useRef<string | false>(false);
   const { swapSlots } = useGame();
   const defs = useMemo(() => new Map(content.units.map((u) => [u.id, u])), []);
+
+  /*
+   * Удержание ЗАСЧИТЫВАЕТСЯ по таймеру (палец чувствует отклик сразу), а бирка
+   * открывается только когда палец отпустили. Разница не косметическая:
+   * `click` браузер шлёт общему предку того, где нажали, и того, где отпустили.
+   * Открой бирку под пальцем — отпускание пришлось бы уже на её подложку, общим
+   * предком оказалась бы подложка описи, и один жест закрывал бы разом опись и
+   * бирку, которую игрок только что вызвал.
+   */
+  const startHold = (u: PartyUnit) => {
+    clearTimeout(holdTimer.current);
+    heldOpen.current = false;
+    holdTimer.current = setTimeout(() => {
+      heldOpen.current = u.uid;
+      vibrate('tap');
+    }, HOLD_MS);
+  };
+  const endHold = () => clearTimeout(holdTimer.current);
 
   return (
     <div className="sheet-backdrop" onClick={onClose}>
@@ -68,7 +99,19 @@ export function ArchiveSheet({
                     <button
                       key={u.uid}
                       className={`party-item tier-${def?.tier ?? 1} ${picked === u.uid ? 'picked' : ''}`}
+                      onPointerDown={() => startHold(u)}
+                      onPointerUp={endHold}
+                      onPointerLeave={endHold}
+                      onPointerCancel={endHold}
                       onClick={() => {
+                        endHold();
+                        // Держали долго — это запрос бирки, а не перестановка.
+                        if (heldOpen.current === u.uid) {
+                          heldOpen.current = false;
+                          setShown(u);
+                          return;
+                        }
+                        heldOpen.current = false;
                         vibrate('tap');
                         if (!picked) {
                           setPicked(u.uid);
@@ -134,6 +177,8 @@ export function ArchiveSheet({
           {t(lang, 'close')}
         </button>
       </div>
+
+      {shown && <RecruitTag unit={shown} lang={lang} look onClose={() => setShown(undefined)} />}
     </div>
   );
 }

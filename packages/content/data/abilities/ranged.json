@@ -2,8 +2,8 @@
   {
     "id": "hook_shot",
     "name": {
-      "ru": "Багор",
-      "en": "Boat Hook"
+      "ru": "Достать багром",
+      "en": "Reach with the Hook"
     },
     "description": {
       "ru": "Достаёт со дна и из заднего ряда.",
@@ -18,8 +18,8 @@
   {
     "id": "coin_sling",
     "name": {
-      "ru": "Горсть грошей",
-      "en": "Handful of Groshes"
+      "ru": "Швырнуть горсть",
+      "en": "Fling a Handful"
     },
     "description": {
       "ru": "Монеты Заклада тяжелы: они чужая память.",
@@ -34,8 +34,8 @@
   {
     "id": "pick_the_pocket",
     "name": {
-      "ru": "Обчистить",
-      "en": "Pickpocket"
+      "ru": "Выбить из рук",
+      "en": "Knock from the Hand"
     },
     "description": {
       "ru": "Уносит немного крови и немного уверенности.",

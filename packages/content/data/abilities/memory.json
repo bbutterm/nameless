@@ -1,0 +1,76 @@
+[
+  {
+    "id": "memory_tar",
+    "name": { "ru": "Развести смолу", "en": "Thin the Tar" },
+    "description": {
+      "ru": "Вода занимается с опозданием на два вдоха.",
+      "en": "The water catches two breaths late."
+    },
+    "icon": "fire",
+    "target": "enemy_row",
+    "power": 0,
+    "cooldown": 99,
+    "effects": [{ "kind": "dot", "amount": 4, "turns": 2, "tag": "smola" }],
+    "anim": "aoe"
+  },
+  {
+    "id": "memory_cup",
+    "name": { "ru": "Подать кружку", "en": "Hand Over the Cup" },
+    "description": {
+      "ru": "Кружка в руки. Разницы не делают.",
+      "en": "A cup in the hands. No distinctions made."
+    },
+    "icon": "heal",
+    "target": "ally_one",
+    "power": 0,
+    "cooldown": 99,
+    "effects": [{ "kind": "heal_flat", "amount": 14 }, { "kind": "cleanse" }],
+    "anim": "buff"
+  },
+  {
+    "id": "memory_promise",
+    "name": { "ru": "Сулить", "en": "Make a Promise" },
+    "description": {
+      "ru": "Бумага держит, пока её никто не предъявил.",
+      "en": "Paper holds while nobody presents it."
+    },
+    "icon": "shield",
+    "target": "ally_one",
+    "power": 0,
+    "cooldown": 99,
+    "effects": [{ "kind": "shield", "amount": 15, "turns": 2 }],
+    "anim": "buff"
+  },
+  {
+    "id": "memory_protocol",
+    "name": { "ru": "Занести в протокол", "en": "Enter into the Record" },
+    "description": {
+      "ru": "Без прибавления и убавления. Вычеркнуть не дадут.",
+      "en": "Nothing added, nothing removed. No line struck out."
+    },
+    "icon": "book",
+    "target": "enemy_any",
+    "power": 0,
+    "cooldown": 99,
+    "effects": [{ "kind": "purge" }, { "kind": "recorded", "turns": 2 }],
+    "anim": "cast"
+  },
+  {
+    "id": "memory_ledger",
+    "name": { "ru": "Опись", "en": "The Inventory" },
+    "description": {
+      "ru": "Пункт первый. Посчитанное можно изымать без спора.",
+      "en": "Item one. What is counted is taken without argument."
+    },
+    "icon": "hourglass",
+    "target": "enemy_all",
+    "power": 0,
+    "cooldown": 0,
+    "passive": true,
+    "effects": [
+      { "kind": "reveal" },
+      { "kind": "debuff", "stat": "def", "amount": 0, "turns": 2 }
+    ],
+    "anim": "cast"
+  }
+]

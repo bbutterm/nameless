@@ -50,12 +50,12 @@
       "kind": "lore",
       "id": "lore_pumps",
       "title": {
-        "ru": "Смета на водоотлив, статья единственная",
+        "ru": "Надпись над насосами",
         "en": "Estimate for pumping, the sole entry"
       },
       "text": {
-        "ru": "Расход на водоотлив равен всей выручке верхних ярусов и вносится в смету одной строкой без разбивки. На памяти цеха эту строку не обсуждали ни разу: обсудить — значит спросить, что именно держат сухим. За четыреста лет вопрос задавали дважды, оба раза младшие оценщики, оба раза в один и тот же четверг.",
-        "en": "The cost of pumping equals the entire takings of the upper tiers and goes into the estimate as a single line with no breakdown. Within the guild's memory that line has never once been discussed: to discuss it would be to ask what exactly is being kept dry. In four hundred years the question was put twice, both times by junior appraisers, both times on the same Thursday."
+        "ru": "Насосы съедают всё, что зарабатывают наверху. За четыреста лет лишь двое спросили, что именно здесь держат сухим. Оба спросили в четверг и больше сюда не вернулись.",
+        "en": "The pumps consume everything earned above. In four hundred years only two people asked what was being kept dry. Both asked on a Thursday and neither returned."
       },
       "next": "storozh_1"
     },
@@ -133,7 +133,7 @@
       "kind": "narration",
       "id": "coin_back",
       "text": {
-        "ru": "У каждой расписки Заклада есть оборот, и на обороте стоит цифра от одного до пяти. Разделы в городе номеров не имеют: номер есть только здесь, на пилонах, и у тебя в кармане. Ты платил этими расписками весь месяц и ни разу не перевернул.",
+        "ru": "У каждой городской бумажки есть оборот, и на обороте стоит цифра от одного до пяти. Номер есть только здесь, на пилонах, и у тебя в кармане. Ты платил этими бумажками весь месяц и ни разу не перевернул.",
         "en": "Every note of Zaklad has a reverse, and on the reverse stands a figure from one to five. Up in the city the sections carry no numbers: the number exists only here, on the pilasters, and in your pocket. You have been paying with these notes all month and never once turned one over."
       },
       "keywords": [
@@ -340,8 +340,8 @@
             "life": "perechen"
           },
           "text": {
-            "ru": "Пятый. Первый Учёт.",
-            "en": "Section five. The First Reckoning."
+            "ru": "Пятый. Зима без имени.",
+            "en": "Fifth. The winter without a name."
           },
           "effects": [
             {
@@ -379,7 +379,7 @@
       "kind": "narration",
       "id": "r_first",
       "text": {
-        "ru": "«Раздел первый. Смолокур. Войны Тихой Воды, годы с первого по восемьдесят четвёртый. Принято оптом, к выдаче не подлежит». Ниже, мелко: «обеспечивает свайное поле, две трети». Город стоит на сваях. Сваи оплачены плавучим городом, который горел восемь часов.",
+        "ru": "«Первый. Смолокур. Войны Тихой Воды». Ниже, мелко: «две сваи из трёх». Город стоит на сваях. За них заплатили плавучим городом, который горел восемь часов.",
         "en": "\"Section one. Smolokur. The Quiet Water Wars, years one through eighty-four. Accepted in bulk, not for issue.\" Below, in small type: \"secures the pile field, two thirds\". The city stands on piles. The piles were paid for with a floating town that burned for eight hours."
       },
       "next": "same_hand"
@@ -388,7 +388,7 @@
       "kind": "narration",
       "id": "r_second",
       "text": {
-        "ru": "«Раздел второй. Ключарь. Обеспечение Сушьих годов». Ниже: «обеспечивает водоснабжение города, полностью. При изъятии уведомить население заранее». Строка про уведомление приписана позже и другим нажимом. Уведомлений в архиве нет.",
+        "ru": "«Второй. Ключарь. Сушьи годы». Ниже: «вся вода города». Другой рукой приписано: «если вынут — предупредить людей». Никого ещё не предупреждали.",
         "en": "\"Section two. Klyuchar. Security for the drought years.\" Below: \"secures the city's water supply, in full. In case of withdrawal, notify the population in advance.\" The line about notice was added later and with a different pressure. There are no notices in the archive."
       },
       "next": "same_hand"
@@ -397,7 +397,7 @@
       "kind": "narration",
       "id": "r_third",
       "text": {
-        "ru": "«Раздел третий. Посульщик. Обеспечение Бумажного века». Ниже: «обеспечивает хождение расписок: шесть грошей из десяти». Шесть грошей из каждых десяти в этом городе стоят на человеке, который продал целому краю несуществующее будущее.",
+        "ru": "«Третий. Посульщик. Бумажный век». Ниже: «шесть грошей из десяти». Деньги этого города стоят на человеке, который продал целому краю несуществующее будущее.",
         "en": "\"Section three. Posulshchik. Security for the Paper Age.\" Below: \"secures the circulation of notes: six groschen in every ten\". Six groschen in every ten in this city stand on a man who sold a whole region a future that did not exist."
       },
       "next": "same_hand"
@@ -406,7 +406,7 @@
       "kind": "narration",
       "id": "r_fourth",
       "text": {
-        "ru": "«Раздел четвёртый. Чистописец. Обеспечение года Голой Правды». Ниже: «обеспечивает доверие к подписи». Подпись в Закладе работает потому, что однажды был писарь, не исправивший ни одной строки, и город из-за него резался четыре дня.",
+        "ru": "«Четвёртый. Чистописец. Год Голой Правды». Ниже: «люди верят подписям». Они верят потому, что однажды писарь не исправил ни строки, и город из-за него резался четыре дня.",
         "en": "\"Section four. Chistopisets. Security for the Year of Bare Truth.\" Below: \"secures faith in the signature\". A signature works in Zaklad because there was once a scribe who corrected not one line, and the town cut itself to pieces over him for four days."
       },
       "next": "same_hand"
@@ -415,8 +415,8 @@
       "kind": "narration",
       "id": "r_fifth",
       "text": {
-        "ru": "«Раздел пятый. Перечень. Обеспечение Первого Учёта». Ниже: «обеспечивает право называть и изымать». Табличка новее прочих и висит ниже прочих: её ставили, когда стена уже держала потолок.",
-        "en": "\"Section five. Perechen. Security for the First Reckoning.\" Below: \"secures the right to name and to take\". The plate is newer than the others and hangs lower than the others: it was set up when the wall was already holding the ceiling."
+        "ru": "«Пятый. Перечень. Зима без имени». Ниже: «даёт право назвать вещь своей и забрать». Табличка новее прочих: её ставили, когда стена уже держала потолок.",
+        "en": "\"Fifth. Perechen. The winter without a name.\" Below: \"gives the right to call a thing yours and take it\". The plate is newer than the others: it was set up when the wall already held the ceiling."
       },
       "next": "same_hand"
     },
@@ -424,7 +424,7 @@
       "kind": "narration",
       "id": "r_all",
       "text": {
-        "ru": "Смолокур обеспечивает сваи, Ключарь — воду, Посульщик — шесть грошей из десяти, Чистописец — доверие к подписи, Перечень — право называть и изымать. Пять табличек, и под каждой указана эпоха, которую этим оплатили.",
+        "ru": "Смолокур держит сваи, Ключарь — воду, Посульщик — шесть грошей из десяти, Чистописец — доверие к подписи, Перечень — право назвать вещь своей. Пять табличек, и под каждой эпоха, отданная за город.",
         "en": "Smolokur secures the piles, Klyuchar the water, Posulshchik six groschen in every ten, Chistopisets faith in the signature, Perechen the right to name and to take. Five plates, and under each the age that was paid for with it."
       },
       "next": "same_hand"
@@ -433,7 +433,7 @@
       "kind": "narration",
       "id": "r_sixth",
       "text": {
-        "ru": "Шестого пилона нет. Есть место под него: кладка в дальнем конце оставлена вполовину высоты и заложена насухо, без раствора, как закладывают на время. Раствор туда не клали ни разу, и пыль на камне лежит ровным слоем в палец.",
+        "ru": "Шестого пилона нет. Есть место под него: кладка в дальнем конце оставлена вполовину высоты и сложена насухо, без раствора, будто на время. Пыль на камне лежит ровным слоем в палец.",
         "en": "There is no sixth pilaster. There is a place for one: at the far end the courses stop at half height and are filled in dry, without mortar, the way you fill in temporarily. No mortar was ever laid there, and the dust lies on the stone in an even finger's depth."
       },
       "next": "same_hand"
@@ -442,8 +442,8 @@
       "kind": "narration",
       "id": "r_card",
       "text": {
-        "ru": "Карточка на «В» отсылала сюда, и здесь ссылка кончается: против «Вклада Первого» стоят не суммы, а пять номеров разделов. Все пять — эта стена. Дальше отсылать некуда.",
-        "en": "The card under \"D\" referred you here, and here the reference ends: against \"Deposit One\" stand not sums but five section numbers. All five are this wall. There is nowhere further to refer you."
+        "ru": "Карточка на «В» отсылала сюда, и здесь след кончается: вместо суммы стоят пять номеров. Все пять — эта стена. Дальше идти некуда.",
+        "en": "The card under \"D\" led here, and here the trail ends: five section numbers stand in place of a sum. All five are this wall. There is nowhere further to go."
       },
       "next": "same_hand"
     },
@@ -469,7 +469,7 @@
       "kind": "narration",
       "id": "mason_mark",
       "text": {
-        "ru": "В нижнем ряду кладки выбито клеймо и рядом с ним графа для года. Год не проставлен. Графу завели позже, чем стену.",
+        "ru": "В нижнем ряду кладки выбито клеймо и рядом оставлено место для года. Года нет. Пустое место вырезали позже, чем сложили стену.",
         "en": "Cut into the lowest course is a mason's mark, and beside it a column for the year. The year is not filled in. The column was introduced later than the wall."
       },
       "next": "not_a_client"
@@ -478,7 +478,7 @@
       "kind": "narration",
       "id": "not_a_client",
       "text": {
-        "ru": "В книгах это называется обеспечением. Обеспечение не обслуживают в зале: его не оценивают, не выдают на руки и не спрашивают, как оно себя чувствует. Ты ходил сюда клиентом и стоял в очереди.",
+        "ru": "В книгах у стены нет человеческого имени. Её не показывают наверху и не спрашивают, как она себя чувствует. А ты ходил над ней и стоял в очереди.",
         "en": "In the books this is called security holdings. Security holdings are not served at the counter: they are not appraised, not handed out, and not asked how they are feeling. You came here as a client and stood in the queue."
       },
       "next": "older_than_city"
@@ -487,14 +487,14 @@
       "kind": "narration",
       "id": "older_than_city",
       "text": {
-        "ru": "Ломбард не хранит твой архив. Ломбард на нём стоит, и стоял до того, как вокруг него встал город. Ревизия сверяет не Заклад: сверять Заклад незачем, Заклад — это то, что сверху.",
-        "en": "The Pawnshop does not store your archive. The Pawnshop stands on it, and stood on it before the city stood around it. The Audit is not reconciling Zaklad: there is no point reconciling Zaklad, Zaklad is what is on top."
+        "ru": "Дом не хранит твоё прошлое. Дом стоит на нём и стоял ещё до того, как вокруг вырос город. Наверху спорят о пропажах, а ответ всё это время держит их потолок.",
+        "en": "The house does not store your past. It stands on it, and stood before the city grew around it. Above they argue about disappearances while the answer has held their ceiling all along."
       },
       "keywords": [
         {
           "match": {
-            "ru": "Ломбард на нём стоит",
-            "en": "The Pawnshop stands on it"
+            "ru": "Дом стоит на нём",
+            "en": "The house stands on it"
           },
           "tone": "danger"
         }
@@ -605,7 +605,7 @@
             "life": "perechen"
           },
           "text": {
-            "ru": "Посчитать, сколько города обеспечено мной.",
+            "ru": "Посчитать, сколько города держится на мне.",
             "en": "Count how much of the city I secure."
           },
           "effects": [
@@ -655,8 +655,8 @@
             "flag": "tminny_trust"
           },
           "text": {
-            "ru": "Крикнуть наверх оценщику. Пусть спускается.",
-            "en": "Call up to the appraiser. Let him come down."
+            "ru": "Крикнуть наверх Глазомеру. Пусть спускается.",
+            "en": "Call up to Keen Eye. Let him come down."
           },
           "effects": [
             {
@@ -750,8 +750,8 @@
       "kind": "narration",
       "id": "r_put_back",
       "text": {
-        "ru": "Короб входит в своё место с первого раза и садится на палец глубже, чем стоял. Трещина над ним не сходится: трещины не сходятся обратно, это знает любой каменщик и любой оценщик.",
-        "en": "The crate goes into its place first try and settles a finger deeper than it stood. The crack above it does not close: cracks do not close back, as any mason knows and any appraiser."
+        "ru": "Короб входит в своё место с первого раза и садится на палец глубже, чем стоял. Трещина над ним не сходится: трещины не сходятся обратно, это знает любой каменщик.",
+        "en": "The crate goes into its place first try and settles a finger deeper than it stood. The crack above it does not close: cracks do not close back, as any mason knows."
       },
       "next": "set_foundation"
     },
@@ -777,7 +777,7 @@
       "kind": "narration",
       "id": "r_counted_city",
       "text": {
-        "ru": "Ты считаешь по табличкам и сводишь: сваи, вода, шесть грошей из десяти, подпись, право изымать. Остаток, не обеспеченный тобой, помещается в одну строку, и в этой строке — только Слуза, которая текла тут до всего.",
+        "ru": "Ты считаешь по табличкам: сваи, вода, шесть грошей из десяти, подпись, право забирать. Без тебя остаётся только Слуза, которая текла тут до всего.",
         "en": "You count off the plates and reconcile: piles, water, six groschen in ten, the signature, the right to take. The remainder not secured by you fits on a single line, and on that line there is only the Sluza, which ran here before any of it."
       },
       "next": "set_foundation"
@@ -797,8 +797,8 @@
       "id": "r_tminny",
       "speaker": "tminny",
       "text": {
-        "ru": "Я не спущусь, позвольте-с. Я стою здесь двадцать лет и не спускаюсь, потому что оценщик, увидевший обеспечение, обязан пересмотреть... всё. Оценка затруднена. Уходите оттуда.",
-        "en": "I shall not come down, if you please. I have stood here twenty years and do not come down, because an appraiser who has seen the security is obliged to review... everything. Appraisal is difficult. Come away from there."
+        "ru": "Я не спущусь, позвольте-с. Я стою здесь двадцать лет и знаю: если увижу эту стену, придётся пересмотреть всю жизнь. Уходите оттуда.",
+        "en": "I shall not come down, if you please. I have stood here twenty years and know that if I see this wall, I must reconsider my whole life. Come away from there."
       },
       "next": "set_foundation"
     },
@@ -806,8 +806,8 @@
       "kind": "narration",
       "id": "r_signed_wall",
       "text": {
-        "ru": "Мел лежит на выступе, там же, где его оставила Ревизия. Ты расписываешься шестой раз, ниже пятого пилона, в пустом месте под несуществующую табличку, и подпись выходит та же самая.",
-        "en": "The chalk lies on the ledge where the Audit left it. You sign a sixth time, below the fifth pilaster, in the empty place under a plate that does not exist, and the signature comes out the same."
+        "ru": "Мел лежит на выступе, там же, где его оставил человек в сером. Ты расписываешься шестой раз, ниже пятого пилона, в пустом месте под несуществующую табличку, и подпись выходит та же самая.",
+        "en": "The chalk lies on the ledge where the grey-coated man left it. You sign a sixth time, below the fifth pilaster, in the empty place under a plate that does not exist, and the signature comes out the same."
       },
       "next": "set_foundation"
     },
@@ -910,7 +910,7 @@
       "kind": "narration",
       "id": "last_thing",
       "text": {
-        "ru": "Последним доходит звук насосов: они не останавливаются. Их никто не останавливал четыреста лет, и то, что сверху лёг ещё один человек, для сметы ничего не меняет.",
+        "ru": "Последним доходит звук насосов: они не останавливаются. Их никто не останавливал четыреста лет, и человек на камнях не меняет их хода.",
         "en": "The last thing to reach you is the sound of the pumps: they do not stop. Nobody has stopped them in four hundred years, and one more man settling on top changes nothing in the estimate."
       },
       "next": "scene:silver_counter#queue_entry"
@@ -929,8 +929,8 @@
       "id": "crew_1",
       "speaker": "marodyor",
       "text": {
-        "ru": "Ревизия пометила мелом: раздел первый. Мы читаем чужие пометки — это дешевле, чем искать самим, и точнее.",
-        "en": "The Audit chalked it: section one. We read other people's marks — it comes cheaper than searching yourself, and more exact."
+        "ru": "Человек в сером пометил мелом: раздел первый. Мы читаем чужие пометки — это дешевле, чем искать самим, и точнее.",
+        "en": "The grey-coated man chalked it: section one. We read other people's marks — it comes cheaper than searching yourself, and more exact."
       },
       "next": "crew_2"
     },
@@ -950,7 +950,7 @@
       "speaker": "storozh_arkhiva",
       "text": {
         "ru": "Пять. Я считаю пилоны, а не людей: люди в описи не стоят, и сбить меня ими нельзя. Пять.",
-        "en": "Five. I count pylons, not people: people are not entered in the inventory, and they cannot put me off. Five."
+        "en": "Five. I count pylons, not people. People cannot put me off. Five."
       },
       "next": "crew_choice"
     },
@@ -1000,7 +1000,7 @@
           "id": "ask_buyer",
           "text": {
             "ru": "Спросить, кто заказчик и по какой описи.",
-            "en": "Ask who the buyer is, and by what inventory."
+            "en": "Ask who wants the crate and why."
           },
           "effects": [
             {
@@ -1055,7 +1055,7 @@
         {
           "id": "name_myself",
           "text": {
-            "ru": "Сказать, чьё это обеспечение. Своё имя первым.",
+            "ru": "Сказать, чья это стена. Своё имя первым.",
             "en": "Say whose holding this is. Your own name first."
           },
           "conditions": {
@@ -1132,7 +1132,7 @@
       "id": "r_crew_stand",
       "speaker": "marodyor",
       "text": {
-        "ru": "Между клином и стеной уже стояли. Их обвело мелом и вписало в смету на водоотлив, отдельной строкой, без разбивки.",
+        "ru": "Между клином и стеной уже стояли. От них остались меловые контуры у насосов.",
         "en": "People have stood between the wedge and the wall before. They were chalked round and entered in the drainage estimate, one line, no breakdown."
       },
       "next": "fight_crew"
@@ -1168,7 +1168,7 @@
       "id": "crew_after",
       "text": {
         "ru": "Лампы они оставляют, а короб бросают там, где держали. Сторож досчитывает до пяти и начинает сначала, потому что при нём вслух назвали число, которого в описи нет.",
-        "en": "They leave the lamps and drop the crate where they were holding it. The watchman counts to five and starts again, because in his hearing someone said aloud a number the inventory does not have."
+        "en": "They leave the lamps and drop the crate. The watchman counts to five and starts again because someone said a sixth number aloud."
       },
       "next": "the_hole"
     },

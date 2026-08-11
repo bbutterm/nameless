@@ -18,8 +18,8 @@
   {
     "id": "debt_collection",
     "name": {
-      "ru": "Взыскание",
-      "en": "Collection"
+      "ru": "Выбить долг",
+      "en": "Beat Out the Debt"
     },
     "description": {
       "ru": "Берёт своё телом должника.",
@@ -34,8 +34,8 @@
   {
     "id": "write_off",
     "name": {
-      "ru": "Списание",
-      "en": "Write-off"
+      "ru": "Захлопнуть",
+      "en": "Slam Shut"
     },
     "description": {
       "ru": "Строчку вычёркивают вместе с тем, кто в ней.",
@@ -50,8 +50,8 @@
   {
     "id": "barefoot_rush",
     "name": {
-      "ru": "Босым вперёд",
-      "en": "Barefoot Rush"
+      "ru": "Ринуться босым",
+      "en": "Rush Barefoot"
     },
     "description": {
       "ru": "Нести нечего, значит и беречь нечего.",
@@ -66,8 +66,8 @@
   {
     "id": "article_eight",
     "name": {
-      "ru": "Статья восьмая",
-      "en": "Article Eight"
+      "ru": "Задержать",
+      "en": "Detain"
     },
     "description": {
       "ru": "Пункт грустный: задержанный молчит один ход.",
@@ -92,8 +92,8 @@
   {
     "id": "chain_of_debt",
     "name": {
-      "ru": "Цепь долга",
-      "en": "Chain of Debt"
+      "ru": "Заковать",
+      "en": "Shackle"
     },
     "description": {
       "ru": "Должник ходит медленнее, чем считает.",

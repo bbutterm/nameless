@@ -21,6 +21,7 @@
 .big-button::after,
 .ability::after,
 .party-item::after,
+.tag-face::after,
 .memory-card::after,
 .sheet-tabs button::after,
 .archive-button::after {
@@ -856,7 +857,33 @@
   position: relative;
   z-index: 1;
   padding-bottom: calc(4px + var(--safe-bottom));
+  /* Верхняя кромка панели — её край как предмета. Цвет кромки называет
+     сторону хода: свой (акцент) или чужой (опасность). Без кромки стебель
+     упирался в пустоту и читался не как соединение, а как случайная галочка. */
+  border-top: 1px solid var(--line);
 }
+.battle-panel.mine { border-top-color: color-mix(in srgb, var(--accent) 55%, transparent); }
+.battle-panel.theirs { border-top-color: color-mix(in srgb, var(--danger) 45%, transparent); }
+
+/* Стебель: клин от верхней кромки панели вверх, ровно под карточкой того,
+   чей сейчас ход. Это ответ на «чьи это кнопки» — не словом, а местом.
+   Позицию по X задаёт JS измерением карточки (см. BattleScreen), здесь только
+   форма. Слой абсолютный и `pointer-events: none` — тапы по доске и по
+   панели он не перехватывает, высоту панели не меняет. */
+.panel-stem {
+  position: absolute;
+  top: -7px;
+  width: 16px;
+  height: 8px;
+  margin-left: -8px;
+  pointer-events: none;
+  z-index: 3;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  background: var(--accent);
+  opacity: 0.85;
+  transition: left 180ms ease;
+}
+.battle-panel.theirs .panel-stem { background: var(--danger); opacity: 0.7; }
 .ability-peek {
   position: absolute;
   bottom: 100%;
@@ -910,6 +937,86 @@
 .ability.active::after {
   border-image-source: url('../../content/assets/ui/nameless/frame-accent.png');
 }
+/* Способность на перезарядке. Раньше её на панели просто НЕ БЫЛО: движок
+   отдавал только готовые, кнопка пропадала на два раунда и возвращалась —
+   состав панели выглядел случайным (REVIEW_GAMEPLAY §1, шаг 4). Теперь она
+   стоит на своём месте серая: место кнопки не меняется никогда, меняется
+   только её готовность, и ждать её или нет — видно, а не угадывается.
+   Уже кнопка живой: срок короче подписи «что делает», и серый столбик не
+   выталкивает готовые кнопки за край панели. */
+.ability.cooling {
+  min-width: 62px;
+  color: var(--text-faint);
+  background: none;
+  opacity: 0.8;
+}
+.ability.cooling::after { opacity: 0.45; }
+.ability.cooling .ability-name { color: var(--text-faint); }
+/* Срок стоит там же, где у готовой кнопки подпись «что делает»: одна строка
+   на кнопке, и глаз не ищет число в новом месте. */
+.ability-cd {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-dim);
+}
+/* Кнопка, выбранная тапом по карточке юнита. Мигает один раз: жест «тапни
+   свою карту» обязан показать, ЧТО он выбрал, иначе выбор остаётся слепым. */
+.ability.pick-flash { animation: pick-flash 460ms ease-out; }
+@keyframes pick-flash {
+  0% { box-shadow: 0 0 0 0 var(--accent); }
+  35% { box-shadow: 0 0 0 3px var(--accent); }
+  100% { box-shadow: 0 0 0 0 rgba(201, 162, 39, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ability.pick-flash { animation: none; box-shadow: 0 0 0 2px var(--accent); }
+  .panel-stem { transition: none; }
+}
+/* Умение памяти. Стоит в той же панели, что и способности юнита, и обязано
+   читаться как ДРУГАЯ вещь, а не как пятая кнопка: знак повёрнут ромбом,
+   цвет — памяти, рамки нет вовсе. Ширина меньше кнопки способности, потому
+   что до четырёх кнопок плюс ромб должны уместиться в 390px, и потому что
+   ромб — не равный им выбор, а вмешательство поверх выбора. */
+.memory-power {
+  position: relative;
+  width: 58px;
+  min-height: var(--tap);
+  padding: 6px 2px;
+  border: none;
+  background: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  font-size: 10.5px;
+  line-height: 1.1;
+  text-align: center;
+  color: var(--memory);
+  flex-shrink: 0;
+}
+.power-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  transform: rotate(45deg);
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--memory);
+}
+/* Знак внутри ромба разворачивается обратно — иначе он лежит на боку. */
+.power-mark > * { transform: rotate(-45deg); }
+.memory-power.active .power-mark { background: var(--surface-hi); box-shadow: inset 0 0 0 2px var(--memory); }
+.memory-power.active { color: var(--memory); }
+/* Потраченный заряд гаснет, но не исчезает: погашенная строка описи всё
+   ещё строка. Убрать кнопку значило бы соврать, что умения не было. */
+.memory-power.spent { color: var(--text-faint); }
+.memory-power.spent .power-mark { background: transparent; box-shadow: inset 0 0 0 1px var(--line); opacity: 0.6; }
+.power-name { max-width: 56px; overflow-wrap: anywhere; }
+.power-spent { font-size: 9.5px; color: var(--text-faint); }
+
 .waiting { min-height: var(--tap); display: flex; align-items: center; padding-left: 14px; color: var(--text-faint); }
 /* Пока ходит противник, панель пуста — но кто именно ходит, теперь написано
    строкой выше, а здесь только дыхание ожидания. */
@@ -934,6 +1041,7 @@
   min-height: 26px;
   display: flex;
   align-items: center;
+  gap: 7px;
   padding: 2px 12px;
   font-size: 12.5px;
   color: var(--text-dim);
@@ -947,6 +1055,51 @@
   min-width: 0;
   white-space: nowrap;
 }
+/* Бирка хозяина панели. Стоит слева от переменной части подсказки и не
+   уступает ей место никогда: раньше имя актора вытеснялось разбором
+   способности и объяснением запрета — то есть пропадало ровно тогда, когда
+   игрок разбирается, чьи это кнопки. Съезжает в многоточие только имя,
+   и только после того, как ужалось всё остальное. */
+.hint-owner {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  /* Потолок бирки. 46% замерены под «Резчик карманов» на 360px: при 34% имя
+     резалось в «Резчик карма…», а урезанное имя — это уже другое слово (то же
+     правило, по которому подпись карточки не переносится, см. UnitCard).
+     Правее живёт разбор способности; он теперь прокручивается, поэтому платит
+     местом он, а не имя. */
+  max-width: 46%;
+  padding: 2px 7px 2px 3px;
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 12px;
+  white-space: nowrap;
+}
+.hint-owner b {
+  color: var(--text);
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.hint-owner.no-mark { padding-left: 8px; }
+.hint-owner.mine { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 60%, transparent); }
+.hint-owner.theirs { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--danger) 50%, transparent); }
+.owner-mark { --mark-s: 16px; width: 16px; height: 16px; flex-shrink: 0; }
+/* Переменная часть ужимается первой и — в отличие от прежнего — не теряет
+   хвост навсегда: чипов разбора бывает четыре, и последний («−броня 3») не
+   влезал в 390px ещё ДО бирки, просто обрезался краем без права достать.
+   Прокрутка здесь та же, что у панели способностей прямо под строкой, так
+   что жест не новый. Прокручивается только эта строка — страница нет. */
+.battle-hint .hint-turn {
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.battle-hint .hint-turn::-webkit-scrollbar { display: none; }
+.battle-hint .hint-block { min-width: 0; }
+
 .hint-turn b { color: var(--text); font-weight: 700; }
 .hint-ability { color: var(--accent); }
 .hint-target { color: var(--danger); overflow: hidden; text-overflow: ellipsis; }
@@ -1469,6 +1622,133 @@
 }
 .spoil.evolve { color: var(--tier-3); }
 
+/* ── Бирка вербовки ──────────────────────────────────────────────────────────
+ *
+ * Одна карточка на все `recruit` (КАНОН_КРАТКО §9.2): лицо, имя, слова нрава,
+ * способности строками «название — глагол и число», ряд. Лежит по центру, а не
+ * шторкой снизу, как опись: опись — лист, который листают, бирка — предмет,
+ * который держат в руках, и она обязана читаться как отдельный такт игры.
+ * ------------------------------------------------------------------------- */
+.tag-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  background: rgba(6, 5, 7, 0.86);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(16px + var(--safe-top)) 16px calc(16px + var(--safe-bottom));
+  animation: rise 240ms ease-out;
+}
+.recruit-tag {
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 14px;
+  background: var(--bg-1);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: 0 10px 30px rgba(6, 5, 7, 0.8);
+  text-align: center;
+}
+.tag-kicker {
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+/* Лицо — та же карта, что игрок увидит в бою, тем же кадром и в той же рамке
+   тира: узнавание строится на повторе, а не на втором изображении. */
+.tag-face {
+  position: relative;
+  width: 116px;
+  flex-shrink: 0;
+  aspect-ratio: 3/4;
+  overflow: hidden;
+  border-radius: var(--r-sm);
+  background: var(--bg-2);
+}
+.tag-face img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Тот же зум, что в .card-art: гасим собственную рамку процедурного арта. */
+  transform: scale(1.16);
+}
+.tag-face .card-mark { --mark-s: 44px; }
+.tag-face::after {
+  border-width: 7px;
+  border-image-source: url('../../content/assets/ui/nameless/frame-tier-1.png');
+  border-image-width: 7px;
+}
+.tag-face.tier-2::after {
+  border-width: 9px;
+  border-image-source: url('../../content/assets/ui/nameless/frame-tier-2.png');
+  border-image-width: 9px;
+}
+.tag-face.tier-3::after {
+  border-width: 11px;
+  border-image-source: url('../../content/assets/ui/nameless/frame-tier-3.png');
+  border-image-width: 11px;
+}
+.tag-name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 22px;
+  line-height: 1.15;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+.tag-traits { display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; }
+.tag-trait {
+  padding: 1px 8px;
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  font-size: 12px;
+  color: var(--text-dim);
+}
+.tag-blurb { font-size: 14px; line-height: 1.3; color: var(--text-faint); font-style: italic; }
+.tag-label {
+  align-self: flex-start;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+/* Способностей у юнита две-три, но бирка обязана пережить и пятую: список
+   скроллится сам, кнопка «Дальше» остаётся на экране на 360×640. */
+.tag-deeds {
+  width: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 2px 0;
+  text-align: left;
+}
+.tag-deed { display: flex; align-items: flex-start; gap: 8px; }
+.deed-body { min-width: 0; flex: 1; }
+.deed-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px; font-size: 16px; }
+.deed-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 3px; }
+.chip-deed {
+  flex-shrink: 0;
+  padding: 1px 6px;
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  font-size: 12px;
+}
+.deed-damage { color: var(--danger); }
+.deed-heal { color: var(--hp-ally); }
+.deed-effect { color: var(--shield); }
+.tag-place { font-size: 14px; color: var(--text-dim); }
+.tag-place b { color: var(--text); font-weight: 700; }
+.tag-close { width: 100%; margin-top: 2px; }
+
 .swap-hint { font-size: 13px; color: var(--text-faint); font-style: italic; padding: 0 2px 2px; }
 .party-item { text-align: left; }
 .party-item.picked { box-shadow: 0 0 0 2px var(--accent); }
@@ -1508,6 +1788,7 @@
 .portrait-mark,
 .card-mark,
 .queue-mark,
+.owner-mark,
 .threat-mark,
 .scene-mark,
 .death-mark,
@@ -1518,6 +1799,7 @@
 .portrait-mark::before,
 .card-mark::before,
 .queue-mark::before,
+.owner-mark::before,
 .threat-mark::before,
 .scene-mark::before,
 .death-mark::before,

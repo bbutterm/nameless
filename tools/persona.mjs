@@ -231,14 +231,14 @@ for (step = 0; step < maxSteps; step++) {
       mine: [...document.querySelectorAll('.card:not(.empty)')]
         .filter((c) => !c.className.includes('enemy'))
         .map((c) => c.querySelector('.card-hp')?.textContent ?? ''),
-      ab: [...document.querySelectorAll('.ability')].map((a) => a.textContent.toLowerCase()),
+      ab: [...document.querySelectorAll('.ability:not(.cooling)')].map((a) => a.textContent.toLowerCase()),
     }));
     const HEALS = ['ветошь и вода', 'колодец не спрашивает', 'милосердие без разбора', 'перевязка'];
     const hurt = info.mine.some((h) => {
       const [a, b] = h.split('/').map(Number);
       return b && a / b < 0.55;
     });
-    const ab = page.locator('.ability');
+    const ab = page.locator('.ability:not(.cooling)');
     const n = await ab.count();
     if (n > 0) {
       const healIdx = info.ab.findIndex((t) => HEALS.some((x) => t.includes(x)));

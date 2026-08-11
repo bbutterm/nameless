@@ -1,9 +1,19 @@
 {
   "id": "archive_night",
   "chapter": 1,
-  "title": { "ru": "Третий ярус ночью", "en": "The Third Tier at Night" },
-  "tags": ["archive", "combat", "story"],
-  "available": { "kind": "visited", "scene": "reading_room" },
+  "title": {
+    "ru": "Третий ярус ночью",
+    "en": "The Third Tier at Night"
+  },
+  "tags": [
+    "archive",
+    "combat",
+    "story"
+  ],
+  "available": {
+    "kind": "visited",
+    "scene": "reading_room"
+  },
   "entry": "descent",
   "nodes": [
     {
@@ -29,12 +39,12 @@
       "kind": "lore",
       "id": "lore_tier",
       "title": {
-        "ru": "Опись третьего яруса, лист восьмой",
-        "en": "Inventory of the third tier, sheet eight"
+        "ru": "список третьего яруса, лист восьмой",
+        "en": "list of the third tier, sheet eight"
       },
       "text": {
         "ru": "«Стеллаж 12: горе родительское, разливное, 40 склянок. Стеллаж 13: стыд детский, невыношенный, 6 склянок — хранить отдельно, дороже взрослого. Стеллаж 14: свободен под приём. Стеллаж 15: чувство, что забыл выключить утюг, 211 склянок, сорт низкий, спрос ровный».",
-        "en": "\"Rack 12: parental grief, loose, 40 jars. Rack 13: childhood shame, not fully carried, 6 jars — store separately, dearer than the adult kind. Rack 14: vacant, held for intake. Rack 15: the feeling of having left the iron on, 211 jars, low grade, steady demand.\""
+        "en": "\"Rack 12: parental grief, loose, 40 jars. Rack 13: childhood shame, not fully carried, 6 jars — store sepapricely, dearer than the adult kind. Rack 14: vacant, held for intake. Rack 15: the feeling of having left the iron on, 211 jars, low grade, steady demand.\""
       },
       "next": "shelves"
     },
@@ -45,7 +55,15 @@
         "ru": "Склянки стоят донцами наружу, каждая с биркой и годом. Свет фонаря идёт по ним волной, и на дне каждой что-то один раз поворачивается, будто просыпается и снова засыпает.",
         "en": "The jars stand base-outward, each with a tag and a year. The lantern light runs along them in a wave, and at the bottom of every one something turns over once, as if waking and going back to sleep."
       },
-      "keywords": [{ "match": { "ru": "бирки", "en": "tag" }, "tone": "lore" }],
+      "keywords": [
+        {
+          "match": {
+            "ru": "бирки",
+            "en": "tag"
+          },
+          "tone": "lore"
+        }
+      ],
       "next": "approach_choice"
     },
     {
@@ -63,17 +81,29 @@
             "en": "Move between the racks at their pace."
           },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 3 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": 3
+            }
+          ],
           "to": "went_quiet"
         },
         {
           "id": "by_inventory",
           "text": {
-            "ru": "Найти нужный стеллаж по номеру описи.",
-            "en": "Find the right rack by its inventory number."
+            "ru": "Найти нужный стеллаж по номеру в списке.",
+            "en": "Find the right rack by its list number."
           },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": -3 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -3
+            }
+          ],
           "to": "went_count"
         },
         {
@@ -83,39 +113,74 @@
             "en": "Put out the lantern and go by ear."
           },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -3 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": -3
+            }
+          ],
           "to": "went_quiet"
         },
         {
           "id": "by_card",
-          "conditions": { "kind": "flag", "flag": "catalog_card_read" },
+          "conditions": {
+            "kind": "flag",
+            "flag": "catalog_card_read"
+          },
           "text": {
             "ru": "Искать стеллаж без номера. Их описали не все.",
             "en": "Look for the unnumbered rack. Not everything got numbered."
           },
-          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": -3 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -3
+            }
+          ],
           "to": "went_count",
           "priority": 5
         },
         {
           "id": "with_boy",
-          "conditions": { "kind": "flag", "flag": "klyost_named" },
+          "conditions": {
+            "kind": "flag",
+            "flag": "klyost_named"
+          },
           "text": {
             "ru": "Пустить мальчика вперёд: его тут не запоминают.",
             "en": "Send the boy ahead: nobody here remembers him."
           },
-          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": 3 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": 3
+            }
+          ],
           "to": "went_boy",
           "priority": 5
         },
         {
           "id": "hard_way",
-          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -20 },
+          "conditions": {
+            "kind": "axis",
+            "axis": "mercy_cruelty",
+            "op": "lte",
+            "value": -20
+          },
           "text": {
             "ru": "Дождаться отставшего и решить вопрос.",
             "en": "Wait for the straggler and settle it."
           },
-          "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": -3 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": -3
+            }
+          ],
           "to": "went_quiet",
           "priority": 5
         }
@@ -125,8 +190,8 @@
       "kind": "narration",
       "id": "went_quiet",
       "text": {
-        "ru": "Ты идёшь ровно в их минуту и дважды оказываешься за спиной у второго сторожа, пока тот держит палец на строке описи и боится его снять.",
-        "en": "You move exactly in their minute and twice end up behind the second watchman while he keeps a finger on a line of the inventory, afraid to lift it."
+        "ru": "Ты идёшь ровно в их минуту и дважды оказываешься за спиной у второго сторожа, пока тот держит палец на строке списка и боится его снять.",
+        "en": "You move exactly in their minute and twice end up behind the second watchman while he keeps a finger on a line of the list, afraid to lift it."
       },
       "next": "rack_found"
     },
@@ -134,8 +199,8 @@
       "kind": "narration",
       "id": "went_count",
       "text": {
-        "ru": "Номера идут подряд до четырнадцатого, а после четырнадцатого сразу шестнадцатый. Пятнадцатый стеллаж стоит там, где стоял, и в описи его нет.",
-        "en": "The numbers run in order up to fourteen, and after fourteen comes sixteen. Rack fifteen stands exactly where it stands, and the inventory has no line for it."
+        "ru": "Номера идут подряд до четырнадцатого, а после четырнадцатого сразу шестнадцатый. Пятнадцатый стеллаж стоит там, где стоял, и в списке его нет.",
+        "en": "The numbers run in order up to fourteen, and after fourteen comes sixteen. Rack fifteen stands exactly where it stands, and the list has no line for it."
       },
       "next": "rack_found"
     },
@@ -185,9 +250,21 @@
           },
           "fallback": true,
           "effects": [
-            { "kind": "fragment", "memory": "smola_na_vode", "amount": 2 },
-            { "kind": "axis", "axis": "mercy_cruelty", "delta": -15 },
-            { "kind": "flag", "flag": "archive_burned", "value": true }
+            {
+              "kind": "fragment",
+              "memory": "smola_na_vode",
+              "amount": 2
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": -15
+            },
+            {
+              "kind": "flag",
+              "flag": "archive_burned",
+              "value": true
+            }
           ],
           "to": "burned"
         },
@@ -199,58 +276,117 @@
           },
           "fallback": true,
           "effects": [
-            { "kind": "fragment", "memory": "punkt_pervyy", "amount": 2 },
-            { "kind": "axis", "axis": "reason_obsession", "delta": -15 },
-            { "kind": "flag", "flag": "archive_copied", "value": true }
+            {
+              "kind": "fragment",
+              "memory": "punkt_pervyy",
+              "amount": 2
+            },
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -15
+            },
+            {
+              "kind": "flag",
+              "flag": "archive_copied",
+              "value": true
+            }
           ],
           "to": "copied"
         },
         {
           "id": "still",
-          "text": { "ru": "Стоять и ничего не трогать.", "en": "Stand still and touch nothing." },
+          "text": {
+            "ru": "Стоять и ничего не трогать.",
+            "en": "Stand still and touch nothing."
+          },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 15 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": 15
+            }
+          ],
           "to": "stood"
         },
         {
           "id": "tarburner",
           "chip": {
             "icon": "fire",
-            "label": { "ru": "Смолокур", "en": "Smolokur" },
+            "label": {
+              "ru": "Смолокур",
+              "en": "Smolokur"
+            },
             "tone": "life"
           },
-          "conditions": { "kind": "life", "life": "smolokur" },
+          "conditions": {
+            "kind": "life",
+            "life": "smolokur"
+          },
           "text": {
             "ru": "Огонь идёт по стеклу вниз. Проверено дважды.",
             "en": "Fire runs down glass. Checked that twice."
           },
           "effects": [
-            { "kind": "fragment", "memory": "smola_na_vode", "amount": 2 },
-            { "kind": "axis", "axis": "mercy_cruelty", "delta": -15 },
-            { "kind": "flag", "flag": "archive_burned", "value": true }
+            {
+              "kind": "fragment",
+              "memory": "smola_na_vode",
+              "amount": 2
+            },
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": -15
+            },
+            {
+              "kind": "flag",
+              "flag": "archive_burned",
+              "value": true
+            }
           ],
           "to": "burned",
           "priority": 6
         },
         {
           "id": "pocket_thing",
-          "conditions": { "kind": "flag", "flag": "pocket_lot_kept" },
+          "conditions": {
+            "kind": "flag",
+            "flag": "pocket_lot_kept"
+          },
           "text": {
             "ru": "Бросить вещь из кармана в дальний проход.",
             "en": "Throw your pocket thing down the far aisle."
           },
-          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": -8 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": -8
+            }
+          ],
           "to": "stood",
           "priority": 5
         },
         {
           "id": "call_them",
-          "conditions": { "kind": "axis", "axis": "honesty_deceit", "op": "gte", "value": 20 },
+          "conditions": {
+            "kind": "axis",
+            "axis": "honesty_deceit",
+            "op": "gte",
+            "value": 20
+          },
           "text": {
             "ru": "Окликнуть их первым и назвать связку.",
             "en": "Hail them first and name the bundle."
           },
-          "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": 8 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 8
+            }
+          ],
           "to": "hailed",
           "priority": 5
         }
@@ -270,7 +406,7 @@
       "id": "copied",
       "text": {
         "ru": "Ящик уходит на ладонь, на манжету и на поля чужой квитанции: девяносто одна карточка, из них четыре — с пометой «см. фундамент». Ты дописываешь последнюю, когда фонарь встаёт у тебя за плечом.",
-        "en": "The drawer goes onto your palm, your cuff and the margins of somebody's receipt: ninety-one cards, four of them marked \"see foundation\". You are finishing the last when a lantern comes to a stop behind your shoulder."
+        "en": "The drawer goes onto your palm, your cuff and the margins of somebody's scrap: ninety-one cards, four of them marked \"see foundation\". You are finishing the last when a lantern comes to a stop behind your shoulder."
       },
       "next": "grab_bundle"
     },
@@ -288,8 +424,8 @@
       "id": "hailed",
       "speaker": "storozh_arkhiva",
       "text": {
-        "ru": "Связка шестнадцать листов? Такой в описи нет. Значит, вы её и принесли. Стой где стоишь.",
-        "en": "A bundle of sixteen sheets? No such line in the inventory. So you brought it in yourself. Stay where you are."
+        "ru": "Связка шестнадцать листов? Такой в списке нет. Значит, вы её и принесли. Стой где стоишь.",
+        "en": "A bundle of sixteen sheets? No such line in the list. So you brought it in yourself. Stay where you are."
       },
       "next": "grab_bundle"
     },
@@ -317,7 +453,13 @@
             "en": "Do not give it up. Reach the stairs."
           },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "grasp_release", "delta": 8 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "grasp_release",
+              "delta": 8
+            }
+          ],
           "to": "watch_battle"
         },
         {
@@ -327,39 +469,76 @@
             "en": "Say the bundle's number out loud and walk."
           },
           "fallback": true,
-          "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": 3 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "honesty_deceit",
+              "delta": 3
+            }
+          ],
           "to": "watch_battle"
         },
         {
           "id": "cold_fight",
-          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "lte", "value": -20 },
+          "conditions": {
+            "kind": "axis",
+            "axis": "mercy_cruelty",
+            "op": "lte",
+            "value": -20
+          },
           "text": {
             "ru": "Сначала тот, у кого фонарь.",
             "en": "The one with the lantern goes first."
           },
-          "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": -3 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": -3
+            }
+          ],
           "to": "watch_battle",
           "priority": 5
         },
         {
           "id": "warn_them",
-          "conditions": { "kind": "axis", "axis": "mercy_cruelty", "op": "gte", "value": 20 },
+          "conditions": {
+            "kind": "axis",
+            "axis": "mercy_cruelty",
+            "op": "gte",
+            "value": 20
+          },
           "text": {
             "ru": "Предупредить: за спиной у них стеллаж.",
             "en": "Warn them: there is a rack behind them."
           },
-          "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": 3 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": 3
+            }
+          ],
           "to": "watch_battle",
           "priority": 5
         },
         {
           "id": "boy_out",
-          "conditions": { "kind": "flag", "flag": "klyost_named" },
+          "conditions": {
+            "kind": "flag",
+            "flag": "klyost_named"
+          },
           "text": {
             "ru": "Отправить мальчика наверх первым.",
             "en": "Send the boy up the stairs first."
           },
-          "effects": [{ "kind": "axis", "axis": "mercy_cruelty", "delta": 8 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "mercy_cruelty",
+              "delta": 8
+            }
+          ],
           "to": "watch_battle",
           "priority": 5
         },
@@ -367,15 +546,27 @@
           "id": "register_fight",
           "chip": {
             "icon": "hourglass",
-            "label": { "ru": "Перечень", "en": "Perechen" },
+            "label": {
+              "ru": "Перечень",
+              "en": "Perechen"
+            },
             "tone": "life"
           },
-          "conditions": { "kind": "life", "life": "perechen" },
+          "conditions": {
+            "kind": "life",
+            "life": "perechen"
+          },
           "text": {
             "ru": "Их четверо. Проходов три. Считай.",
             "en": "Four of them. Three aisles. Do the arithmetic."
           },
-          "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": -3 }],
+          "effects": [
+            {
+              "kind": "axis",
+              "axis": "reason_obsession",
+              "delta": -3
+            }
+          ],
           "to": "watch_battle",
           "priority": 6
         }
@@ -392,12 +583,36 @@
       "kind": "effects",
       "id": "dying_shelf",
       "effects": [
-        { "kind": "flag", "flag": "death_cause_shelf", "value": true },
-        { "kind": "flag", "flag": "death_cause_guard", "value": false },
-        { "kind": "flag", "flag": "death_cause_scavengers", "value": false },
-        { "kind": "flag", "flag": "death_cause_guild", "value": false },
-        { "kind": "flag", "flag": "death_cause_sluza", "value": false },
-        { "kind": "flag", "flag": "death_cause_vytsvet", "value": false }
+        {
+          "kind": "flag",
+          "flag": "death_cause_shelf",
+          "value": true
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_guard",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_scavengers",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_guild",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_sluza",
+          "value": false
+        },
+        {
+          "kind": "flag",
+          "flag": "death_cause_vytsvet",
+          "value": false
+        }
       ],
       "next": "scene:silver_counter#queue_entry"
     }

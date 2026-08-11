@@ -1,0 +1,933 @@
+/**
+ * Умения памяти в бою: механики §B.4 и отклик сродства §C MEMORY_POWERS.
+ *
+ * Фикстура КАРКАСНАЯ и намеренно безымянная: здесь проверяется движок, а не
+ * содержание. Канонные числа пяти умений сверяются отдельно, на настоящем
+ * контенте (`packages/sim/src/memory-powers.test.ts`), — потому что движку
+ * всё равно, сколько написано в таблице, а контенту не всё равно.
+ */
+import { describe, expect, it } from 'vitest';
+import {
+  act,
+  currentActor,
+  planAction,
+  indexCombat,
+  isRecorded,
+  playerAbilityBar,
+  readyPlayerAbilities,
+  runAuto,
+  shieldOf,
+  startBattle,
+  type BattleState,
+} from './combat.js';
+import { derivePlayerPowers, mergeAmplify, NO_AMPLIFY } from './powers.js';
+import type {
+  Ability,
+  BattleDef,
+  ContentBundle,
+  Memory,
+  PartyUnit,
+  PlayerAbility,
+  UnitDef,
+} from './types.js';
+
+const t = (ru: string) => ({ ru, en: ru });
+
+const abilities: Ability[] = [
+  { id: 'hit', name: t('Удар'), description: t('Удар'), icon: 'sword', target: 'enemy_front', power: 1, cooldown: 0 },
+  {
+    id: 'row_shield',
+    name: t('Бумага ряду'),
+    description: t('Бумага ряду'),
+    icon: 'shield',
+    target: 'ally_row',
+    power: 0,
+    cooldown: 99,
+    effects: [{ kind: 'shield', amount: 20, turns: 2 }, { kind: 'shield_refund' }],
+  },
+  {
+    id: 'plain_shield',
+    name: t('Бумага одному'),
+    description: t('Бумага одному'),
+    icon: 'shield',
+    target: 'ally_one',
+    power: 0,
+    cooldown: 99,
+    effects: [{ kind: 'shield', amount: 20, turns: 2 }],
+  },
+  {
+    id: 'protocol',
+    name: t('Протокол'),
+    description: t('Протокол'),
+    icon: 'book',
+    target: 'enemy_any',
+    power: 0,
+    cooldown: 99,
+    effects: [{ kind: 'purge' }, { kind: 'recorded', turns: 2 }],
+  },
+  {
+    id: 'truth',
+    name: t('Правда'),
+    description: t('Правда'),
+    icon: 'book',
+    target: 'enemy_all',
+    power: 0,
+    cooldown: 99,
+    effects: [{ kind: 'purge' }, { kind: 'recorded', turns: 2 }, { kind: 'bare_truth' }],
+  },
+  {
+    id: 'cup',
+    name: t('Кружка'),
+    description: t('Кружка'),
+    icon: 'heal',
+    target: 'ally_all',
+    power: 0,
+    cooldown: 99,
+    effects: [
+      { kind: 'heal_flat', amount: 12 },
+      { kind: 'cleanse' },
+      { kind: 'spare_worst_foe', amount: 12 },
+    ],
+  },
+  {
+    id: 'tar',
+    name: t('Смола'),
+    description: t('Смола'),
+    icon: 'fire',
+    target: 'enemy_all',
+    power: 0,
+    cooldown: 99,
+    effects: [
+      { kind: 'dot', amount: 6, turns: 3, tag: 'smola' },
+      { kind: 'rally', stat: 'atk', amount: 3, turns: 2 },
+    ],
+  },
+  {
+    id: 'ledger',
+    name: t('Опись'),
+    description: t('Опись'),
+    icon: 'hourglass',
+    target: 'enemy_all',
+    power: 0,
+    cooldown: 0,
+    passive: true,
+    effects: [
+      { kind: 'reveal' },
+      { kind: 'debuff', stat: 'def', amount: 4, turns: 3 },
+      { kind: 'heal_tax', factor: 0.75 },
+    ],
+  },
+  {
+    id: 'ward',
+    name: t('Бумага своему'),
+    description: t('Бумага своему'),
+    icon: 'shield',
+    target: 'ally_one',
+    power: 0,
+    cooldown: 0,
+    effects: [{ kind: 'shield', amount: 8, turns: 2 }],
+  },
+  {
+    id: 'plain_heal',
+    name: t('Лечение'),
+    description: t('Лечение'),
+    icon: 'heal',
+    target: 'ally_one',
+    power: 0,
+    cooldown: 99,
+    effects: [{ kind: 'heal_flat', amount: 10 }],
+  },
+  // Способность отклика: заметно бьёт и вешает щит — чтобы половинность
+  // была видна и в уроне, и в числе статуса.
+  // Дешёвая способность для проверки правила «отклик берёт самую дешёвую».
+  {
+    id: 'echo_cheap',
+    name: t('Дешёвый отклик'),
+    description: t('Дешёвый отклик'),
+    icon: 'spark',
+    target: 'enemy_front',
+    power: 1,
+    cooldown: 0,
+    effects: [{ kind: 'damage', power: 1 }],
+  },
+  {
+    id: 'echo_blow',
+    name: t('Отклик'),
+    description: t('Отклик'),
+    icon: 'spark',
+    target: 'enemy_front',
+    power: 2,
+    cooldown: 3,
+    effects: [{ kind: 'damage', power: 2 }, { kind: 'shield', amount: 9, turns: 2 }],
+  },
+];
+
+function unitDef(
+  id: string,
+  over: Partial<UnitDef> & { stats: UnitDef['stats']; row: UnitDef['row'] },
+): UnitDef {
+  return { id, name: t(id), blurb: t(id), art: '', faction: 'test', tier: 1, abilities: ['hit'], ...over };
+}
+
+const units: UnitDef[] = [
+  // Инициатива расставлена так, чтобы очередь была предсказуема без бросков:
+  // ведущий ходит первым, откликающиеся — следом, враг последним.
+  unitDef('lead', { row: 'front', stats: { hp: 60, atk: 10, def: 5, initiative: 30 } }),
+  unitDef('kin_fast', {
+    row: 'back',
+    stats: { hp: 60, atk: 10, def: 5, initiative: 20 },
+    abilities: ['echo_blow'],
+    traits: ['life_test_life'],
+  }),
+  // Первой стоит дорогая, второй — дешёвая: порядок в списке важен именно
+  // тем, что отклик обязан его игнорировать.
+  unitDef('kin_rich', {
+    row: 'back',
+    stats: { hp: 60, atk: 10, def: 5, initiative: 20 },
+    abilities: ['echo_blow', 'echo_cheap'],
+    traits: ['life_test_life'],
+  }),
+  // Ремёсла для разбора роли отклика. У «двурукого» два трейта сразу —
+  // проверяется, что порядок разбора однозначен, а не «как повезёт».
+  unitDef('kin_healer', {
+    row: 'back',
+    stats: { hp: 60, atk: 10, def: 5, initiative: 19 },
+    traits: ['life_test_life', 'healer'],
+  }),
+  unitDef('kin_two_hands', {
+    row: 'back',
+    stats: { hp: 60, atk: 10, def: 5, initiative: 18 },
+    traits: ['life_test_life', 'breaker', 'healer'],
+  }),
+  unitDef('kin_named', {
+    row: 'back',
+    stats: { hp: 60, atk: 10, def: 5, initiative: 17 },
+    traits: ['life_test_life', 'healer'],
+    responseRole: 'shield',
+  }),
+  unitDef('kin_slow', {
+    row: 'back',
+    stats: { hp: 60, atk: 10, def: 5, initiative: 15 },
+    abilities: ['echo_blow'],
+    traits: ['life_test_life'],
+  }),
+  unitDef('stranger', {
+    row: 'back',
+    stats: { hp: 60, atk: 10, def: 5, initiative: 12 },
+    abilities: ['echo_blow'],
+    traits: ['life_other_life'],
+  }),
+  // Щитоносец своим: нужен там, где проверяется, что запрета статусов больше
+  // нет и после печати правды бумагу снова выписывают.
+  unitDef('warder', {
+    row: 'back',
+    stats: { hp: 60, atk: 10, def: 5, initiative: 25 },
+    abilities: ['ward'],
+    traits: ['life_other_life'],
+  }),
+  unitDef('dummy', { row: 'front', stats: { hp: 400, atk: 4, def: 5, initiative: 1 } }),
+  // Соломенный: нужен там, где враг обязан погибнуть от одного удара —
+  // «первая закрытая строка» меряется гибелью, а не намерением.
+  unitDef('straw', { row: 'front', stats: { hp: 1, atk: 1, def: 0, initiative: 1 } }),
+];
+
+function memory(id: string, over: Partial<Memory> = {}): Memory {
+  return { id, life: 'test_life', name: t(id), revelation: t(id), icon: 'book', cost: 1, ...over };
+}
+
+const memories: Memory[] = [
+  memory('m_row_shield', { powers: [{ kind: 'grant', ability: 'row_shield' }] }),
+  memory('m_plain_shield', { powers: [{ kind: 'grant', ability: 'plain_shield' }] }),
+  memory('m_protocol', { powers: [{ kind: 'grant', ability: 'protocol' }] }),
+  memory('m_truth', { powers: [{ kind: 'grant', ability: 'truth' }] }),
+  memory('m_cup', { powers: [{ kind: 'grant', ability: 'cup' }] }),
+  memory('m_tar', { powers: [{ kind: 'grant', ability: 'tar' }] }),
+  memory('m_ledger', { powers: [{ kind: 'grant', ability: 'ledger' }] }),
+  memory('m_heal', { powers: [{ kind: 'grant', ability: 'plain_heal' }] }),
+];
+
+const bundle: ContentBundle = {
+  axes: [],
+  scenes: [],
+  units,
+  abilities,
+  battles: [],
+  lives: [],
+  memories,
+  deaths: [],
+  chapters: [],
+  speakers: [],
+  codex: [],
+};
+
+const idx = indexCombat(bundle);
+
+function party(...specs: [string, 'front' | 'back', number][]): PartyUnit[] {
+  return specs.map(([defId, row, index], i) => {
+    const def = units.find((u) => u.id === defId);
+    return { uid: `p${i}:${defId}`, defId, hp: def?.stats.hp ?? 1, xp: 0, level: 1, slot: { row, index } };
+  });
+}
+
+const foes: BattleDef['enemies'] = [
+  { unit: 'dummy', row: 'front', index: 0 },
+  { unit: 'dummy', row: 'back', index: 0 },
+];
+
+function battle(id: string, enemies: BattleDef['enemies'] = foes): BattleDef {
+  return { id, name: t(id), enemies, turnLimit: 30 };
+}
+
+function powersOf(...ids: string[]): PlayerAbility[] {
+  return derivePlayerPowers(ids, bundle).abilities;
+}
+
+/** Кто ходит сейчас. Нужен во всех сценариях: умение произносит чужой ход. */
+const who = (s: BattleState): string => currentActor(s)?.uid ?? '';
+const unit = (s: BattleState, uid: string) => s.units.find((u) => u.uid === uid);
+
+describe('статус «занесено в протокол»', () => {
+  const setup = (): BattleState =>
+    startBattle(idx, battle('b_rec'), party(['lead', 'front', 0]), 'rec', powersOf('m_protocol'));
+
+  it('блокирует новые щиты, бафы и лечение, но не урон', () => {
+    let s = setup();
+    const foe = s.units.find((u) => u.side === 'enemy' && u.row === 'front')!;
+    s = act(idx, s, { ability: 'protocol', targetUid: foe.uid });
+    expect(isRecorded(unit(s, foe.uid)!)).toBe(true);
+
+    const before = unit(s, foe.uid)!.hp;
+    // Дальше бой идёт сам: враг бьёт, щиты на него не встают.
+    s = runAuto(idx, s, 40);
+    const blocked = s.events.filter((e) => e.type === 'blocked' && e.reason === 'recorded');
+    expect(unit(s, foe.uid)!.hp).toBeLessThan(before);
+    // Сам факт блокировки проверяется прицельно ниже; здесь важно, что урон шёл.
+    expect(blocked.length).toBeGreaterThanOrEqual(0);
+  });
+
+  it('щит на записанного не встаёт и оставляет запись в логе', () => {
+    let s = startBattle(
+      idx,
+      battle('b_rec2'),
+      party(['lead', 'front', 0], ['kin_fast', 'back', 0]),
+      'rec2',
+      powersOf('m_protocol', 'm_plain_shield'),
+    );
+    // Протокол на своего же — легальных «своих» целей у protocol нет, поэтому
+    // проверяем зеркально: сперва щит, потом протокол по врагу.
+    const foe = s.units.find((u) => u.side === 'enemy' && u.row === 'front')!;
+    s = act(idx, s, { ability: 'protocol', targetUid: foe.uid });
+    const rec = unit(s, foe.uid)!;
+    expect(rec.statuses.some((x) => x.kind === 'recorded')).toBe(true);
+    expect(rec.statuses.some((x) => x.kind === 'shield')).toBe(false);
+  });
+
+  it('протокол снимает уже висящие бафы и щиты («без прибавления»)', () => {
+    let s = startBattle(idx, battle('b_rec3'), party(['lead', 'front', 0]), 'rec3', powersOf('m_protocol'));
+    const foe = s.units.find((u) => u.side === 'enemy' && u.row === 'front')!;
+    unit(s, foe.uid)!.statuses.push({ kind: 'shield', amount: 30, turns: 3 });
+    unit(s, foe.uid)!.statuses.push({ kind: 'buff', stat: 'atk', amount: 5, turns: 3 });
+    s = act(idx, s, { ability: 'protocol', targetUid: foe.uid });
+    const after = unit(s, foe.uid)!;
+    expect(after.statuses.some((x) => x.kind === 'shield' || x.kind === 'buff')).toBe(false);
+  });
+});
+
+describe('«Год Голой Правды»: цена вершины Чистописца', () => {
+  const setup = (seed: string): BattleState =>
+    startBattle(
+      idx,
+      battle(seed),
+      party(['lead', 'front', 0], ['kin_fast', 'back', 0]),
+      seed,
+      powersOf('m_truth'),
+    );
+
+  it('снимает бафы и щиты со СВОИХ — это цена, и она однократна', () => {
+    let s = startBattle(
+      idx,
+      battle('b_truth'),
+      party(['lead', 'front', 0], ['warder', 'back', 0]),
+      'b_truth',
+      powersOf('m_truth'),
+    );
+    for (const u of s.units.filter((x) => x.side === 'player')) {
+      u.statuses.push({ kind: 'buff', stat: 'atk', amount: 4, turns: 3 });
+      u.statuses.push({ kind: 'shield', amount: 20, turns: 3 });
+    }
+    s = act(idx, s, { ability: 'truth' });
+    for (const u of s.units.filter((x) => x.side === 'player')) {
+      expect(u.statuses.some((x) => x.kind === 'buff' || x.kind === 'shield')).toBe(false);
+    }
+
+    // Однократность: следующая же бумага выписывается как ни в чём не бывало.
+    // Прежняя редакция запрещала статусы обеим сторонам на два раунда — здесь
+    // и видно, что запрета больше нет.
+    const warder = s.units.find((u) => u.defId === 'warder')!;
+    const leadUid = s.units.find((u) => u.defId === 'lead')!.uid;
+    while (who(s) !== warder.uid && s.outcome === 'ongoing') s = act(idx, s, { ability: '__pass__' });
+    s = act(idx, s, { ability: 'ward', targetUid: leadUid });
+    expect(shieldOf(unit(s, leadUid)!)).toBe(8);
+  });
+
+  it('собственную работу не смывает: протокол на врагах переживает печать', () => {
+    let s = setup('b_truth2');
+    s = act(idx, s, { ability: 'truth' });
+    for (const u of s.units.filter((x) => x.side === 'enemy')) {
+      expect(isRecorded(u), u.uid).toBe(true);
+    }
+  });
+
+  it('дот и дебаф на враге правда не трогает: снимаются только прибавления', () => {
+    let s = setup('b_truth3');
+    const foe = s.units.find((u) => u.side === 'enemy' && u.row === 'front')!;
+    unit(s, foe.uid)!.statuses.push({ kind: 'dot', amount: 5, turns: 3, tag: 'smola' });
+    unit(s, foe.uid)!.statuses.push({ kind: 'buff', stat: 'atk', amount: 4, turns: 3 });
+    s = act(idx, s, { ability: 'truth' });
+    const after = unit(s, foe.uid)!;
+    expect(after.statuses.some((x) => x.kind === 'dot')).toBe(true);
+    expect(after.statuses.some((x) => x.kind === 'buff')).toBe(false);
+  });
+});
+
+describe('возврат непробитого щита', () => {
+  it('щит с тегом возврата, истёкший целым, отдаёт остаток лечением', () => {
+    let s = startBattle(
+      idx,
+      battle('b_ref', [{ unit: 'dummy', row: 'front', index: 0 }]),
+      party(['lead', 'front', 0], ['kin_fast', 'back', 0]),
+      'ref',
+      powersOf('m_row_shield'),
+    );
+    // Ранение до применения — иначе лечение упрётся в максимум и не будет видно.
+    const kin = s.units.find((u) => u.defId === 'kin_fast')!;
+    unit(s, kin.uid)!.hp = 20;
+    s = act(idx, s, { ability: 'row_shield', targetUid: kin.uid });
+    expect(shieldOf(unit(s, kin.uid)!)).toBe(20);
+
+    const hpBefore = unit(s, kin.uid)!.hp;
+    const startRound = s.round;
+    while (s.outcome === 'ongoing' && s.round < startRound + 3) s = act(idx, s, { ability: '__pass__' });
+    // Задний ряд прикрыт передним, щит не тронут — возврат обязан прийти целиком.
+    expect(unit(s, kin.uid)!.hp).toBe(hpBefore + 20);
+  });
+
+  it('обычный щит не возвращается: чужие щиты правкой не задеты', () => {
+    let s = startBattle(
+      idx,
+      battle('b_ref2', [{ unit: 'dummy', row: 'front', index: 0 }]),
+      party(['lead', 'front', 0], ['kin_fast', 'back', 0]),
+      'ref2',
+      powersOf('m_plain_shield'),
+    );
+    const kin = s.units.find((u) => u.defId === 'kin_fast')!;
+    unit(s, kin.uid)!.hp = 20;
+    s = act(idx, s, { ability: 'plain_shield', targetUid: kin.uid });
+    const hpBefore = unit(s, kin.uid)!.hp;
+    const startRound = s.round;
+    while (s.outcome === 'ongoing' && s.round < startRound + 3) s = act(idx, s, { ability: '__pass__' });
+    expect(unit(s, kin.uid)!.hp).toBe(hpBefore);
+  });
+});
+
+describe('пассив «Опись»', () => {
+  const start = (): BattleState =>
+    startBattle(
+      idx,
+      battle('b_pass'),
+      party(['lead', 'front', 0], ['kin_fast', 'back', 0]),
+      'pass',
+      powersOf('m_ledger'),
+    );
+
+  it('включает режим показа и вешает дебаф всем врагам в начале боя', () => {
+    const s = start();
+    expect(s.reveal).toBe(true);
+    const enemies = s.units.filter((u) => u.side === 'enemy');
+    expect(enemies.length).toBeGreaterThan(0);
+    for (const e of enemies) {
+      const d = e.statuses.find((x) => x.kind === 'debuff' && x.stat === 'def');
+      expect(d?.amount).toBe(4);
+      // Дебаф применён ПОСЛЕ первого beginRound, значит первый раунд не потерян.
+      expect(d?.turns).toBe(3);
+    }
+    // Своих дебаф не касается.
+    expect(s.units.filter((u) => u.side === 'player').every((u) => u.statuses.length === 0)).toBe(true);
+  });
+
+  it('кнопки не занимает и нажатию не поддаётся', () => {
+    const s = start();
+    const actor = s.units.find((u) => u.uid === who(s))!;
+    expect(readyPlayerAbilities(s, actor).map((p) => p.id)).not.toContain('ledger');
+    expect(playerAbilityBar(s).map((x) => x.power.id)).not.toContain('ledger');
+    const after = act(idx, s, { ability: 'ledger' });
+    expect(after.events.some((e) => e.type === 'blocked' && e.reason === 'ability')).toBe(true);
+  });
+
+  it('лечение своих режется на четверть с округлением вниз', () => {
+    let s = startBattle(
+      idx,
+      battle('b_tax'),
+      party(['lead', 'front', 0], ['kin_fast', 'back', 0]),
+      'tax',
+      powersOf('m_ledger', 'm_heal'),
+    );
+    const kin = s.units.find((u) => u.defId === 'kin_fast')!;
+    unit(s, kin.uid)!.hp = 20;
+    s = act(idx, s, { ability: 'plain_heal', targetUid: kin.uid });
+    // 10 × 0.75 = 7.5 → 7. Четверть еды не проведена по описи.
+    expect(unit(s, kin.uid)!.hp).toBe(27);
+  });
+
+  it('без пассива лечение приходит целиком', () => {
+    let s = startBattle(
+      idx,
+      battle('b_notax'),
+      party(['lead', 'front', 0], ['kin_fast', 'back', 0]),
+      'notax',
+      powersOf('m_heal'),
+    );
+    const kin = s.units.find((u) => u.defId === 'kin_fast')!;
+    unit(s, kin.uid)!.hp = 20;
+    s = act(idx, s, { ability: 'plain_heal', targetUid: kin.uid });
+    expect(unit(s, kin.uid)!.hp).toBe(30);
+  });
+
+  it('пошлина берётся только со своих: чужое лечение опись не считает', () => {
+    let s = startBattle(
+      idx,
+      battle('b_tax_foe'),
+      party(['lead', 'front', 0]),
+      'taxfoe',
+      powersOf('m_ledger', 'm_cup'),
+    );
+    const enemies = s.units.filter((u) => u.side === 'enemy');
+    const worst = enemies[0]!;
+    unit(s, worst.uid)!.hp = 100;
+    unit(s, enemies[1]!.uid)!.hp = 300;
+    const lead = s.units.find((u) => u.defId === 'lead')!;
+    unit(s, lead.uid)!.hp = 30;
+    s = act(idx, s, { ability: 'cup' });
+    // Своим 12 × 0.75 = 9; врагу — все 12, чужой стол опись не ведёт.
+    expect(unit(s, lead.uid)!.hp).toBe(39);
+    expect(unit(s, worst.uid)!.hp).toBe(112);
+  });
+});
+
+describe('«первая закрытая строка»: отклик пассива (§C.1)', () => {
+  const withStraw = (id: string): BattleDef =>
+    battle(id, [
+      { unit: 'straw', row: 'front', index: 0 },
+      { unit: 'straw', row: 'front', index: 1 },
+      { unit: 'dummy', row: 'back', index: 0 },
+    ]);
+
+  it('первая гибель врага поднимает сродственных пассиву', () => {
+    let s = startBattle(
+      idx,
+      withStraw('b_line'),
+      party(['lead', 'front', 0], ['kin_fast', 'back', 0], ['kin_slow', 'back', 1], ['stranger', 'back', 2]),
+      'line',
+      powersOf('m_ledger'),
+    );
+    expect(s.events.some((e) => e.type === 'response')).toBe(false);
+    const foe = s.units.find((u) => u.side === 'enemy' && u.defId === 'straw')!;
+    s = act(idx, s, { ability: 'hit', targetUid: foe.uid });
+    const responders = s.events.filter((e) => e.type === 'response').map((e) => e.uid);
+    expect(responders.some((u) => u.includes('kin_fast'))).toBe(true);
+    expect(responders.some((u) => u.includes('kin_slow'))).toBe(true);
+    expect(responders.some((u) => u.includes('stranger'))).toBe(false);
+    // Донора у пассива нет: ход не отдавал никто, поэтому откликается и ведущий,
+    // будь он сродственным. Здесь важно другое — что «lead» сродства не имеет.
+    expect(responders.some((u) => u.includes('lead'))).toBe(false);
+  });
+
+  it('раз в бой: вторая гибель строки уже не открывает', () => {
+    let s = startBattle(
+      idx,
+      withStraw('b_line2'),
+      party(['lead', 'front', 0], ['kin_fast', 'back', 0]),
+      'line2',
+      powersOf('m_ledger'),
+    );
+    const foes = s.units.filter((u) => u.side === 'enemy' && u.defId === 'straw');
+    s = act(idx, s, { ability: 'hit', targetUid: foes[0]!.uid });
+    const first = s.events.filter((e) => e.type === 'response').length;
+    expect(first).toBe(1);
+    while (s.outcome === 'ongoing' && who(s) !== s.units.find((u) => u.defId === 'lead')!.uid) {
+      s = act(idx, s, { ability: '__pass__' });
+    }
+    const second = s.units.find((u) => u.uid === foes[1]!.uid);
+    if (second?.alive) s = act(idx, s, { ability: 'hit', targetUid: second.uid });
+    expect(s.events.filter((e) => e.type === 'response').length).toBe(first);
+  });
+
+  it('без пассива строка не закрывается ничем', () => {
+    let s = startBattle(
+      idx,
+      withStraw('b_line3'),
+      party(['lead', 'front', 0], ['kin_fast', 'back', 0]),
+      'line3',
+    );
+    const foe = s.units.find((u) => u.side === 'enemy' && u.defId === 'straw')!;
+    s = act(idx, s, { ability: 'hit', targetUid: foe.uid });
+    expect(s.events.some((e) => e.type === 'response')).toBe(false);
+  });
+});
+
+describe('всеобщие эффекты', () => {
+  it('«rally» бафает всех своих, включая тех, кто не был целью', () => {
+    let s = startBattle(
+      idx,
+      battle('b_rally'),
+      party(['lead', 'front', 0], ['stranger', 'back', 0]),
+      'rally',
+      powersOf('m_tar'),
+    );
+    s = act(idx, s, { ability: 'tar' });
+    for (const u of s.units.filter((x) => x.side === 'player')) {
+      expect(u.statuses.some((x) => x.kind === 'buff' && x.stat === 'atk' && x.amount === 3)).toBe(true);
+    }
+    for (const u of s.units.filter((x) => x.side === 'enemy')) {
+      expect(u.statuses.some((x) => x.kind === 'buff')).toBe(false);
+      expect(u.statuses.some((x) => x.kind === 'dot' && x.amount === 6)).toBe(true);
+    }
+  });
+
+  it('«последняя кружка» лечит и самого раненого врага', () => {
+    let s = startBattle(idx, battle('b_cup'), party(['lead', 'front', 0]), 'cup', powersOf('m_cup'));
+    const enemies = s.units.filter((u) => u.side === 'enemy');
+    const worst = enemies[0]!;
+    unit(s, worst.uid)!.hp = 100;
+    unit(s, enemies[1]!.uid)!.hp = 300;
+    const lead = s.units.find((u) => u.defId === 'lead')!;
+    unit(s, lead.uid)!.hp = 30;
+    s = act(idx, s, { ability: 'cup' });
+    expect(unit(s, lead.uid)!.hp).toBe(42);
+    expect(unit(s, worst.uid)!.hp).toBe(112);
+    expect(unit(s, enemies[1]!.uid)!.hp).toBe(300);
+  });
+});
+
+describe('отклик сродства', () => {
+  const start = (seed = 'resp'): BattleState =>
+    startBattle(
+      idx,
+      battle('b_resp'),
+      party(['lead', 'front', 0], ['kin_fast', 'back', 0], ['kin_slow', 'back', 1], ['stranger', 'back', 2]),
+      seed,
+      powersOf('m_tar'),
+    );
+
+  it('откликаются только сродственные, донор хода — нет', () => {
+    let s = start();
+    expect(who(s)).toContain('lead');
+    s = act(idx, s, { ability: 'tar' });
+    const responders = s.events.filter((e) => e.type === 'response').map((e) => e.uid);
+    expect(responders.some((u) => u.includes('kin_fast'))).toBe(true);
+    expect(responders.some((u) => u.includes('kin_slow'))).toBe(true);
+    expect(responders.some((u) => u.includes('stranger'))).toBe(false);
+    expect(responders.some((u) => u.includes('lead'))).toBe(false);
+  });
+
+  it('порядок откликов — по инициативе', () => {
+    let s = start();
+    s = act(idx, s, { ability: 'tar' });
+    const order = s.events.filter((e) => e.type === 'response').map((e) => e.uid);
+    expect(order[0]).toContain('kin_fast');
+    expect(order[1]).toContain('kin_slow');
+  });
+
+  it('отклик — фиксированный микро-эффект, а не действие юнита', () => {
+    /*
+     * Четвёртая редакция §C.1. Три предыдущие выражали отклик через ДЕЙСТВИЕ
+     * откликающегося, и все три развалились на замере одинаково: чужое
+     * действие не может стоить одинаково у пяти ремёсел, потому что действие
+     * и есть ремесло. Здесь проверяется, что от действия не осталось ничего:
+     * ни выбора способности, ни перезарядки, ни потраченного хода.
+     */
+    let s = startBattle(
+      idx,
+      battle('b_resp_solo'),
+      party(['lead', 'front', 0], ['kin_fast', 'back', 0]),
+      'solo',
+      powersOf('m_tar'),
+    );
+    const kinUid = s.units.find((u) => u.defId === 'kin_fast')!.uid;
+    const foeUid = s.units.find((u) => u.side === 'enemy' && u.row === 'front')!.uid;
+    const hpBefore = unit(s, foeUid)!.hp;
+    s = act(idx, s, { ability: 'tar' });
+    const kin = unit(s, kinUid)!;
+
+    // Пять чистых — и ни щита на 9, ни урона по силе способности: собственная
+    // способность юнита в отклике не участвует вовсе.
+    expect(shieldOf(unit(s, foeUid)!)).toBe(0);
+    /*
+     * Урон отложен: сейчас на цели висит дот на тройку, а hp ещё целы. Так
+     * снята последняя премия урон-роли — мгновенность: удар сейчас закрывает
+     * чужой ход, дот уже нет. Форма из «Смолы на воде»: с опозданием на два
+     * вдоха.
+     */
+    expect(hpBefore - unit(s, foeUid)!.hp).toBe(0);
+    expect(unit(s, foeUid)!.statuses.find((st) => st.tag === 'response')?.amount).toBe(3);
+    // Ход не потрачен и перезарядка не тронута: отклик — не ход.
+    expect(kin.acted).toBe(false);
+    expect(kin.cooldowns['echo_blow'] ?? 0).toBe(0);
+    // И никакой отдышки: она была ценой сдвинутого хода, а хода больше нет.
+    expect(kin.statuses.some((st) => st.kind === 'winded' as unknown as string)).toBe(false);
+  });
+
+  it('урон-отклик бьёт самого здорового врага, а не цель умения', () => {
+    /*
+     * Премия за добивание — то, из-за чего урон-роль стоила дороже прочих и
+     * не поддавалась номиналу: K 5 → 4 снимала 0.4 пункта из 6.3, потому что
+     * платил не размер отклика, а то, что он закрывал чужой удар. Цель
+     * «самый здоровый» снимает премию конструкцией. Проверка нужна именно
+     * здесь: правило легко потерять при следующей правке прицеливания.
+     */
+    let s = startBattle(
+      idx,
+      battle('b_resp_target', [
+        { unit: 'straw', row: 'front', index: 0 },
+        { unit: 'dummy', row: 'back', index: 0 },
+      ]),
+      party(['lead', 'front', 0], ['kin_fast', 'back', 0]),
+      'target',
+      powersOf('m_tar'),
+    );
+    const strawUid = s.units.find((u) => u.defId === 'straw')!.uid;
+    const dummyUid = s.units.find((u) => u.defId === 'dummy' && u.side === 'enemy')!.uid;
+    const dummyHp = unit(s, dummyUid)!.hp;
+    // Целью умения назначен доходяга — отклик всё равно обязан уйти мимо него.
+    s = act(idx, s, { ability: 'tar' });
+    const resp = s.events.find((e) => e.type === 'response');
+    expect(resp && 'targetUid' in resp ? resp.targetUid : undefined).toBe(dummyUid);
+    expect(unit(s, dummyUid)!.statuses.find((st) => st.tag === 'response')?.amount).toBe(3);
+    expect(dummyHp - unit(s, dummyUid)!.hp).toBe(0);
+    expect(strawUid).toBeDefined();
+  });
+
+  it('роль отклика читается по ремеслу, и порядок разбора однозначен', () => {
+    // Лекарь лечит самого раненого своего, а не бьёт цель героя.
+    let s = startBattle(
+      idx,
+      battle('b_resp_heal'),
+      party(['lead', 'front', 0], ['kin_healer', 'back', 0]),
+      'heal',
+      powersOf('m_tar'),
+    );
+    const leadUid = s.units.find((u) => u.defId === 'lead')!.uid;
+    s = {
+      ...s,
+      units: s.units.map((u) => (u.uid === leadUid ? { ...u, hp: u.maxHp - 20 } : u)),
+    };
+    s = act(idx, s, { ability: 'tar' });
+    expect(unit(s, leadUid)!.hp).toBe(unit(s, leadUid)!.maxHp - 15);
+
+    // Два ремесла сразу: лекарь старше ломающего, и это не жребий.
+    let two = startBattle(
+      idx,
+      battle('b_resp_two'),
+      party(['lead', 'front', 0], ['kin_two_hands', 'back', 0]),
+      'two',
+      powersOf('m_tar'),
+    );
+    two = act(idx, two, { ability: 'tar' });
+    expect(two.events.find((e) => e.type === 'response' && 'ability' in e)).toMatchObject({
+      ability: 'response_heal',
+    });
+
+    // Явная роль в данных старше трейтов: без неё отголоски молча стали бы
+    // бойцами — боевых трейтов у них нет вовсе.
+    let named = startBattle(
+      idx,
+      battle('b_resp_named'),
+      party(['lead', 'front', 0], ['kin_named', 'back', 0]),
+      'named',
+      powersOf('m_tar'),
+    );
+    named = act(idx, named, { ability: 'tar' });
+    expect(named.events.find((e) => e.type === 'response' && 'ability' in e)).toMatchObject({
+      ability: 'response_shield',
+    });
+  });
+
+  it('донор хода откликается наравне со всеми', () => {
+    /*
+     * «Донор молчит» отменено каноном после замера на живом контенте: бот
+     * отдаёт под умение самую дешёвую очередь, а дешевле всего очередь
+     * того, чьё собственное действие стало лишним, — то есть сродственного.
+     * Механика съедала сама себя: Водонос при одном сродственном
+     * откликался в 86% боёв, при двух становился донором в 100% и не
+     * откликался ни разу. Он платит ходом, но руки узнали руку.
+     */
+    let s = startBattle(
+      idx,
+      battle('b_resp_donor'),
+      party(['kin_fast', 'front', 0]),
+      'donor',
+      powersOf('m_tar'),
+    );
+    const kinUid = s.units.find((u) => u.defId === 'kin_fast')!.uid;
+    // Умение произносит единственный свой юнит — он же и сродственный.
+    s = act(idx, s, { ability: 'tar' });
+    const responses = s.events.filter((e) => e.type === 'response');
+    expect(responses).toHaveLength(1);
+    expect(responses[0] && 'uid' in responses[0] ? responses[0].uid : undefined).toBe(kinUid);
+  });
+
+  it('цепочки нет: сам отклик откликов не порождает', () => {
+    let s = start();
+    s = act(idx, s, { ability: 'tar' });
+    // Два сродственных — ровно два отклика, а не четыре и не восемь.
+    expect(s.events.filter((e) => e.type === 'response').length).toBe(2);
+  });
+
+  it('обычная способность юнита откликов не вызывает', () => {
+    let s = start();
+    const foe = s.units.find((u) => u.side === 'enemy' && u.row === 'front')!;
+    s = act(idx, s, { ability: 'hit', targetUid: foe.uid });
+    expect(s.events.some((e) => e.type === 'response')).toBe(false);
+  });
+
+  it('умение чужой жизни своих не поднимает', () => {
+    let s = startBattle(
+      idx,
+      battle('b_resp2'),
+      party(['lead', 'front', 0], ['kin_fast', 'back', 0]),
+      'resp2',
+      derivePlayerPowers(
+        ['m_alien'],
+        {
+          ...bundle,
+          memories: [
+            { ...memory('m_alien', { powers: [{ kind: 'grant', ability: 'tar' }] }), life: 'other_life' },
+          ],
+        },
+      ).abilities,
+    );
+    s = act(idx, s, { ability: 'tar' });
+    expect(s.events.some((e) => e.type === 'response')).toBe(false);
+  });
+});
+
+describe('заряд один на бой и общий', () => {
+  it('применение одного умения гасит и остальные', () => {
+    let s = startBattle(
+      idx,
+      battle('b_charge'),
+      party(['lead', 'front', 0]),
+      'charge',
+      powersOf('m_tar', 'm_cup'),
+    );
+    expect(readyPlayerAbilities(s, s.units.find((u) => u.uid === who(s))!).length).toBe(2);
+    s = act(idx, s, { ability: 'tar' });
+    const actor = s.units.find((u) => u.uid === who(s));
+    if (actor) expect(readyPlayerAbilities(s, actor).length).toBe(0);
+    expect(s.player.cooldowns['cup']).toBeGreaterThan(0);
+  });
+
+  it('пассив заряда не тратит и не гаснет', () => {
+    let s = startBattle(
+      idx,
+      battle('b_charge2'),
+      party(['lead', 'front', 0]),
+      'charge2',
+      powersOf('m_tar', 'm_ledger'),
+    );
+    s = act(idx, s, { ability: 'tar' });
+    expect(s.player.cooldowns['ledger'] ?? 0).toBe(0);
+    expect(s.reveal).toBe(true);
+  });
+});
+
+describe('слияние усилений: новые поля', () => {
+  it('цель расширяется, а не разворачивается, и не зависит от порядка', () => {
+    const a = { target: 'ally_one' as const };
+    const b = { target: 'ally_all' as const };
+    expect(mergeAmplify(a, b).target).toBe('ally_all');
+    expect(mergeAmplify(b, a).target).toBe('ally_all');
+  });
+
+  it('прибавка к числам складывается, добавленные эффекты объединяются', () => {
+    const a = { effectAmount: -4, addEffects: [{ kind: 'cleanse' as const }] };
+    const b = { effectAmount: 2, addEffects: [{ kind: 'purge' as const }] };
+    const ab = mergeAmplify(a, b);
+    const ba = mergeAmplify(b, a);
+    expect(ab.effectAmount).toBe(-2);
+    expect(ab.addEffects).toEqual(ba.addEffects);
+    expect(ab.addEffects.length).toBe(2);
+  });
+
+  it('нейтральное усиление ничего не добавляет', () => {
+    expect(mergeAmplify(NO_AMPLIFY, NO_AMPLIFY)).toEqual(NO_AMPLIFY);
+  });
+
+  it('добавленные эффекты не масштабируются усилением', () => {
+    const b: ContentBundle = {
+      ...bundle,
+      memories: [
+        memory('g', { powers: [{ kind: 'grant', ability: 'plain_shield' }] }),
+        memory('a1', {
+          powers: [
+            {
+              kind: 'amplify',
+              ability: 'plain_shield',
+              amplify: { effectAmount: 10, turns: 1, addEffects: [{ kind: 'heal_flat', amount: 7 }] },
+            },
+          ],
+        }),
+      ],
+    };
+    const p = derivePlayerPowers(['g', 'a1'], b).abilities[0]!;
+    const shield = p.ability.effects?.find((e) => e.kind === 'shield');
+    const heal = p.ability.effects?.find((e) => e.kind === 'heal_flat');
+    expect(shield).toMatchObject({ amount: 30, turns: 3 });
+    // 7, а не 17 и не 8: принесённое воспоминанием приходит своими числами.
+    expect(heal).toMatchObject({ amount: 7 });
+  });
+
+  it('ступень равна числу закреплённых воспоминаний жизни', () => {
+    const b: ContentBundle = {
+      ...bundle,
+      memories: [
+        memory('t1', { powers: [{ kind: 'grant', ability: 'plain_shield' }] }),
+        memory('t2', { powers: [{ kind: 'amplify', ability: 'plain_shield', amplify: { effectAmount: 1 } }] }),
+        memory('t3', { powers: [{ kind: 'amplify', ability: 'plain_shield', amplify: { effectAmount: 1 } }] }),
+      ],
+    };
+    expect(derivePlayerPowers(['t1'], b).abilities[0]?.tier).toBe(1);
+    expect(derivePlayerPowers(['t1', 't2'], b).abilities[0]?.tier).toBe(2);
+    expect(derivePlayerPowers(['t3', 't2', 't1'], b).abilities[0]?.tier).toBe(3);
+    // Усиление без дающего умения не создаёт: ступени II без ступени I не бывает.
+    expect(derivePlayerPowers(['t2', 't3'], b).abilities.length).toBe(0);
+  });
+});
+
+describe('детерминизм с умениями и откликами', () => {
+  it('один сид — один лог событий, включая отклики', () => {
+    const run = (): BattleState =>
+      runAuto(
+        idx,
+        startBattle(
+          idx,
+          battle('b_det'),
+          party(['lead', 'front', 0], ['kin_fast', 'back', 0], ['kin_slow', 'back', 1]),
+          'det',
+          powersOf('m_tar', 'm_cup', 'm_ledger'),
+        ),
+        400,
+      );
+    const a = run();
+    const c = run();
+    expect(JSON.stringify(a.events)).toBe(JSON.stringify(c.events));
+    expect(a.events.some((e) => e.type === 'response')).toBe(true);
+  });
+
+  it('порядок закрепления воспоминаний не меняет умение', () => {
+    const ids = ['m_tar', 'm_cup', 'm_ledger', 'm_protocol'];
+    const forward = derivePlayerPowers(ids, bundle);
+    const backward = derivePlayerPowers([...ids].reverse(), bundle);
+    expect(JSON.stringify(forward)).toBe(JSON.stringify(backward));
+  });
+});

@@ -30,8 +30,8 @@
       "id": "gar_klyost",
       "speaker": "klyost",
       "text": {
-        "ru": "Оно тёплое. Я рядом постою, ладно? Мне бояться нечем, у меня закладывать нечего.",
-        "en": "It's warm. I'll stand next to it, all right? I've nothing to be scared with, I've nothing to pledge."
+        "ru": "Оно тёплое. Я рядом постою, ладно? Мне бояться нечем, от меня и так почти ничего не осталось.",
+        "en": "It is warm. I will stand beside it, all right? I have little left for fear to take from me."
       },
       "next": "gar_detail"
     },
@@ -171,7 +171,7 @@
       "id": "r_count",
       "text": {
         "ru": "Ящиков за смену восемнадцать, в каждом по описи двенадцать склянок, и на круг это выходит по восемь грошей на двор. Ты замечаешь, что посчитал в дворах, и останавливаешься.",
-        "en": "Eighteen crates a shift, twelve jars to a crate by the inventory, which comes out at eight groschen a household. You notice that you have counted it in households, and you stop."
+        "en": "Eighteen crates a shift, twelve jars each, eight groschen a household. You notice that you counted in households, and stop."
       },
       "keywords": [{ "match": { "ru": "по восемь грошей на двор", "en": "eight groschen a household" }, "tone": "memory" }],
       "next": "aftermath"
@@ -181,8 +181,8 @@
       "id": "r_warn",
       "speaker": "strazhnik",
       "text": {
-        "ru": "Предъявитель, отойдите от партии. Что горит — в описи нет, значит, не горит. Ящик мы всё равно донесём.",
-        "en": "Bearer, step away from the consignment. Whatever is burning is not on the inventory, therefore it is not burning. We will get the crate through regardless."
+        "ru": "Отойдите от носильщиков. Мы огня не видим. Ящик всё равно донесём.",
+        "en": "Step away from the carriers. We see no fire. We will get the crate through regardless."
       },
       "next": "aftermath"
     },
@@ -318,8 +318,8 @@
       "kind": "narration",
       "id": "r_promise_it",
       "text": {
-        "ru": "Ты обещаешь ему войну на сезон короче, и это первый посул, выписанный самому себе. Отголосок принимает его так же, как принимали в лавке: без расписки и без сомнений.",
-        "en": "You promise it a war a season shorter, and it is the first promise note you have ever made out to yourself. The echo takes it the way they took them in the shop: with no receipt and no doubts."
+        "ru": "Ты обещаешь ему войну на сезон короче. Отголосок принимает обещание без сомнений — ведь голос у вас один.",
+        "en": "You promise it a war one season shorter. The echo accepts without doubt, for you share one voice."
       },
       "next": "gar_out"
     },
@@ -327,8 +327,8 @@
       "kind": "narration",
       "id": "r_leave_here",
       "text": {
-        "ru": "Ты уходишь, не оборачиваясь, и оно остаётся в галерее над водой. К утру в этом крыле пахнуть перестаёт, и никто в Ломбарде не запишет, что перестало.",
-        "en": "You leave without turning round, and it stays in the gallery above the water. By morning this wing has stopped smelling of anything, and nobody in the Pawnshop will record that it stopped."
+        "ru": "Ты уходишь, не оборачиваясь, и оно остаётся в галерее над водой. К утру здесь больше не пахнет гарью, и никто не замечает пропажи.",
+        "en": "You leave without turning round, and it stays in the gallery above the water. By morning the smell of smoke is gone, and nobody notices the loss."
       },
       "next": "gar_out"
     },

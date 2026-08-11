@@ -21,6 +21,7 @@ import {
   type BattleUnitState,
   type Lang,
   type TargetKind,
+  type UnitDef,
 } from '@nameless/engine';
 import { t } from '../i18n';
 
@@ -40,19 +41,22 @@ function damageEffects(ability: Ability): BattleEffect[] {
     : [{ kind: 'damage', power: ability.power }];
 }
 
+/** Края разброса урона по голым числам — общий корень боевого и небоевого чтения. */
+function spanFromStats(atk: number, armor: number, power: number): { min: number; max: number } {
+  const mitigated = atk * power * (ARMOR_K / (ARMOR_K + armor));
+  return {
+    min: Math.max(1, Math.round(mitigated * (1 - DAMAGE_VARIANCE))),
+    max: Math.max(1, Math.round(mitigated * (1 + DAMAGE_VARIANCE))),
+  };
+}
+
 /** Края разброса урона: min/max того же выражения, что считает computeDamage. */
 export function damageRange(
   attacker: BattleUnitState,
   target: BattleUnitState,
   power: number,
 ): { min: number; max: number } {
-  const atk = effectiveStat(attacker, 'atk');
-  const def = effectiveStat(target, 'def');
-  const mitigated = atk * power * (ARMOR_K / (ARMOR_K + def));
-  return {
-    min: Math.max(1, Math.round(mitigated * (1 - DAMAGE_VARIANCE))),
-    max: Math.max(1, Math.round(mitigated * (1 + DAMAGE_VARIANCE))),
-  };
+  return spanFromStats(effectiveStat(attacker, 'atk'), effectiveStat(target, 'def'), power);
 }
 
 /** Лечение разброса не имеет — движок считает его ровно. */
@@ -120,6 +124,58 @@ export function effectWord(eff: BattleEffect, lang: Lang): string {
   }
 }
 
+/**
+ * Опорная броня для чисел ВНЕ боя — медиана `def` по всему ростеру.
+ *
+ * Бирка вербовки показывает способности до того, как у них появилась цель, а
+ * урон в этой игре считается только против чьей-то брони (`ARMOR_K`). Врать
+ * «уроном без брони» нельзя — он завышает на 12–15% против любого настоящего
+ * врага. Медиана ростера — единственное число, которое здесь не выдумано:
+ * оно взято из тех же данных, по которым потом пойдёт бой, и меняется вместе
+ * с ними. Приблизительность видна и без оговорок: урон на бирке всегда стоит
+ * вилкой («урон 10–12»), а не одним числом (см. `abilityDeed`).
+ */
+export function referenceArmor(units: readonly UnitDef[]): number {
+  const ds = units.map((u) => u.stats.def).sort((a, b) => a - b);
+  return ds.length > 0 ? (ds[Math.floor(ds.length / 2)] ?? 0) : 0;
+}
+
+/**
+ * «Глагол и число» одной способности — то, чем канон велит подписывать юнита
+ * при вербовке (КАНОН_КРАТКО §9.2): «урон 9–12», «лечит 11», «щит 16».
+ *
+ * Считается по атаке самого юнита (её передают уже с поправкой на уровень) и
+ * по опорной броне: ни одного числа, которого нет в данных. Лечение движок
+ * считает ровно, поэтому оно стоит точным числом, а урон — вилкой ±12%.
+ * Куда бьёт, как часто и что оставляет после себя — по-прежнему `abilityChips`.
+ */
+export function abilityDeed(
+  atk: number,
+  ability: Ability,
+  lang: Lang,
+  armor: number,
+): Preview | undefined {
+  const effects = damageEffects(ability);
+  const dmg = effects.find((e) => e.kind === 'damage');
+  if (dmg && dmg.kind === 'damage' && dmg.power > 0) {
+    const { min, max } = spanFromStats(atk, armor, dmg.power);
+    return {
+      text: `${t(lang, 'damageWord')} ${min === max ? min : `${min}–${max}`}`,
+      tone: 'damage',
+    };
+  }
+  const heal = effects.find((e) => e.kind === 'heal');
+  if (heal && heal.kind === 'heal') {
+    return {
+      text: `${t(lang, 'healsWord')} ${Math.max(1, Math.round(atk * heal.power))}`,
+      tone: 'heal',
+    };
+  }
+  const first = effects.find((e) => e.kind !== 'damage');
+  const word = first ? effectWord(first, lang) : '';
+  return word ? { text: word, tone: 'effect' } : undefined;
+}
+
 export function targetWord(kind: TargetKind, lang: Lang): string {
   switch (kind) {
     case 'enemy_front':
@@ -141,11 +197,27 @@ export function targetWord(kind: TargetKind, lang: Lang): string {
   }
 }
 
+/** Верх коридора длины боя: дольше него перезарядка означает «один раз». */
+const ONCE_PER_BATTLE_FROM = 14;
+
 /** Чипы разбора способности: куда бьёт, как часто, что оставляет после себя. */
 export function abilityChips(ability: Ability, lang: Lang): string[] {
   const chips = [targetWord(ability.target, lang)];
   if (ability.piercing) chips.push(t(lang, 'piercing'));
-  chips.push(ability.cooldown > 0 ? `${t(lang, 'cooldownN')} ${ability.cooldown}` : t(lang, 'everyTurn'));
+  /*
+   * «Раз за бой» умения памяти выражено в данных заведомо недостижимой
+   * перезарядкой, и это внутренняя уловка: боёв в 99 раундов не бывает при
+   * коридоре 6–14. Игроку она не адресована — он читал бы «перезарядка 99»
+   * и ждал бы её конца. Порог совпадает с верхом коридора длины боя: всё,
+   * что дольше самого длинного боя, — это «один раз», как ни называй.
+   */
+  chips.push(
+    ability.cooldown > ONCE_PER_BATTLE_FROM
+      ? t(lang, 'oncePerBattle')
+      : ability.cooldown > 0
+        ? `${t(lang, 'cooldownN')} ${ability.cooldown}`
+        : t(lang, 'everyTurn'),
+  );
   for (const eff of ability.effects ?? []) {
     // Урон уже показан диапазоном на самих картах — в чипах он лишний.
     if (eff.kind === 'damage') continue;
@@ -153,6 +225,35 @@ export function abilityChips(ability: Ability, lang: Lang): string[] {
     if (word) chips.push(word);
   }
   return chips;
+}
+
+/**
+ * Слово «раунд» в нужном числе. Русский требует трёх форм, английский — двух,
+ * и ни одну из них нельзя собрать конкатенацией «раунд(ов)»: строка вида
+ * «через 2 раунд(ов)» читается как недоделанный интерфейс, а не как срок.
+ */
+function roundsWord(n: number, lang: Lang): string {
+  if (lang !== 'ru') return n === 1 ? t(lang, 'roundsOne') : t(lang, 'roundsMany');
+  const tail = n % 100;
+  if (tail >= 11 && tail <= 14) return t(lang, 'roundsMany');
+  const last = n % 10;
+  if (last === 1) return t(lang, 'roundsOne');
+  if (last >= 2 && last <= 4) return t(lang, 'roundsFew');
+  return t(lang, 'roundsMany');
+}
+
+/**
+ * Почему эта кнопка серая. Перезарядка тикает РАУНДАМИ боя (`endRound` в
+ * combat.ts вычитает единицу из всех `cooldowns` один раз за круг), поэтому
+ * срок и называется раундами, а не ходами: сказать «через 2 хода» значило бы
+ * соврать вдвое в бою на троих.
+ *
+ * Раньше неготовая способность просто пропадала с панели (`readyAbilities`
+ * её отфильтровывал), и с точки зрения игрока состав кнопок был случаен —
+ * `REVIEW_GAMEPLAY.md` §1, шаг 4. Ждать её или нет, теперь написано словами.
+ */
+export function coolingReason(name: string, turns: number, lang: Lang): string {
+  return `${t(lang, 'coolingNow')}: ${name} — ${t(lang, 'coolingIn')} ${turns} ${roundsWord(turns, lang)}.`;
 }
 
 /**

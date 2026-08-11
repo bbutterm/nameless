@@ -19,6 +19,7 @@ import type {
 import { content as gameContent } from '@nameless/content';
 import { fuzzDialogue, makePersonalities } from './dialogue-fuzz.js';
 import { determinismCheck, scriptedBattles, unitWinrates } from './battle-sim.js';
+import { decisionDensity } from './decisions.js';
 import {
   exhaustiveLadderCheck,
   personaRun,
@@ -455,6 +456,92 @@ describe('battle-sim: цифры значат то, что написано', ()
   it('бандл без юнитов не роняет симулятор', () => {
     expect(unitWinrates(bundle({}), 5)).toEqual([]);
     expect(scriptedBattles(bundle({}), () => [], 5)).toEqual([]);
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Ходы без решения (docs/БОЙ_ЗАМЕРЫ.md, метрика А)
+//
+// Прибор, который меряет жалобу владельца, обязан сам проходить проверку на
+// вырожденных случаях: бой, где выбора физически нет, должен давать 100%
+// ходов без решения, иначе цифра 84% ничего не значит.
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe('ходы без решения: прибор к жалобе §A.1', () => {
+  const oneEnemy = (id: string): ContentBundle['battles'][number] => ({
+    id,
+    name: L(id),
+    enemies: [{ unit: 'even1', row: 'front', index: 0 }],
+    turnLimit: 20,
+  });
+  const party: PartyUnit[] = [
+    { uid: 'p0', defId: 'even2', hp: 30, xp: 0, level: 1, slot: { row: 'front', index: 0 } },
+  ];
+
+  it('одна способность и одна цель — решать нечего, ровно 100%', () => {
+    const b = bundle({
+      units: [unit('even1'), unit('even2')],
+      abilities: [ability('hit', { power: 1 })],
+      battles: [oneEnemy('b1')],
+    });
+    const d = decisionDensity(b, () => party, { rollouts: 4, runs: 1 });
+    expect(d.turns).toBeGreaterThan(0);
+    // Вариант ровно один: все ходы вынужденные, и это ВИДНО отдельным числом,
+    // а не спрятано в общей доле.
+    expect(d.forcedShare).toBe(1);
+    expect(d.noDecisionShare).toBe(1);
+    expect(d.branching).toBe(1);
+  });
+
+  it('несколько способностей и целей — выбор шире одного, доля остаётся долей', () => {
+    const b = bundle({
+      units: [
+        unit('even1'),
+        unit('even2', { abilities: ['hit', 'swing'] }),
+        unit('even3', { row: 'back' }),
+      ],
+      abilities: [ability('hit', { power: 1 }), ability('swing', { power: 1.2, target: 'enemy_any' })],
+      battles: [
+        {
+          id: 'b1',
+          name: L('b1'),
+          enemies: [
+            { unit: 'even1', row: 'front', index: 0 },
+            { unit: 'even3', row: 'back', index: 0 },
+          ],
+          turnLimit: 20,
+        },
+      ],
+    });
+    const d = decisionDensity(b, () => party, { rollouts: 4, runs: 1 });
+    expect(d.branching).toBeGreaterThan(1);
+    expect(d.forcedShare).toBeLessThan(1);
+    expect(d.noDecisionShare).toBeGreaterThanOrEqual(0);
+    expect(d.noDecisionShare).toBeLessThanOrEqual(1);
+  });
+
+  it('один и тот же бандл даёт одно и то же число — иначе сравнивать «было/стало» нечем', () => {
+    const b = bundle({
+      units: [unit('even1'), unit('even2', { abilities: ['hit', 'swing'] })],
+      abilities: [ability('hit', { power: 1 }), ability('swing', { power: 1.2 })],
+      battles: [oneEnemy('b1')],
+    });
+    const a = decisionDensity(b, () => party, { rollouts: 4, runs: 1 });
+    const c = decisionDensity(b, () => party, { rollouts: 4, runs: 1 });
+    expect(a.noDecisionShare).toBe(c.noDecisionShare);
+    expect(a.regret).toBe(c.regret);
+  });
+
+  it('бои-знакомства и летальные в замер не идут', () => {
+    const b = bundle({
+      units: [unit('even1'), unit('even2')],
+      abilities: [ability('hit', { power: 1 })],
+      battles: [
+        { ...oneEnemy('b1'), tags: ['tutorial'] },
+        { ...oneEnemy('b2'), tags: ['lethal'] },
+      ],
+    });
+    expect(decisionDensity(b, () => party, { rollouts: 2, runs: 1 }).perBattle).toEqual([]);
   });
 });
 
