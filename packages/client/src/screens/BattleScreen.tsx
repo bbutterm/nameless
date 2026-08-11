@@ -3,6 +3,7 @@ import {
   commonActions,
   currentActor,
   isPlayerTurn,
+  isWinded,
   legalTargets,
   playerAbilityBar,
   unitAbilities,
@@ -98,6 +99,8 @@ export function BattleScreen() {
   /* Кнопка, которую только что выбрал тап по карте: она мигает, чтобы игрок
      увидел, ЧТО именно выбрал его жест, а не гадал по подсказке. */
   const [picked, setPicked] = useState<string>();
+  /** Наддача взведена: следующий удар пойдёт в полтора раза сильнее. */
+  const [surging, setSurging] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
   const pickTimer = useRef<ReturnType<typeof setTimeout>>();
   const seenEvents = useRef(0);
@@ -153,6 +156,7 @@ export function BattleScreen() {
     setPeek(undefined);
     setReason(undefined);
     setPicked(undefined);
+    setSurging(false);
   }, [clearViewTimers]);
 
   // Экран боя не размонтируется между боями: узел onWin может вести прямо в
@@ -413,6 +417,25 @@ export function BattleScreen() {
     : coverTargets.length === 0
       ? 'noOne'
       : undefined;
+  /*
+   * «Наддать» (§B.C2) — не третья кнопка хода, а ЦЕНА уже выбранного удара,
+   * поэтому переключатель. Взведён — следующий удар пойдёт в полтора раза
+   * сильнее, а этот юнит пропустит свой следующий ход.
+   *
+   * Почему не долгим нажатием, как предлагал канон: долгое нажатие в этой
+   * панели уже занято разбором способности (Б2), и второй смысл на тот же жест
+   * означал бы, что игрок, решивший прочитать, чем бьёт, случайно занимает ход
+   * у собственного будущего.
+   *
+   * Взвод сбрасывается сам при смене хода: заём, взведённый в прошлом ходу и
+   * забытый, потратил бы ход, о котором игрок уже не помнит.
+   */
+  const canSurgeNow = !!actor && myTurn && !isWinded(actor);
+  const surgeBarred: 'winded' | 'notYourTurn' | undefined = !myTurn
+    ? 'notYourTurn'
+    : actor && isWinded(actor)
+      ? 'winded'
+      : undefined;
   const legal = actor && selectedAbility && myTurn ? legalTargets(battle, actor.uid, selectedAbility) : [];
   const targets = legal.map((u) => u.uid);
   const over = battle.outcome !== 'ongoing';
@@ -516,8 +539,10 @@ export function BattleScreen() {
   function onTapUnit(u: BattleUnitState) {
     if (!myTurn || !actor) return;
     if (selectedAbility && targets.includes(u.uid)) {
-      vibrate('tap');
-      battleAct({ ability: selectedAbility.id, targetUid: u.uid });
+      vibrate(surging ? 'crit' : 'tap');
+      if (surging) playSfx('power');
+      battleAct({ ability: selectedAbility.id, targetUid: u.uid, ...(surging ? { surge: true } : {}) });
+      setSurging(false);
       setSelectedAbility(undefined);
       setPeek(undefined);
       setReason(undefined);
@@ -734,7 +759,7 @@ export function BattleScreen() {
              * видно, для него не существует — той самой жалобе «бой скучный»
              * это прямо противоречит.
              */}
-            {(powers.length > 0 || (myTurn && coverAbility)) && (
+            {(powers.length > 0 || myTurn) && (
               <div className="bar-row bar-row-own">
             {/* Ромбы стоят вне ветки myTurn: погашенное умение должно быть
                 видно и в чужой ход — иначе игрок узнаёт о нём только в свой,
@@ -815,6 +840,39 @@ export function BattleScreen() {
                 <Icon name={coverAbility.icon} size={22} />
                 <span className="ability-name">{loc(coverAbility.name, lang)}</span>
                 <span className="ability-gist">{abilityGist(coverAbility, lang)}</span>
+              </button>
+            )}
+            {myTurn && (
+              <button
+                className={[
+                  'common-action',
+                  'surge-action',
+                  surging ? 'active' : '',
+                  surgeBarred ? 'barred' : '',
+                ]
+                  .filter(Boolean)
+                  .join(' ')}
+                aria-label={
+                  surgeBarred
+                    ? `${t(lang, 'surge')} — ${t(lang, surgeBarred === 'winded' ? 'surgeWinded' : 'surgeNotYourTurn')}`
+                    : t(lang, 'surgeArmed')
+                }
+                onClick={() => {
+                  if (!canSurgeNow) {
+                    // Молчащая кнопка учит только тому, что игра сломана.
+                    setReason(t(lang, surgeBarred === 'winded' ? 'surgeWinded' : 'surgeNotYourTurn'));
+                    return;
+                  }
+                  vibrate('tap');
+                  setPeek(undefined);
+                  const next = !surging;
+                  setSurging(next);
+                  setReason(next ? t(lang, 'surgeArmed') : undefined);
+                }}
+              >
+                <Icon name="hourglass" size={22} />
+                <span className="ability-name">{t(lang, 'surge')}</span>
+                <span className="ability-gist">{t(lang, 'surgeGist')}</span>
               </button>
             )}
               </div>
