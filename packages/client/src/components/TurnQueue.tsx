@@ -24,8 +24,35 @@ import { unitEmblem } from '../lib/emblems';
  *    отходившими (они гаснут). Значок нового раунда стоит только тогда, когда
  *    окно действительно дошло до конца раунда: дальше порядок решает бросок
  *    инициативы, и врать про него нельзя.
+ *
+ * 3. **Видно, СКОЛЬКО ждать.** Лента показывала, чей ход идёт, но не отвечала
+ *    на вопрос ожидающего: «сколько ещё чужих ходов до моего». Ожидание без
+ *    конца ощущается дольше, чем оно есть, — а это ровно жалоба «не
+ *    динамичная»: замер Б10 говорит, что ждать осталось секунду, но игрок
+ *    этого не знал. Теперь ближайшее СВОЁ деление помечено золотом и несёт
+ *    цифру — через сколько ходов оно наступит, а чужие деления до него горят
+ *    полным светом (остальные приглушены). Цифра, а не слово: лента и так
+ *    говорит знаками, и переводить тут нечего.
  */
 const WINDOW = 8;
+
+/**
+ * Через сколько ходов очередь дойдёт до стороны игрока. 0 — уже дошла,
+ * `undefined` — до конца раунда своих не осталось (тогда врать нельзя:
+ * следующий порядок решает бросок инициативы).
+ *
+ * Живёт здесь, а не в экране боя, потому что считается по тому же `order`,
+ * который рисует лента: два места, считающие «сколько ждать» по-разному, —
+ * это две разные цифры на одном экране.
+ */
+export function turnsUntilPlayer(battle: BattleState): number | undefined {
+  const rest = battle.order
+    .slice(battle.turnIndex)
+    .map((uid) => battle.units.find((x) => x.uid === uid))
+    .filter((u): u is NonNullable<typeof u> => !!u && u.alive);
+  const i = rest.findIndex((u) => u.side === 'player');
+  return i < 0 ? undefined : i;
+}
 
 export function TurnQueue({
   battle,
@@ -50,9 +77,20 @@ export function TurnQueue({
   const win = rows.slice(start, start + WINDOW);
   const tailShown = start + win.length >= rows.length;
 
+  // Ближайшее своё деление и расстояние до него — в тех же строках, что рисует
+  // лента, иначе цифра указывала бы не на тот кружок.
+  const mineIdx = nowIdx < 0 ? -1 : rows.findIndex((r, i) => i >= nowIdx && r.u.side === 'player');
+  const untilMine = mineIdx < 0 ? -1 : mineIdx - nowIdx;
+
   return (
     <div className="turn-queue" aria-hidden="true">
-      {win.map(({ u, done }) => {
+      {win.map(({ u, done }, i) => {
+        const at = start + i;
+        // Ждущему нужен не «мой ход когда-нибудь», а «ещё два чужих и мой»,
+        // поэтому метка живёт только пока ход чужой: в свой ход цифра «0» на
+        // собственной карточке — шум.
+        const mineNext = untilMine > 0 && at === mineIdx;
+        const beforeMine = untilMine > 0 && at >= nowIdx && at < mineIdx;
         const def = defs.get(u.defId);
         // Лицо с карточки главнее знака: рисунок узнаётся быстрее абстрактного
         // глифа и, в отличие от него, есть у КАЖДОГО юнита — новые силы мира B
@@ -64,11 +102,19 @@ export function TurnQueue({
         return (
           <div
             key={u.uid}
-            className={['queue-chip', u.side, done ? 'done' : '', u.uid === nowUid ? 'now' : '']
+            className={[
+              'queue-chip',
+              u.side,
+              done ? 'done' : '',
+              u.uid === nowUid ? 'now' : '',
+              mineNext ? 'mine-next' : '',
+              beforeMine ? 'before-mine' : '',
+            ]
               .filter(Boolean)
               .join(' ')}
             title={name}
           >
+            {mineNext && <span className="queue-eta">{untilMine}</span>}
             {art ? (
               <img className="queue-art" src={art} alt="" draggable={false} />
             ) : mark ? (

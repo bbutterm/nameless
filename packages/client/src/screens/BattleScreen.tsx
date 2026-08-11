@@ -13,7 +13,7 @@ import {
   type BattleUnitState,
 } from '@nameless/engine';
 import { UnitCard, type FloatingNumber, type ThreatMark } from '../components/UnitCard';
-import { TurnQueue } from '../components/TurnQueue';
+import { TurnQueue, turnsUntilPlayer } from '../components/TurnQueue';
 import { Icon } from '../components/Icon';
 import { loc, t } from '../i18n';
 import { useGame } from '../store/game';
@@ -44,8 +44,42 @@ const HOLD_MS = 380;
 const REASON_MS = 2600;
 /** Столько живёт всплывающая цифра — ровно длина анимации .float в screens.css. */
 const FLOAT_MS = 900;
-/** Столько держится рывок/тряска карточки. */
-const ANIM_MS = 420;
+/** Рывок (320 мс) и тряска (300 мс) в screens.css; класс снимаем по длинной. */
+const MOVE_MS = 320;
+/** Рассыпание мёртвого — 420 мс, самая долгая анимация карточки. */
+const DIE_MS = 420;
+/*
+ * Пауза хода бота — и это ЕДИНСТВЕННАЯ ручка темпа боя.
+ *
+ * Замер Б10 разложил время боя по причинам и показал неочевидное: ожидание
+ * без права хода почти точно равно «действий ботов × эта пауза» (7 действий,
+ * 3.3 с при 480 мс). Рывок карточки и цифра урона идут ВНУТРИ паузы, а не
+ * после неё, — укоротить их значит убрать движение, а не время.
+ *
+ * Пауз две, и разница между ними не украшение.
+ *
+ * ПЕРВАЯ — сразу после хода игрока, и она не пауза, а доля такта. 120 мс —
+ * это 38% рывка `lunge-up`, тот самый кадр, где своя карточка достаёт до цели.
+ * Ответный удар начинается в момент попадания твоего: экран в это мгновение и
+ * так занят собственным движением игрока и цифрой урона (900 мс), и держать
+ * поверх этого ещё паузу значит показывать то, что игрок уже увидел. Полные
+ * 480 мс были самой длинной неподвижной растяжкой боя — ровно там, где
+ * нетерпение сильнее всего: только что нажал и жду.
+ *
+ * СЛЕДУЮЩИЕ подряд — не короче самого рывка (340 ≥ MOVE_MS). Правило простое:
+ * наложение рывков в бою разрешено РОВНО ОДНО — первый удар бота поверх рывка
+ * игрока, потому что про свой удар игрок уже всё знает. Второй и третий бот
+ * ничем не прикрыты, и если их рывки наложатся друг на друга, ход противника
+ * станет одним мельтешением вместо «ударили эти двое». Ускорение, купленное
+ * такой ценой, — провал, даже когда доля ожидания зелёная.
+ *
+ * Резать паузу можно ТОЛЬКО потому, что рывки перестали обрывать друг друга
+ * (см. эффект событий ниже). Пока анимации жили одним общим таймером, пауза
+ * короче 420 мс рубила предыдущий рывок на середине — и любое ускорение
+ * оплачивалось дёргаными карточками.
+ */
+const BOT_FIRST_MS = 120;
+const BOT_NEXT_MS = 340;
 /** Столько мигает кнопка, выбранная тапом по карте, — ровно длина .pick-flash. */
 const PICK_MS = 460;
 /** Ряд отряда — три слота; столько же у врага. */
@@ -70,19 +104,41 @@ export function BattleScreen() {
   const holdTimer = useRef<ReturnType<typeof setTimeout>>();
   const heldOpen = useRef(false);
   // Таймеры уборки живут в ref, а не в cleanup эффекта: ходы идут чаще, чем
-  // гаснут цифры (бот ходит раз в 480 мс, цифра висит 900 мс), и cleanup при
-  // каждом новом ходе отменял бы уборку предыдущей партии — старые floats
+  // гаснут цифры (бот ходит раз в 200–300 мс, цифра висит 900 мс), и cleanup
+  // при каждом новом ходе отменял бы уборку предыдущей партии — старые floats
   // копились бы в стейте и в DOM до конца боя, невидимые из-за opacity 0.
   const floatTimers = useRef<ReturnType<typeof setTimeout>[]>([]);
-  const animTimer = useRef<ReturnType<typeof setTimeout>>();
+  // Ровно то же самое и по той же причине — для анимаций карточек. Раньше
+  // таймер был ОДИН на экран, а `setAnims` заменял карту целиком: следующее
+  // событие снимало класс с карточки, которая ещё двигалась. При паузе 480 мс
+  // это почти не было заметно (рывок успевал за 320), но именно это и держало
+  // паузу: короче — и каждый второй рывок обрывался на середине. Теперь каждая
+  // партия анимаций досматривает свои миллисекунды сама, и темп боя перестал
+  // быть заложником длины анимации.
+  const animTimers = useRef<ReturnType<typeof setTimeout>[]>([]);
+  // Какое поколение анимации сейчас на карточке: без этого таймер старой
+  // партии снял бы класс, который успела поставить новая.
+  const animGen = useRef(new Map<string, number>());
+  const genSeq = useRef(0);
+  // Сколько действий бота подряд уже прокручено с последнего хода игрока.
+  const botStep = useRef(0);
+  // Был ли предыдущий ход ходом игрока. Короткая пауза BOT_FIRST_MS оправдана
+  // ровно тем, что её прикрывает рывок своей карточки, — а в начале боя (и в
+  // начале раунда, который враг открывает первым же броском инициативы)
+  // прикрывать нечем: доска только что появилась, игрок ещё ничего не сделал,
+  // и удар через 120 мс он получит раньше, чем разберёт, кто где стоит.
+  const coveredStart = useRef(false);
 
   const defs = useMemo(() => new Map(content.units.map((u) => [u.id, u])), []);
 
   const clearViewTimers = useCallback(() => {
     for (const timer of floatTimers.current) clearTimeout(timer);
     floatTimers.current = [];
-    clearTimeout(animTimer.current);
-    animTimer.current = undefined;
+    for (const timer of animTimers.current) clearTimeout(timer);
+    animTimers.current = [];
+    animGen.current.clear();
+    botStep.current = 0;
+    coveredStart.current = false;
     clearTimeout(pickTimer.current);
     pickTimer.current = undefined;
   }, []);
@@ -156,12 +212,42 @@ export function BattleScreen() {
     const done = fresh.find((e) => e.type === 'outcome');
     if (done && done.type === 'outcome') playSfx(done.result === 'win' ? 'victory' : 'defeat');
 
-    setAnims(nextAnims);
     setFloats((f) => [...f, ...nextFloats]);
 
-    // Анимации карточек заменяются целиком, поэтому её таймер один на экран.
-    clearTimeout(animTimer.current);
-    animTimer.current = setTimeout(() => setAnims({}), ANIM_MS);
+    /*
+     * Анимации ДОБАВЛЯЮТСЯ к тем, что уже идут, а не заменяют их.
+     *
+     * Пока карта заменялась целиком, длина анимации была нижней границей паузы
+     * между ходами ботов: сделай паузу короче рывка — и предыдущая карточка
+     * прыгала в исходное положение с полпути. Теперь рывок бота, рассыпание
+     * убитого и тряска раненого доживают свой срок независимо друг от друга,
+     * сколько бы событий ни случилось следом. Ценой этого стал темп: пауза
+     * хода бота упала с 480 до 200–300 мс, и ни одно движение не укорочено.
+     *
+     * Срок партии — по самой длинной анимации в ней: рассыпание живёт дольше
+     * рывка. Считать одним числом (420 на всё) значило бы держать на карточке
+     * сто миллисекунд мёртвого класса после каждого удара — а по этому классу
+     * прибор `battlelab.mjs` и отличает движение от неподвижности.
+     */
+    const uids = Object.keys(nextAnims);
+    if (uids.length > 0) {
+      setAnims((a) => ({ ...a, ...nextAnims }));
+      const gen = ++genSeq.current;
+      for (const uid of uids) animGen.current.set(uid, gen);
+      const life = uids.some((uid) => nextAnims[uid] === 'die') ? DIE_MS : MOVE_MS;
+      const timer = setTimeout(() => {
+        animTimers.current = animTimers.current.filter((x) => x !== timer);
+        const mine = uids.filter((uid) => animGen.current.get(uid) === gen);
+        if (mine.length === 0) return;
+        for (const uid of mine) animGen.current.delete(uid);
+        setAnims((a) => {
+          const next = { ...a };
+          for (const uid of mine) delete next[uid];
+          return next;
+        });
+      }, life);
+      animTimers.current.push(timer);
+    }
 
     // А каждая партия цифр убирает СЕБЯ и досматривает свои 900 мс до конца,
     // даже если за это время случилось ещё три хода.
@@ -192,8 +278,18 @@ export function BattleScreen() {
     if (finished) collectSpoils();
   }, [finished, collectSpoils]);
   useEffect(() => {
-    if (!waitingForBots) return;
-    const timer = setTimeout(battleAuto, 480);
+    if (!waitingForBots) {
+      // Ход вернулся к игроку — следующая цепочка ботов начнётся с первой,
+      // короткой паузы: её снова прикроет рывок его собственной карточки.
+      botStep.current = 0;
+      coveredStart.current = true;
+      return;
+    }
+    const covered = botStep.current === 0 && coveredStart.current;
+    const timer = setTimeout(() => {
+      botStep.current++;
+      battleAuto();
+    }, covered ? BOT_FIRST_MS : BOT_NEXT_MS);
     return () => clearTimeout(timer);
   }, [waitingForBots, battle, battleAuto]);
 
@@ -320,6 +416,9 @@ export function BattleScreen() {
   const legal = actor && selectedAbility && myTurn ? legalTargets(battle, actor.uid, selectedAbility) : [];
   const targets = legal.map((u) => u.uid);
   const over = battle.outcome !== 'ongoing';
+  // Сколько чужих ходов ещё до твоего — считает очередь, чтобы лента наверху и
+  // отсчёт в панели не разошлись в цифре.
+  const untilMine = over ? undefined : turnsUntilPlayer(battle);
 
   const nameOf = (u: BattleUnitState | undefined) =>
     u ? loc(defs.get(u.defId)?.name, lang) : '';
@@ -783,8 +882,38 @@ export function BattleScreen() {
                 </button>
               ))
             ) : (
+              /*
+               * Пока ходит противник, на месте кнопок стояла одна дышащая
+               * точка — она сообщала «идёт что-то», но не отвечала на
+               * единственный вопрос ждущего: сколько ещё ждать. Ожидание без
+               * видимого конца тянется дольше, чем оно есть, и это половина
+               * жалобы «не динамичная»: замер говорит, что до хода игрока
+               * осталось полсекунды, а игрок этого не знал.
+               *
+               * Теперь здесь отсчёт: по точке на каждый чужой ход до твоего
+               * (передняя, тот, кто ходит сейчас, — дышит), и за ними бирка
+               * «Твой ход» цветом выбора. Точки гаснут одна за другой — видно,
+               * что очередь движется. То же самое, что метка в ленте наверху,
+               * но у большого пальца, куда игрок и смотрит.
+               *
+               * Отсчёт держится только внутри раунда: если своих в остатке
+               * порядка нет, следующий порядок решает бросок инициативы, и
+               * обещать число нельзя — тогда остаётся прежняя одна точка.
+               */
               <div className="waiting">
-                <span className="waiting-dot" />
+                {untilMine === undefined ? (
+                  <span className="waiting-dot" aria-hidden="true" />
+                ) : (
+                  <>
+                    {Array.from({ length: untilMine }, (_, i) => (
+                      <span key={i} className={`waiting-dot ${i === 0 ? 'now' : ''}`} aria-hidden="true" />
+                    ))}
+                    <span className="waiting-arrow" aria-hidden="true">
+                      →
+                    </span>
+                    <span className="waiting-mine">{t(lang, 'yourTurn')}</span>
+                  </>
+                )}
               </div>
             )}
             </div>
