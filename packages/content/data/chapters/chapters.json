@@ -42,12 +42,12 @@
     "index": 3,
     "id": "first_deposit",
     "title": {
-      "ru": "Вклад Первый",
-      "en": "The First Deposit"
+      "ru": "Стул для тебя",
+      "en": "A Chair for You"
     },
     "subtitle": {
-      "ru": "Ревизия сверяет город. Расхождение одно, и оно ходит, дышит и задаёт вопросы.",
-      "en": "The Audit is reconciling the city. There is one discrepancy, and it walks, breathes and asks questions."
+      "ru": "Один человек искал тебя много лет и первым делом спросил, не холодно ли.",
+      "en": "One man searched for you for years and first asked whether you were cold."
     },
     "entryScene": "audit_arrives"
   }

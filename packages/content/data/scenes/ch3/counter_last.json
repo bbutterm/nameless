@@ -35,7 +35,7 @@
       "kind": "narration",
       "id": "book_open",
       "text": {
-        "ru": "Она открывает книгу не на твоей странице, а с самого начала, и ведёт пальцем вниз по столбцу причин. Столбец длинный, и она читает его вслух, потому что сверку читают вслух.",
+        "ru": "Она открывает книгу не на твоей странице, а с самого начала, и ведёт пальцем вниз по столбцу причин. Столбец длинный, и она читает его вслух, потому что записи читают вслух.",
         "en": "She opens the book not at your page but at the very beginning, and runs her finger down the column of causes. The column is long, and she reads it aloud, because a reconciliation is read aloud."
       },
       "next": "osoka_causes"
@@ -55,18 +55,18 @@
       "id": "osoka_one_clerk",
       "speaker": "osoka",
       "text": {
-        "ru": "Приёмщик по всем явкам один. Я.",
+        "ru": "Приёмщик во всех записях один. Я.",
         "en": "The receiving officer for every appearance is one. Me."
       },
-      "keywords": [{ "match": { "ru": "по всем явкам один", "en": "for every appearance is one" }, "tone": "memory" }],
+      "keywords": [{ "match": { "ru": "во всех записях один", "en": "for every appearance is one" }, "tone": "memory" }],
       "next": "revizor_at_end"
     },
     {
       "kind": "narration",
       "id": "revizor_at_end",
       "text": {
-        "ru": "Ревизор стоит у дальнего края стойки, где кончается свет. Лицо у него сегодня есть целиком, и оно из тех, которые видишь в чужой описи и узнаёшь по приметам.",
-        "en": "The Auditor stands at the far end of the counter, where the light gives out. Today he has a face, the whole of it, and it is the kind you meet in somebody else's record and recognise from the description."
+        "ru": "Сличила стоит у дальнего края стойки, где кончается свет. Лицо у него сегодня есть целиком. Такое лицо узнаёшь по приметам из чужой записи.",
+        "en": "The Collator stands at the far end of the counter, where the light gives out. Today he has a face, the whole of it, and it is the kind you meet in somebody else's record and recognise from the description."
       },
       "next": "known_router"
     },
@@ -98,8 +98,8 @@
       "kind": "narration",
       "id": "kinship_form",
       "text": {
-        "ru": "Она достаёт бланк наследования и ведёт по графам сверху вниз: вкладчик, наследник, степень родства. Первые две заполнены давно и не ею.",
-        "en": "She takes out the inheritance form and goes down the columns: depositor, heir, degree of kinship. The first two were filled in long ago and not by her."
+        "ru": "Она достаёт лист наследования и ведёт по строкам сверху вниз: хозяин, наследник, степень родства. Первые две заполнены давно и не ею.",
+        "en": "She takes out the inheritance form and goes down the columns: owner, heir, degree of kinship. The first two were filled in long ago and not by her."
       },
       "next": "pen_stops"
     },
@@ -107,7 +107,7 @@
       "kind": "narration",
       "id": "pen_stops",
       "text": {
-        "ru": "Перо доходит до третьей графы и останавливается. Эту графу печатают на каждом бланке города четыреста лет, и за четыреста лет её не заполнили ни разу.",
+        "ru": "Перо доходит до третьей строки и останавливается. Эту строку печатают на каждом листе города четыреста лет, и за четыреста лет её не заполнили ни разу.",
         "en": "The pen reaches the third column and stops. That column has been printed on every form in the city for four hundred years, and in four hundred years it has never once been filled in."
       },
       "next": "osoka_question"
@@ -124,7 +124,7 @@
       "kind": "narration",
       "id": "after_question",
       "text": {
-        "ru": "За четыреста лет она не спросила ни у кого ни одного вопроса о прошлом. Строки под ответ в бланке нет: третья графа заполняется одним словом, и слово должно быть из списка.",
+        "ru": "За четыреста лет она не спросила ни у кого ни одного вопроса о прошлом. Строки под ответ в листе нет: третья строка заполняется одним словом, и слово должно быть из списка.",
         "en": "In four hundred years she has not asked one person one question about the past. There is no line on the form for an answer: the third column takes one word, and the word must be from the list."
       },
       "next": "answer_choice"
@@ -139,7 +139,7 @@
       "options": [
         {
           "id": "nobody",
-          "text": { "ru": "Никто. Вкладчик номер один.", "en": "Nobody. Depositor number one." },
+          "text": { "ru": "Никто. Хозяин номер один.", "en": "Nobody. Owner number one." },
           "fallback": true,
           "to": "a_nobody"
         },
@@ -152,7 +152,7 @@
         },
         {
           "id": "by_record",
-          "text": { "ru": "По описи — продавец. Больше там ничего нет.", "en": "By the record: the seller. Nothing else there." },
+          "text": { "ru": "По списку — продавец. Больше там ничего нет.", "en": "By the record: the seller. Nothing else there." },
           "fallback": true,
           "effects": [{ "kind": "axis", "axis": "reason_obsession", "delta": 3 }],
           "to": "a_record"
@@ -168,7 +168,7 @@
         {
           "id": "clerical_error",
           "conditions": { "kind": "axis", "axis": "honesty_deceit", "op": "lte", "value": -30 },
-          "text": { "ru": "Никто. Это описка в бланке.", "en": "Nobody. It is a slip on the form." },
+          "text": { "ru": "Никто. Это описка в листе.", "en": "Nobody. It is a slip on the form." },
           "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": -8 }],
           "to": "a_error",
           "priority": 6
@@ -176,7 +176,7 @@
         {
           "id": "ask_back",
           "conditions": { "kind": "axis", "axis": "reason_obsession", "op": "gte", "value": 30 },
-          "text": { "ru": "А что у вас стоит в этой графе?", "en": "And what stands in that column of yours?" },
+          "text": { "ru": "А что у вас стоит в этой строке?", "en": "And what stands in that column of yours?" },
           "to": "a_ask_back",
           "priority": 6
         },
@@ -192,7 +192,7 @@
           "id": "read_item_one",
           "chip": { "icon": "hourglass", "label": { "ru": "Перечень", "en": "Perechen" }, "tone": "life" },
           "conditions": { "kind": "life", "life": "perechen" },
-          "text": { "ru": "Пункт первый описи плательщика. Читайте.", "en": "Item one of the payer's inventory. Read it." },
+          "text": { "ru": "Строка первая списку плательщика. Читайте.", "en": "Item one of the payer's inventory. Read it." },
           "to": "a_item_one",
           "priority": 6
         }
@@ -209,7 +209,7 @@
       "kind": "narration",
       "id": "a_silent",
       "text": {
-        "ru": "Она ждёт ровно столько, сколько отведено на ответ, и ни секундой дольше: время ответа в бланке проставлено. Потом возвращает перо к графе.",
+        "ru": "Она ждёт ровно столько, сколько отведено на ответ, и ни секундой дольше: время ответа в листе проставлено. Потом возвращает перо к строке.",
         "en": "She waits exactly as long as an answer is allowed and not a second more: the time for an answer is printed on the form. Then she brings the pen back to the column."
       },
       "next": "three_forms"
@@ -218,21 +218,21 @@
       "kind": "say",
       "id": "a_record",
       "speaker": "osoka",
-      "text": { "ru": "Продавец — это графа вторая. Спрашиваю третью.", "en": "Seller is column two. I am asking column three." },
+      "text": { "ru": "Продавец — это строка вторая. Спрашиваю третью.", "en": "Seller is column two. I am asking column three." },
       "next": "three_forms"
     },
     {
       "kind": "say",
       "id": "a_father",
       "speaker": "osoka",
-      "text": { "ru": "Не подтверждено описью. Записать не могу.", "en": "Not confirmed by record. I cannot enter that." },
+      "text": { "ru": "Не подтверждено списком. Записать не могу.", "en": "Not confirmed by record. I cannot enter that." },
       "next": "three_forms"
     },
     {
       "kind": "narration",
       "id": "a_error",
       "text": {
-        "ru": "Она проверяет бланк на просвет, ищет исправление и не находит: графа отпечатана, а не вписана. Описку в отпечатанном не делают.",
+        "ru": "Она проверяет лист на просвет, ищет исправление и не находит: строка отпечатана, а не вписана. Описку в отпечатанном не делают.",
         "en": "She holds the form up to the light, looking for a correction, and finds none: the column is printed, not entered. Nobody slips on what has been printed."
       },
       "next": "three_forms"
@@ -248,7 +248,7 @@
       "kind": "narration",
       "id": "a_sorry",
       "text": {
-        "ru": "«Простите» в формуляре не значится, и она не знает, куда это подшить. Она откладывает слово, как откладывают вещь без бирки: в сторону, но не в мусор.",
+        "ru": "«Простите» в листе не значится, и она не знает, куда это подшить. Она откладывает слово, как откладывают вещь без бирки: в сторону, но не в мусор.",
         "en": "\"I am sorry\" appears on no form, and she does not know where to file it. She sets the word aside the way you set aside a thing with no tag: to one side, but not in the rubbish."
       },
       "next": "three_forms"
@@ -257,7 +257,7 @@
       "kind": "narration",
       "id": "a_item_one",
       "text": {
-        "ru": "Она читает про себя и шевелит губами на четырёх словах. Потом кладёт листок обратно подписью вниз и придвигает бланк к себе.",
+        "ru": "Она читает про себя и шевелит губами на четырёх словах. Потом кладёт листок обратно подписью вниз и придвигает лист к себе.",
         "en": "She reads it to herself, her lips moving on four words. Then she puts the slip back face down and draws the form towards her."
       },
       "next": "three_forms"
@@ -266,7 +266,7 @@
       "kind": "narration",
       "id": "three_forms",
       "text": {
-        "ru": "На стойке лежат три бланка, и все три заполнены до последней графы. Пустая графа в каждом одна и та же, и называется она «основание».",
+        "ru": "На стойке лежат три листа, и все три заполнены до последней строки. Пустая строка в каждом одна и та же, и называется она «основание».",
         "en": "Three forms lie on the counter, and all three are filled in down to the last column. The empty column in each is the same one, and it is called \"grounds\"."
       },
       "next": "ending_router"
@@ -344,25 +344,25 @@
       "kind": "choice",
       "id": "manual_choice",
       "prompt": {
-        "ru": "Три бланка лежат рядом. Ни один из них не дешевле двух других.",
+        "ru": "Три листа лежат рядом. Ни один из них не дешевле двух других.",
         "en": "Three forms lie side by side. Not one of them is cheaper than the other two."
       },
       "options": [
         {
           "id": "manual_ransom",
-          "text": { "ru": "Выкупить ей её память обо мне.", "en": "Redeem her memory of me, for her." },
+          "text": { "ru": "Вернуть ей её память обо мне.", "en": "Redeem her memory of me, for her." },
           "fallback": true,
           "to": "ransom_1"
         },
         {
           "id": "manual_keep",
-          "text": { "ru": "Забрать последний лот себе.", "en": "Take the last lot for myself." },
+          "text": { "ru": "Забрать последний свёрток себе.", "en": "Take the last lot for myself." },
           "fallback": true,
           "to": "keep_1"
         },
         {
           "id": "manual_writeoff",
-          "text": { "ru": "Дать Ревизии списать вклад целиком.", "en": "Let the Audit write the deposit off entire." },
+          "text": { "ru": "Дать Сличиле забрать свёрток целиком.", "en": "Let the Collator take the whole bundle." },
           "fallback": true,
           "to": "writeoff_1"
         }
@@ -372,8 +372,8 @@
       "kind": "narration",
       "id": "ransom_open",
       "text": {
-        "ru": "Бланк выкупа лежит слева и заполнен по всем графам, кроме одной. В графе «плата» отпечатано: «самое дорогое, что есть у плательщика на день выкупа».",
-        "en": "The redemption form lies on the left, filled in on every column but one. In the column for \"payment\" it is printed: \"the dearest thing the payer has on the day of redemption\"."
+        "ru": "Лист лежит слева и заполнен по всем строкам, кроме одной. В строке «плата» отпечатано: «самое дорогое, что есть у человека сегодня».",
+        "en": "The return form lies on the left, filled in on every column but one. In the column for \"payment\" it is printed: \"the dearest thing the payer has on the day of return\"."
       },
       "next": "ransom_1"
     },
@@ -381,14 +381,14 @@
       "kind": "say",
       "id": "ransom_1",
       "speaker": "osoka",
-      "text": { "ru": "Выкуп. Плательщик — вы. Получатель — наследница.", "en": "Redemption. Payer: you. Recipient: the heir." },
+      "text": { "ru": "Возвращение. Плательщик — вы. Получатель — наследница.", "en": "Return. Payer: you. Recipient: the heir." },
       "next": "ransom_2"
     },
     {
       "kind": "narration",
       "id": "ransom_2",
       "text": {
-        "ru": "Опись плательщика пополнилась с того раза. В ней теперь всё, что тебе выдавали на этой стороне прилавка по одному лоту за смерть, и всё это уходит в графу «плата» одной строкой.",
+        "ru": "Список плательщика пополнился с того раза. В нём теперь всё, что тебе выдавали на этой стороне прилавка по одному свёртку за смерть, и всё это уходит в строку «плата» одной строкой.",
         "en": "The payer's inventory has grown since the last time. It now holds everything issued to you on this side of the counter, one lot to a death, and all of it goes into the \"payment\" column in a single line."
       },
       "next": "ransom_3"
@@ -423,7 +423,7 @@
       "kind": "narration",
       "id": "ransom_6",
       "text": {
-        "ru": "Она вписывает слово, и на «которого» в следующей строке рука делает три знака с точкой посередине. Графа заполнена впервые с того дня, как её отпечатали.",
+        "ru": "Она вписывает слово, и на «которого» в следующей строке рука делает три знака с точкой посередине. Строка заполнена впервые с того дня, как её отпечатали.",
         "en": "She enters the word, and at \"whereof\" in the next line her hand makes three strokes with a dot in the middle. The column is filled in for the first time since the day it was printed."
       },
       "next": "ransom_7"
@@ -432,8 +432,8 @@
       "kind": "narration",
       "id": "ransom_7",
       "text": {
-        "ru": "Вместе с сорока годами она получила и тот день — он лежит у неё между двумя обычными днями и вынимается только по договору. Ломбард примет его по цене, которую в зале произносят шёпотом, и цену эту она называет вслух каждую смену, другим.",
-        "en": "Along with the forty years she has been given that day as well; it lies between two ordinary days of hers and comes out only by contract. The Pawnshop will take it at the price they say in whispers in the hall, and that price she names out loud every shift, to other people."
+        "ru": "Вместе с сорока годами она получила и тот день. Он лежит у неё между двумя обычными днями и вынимается только по договору. Его цену в зале называют тихо; Осока каждую смену произносит её вслух для других.",
+        "en": "Along with the forty years she has been given that day as well; it lies between two ordinary days of hers and comes out only by contract. The House of Things will take it at the price they say in whispers in the hall, and that price she names out loud every shift, to other people."
       },
       "next": "ransom_left_gate"
     },
@@ -447,7 +447,7 @@
       "kind": "narration",
       "id": "ransom_boy",
       "text": {
-        "ru": "Ты просишь об одном, и это влезает в поля бланка: вписать в книгу мальчишку с чёрных лестниц. Она заводит ему строку и номер, и с этого дня у него на каждом посту спрашивают номер, а не имя.",
+        "ru": "Ты просишь об одном, и это влезает в поля листа: вписать в книгу мальчишку с чёрных лестниц. Она заводит ему строку и номер, и с этого дня у него на каждом посту спрашивают номер, а не имя.",
         "en": "You ask for one thing, and it fits in the margin of the form: to enter the boy from the back stairs in the book. She opens him a line and a number, and from that day on at every post they ask him for the number, not the name."
       },
       "next": "ransom_close"
@@ -466,7 +466,7 @@
       "kind": "narration",
       "id": "keep_open",
       "text": {
-        "ru": "Бланк закрепления лежит посередине, и он короче двух других: закрепляют тут часто, бланк отработан до трёх граф.",
+        "ru": "Лист закрепления лежит посередине, и он короче двух других: закрепляют тут часто, лист отработан до трёх граф.",
         "en": "The form for making a lot permanent lies in the middle, and it is shorter than the other two: it is done here often, and the form has been worn down to three columns."
       },
       "next": "keep_1"
@@ -476,7 +476,7 @@
       "id": "keep_1",
       "speaker": "osoka",
       "text": {
-        "ru": "Один лот, закрепление. Расписываться нечем — моргните.",
+        "ru": "Один свёрток, закрепление. Расписываться нечем — моргните.",
         "en": "One lot, made permanent. Nothing to sign with: blink."
       },
       "next": "keep_2"
@@ -494,7 +494,7 @@
       "kind": "narration",
       "id": "keep_3",
       "text": {
-        "ru": "Она остаётся ровно такой, какой была четыреста лет: быстрой, вежливой и без единой строки о тебе. В третьей графе так и стоит прочерк, и это ты его там оставил.",
+        "ru": "Она остаётся ровно такой, какой была четыреста лет: быстрой, вежливой и без единой строки о тебе. В третьей строке так и стоит прочерк, и это ты его там оставил.",
         "en": "She stays exactly as she has been for four hundred years: quick, polite, and without one line about you. The third column still holds its dash, and it is you who left it there."
       },
       "next": "keep_4"
@@ -503,7 +503,7 @@
       "kind": "narration",
       "id": "keep_4",
       "text": {
-        "ru": "Она закрывает книгу и убирает бланк наследования в нижний ящик, к тем, что заполнены не до конца. Ящик открывают раз в год и не разбирают.",
+        "ru": "Она закрывает книгу и убирает лист наследования в нижний ящик, к тем, что заполнены не до конца. Ящик открывают раз в год и не разбирают.",
         "en": "She shuts the book and puts the inheritance form away in the bottom drawer, with the ones that were never filled in to the end. The drawer is opened once a year and never sorted through."
       },
       "next": "keep_left_gate"
@@ -527,7 +527,7 @@
       "kind": "narration",
       "id": "keep_close",
       "text": {
-        "ru": "Свет вдоль стойки возвращается, и с ним возвращается очередь: люди становятся, держа свои лоты двумя руками снизу.",
+        "ru": "Свет вдоль стойки возвращается, и с ним возвращается очередь: люди становятся, держа свои свёртки двумя руками снизу.",
         "en": "The light comes back along the counter, and the queue comes back with it: people take their places, holding their lots with both hands, from underneath."
       },
       "next": "keep_last"
@@ -553,8 +553,8 @@
       "kind": "narration",
       "id": "writeoff_open",
       "text": {
-        "ru": "Акт лежит справа, отпечатанный в одном экземпляре. Ревизор кладёт рядом перо и отходит на шаг: при подписании он присутствовать обязан, стоять рядом — нет.",
-        "en": "The certificate lies on the right, printed in one copy. The Auditor lays a pen beside it and steps back: he is required to be present at the signing, not to stand close."
+        "ru": "Лист лежит справа, и другого такого нет. Сличила кладёт рядом перо и отходит на шаг: при подписании он должен присутствовать, стоять рядом — нет.",
+        "en": "The certificate lies on the right, printed in one copy. The Collator lays a pen beside it and steps back: he is required to be present at the signing, not to stand close."
       },
       "next": "writeoff_1"
     },
@@ -572,8 +572,8 @@
       "id": "writeoff_2",
       "speaker": "revizor",
       "text": {
-        "ru": "Списание принято. Порядок: снизу вверх, по разделам.",
-        "en": "Write-off accepted. Order: from the bottom up, by sections."
+        "ru": "Утрата принята. Порядок: снизу вверх, по разделам.",
+        "en": "Loss accepted. Order: from the bottom up, by sections."
       },
       "next": "writeoff_3"
     },
@@ -599,7 +599,7 @@
       "kind": "narration",
       "id": "writeoff_5",
       "text": {
-        "ru": "Пятым уходит право называть и изымать, и вместе с ним — все описи разом. Насосы останавливаются последними: в смете больше нет строки, из которой их оплачивать.",
+        "ru": "Пятым уходит право называть и изымать, и вместе с ним — все списки разом. Насосы останавливаются последними: в расчёте больше нет строки, из которой их оплачивать.",
         "en": "Fifth goes the right to name and to take, and with it every inventory at once. The pumps stop last: there is no longer a line in the estimate to pay for them out of."
       },
       "next": "writeoff_left_gate"
@@ -624,7 +624,7 @@
       "id": "writeoff_revizor",
       "speaker": "revizor",
       "text": {
-        "ru": "Расхождение: устранено. Сверка: закрыта. Пункт: отсутствует.",
+        "ru": "Расхождение: устранено. Встреча: закрыта. Строка: отсутствует.",
         "en": "Discrepancy: removed. Reconciliation: closed. The clause: is absent."
       },
       "next": "writeoff_face"
@@ -633,7 +633,7 @@
       "kind": "narration",
       "id": "writeoff_face",
       "text": {
-        "ru": "Он выцветает вместе с городом и с той же скоростью, и лицо у него до последнего то самое, что стояло в графе «приметы»: рост средний, лет около сорока, особых примет не имеет.",
+        "ru": "Он выцветает вместе с городом и с той же скоростью, и лицо у него до последнего то самое, что стояло в строке «приметы»: рост средний, лет около сорока, особых примет не имеет.",
         "en": "He fades along with the city and at the same rate, and his face to the last is the one that stood in the column for \"description\": middling height, about forty years of age, no distinguishing marks."
       },
       "next": "writeoff_osoka"
@@ -790,7 +790,7 @@
       "kind": "narration",
       "id": "keep_left_chistopisets",
       "text": {
-        "ru": "Раздел четвёртый остаётся. Подпись, которой верят в четырёх конторах, стоит не на тебе, а на нём.",
+        "ru": "Раздел четвёртый остаётся. Подпись, которой верят в четырёх домах, стоит не на тебе, а на нём.",
         "en": "Section four stays. The signature they trust in four offices stands not on you but on it."
       },
       "next": "keep_left_5"
@@ -817,7 +817,7 @@
       "kind": "narration",
       "id": "keep_left_perechen",
       "text": {
-        "ru": "Раздел пятый остаётся. Право назвать и изъять держится на описи, в которой ты стоишь пунктом первым.",
+        "ru": "Раздел пятый остаётся. Право назвать и изъять держится на списке, в которой ты стоишь строкой первым.",
         "en": "Section five stays. The right to name and to take holds on an inventory in which you are item one."
       },
       "next": "keep_left_end"
@@ -866,7 +866,7 @@
       "id": "writeoff_left_open",
       "speaker": "revizor",
       "text": {
-        "ru": "Невыкупленное читается вслух, по табличкам. Так положено: списать можно только названное.",
+        "ru": "Невозвращённое читается вслух, по табличкам. Так положено: списать можно только названное.",
         "en": "What was never redeemed is read out loud, by the plates. That is the procedure: only what is named can be written off."
       },
       "next": "writeoff_left_1"
@@ -894,7 +894,7 @@
       "id": "writeoff_left_smolokur",
       "speaker": "revizor",
       "text": {
-        "ru": "Раздел первый. Войны Тихой Воды. Остаток не выкуплен. Списан.",
+        "ru": "Раздел первый. Войны Тихой Воды. Остаток не возвращён. Списан.",
         "en": "Section one. The Wars of the Quiet Water. Remainder not redeemed. Written off."
       },
       "next": "writeoff_left_2"
@@ -922,7 +922,7 @@
       "id": "writeoff_left_klyuchar",
       "speaker": "revizor",
       "text": {
-        "ru": "Раздел второй. Сушьи годы. Остаток не выкуплен. Списан.",
+        "ru": "Раздел второй. Сушьи годы. Остаток не возвращён. Списан.",
         "en": "Section two. The Dry Years. Remainder not redeemed. Written off."
       },
       "next": "writeoff_left_3"
@@ -950,7 +950,7 @@
       "id": "writeoff_left_posulshchik",
       "speaker": "revizor",
       "text": {
-        "ru": "Раздел третий. Бумажный век. Остаток не выкуплен. Списан.",
+        "ru": "Раздел третий. Бумажный век. Остаток не возвращён. Списан.",
         "en": "Section three. The Paper Age. Remainder not redeemed. Written off."
       },
       "next": "writeoff_left_4"
@@ -978,7 +978,7 @@
       "id": "writeoff_left_chistopisets",
       "speaker": "revizor",
       "text": {
-        "ru": "Раздел четвёртый. Год Голой Правды. Остаток не выкуплен. Списан.",
+        "ru": "Раздел четвёртый. Год Голой Правды. Остаток не возвращён. Списан.",
         "en": "Section four. The Year of Bare Truth. Remainder not redeemed. Written off."
       },
       "next": "writeoff_left_5"
@@ -1006,7 +1006,7 @@
       "id": "writeoff_left_perechen",
       "speaker": "revizor",
       "text": {
-        "ru": "Раздел пятый. Первый Учёт. Остаток не выкуплен. Списан.",
+        "ru": "Раздел пятый. Первый Счёт. Остаток не возвращён. Списан.",
         "en": "Section five. The First Reckoning. Remainder not redeemed. Written off."
       },
       "next": "writeoff_left_end"
