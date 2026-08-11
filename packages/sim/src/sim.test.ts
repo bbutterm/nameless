@@ -8,6 +8,7 @@
  * категория поломки доходит до отчёта.
  */
 import { describe, expect, it } from 'vitest';
+import { COVER_ABILITY_ID } from '@nameless/engine';
 import type {
   Ability,
   ContentBundle,
@@ -409,6 +410,43 @@ describe('battle-sim: цифры значат то, что написано', ()
     );
   });
 
+  it('scriptedBattles считает заслоны обеих сторон — §E.6 требует их видеть', () => {
+    const b = bundle({
+      units: [
+        unit('even1', { stats: { hp: 60, atk: 14, def: 2, initiative: 12 } }),
+        unit('even2', { stats: { hp: 60, atk: 6, def: 10, initiative: 15 } }),
+        unit('even3', { row: 'back', stats: { hp: 12, atk: 6, def: 0, initiative: 7 } }),
+      ],
+      abilities: [
+        ability('hit', { power: 1, target: 'enemy_any' }),
+        ability(COVER_ABILITY_ID, {
+          target: 'ally_one',
+          power: 0,
+          effects: [{ kind: 'cover', turns: 2 }],
+        }),
+      ],
+      battles: [
+        {
+          id: 'b1',
+          name: L('b1'),
+          enemies: [{ unit: 'even1', row: 'front', index: 0 }],
+          turnLimit: 20,
+        },
+      ],
+    });
+    const party: PartyUnit[] = [
+      { uid: 'p0', defId: 'even2', hp: 60, xp: 0, level: 1, slot: { row: 'front', index: 0 } },
+      { uid: 'p1', defId: 'even3', hp: 12, xp: 0, level: 1, slot: { row: 'back', index: 0 } },
+    ];
+    const rep = scriptedBattles(b, () => party, 20)[0];
+    expect(rep).toBeDefined();
+    // Стенд собран ровно под заслон: хрупкий задний ряд под стрелком и
+    // толстый передний, который ходит раньше. Если бот тут не ручается —
+    // политика мертва, и все коридоры сняты с боя без механики.
+    expect(rep?.coversPlayer ?? 0).toBeGreaterThan(0);
+    expect(rep?.coversFired ?? 0).toBeGreaterThan(0);
+  });
+
   it('в отчёте есть строка на каждый юнит и число боёв больше нуля', () => {
     const b = bundle({ units: units.slice(0, 4), abilities });
     const wr = unitWinrates(b, 12);
@@ -530,6 +568,34 @@ describe('ходы без решения: прибор к жалобе §A.1', (
     const c = decisionDensity(b, () => party, { rollouts: 4, runs: 1 });
     expect(a.noDecisionShare).toBe(c.noDecisionShare);
     expect(a.regret).toBe(c.regret);
+  });
+
+  it('заслон входит в перебор вариантов: без него прибор мерил бы бой без механики', () => {
+    const withCover = bundle({
+      units: [unit('even1'), unit('even2'), unit('even3', { row: 'back' })],
+      abilities: [
+        ability('hit', { power: 1 }),
+        ability(COVER_ABILITY_ID, {
+          target: 'ally_one',
+          power: 0,
+          effects: [{ kind: 'cover', turns: 2 }],
+        }),
+      ],
+      battles: [oneEnemy('b1')],
+    });
+    const twoParty: PartyUnit[] = [
+      { uid: 'p0', defId: 'even2', hp: 30, xp: 0, level: 1, slot: { row: 'front', index: 0 } },
+      { uid: 'p1', defId: 'even3', hp: 30, xp: 0, level: 1, slot: { row: 'back', index: 0 } },
+    ];
+    const noCover = bundle({
+      ...withCover,
+      abilities: withCover.abilities.filter((a) => a.id !== COVER_ABILITY_ID),
+    });
+    const wide = decisionDensity(withCover, () => twoParty, { rollouts: 4, runs: 1 });
+    const narrow = decisionDensity(noCover, () => twoParty, { rollouts: 4, runs: 1 });
+    // Ширина выбора обязана вырасти: у переднего юнита появился ещё один
+    // законный ход, и он предъявлен наравне с кнопками.
+    expect(wide.branching).toBeGreaterThan(narrow.branching);
   });
 
   it('бои-знакомства и летальные в замер не идут', () => {

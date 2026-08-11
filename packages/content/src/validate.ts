@@ -1,5 +1,5 @@
 import type { ContentBundle, Condition, Effect, Scene } from '@nameless/engine';
-import { collectRefs, emptyRefs } from '@nameless/engine';
+import { collectRefs, COVER_ABILITY_ID, emptyRefs } from '@nameless/engine';
 import { zBundle } from './schema.js';
 
 export interface Issue {
@@ -935,6 +935,11 @@ export function validateBundle(bundle: ContentBundle): Issue[] {
   const usedAbilities = new Set<string>();
   for (const u of bundle.units) for (const a of u.abilities) usedAbilities.add(a);
   for (const a of grantedAbilities) usedAbilities.add(a);
+  // Общие действия носит не карта, а правила боя: «Заслонить» доступно любому
+  // юниту переднего ряда и потому не вписано никому в набор (combat.ts,
+  // `commonActions`). Без этой строки правило «ничья способность» краснело бы
+  // на действии, которое как раз обязано быть ничьим.
+  usedAbilities.add(COVER_ABILITY_ID);
   for (const a of bundle.abilities) {
     if (!usedAbilities.has(a.id)) {
       issues.push({

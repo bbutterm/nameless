@@ -51,6 +51,7 @@
 import {
   act,
   autoAct,
+  commonActions,
   currentActor,
   indexCombat,
   legalTargets,
@@ -157,6 +158,10 @@ function candidates(idx: CombatIndex, state: BattleState, actorUid: string): Act
   if (!actor) return [];
   const abilities: { id: string; ability: Ability }[] = [
     ...readyAbilities(idx, actor).map((a) => ({ id: a.id, ability: a })),
+    // Общие действия правил боя («Заслонить»): слота в наборе они не занимают,
+    // но игроку предъявлены наравне с кнопками — значит, и прибор обязан их
+    // перечислять. Не перечисляли бы — метрика мерила бы бой без механики.
+    ...commonActions(idx, actor).map((a) => ({ id: a.id, ability: a })),
     ...readyPlayerAbilities(state, actor).map((p: PlayerAbility) => ({ id: p.id, ability: p.ability })),
   ];
   const out: Action[] = [];

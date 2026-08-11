@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import {
   ARMOR_K,
   act,
+  commonActions,
+  COVER_ABILITY_ID,
   beginRound,
   computeDamage,
   currentActor,
@@ -426,5 +428,178 @@ describe('статусы и кулдауны', () => {
     const s1 = act(idx, ordered, { ability: 'mend', targetUid: medic.uid });
     const after = s1.units.find((u) => u.uid === medic.uid);
     expect(after?.hp).toBe(after?.maxHp);
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// «Заслонить» (DIRECTION_COMBAT §B.C1)
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe('заслон', () => {
+  const coverAbility: Ability = {
+    id: COVER_ABILITY_ID,
+    name: t('Заслонить'),
+    description: t('Заслонить'),
+    icon: 'shield',
+    target: 'ally_one',
+    power: 0,
+    cooldown: 0,
+    effects: [{ kind: 'cover', turns: 2 }],
+  };
+  const sweep: Ability = {
+    id: 'sweep',
+    name: t('Оземь'),
+    description: t('Оземь'),
+    icon: 'hammer',
+    target: 'enemy_all',
+    power: 1,
+    cooldown: 0,
+  };
+  const sweeper = unitDef('sweeper', {
+    row: 'front',
+    stats: { hp: 40, atk: 10, def: 5, initiative: 10 },
+    abilities: ['sweep'],
+  });
+  const cBundle: ContentBundle = {
+    ...bundle,
+    units: [...units, sweeper],
+    abilities: [...abilities, coverAbility, sweep],
+  };
+  const cIdx = indexCombat(cBundle);
+  /** Тот же мир, но без записи заслона в контенте: общего действия нет. */
+  const plainIdx = indexCombat({ ...cBundle, abilities: [...abilities, sweep] });
+  const b = battle('cover', [
+    { unit: 'archer', row: 'front', index: 0 },
+    { unit: 'sweeper', row: 'front', index: 1 },
+  ]);
+  const p = party(['wall', 'front', 0], ['glass', 'back', 0], ['archer', 'back', 1]);
+
+  const find = (s: BattleState, defId: string, side: 'player' | 'enemy') => {
+    const u = s.units.find((x) => x.defId === defId && x.side === side);
+    if (!u) throw new Error(`нет юнита ${defId}/${side}`);
+    return u;
+  };
+
+  /** Заслон поставлен: `wall` поручился за `wardDef`. Ходит уже кто угодно. */
+  function withCover(wardDef: string): BattleState {
+    const s0 = startBattle(cIdx, b, p, 'cover-seed');
+    const guard = find(s0, 'wall', 'player');
+    const ward = find(s0, wardDef, 'player');
+    const ordered: BattleState = {
+      ...s0,
+      order: [guard.uid, ...s0.order.filter((u) => u !== guard.uid)],
+      turnIndex: 0,
+    };
+    return act(cIdx, ordered, { ability: COVER_ABILITY_ID, targetUid: ward.uid });
+  }
+
+  /** Поставить в очередь одного стрелка и дать ему ударить по цели. */
+  function shoot(s: BattleState, ability: string, targetUid: string, shooter = 'archer'): BattleState {
+    const foe = find(s, shooter, 'enemy');
+    return act(cIdx, { ...s, order: [foe.uid], turnIndex: 0 }, { ability, targetUid });
+  }
+
+  it('заслонять может только передний ряд', () => {
+    const s = startBattle(cIdx, b, p, 'cover-seed');
+    expect(legalTargets(s, find(s, 'archer', 'player').uid, coverAbility)).toHaveLength(0);
+    expect(legalTargets(s, find(s, 'wall', 'player').uid, coverAbility).length).toBeGreaterThan(0);
+  });
+
+  it('за себя поручиться нельзя', () => {
+    const s = startBattle(cIdx, b, p, 'cover-seed');
+    const front = find(s, 'wall', 'player');
+    expect(legalTargets(s, front.uid, coverAbility).some((u) => u.uid === front.uid)).toBe(false);
+  });
+
+  it('общее действие выдаётся переднему ряду и не занимает слот способностей', () => {
+    const s = startBattle(cIdx, b, p, 'cover-seed');
+    const front = find(s, 'wall', 'player');
+    expect(commonActions(cIdx, front).map((a) => a.id)).toEqual([COVER_ABILITY_ID]);
+    expect(commonActions(cIdx, find(s, 'archer', 'player'))).toHaveLength(0);
+    expect(readyAbilities(cIdx, front).map((a) => a.id)).not.toContain(COVER_ABILITY_ID);
+  });
+
+  it('без записи в контенте общего действия нет вовсе', () => {
+    const s = startBattle(plainIdx, b, p, 'cover-seed');
+    expect(commonActions(plainIdx, find(s, 'wall', 'player'))).toHaveLength(0);
+  });
+
+  it('одноцелевой удар принимает поручившийся, а не цель', () => {
+    const s1 = withCover('glass');
+    const ward = find(s1, 'glass', 'player');
+    const guard = find(s1, 'wall', 'player');
+    const s2 = shoot(s1, 'reach', ward.uid);
+    expect(s2.units.find((u) => u.uid === ward.uid)?.hp).toBe(ward.hp);
+    expect(s2.units.find((u) => u.uid === guard.uid)?.hp).toBeLessThan(guard.hp);
+    expect(
+      s2.events.some((e) => e.type === 'cover' && e.uid === guard.uid && e.targetUid === ward.uid),
+    ).toBe(true);
+  });
+
+  it('площадь проходит мимо заслона', () => {
+    const s1 = withCover('glass');
+    const ward = find(s1, 'glass', 'player');
+    const s2 = shoot(s1, 'sweep', ward.uid, 'sweeper');
+    expect(s2.units.find((u) => u.uid === ward.uid)?.hp).toBeLessThan(ward.hp);
+    expect(s2.events.some((e) => e.type === 'cover')).toBe(false);
+  });
+
+  it('заряд один: второй удар за тот же раунд идёт в цель', () => {
+    const s1 = withCover('archer');
+    const ward = find(s1, 'archer', 'player');
+    const s2 = shoot(s1, 'reach', ward.uid);
+    expect(s2.units.find((u) => u.uid === ward.uid)?.hp).toBe(ward.hp);
+    const s3 = shoot(s2, 'reach', ward.uid);
+    expect(s3.units.find((u) => u.uid === ward.uid)?.hp).toBeLessThan(ward.hp);
+  });
+
+  it('не складывается: второй заслон той же цели заменяет первого', () => {
+    const s1 = withCover('glass');
+    expect(find(s1, 'glass', 'player').statuses.filter((s) => s.kind === 'cover')).toHaveLength(1);
+  });
+
+  it('тело одно: поручившись за второго, первого не держит', () => {
+    const s1 = withCover('glass');
+    const guard = find(s1, 'wall', 'player');
+    const other = find(s1, 'archer', 'player');
+    const s2 = act(cIdx, { ...s1, order: [guard.uid], turnIndex: 0 }, {
+      ability: COVER_ABILITY_ID,
+      targetUid: other.uid,
+    });
+    expect(find(s2, 'glass', 'player').statuses.some((s) => s.kind === 'cover')).toBe(false);
+    expect(find(s2, 'archer', 'player').statuses.some((s) => s.kind === 'cover')).toBe(true);
+  });
+
+  it('поручительство снимается собственным ходом поручившегося', () => {
+    const s1 = withCover('glass');
+    const guard = find(s1, 'wall', 'player');
+    const foe = find(s1, 'archer', 'enemy');
+    const s2 = act(cIdx, { ...s1, order: [guard.uid], turnIndex: 0 }, {
+      ability: 'hit',
+      targetUid: foe.uid,
+    });
+    expect(find(s2, 'glass', 'player').statuses.some((s) => s.kind === 'cover')).toBe(false);
+  });
+
+  it('павший поручитель никого не держит', () => {
+    const s1 = withCover('glass');
+    const guard = find(s1, 'wall', 'player');
+    const ward = find(s1, 'glass', 'player');
+    const fallen: BattleState = {
+      ...s1,
+      units: s1.units.map((u) => (u.uid === guard.uid ? { ...u, alive: false, hp: 0 } : u)),
+    };
+    const s2 = shoot(fallen, 'reach', ward.uid);
+    expect(s2.units.find((u) => u.uid === ward.uid)?.hp).toBeLessThan(ward.hp);
+  });
+
+  it('заслон не пишет перезарядку на карту', () => {
+    expect(find(withCover('glass'), 'wall', 'player').cooldowns[COVER_ABILITY_ID]).toBeUndefined();
+  });
+
+  it('бой с заслоном остаётся детерминированным по сиду', () => {
+    const a = runAuto(cIdx, startBattle(cIdx, b, p, 'cover-det'));
+    const c = runAuto(cIdx, startBattle(cIdx, b, p, 'cover-det'));
+    expect(stripEvents(a)).toBe(stripEvents(c));
   });
 });

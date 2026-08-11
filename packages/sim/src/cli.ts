@@ -241,6 +241,42 @@ if (!only || only === 'battles') {
     summary['scriptedBattles'] = rep;
     summary['scriptedBattlesMedian'] = storyMedian;
 
+    // ── Заслон: умеет ли бот играть механикой (DIRECTION_COMBAT §B.C1, §E.6) ──
+    //
+    // Правило §E.6 короткое: механику, в которую бот не умеет играть, нельзя
+    // замерить — отчёт выйдет зелёным при любой её силе, и первым перекос
+    // заметит игрок. Поэтому заслон отчитывается отдельной строкой: сколько раз
+    // за бой к нему прибегает каждая сторона и сколько раз поручительство
+    // действительно приняло удар. Ноль у стороны игрока — красное: значит, все
+    // цифры выше сняты с боя БЕЗ заслона.
+    head('Заслон: пользуется ли им бот');
+    const storyReps = rep.filter((r) => storyIds.includes(r.battle));
+    const coverMine = storyReps.reduce((a, r) => a + r.coversPlayer, 0) / Math.max(1, storyReps.length);
+    const coverTheirs = storyReps.reduce((a, r) => a + r.coversEnemy, 0) / Math.max(1, storyReps.length);
+    const coverFired = storyReps.reduce((a, r) => a + r.coversFired, 0) / Math.max(1, storyReps.length);
+    for (const r of storyReps) {
+      if (r.coversPlayer + r.coversEnemy === 0) continue;
+      console.log(
+        `   ${r.battle.padEnd(24)} игрок ${r.coversPlayer.toFixed(2)}/бой  ` +
+          `враг ${r.coversEnemy.toFixed(2)}/бой  принято ударов ${r.coversFired.toFixed(2)}/бой`,
+      );
+    }
+    const coverOk = coverMine > 0;
+    console.log(
+      `${coverOk ? '  ' : '!!'} по сюжетным боям: игрок ${coverMine.toFixed(2)}/бой, ` +
+        `враг ${coverTheirs.toFixed(2)}/бой, принято ударов ${coverFired.toFixed(2)}/бой`,
+    );
+    summary['cover'] = { player: coverMine, enemy: coverTheirs, fired: coverFired };
+    if (!coverOk) {
+      red(
+        'coverUnused',
+        'all',
+        'бот-игрок ни разу не заслонил: механика в замер не вошла, и коридоры выше ' +
+          'сняты с боя без неё (DIRECTION_COMBAT §E.6)',
+        0,
+      );
+    }
+
     // ── Умения игрока ────────────────────────────────────────────────────────
     // Потолок: игрок, вспомнивший ВСЁ. Раздел справочный и не краснит прогон.
     //

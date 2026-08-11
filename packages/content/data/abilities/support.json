@@ -243,5 +243,27 @@
       }
     ],
     "anim": "buff"
+  },
+  {
+    "id": "cover",
+    "name": {
+      "ru": "Заслонить",
+      "en": "Take It For Him"
+    },
+    "description": {
+      "ru": "Ручаюсь телом: первый удар по нему — мой.",
+      "en": "I vouch with my body: the first blow meant for him is mine."
+    },
+    "icon": "shield",
+    "target": "ally_one",
+    "power": 0,
+    "cooldown": 0,
+    "effects": [
+      {
+        "kind": "cover",
+        "turns": 2
+      }
+    ],
+    "anim": "buff"
   }
 ]

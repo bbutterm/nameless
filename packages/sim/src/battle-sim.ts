@@ -3,6 +3,7 @@
  * Балансовый коридор: любой юнит вне 42–58% — повод править статы.
  */
 import {
+  COVER_ABILITY_ID,
   indexCombat,
   runAuto,
   startBattle,
@@ -94,6 +95,17 @@ export interface BattleReport {
   avgRounds: number;
   /** Средняя доля выживших юнитов игрока — метрика «бой был напряжённым». */
   avgSurvivors: number;
+  /**
+   * Заслонов за бой — отдельно у стороны игрока и у врага, и отдельно —
+   * сколько раз поручительство сработало (удар действительно переехал).
+   *
+   * Это не украшение отчёта, а исполнение DIRECTION_COMBAT §E.6: механику, в
+   * которую бот не умеет играть, нельзя замерить — при нуле здесь все цифры
+   * выше говорят о бое БЕЗ заслона, каким бы сильным он ни был.
+   */
+  coversPlayer: number;
+  coversEnemy: number;
+  coversFired: number;
 }
 
 /**
@@ -262,6 +274,9 @@ export function scriptedBattles(
     let wins = 0;
     let rounds = 0;
     let survivors = 0;
+    let coversPlayer = 0;
+    let coversEnemy = 0;
+    let coversFired = 0;
     for (let i = 0; i < runs; i++) {
       const st = runAuto(idx, startBattle(idx, b, party, `scripted:${b.id}:${i}`, powers));
       rounds += st.round;
@@ -269,6 +284,14 @@ export function scriptedBattles(
       const alivePlayers = st.units.filter((u) => u.side === 'player' && u.alive).length;
       const totalPlayers = st.units.filter((u) => u.side === 'player').length || 1;
       survivors += alivePlayers / totalPlayers;
+      const sideOf = new Map(st.units.map((u) => [u.uid, u.side]));
+      for (const e of st.events) {
+        if (e.type === 'act' && e.ability === COVER_ABILITY_ID) {
+          if (sideOf.get(e.uid) === 'player') coversPlayer++;
+          else coversEnemy++;
+        }
+        if (e.type === 'cover') coversFired++;
+      }
     }
     out.push({
       battle: b.id,
@@ -276,6 +299,9 @@ export function scriptedBattles(
       winrate: wins / runs,
       avgRounds: rounds / runs,
       avgSurvivors: survivors / runs,
+      coversPlayer: coversPlayer / runs,
+      coversEnemy: coversEnemy / runs,
+      coversFired: coversFired / runs,
     });
   }
   return out;

@@ -122,6 +122,11 @@ function scaleEffect(
     case 'stun':
     case 'recorded':
       return { ...eff, turns: t(eff.turns) };
+    // Заслон — общее действие правил боя, а не умение памяти: усиливать его
+    // ступенью нельзя в принципе, и «поручительство на два раунда» отменило бы
+    // его цену — размен решается заново каждый раунд (DIRECTION_COMBAT §B.C1).
+    case 'cover':
+      return eff;
     case 'revive':
       return { ...eff, hpPercent: Math.min(1, Math.max(0, eff.hpPercent * scale)) };
     case 'rally':

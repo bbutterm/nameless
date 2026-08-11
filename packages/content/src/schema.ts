@@ -193,6 +193,10 @@ export const zBattleEffect = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('purge') }),
   z.object({ kind: z.literal('recorded'), turns: z.number().int().min(1) }),
   z.object({ kind: z.literal('shield_refund') }),
+  // «Заслонить» (DIRECTION_COMBAT §B.C1): удары по отмеченному до конца
+  // раунда принимает тот, кто поручился. Длительность в раундах, ноль
+  // запрещён — заслон на ноль раундов был бы потраченным ходом ни за чем.
+  z.object({ kind: z.literal('cover'), turns: z.number().int().min(1) }),
   z.object({
     kind: z.literal('rally'),
     stat: z.enum(['atk', 'def', 'initiative']),

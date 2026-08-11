@@ -38,6 +38,15 @@ export const SLOTS_PER_ROW = 3;
 /** Ниже этого числа раундов бой не успевает стать интересным, выше — надоедает. */
 export const DEFAULT_TURN_LIMIT = 30;
 
+/**
+ * «Заслонить» (DIRECTION_COMBAT §B.C1) — общее действие, а не способность
+ * карты. Слота в наборе юнита оно не занимает и в `readyAbilities` не входит:
+ * его выдаёт `commonActions` любому живому юниту ПЕРЕДНЕГО ряда. Запись
+ * способности живёт в контенте (`data/abilities/support.json`), потому что у
+ * действия есть имя и бирка, а имена — не дело движка.
+ */
+export const COVER_ABILITY_ID = 'cover';
+
 export type BattleOutcome = 'ongoing' | 'win' | 'lose' | 'draw';
 
 export type BattleEvent =
@@ -54,6 +63,13 @@ export type BattleEvent =
   | { type: 'damage'; uid: string; amount: number; hpAfter: number; crit: boolean }
   | { type: 'heal'; uid: string; amount: number; hpAfter: number }
   | { type: 'status'; uid: string; status: StatusEffect['kind']; turns: number }
+  /**
+   * Заслон сработал: удар, нацеленный в `targetUid`, принял `uid`.
+   * Отдельным событием, а не строкой `blocked`: удар не пропал, он сменил
+   * тело, и это надо уметь показать (панель, лог) и посчитать (симулятор
+   * меряет, что бот действительно пользуется механикой, DIRECTION_COMBAT §E.6).
+   */
+  | { type: 'cover'; uid: string; targetUid: string }
   | { type: 'death'; uid: string }
   | { type: 'blocked'; uid: string; reason: string }
   | { type: 'outcome'; result: BattleOutcome };
@@ -421,6 +437,66 @@ export function readyAbilities(idx: CombatIndex, u: BattleUnitState): Ability[] 
 }
 
 /**
+ * Общие действия — те, что есть у юнита не от набора способностей, а от правил
+ * боя. Сегодня оно одно: «Заслонить».
+ *
+ * Почему отдельным списком, а не строкой в `abilities` каждого юнита: слот
+ * способности стоит денег (правило четырёх кнопок, §E.8), а главное — приписка
+ * общего действия в набор сдвинула бы норму всего тира разом, и цена юнита
+ * стала бы зависеть от того, вписали ему строку или забыли.
+ *
+ * Заслонять может только ПЕРЕДНИЙ ряд: поручительство телом требует стоять
+ * там, куда придёт удар.
+ */
+export function commonActions(idx: CombatIndex, u: BattleUnitState): Ability[] {
+  if (!u.alive || u.row !== 'front') return [];
+  const cover = idx.abilities.get(COVER_ABILITY_ID);
+  return cover ? [cover] : [];
+}
+
+/**
+ * Удар одноцелевой? Только такие перенаправляются заслоном: площадь бьёт по
+ * месту, а не по человеку, и подставить под неё своё тело нельзя.
+ */
+export function isSingleTarget(ability: Ability): boolean {
+  return (
+    ability.target !== 'enemy_all' &&
+    ability.target !== 'enemy_row' &&
+    ability.target !== 'ally_all' &&
+    ability.target !== 'ally_row'
+  );
+}
+
+/**
+ * Сколько ударов ещё примет поручившийся. Один: поручительство — про удар, а
+ * не про раунд без ран. Второй нападающий за тот же раунд бьёт уже в цель.
+ */
+export const COVER_CHARGES = 1;
+
+/** Погасить заряд заслона на цели: удар принят, поручительство исполнено. */
+function spendCover(target: BattleUnitState): void {
+  for (const st of target.statuses) {
+    if (st.kind === 'cover') st.amount -= 1;
+  }
+  target.statuses = target.statuses.filter((s) => !(s.kind === 'cover' && s.amount <= 0));
+}
+
+/** Кто поручился за этого юнита и всё ещё стоит на ногах. */
+export function guardOf(
+  units: readonly BattleUnitState[],
+  target: BattleUnitState,
+): BattleUnitState | undefined {
+  const st = target.statuses.find(
+    (s) => s.kind === 'cover' && s.turns > 0 && s.amount > 0 && s.guardUid,
+  );
+  if (!st?.guardUid || st.guardUid === target.uid) return undefined;
+  const g = units.find((u) => u.uid === st.guardUid);
+  // Павший поручитель никого не держит, и цепочек заслонов не бывает: удар
+  // делает ровно один шаг в сторону.
+  return g && g.alive && g.side === target.side ? g : undefined;
+}
+
+/**
  * Умения игрока, готовые прямо сейчас, — для конкретного носителя.
  *
  * Носителем может быть ЛЮБАЯ живая карта своей стороны: умение принадлежит
@@ -453,6 +529,14 @@ function resolveAction(
 ):
   | { ability: Ability; fromPlayer: boolean; cooldown: number; spendsTurn: boolean; life?: LifeId }
   | undefined {
+  // Общее действие старше всего: оно принадлежит правилам боя, а не карте.
+  // Проверка ряда здесь же — иначе задний ряд «заслонял» бы вхолостую, тратя
+  // ход на статус, который никто не увидит.
+  if (abilityId === COVER_ABILITY_ID) {
+    const common = commonActions(idx, actor).find((a) => a.id === COVER_ABILITY_ID);
+    if (!common) return undefined;
+    return { ability: common, fromPlayer: false, cooldown: 0, spendsTurn: true };
+  }
   const owns = idx.units.get(actor.defId)?.abilities.includes(abilityId) ?? false;
   if (owns) {
     const ability = idx.abilities.get(abilityId);
@@ -507,6 +591,13 @@ export function legalTargets(
   if (!actor || !actor.alive) return [];
   const foes = living(state, actor.side === 'player' ? 'enemy' : 'player');
   const allies = isRevive(ability) ? fallen(state, actor.side) : living(state, actor.side);
+
+  // Заслон — единственное действие, у которого «за себя» бессмысленно: удар и
+  // так придёт в того, кто его принимает. И задний ряд поручиться не может.
+  if (ability.id === COVER_ABILITY_ID) {
+    if (actor.row !== 'front') return [];
+    return allies.filter((u) => u.uid !== actor.uid);
+  }
 
   switch (ability.target) {
     case 'self':
@@ -635,6 +726,16 @@ export function act(idx: CombatIndex, state: BattleState, action: Action): Battl
   const self = units.find((u) => u.uid === actor.uid);
   if (!self) return advanceTurn(idx, state);
 
+  // Поручительство держится ДО СЛЕДУЮЩЕГО ХОДА поручившегося — и снимается
+  // тем, что он снова взялся за своё. Срок в данных стоит на раунд длиннее
+  // именно ради этого: иначе медленный юнит переднего ряда (а это и есть те,
+  // кто заслоняет) ручался бы за остаток раунда, в котором все уже отходили,
+  // то есть ни за что. Тело одно: заслонить второго, не сняв первого, нельзя.
+  for (const u of units) {
+    if (!u.statuses.some((s) => s.kind === 'cover' && s.guardUid === self.uid)) continue;
+    u.statuses = u.statuses.filter((s) => !(s.kind === 'cover' && s.guardUid === self.uid));
+  }
+
   const targets = resolveTargets({ ...state, units }, self, ability, action.targetUid);
   const events: BattleEvent[] = [
     { type: 'act', uid: self.uid, ability: ability.id, targetUid: action.targetUid, anim: ability.anim ?? 'lunge' },
@@ -643,16 +744,28 @@ export function act(idx: CombatIndex, state: BattleState, action: Action): Battl
   const { perTarget, wide } = splitEffects(ability);
   const tax = healTax(state);
 
+  // Заслон перенаправляет только ОДНОЦЕЛЕВОЙ урон (§B.C1). Площадь и дот идут
+  // мимо: подставить тело можно под удар, но не под пожар и не под яд.
+  const single = isSingleTarget(ability);
+
   for (const eff of perTarget) {
     for (const tRef of targets) {
       const t = units.find((u) => u.uid === tRef.uid);
       // Мёртвая цель пропускается всем, кроме воскрешения: оно ради неё и есть.
       if (!t || (!t.alive && eff.kind !== 'revive')) continue;
-      applyBattleEffect(rng, self, t, eff, events, tax);
-      if (t.hp <= 0 && t.alive) {
-        t.alive = false;
-        t.hp = 0;
-        events.push({ type: 'death', uid: t.uid });
+      const guard = eff.kind === 'damage' && single ? guardOf(units, t) : undefined;
+      const victim = guard ?? t;
+      if (guard) {
+        // Поручительство — на ОДИН удар: тело одно, и подставить его дважды за
+        // раунд нельзя. Заряд гасится здесь же, статус снимается.
+        spendCover(t);
+        events.push({ type: 'cover', uid: guard.uid, targetUid: t.uid });
+      }
+      applyBattleEffect(rng, self, victim, eff, events, tax);
+      if (victim.hp <= 0 && victim.alive) {
+        victim.alive = false;
+        victim.hp = 0;
+        events.push({ type: 'death', uid: victim.uid });
       }
     }
   }
@@ -683,7 +796,11 @@ export function act(idx: CombatIndex, state: BattleState, action: Action): Battl
         ),
       }
     : loadout;
-  if (!fromPlayer) self.cooldowns = { ...self.cooldowns, [ability.id]: ability.cooldown };
+  // Общее действие перезарядки не пишет: у него её нет и быть не может —
+  // иначе оно перестало бы быть общим и стало бы способностью карты.
+  if (!fromPlayer && ability.id !== COVER_ABILITY_ID) {
+    self.cooldowns = { ...self.cooldowns, [ability.id]: ability.cooldown };
+  }
   if (spendsTurn) self.acted = true;
 
   // Отклик сродства: руки узнают руки (MEMORY_POWERS §C.1). Только от умения
@@ -732,6 +849,10 @@ const ADDITIONS: ReadonlySet<BattleEffect['kind']> = new Set([
   'heal',
   'heal_flat',
 ]);
+// «Заслон» сюда НЕ входит намеренно: протокол отказывает в приписках к самому
+// человеку, а заслон человеку ничего не приписывает — он уводит удар в другое
+// тело. Занесённого в протокол можно заслонить: запретить это значило бы
+// запретить чужой поступок чужой бумагой.
 
 export function isRecorded(u: BattleUnitState): boolean {
   return u.statuses.some((s) => s.kind === 'recorded' && s.turns > 0);
@@ -832,6 +953,19 @@ function applyBattleEffect(
     case 'recorded':
       target.statuses.push({ kind: 'recorded', amount: 0, turns: eff.turns });
       events.push({ type: 'status', uid: target.uid, status: 'recorded', turns: eff.turns });
+      break;
+    case 'cover':
+      // Не складывается: второй заслон той же цели ЗАМЕНЯЕТ первого. Иначе два
+      // хода отряда покупали бы два тела под один удар, и «черепаха» из §B.C1
+      // (все заслоняют всех) стала бы выгодной вопреки цене в целый ход.
+      target.statuses = target.statuses.filter((s) => s.kind !== 'cover');
+      target.statuses.push({
+        kind: 'cover',
+        amount: COVER_CHARGES,
+        turns: eff.turns,
+        guardUid: actor.uid,
+      });
+      events.push({ type: 'status', uid: target.uid, status: 'cover', turns: eff.turns });
       break;
     case 'revive':
       if (!target.alive) {
@@ -1228,13 +1362,19 @@ export function planAction(
   state: BattleState,
   actor: BattleUnitState,
   /**
-   * Считать ли умения героя. Отклик зовёт эту функцию с `false`: сдвигается
-   * ХОД ЮНИТА, а умение героя уже применено — иначе сродственный «откликнулся»
-   * бы вторым применением того же умения, и заряд боя перестал бы быть одним.
+   * `hero` — считать ли умения героя. Отклик зовёт эту функцию с `false`:
+   * сдвигается ХОД ЮНИТА, а умение героя уже применено — иначе сродственный
+   * «откликнулся» бы вторым применением того же умения, и заряд боя перестал
+   * бы быть одним.
+   *
+   * `cover` — рассматривать ли заслон. Политика заслона сама спрашивает у этой
+   * функции, что собирается делать противник, и зовёт её с `cover: false`:
+   * без этого «кого мне заслонить» уходило бы в бесконечную взаимную вежливость.
    */
-  options: { hero?: boolean } = {},
+  options: { hero?: boolean; cover?: boolean } = {},
 ): Action | undefined {
   const useHero = options.hero !== false;
+  const useCover = options.cover !== false;
   // Бот-игрок ПОЛЬЗУЕТСЯ умениями игрока — сознательно.
   //
   // Живым игроком бот не управляет; обе стороны ботами гоняет только симулятор.
@@ -1252,7 +1392,14 @@ export function planAction(
   // неправдой при зелёном отчёте. Плюс заряд один на бой: такое решение нельзя
   // принимать той же меркой, что выбор между двумя ударами.
   const ready = readyAbilities(idx, actor);
-  if (ready.length === 0 && (!useHero || readyPlayerAbilities(state, actor).length === 0)) return undefined;
+  const canCover = useCover && commonActions(idx, actor).length > 0;
+  if (
+    ready.length === 0 &&
+    !canCover &&
+    (!useHero || readyPlayerAbilities(state, actor).length === 0)
+  ) {
+    return undefined;
+  }
   const rng = Rng.restore(state.rng).fork(`ai:${actor.uid}:${state.round}:${state.turnIndex}`);
 
   const allies = living(state, actor.side);
@@ -1279,6 +1426,15 @@ export function planAction(
   const strikeValue = effectiveStat(actor, 'atk') * (scored[0]?.a.power ?? 1);
   const hero = useHero ? heroPlan(idx, state, actor, strikeValue) : undefined;
   if (hero) return hero;
+
+  // Заслон разбирается ДО удара и после умения героя: заряд героя один на бой,
+  // а поручиться можно каждый раунд — дешёвое решение не должно вытеснять
+  // дорогое. Политика живёт в `coverPlan` по той же причине, по какой умения
+  // героя живут в `heroPlan`: общая эвристика сортирует по `power`, а у заслона
+  // `power` равен нулю, и в общем списке он не всплыл бы никогда — механику,
+  // в которую бот не умеет играть, нельзя замерить (DIRECTION_COMBAT §E.6).
+  const cover = canCover ? coverPlan(idx, state, actor) : undefined;
+  if (cover) return cover;
 
   const healer = ready.find(
     (a) => !isRevive(a) && (a.effects?.some((e) => e.kind === 'heal') || a.target === 'ally_one'),
@@ -1324,6 +1480,201 @@ export function planAction(
   const weakest = targets.slice().sort((a, b) => a.hp - b.hp)[0];
   const target = finishable ?? (rng.chance(0.15) ? rng.pick(targets) : weakest);
   return { ability: chosen.id, targetUid: target?.uid };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Политика бота для заслона (DIRECTION_COMBAT §B.C1, §E.6)
+//
+// Механику, в которую не умеет играть бот, нельзя замерить: отчёт будет
+// зелёным при любой её силе. Здесь живёт та самая политика — во что бот
+// оценивает поручительство, за кого ручается и когда решает, что момент
+// настал. Всё считается в HP-эквиваленте, чтобы сравниваться с ценой
+// пропущенного удара, — той же меркой, что у лечения и умений героя.
+//
+// Заслон почти никогда не «выгоден по арифметике»: тот же урон переезжает с
+// одного тела на другое, и разница брони мала. Он выгоден по ДРУГОМУ счёту —
+// когда удар добивает, а поручившийся удар держит. Поэтому в оценке два
+// слагаемых: сколько hp сотрётся на самом деле (с учётом того, что добивание
+// сверх остатка hp никому не стоит ничего) и кто после раунда останется на
+// доске.
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Во сколько своих ходов оценивается тело, оставшееся на доске. Спасённый
+ * успеет ударить ещё раз — на это и считаем.
+ *
+ * Двойка замерена и отвергнута: бот с ней ручается вдвое чаще (0.68 против
+ * 0.27 заслона за бой) и ВЫИГРЫВАЕТ БОЛЬШЕ — медиана сюжетных боёв 69.7%
+ * против 65.7%, то есть вылетает из коридора 63–68. Это записано здесь
+ * честно: при смелой игре заслон сильнее, чем позволяет коридор, и следующая
+ * правка механики (Б5/Б11) обязана начинать с этого числа, а не с порога.
+ */
+const COVER_LIFE_ROUNDS = 1;
+/**
+ * Порог: во сколько раз оценка заслона должна перекрыть пропущенный удар.
+ *
+ * Единица — честная мерка: ход отдаётся за поручительство, только если оно
+ * стоит не меньше, чем удар, которого не будет. Удар при этом считается ТЕМ
+ * ЖЕ смягчением бронёй, что и заслон (`bestStrike`), а не сырой атакой, как в
+ * пороге умений героя: сырое число завышено вдвое, и бот ручался бы вдвое
+ * чаще, чем сам же считает выгодным.
+ */
+const COVER_THRESHOLD = 1;
+
+/** Лучший урон, который актор нанесёт этим ходом, — цена отданного хода. */
+function bestStrike(idx: CombatIndex, state: BattleState, actor: BattleUnitState): number {
+  let best = 0;
+  for (const a of readyAbilities(idx, actor)) {
+    const power = damagePower(a);
+    if (power <= 0) continue;
+    for (const t of legalTargets(state, actor.uid, a)) {
+      const hit = resolveTargets(state, actor, a, t.uid).reduce(
+        (s, x) => s + expectedHit(actor, x, power),
+        0,
+      );
+      if (hit > best) best = hit;
+    }
+  }
+  return best;
+}
+
+/**
+ * Что противник собирается сделать на этом ходу. У врагов намерение объявлено
+ * заранее (`rollIntents`) — его и берём: заслон стоит ровно на той площадке,
+ * которую игра уже показывает. У стороны игрока намерений нет, и приходится
+ * спрашивать ту же эвристику — с выключенным заслоном, иначе взаимная
+ * вежливость ушла бы в рекурсию.
+ */
+function predictedAction(
+  idx: CombatIndex,
+  state: BattleState,
+  u: BattleUnitState,
+): Action | undefined {
+  if (u.intent) return { ability: u.intent.ability, targetUid: u.intent.targetUid };
+  const memo = predictionMemo.get(state) ?? new Map<string, Action | undefined>();
+  if (!predictionMemo.has(state)) predictionMemo.set(state, memo);
+  if (memo.has(u.uid)) return memo.get(u.uid);
+  const plan = planAction(idx, state, u, { hero: false, cover: false });
+  memo.set(u.uid, plan);
+  return plan;
+}
+
+/**
+ * Память предсказаний в пределах ОДНОГО состояния боя.
+ *
+ * `rollIntents` спрашивает план каждого врага, каждый из них спрашивает планы
+ * всей стороны игрока — и без памятки одно и то же считалось бы до тридцати
+ * шести раз за раунд. Ключ — сам объект состояния: состояния в этом движке
+ * неизменяемы, значит ответ на одном и том же объекте один и тот же, а
+ * `WeakMap` не держит мёртвые бои в памяти. На детерминизм не влияет:
+ * памятка возвращает ровно то, что вернул бы пересчёт.
+ */
+const predictionMemo = new WeakMap<BattleState, Map<string, Action | undefined>>();
+
+/** Урон эффектов способности в долях атаки — без жеребьёвки и крита. */
+function damagePower(ability: Ability): number {
+  const raw: readonly BattleEffect[] =
+    ability.effects && ability.effects.length > 0
+      ? ability.effects
+      : [{ kind: 'damage', power: ability.power }];
+  return raw.reduce((s, e) => s + (e.kind === 'damage' ? e.power : 0), 0);
+}
+
+/** Ожидаемый урон без разброса и крита — тем же смягчением бронёй, что в бою. */
+function expectedHit(attacker: BattleUnitState, target: BattleUnitState, power: number): number {
+  if (power <= 0) return 0;
+  return (
+    effectiveStat(attacker, 'atk') * power * (ARMOR_K / (ARMOR_K + effectiveStat(target, 'def')))
+  );
+}
+
+interface IncomingHit {
+  attacker: BattleUnitState;
+  ability: Ability;
+  targetUid: string;
+}
+
+/**
+ * Одноцелевые удары, которые придут ПОСЛЕ хода `actor` в этом раунде.
+ *
+ * «После» — не украшение, а суть механики: заслонить может только тот, кто
+ * ходит раньше атакующего, и инициатива из строки в статах становится валютой
+ * (§B.C1). Уже отходившие и оглушённые в счёт не идут.
+ */
+function incomingHits(
+  idx: CombatIndex,
+  state: BattleState,
+  actor: BattleUnitState,
+): IncomingHit[] {
+  const from = state.order.indexOf(actor.uid);
+  if (from < 0) return [];
+  const out: IncomingHit[] = [];
+  for (let i = from + 1; i < state.order.length; i++) {
+    const u = state.units.find((x) => x.uid === state.order[i]);
+    if (!u || !u.alive || u.side === actor.side || isStunned(u)) continue;
+    const plan = predictedAction(idx, state, u);
+    if (!plan?.targetUid) continue;
+    const ability = resolveAction(idx, state, u, plan.ability)?.ability;
+    if (!ability || !isSingleTarget(ability) || damagePower(ability) <= 0) continue;
+    out.push({ attacker: u, ability, targetUid: plan.targetUid });
+  }
+  return out;
+}
+
+/**
+ * За кого поручиться прямо сейчас — и стоит ли вообще.
+ *
+ * Считается по каждому союзнику, в которого целятся: сколько hp сотрётся с
+ * него, сколько сотрётся с поручившегося, и кто из двоих после этого падает.
+ * Овеpкилл не считается потерей — удар, снимающий сорок с десяти оставшихся,
+ * стоит отряду десять и одно тело, а не сорок.
+ */
+function coverPlan(
+  idx: CombatIndex,
+  state: BattleState,
+  actor: BattleUnitState,
+): Action | undefined {
+  const cover = commonActions(idx, actor).find((a) => a.id === COVER_ABILITY_ID);
+  if (!cover) return undefined;
+  const wards = legalTargets(state, actor.uid, cover);
+  if (wards.length === 0) return undefined;
+  const hits = incomingHits(idx, state, actor);
+  if (hits.length === 0) return undefined;
+
+  const pool = (u: BattleUnitState): number => u.hp + shieldOf(u);
+  // То, что и так летит в поручившегося, уменьшает его запас: тело одно, и
+  // принять чужой удар оно может только тем, что осталось после своего.
+  const onSelf = hits
+    .filter((h) => h.targetUid === actor.uid)
+    .reduce((s, h) => s + expectedHit(h.attacker, actor, damagePower(h.ability)), 0);
+  const guardPool = Math.max(0, pool(actor) - onSelf);
+
+  let best: { uid: string; value: number } | undefined;
+  for (const ward of wards) {
+    // Заряд один, и `hits` идут в порядке очереди: перехвачен будет ПЕРВЫЙ
+    // удар, а не все. Считать по всем значило бы обещать боту то, чего
+    // механика не делает, — и он платил бы ходом за половину обещания.
+    const aimed = hits.filter((h) => h.targetUid === ward.uid).slice(0, COVER_CHARGES);
+    if (aimed.length === 0) continue;
+    let toWard = 0;
+    let toGuard = 0;
+    for (const h of aimed) {
+      toWard += expectedHit(h.attacker, ward, damagePower(h.ability));
+      toGuard += expectedHit(h.attacker, actor, damagePower(h.ability));
+    }
+    // Стёртые hp, а не объявленный урон: сверх остатка ничего не стирается.
+    let value = Math.min(toWard, pool(ward)) - Math.min(toGuard, guardPool);
+    if (toWard >= pool(ward)) value += COVER_LIFE_ROUNDS * effectiveStat(ward, 'atk');
+    if (toGuard >= guardPool) value -= COVER_LIFE_ROUNDS * effectiveStat(actor, 'atk');
+    // Ничьи разводятся строковым сравнением uid, не localeCompare.
+    if (!best || value > best.value || (value === best.value && ward.uid < best.uid)) {
+      best = { uid: ward.uid, value };
+    }
+  }
+  if (!best || best.value <= 0) return undefined;
+  return best.value >= bestStrike(idx, state, actor) * COVER_THRESHOLD
+    ? { ability: COVER_ABILITY_ID, targetUid: best.uid }
+    : undefined;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
