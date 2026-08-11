@@ -63,6 +63,32 @@ describe('база известного красного', () => {
     expect(v.lines.join('\n')).toContain('база устарела: rhythm:max');
   });
 
+  it('частичный прогон не выдаёт известное красное за новое', () => {
+    // Прибор врал: `--only=battles` с базой не сверялся и печатал «ИТОГ:
+    // КРАСНЫЙ (новое красное)» поверх давно записанных строк. За этой ложью
+    // полдня искали регрессию, которой не было.
+    const v = verdict([known], base, undefined, 'battles');
+    expect(v.exitCode).toBe(0);
+    expect(v.lines.join('\n')).toContain('известное rhythm:max');
+    expect(v.lines.join('\n')).not.toContain('НОВОЕ КРАСНОЕ');
+  });
+
+  it('частичный прогон роняется на новом красном наравне с полным', () => {
+    const fresh: Finding = { kind: 'noDecision', id: 'ch1_first', note: 'ходов без решения больше нормы' };
+    const v = verdict([known, fresh], base, undefined, 'battles');
+    expect(v.exitCode).toBe(1);
+    expect(v.comparison.fresh).toEqual([fresh]);
+  });
+
+  it('частичный прогон молчит про устаревшие записи чужих разделов', () => {
+    // Иначе «база устарела: invisibleOption:…» печаталось бы про диалоги при
+    // прогоне одних боёв — и записи вычёркивались бы не глядя.
+    const v = verdict([], base, undefined, 'battles');
+    expect(v.exitCode).toBe(0);
+    expect(v.lines.join('\n')).not.toContain('база устарела');
+    expect(v.lines.join('\n')).toContain('частичный прогон');
+  });
+
   it('нечитаемая база роняет прогон, а не тихо считает всё известным', () => {
     const v = verdict([], { known: [] }, 'файл не читается');
     expect(v.exitCode).toBe(1);

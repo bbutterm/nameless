@@ -804,25 +804,18 @@ if (updateBaseline) {
   console.log('   ПРОВЕРЬ причины у каждой записи руками — снимок пишет их машинными словами');
 }
 const { baseline, error: baselineError } = loadBaseline(baselinePath);
-// Частичный прогон (`--only=...`) сверять с базой нельзя: разделы, которых он
-// не считал, выглядели бы починенными, и «база устарела» печаталось бы про
-// половину записей. Такой прогон судит по-старому — любое красное роняет.
-const v = only
-  ? {
-      exitCode: findings.length > 0 ? 1 : 0,
-      comparison: { fresh: findings, known: [], stale: [] },
-      lines: [
-        `частичный прогон (--only=${only}): с базой не сверяется, красных строк ${findings.length}`,
-        ...findings.map((f) => `!! ${f.kind}:${f.id} — ${f.note}`),
-      ],
-    }
-  : verdict(findings, baseline, updateBaseline ? undefined : baselineError);
+// Частичный прогон (`--only=...`) сверяется с базой наравне с полным: известное
+// красное остаётся известным. Не судит он только об устаревших записях — разделы,
+// которых он не считал, выглядели бы починенными.
+const v = verdict(findings, baseline, updateBaseline ? undefined : baselineError, only);
 for (const line of v.lines) console.log(line);
 summary['findings'] = findings;
 summary['baseline'] = {
   entries: baseline.known.length,
   fresh: v.comparison.fresh,
-  stale: v.comparison.stale,
+  // При частичном прогоне «устаревших» записей не бывает — есть несчитанные.
+  stale: only ? [] : v.comparison.stale,
+  ...(only ? { partial: only } : {}),
 };
 
 try {
@@ -834,7 +827,10 @@ try {
 
 // Прогон падает ТОЛЬКО на новом красном. Известное красное — не падение:
 // иначе прибор третий месяц отвечает «красный» и перестаёт что-либо сообщать.
-head(v.exitCode === 0 ? 'ИТОГ: зелёный' : 'ИТОГ: КРАСНЫЙ (новое красное)');
+// Область прогона печатается в самом итоге: частичный зелёный — это зелёный
+// одного раздела, и путать его с полным нельзя.
+const scope = only ? ` — только раздел ${only}` : '';
+head(v.exitCode === 0 ? `ИТОГ: зелёный${scope}` : `ИТОГ: КРАСНЫЙ (новое красное)${scope}`);
 process.exit(v.exitCode);
 
 function dedupe(items: string[]): string[] {

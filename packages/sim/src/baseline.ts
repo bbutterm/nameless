@@ -188,11 +188,20 @@ export interface Verdict {
 /**
  * Вердикт прогона. Один и тот же код зовут и `cli.ts`, и тесты — иначе
  * «прибор падает на новом красном» проверялся бы не тем кодом, который живёт.
+ *
+ * `partial` — имя раздела, если считали только его (`--only=battles`). Такой
+ * прогон сверяется с базой так же, как полный: известное красное остаётся
+ * известным, новое роняет. Разница ровно одна — про «база устарела» он молчит,
+ * потому что разделы, которых он не считал, выглядели бы починенными.
+ * Раньше частичный прогон судил по-старому (любое красное — падение) и печатал
+ * «ИТОГ: КРАСНЫЙ (новое красное)» поверх давно записанного известного. Прибор,
+ * который кричит «новое» про старое, хуже молчащего: на него перестают смотреть.
  */
 export function verdict(
   findings: readonly Finding[],
   baseline: Baseline,
   baselineError?: string,
+  partial?: string,
 ): Verdict {
   const comparison = compareToBaseline(findings, baseline);
   const lines: string[] = [];
@@ -207,8 +216,15 @@ export function verdict(
   for (const { finding, entry } of comparison.known) {
     lines.push(`   известное ${findingKey(finding)}${delta(entry, finding)} — ${entry.note}`);
   }
-  for (const s of comparison.stale) {
-    lines.push(`   база устарела: ${findingKey(s)} больше не красный — ${s.note}`);
+  if (partial) {
+    lines.push(
+      `   частичный прогон (--only=${partial}): про устаревшие записи базы не судим — ` +
+        'несчитанные разделы выглядели бы починенными',
+    );
+  } else {
+    for (const s of comparison.stale) {
+      lines.push(`   база устарела: ${findingKey(s)} больше не красный — ${s.note}`);
+    }
   }
   for (const f of comparison.fresh) {
     lines.push(
