@@ -16,12 +16,12 @@
     "index": 1,
     "id": "pocket_inventory",
     "title": {
-      "ru": "Опись карманов",
-      "en": "Inventory of Pockets"
+      "ru": "Чужие вещи",
+      "en": "Other People's Things"
     },
     "subtitle": {
-      "ru": "Вас обокрали. Осталось выяснить, кто расписался в получении.",
-      "en": "You were robbed. It remains to find out who signed for the goods."
+      "ru": "Среди чужого нашлась вещь, которую кто-то чинил для тебя.",
+      "en": "Among other people's things lies one that someone mended for you."
     },
     "entryScene": "chulan_wake"
   },
