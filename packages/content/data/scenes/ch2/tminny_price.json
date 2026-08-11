@@ -40,8 +40,8 @@
       "id": "tminny_tea_2",
       "speaker": "tminny",
       "text": {
-        "ru": "Обеспечение у нас одно на всю монету, и лежит оно в пяти разделах. Пять — это мало. Пять — это, позвольте-с, один вкладчик.",
-        "en": "We have one body of holdings for the whole coinage, and it lies in five sections. Five is few. Five is, if you will permit, one depositor."
+        "ru": "Спрятанное у нас одно на всю монету, и лежит оно в пяти разделах. Пять — это мало. Пять — это, позвольте-с, один отдавший.",
+        "en": "We have one body of hidden things for the whole coinage, and it lies in five sections. Five is few. Five is, if you will permit, one giver."
       },
       "keywords": [{ "match": { "ru": "пяти разделах", "en": "five sections" }, "tone": "danger" }],
       "next": "tea_slip"
@@ -57,7 +57,7 @@
       "id": "tminny_tea_3",
       "speaker": "tminny",
       "text": {
-        "ru": "Я это произнёс вслух впервые за одиннадцать лет и сразу оценил. Оценка... в четыре гроша. Дешевле молчания, но молчание я уже носил.",
+        "ru": "Я это произнёс вслух впервые за одиннадцать лет и сразу понял цену. Четыре гроша. Дешевле молчания, но молчание я уже носил.",
         "en": "I have said that out loud for the first time in eleven years, and I valued it at once. Valuation... four groschen. Cheaper than silence, but I have worn the silence already."
       },
       "next": "burn_router"
@@ -77,7 +77,7 @@
       "id": "window_otsen",
       "speaker": "otsenshchik",
       "text": {
-        "ru": "Пункт двадцатый: особое распоряжение на нижние ярусы. Цена прописью, торг не через форточку.",
+        "ru": "Строка двадцатый: особое распоряжение на нижние ярусы. Цена прсписком, торг не через форточку.",
         "en": "Clause twenty: special order for the lower tiers. Price in words, no haggling through the pane."
       },
       "next": "window_2"
@@ -86,7 +86,7 @@
       "kind": "narration",
       "id": "window_2",
       "text": {
-        "ru": "Цену тебе называют прописью, и она занимает три строки. В конце приписано «и ещё половина», а половину прописью в этом городе пишут одинаково давно и одной формулой.",
+        "ru": "Цену тебе называют прсписком, и она занимает три строки. В конце приписано «и ещё половина», а половину прсписком в этом городе пишут одинаково давно и одной формулой.",
         "en": "The price is given to you in words and takes three lines. At the end it says \"and one half more\", and in this city the half has been written out in words the same way, in the same formula, for a very long time."
       },
       "keywords": [{ "match": { "ru": "и ещё половина", "en": "and one half more" }, "tone": "memory" }],
@@ -107,7 +107,7 @@
       "kind": "narration",
       "id": "desk_1",
       "text": {
-        "ru": "Стол под лампой пуст, кроме промокашки и одного бланка на две подписи. Бланк лежит лицом вниз, и Тминный не переворачивает его, пока смотрит на тебя.",
+        "ru": "Стол под лампой пуст, кроме промокашки и одного листа на две подписи. Лист лежит лицом вниз, и Тминный не переворачивает его, пока смотрит на тебя.",
         "en": "The desk under the lamp is bare except for a blotter and a single form with room for two signatures. The form lies face down, and Tminny does not turn it over while he is looking at you."
       },
       "next": "tminny_desk_1"
@@ -127,8 +127,8 @@
       "id": "tminny_desk_2",
       "speaker": "tminny",
       "text": {
-        "ru": "Особое распоряжение — бумага на две подписи: моя и того, кто отвечает за обеспечение. Вторая подпись, позвольте-с, не ставилась при мне ни разу.",
-        "en": "A special order is a paper for two signatures: mine, and that of whoever answers for the holdings. The second signature, if you will permit, has never once been put there in my time."
+        "ru": "Особое распоряжение — бумага на две подписи: моя и того, кто отвечает за спрятанное. Вторая подпись, позвольте-с, не ставилась при мне ни разу.",
+        "en": "A special order is a paper for two signatures: mine, and that of whoever answers for the hidden things. The second signature, if you will permit, has never once been put there in my time."
       },
       "next": "burn_router"
     },
@@ -144,7 +144,7 @@
       "id": "tminny_burn",
       "speaker": "tminny",
       "text": {
-        "ru": "За дым на третьем ярусе вам выставлено четырнадцать строк, и одиннадцатая — про уборку. Убыток я подписал не глядя: горелые лоты дорожают, у них появляется происхождение.",
+        "ru": "За дым на третьем ярусе вам выставлено четырнадцать строк, и одиннадцатая — про уборку. Убыток я подписал не глядя: горелые вещьы дорожают, у них появляется происхождение.",
         "en": "For the smoke on the third tier you have been billed fourteen lines, and the eleventh is for the cleaning. I signed off the loss without looking: scorched lots go up in price, they acquire a provenance."
       },
       "next": "grasp_router"
@@ -162,8 +162,8 @@
       "id": "tminny_threat",
       "speaker": "tminny",
       "text": {
-        "ru": "Вы третий месяц прощаете долги, и в нашей конторе о вас говорят тише, чем о Ревизии. Прощённый долг цены не имеет, а всё, что цены не имеет, нас разоряет.",
-        "en": "You have been forgiving debts for three months, and in our office you are spoken of more quietly than the Audit is. A forgiven debt carries no price, and everything that carries no price ruins us."
+        "ru": "Вы третий месяц прощаете долги, и в нашем доме о вас говорят тише, чем о Сличиле. Прощённый долг цены не имеет, а всё бесценное нас разоряет.",
+        "en": "You have been forgiving debts for three months, and in our office you are spoken of more quietly than the Collator is. A forgiven debt carries no price, and everything that carries no price ruins us."
       },
       "next": "price_choice"
     },
@@ -190,7 +190,7 @@
         },
         {
           "id": "haggle",
-          "text": { "ru": "Торговаться по пунктам.", "en": "Haggle clause by clause." },
+          "text": { "ru": "Торговаться по строким.", "en": "Haggle clause by clause." },
           "fallback": true,
           "effects": [
             { "kind": "axis", "axis": "reason_obsession", "delta": 8 },
@@ -284,7 +284,7 @@
       "id": "r_paid",
       "speaker": "tminny",
       "text": {
-        "ru": "Принято без сдачи. Люди, которые не переспрашивают цену, у нас проходят по отдельной графе, и графа эта короткая.",
+        "ru": "Принято без сдачи. Люди, которые не переспрашивают цену, у нас проходят по отдельной строке, и строка эта короткая.",
         "en": "Accepted, no change given. People who do not ask the price twice go in a separate column here, and that column is a short one."
       },
       "next": "after_price"
@@ -294,8 +294,8 @@
       "id": "r_haggle",
       "speaker": "tminny",
       "text": {
-        "ru": "Сошлись на половине, и половина распоряжения — это ярус первый без второго. Дальше первого вас пропустят разве что по недосмотру, а недосмотр у нас в описи есть.",
-        "en": "We settle at half, and half an order is the first tier without the second. Beyond the first they will let you through only by oversight, and oversight is a line we do have in the inventory."
+        "ru": "Сошлись на половине, и половина распоряжения — это ярус первый без второго. Дальше первого вас пропустят разве что по недосмотру, а недосмотр у нас в списке есть.",
+        "en": "We settle at half, and half an order is the first tier without the second. Beyond the first they will let you through only by oversight, and oversight is a line we do have in the list."
       },
       "next": "after_price"
     },
@@ -324,7 +324,7 @@
       "id": "r_truth",
       "speaker": "tminny",
       "text": {
-        "ru": "Вы сказали больше, чем стоила бумага, и я вам её отдаю. Оценка затруднена: у меня нет пункта на человека, который платит правдой о себе.",
+        "ru": "Вы сказали больше, чем стоила бумага, и я вам её отдаю. Оценка затруднена: у меня нет строки на человека, который платит правдой о себе.",
         "en": "You said more than the paper was worth, so I am giving it to you. Valuation is impeded: I have no clause for a man who pays in the truth about himself."
       },
       "next": "after_price"
@@ -364,7 +364,7 @@
       "id": "r_offset",
       "speaker": "tminny",
       "text": {
-        "ru": "Зачёт оформим строкой «взаимное погашение, без движения монеты». Строка эта в Ломбарде любимая: по ней ничего не происходит, а бумаги закрыты.",
+        "ru": "Зачёт оформим строкой «взаимное погашение, без движения монеты». Строка эта в дом вещейе любимая: по ней ничего не происходит, а бумаги закрыты.",
         "en": "We shall record the set-off in the line \"mutual discharge, no movement of coin\". That line is a favourite here: nothing whatever happens under it, and the paperwork closes."
       },
       "next": "after_price"
@@ -374,10 +374,10 @@
       "kind": "narration",
       "id": "after_price",
       "text": {
-        "ru": "Бланк он всё-таки переворачивает. Первая подпись стоит, вторая графа пуста, а под ней мелким шрифтом: «в отсутствие ответственного за обеспечение подписывает вкладчик».",
-        "en": "He turns the form over after all. The first signature is there, the second column is empty, and beneath it in small type: \"in the absence of the party responsible for the holdings, the depositor signs\"."
+        "ru": "Лист он всё-таки переворачивает. Первая подпись стоит, вторая строка пуста, а под ней мелким шрифтом: «в отсутствие ответственного за спрятанное подписывает отдавший».",
+        "en": "He turns the form over after all. The first signature is there, the second column is empty, and beneath it in small type: \"in the absence of the party responsible for the hidden things, the giver signs\"."
       },
-      "keywords": [{ "match": { "ru": "подписывает вкладчик", "en": "the depositor signs" }, "tone": "danger" }],
+      "keywords": [{ "match": { "ru": "подписывает отдавший", "en": "the giver signs" }, "tone": "danger" }],
       "next": "foundation_talk"
     },
     {
@@ -390,13 +390,13 @@
       "options": [
         {
           "id": "ask_five",
-          "text": { "ru": "Сколько разделов в обеспечении?", "en": "How many sections are in the holdings?" },
+          "text": { "ru": "Сколько внизу разделов?", "en": "How many sections are down there?" },
           "fallback": true,
           "to": "r_five"
         },
         {
           "id": "ask_who",
-          "text": { "ru": "Кто отвечает за обеспечение?", "en": "Who answers for the holdings?" },
+          "text": { "ru": "Кто отвечает за спрятанное?", "en": "Who answers for the hidden things?" },
           "fallback": true,
           "to": "r_who"
         },
@@ -409,7 +409,7 @@
         },
         {
           "id": "ask_list",
-          "text": { "ru": "Попросить разделы по пунктам, с номерами.", "en": "Ask for the sections by clause, with numbers." },
+          "text": { "ru": "Попросить разделы по строким, с номерами.", "en": "Ask for the sections by clause, with numbers." },
           "chip": { "icon": "hourglass", "label": { "ru": "Перечень", "en": "Perechen" }, "tone": "life" },
           "conditions": { "kind": "life", "life": "perechen" },
           "effects": [
@@ -460,10 +460,10 @@
       "id": "r_who",
       "speaker": "tminny",
       "text": {
-        "ru": "Вкладчик. Так и напечатано, и типография эта закрылась при позапрошлом Учёте. Больше я вам сегодня, позвольте-с, не скажу ничего.",
-        "en": "The depositor. That is how it is printed, and that printing house shut down two Reckonings ago. Beyond this, if you will permit, I shall tell you nothing today."
+        "ru": "Отдавший. Так и напечатано, а типография закрылась одиннадцать лет назад. Больше я вам сегодня, позвольте-с, не скажу ничего.",
+        "en": "The giver. That is how it is printed, and that printing house shut down two Reckonings ago. Beyond this, if you will permit, I shall tell you nothing today."
       },
-      "keywords": [{ "match": { "ru": "Вкладчик", "en": "The depositor" }, "tone": "memory" }],
+      "keywords": [{ "match": { "ru": "Отдавший", "en": "The giver" }, "tone": "memory" }],
       "next": "price_exit"
     },
     {
@@ -480,7 +480,7 @@
       "id": "r_list",
       "speaker": "tminny",
       "text": {
-        "ru": "Раздел первый — война, второй — засуха, третий — бумага, четвёртый — хроника, пятый — Учёт. Пять эпох города, и все пять, позвольте-с, оплачены с одного счёта.",
+        "ru": "Раздел первый — война, второй — засуха, третий — бумага, четвёртый — хроника, пятый — безымянная зима. Пять эпох города, и все пять, позвольте-с, взяты у одного человека.",
         "en": "Section one, a war; two, a drought; three, paper; four, a chronicle; five, the Reckoning. Five ages of the city, and all five, if you will permit, paid out of one account."
       },
       "keywords": [{ "match": { "ru": "с одного счёта", "en": "out of one account" }, "tone": "danger" }],
@@ -491,8 +491,8 @@
       "id": "r_contract",
       "speaker": "tminny",
       "text": {
-        "ru": "Знаю. У нас в зале с того утра говорят вполголоса, а младший оценщик пересчитал прейскурант дважды и оба раза сошёлся. Его это утешило.",
-        "en": "I know. Since that morning the hall has been speaking at half voice, and the junior appraiser has counted the price list through twice and it came out right both times. That comforted him."
+        "ru": "Знаю. У нас в зале с того утра говорят вполголоса, а младший Глазомер пересчитал ценник дважды и оба раза сошёлся. Его это утешило.",
+        "en": "I know. Since that morning the hall has been speaking at half voice, and the junior Keen Eye has counted the price board through twice and it came out right both times. That comforted him."
       },
       "next": "price_exit"
     },
@@ -511,7 +511,7 @@
       "id": "r_pane",
       "speaker": "otsenshchik",
       "text": {
-        "ru": "Ответ через форточку не выдаётся. Минус грош за беспокойство, пункт четырнадцатый, и очередь за вами уже две головы.",
+        "ru": "Ответ через форточку не выдаётся. Минус грош за беспокойство, строка четырнадцатый, и очередь за вами уже две головы.",
         "en": "Answers are not issued through the pane. Minus one groschen for the disturbance, clause fourteen, and the queue behind you is already two heads long."
       },
       "next": "price_exit"

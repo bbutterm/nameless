@@ -29,12 +29,12 @@
     "index": 2,
     "id": "lower_vaults",
     "title": {
-      "ru": "Нижние ярусы",
-      "en": "The Lower Vaults"
+      "ru": "То, на чём стоит дом",
+      "en": "What the House Stands On"
     },
     "subtitle": {
-      "ru": "Подвалы Ломбарда глубже, чем башня высока. Теперь известно почему.",
-      "en": "The Pawnshop's cellars run deeper than its tower is tall. Now you know why."
+      "ru": "Внизу спрятана жизнь одного человека. Дом держится на ней.",
+      "en": "One person's life is hidden below. The house stands on it."
     },
     "entryScene": "vault_gate"
   },

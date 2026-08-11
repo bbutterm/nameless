@@ -1,7 +1,7 @@
 {
   "id": "revizor_second",
   "chapter": 2,
-  "title": { "ru": "Сверка на четвёртой ступени", "en": "Reconciliation on the Fourth Step" },
+  "title": { "ru": "Сравнение на четвёртой ступени", "en": "Reconciliation on the Fourth Step" },
   "tags": ["story", "revizor", "vaults", "no_combat"],
   "available": { "kind": "always" },
   "entry": "water_stair",
@@ -35,10 +35,10 @@
       "id": "open_obsession",
       "speaker": "revizor",
       "text": {
-        "ru": "Узнаю почерк. Вклад Пятый писал так же: сначала опись, потом еда.",
-        "en": "The Audit knows this hand. Deposit Five wrote the same way: inventory first, food afterwards."
+        "ru": "Узнаю почерк. Пятый прежний писал так же: сначала список, потом еда.",
+        "en": "The Collator knows this hand. Fifth former self wrote the same way: list first, food afterwards."
       },
-      "keywords": [{ "match": { "ru": "Вклад Пятый", "en": "Deposit Five" }, "tone": "danger" }],
+      "keywords": [{ "match": { "ru": "Пятый прежний", "en": "Fifth former self" }, "tone": "danger" }],
       "next": "contract_router"
     },
     {
@@ -46,7 +46,7 @@
       "id": "open_reason",
       "speaker": "revizor",
       "text": {
-        "ru": "Собеседник: пригоден. Отмечено вторично. Вторично — это уже не наблюдение, это графа.",
+        "ru": "Собеседник: пригоден. Отмечено вторично. Вторично — это уже не наблюдение, это строка.",
         "en": "Interlocutor: serviceable. Noted a second time. A second time is no longer an observation, it is a column."
       },
       "keywords": [{ "match": { "ru": "пригоден", "en": "serviceable" }, "tone": "lore" }],
@@ -92,8 +92,8 @@
       "id": "carried",
       "speaker": "revizor",
       "text": {
-        "ru": "Лист при вас. Носится под рубахой. Температура листа: не поднялась. Ревизия проверяла.",
-        "en": "The sheet is on you. Carried under the shirt. Temperature of the sheet: has not risen. The Audit checked."
+        "ru": "Лист при вас. Носится под рубахой. Температура листа: не поднялась. Сличила проверяла.",
+        "en": "The sheet is on you. Carried under the shirt. Temperature of the sheet: has not risen. The Collator checked."
       },
       "next": "face_now"
     },
@@ -110,9 +110,9 @@
     {
       "kind": "lore",
       "id": "lore_sheet",
-      "title": { "ru": "Сводка Ревизии, лист текущий", "en": "Audit summary, current sheet" },
+      "title": { "ru": "Сводка Сличилы, лист текущий", "en": "Collator summary, current sheet" },
       "text": {
-        "ru": "«Сведено ярусов: одиннадцать из неустановленного числа. Склянок: сорок одна тысяча двести. Расхождение: одно. Возраст расхождения: весь. Место расхождения: перемещается». Последняя строка вписана позже остальных и другим нажимом, как вписывают то, чего в бланке не предусмотрено.",
+        "ru": "«Сведено ярусов: одиннадцать из неустановленного числа. Склянок: сорок одна тысяча двести. Расхождение: одно. Возраст расхождения: весь. Место расхождения: перемещается». Последняя строка вписана позже остальных и другим нажимом, как вписывают то, чего в листе не предусмотрено.",
         "en": "\"Tiers reconciled: eleven out of an undetermined number. Jars: forty-one thousand two hundred. Discrepancy: one. Age of discrepancy: all of it. Location of discrepancy: moves about.\" The last line was entered later than the rest and with a different pressure, the way one enters what the form does not provide for."
       },
       "next": "rev_security"
@@ -122,8 +122,8 @@
       "id": "rev_security",
       "speaker": "revizor",
       "text": {
-        "ru": "Обеспечение: не проверялось ни разу за четыреста лет. Причина: проверять нечем. Инструмент проверки: один. Вы.",
-        "en": "Security holdings: never once verified in four hundred years. Reason: nothing to verify them with. Instrument of verification: one. You."
+        "ru": "Спрятанное: не проверялось ни разу за четыреста лет. Причина: проверять нечем. Инструмент проверки: один. Вы.",
+        "en": "What lies below: never once checked in four hundred years. Reason: there was nothing to check it against. There is one means of checking now. You."
       },
       "mood": "flat",
       "next": "audit2_choice"
@@ -138,7 +138,7 @@
       "options": [
         {
           "id": "answer_all",
-          "text": { "ru": "Отвечать по описи. Все одиннадцать ярусов.", "en": "Answer by the inventory. All eleven tiers." },
+          "text": { "ru": "Отвечать по списку. Все одиннадцать ярусов.", "en": "Answer by the list. All eleven tiers." },
           "fallback": true,
           "effects": [
             { "kind": "fragment", "memory": "khronika_bez_popravok", "amount": 1 },
@@ -195,7 +195,7 @@
           "id": "promise_close",
           "chip": { "icon": "coin", "label": { "ru": "Посульщик", "en": "Posulshchik" }, "tone": "life" },
           "conditions": { "kind": "life", "life": "posulshchik" },
-          "text": { "ru": "Расхождение закроется к четвергу. Дайте бланк.", "en": "The discrepancy closes by Thursday. Give me a form." },
+          "text": { "ru": "Расхождение закроется к четвергу. Дайте лист.", "en": "The discrepancy closes by Thursday. Give me a form." },
           "effects": [
             { "kind": "fragment", "memory": "luchshie_gody", "amount": 1 },
             { "kind": "axis", "axis": "honesty_deceit", "delta": -12 },
@@ -234,8 +234,8 @@
       "id": "rev_tally",
       "speaker": "revizor",
       "text": {
-        "ru": "Сходится десять из одиннадцати. Одиннадцатый: вы там были и не помните. Ревизия тоже.",
-        "en": "Ten of eleven tally. The eleventh: you were there and do not remember. Neither does the Audit."
+        "ru": "Сходится десять из одиннадцати. Одиннадцатый: вы там были и не помните. Сличила тоже.",
+        "en": "Ten of eleven tally. The eleventh: you were there and do not remember. Neither does the Collator."
       },
       "next": "rev_close2"
     },
@@ -255,8 +255,8 @@
       "id": "rev_refused",
       "speaker": "revizor",
       "text": {
-        "ru": "Метод: понятен. Метод: не мешает. Ревизия спускается тем же путём и не спешит.",
-        "en": "Method: understood. Method: no obstacle. The Audit goes down by the same way and is not in a hurry."
+        "ru": "Метод: понятен. Метод: не мешает. Сличила спускается тем же путём и не спешит.",
+        "en": "Method: understood. Method: no obstacle. The Collator goes down by the same way and is not in a hurry."
       },
       "next": "rev_close2"
     },
@@ -275,8 +275,8 @@
       "id": "rev_nights",
       "speaker": "revizor",
       "text": {
-        "ru": "Ночей без сна: четыре. Ревизия не спит: всего. Сходство отмечено. Ревизия предпочла бы его не отмечать.",
-        "en": "Nights without sleep: four. The Audit does not sleep: all of them. The resemblance is noted. The Audit would rather it were not."
+        "ru": "Ночей без сна: четыре. Сличила не спит: всего. Сходство отмечено. Сличила предпочла бы его не отмечать.",
+        "en": "Nights without sleep: four. The Collator does not sleep: all of them. The resemblance is noted. The Collator would rather it were not."
       },
       "next": "rev_close2"
     },
@@ -285,7 +285,7 @@
       "id": "rev_dictate",
       "speaker": "revizor",
       "text": {
-        "ru": "Диктую: спускался, читал, уносил. Записано вами, при вас, о вас. Такой протокол Учёт принимает без свидетелей.",
+        "ru": "Диктую: спускался, читал, уносил. Записано вами, при вас, о вас. Такой записи Сличиле достаточно.",
         "en": "Dictating: descended, read, carried off. Written by you, before you, about you. The Reckoning accepts such a record without witnesses."
       },
       "next": "rev_close2"
@@ -295,7 +295,7 @@
       "id": "rev_promise",
       "speaker": "revizor",
       "text": {
-        "ru": "Бланка нет. Форма Р-2 не отпечатана. Обещаний в Учёте: девять тысяч. Закрытых: ноль.",
+        "ru": "Листа нет. Форма Р-2 не отпечатана. Обещаний записано девять тысяч. Исполненных: ни одного.",
         "en": "There is no form. Form A-2 has not been printed. Promises in the Reckoning: nine thousand. Closed: none."
       },
       "next": "rev_close2"
@@ -315,8 +315,8 @@
       "id": "rev_correction",
       "speaker": "revizor",
       "text": {
-        "ru": "Поправка внесена. Строка не вычёркивается: вычеркнутое остаётся в описи как вычеркнутое. Теперь их две.",
-        "en": "The correction is entered. The line is not struck out: what is struck out stays in the inventory as struck out. Now there are two of them."
+        "ru": "Поправка внесена. Строка не вычёркивается: зачёркнутое остаётся в списке. Теперь строк две.",
+        "en": "The correction is entered. The line is not struck out: what is struck out stays in the list as struck out. Now there are two of them."
       },
       "next": "rev_close2"
     },
@@ -325,8 +325,8 @@
       "id": "rev_close2",
       "speaker": "revizor",
       "text": {
-        "ru": "Ниже воды: сухо. Причина: водоотлив. Плательщик водоотлива: город. Получатель: неизвестен Ревизии.",
-        "en": "Below the water: dry. Cause: pumping. Payer for the pumping: the city. Beneficiary: unknown to the Audit."
+        "ru": "Ниже воды: сухо. Причина: водоотлив. Платит город. Для кого качают воду: Сличиле неизвестно.",
+        "en": "Below the water: dry. Cause: pumping. Payer for the pumping: the city. Beneficiary: unknown to the Collator."
       },
       "keywords": [{ "match": { "ru": "Ниже воды: сухо", "en": "Below the water: dry" }, "tone": "lore" }],
       "next": "step_choice"
@@ -375,7 +375,7 @@
         {
           "id": "recite_seven",
           "conditions": { "kind": "flag", "flag": "contract_read" },
-          "text": { "ru": "Прочесть ему пункт седьмой наизусть.", "en": "Recite item seven to him from memory." },
+          "text": { "ru": "Прочесть ему строку седьмую наизусть.", "en": "Recite item seven to him from memory." },
           "effects": [{ "kind": "axis", "axis": "honesty_deceit", "delta": 8 }],
           "to": "rev_seven",
           "priority": 5
@@ -411,8 +411,8 @@
       "id": "rev_past",
       "speaker": "revizor",
       "text": {
-        "ru": "Расхождение: перемещается вниз. Скорость: ваша. Ревизия отмечает удобство.",
-        "en": "The discrepancy: moving downward. Speed: yours. The Audit notes the convenience."
+        "ru": "Расхождение: перемещается вниз. Скорость: ваша. Сличила отмечает удобство.",
+        "en": "The discrepancy: moving downward. Speed: yours. The Collator notes the convenience."
       },
       "next": "deeper3"
     },
@@ -421,7 +421,7 @@
       "id": "rev_after",
       "speaker": "revizor",
       "text": {
-        "ru": "После сведения: закрытие. Закрытие чего: сверки. Дальше в предписании пусто, и это единственная пустая графа в предписании.",
+        "ru": "После сведения: закрытие. Закрытие чего: сравнения. Дальше в предписании пусто, и это единственная пустая строка в предписании.",
         "en": "After reconciliation: closure. Closure of what: of the reconciliation. Beyond that the order is blank, and it is the only blank column in the order."
       },
       "next": "deeper3"
@@ -431,8 +431,8 @@
       "id": "rev_wait",
       "speaker": "revizor",
       "text": {
-        "ru": "Ждать можно. Сроки: не установлены. У Ревизии их нет, у вас, судя по описи, тоже.",
-        "en": "Waiting is permitted. Duration: not established. The Audit has none, and by the inventory neither have you."
+        "ru": "Ждать можно. Сроки: не установлены. У Сличилы времени нет, у вас, судя по списку, тоже.",
+        "en": "Waiting is permitted. Duration: not established. The Collator has none, and by the list neither have you."
       },
       "next": "deeper3"
     },
@@ -441,8 +441,8 @@
       "id": "rev_bundle",
       "speaker": "revizor",
       "text": {
-        "ru": "Принято. Подошью вторым экземпляром. Ревизия отмечает: вернул сам, дважды. Дважды — это уже поведение.",
-        "en": "Accepted. It will be filed as a second copy. The Audit notes: returned voluntarily, twice. Twice is already conduct."
+        "ru": "Принято. Подошью второй копией. Сличила отмечает: вернул сам, дважды. Дважды — это уже поведение.",
+        "en": "Accepted. It will be filed as a second copy. The Collator notes: returned voluntarily, twice. Twice is already conduct."
       },
       "next": "deeper3"
     },
@@ -451,8 +451,8 @@
       "id": "rev_seven",
       "speaker": "revizor",
       "text": {
-        "ru": "Слово в слово. Пункт седьмой Ревизия считает ошибкой сто десятый раз. Ошибку вписал тот, кто её же и подписал.",
-        "en": "Word for word. For the hundred and tenth time the Audit considers item seven an error. The error was entered by the man who also signed it."
+        "ru": "Слово в слово. Строку седьмую Сличила считает ошибкой сто десятый раз. Ошибку вписал тот, кто её же и подписал.",
+        "en": "Word for word. For the hundred and tenth time the Collator considers item seven an error. The error was entered by the man who also signed it."
       },
       "next": "deeper3"
     },
@@ -461,7 +461,7 @@
       "id": "rev_card",
       "speaker": "revizor",
       "text": {
-        "ru": "Помета «см. фундамент» ставится, когда сумма не помещается ни в одну графу. Таких помет в каталоге: одна.",
+        "ru": "Помета «см. фундамент» ставится, когда сумма не помещается ни в одну строку. Таких помет в каталоге: одна.",
         "en": "The note \"see foundation\" is entered when a sum fits in no column at all. Such notes in the catalogue: one."
       },
       "keywords": [{ "match": { "ru": "см. фундамент", "en": "see foundation" }, "tone": "danger" }],
@@ -481,8 +481,8 @@
       "id": "rev_release",
       "speaker": "revizor",
       "text": {
-        "ru": "Отпустить. Пункт: отсутствует. Ревизия... Ступеней вниз: девять.",
-        "en": "Let it go. Clause: absent. The Audit... Steps down: nine."
+        "ru": "Отпустить. Строка: отсутствует. Сличила... Ступеней вниз: девять.",
+        "en": "Let it go. Clause: absent. The Collator... Steps down: nine."
       },
       "next": "deeper3"
     },
