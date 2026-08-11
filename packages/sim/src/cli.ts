@@ -2,7 +2,16 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { content, validateBundle } from '@nameless/content';
-import { derivePlayerPowers, type PartyUnit, type UnitDef } from '@nameless/engine';
+// `defaultParty`/`namedParty` уехали в движок: с появлением полигона боёв
+// правило отряда читают двое — симулятор и клиент, — и их числа сравнивают
+// друг с другом. Копия правила рассинхронизировалась бы молча (roster.ts).
+import {
+  defaultParty,
+  derivePlayerPowers,
+  namedParty,
+  type PartyUnit,
+  type UnitDef,
+} from '@nameless/engine';
 import {
   determinismCheck,
   BASE_MAX,
@@ -951,12 +960,6 @@ function dedupe(items: string[]): string[] {
 }
 
 /**
- * Отряд по именам: ровно тот, что есть у игрока в этой точке сюжета.
- * Нужен для боёв, объявивших `expectParty`: бой-знакомство в начале главы
- * проходится вдвоём, и мерить его шестью сильнейшими юнитами тира — мерить
- * не тот вход, там любой состав даёт 100%.
- */
-/**
  * Стенд для контроля отклика (§D.1).
  *
  * Шесть юнитов второго тира: ровно два сродственных замеряемой жизни и одна и
@@ -1015,22 +1018,6 @@ function standKinCount(units: UnitDef[], life: string): number {
   ).length;
 }
 
-function namedParty(units: UnitDef[], ids: string[]): PartyUnit[] {
-  const byId = new Map(units.map((u) => [u.id, u]));
-  const out: PartyUnit[] = [];
-  let front = 0;
-  let back = 0;
-  for (const id of ids) {
-    const u = byId.get(id);
-    if (!u) continue;
-    const row = u.row;
-    const index = row === 'front' ? front++ : back++;
-    if (index > 2) continue;
-    out.push({ uid: `n${out.length}`, defId: u.id, hp: u.stats.hp, xp: 0, level: 1, slot: { row, index } });
-  }
-  return out;
-}
-
 /**
  * Замена одного юнита на сродственного РАВНОГО ТИРА — маржинальная мерка
  * сродства (MEMORY_POWERS §D.3, новая редакция).
@@ -1076,24 +1063,3 @@ function affinitySwap(
   return undefined;
 }
 
-/** Отряд «среднего игрока» заданной главы: потолок тира и уровень. */
-function defaultParty(units: UnitDef[], maxTier: number, level: number): PartyUnit[] {
-  const pool = units.filter((u) => u.tier <= maxTier);
-  // Берём сильнейших доступных: игрок к этой главе уже выбирал, кого держать.
-  const byTier = (a: UnitDef, b: UnitDef) => b.tier - a.tier;
-  const front = pool.filter((u) => u.row === 'front').sort(byTier).slice(0, 3);
-  const back = pool.filter((u) => u.row === 'back').sort(byTier).slice(0, 3);
-  const out: PartyUnit[] = [];
-  const push = (u: UnitDef, row: 'front' | 'back', i: number) =>
-    out.push({
-      uid: `d${out.length}`,
-      defId: u.id,
-      hp: Math.round(u.stats.hp * (1 + 0.12 * (level - 1))),
-      xp: 0,
-      level,
-      slot: { row, index: i },
-    });
-  front.forEach((u, i) => push(u, 'front', i));
-  back.forEach((u, i) => push(u, 'back', i));
-  return out;
-}

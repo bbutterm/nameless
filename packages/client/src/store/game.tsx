@@ -36,12 +36,27 @@ import {
 } from '@nameless/engine';
 import { combat, content, idx } from './content';
 import { clearSave, loadGame, saveGame } from '../lib/storage';
+import {
+  attemptsOf,
+  isRangeHash,
+  loadScore,
+  rangeParty,
+  rangePowers,
+  rangeSeed,
+  recordResult,
+  type RangeSetup,
+} from '../lib/range';
 import { bumpRuns, commitPending, loadCodex } from '../lib/codex';
 import { detectLang, saveLang } from '../i18n';
 import { vibrate } from '../lib/haptics';
 import { BATTLE_SFX, playSfx, preloadSfx, resume as resumeAudio } from '../lib/sound';
 
-export type Mode = 'title' | 'dialogue' | 'battle' | 'death' | 'end' | 'error';
+/**
+ * `range` — полигон боёв: отладочный прибор владельца, вход по адресу
+ * `#полигон` (см. `lib/range.ts`). Обычный игрок в этот режим не попадает
+ * никогда: кнопки к нему нет ни на одном экране.
+ */
+export type Mode = 'title' | 'dialogue' | 'battle' | 'death' | 'end' | 'error' | 'range';
 
 export interface BattleSpoils {
   levelUps: { uid: string; from: number; to: number }[];
@@ -89,6 +104,10 @@ interface GameApi {
   ackDeath(): void;
   ackRecruit(): void;
   toTitle(): void;
+  /** Полигон: отыграть выбранный бой заданной настройкой. */
+  rangeFight(battleId: string, setup: RangeSetup): void;
+  /** Полигон: снять адрес и уйти на титул. */
+  leaveRange(): void;
 }
 
 const Ctx = createContext<GameApi | undefined>(undefined);
@@ -204,6 +223,14 @@ export function GameProvider({ children }: { children: ReactNode }) {
    */
   const knownParty = useRef<Set<string>>(new Set());
   const settledRef = useRef<{ from: GameState; battle: BattleState; result: Settled }>();
+  /*
+   * Id боя, который идёт НА ПОЛИГОНЕ. Флаг обязателен и не заменяется проверкой
+   * `mode`: полигон открывается поверх идущего забега, и в памяти в этот момент
+   * лежит настоящий `GameState`. Без флага исход полигонного боя доехал бы до
+   * `settleBattle` — то есть до ран, опыта и наград сюжетного отряда, — а
+   * оттуда одним шагом до записи в сейв. Полигон сейва не касается вовсе.
+   */
+  const rangeBout = useRef<string>();
 
   useEffect(() => {
     const loaded = loadGame();
@@ -383,7 +410,9 @@ export function GameProvider({ children }: { children: ReactNode }) {
 
   /** Показывает игроку, кто вырос и кто превратился, прежде чем вернуть в сцену. */
   const collectSpoils = useCallback(() => {
-    if (!state || !battle || battle.outcome === 'ongoing') {
+    // На полигоне итогов нет и быть не должно: расти и эволюционировать там
+    // некому — отряд собран прибором и живёт ровно один бой.
+    if (rangeBout.current || !state || !battle || battle.outcome === 'ongoing') {
       setSpoils(undefined);
       return;
     }
@@ -391,6 +420,19 @@ export function GameProvider({ children }: { children: ReactNode }) {
   }, [state, battle, settle]);
 
   const finishBattle = useCallback(() => {
+    // Полигон возвращает в список боёв, а не в сюжет, и пишет исход в свой
+    // счёт. Ветка стоит ПЕРВОЙ и выходит сразу: ниже начинается конвейер
+    // сюжетного исхода, которому на полигоне делать нечего.
+    const bout = rangeBout.current;
+    if (bout) {
+      if (!battle || battle.outcome === 'ongoing') return;
+      rangeBout.current = undefined;
+      recordResult(bout, battle.outcome === 'win');
+      setSpoils(undefined);
+      setBattle(undefined);
+      setMode('range');
+      return;
+    }
     if (!state || !battle || !battleReturn.current) return;
     setSpoils(undefined);
     const won = battle.outcome === 'win';
@@ -444,6 +486,78 @@ export function GameProvider({ children }: { children: ReactNode }) {
     setSaveExists(true);
   }, []);
 
+  /**
+   * Полигон боёв. Бой собирается прямо здесь — из выбранной главы, уровня и
+   * ступени памяти, — и НИЧЕГО не пишет в сюжетное состояние.
+   *
+   * Сид несёт номер попытки (`range:<бой>:<номер>`): без него десять прогонов
+   * подряд были бы одним и тем же боем, повторённым десять раз, и «выиграл
+   * 10 из 10» не означало бы ничего. `Math.random()` тут запрещён, как и везде
+   * в игровом коде, — бой обязан воспроизводиться.
+   */
+  const rangeFight = useCallback((battleId: string, setup: RangeSetup) => {
+    const def = content.battles.find((b) => b.id === battleId);
+    if (!def) return;
+    void resumeAudio();
+    preloadSfx(BATTLE_SFX);
+    const attempt = attemptsOf(loadScore(), battleId);
+    rangeBout.current = battleId;
+    setSpoils(undefined);
+    setBattle(
+      startBattle(
+        combat,
+        def,
+        rangeParty(def, setup),
+        rangeSeed(battleId, attempt),
+        rangePowers(setup.tier),
+      ),
+    );
+    setMode('battle');
+  }, []);
+
+  /** Уход с полигона: адрес снимается, недоигранный бой в счёт не идёт. */
+  const leaveRange = useCallback(() => {
+    try {
+      window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}`);
+    } catch {
+      // Приватный режим или file:// — экран всё равно сменится, адрес переживём.
+    }
+    rangeBout.current = undefined;
+    setBattle(undefined);
+    setSpoils(undefined);
+    setMode('title');
+  }, []);
+
+  /*
+   * Вход на полигон — АДРЕС, а не жест. Тайное долгое нажатие на титуле однажды
+   * находит обычный игрок (а он найдёт: пальцы на телефоне лежат где попало), и
+   * тогда прибор становится частью игры. Адрес не находят случайно.
+   *
+   * Слушаем `hashchange`, чтобы вход не требовал перезагрузки: владелец
+   * дописывает `#полигон` в строку и попадает куда хотел.
+   */
+  useEffect(() => {
+    const apply = (): void => {
+      if (isRangeHash(window.location.hash)) {
+        setMode('range');
+        return;
+      }
+      // Адрес сняли. Если полигона на экране не было — не трогаем ничего:
+      // сюжет живёт своей жизнью, и чужой хеш в адресе его не касается.
+      if (!rangeBout.current) {
+        setMode((m) => (m === 'range' ? 'title' : m));
+        return;
+      }
+      rangeBout.current = undefined;
+      setBattle(undefined);
+      setSpoils(undefined);
+      setMode('title');
+    };
+    apply();
+    window.addEventListener('hashchange', apply);
+    return () => window.removeEventListener('hashchange', apply);
+  }, []);
+
   const api = useMemo<GameApi>(
     () => ({
       ready: true,
@@ -470,6 +584,8 @@ export function GameProvider({ children }: { children: ReactNode }) {
       ackDeath,
       ackRecruit,
       toTitle,
+      rangeFight,
+      leaveRange,
     }),
     [
       mode,
@@ -495,6 +611,8 @@ export function GameProvider({ children }: { children: ReactNode }) {
       ackDeath,
       ackRecruit,
       toTitle,
+      rangeFight,
+      leaveRange,
     ],
   );
 

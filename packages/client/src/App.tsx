@@ -3,12 +3,18 @@ import { RecruitTag } from './components/RecruitTag';
 import { BattleScreen } from './screens/BattleScreen';
 import { DeathScreen } from './screens/DeathScreen';
 import { DialogueScreen } from './screens/DialogueScreen';
+import { RangeScreen } from './screens/RangeScreen';
 import { TitleScreen } from './screens/TitleScreen';
 import { GameProvider, useGame } from './store/game';
 import { t } from './i18n';
 import '@nameless/content/palette.css';
 import './theme.css';
 import './screens.css';
+/* Стили полигона — отдельным файлом, последним. Это прибор, а не экран игры:
+   отдельный файл не даёт ему прирасти к `screens.css` и позволяет вынести его
+   целиком, если он однажды перестанет быть нужен. Порядок важен — правила
+   полигона стоят после игровых и не спорят с ними за вес селектора. */
+import './range.css';
 
 function Router() {
   const { mode, lang, error, toTitle } = useGame();
@@ -23,6 +29,10 @@ function Router() {
       </div>
     );
   }
+  // Полигон стоит выше боя не случайно: бой на полигоне идёт в режиме
+  // `battle`, и порядок веток тут ни на что не влияет, а вот сама ветка —
+  // единственный вход в прибор (адрес `#полигон`, см. store/game.tsx).
+  if (mode === 'range') return <RangeScreen />;
   if (mode === 'battle') return <BattleScreen />;
   if (mode === 'death') return <DeathScreen />;
   if (mode === 'dialogue') return <DialogueScreen />;
