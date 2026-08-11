@@ -103,8 +103,8 @@
       "id": "hub_storozh_2",
       "speaker": "storozh_arkhiva",
       "text": {
-        "ru": "Вниз уходит по описи, наверх приходит пустое. За четыре года ни одного ящика обратно с содержимым. Шестьдесят три.",
-        "en": "It goes down by inventory and comes back up empty. Not one crate back with anything in it in four years. Sixty-three."
+        "ru": "Вниз уходит полное, наверх приходит пустое. За четыре года ни одного ящика обратно с содержимым. Шестьдесят три.",
+        "en": "It goes down full and comes back up empty. Not one crate back with anything in it in four years. Sixty-three."
       },
       "next": "hub_klyost"
     },
@@ -132,8 +132,8 @@
       "id": "hub_storozh_again",
       "speaker": "storozh_arkhiva",
       "text": {
-        "ru": "Один. Два. Внизу сегодня тише обычного, и это в описи не отражается никак.",
-        "en": "One. Two. It is quieter than usual below today, and that shows up nowhere in the inventory."
+        "ru": "Один. Два. Внизу сегодня тише обычного. Я этого тише не умею считать.",
+        "en": "One. Two. It is quieter than usual below today. I do not know how to count quieter."
       },
       "next": "hub_choice"
     },
@@ -185,7 +185,7 @@
         {
           "id": "down_stairs",
           "text": {
-            "ru": "Вниз, к ярусам обеспечения.",
+            "ru": "Вниз, к затопленным ярусам.",
             "en": "Down, to the holding tiers."
           },
           "fallback": true,
@@ -211,8 +211,8 @@
         {
           "id": "to_tminny",
           "text": {
-            "ru": "К оценщику, за особым распоряжением.",
-            "en": "To the appraiser, for the special order."
+            "ru": "К Глазомеру за советом.",
+            "en": "To Keen Eye for advice."
           },
           "conditions": {
             "kind": "not",
@@ -344,7 +344,7 @@
         {
           "id": "first_tier",
           "text": {
-            "ru": "На первый ярус обеспечения.",
+            "ru": "На первый затопленный ярус.",
             "en": "To the first holding tier."
           },
           "fallback": true,
@@ -537,8 +537,8 @@
         {
           "id": "to_dratva",
           "text": {
-            "ru": "К стойке залоговых споров.",
-            "en": "To the pledge-dispute desk."
+            "ru": "К Дратве под навесом.",
+            "en": "To Dratva beneath the awning."
           },
           "conditions": {
             "kind": "all",
@@ -789,8 +789,8 @@
       "kind": "narration",
       "id": "hub_hoist",
       "text": {
-        "ru": "Восемь ящиков вниз с утра, шесть пустых наверх, и разница объясняется на бланке одной строкой: «убыль при перемещении, обычная». Строку эту отпечатали в типографии, значит, убыль ожидали заранее.",
-        "en": "Eight crates down since morning, six empty ones up, and the difference is explained on a form in one line: \"loss in transit, ordinary\". That line was set in type at a printer's, so the loss was expected in advance."
+        "ru": "Восемь ящиков вниз с утра, шесть пустых наверх. На доске уже написано: «два не вернутся». Мел старый, значит, пропажу ждали заранее.",
+        "en": "Eight crates down since morning, six empty ones up. The board already says: \"two will not return\". The chalk is old, so the loss was expected."
       },
       "next": "hub_down"
     },
@@ -802,8 +802,8 @@
         "en": "Discrepancy board, lower intake"
       },
       "text": {
-        "ru": "«Расхождений на сегодня: одно. Возраст расхождения: не установлен, установить не удалось, установить поручено. Сумма расхождения: см. обеспечение. Ответственный: см. обеспечение». Ниже, карандашом и другой рукой: «Обеспечение смотреть нельзя. Мы спрашивали».",
-        "en": "\"Discrepancies as of today: one. Age of the discrepancy: not established, could not be established, ordered to be established. Amount of the discrepancy: see holdings. Party responsible: see holdings.\" Below, in pencil and another hand: \"The holdings may not be viewed. We asked.\""
+        "ru": "«Сегодня не вернулся один ящик. Вчера — один. Позавчера — один». Ниже, карандашом и другой рукой: «Мы спустились посмотреть. Лучше бы не спускались».",
+        "en": "\"One crate failed to return today. One yesterday. One the day before.\" Below, in pencil and another hand: \"We went down to look. We should not have.\""
       },
       "next": "hub_choice"
     },
@@ -821,8 +821,8 @@
       "kind": "narration",
       "id": "hub_rates",
       "text": {
-        "ru": "Курс на завтра вывешен только конторой у ворот, и в нём стоит прочерк вместо числа. Внизу приписка сторожа: «до сверки обеспечения курс не объявляется, спрашивать не у кого».",
-        "en": "The rate for tomorrow has been posted by the gate office alone, and it carries a dash where the figure should be. Beneath it, in the watchman's hand: \"no rate is announced until the holdings are reconciled, and there is nobody to ask\"."
+        "ru": "У ворот на завтра оставили пустую доску. Внизу сторож приписал: «утром узнаем, сколько осталось; спросить некого».",
+        "en": "At the gate they left tomorrow's board blank. Beneath it the watchman added: \"in the morning we learn what remains; there is nobody to ask\"."
       },
       "keywords": [
         {
@@ -873,8 +873,8 @@
       "id": "skim_2",
       "speaker": "storozh_arkhiva",
       "text": {
-        "ru": "Восемь вниз, шесть наверх. Разницу мне печатают в бланке заранее: «убыль при перемещении, обычная». Я четыре года считаю то, что уже посчитали за меня.",
-        "en": "Eight down, six up. The difference is printed on my form in advance: \"loss in transit, ordinary\". For four years I have been counting what was counted for me."
+        "ru": "Восемь вниз, шесть наверх. На доске заранее написали, что два не вернутся. Я четыре года считаю чужое ожидание.",
+        "en": "Eight down, six up. The board said in advance that two would not return. For four years I have counted somebody else's expectation."
       },
       "next": "skim_3"
     },
@@ -892,8 +892,8 @@
       "kind": "choice",
       "id": "skim_choice",
       "prompt": {
-        "ru": "Стол между вами. На столе бланк с отпечатанной строкой и мел.",
-        "en": "The table is between you. On it a form with the line already printed, and chalk."
+        "ru": "Стол между вами. На столе доска со старой цифрой и мел.",
+        "en": "The table is between you. On it a board with an old figure, and chalk."
       },
       "options": [
         {
@@ -1066,8 +1066,8 @@
       "kind": "narration",
       "id": "skim_after",
       "text": {
-        "ru": "Печать возвращают на место, и она садится ровно: её снимали целой не первый раз. Сторож дописывает в бланк своё число рядом с отпечатанным, и два числа стоят в одной графе, ни одно не зачёркнуто.",
-        "en": "The seal goes back and settles evenly: it has been lifted whole more than once. The watchman writes his own figure into the form beside the printed one, and the two stand in one column, neither struck out."
+        "ru": "Печать возвращают на место, и она садится ровно: её снимали целой не первый раз. Сторож пишет рядом две цифры — ожидаемую и увиденную — и не стирает ни одну.",
+        "en": "The seal goes back and settles evenly: it has been lifted whole more than once. The watchman writes two figures together, expected and witnessed, and erases neither."
       },
       "next": "hub_choice"
     },
@@ -1122,8 +1122,8 @@
       "kind": "narration",
       "id": "skim_falling",
       "text": {
-        "ru": "Тебя укладывают в тот самый ящик и накрывают печатью, снятой целой. Внизу барабан принимает вес, не спрашивая описи, и на бланке остаётся строка, отпечатанная год назад: убыль при перемещении, обычная.",
-        "en": "They lay you in that same crate and close it with the seal lifted whole. Below, the drum takes the weight without asking for an inventory, and on the form there remains a line printed a year ago: loss in transit, ordinary."
+        "ru": "Тебя укладывают в тот самый ящик и накрывают печатью, снятой целой. Внизу барабан принимает вес, а на доске остаётся старая цифра: два не вернутся.",
+        "en": "They lay you in that same crate and close it with the seal lifted whole. Below, the drum takes the weight, while the old figure remains on the board: two will not return."
       },
       "next": "scene:silver_counter#queue_entry"
     }
