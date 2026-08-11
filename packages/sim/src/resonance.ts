@@ -367,6 +367,12 @@ export interface PersonaRun {
   refusedElsewhere: number;
   /** Лестница досыпала, а лот не закрепился — этого быть не должно. */
   fundedButNoLot: number;
+  /**
+   * След неисправностей: по одной строке на случай, где лестница заплатила
+   * впустую. Голое число «5» показывает, что сломано, но не показывает где, и
+   * поиск начинается с гадания. Строка называет смерть и сумму досыпки.
+   */
+  notes: string[];
   /** Осока сказала «не отзывается», а лот всё же вышел — шов. */
   seam: number;
   /** Осколки, набранные поступками (без неустоек), к концу прогона. */
@@ -439,6 +445,7 @@ export function personaRun(
     refusedWithDeeds: 0,
     refusedElsewhere: 0,
     fundedButNoLot: 0,
+    notes: [],
     seam: 0,
     deedShards: {},
     axes: {},
@@ -525,10 +532,18 @@ export function personaRun(
       }
       if (granted >= 2) {
         if (out.memory) run.lots++;
-        else run.fundedButNoLot++;
+        else {
+          run.fundedButNoLot++;
+          run.notes.push(`досыпано ${granted}, лота нет: смерть ${death.id}, сцена ${state.scene}`);
+        }
       } else if (granted === 1) {
         run.noEcho++;
-        if (out.memory) run.seam++;
+        if (out.memory) {
+          run.seam++;
+          run.notes.push(
+            `шов: неустойка 1, а лот вышел — смерть ${death.id}, воспоминание ${out.memory.id}`,
+          );
+        }
       } else if (out.memory) {
         run.lots++;
       } else if (!refusal) {

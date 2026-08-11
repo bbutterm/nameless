@@ -79,7 +79,14 @@ export type PropKind =
   | 'lot_jar'
   | 'helm_line'
   /** Коромысло Водоноса — предмет отголоска из канона §3.1, не из списка §1.2. */
-  | 'yoke';
+  | 'yoke'
+  /**
+   * Мелок Меловщика. Заведён сценарной волной вместе с лицом `chalk_marker`,
+   * но в список видов не попал: лицо носило предмет, которого не существует, —
+   * сборка не проходила типы, а если бы прошла, портрет остался бы с пустой
+   * рукой. Дописано при слиянии.
+   */
+  | 'chalk';
 
 /** Полный набор черт одного лица. Все шкалы 0..1, кроме `mouth` и `tilt`. */
 export interface Face {
@@ -1125,6 +1132,14 @@ function propPath(f: Face, g: Geom, hue: string): string {
     case 'helm_line':
       // Светлая полоса поперёк лба: шлем она снимает, когда говорит с людьми.
       return `<rect x="${num(CX - wL + 2)}" y="${num(eyeY - 15)}" width="${num(wL + wR - 4)}" height="4.5" fill="${P.bone}" opacity="0.26"/>`;
+    case 'chalk':
+      // Мелок в опущенной руке и след, который он уже оставил. Знак ставят
+      // раньше, чем называют себя, — потому след виден, а лица к нему нет.
+      return `<g opacity="0.9">
+        <rect x="${num(CX + 13)} " y="${num(chin + 12)}" width="5" height="12" rx="1.6"
+          transform="rotate(18 ${num(CX + 15)} ${num(chin + 18)})" fill="${P.bone}" opacity="0.85"/>
+        <path d="M ${num(CX + 6)} ${num(chin + 26)} l 9 -3" stroke="${P.bone}" stroke-width="1.6"
+          opacity="0.55" stroke-linecap="round"/></g>`;
     case 'yoke':
       // Коромысло Водоноса: одна линия поперёк плеч и два свеса.
       return `<g stroke="${hue}" stroke-width="2.2" fill="none" opacity="0.7" stroke-linecap="round">

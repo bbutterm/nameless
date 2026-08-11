@@ -198,7 +198,584 @@
           "tone": "memory"
         }
       ],
-      "next": "zarubka_ladder"
+      "next": "zar_ready"
+    },
+    {
+      "kind": "branch",
+      "id": "zar_ready",
+      "branches": [
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "smola_na_vode"
+                }
+              },
+              {
+                "kind": "fragments",
+                "memory": "smola_na_vode",
+                "op": "gte",
+                "value": 2
+              },
+              {
+                "kind": "any",
+                "of": [
+                  {
+                    "kind": "axis",
+                    "axis": "mercy_cruelty",
+                    "op": "lt",
+                    "value": 20
+                  },
+                  {
+                    "kind": "counter",
+                    "counter": "_res:smola_na_vode",
+                    "op": "lte",
+                    "value": 0
+                  }
+                ]
+              }
+            ]
+          },
+          "to": "zarubka_notch"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "ples_gorit"
+                }
+              },
+              {
+                "kind": "fragments",
+                "memory": "ples_gorit",
+                "op": "gte",
+                "value": 3
+              },
+              {
+                "kind": "any",
+                "of": [
+                  {
+                    "kind": "axis",
+                    "axis": "mercy_cruelty",
+                    "op": "lt",
+                    "value": 20
+                  },
+                  {
+                    "kind": "counter",
+                    "counter": "_res:ples_gorit",
+                    "op": "lte",
+                    "value": 0
+                  }
+                ]
+              }
+            ]
+          },
+          "to": "zarubka_notch"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "schet_za_sezon"
+                }
+              },
+              {
+                "kind": "fragments",
+                "memory": "schet_za_sezon",
+                "op": "gte",
+                "value": 4
+              },
+              {
+                "kind": "any",
+                "of": [
+                  {
+                    "kind": "axis",
+                    "axis": "mercy_cruelty",
+                    "op": "lt",
+                    "value": 20
+                  },
+                  {
+                    "kind": "counter",
+                    "counter": "_res:schet_za_sezon",
+                    "op": "lte",
+                    "value": 0
+                  }
+                ]
+              }
+            ]
+          },
+          "to": "zarubka_notch"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "pervoye_vedro"
+                }
+              },
+              {
+                "kind": "fragments",
+                "memory": "pervoye_vedro",
+                "op": "gte",
+                "value": 2
+              },
+              {
+                "kind": "any",
+                "of": [
+                  {
+                    "kind": "axis",
+                    "axis": "mercy_cruelty",
+                    "op": "gt",
+                    "value": -20
+                  },
+                  {
+                    "kind": "counter",
+                    "counter": "_res:pervoye_vedro",
+                    "op": "lte",
+                    "value": 0
+                  }
+                ]
+              }
+            ]
+          },
+          "to": "zarubka_notch"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "ochered_k_kolodtsu"
+                }
+              },
+              {
+                "kind": "fragments",
+                "memory": "ochered_k_kolodtsu",
+                "op": "gte",
+                "value": 3
+              },
+              {
+                "kind": "any",
+                "of": [
+                  {
+                    "kind": "axis",
+                    "axis": "mercy_cruelty",
+                    "op": "gt",
+                    "value": -20
+                  },
+                  {
+                    "kind": "counter",
+                    "counter": "_res:ochered_k_kolodtsu",
+                    "op": "lte",
+                    "value": 0
+                  }
+                ]
+              }
+            ]
+          },
+          "to": "zarubka_notch"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "poslednyaya_kruzhka"
+                }
+              },
+              {
+                "kind": "fragments",
+                "memory": "poslednyaya_kruzhka",
+                "op": "gte",
+                "value": 4
+              },
+              {
+                "kind": "any",
+                "of": [
+                  {
+                    "kind": "axis",
+                    "axis": "mercy_cruelty",
+                    "op": "gt",
+                    "value": -20
+                  },
+                  {
+                    "kind": "counter",
+                    "counter": "_res:poslednyaya_kruzhka",
+                    "op": "lte",
+                    "value": 0
+                  }
+                ]
+              }
+            ]
+          },
+          "to": "zarubka_notch"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "pervyy_posul"
+                }
+              },
+              {
+                "kind": "fragments",
+                "memory": "pervyy_posul",
+                "op": "gte",
+                "value": 2
+              },
+              {
+                "kind": "any",
+                "of": [
+                  {
+                    "kind": "axis",
+                    "axis": "honesty_deceit",
+                    "op": "lt",
+                    "value": 20
+                  },
+                  {
+                    "kind": "counter",
+                    "counter": "_res:pervyy_posul",
+                    "op": "lte",
+                    "value": 0
+                  }
+                ]
+              }
+            ]
+          },
+          "to": "zarubka_notch"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "zima_bez_khleba"
+                }
+              },
+              {
+                "kind": "fragments",
+                "memory": "zima_bez_khleba",
+                "op": "gte",
+                "value": 3
+              },
+              {
+                "kind": "any",
+                "of": [
+                  {
+                    "kind": "axis",
+                    "axis": "honesty_deceit",
+                    "op": "lt",
+                    "value": 20
+                  },
+                  {
+                    "kind": "counter",
+                    "counter": "_res:zima_bez_khleba",
+                    "op": "lte",
+                    "value": 0
+                  }
+                ]
+              }
+            ]
+          },
+          "to": "zarubka_notch"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "luchshie_gody"
+                }
+              },
+              {
+                "kind": "fragments",
+                "memory": "luchshie_gody",
+                "op": "gte",
+                "value": 4
+              },
+              {
+                "kind": "any",
+                "of": [
+                  {
+                    "kind": "axis",
+                    "axis": "honesty_deceit",
+                    "op": "lt",
+                    "value": 20
+                  },
+                  {
+                    "kind": "counter",
+                    "counter": "_res:luchshie_gody",
+                    "op": "lte",
+                    "value": 0
+                  }
+                ]
+              }
+            ]
+          },
+          "to": "zarubka_notch"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "pervaya_stroka"
+                }
+              },
+              {
+                "kind": "fragments",
+                "memory": "pervaya_stroka",
+                "op": "gte",
+                "value": 2
+              },
+              {
+                "kind": "any",
+                "of": [
+                  {
+                    "kind": "axis",
+                    "axis": "honesty_deceit",
+                    "op": "gt",
+                    "value": -20
+                  },
+                  {
+                    "kind": "counter",
+                    "counter": "_res:pervaya_stroka",
+                    "op": "lte",
+                    "value": 0
+                  }
+                ]
+              }
+            ]
+          },
+          "to": "zarubka_notch"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "khronika_bez_popravok"
+                }
+              },
+              {
+                "kind": "fragments",
+                "memory": "khronika_bez_popravok",
+                "op": "gte",
+                "value": 3
+              },
+              {
+                "kind": "any",
+                "of": [
+                  {
+                    "kind": "axis",
+                    "axis": "honesty_deceit",
+                    "op": "gt",
+                    "value": -20
+                  },
+                  {
+                    "kind": "counter",
+                    "counter": "_res:khronika_bez_popravok",
+                    "op": "lte",
+                    "value": 0
+                  }
+                ]
+              }
+            ]
+          },
+          "to": "zarubka_notch"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "god_goloy_pravdy"
+                }
+              },
+              {
+                "kind": "fragments",
+                "memory": "god_goloy_pravdy",
+                "op": "gte",
+                "value": 4
+              },
+              {
+                "kind": "any",
+                "of": [
+                  {
+                    "kind": "axis",
+                    "axis": "honesty_deceit",
+                    "op": "gt",
+                    "value": -20
+                  },
+                  {
+                    "kind": "counter",
+                    "counter": "_res:god_goloy_pravdy",
+                    "op": "lte",
+                    "value": 0
+                  }
+                ]
+              }
+            ]
+          },
+          "to": "zarubka_notch"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "punkt_pervyy"
+                }
+              },
+              {
+                "kind": "fragments",
+                "memory": "punkt_pervyy",
+                "op": "gte",
+                "value": 2
+              },
+              {
+                "kind": "any",
+                "of": [
+                  {
+                    "kind": "axis",
+                    "axis": "reason_obsession",
+                    "op": "lt",
+                    "value": 20
+                  },
+                  {
+                    "kind": "counter",
+                    "counter": "_res:punkt_pervyy",
+                    "op": "lte",
+                    "value": 0
+                  }
+                ]
+              }
+            ]
+          },
+          "to": "zarubka_notch"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "opis_vsego_sushchego"
+                }
+              },
+              {
+                "kind": "fragments",
+                "memory": "opis_vsego_sushchego",
+                "op": "gte",
+                "value": 3
+              },
+              {
+                "kind": "any",
+                "of": [
+                  {
+                    "kind": "axis",
+                    "axis": "reason_obsession",
+                    "op": "lt",
+                    "value": 20
+                  },
+                  {
+                    "kind": "counter",
+                    "counter": "_res:opis_vsego_sushchego",
+                    "op": "lte",
+                    "value": 0
+                  }
+                ]
+              }
+            ]
+          },
+          "to": "zarubka_notch"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "eda_ne_vnesena"
+                }
+              },
+              {
+                "kind": "fragments",
+                "memory": "eda_ne_vnesena",
+                "op": "gte",
+                "value": 4
+              },
+              {
+                "kind": "any",
+                "of": [
+                  {
+                    "kind": "axis",
+                    "axis": "reason_obsession",
+                    "op": "lt",
+                    "value": 20
+                  },
+                  {
+                    "kind": "counter",
+                    "counter": "_res:eda_ne_vnesena",
+                    "op": "lte",
+                    "value": 0
+                  }
+                ]
+              }
+            ]
+          },
+          "to": "zarubka_notch"
+        }
+      ],
+      "fallback": "zarubka_ladder"
     },
     {
       "kind": "branch",
@@ -258,31 +835,64 @@
       "branches": [
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "smola_na_vode"
-            }
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "smola_na_vode"
+                }
+              },
+              {
+                "kind": "axis",
+                "axis": "mercy_cruelty",
+                "op": "lt",
+                "value": 20
+              }
+            ]
           },
           "to": "zar_full_smola_na_vode"
         },
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "ples_gorit"
-            }
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "ples_gorit"
+                }
+              },
+              {
+                "kind": "axis",
+                "axis": "mercy_cruelty",
+                "op": "lt",
+                "value": 20
+              }
+            ]
           },
           "to": "zar_full_ples_gorit"
         },
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "schet_za_sezon"
-            }
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "schet_za_sezon"
+                }
+              },
+              {
+                "kind": "axis",
+                "axis": "mercy_cruelty",
+                "op": "lt",
+                "value": 20
+              }
+            ]
           },
           "to": "zar_full_schet_za_sezon"
         }
@@ -295,31 +905,64 @@
       "branches": [
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "pervoye_vedro"
-            }
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "pervoye_vedro"
+                }
+              },
+              {
+                "kind": "axis",
+                "axis": "mercy_cruelty",
+                "op": "gt",
+                "value": -20
+              }
+            ]
           },
           "to": "zar_full_pervoye_vedro"
         },
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "ochered_k_kolodtsu"
-            }
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "ochered_k_kolodtsu"
+                }
+              },
+              {
+                "kind": "axis",
+                "axis": "mercy_cruelty",
+                "op": "gt",
+                "value": -20
+              }
+            ]
           },
           "to": "zar_full_ochered_k_kolodtsu"
         },
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "poslednyaya_kruzhka"
-            }
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "poslednyaya_kruzhka"
+                }
+              },
+              {
+                "kind": "axis",
+                "axis": "mercy_cruelty",
+                "op": "gt",
+                "value": -20
+              }
+            ]
           },
           "to": "zar_full_poslednyaya_kruzhka"
         }
@@ -332,31 +975,64 @@
       "branches": [
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "pervyy_posul"
-            }
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "pervyy_posul"
+                }
+              },
+              {
+                "kind": "axis",
+                "axis": "honesty_deceit",
+                "op": "lt",
+                "value": 20
+              }
+            ]
           },
           "to": "zar_full_pervyy_posul"
         },
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "zima_bez_khleba"
-            }
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "zima_bez_khleba"
+                }
+              },
+              {
+                "kind": "axis",
+                "axis": "honesty_deceit",
+                "op": "lt",
+                "value": 20
+              }
+            ]
           },
           "to": "zar_full_zima_bez_khleba"
         },
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "luchshie_gody"
-            }
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "luchshie_gody"
+                }
+              },
+              {
+                "kind": "axis",
+                "axis": "honesty_deceit",
+                "op": "lt",
+                "value": 20
+              }
+            ]
           },
           "to": "zar_full_luchshie_gody"
         }
@@ -369,31 +1045,64 @@
       "branches": [
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "pervaya_stroka"
-            }
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "pervaya_stroka"
+                }
+              },
+              {
+                "kind": "axis",
+                "axis": "honesty_deceit",
+                "op": "gt",
+                "value": -20
+              }
+            ]
           },
           "to": "zar_full_pervaya_stroka"
         },
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "khronika_bez_popravok"
-            }
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "khronika_bez_popravok"
+                }
+              },
+              {
+                "kind": "axis",
+                "axis": "honesty_deceit",
+                "op": "gt",
+                "value": -20
+              }
+            ]
           },
           "to": "zar_full_khronika_bez_popravok"
         },
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "god_goloy_pravdy"
-            }
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "god_goloy_pravdy"
+                }
+              },
+              {
+                "kind": "axis",
+                "axis": "honesty_deceit",
+                "op": "gt",
+                "value": -20
+              }
+            ]
           },
           "to": "zar_full_god_goloy_pravdy"
         }
@@ -406,31 +1115,64 @@
       "branches": [
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "punkt_pervyy"
-            }
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "punkt_pervyy"
+                }
+              },
+              {
+                "kind": "axis",
+                "axis": "reason_obsession",
+                "op": "lt",
+                "value": 20
+              }
+            ]
           },
           "to": "zar_full_punkt_pervyy"
         },
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "opis_vsego_sushchego"
-            }
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "opis_vsego_sushchego"
+                }
+              },
+              {
+                "kind": "axis",
+                "axis": "reason_obsession",
+                "op": "lt",
+                "value": 20
+              }
+            ]
           },
           "to": "zar_full_opis_vsego_sushchego"
         },
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "eda_ne_vnesena"
-            }
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "eda_ne_vnesena"
+                }
+              },
+              {
+                "kind": "axis",
+                "axis": "reason_obsession",
+                "op": "lt",
+                "value": 20
+              }
+            ]
           },
           "to": "zar_full_eda_ne_vnesena"
         }
@@ -443,156 +1185,916 @@
       "branches": [
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "smola_na_vode"
-            }
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "smola_na_vode"
+                }
+              },
+              {
+                "kind": "axis",
+                "axis": "mercy_cruelty",
+                "op": "lt",
+                "value": 20
+              }
+            ]
           },
           "to": "zar_full_smola_na_vode"
         },
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "ples_gorit"
-            }
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "ples_gorit"
+                }
+              },
+              {
+                "kind": "axis",
+                "axis": "mercy_cruelty",
+                "op": "lt",
+                "value": 20
+              }
+            ]
           },
           "to": "zar_full_ples_gorit"
         },
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "schet_za_sezon"
-            }
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "schet_za_sezon"
+                }
+              },
+              {
+                "kind": "axis",
+                "axis": "mercy_cruelty",
+                "op": "lt",
+                "value": 20
+              }
+            ]
           },
           "to": "zar_full_schet_za_sezon"
         },
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "pervoye_vedro"
-            }
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "pervoye_vedro"
+                }
+              },
+              {
+                "kind": "axis",
+                "axis": "mercy_cruelty",
+                "op": "gt",
+                "value": -20
+              }
+            ]
           },
           "to": "zar_full_pervoye_vedro"
         },
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "ochered_k_kolodtsu"
-            }
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "ochered_k_kolodtsu"
+                }
+              },
+              {
+                "kind": "axis",
+                "axis": "mercy_cruelty",
+                "op": "gt",
+                "value": -20
+              }
+            ]
           },
           "to": "zar_full_ochered_k_kolodtsu"
         },
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "poslednyaya_kruzhka"
-            }
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "poslednyaya_kruzhka"
+                }
+              },
+              {
+                "kind": "axis",
+                "axis": "mercy_cruelty",
+                "op": "gt",
+                "value": -20
+              }
+            ]
           },
           "to": "zar_full_poslednyaya_kruzhka"
         },
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "pervyy_posul"
-            }
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "pervyy_posul"
+                }
+              },
+              {
+                "kind": "axis",
+                "axis": "honesty_deceit",
+                "op": "lt",
+                "value": 20
+              }
+            ]
           },
           "to": "zar_full_pervyy_posul"
         },
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "zima_bez_khleba"
-            }
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "zima_bez_khleba"
+                }
+              },
+              {
+                "kind": "axis",
+                "axis": "honesty_deceit",
+                "op": "lt",
+                "value": 20
+              }
+            ]
           },
           "to": "zar_full_zima_bez_khleba"
         },
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "luchshie_gody"
-            }
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "luchshie_gody"
+                }
+              },
+              {
+                "kind": "axis",
+                "axis": "honesty_deceit",
+                "op": "lt",
+                "value": 20
+              }
+            ]
           },
           "to": "zar_full_luchshie_gody"
         },
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "pervaya_stroka"
-            }
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "pervaya_stroka"
+                }
+              },
+              {
+                "kind": "axis",
+                "axis": "honesty_deceit",
+                "op": "gt",
+                "value": -20
+              }
+            ]
           },
           "to": "zar_full_pervaya_stroka"
         },
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "khronika_bez_popravok"
-            }
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "khronika_bez_popravok"
+                }
+              },
+              {
+                "kind": "axis",
+                "axis": "honesty_deceit",
+                "op": "gt",
+                "value": -20
+              }
+            ]
           },
           "to": "zar_full_khronika_bez_popravok"
         },
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "god_goloy_pravdy"
-            }
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "god_goloy_pravdy"
+                }
+              },
+              {
+                "kind": "axis",
+                "axis": "honesty_deceit",
+                "op": "gt",
+                "value": -20
+              }
+            ]
           },
           "to": "zar_full_god_goloy_pravdy"
         },
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "punkt_pervyy"
-            }
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "punkt_pervyy"
+                }
+              },
+              {
+                "kind": "axis",
+                "axis": "reason_obsession",
+                "op": "lt",
+                "value": 20
+              }
+            ]
           },
           "to": "zar_full_punkt_pervyy"
         },
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "opis_vsego_sushchego"
-            }
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "opis_vsego_sushchego"
+                }
+              },
+              {
+                "kind": "axis",
+                "axis": "reason_obsession",
+                "op": "lt",
+                "value": 20
+              }
+            ]
           },
           "to": "zar_full_opis_vsego_sushchego"
         },
         {
           "when": {
-            "kind": "not",
-            "of": {
-              "kind": "memory",
-              "memory": "eda_ne_vnesena"
-            }
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "eda_ne_vnesena"
+                }
+              },
+              {
+                "kind": "axis",
+                "axis": "reason_obsession",
+                "op": "lt",
+                "value": 20
+              }
+            ]
           },
           "to": "zar_full_eda_ne_vnesena"
         }
       ],
+      "fallback": "zar_forfeit"
+    },
+    {
+      "kind": "branch",
+      "id": "zar_forfeit",
+      "branches": [
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "smola_na_vode"
+                }
+              },
+              {
+                "kind": "fragments",
+                "memory": "smola_na_vode",
+                "op": "lte",
+                "value": 0
+              }
+            ]
+          },
+          "to": "zar_dust_smola_na_vode"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "ples_gorit"
+                }
+              },
+              {
+                "kind": "fragments",
+                "memory": "ples_gorit",
+                "op": "lte",
+                "value": 1
+              }
+            ]
+          },
+          "to": "zar_dust_ples_gorit"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "schet_za_sezon"
+                }
+              },
+              {
+                "kind": "fragments",
+                "memory": "schet_za_sezon",
+                "op": "lte",
+                "value": 2
+              }
+            ]
+          },
+          "to": "zar_dust_schet_za_sezon"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "pervoye_vedro"
+                }
+              },
+              {
+                "kind": "fragments",
+                "memory": "pervoye_vedro",
+                "op": "lte",
+                "value": 0
+              }
+            ]
+          },
+          "to": "zar_dust_pervoye_vedro"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "ochered_k_kolodtsu"
+                }
+              },
+              {
+                "kind": "fragments",
+                "memory": "ochered_k_kolodtsu",
+                "op": "lte",
+                "value": 1
+              }
+            ]
+          },
+          "to": "zar_dust_ochered_k_kolodtsu"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "poslednyaya_kruzhka"
+                }
+              },
+              {
+                "kind": "fragments",
+                "memory": "poslednyaya_kruzhka",
+                "op": "lte",
+                "value": 2
+              }
+            ]
+          },
+          "to": "zar_dust_poslednyaya_kruzhka"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "pervyy_posul"
+                }
+              },
+              {
+                "kind": "fragments",
+                "memory": "pervyy_posul",
+                "op": "lte",
+                "value": 0
+              }
+            ]
+          },
+          "to": "zar_dust_pervyy_posul"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "zima_bez_khleba"
+                }
+              },
+              {
+                "kind": "fragments",
+                "memory": "zima_bez_khleba",
+                "op": "lte",
+                "value": 1
+              }
+            ]
+          },
+          "to": "zar_dust_zima_bez_khleba"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "luchshie_gody"
+                }
+              },
+              {
+                "kind": "fragments",
+                "memory": "luchshie_gody",
+                "op": "lte",
+                "value": 2
+              }
+            ]
+          },
+          "to": "zar_dust_luchshie_gody"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "pervaya_stroka"
+                }
+              },
+              {
+                "kind": "fragments",
+                "memory": "pervaya_stroka",
+                "op": "lte",
+                "value": 0
+              }
+            ]
+          },
+          "to": "zar_dust_pervaya_stroka"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "khronika_bez_popravok"
+                }
+              },
+              {
+                "kind": "fragments",
+                "memory": "khronika_bez_popravok",
+                "op": "lte",
+                "value": 1
+              }
+            ]
+          },
+          "to": "zar_dust_khronika_bez_popravok"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "god_goloy_pravdy"
+                }
+              },
+              {
+                "kind": "fragments",
+                "memory": "god_goloy_pravdy",
+                "op": "lte",
+                "value": 2
+              }
+            ]
+          },
+          "to": "zar_dust_god_goloy_pravdy"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "punkt_pervyy"
+                }
+              },
+              {
+                "kind": "fragments",
+                "memory": "punkt_pervyy",
+                "op": "lte",
+                "value": 0
+              }
+            ]
+          },
+          "to": "zar_dust_punkt_pervyy"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "opis_vsego_sushchego"
+                }
+              },
+              {
+                "kind": "fragments",
+                "memory": "opis_vsego_sushchego",
+                "op": "lte",
+                "value": 1
+              }
+            ]
+          },
+          "to": "zar_dust_opis_vsego_sushchego"
+        },
+        {
+          "when": {
+            "kind": "all",
+            "of": [
+              {
+                "kind": "not",
+                "of": {
+                  "kind": "memory",
+                  "memory": "eda_ne_vnesena"
+                }
+              },
+              {
+                "kind": "fragments",
+                "memory": "eda_ne_vnesena",
+                "op": "lte",
+                "value": 2
+              }
+            ]
+          },
+          "to": "zar_dust_eda_ne_vnesena"
+        }
+      ],
       "fallback": "zarubka_full"
+    },
+    {
+      "kind": "effects",
+      "id": "zar_dust_smola_na_vode",
+      "effects": [
+        {
+          "kind": "fragment",
+          "memory": "smola_na_vode",
+          "amount": 1
+        },
+        {
+          "kind": "counter",
+          "counter": "_res:smola_na_vode",
+          "delta": 1
+        }
+      ],
+      "next": "zar_no_echo"
+    },
+    {
+      "kind": "effects",
+      "id": "zar_dust_ples_gorit",
+      "effects": [
+        {
+          "kind": "fragment",
+          "memory": "ples_gorit",
+          "amount": 1
+        },
+        {
+          "kind": "counter",
+          "counter": "_res:ples_gorit",
+          "delta": 1
+        }
+      ],
+      "next": "zar_no_echo"
+    },
+    {
+      "kind": "effects",
+      "id": "zar_dust_schet_za_sezon",
+      "effects": [
+        {
+          "kind": "fragment",
+          "memory": "schet_za_sezon",
+          "amount": 1
+        },
+        {
+          "kind": "counter",
+          "counter": "_res:schet_za_sezon",
+          "delta": 1
+        }
+      ],
+      "next": "zar_no_echo"
+    },
+    {
+      "kind": "effects",
+      "id": "zar_dust_pervoye_vedro",
+      "effects": [
+        {
+          "kind": "fragment",
+          "memory": "pervoye_vedro",
+          "amount": 1
+        },
+        {
+          "kind": "counter",
+          "counter": "_res:pervoye_vedro",
+          "delta": 1
+        }
+      ],
+      "next": "zar_no_echo"
+    },
+    {
+      "kind": "effects",
+      "id": "zar_dust_ochered_k_kolodtsu",
+      "effects": [
+        {
+          "kind": "fragment",
+          "memory": "ochered_k_kolodtsu",
+          "amount": 1
+        },
+        {
+          "kind": "counter",
+          "counter": "_res:ochered_k_kolodtsu",
+          "delta": 1
+        }
+      ],
+      "next": "zar_no_echo"
+    },
+    {
+      "kind": "effects",
+      "id": "zar_dust_poslednyaya_kruzhka",
+      "effects": [
+        {
+          "kind": "fragment",
+          "memory": "poslednyaya_kruzhka",
+          "amount": 1
+        },
+        {
+          "kind": "counter",
+          "counter": "_res:poslednyaya_kruzhka",
+          "delta": 1
+        }
+      ],
+      "next": "zar_no_echo"
+    },
+    {
+      "kind": "effects",
+      "id": "zar_dust_pervyy_posul",
+      "effects": [
+        {
+          "kind": "fragment",
+          "memory": "pervyy_posul",
+          "amount": 1
+        },
+        {
+          "kind": "counter",
+          "counter": "_res:pervyy_posul",
+          "delta": 1
+        }
+      ],
+      "next": "zar_no_echo"
+    },
+    {
+      "kind": "effects",
+      "id": "zar_dust_zima_bez_khleba",
+      "effects": [
+        {
+          "kind": "fragment",
+          "memory": "zima_bez_khleba",
+          "amount": 1
+        },
+        {
+          "kind": "counter",
+          "counter": "_res:zima_bez_khleba",
+          "delta": 1
+        }
+      ],
+      "next": "zar_no_echo"
+    },
+    {
+      "kind": "effects",
+      "id": "zar_dust_luchshie_gody",
+      "effects": [
+        {
+          "kind": "fragment",
+          "memory": "luchshie_gody",
+          "amount": 1
+        },
+        {
+          "kind": "counter",
+          "counter": "_res:luchshie_gody",
+          "delta": 1
+        }
+      ],
+      "next": "zar_no_echo"
+    },
+    {
+      "kind": "effects",
+      "id": "zar_dust_pervaya_stroka",
+      "effects": [
+        {
+          "kind": "fragment",
+          "memory": "pervaya_stroka",
+          "amount": 1
+        },
+        {
+          "kind": "counter",
+          "counter": "_res:pervaya_stroka",
+          "delta": 1
+        }
+      ],
+      "next": "zar_no_echo"
+    },
+    {
+      "kind": "effects",
+      "id": "zar_dust_khronika_bez_popravok",
+      "effects": [
+        {
+          "kind": "fragment",
+          "memory": "khronika_bez_popravok",
+          "amount": 1
+        },
+        {
+          "kind": "counter",
+          "counter": "_res:khronika_bez_popravok",
+          "delta": 1
+        }
+      ],
+      "next": "zar_no_echo"
+    },
+    {
+      "kind": "effects",
+      "id": "zar_dust_god_goloy_pravdy",
+      "effects": [
+        {
+          "kind": "fragment",
+          "memory": "god_goloy_pravdy",
+          "amount": 1
+        },
+        {
+          "kind": "counter",
+          "counter": "_res:god_goloy_pravdy",
+          "delta": 1
+        }
+      ],
+      "next": "zar_no_echo"
+    },
+    {
+      "kind": "effects",
+      "id": "zar_dust_punkt_pervyy",
+      "effects": [
+        {
+          "kind": "fragment",
+          "memory": "punkt_pervyy",
+          "amount": 1
+        },
+        {
+          "kind": "counter",
+          "counter": "_res:punkt_pervyy",
+          "delta": 1
+        }
+      ],
+      "next": "zar_no_echo"
+    },
+    {
+      "kind": "effects",
+      "id": "zar_dust_opis_vsego_sushchego",
+      "effects": [
+        {
+          "kind": "fragment",
+          "memory": "opis_vsego_sushchego",
+          "amount": 1
+        },
+        {
+          "kind": "counter",
+          "counter": "_res:opis_vsego_sushchego",
+          "delta": 1
+        }
+      ],
+      "next": "zar_no_echo"
+    },
+    {
+      "kind": "effects",
+      "id": "zar_dust_eda_ne_vnesena",
+      "effects": [
+        {
+          "kind": "fragment",
+          "memory": "eda_ne_vnesena",
+          "amount": 1
+        },
+        {
+          "kind": "counter",
+          "counter": "_res:eda_ne_vnesena",
+          "delta": 1
+        }
+      ],
+      "next": "zar_no_echo"
+    },
+    {
+      "kind": "narration",
+      "id": "zar_no_echo",
+      "text": {
+        "ru": "Голос долго держит щепку и не режет. «Тут не отзывается», — говорит он наконец и всё-таки скребёт по краю ногтем: неустойка, чтобы ты не ушёл с пустыми руками. Зарубки не выходит — выходит царапина.",
+        "en": "The Voice holds the splinter a long while and does not cut. \"Nothing answers here,\" it says at last, and still scrapes the edge with a fingernail: a forfeit, so you do not leave empty-handed. It makes no notch — it makes a scratch."
+      },
+      "keywords": [
+        {
+          "match": {
+            "ru": "неустойка",
+            "en": "a forfeit"
+          },
+          "tone": "lore"
+        }
+      ],
+      "next": "death_oklik"
     },
     {
       "kind": "effects",
