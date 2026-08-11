@@ -294,7 +294,9 @@ export function scriptedBattles(
     let surgesPlayer = 0;
     let surgesEnemy = 0;
     for (let i = 0; i < runs; i++) {
-      const st = runAuto(idx, startBattle(idx, b, party, `scripted:${b.id}:${i}`, powers), 2000, { surge });
+      // Политика уезжает в САМО состояние боя: враг решает наддачу при
+      // объявлении намерения, куда параметры прогона не доходят.
+      const st = runAuto(idx, startBattle(idx, b, party, `scripted:${b.id}:${i}`, powers, surge));
       rounds += st.round;
       if (st.outcome === 'win') wins++;
       const alivePlayers = st.units.filter((u) => u.side === 'player' && u.alive).length;

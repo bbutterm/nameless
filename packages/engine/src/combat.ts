@@ -66,7 +66,15 @@ export type BattleOutcome = 'ongoing' | 'win' | 'lose' | 'draw';
 
 export type BattleEvent =
   | { type: 'round'; round: number }
-  | { type: 'intent'; uid: string; ability: AbilityId; targetUid?: string; icon: string }
+  /**
+   * Объявленное намерение врага. `surge` — «наддаст»: враг объявляет заём
+   * ВПЕРЁД, а не подмешивает его в момент удара. Скрытая наддача была
+   * измерена в тринадцать пунктов сложности по всему корпусу — и это была
+   * цена не самой механики, а того, что против неё у игрока нет хода.
+   * Объявленная превращается в материал решения: сорвать наддающего до его
+   * хода, заслонить названную цель, добить его в отдышке.
+   */
+  | { type: 'intent'; uid: string; ability: AbilityId; targetUid?: string; icon: string; surge?: true }
   | { type: 'act'; uid: string; ability: AbilityId; targetUid?: string; anim: string }
   /**
    * Отклик сродства: юнит той же жизни сорвался следом за рукой героя.
@@ -109,6 +117,17 @@ export interface BattleState {
    * знание, а не преимущество в числах.
    */
   reveal: boolean;
+  /**
+   * Политика наддачи сторон. Живёт в состоянии боя, а не в параметрах прогона,
+   * потому что решение о наддаче принимается в ДВУХ разных местах: игрок и
+   * безнамеренный бот решают в момент удара, а враг с объявленным намерением —
+   * при объявлении, в `rollIntents`, куда параметры прогона не доходят. Два
+   * источника правды тут кончились бы тем, что контроль мерил бы одну политику,
+   * а бой играл другую.
+   *
+   * Пусто — «на добивание» у обеих сторон, то есть игра, в которую играют.
+   */
+  surge?: SurgePolicyBySide;
   /**
    * «Первая закрытая строка» (MEMORY_POWERS §C.1) уже прозвучала.
    *
@@ -200,6 +219,8 @@ export function startBattle(
   party: PartyUnit[],
   seed: string,
   powers?: readonly PlayerAbility[],
+  /** Политика наддачи сторон; пусто — «на добивание» у обеих. */
+  surge?: SurgePolicyBySide,
 ): BattleState {
   const rng = new Rng(`${seed}:${battle.id}`);
   const units: BattleUnitState[] = [];
@@ -251,6 +272,7 @@ export function startBattle(
     player: loadout,
     reveal: false,
     firstLine: false,
+    ...(surge === undefined ? {} : { surge }),
     // 0 в данных означает «без лимита» (так объявлено в BattleDef), а не «ноль ходов»:
     // буквальное чтение превращало такой бой в мгновенное поражение.
     turnLimit: battle.turnLimit === undefined ? DEFAULT_TURN_LIMIT : battle.turnLimit || Number.MAX_SAFE_INTEGER,
@@ -2141,12 +2163,29 @@ function heroPlan(
 export function rollIntents(idx: CombatIndex, state: BattleState): BattleState {
   const units = state.units.map((u) => {
     if (!u.alive || u.side !== 'enemy') return { ...u, intent: undefined };
-    const plan = planAction(idx, state, u);
+    const plan = planAction(idx, state, u, { surge: policyFor(state.surge, 'enemy') });
     if (!plan) return { ...u, intent: undefined };
     const ab = idx.abilities.get(plan.ability);
+    /*
+     * Здесь стоял ограничитель «один заём на бой на человека» — попытка
+     * сделать наддачу врага поступком, а не манерой. Замер его отверг: частота
+     * упала всего с 3.79 до 3.41 (то есть манерой быть не перестала), а
+     * медиана сюжетных боёв просела с 55.7% до 53.0% и разрыв политик — с 4.2
+     * до 3.5. Ограничитель платил пунктами за то, чего не добивался.
+     *
+     * Причина, ради которой стоит помнить: наддача — размен НЕВЫГОДНЫЙ в
+     * среднем («всегда» проигрывает «никогда» восемнадцать пунктов), и запрет
+     * наддавать делает того, кому запретили, СИЛЬНЕЕ. Урезая манеру врага, мы
+     * усиливали врага.
+     */
     return {
       ...u,
-      intent: { ability: plan.ability, targetUid: plan.targetUid, icon: ab?.icon ?? 'sword' },
+      intent: {
+        ability: plan.ability,
+        targetUid: plan.targetUid,
+        icon: ab?.icon ?? 'sword',
+        ...(plan.surge ? { surge: true as const } : {}),
+      },
     };
   });
   const events: BattleEvent[] = units
@@ -2157,25 +2196,37 @@ export function rollIntents(idx: CombatIndex, state: BattleState): BattleState {
       ability: u.intent!.ability,
       targetUid: u.intent!.targetUid,
       icon: u.intent!.icon,
+      ...(u.intent!.surge ? { surge: true as const } : {}),
     }));
   return { ...state, units, events: [...state.events, ...events] };
 }
 
 /** Ход бота (враг или обе стороны в симуляции). */
-export function autoAct(
-  idx: CombatIndex,
-  state: BattleState,
-  options: { surge?: SurgePolicyBySide } = {},
-): BattleState {
+export function autoAct(idx: CombatIndex, state: BattleState): BattleState {
   const actor = currentActor(state);
-  const policy = policyFor(options.surge, actor?.side ?? 'player');
+  /*
+   * Политика читается ИЗ СОСТОЯНИЯ боя, и это единственный её источник.
+   * Пока она приезжала параметром прогона, а враг решал наддачу в
+   * `rollIntents`, куда параметр не доходил, — вышли два источника правды, и
+   * контроль трёх политик напечатал три одинаковых числа: 57.9 / 57.9 / 57.9.
+   * Сторона игрока молча играла политику по умолчанию во всех трёх прогонах.
+   */
+  const policy = policyFor(state.surge, actor?.side ?? 'player');
   // Очередь указывает в пустоту (юнит пал вне очереди хода, состояние пришло
   // из сейва или было поправлено эффектом) — раньше autoAct возвращал ТО ЖЕ
   // состояние, и runAuto молча крутил холостые итерации до maxSteps, отдавая
   // симулятору «ongoing». Передаём ход дальше — этим занимается act.
   if (!actor) return act(idx, state, { ability: '__pass__' });
+  /*
+   * Враг исполняет ОБЪЯВЛЕННОЕ: и способность, и цель, и наддачу. Решать
+   * наддачу заново в момент удара значило бы объявить одно, а сделать другое.
+   */
   const plan = actor.side === 'enemy' && actor.intent
-    ? { ability: actor.intent.ability, targetUid: actor.intent.targetUid }
+    ? {
+        ability: actor.intent.ability,
+        targetUid: actor.intent.targetUid,
+        ...(actor.intent.surge ? { surge: true as const } : {}),
+      }
     : planAction(idx, state, actor, { surge: policy });
   if (!plan) {
     return act(idx, state, { ability: '__pass__' });
@@ -2198,6 +2249,7 @@ export function autoAct(
    * Наддают обе стороны. Иначе у игрока была бы вещь, которой в мире нет, — а
    * правило, действующее в одну сторону, перестаёт быть правилом мира.
    */
+  if ('surge' in plan) return act(idx, state, plan);
   return act(idx, state, { ...plan, ...surgeFlag(actor, ab, target, policy) });
 }
 
@@ -2264,16 +2316,11 @@ export function playerAbilityBar(state: BattleState): PlayerAbilitySlot[] {
 }
 
 /** Прогон боя до конца обеими сторонами-ботами. Используется симулятором. */
-export function runAuto(
-  idx: CombatIndex,
-  state: BattleState,
-  maxSteps = 2000,
-  options: { surge?: SurgePolicyBySide } = {},
-): BattleState {
+export function runAuto(idx: CombatIndex, state: BattleState, maxSteps = 2000): BattleState {
   let s = state;
   let steps = 0;
   while (s.outcome === 'ongoing' && steps++ < maxSteps) {
-    s = autoAct(idx, s, options);
+    s = autoAct(idx, s);
   }
   return s;
 }
