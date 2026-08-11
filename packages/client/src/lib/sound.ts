@@ -175,10 +175,43 @@ function noise(dur: number, gain = 0.1, filterHz = 1400, delay = 0): void {
   src.start(t0);
 }
 
-export type Sfx = 'bubble' | 'choice' | 'hit' | 'crit' | 'death' | 'memory' | 'victory' | 'defeat';
+/**
+ * Поводы звучать. Опись Б8 (`docs/БОЙ_ЗАМЕРЫ.md`, «Звук боя») насчитала их
+ * двадцать, из которых звучали четыре. Здесь объявлены все, у которых есть
+ * повод в движке: имя повода — это имя файла, который его закроет.
+ *
+ * Пока файла нет, играет синтез — тот же, что и раньше, и такой же временный.
+ * Молчание было бы хуже: заслон и отклик сродственных канон требует делать
+ * ЗАМЕТНЫМИ, а незаметное «улучшение» игрок считает поломкой.
+ */
+export type Sfx =
+  | 'bubble'
+  | 'choice'
+  | 'hit'
+  | 'crit'
+  | 'death'
+  | 'memory'
+  | 'victory'
+  | 'defeat'
+  // Заведены Б9: у каждого есть свой повод в бою и своя строка в описи.
+  | 'unit_death'
+  | 'cover'
+  | 'response'
+  | 'power'
+  | 'heal'
+  | 'shield'
+  | 'stun'
+  | 'status'
+  | 'purge'
+  | 'round'
+  | 'blocked'
+  | 'tap'
+  | 'recruit';
 
 export function playSfx(kind: Sfx): void {
   if (!enabled) return;
+  // Положенный в `assets/sfx/` файл молча забирает повод себе.
+  if (playSfxFile(kind)) return;
   switch (kind) {
     case 'bubble': // сухой деревянный щелчок счётов
       tone({ freq: 880, to: 660, dur: 0.045, type: 'triangle', gain: 0.045 });
@@ -210,6 +243,65 @@ export function playSfx(kind: Sfx): void {
       break;
     case 'defeat':
       [392, 330, 262].forEach((f, i) => tone({ freq: f, dur: 0.42, type: 'triangle', gain: 0.06, delay: i * 0.13 }));
+      break;
+
+    /*
+     * Дальше — временный синтез под поводы, которые до сих пор молчали.
+     * Он нарочно суше и тише прежнего (0.02–0.08 против 0.045–0.17): его
+     * задача — не понравиться, а обозначить событие, пока Б9 не принесла
+     * файл. Ни одной новой пилы и ни одного меандра: опись назвала виноватыми
+     * именно их.
+     */
+    case 'unit_death': // тело осело мешком, следом осыпается труха
+      noise(0.16, 0.09, 420);
+      noise(0.45, 0.03, 1800, 0.12);
+      tone({ freq: 110, to: 46, dur: 0.4, type: 'sine', gain: 0.05 });
+      break;
+    case 'cover': // шаг по доскам: кто-то встал между
+      noise(0.07, 0.08, 700);
+      tone({ freq: 130, to: 92, dur: 0.13, type: 'sine', gain: 0.06 });
+      break;
+    case 'response': // два сухих стука подряд — своё отозвалось своему
+      noise(0.035, 0.05, 1900);
+      noise(0.035, 0.045, 1600, 0.11);
+      tone({ freq: 620, to: 520, dur: 0.05, type: 'triangle', gain: 0.03, delay: 0.11 });
+      break;
+    case 'power': // склянку тронули ногтем; призвуки нарочно негармоничны
+      tone({ freq: 1490, dur: 0.7, type: 'sine', gain: 0.05 });
+      tone({ freq: 2337, dur: 0.5, type: 'sine', gain: 0.022, delay: 0.02 });
+      tone({ freq: 3110, dur: 0.3, type: 'sine', gain: 0.012, delay: 0.03 });
+      break;
+    case 'heal': // ткань рвётся на бинт
+      noise(0.22, 0.05, 3400);
+      tone({ freq: 300, to: 360, dur: 0.18, type: 'sine', gain: 0.025 });
+      break;
+    case 'shield': // деревянный засов встал на место
+      noise(0.05, 0.06, 1200);
+      tone({ freq: 210, to: 170, dur: 0.16, type: 'sine', gain: 0.05, delay: 0.03 });
+      break;
+    case 'stun': // глухой удар и низкий гул после него
+      noise(0.09, 0.08, 500);
+      tone({ freq: 78, dur: 0.5, type: 'sine', gain: 0.05, delay: 0.04 });
+      break;
+    case 'status': // что-то легло на человека
+      noise(0.18, 0.035, 2600);
+      break;
+    case 'purge': // смахнули со стола
+      noise(0.16, 0.04, 4200);
+      break;
+    case 'round': // костяшка счётов отбивает раунд
+      tone({ freq: 1040, to: 820, dur: 0.035, type: 'triangle', gain: 0.035 });
+      break;
+    case 'blocked': // пустой щелчок замка: так нельзя
+      noise(0.02, 0.04, 2200);
+      tone({ freq: 380, to: 300, dur: 0.04, type: 'sine', gain: 0.03 });
+      break;
+    case 'tap': // тише всего: он звучит дважды на каждый ход
+      tone({ freq: 900, to: 760, dur: 0.025, type: 'triangle', gain: 0.02 });
+      break;
+    case 'recruit': // бирку повесили: щелчок и короткий призвук
+      noise(0.04, 0.05, 1500);
+      tone({ freq: 660, to: 880, dur: 0.14, type: 'triangle', gain: 0.045, delay: 0.04 });
       break;
     default:
       break;
@@ -398,7 +490,11 @@ for (const [path, url] of Object.entries(musicFiles)) {
 let probe: HTMLAudioElement | undefined;
 /** Что из принесённого этот браузер вообще может играть. */
 function pickSource(track: Track): string | undefined {
-  const list = musicByName.get(track);
+  return pickFrom(musicByName.get(track));
+}
+
+/** То же для любого набора вариантов одного имени — музыки и боевых звуков. */
+function pickFrom(list: { ext: string; url: string }[] | undefined): string | undefined {
   if (!list || list.length === 0) return undefined;
   if (!probe) probe = document.createElement('audio');
   const scored = list
@@ -559,4 +655,126 @@ export function stopMusic(): void {
       if (!el.paused) el.pause();
     }, FADE_S * 1000 + 200);
   }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Файлы боевых звуков
+//
+// Слой устроен как музыкальный и как арт-слоты: положили файл с нужным именем
+// в `packages/content/assets/sfx/` — он молча забрал повод себе, синтез под
+// этим поводом больше не звучит. Ничего подключать не надо, и это не
+// вежливость к будущему агенту, а условие задачи Б9: он приносит файлы, а не
+// правит звуковой движок.
+//
+// Три решения, которые стоит объяснить, потому что они не очевидны.
+//
+// 1. Не `new Audio()`, а декодированный буфер. Элемент `<audio>` годится
+//    музыке: она играет минутами, и лишние десятки миллисекунд на старте
+//    незаметны. Удар — 0.15 с целиком, и та же задержка съедает его начало,
+//    то есть ровно то, чем удар и является. Буфер стартует по расписанию
+//    контекста, без разгона.
+// 2. Отсюда же снимается запрет описи Б8 на AAC для коротких звуков: фрейм
+//    разгона у сжатых форматов существует при ПОТОКОВОМ воспроизведении, а
+//    декодируем мы заранее и целиком. Формат остаётся вопросом веса, а не
+//    отклика, — и `.m4a` можно брать любой длины.
+// 3. Файлы качаются лениво, но пачкой: `preloadSfx('battle')` перед первым
+//    боем. Иначе первый удар первого боя молчит — он и есть тот единственный
+//    удар, который игрок помнит.
+// ─────────────────────────────────────────────────────────────────────────────
+
+const sfxFiles = import.meta.glob(
+  '../../../content/assets/sfx/*.{m4a,mp3,ogg,opus,webm,wav}',
+  { eager: true, query: '?url', import: 'default' },
+) as Record<string, string>;
+
+const sfxByName = new Map<string, { ext: string; url: string }[]>();
+for (const [path, url] of Object.entries(sfxFiles)) {
+  const file = path.split('/').pop() ?? '';
+  const ext = (file.match(/\.([^.]+)$/)?.[1] ?? '').toLowerCase();
+  const base = file.replace(/\.[^.]+$/, '');
+  const list = sfxByName.get(base) ?? [];
+  list.push({ ext, url });
+  sfxByName.set(base, list);
+}
+
+/** Готовые к бою буферы. `null` — файл есть, но не читается: больше не пробуем. */
+const sfxBuffers = new Map<string, AudioBuffer | null>();
+/** Уже начатые загрузки: два удара подряд не качают файл дважды. */
+const sfxLoading = new Set<string>();
+
+/**
+ * Громкость файлов. Отдельная от синтеза: чужая запись нормирована как угодно,
+ * а шина с ограничителем стоит ради пика (замер `soundcheck` показывал 1.48).
+ * Пятнадцать новых источников — пятнадцать поводов пробить его снова.
+ */
+const SFX_FILE_GAIN = 0.5;
+
+function loadSfx(kind: string): void {
+  if (sfxBuffers.has(kind) || sfxLoading.has(kind)) return;
+  const url = pickFrom(sfxByName.get(kind));
+  if (!url) return;
+  const a = audio();
+  if (!a) return;
+  sfxLoading.add(kind);
+  void fetch(url)
+    .then((r) => r.arrayBuffer())
+    .then((buf) => a.decodeAudioData(buf))
+    .then((decoded) => sfxBuffers.set(kind, decoded))
+    .catch(() => {
+      // Битый или неподдержанный файл — повод остаётся за синтезом, молча.
+      sfxBuffers.set(kind, null);
+    })
+    .finally(() => sfxLoading.delete(kind));
+}
+
+/**
+ * Заранее приготовить пачку звуков. Зовётся на входе в бой: качать по первому
+ * удару — значит промолчать ровно на нём.
+ */
+export function preloadSfx(kinds: readonly Sfx[]): void {
+  for (const k of kinds) loadSfx(k);
+}
+
+/** Всё, что может понадобиться в бою, — одной пачкой. */
+export const BATTLE_SFX: readonly Sfx[] = [
+  'hit',
+  'crit',
+  'unit_death',
+  'cover',
+  'response',
+  'power',
+  'heal',
+  'shield',
+  'stun',
+  'status',
+  'purge',
+  'round',
+  'blocked',
+  'tap',
+  'victory',
+  'defeat',
+];
+
+/**
+ * Сыграть повод файлом. Возвращает `false`, если файла нет или он ещё не
+ * готов, — тогда звучит синтез. Заодно ставит файл в очередь на загрузку:
+ * первый раз повод прозвучит синтезом, дальше — файлом.
+ */
+function playSfxFile(kind: Sfx): boolean {
+  if (!sfxByName.has(kind)) return false;
+  const buf = sfxBuffers.get(kind);
+  if (buf === undefined) {
+    loadSfx(kind);
+    return false;
+  }
+  if (buf === null) return false;
+  const a = audio();
+  if (!a) return false;
+  const src = a.createBufferSource();
+  src.buffer = buf;
+  const gain = a.createGain();
+  gain.gain.setValueAtTime(SFX_FILE_GAIN, a.currentTime);
+  src.connect(gain).connect(bus() ?? a.destination);
+  src.start();
+  return true;
 }

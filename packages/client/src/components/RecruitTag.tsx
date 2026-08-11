@@ -11,6 +11,7 @@ import { unitEmblem } from '../lib/emblems';
 import { abilityChips, abilityDeed, referenceArmor } from '../lib/combatRead';
 import { combat, content } from '../store/content';
 import { vibrate } from '../lib/haptics';
+import { playSfx } from '../lib/sound';
 import { Icon } from './Icon';
 
 /**
@@ -61,10 +62,17 @@ export function RecruitTag({
 }) {
   const [armed, setArmed] = useState(false);
 
-  // Подтверждение вербовки на ощупь. Свой звук у вербовки будет отдельно
-  // (задача В4) — здесь его нарочно нет, чтобы не закрепить чужой.
+  /*
+   * Момент вступления в отряд — единственное место, где игра говорит «этот
+   * человек теперь твой». Звучит и отзывается он только здесь: та же бирка,
+   * открытая позже из описи (`look`), — просто справка, и подчёркивать её
+   * нечем, иначе подчёркивание перестанет что-либо значить.
+   */
   useEffect(() => {
-    if (!look) vibrate('choice');
+    if (!look) {
+      vibrate('recruit');
+      playSfx('recruit');
+    }
     setArmed(false);
     const id = setTimeout(() => setArmed(true), ARM_MS);
     return () => clearTimeout(id);
