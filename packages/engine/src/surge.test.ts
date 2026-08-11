@@ -36,6 +36,17 @@ const abilities: Ability[] = [
     surge: false,
   },
   {
+    // Площадь: наддавать её нельзя правилом, а не данными.
+    id: 'sweep',
+    name: t('Обмах'),
+    description: t('Обмах'),
+    icon: 'sword',
+    target: 'enemy_row',
+    power: 1,
+    cooldown: 0,
+    effects: [{ kind: 'damage', power: 1 }],
+  },
+  {
     id: 'mend',
     name: t('Ветошь'),
     description: t('Ветошь'),
@@ -61,6 +72,7 @@ const units: UnitDef[] = [
   unitDef('slow', { row: 'front', stats: { hp: 40, atk: 10, def: 5, initiative: 1 } }),
   unitDef('odd_one', { row: 'front', stats: { hp: 40, atk: 10, def: 5, initiative: 20 }, abilities: ['odd'] }),
   unitDef('healer', { row: 'back', stats: { hp: 30, atk: 10, def: 3, initiative: 19 }, abilities: ['mend'] }),
+  unitDef('sweeper', { row: 'front', stats: { hp: 40, atk: 10, def: 5, initiative: 18 }, abilities: ['sweep'] }),
   // Мешок: живёт долго, чтобы бой не кончился раньше замера.
   unitDef('sack', { row: 'front', stats: { hp: 400, atk: 1, def: 0, initiative: 2 } }),
   // Тонкая цель: обычный удар не добивает, наддача добивает.
@@ -124,6 +136,16 @@ describe('наддать: сила', () => {
     const s = startBattle(idx, battle('b', [{ unit: 'sack', row: 'front', index: 0 }]), party(['healer', 'back', 0]), 's');
     const actor = currentActor(s);
     expect(actor && canSurge(mend, actor)).toBe(false);
+  });
+
+  it('площадь наддать нельзя: торгуются за один лот, а не за ряд', () => {
+    // Найдено замером, а не рассуждением: полтора на площади умножались на
+    // число целей, а платил всё тот же один ход. Два юнита вылетели из
+    // коридоров именно на этом.
+    const wide = abilities.find((a) => a.id === 'sweep') as Ability;
+    const s = startBattle(idx, battle('b', [{ unit: 'sack', row: 'front', index: 0 }]), party(['sweeper', 'front', 0]), 's');
+    const actor = currentActor(s);
+    expect(actor && canSurge(wide, actor)).toBe(false);
   });
 
   it('`surge: false` в данных запрещает наддачу', () => {

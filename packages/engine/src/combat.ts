@@ -707,20 +707,31 @@ export interface Action {
 }
 
 /**
- * Можно ли наддать этим ударом. Три запрета, и каждый из них — про смысл, а
- * не про баланс:
+ * Можно ли наддать этим ударом. Четыре запрета, и каждый из них — про смысл,
+ * а не про баланс:
  *
  * 1. Наддавать можно только УРОН. Полтора лечения или полтора щита — это не
  *    заём темпа, а просто числа побольше; заём должен быть слышен в ударе.
- * 2. `surge: false` в данных — для способностей, которым наддача запрещена
- *    по канону (странности отголосков не трогаем).
- * 3. В отдышке наддать нельзя. Заняв ход, второй раз занимать нечего: долг
+ * 2. Только ОДНОЦЕЛЕВОЙ урон. Наддать — слово торга, а торгуются за одну
+ *    названную цену, за один лот. На площади полтора умножались бы на число
+ *    целей, а платил бы всё тот же один ход, — и это не заём под процент, а
+ *    подарок. Найдено замером: обе красные строки про силу (`tar_burner`
+ *    66.7% при норме 56, `battle_gate_takers` 53%) держались на наддутой
+ *    площади — «Горящая вода» по ряду и «Занятое горе» по всем. Тот же
+ *    прецедент, что у заслона: площадь проходит мимо поручительства (§B.C1),
+ *    потому что подставить тело можно под удар, а не под пожар.
+ * 3. `surge: false` в данных — для способностей, которым наддача запрещена
+ *    по канону (странности отголосков не трогаем). Это метка, а НЕ ручка
+ *    баланса: балансовые запреты живут правилом, иначе цена механики зависела
+ *    бы от того, вписали строку или забыли.
+ * 4. В отдышке наддать нельзя. Заняв ход, второй раз занимать нечего: долг
  *    брали бы у хода, который уже отдан.
  */
 export function canSurge(ability: Ability, actor: BattleUnitState): boolean {
   if (ability.surge === false) return false;
   if (isWinded(actor)) return false;
-  return (ability.effects ?? []).some((e) => e.kind === 'damage');
+  if (!isSingleTarget(ability)) return false;
+  return damagePower(ability) > 0;
 }
 
 /** Юнит в отдышке — он пропустит свой ход. */
@@ -1652,11 +1663,9 @@ function wantsSurge(
   if (policy === 'never') return false;
   if (!canSurge(ability, actor)) return false;
   if (policy === 'always') return true;
-  const atk = effectiveStat(actor, 'atk');
-  const def = effectiveStat(target, 'def');
-  const power = (ability.effects ?? []).reduce((sum, e) => sum + (e.kind === 'damage' ? e.power : 0), 0);
+  const power = damagePower(ability);
   if (power <= 0) return false;
-  const plain = Math.max(1, Math.round(atk * power * (ARMOR_K / (ARMOR_K + def))));
+  const plain = Math.max(1, Math.round(expectedHit(actor, target, power)));
   const alive = target.hp + shieldOf(target);
   return plain < alive && plain * SURGE_POWER >= alive;
 }
@@ -1750,7 +1759,18 @@ function predictedAction(
  */
 const predictionMemo = new WeakMap<BattleState, Map<string, Action | undefined>>();
 
-/** Урон эффектов способности в долях атаки — без жеребьёвки и крита. */
+/**
+ * Урон эффектов способности в долях атаки — без жеребьёвки и крита.
+ *
+ * Смотреть в `ability.effects` напрямую НЕЛЬЗЯ, и на этом я обжёгся, делая
+ * наддачу: способность без списка эффектов бьёт своим `power` — урон ей
+ * подставляет `splitEffects`, — а запрет наддачи читал пустой список как
+ * «урона нет». Наддавать умели только те немногие, у кого урон выписан
+ * эффектом явно; частота вышла 0.25 за бой, и замер трёх политик мерил не силу
+ * механики, а размер дыры в запрете. Функция эта уже существовала — я написал
+ * рядом вторую такую же вместо того, чтобы поискать. Одно правило на все
+ * места: бой, политика и запрет обязаны считать урон одинаково.
+ */
 function damagePower(ability: Ability): number {
   const raw: readonly BattleEffect[] =
     ability.effects && ability.effects.length > 0

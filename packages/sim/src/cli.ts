@@ -314,9 +314,16 @@ if (!only || only === 'battles') {
       );
     }
 
-    // Прогонов у контроля меньше, чем у основного замера: он сравнивает три
-    // политики между собой, и его точность нужна на разнице, а не на числе.
-    const surgeRuns = Math.max(12, Math.floor(runs / 4));
+    /*
+     * Контроль сравнивает три политики, и его точность нужна НА РАЗНИЦЕ.
+     *
+     * Первая редакция брала медиану по четырнадцати боям — то есть выбрасывала
+     * все прогоны, кроме одного среднего боя, и разницу в пункт отличить не
+     * могла: замер дал «−0.7» там, где честный ответ был «меньше шума».
+     * Считаем долю побед по ВСЕМ прогонам всех сюжетных боёв разом: те же
+     * данные, но целиком, и разница перестаёт тонуть.
+     */
+    const surgeRuns = Math.max(24, Math.floor(runs / 3));
     const policyWinrate = (player: 'never' | 'always' | 'finish'): number => {
       const r = scriptedBattles(
         content,
@@ -330,14 +337,17 @@ if (!only || only === 'battles') {
         undefined,
         { player, enemy: 'finish' },
       );
-      return median(r.filter((x) => storyIds.includes(x.battle)).map((x) => x.winrate));
+      const rows = r.filter((x) => storyIds.includes(x.battle));
+      const wins = rows.reduce((a, x) => a + x.winrate * x.runs, 0);
+      const total = rows.reduce((a, x) => a + x.runs, 0);
+      return total > 0 ? wins / total : 0;
     };
     const pNever = policyWinrate('never');
     const pAlways = policyWinrate('always');
     const pFinish = policyWinrate('finish');
     const pct = (v: number) => `${(v * 100).toFixed(1)}%`;
     console.log(
-      `   медиана по сюжетным боям, ${surgeRuns} прогонов: никогда ${pct(pNever)}, ` +
+      `   доля побед по всем сюжетным боям, ${surgeRuns} прогонов на бой: никогда ${pct(pNever)}, ` +
         `всегда ${pct(pAlways)}, на добивание ${pct(pFinish)}`,
     );
     summary['surge'] = {
