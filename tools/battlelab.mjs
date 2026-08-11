@@ -116,11 +116,32 @@ const geom = await page.evaluate(() => {
       aria: a.getAttribute('aria-label') ?? '',
     };
   });
+  /*
+   * Общие действия боя («Заслонить») — отдельным списком, а не вместе с
+   * `.ability`. Разделение не косметическое: замер (в) «тапов на ход» жмёт
+   * первую готовую `.ability`, и если бы общее действие носило тот же класс,
+   * прибор играл бы заслоном вместо удара и мерил бы уже другой бой.
+   */
+  const common = [...document.querySelectorAll('.common-action')].map((a) => {
+    const r = a.getBoundingClientRect();
+    return {
+      text: a.textContent,
+      barred: a.classList.contains('barred'),
+      w: +r.width.toFixed(1),
+      h: +r.height.toFixed(1),
+      aria: a.getAttribute('aria-label') ?? '',
+    };
+  });
   return {
     vw,
     vh,
     cards,
     abilities,
+    common,
+    barScroll: (() => {
+      const b = document.querySelector('.ability-bar');
+      return b ? { scrollW: b.scrollWidth, clientW: b.clientWidth } : null;
+    })(),
     hint: document.querySelector('.battle-hint')?.textContent ?? '',
     top: document.querySelector('.battle-top')?.textContent ?? '',
     fieldOverflow: (() => {
@@ -148,6 +169,17 @@ console.log('способности:');
 for (const a of geom.abilities) {
   console.log(
     `  «${a.text}»${a.cooling ? ' [серая, перезарядка]' : ''} ${a.w}×${a.h}, шрифт ${a.font}px, title=«${a.title}» aria=«${a.aria}»`,
+  );
+}
+console.log('общие действия боя:', geom.common.length ? '' : 'НЕТ НИ ОДНОГО');
+for (const a of geom.common) {
+  console.log(`  «${a.text}»${a.barred ? ' [гаснет, сейчас нельзя]' : ''} ${a.w}×${a.h} aria=«${a.aria}»`);
+}
+if (geom.barScroll) {
+  const over = geom.barScroll.scrollW - geom.barScroll.clientW;
+  console.log(
+    `панель кнопок: ${geom.barScroll.scrollW}px в окне ${geom.barScroll.clientW}px` +
+      `${over > 1 ? ` — ПРОКРУЧИВАЕТСЯ ВБОК на ${over}px` : ' — влезает целиком'}`,
   );
 }
 
@@ -185,6 +217,37 @@ if (geom.abilities.length) {
       before !== after ? 'да' : 'НЕТ (молчание)',
     );
     await page.screenshot({ path: `${outDir}/battle-forbidden-${tag}.png` });
+  }
+}
+
+// Заслон под пальцем: выбираем общее действие и смотрим, кого можно закрыть.
+if (geom.common.length) {
+  const cover = page.locator('.common-action:not(.barred)').first();
+  if (await cover.count()) {
+    await cover.click();
+    await page.waitForTimeout(200);
+    await page.screenshot({ path: `${outDir}/battle-cover-${tag}.png` });
+    const c = await page.evaluate(() => ({
+      hint: document.querySelector('.battle-hint')?.textContent ?? '',
+      wards: [...document.querySelectorAll('.card.targetable')].map((x) => ({
+        n: x.querySelector('.card-name')?.textContent,
+        side: x.className.includes('enemy') ? 'enemy' : 'player',
+        preview: x.querySelector('.preview')?.textContent ?? '',
+      })),
+    }));
+    console.log('заслон: подсказка', JSON.stringify(c.hint), 'можно закрыть', JSON.stringify(c.wards));
+    if (c.wards.length) {
+      await page.locator('.card.targetable').first().click();
+      await page.waitForTimeout(300);
+      await page.screenshot({ path: `${outDir}/battle-covered-${tag}.png` });
+      const marks = await page.evaluate(() =>
+        [...document.querySelectorAll('.card:not(.empty)')].map((x) => ({
+          n: x.querySelector('.card-name')?.textContent,
+          chips: [...x.querySelectorAll('.status-chip')].map((s) => s.textContent),
+        })),
+      );
+      console.log('после заслона на картах:', JSON.stringify(marks));
+    }
   }
 }
 

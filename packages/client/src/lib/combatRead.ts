@@ -13,6 +13,7 @@
  */
 import {
   ARMOR_K,
+  COVER_ABILITY_ID,
   DAMAGE_VARIANCE,
   effectiveStat,
   type Ability,
@@ -119,6 +120,12 @@ export function effectWord(eff: BattleEffect, lang: Lang): string {
       return t(lang, 'effCleanse');
     case 'revive':
       return t(lang, 'effRevive');
+    /* Заслон — не щит: щит поглощает урон на месте, заслон уводит его в чужое
+       тело. Слово поэтому своё (§B.C1: разводить словами, не иконками), и без
+       этой ветки чип и предпросмотр молчали бы вовсе — `default` возвращает
+       пустую строку, и на карте союзника висел бы пустой ярлык. */
+    case 'cover':
+      return t(lang, 'effCover');
     default:
       return '';
   }
@@ -290,6 +297,15 @@ export function blockReason(
   target: BattleUnitState,
   lang: Lang,
 ): string {
+  /* Заслон отсеивает цели не правилом строя, а своими двумя: только свой и
+     только не сам. Общая ветка ответила бы «этой способностью по нему не
+     ударить» — и была бы вдвойне непонятной, потому что заслон вообще не
+     бьёт. */
+  if (ability.id === COVER_ABILITY_ID) {
+    if (target.side !== actor.side) return t(lang, 'coverNotAlly');
+    if (target.uid === actor.uid) return t(lang, 'coverNotSelf');
+    return t(lang, 'coverNoOne');
+  }
   const hitsFoes =
     ability.target === 'enemy_front' ||
     ability.target === 'enemy_any' ||
@@ -326,6 +342,10 @@ export function isCovered(
  * Формат «глагол + кому»: «урон переднему», «щит 16 своему», «лечит своего».
  */
 export function abilityGist(ability: Ability, lang: Lang): string {
+  // Заслон разобрался бы по общему правилу в «заслон · своему» — тавтологию под
+  // кнопкой с именем «Заслонить». Подпись обязана добавлять к имени, а не
+  // повторять его: «удар за своего» называет размен, которого в имени нет.
+  if (ability.id === COVER_ABILITY_ID) return t(lang, 'coverGist');
   const who = targetWord(ability.target, lang);
   // Урон не лежит в effects — он выводится из power, поэтому проверяется первым.
   const damaging = ability.power > 0 && ability.target.startsWith('enemy');

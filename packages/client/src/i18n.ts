@@ -69,6 +69,16 @@ export const ui = {
     coveredReason: 'Задний ряд прикрыт передним. Сначала передние.',
     notATarget: 'Этой способностью по нему не ударить.',
     allyReason: 'Это свой. Способность бьёт врагов.',
+    /* Заслон. Слова нарочно НЕ повторяют слова щита: щит «держит», заслон
+       «принимает удар за» — DIRECTION_COMBAT §B.C1 велит разводить их
+       именно словами. И «прикрыт» (правило рядов) здесь не годится: это
+       уже занятое слово про другое. */
+    effCover: 'заслон',
+    coverGist: 'удар за своего',
+    coverBackRow: 'Заслоняют из переднего ряда: удар приходит туда.',
+    coverNoOne: 'Ручаться не за кого — своих больше нет.',
+    coverNotAlly: 'Заслонить можно только своего.',
+    coverNotSelf: 'За себя не ручаются: удар и так придёт к нему.',
     effShield: 'щит',
     effDot: 'яд',
     effStun: 'оглушение',
@@ -174,6 +184,12 @@ export const ui = {
     coveredReason: 'The back row is covered. Clear the front first.',
     notATarget: 'This ability cannot reach them.',
     allyReason: 'One of yours. This ability strikes foes.',
+    effCover: 'vouched',
+    coverGist: 'his blow, mine',
+    coverBackRow: 'You vouch from the front row: that is where the blow lands.',
+    coverNoOne: 'No one left to vouch for.',
+    coverNotAlly: 'You can only vouch for your own.',
+    coverNotSelf: 'No one vouches for himself: the blow is his already.',
     effShield: 'shield',
     effDot: 'poison',
     effStun: 'stun',

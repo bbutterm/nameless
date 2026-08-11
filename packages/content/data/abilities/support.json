@@ -254,7 +254,7 @@
       "ru": "Ручаюсь телом: первый удар по нему — мой.",
       "en": "I vouch with my body: the first blow meant for him is mine."
     },
-    "icon": "shield",
+    "icon": "cover",
     "target": "ally_one",
     "power": 0,
     "cooldown": 0,

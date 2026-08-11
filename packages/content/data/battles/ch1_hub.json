@@ -9,12 +9,12 @@
       {
         "unit": "pocket_cutter",
         "row": "front",
-        "index": 0,
+        "index": 1,
         "level": 1
       },
       {
         "unit": "hook_man",
-        "row": "front",
+        "row": "back",
         "index": 1,
         "level": 1
       }

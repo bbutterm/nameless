@@ -1017,6 +1017,46 @@
 .power-name { max-width: 56px; overflow-wrap: anywhere; }
 .power-spent { font-size: 9.5px; color: var(--text-faint); }
 
+/* Общее действие боя («Заслонить»). Третья вещь в панели — и третья её форма.
+   Способность юнита стоит в рамке-плашке: она вписана в карту. Умение памяти —
+   ромб цвета памяти: оно принадлежит герою. Общее действие не принадлежит
+   никому: у него нет плашки, только пунктирная кромка — строка, которой нет ни
+   в одной описи, но которая действует на всех. Пунктир держит ту же ширину, что
+   и способность, чтобы кнопки не плясали, но уже её потолком: заслон обязан
+   помещаться рядом с четырьмя кнопками, а не вместо одной из них. */
+.common-action {
+  position: relative;
+  min-width: 70px;
+  max-width: 86px;
+  min-height: var(--tap);
+  padding: 6px 8px;
+  border: 1px dashed color-mix(in srgb, var(--text-dim) 60%, transparent);
+  border-radius: var(--r-sm);
+  background: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 11px;
+  color: var(--text-dim);
+  flex-shrink: 0;
+}
+.common-action.active {
+  color: var(--accent);
+  border-style: solid;
+  border-color: var(--accent);
+  background: var(--surface-hi);
+}
+/* Заслонить сейчас нельзя (актор в заднем ряду, ручаться не за кого). Кнопка
+   не пропадает и не молчит: пропажа читалась бы как случайность панели, а
+   молчание — как поломка. Гаснет и на нажатие объясняет причину словами. */
+.common-action.barred {
+  color: var(--text-faint);
+  border-color: color-mix(in srgb, var(--line) 80%, transparent);
+  opacity: 0.75;
+}
+.common-action.barred .ability-gist { color: var(--text-faint); }
+
 .waiting { min-height: var(--tap); display: flex; align-items: center; padding-left: 14px; color: var(--text-faint); }
 /* Пока ходит противник, панель пуста — но кто именно ходит, теперь написано
    строкой выше, а здесь только дыхание ожидания. */

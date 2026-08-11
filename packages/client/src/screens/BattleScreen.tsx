@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import {
+  commonActions,
   currentActor,
   isPlayerTurn,
   legalTargets,
   playerAbilityBar,
   unitAbilities,
+  COVER_ABILITY_ID,
   PARTY_SLOTS_PER_ROW,
   type Ability,
   type BattleEvent,
@@ -285,6 +287,36 @@ export function BattleScreen() {
    * тем, что этот ход мог бы сделать.
    */
   const powers = playerAbilityBar(battle);
+  /*
+   * «Заслонить» — третья вещь в панели, и форма у неё третья.
+   *
+   * Это не способность карты: в набор юнита заслон не вписан нарочно — слот
+   * стоит денег, а приписка общего действия в наборы сдвинула бы норму целого
+   * тира (DIRECTION_COMBAT §B.C1, §E.8). И не умение памяти: у памяти свой
+   * ромб и свой цвет. Это правило боя, доступное любому живому юниту ПЕРЕДНЕГО
+   * ряда, — движок отдаёт его отдельным списком `commonActions`.
+   *
+   * Кнопка стоит на месте ВСЕГДА, пока ход мой, даже когда действие сейчас
+   * недоступно. Это то же правило, которым Б2 чинила перезарядку: кнопка, то
+   * появляющаяся, то пропадающая, читается как случайность, а не как правило,
+   * — а заслон обязан читаться именно как правило, иначе игрок не узнает о нём
+   * никогда (он доступен только части ходов). Недоступная гаснет и на нажатие
+   * отвечает словами, почему: заслоняют из переднего ряда, за себя не ручаются.
+   *
+   * Место — сразу за ромбами памяти и ПЕРЕД способностями юнита: слева стоит
+   * то, что не принадлежит карте и потому не меняется с ходом, справа — набор
+   * актора, который меняется каждый ход. Так общее действие не уезжает за край
+   * панели вместе с чужими кнопками.
+   */
+  const coverAbility = combat.abilities.get(COVER_ABILITY_ID);
+  const coverFromRow = !!actor && myTurn && commonActions(combat, actor).length > 0;
+  const coverTargets =
+    actor && coverAbility && coverFromRow ? legalTargets(battle, actor.uid, coverAbility) : [];
+  const coverBarred: 'backRow' | 'noOne' | undefined = !coverFromRow
+    ? 'backRow'
+    : coverTargets.length === 0
+      ? 'noOne'
+      : undefined;
   const legal = actor && selectedAbility && myTurn ? legalTargets(battle, actor.uid, selectedAbility) : [];
   const targets = legal.map((u) => u.uid);
   const over = battle.outcome !== 'ongoing';
@@ -369,6 +401,7 @@ export function BattleScreen() {
             threats={incoming.get(u.uid)}
             covered={covered}
             coveredLabel={t(lang, 'coveredShort')}
+            coverStatusLabel={t(lang, 'effCover')}
             hideIntent={over}
             preview={previews.get(u.uid)}
             anim={anims[u.uid]}
@@ -624,6 +657,48 @@ export function BattleScreen() {
                 </button>
               );
             })}
+            {myTurn && coverAbility && (
+              <button
+                className={[
+                  'common-action',
+                  selectedAbility?.id === coverAbility.id ? 'active' : '',
+                  coverBarred ? 'barred' : '',
+                ]
+                  .filter(Boolean)
+                  .join(' ')}
+                /* Не `disabled`: недоступную кнопку всё равно надо уметь
+                   разобрать долгим тапом и спросить, почему она серая. Молчащая
+                   кнопка учит только тому, что игра сломана. */
+                aria-label={
+                  coverBarred
+                    ? `${loc(coverAbility.name, lang)} — ${t(lang, coverBarred === 'backRow' ? 'coverBackRow' : 'coverNoOne')}`
+                    : undefined
+                }
+                onPointerDown={() => startHold(coverAbility)}
+                onPointerUp={endHold}
+                onPointerLeave={endHold}
+                onPointerCancel={endHold}
+                onClick={() => {
+                  endHold();
+                  if (heldOpen.current) {
+                    heldOpen.current = false;
+                    return;
+                  }
+                  vibrate('tap');
+                  setPeek(undefined);
+                  if (coverBarred) {
+                    setReason(t(lang, coverBarred === 'backRow' ? 'coverBackRow' : 'coverNoOne'));
+                    return;
+                  }
+                  setReason(undefined);
+                  setSelectedAbility(coverAbility);
+                }}
+              >
+                <Icon name={coverAbility.icon} size={22} />
+                <span className="ability-name">{loc(coverAbility.name, lang)}</span>
+                <span className="ability-gist">{abilityGist(coverAbility, lang)}</span>
+              </button>
+            )}
             {myTurn ? (
               bar.map(({ a, cd }) => (
                 <button

@@ -91,13 +91,15 @@ const STAT_ICON: Record<string, string> = {
   initiative: 'wing',
 };
 
-function statusChips(statuses: StatusEffect[]): StatusChip[] {
+function statusChips(statuses: StatusEffect[], coverWord: string): StatusChip[] {
   const chips: StatusChip[] = [];
   let shield = 0;
   let dot = 0;
   let stunTurns = 0;
+  let covered = false;
   for (const s of statuses) {
-    if (s.kind === 'shield') shield += s.amount;
+    if (s.kind === 'cover') covered = true;
+    else if (s.kind === 'shield') shield += s.amount;
     else if (s.kind === 'dot') dot += s.amount;
     else if (s.kind === 'stun') stunTurns = Math.max(stunTurns, s.turns);
     else if (s.kind === 'buff' || s.kind === 'debuff') {
@@ -113,6 +115,13 @@ function statusChips(statuses: StatusEffect[]): StatusChip[] {
   // Порядок постоянный: щит → яд → оглушение → усиления. Прыгающий порядок
   // на карточке 105px читается как мигание, а не как информация.
   const head: StatusChip[] = [];
+  /* Заслон стоит ПЕРВЫМ и своим знаком: без него поручительство было
+     невидимым — игрок отдавал целый ход и не получал на доске ничего, кроме
+     ушедшего хода. Цвет — акцент (своё решение), а не цвет щита: щит держит
+     урон на месте, заслон уводит его в другое тело, и путать их на карточке
+     нельзя (DIRECTION_COMBAT §B.C1). Число тут не пишем: заряд всегда один,
+     «1» рядом со щитом читалось бы как «щит на 1». */
+  if (covered) head.push({ key: 'cover', icon: 'cover', tone: 'var(--accent)', label: coverWord });
   if (shield > 0)
     head.push({ key: 'shield', icon: 'shield', tone: 'var(--shield)', label: String(shield) });
   if (dot > 0) head.push({ key: 'dot', icon: 'poison', tone: 'var(--danger)', label: String(dot) });
@@ -135,6 +144,7 @@ export function UnitCard({
   threats,
   covered,
   coveredLabel,
+  coverStatusLabel,
   hideIntent,
   preview,
   anim,
@@ -154,6 +164,8 @@ export function UnitCard({
   /** Закрыта живым передним рядом — цель недоступна, и это надо объяснить. */
   covered?: boolean;
   coveredLabel?: string;
+  /** Слово статуса «за него поручились» — своё, не слово щита и не «прикрыт». */
+  coverStatusLabel?: string;
   /** Бой кончился — намерения больше ни к чему не относятся. */
   hideIntent?: boolean;
   /** Сколько примерно снимет выбранная способность именно с этой цели. */
@@ -170,7 +182,7 @@ export function UnitCard({
   // Знак дома кладём только поверх процедурной заглушки. Свой арт пользователя
   // (assets/cards/<id>.webp) ничем не забиваем — это его слот, а не наш холст.
   const mark = custom ? undefined : unitEmblem(def?.id, def?.faction);
-  const chips = statusChips(unit.statuses);
+  const chips = statusChips(unit.statuses, coverStatusLabel ?? '');
   const name = def ? loc(def.name, lang) : unit.defId;
   const marked = (threats ?? []).filter((x) => !!x.mark);
   const extraThreats = marked.length - MAX_THREAT_MARKS;
