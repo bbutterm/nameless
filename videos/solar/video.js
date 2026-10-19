@@ -26,11 +26,11 @@ const wordT = (line, word) => { if (TIM.words && TIM.words[word] != null) return
 const END = TIM.end;
 const Bd = [0, L[1].t0 - 0.2, L[2].t0 - 0.15, L[3].t0 - 0.25, L[4].t0 - 0.2, L[5].t0 - 0.2, L[6].t0 - 0.2, END];
 
-const STARS = [makeStars(101, 600, 6000, 2600, 0.6, 1.6), makeStars(102, 200, 6000, 2600, 1.2, 2.6), makeStars(103, 60, 6000, 2600, 2.2, 4.0)];
+const SKY_STARS = [makeStars(101, 600, 6000, 2600, 0.6, 1.6), makeStars(102, 200, 6000, 2600, 1.2, 2.6), makeStars(103, 60, 6000, 2600, 2.2, 4.0)];
 function space(ctx, cam, t, a = 1) {
   const g = ctx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, C.sp0); g.addColorStop(1, C.sp1); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
   ctx.save(); applyCam(ctx, cam, 0.12); glow(ctx, 300, 300, 800, 'rgba(255,90,200,0.35)', 0.6 * a); glow(ctx, 1600, 800, 900, 'rgba(60,200,255,0.3)', 0.6 * a); ctx.restore();
-  [0.12, 0.3, 0.55].forEach((p, i) => { ctx.save(); applyCam(ctx, cam, p); ctx.globalAlpha = a; drawStars(ctx, STARS[i], t, C.star, 0.6); ctx.restore(); });
+  [0.12, 0.3, 0.55].forEach((p, i) => { ctx.save(); applyCam(ctx, cam, p); ctx.globalAlpha = a; drawStars(ctx, SKY_STARS[i], t, C.star, 0.6); ctx.restore(); });
   ctx.globalAlpha = 1;
 }
 function twinkleStar(ctx, x, y, r, a) { ctx.save(); ctx.translate(x, y); ctx.globalAlpha = a; ctx.fillStyle = C.star; ctx.beginPath(); for (let i = 0; i < 8; i++) { const rr = i % 2 ? r * 0.3 : r; const an = i / 8 * TAU; ctx.lineTo(Math.cos(an) * rr, Math.sin(an) * rr); } ctx.fill(); ctx.restore(); }
@@ -160,7 +160,7 @@ function k1(ctx, u, d, t) {
   const sp = clamp(alt / 2600);
   const g = ctx.createLinearGradient(0, 0, 0, H);
   g.addColorStop(0, mix('#6ccfff', C.sp0, sp)); g.addColorStop(1, mix('#c9f0ff', C.sp1, sp)); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-  if (sp > 0.2) [0.12, 0.3, 0.55].forEach((p, i) => { const oy = (((540 - cam.y) * p) % 2600 + 2600) % 2600; ctx.save(); applyCam(ctx, { x: cam.x, y: 540, z: 1, r: cam.r }, p); ctx.globalAlpha = seg(sp, 0.2, 0.8); ctx.translate(0, oy); drawStars(ctx, STARS[i], t, C.star, 0.6); ctx.translate(0, -2600); drawStars(ctx, STARS[i], t, C.star, 0.6); ctx.restore(); });
+  if (sp > 0.2) [0.12, 0.3, 0.55].forEach((p, i) => { const oy = (((540 - cam.y) * p) % 2600 + 2600) % 2600; ctx.save(); applyCam(ctx, { x: cam.x, y: 540, z: 1, r: cam.r }, p); ctx.globalAlpha = seg(sp, 0.2, 0.8); ctx.translate(0, oy); drawStars(ctx, SKY_STARS[i], t, C.star, 0.6); ctx.translate(0, -2600); drawStars(ctx, SKY_STARS[i], t, C.star, 0.6); ctx.restore(); });
   ctx.globalAlpha = 1;
   // far clouds
   ctx.save(); applyCam(ctx, cam, 0.6);
