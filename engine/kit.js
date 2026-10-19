@@ -154,7 +154,7 @@ function beadPos(b, t, cx, cy, sc) {
   const R = RING_R[b.k] * sc;
   const ex = Math.cos(ang) * R, ey = Math.sin(ang) * R * Math.cos(RING_TILT[b.k]);
   const c = Math.cos(RING_ROT[b.k]), s = Math.sin(RING_ROT[b.k]);
-  return { x: cx + ex * c - ey * s, y: cy + ex * s + ey * c, front: Math.sin(ang) > 0 };
+  return { x: cx + ex * c - ey * s, y: cy + ex * s + ey * c, front: Math.sin(ang) > 0, a: ang + RING_ROT[b.k] };
 }
 // o: {grow, eye, rings, tint (0 cyan → 1 magenta), warm (0..1 amber), look:[x,y], slit}
 function aiCore(ctx, cx, cy, sc, t, o = {}) {
@@ -167,7 +167,16 @@ function aiCore(ctx, cx, cy, sc, t, o = {}) {
   ctx.save(); ctx.globalAlpha *= ringA * 0.35;
   for (let k = 0; k < 3; k++) { ctx.save(); ctx.translate(cx, cy); ctx.rotate(RING_ROT[k]); ctx.strokeStyle = lc; ctx.lineWidth = 2 * Math.max(1, sc); ctx.beginPath(); ctx.ellipse(0, 0, RING_R[k] * sc * grow, RING_R[k] * sc * grow * Math.cos(RING_TILT[k]), 0, Math.PI, TAU); ctx.stroke(); ctx.restore(); }
   ctx.restore();
-  const drawBeads = (front) => { for (const b of BEADS) { const p = beadPos(b, t, cx, cy, sc * grow); if (p.front !== front) continue; ctx.globalAlpha = ringA * (front ? 1 : 0.55); circle(ctx, p.x, p.y, 7 * sc, front ? '#e9fbff' : lc); } ctx.globalAlpha = 1; };
+  const clipsK = o.clips || 0; // 0 = round beads, 1 = the beads are paperclips
+  const drawBeads = (front) => {
+    for (const b of BEADS) {
+      const p = beadPos(b, t, cx, cy, sc * grow); if (p.front !== front) continue;
+      const a0 = ringA * (front ? 1 : 0.55);
+      if (clipsK < 1) { ctx.globalAlpha = a0 * (1 - clipsK); circle(ctx, p.x, p.y, 7 * sc, front ? '#e9fbff' : lc); }
+      if (clipsK > 0) { ctx.globalAlpha = a0 * clipsK; paperclip(ctx, p.x, p.y, 30 * sc, p.a, front ? '#e3ebf7' : '#8fa0bd'); }
+    }
+    ctx.globalAlpha = 1;
+  };
   if (ringA > 0) drawBeads(false);
   const r = 110 * sc * grow;
   ball(ctx, cx, cy, r, mix('#1d2f7e', '#5a1838', tint), 'rgba(3,4,30,0.55)', null, -0.9);
@@ -260,6 +269,21 @@ function earth(ctx, x, y, r, t, o = {}) {
   }
   ctx.restore();
   ctx.strokeStyle = 'rgba(140,200,255,0.5)'; ctx.lineWidth = r * 0.03; circle(ctx, x, y, r * 1.01); ctx.stroke();
+}
+
+// A paperclip (Gem shape) drawn as one wire: s = length in px, rot = rotation, lying along its long axis
+function paperclip(ctx, x, y, s, rot, color = '#d6deec', o = {}) {
+  ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(s, s);
+  const path = () => {
+    ctx.beginPath(); ctx.moveTo(0.05, 0.12); ctx.lineTo(0.05, -0.31); ctx.arc(-0.02, -0.31, 0.07, 0, Math.PI, true);
+    ctx.lineTo(-0.09, 0.29); ctx.arc(0.015, 0.29, 0.105, Math.PI, 0, true); ctx.lineTo(0.12, -0.37);
+    ctx.arc(0, -0.37, 0.12, 0, Math.PI, true); ctx.lineTo(-0.12, 0.18);
+  };
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  if (o.shadow) { ctx.save(); ctx.translate(0.03, 0.03); path(); ctx.strokeStyle = 'rgba(0,0,20,0.35)'; ctx.lineWidth = o.w || 0.04; ctx.stroke(); ctx.restore(); }
+  path(); ctx.strokeStyle = color; ctx.lineWidth = o.w || 0.04; ctx.stroke();
+  if (!o.flat) { path(); ctx.strokeStyle = 'rgba(255,255,255,0.55)'; ctx.lineWidth = (o.w || 0.04) * 0.35; ctx.translate(-0.008, -0.008); ctx.stroke(); }
+  ctx.restore();
 }
 
 // Scene boundaries from narration lines: midway in the gap before each line, never later than 0.25 s before its first word.

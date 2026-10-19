@@ -9,6 +9,7 @@
 | Ролик | Длина | Папка |
 |---|---|---|
 | Василиск Роко (ИИ) | 2:48 | `videos/basilisk/` |
+| Скрепочный максимизатор (ИИ, Бостром) | 2:37 | `videos/paperclips/` |
 | Солнечная система (детский, пример v1, без голоса) | 0:31 | `videos/solar/` |
 
 ## Установка
@@ -35,6 +36,7 @@ python3 engine/render.py basilisk 75 92         # отрендерить тол�
 ```
 engine/                  общий движок
   lib.js                 камера-сплайн, параллакс, DOF-слои, motion blur, зерно, narration() — тайминги слов
+  kit.js                 общая графика канала: палитра, небо, герой dude(), глаз, ядро ИИ, скрепка, типографика, sceneTimeline()
   index.html             загрузчик: index.html?v=<ролик>
   align.py               голос + слова Scribe → videos/<v>/timings.js (+ паузы между блоками)
   dump_events.py         VIDEO.events() → out/<v>/events.json
@@ -42,7 +44,7 @@ engine/                  общий движок
   render.py              детерминированный рендер всех кадров i/60 → H.264
   finish.py              сведение, громкость −14 LUFS, SRT
   build.py               всё подряд
-  audio/instruments.py   синтезаторы и SFX (пэды, плаки, маримба, колокола, вжухи, удары…)
+  audio/instruments.py   синтезаторы и SFX (пэды, плаки, маримба, колокола, вжухи, удары…) + section() — аранжировщик аккордов
 videos/<ролик>/
   script.json            текст: для озвучки (say) и для субтитров (text), паузы, голос
   storyboard.md          раскадровка: варианты сцен и выбранный
