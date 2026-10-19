@@ -1,5 +1,5 @@
 """Mux picture + soundtrack into the deliverable and write subtitles.
-usage: python3 engine/finish.py <video> [--crf 20]  -> out/<v>/<v>.mp4 (H.264 re-encode from the crf-16 master, AAC 192k, -14 LUFS / -1 dBTP), out/<v>/<v>.srt
+usage: python3 engine/finish.py <video> [--crf 20]  -> out/<v>/<v>.mp4 + out/<v>/<v>_720p.mp4 (~20 MB to send) (H.264 re-encode from the crf-16 master, AAC 192k, -14 LUFS / -1 dBTP), out/<v>/<v>.srt
 The master out/<v>/video.mp4 carries per-frame film grain at crf 16 (~40 Mbit/s); the deliverable is re-encoded with
 preset slow at crf 20 (~5–8 Mbit/s), which YouTube ingests without visible loss."""
 import sys, json, re, subprocess
@@ -19,6 +19,9 @@ def main():
     ln = f"loudnorm=I=-14:TP=-1.0:LRA=11:measured_I={j['input_i']}:measured_TP={j['input_tp']}:measured_LRA={j['input_lra']}:measured_thresh={j['input_thresh']}:offset={j['target_offset']}:linear=true"
     subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', str(O / 'video.mp4'), '-i', str(O / 'mix.wav'), '-map', '0:v:0', '-map', '1:a:0', '-c:v', 'libx264', '-preset', 'slow', '-crf', crf, '-pix_fmt', 'yuv420p', '-r', '60',
                     '-af', ln, '-c:a', 'aac', '-b:a', '192k', '-ar', '48000', '-t', f'{secs:.4f}', '-movflags', '+faststart', str(O / f'{v}.mp4')], check=True)
+    # light copy for sending in chat / phones (big files don't get a download button there)
+    subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', str(O / f'{v}.mp4'), '-vf', 'scale=1280:720:flags=lanczos', '-c:v', 'libx264', '-preset', 'medium', '-crf', '24',
+                    '-maxrate', '2.2M', '-bufsize', '4M', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '128k', '-movflags', '+faststart', str(O / f'{v}_720p.mp4')], check=True)
     tj = vdir(v) / 'timings.js'
     if tj.exists():
         tm = json.loads(re.search(r'=\s*(\{.*\});', tj.read_text(encoding='utf-8'), re.S).group(1))
