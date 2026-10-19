@@ -52,6 +52,7 @@ videos/<ролик>/
   voice/words.json       тайминги слов (ElevenLabs Scribe)
   timings.js             генерируется align.py
 .claude/skills/vizavi-motion/   скилл режиссуры motion-роликов (раскадровка, качество, итерации)
+skills/kurz-video-factory/      переносимый скилл всего пайплайна (для других агентов, напр. GPT): SKILL.md + справочники + шаблон проекта
 ```
 
 Подробная инструкция для работы с Claude — в `CLAUDE.md`.
