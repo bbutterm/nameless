@@ -24,7 +24,8 @@ npm install                            # шрифты Unbounded / Montserrat / N
 ## Сборка
 
 ```bash
-python3 engine/build.py basilisk        # выравнивание → события → звук → рендер → out/basilisk/basilisk.mp4 + .srt
+python3 engine/build.py basilisk        # выравнивание → события → звук → рендер 720p → out/basilisk/basilisk.mp4 + .srt
+python3 engine/render.py basilisk --size 1080 && python3 engine/finish.py basilisk   # 1080p по запросу
 python3 engine/preview.py basilisk 12 40.5 90   # отдельные кадры + контактный лист (быстро)
 python3 engine/render.py basilisk 75 92         # отрендерить только кусок
 ```
