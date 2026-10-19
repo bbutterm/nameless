@@ -1,22 +1,5 @@
 node_modules/
-dist/
-build/
-.vite/
-*.tsbuildinfo
+out/
+__pycache__/
+*.pyc
 .DS_Store
-coverage/
-sim-reports/
-!sim-reports/.gitkeep
-screenshots/
-.env
-.env.local
-
-# Временные скрипты агентов.
-# Раньше сюда дописывали каждое имя поимённо — и список отставал от жизни:
-# одноразовые смотрелки пишутся под конкретную находку и называются по ней.
-# Правило вместо перечня: временный скрипт кончается на `-tmp.mjs` или
-# `.tmp.mjs`, и тогда он никому не мешает и ничего не просит в коммит.
-.shotcand.mjs
-.tiershot.mjs
-*-tmp.mjs
-*.tmp.mjs
