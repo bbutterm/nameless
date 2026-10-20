@@ -167,3 +167,33 @@ def master(music, sfx, voice, END, v_at, duck=0.55, mgain=1.0, sgain=1.0):
     pk = np.abs(mix).max(); mix = mix / pk * 0.89
     return mix
 
+
+
+# ---------- shared arranger ----------
+def section(bus, t0, t1, chords, roots, beat=0.6, gain=1.0, cutoff=800, bass=0.22, arp=0.0, arp_cut=3000, kick_=0.0, hats=0.0, snare=0.0, marim=0.0, seed=1, bars_per_chord=2):
+    """Lay a chord progression between t0 and t1: pads + sub bass (+ optional arpeggio, kick, hats, snare, marimba melody).
+    chords: list of note-name triads, roots: bass note names; one chord lasts bars_per_chord * 2 beats."""
+    g = np.random.default_rng(seed)
+    clen = beat * 2 * bars_per_chord
+    t = t0; k = 0
+    while t < t1 - 0.05:
+        ch, rt = chords[k % len(chords)], roots[k % len(roots)]
+        d = min(clen, t1 - t) + 1.2
+        for n in ch: bus.add(pad_note(note(n), d, cutoff), t, 0.15 * gain, pan=g.uniform(-0.4, 0.4))
+        bus.add(sine(note(rt), d) * env_adsr(d, 0.6, 1.0), t, bass * gain)
+        end = min(t + clen, t1) - 0.02
+        if arp > 0:
+            tones = [note(n) * 2 for n in ch] + [note(ch[0]) * 4]; tt, i = t, 0
+            while tt < end: bus.add(pluck(tones[[0, 1, 2, 3, 2, 1][i % 6]], 0.45, arp_cut, 0.16), tt, 0.085 * arp * gain, pan=0.3 * np.sin(i)); tt += beat / 2; i += 1
+        if marim > 0:
+            scale = [note(n) * 4 for n in ch] + [note(ch[1]) * 8]; tt = t
+            while tt < end:
+                if g.random() < 0.6: bus.add(marimba(scale[g.integers(len(scale))], 0.5), tt, 0.1 * marim * gain, pan=0.25)
+                tt += beat / 2
+        tt, b = t, 0
+        while tt < end:
+            if kick_ > 0 and b % 2 == 0: bus.add(kick(0.42, 110, 40, 1.4), tt, 0.45 * kick_ * gain)
+            if snare > 0 and b % 4 == 2: bus.add(snap(0.18, 900, 5000, 0.05), tt, 0.16 * snare * gain, pan=0.1)
+            if hats > 0: bus.add(hat(0.05), tt + beat / 2, 0.05 * hats * gain, pan=0.35)
+            tt += beat; b += 1
+        t += clen; k += 1
