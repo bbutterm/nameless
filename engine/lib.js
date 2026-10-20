@@ -82,7 +82,8 @@ function ball(ctx, x, y, r, base, shadow, light, ang = -0.8) {
   if (light) { circle(ctx, x + Math.cos(ang) * r * 0.45, y + Math.sin(ang) * r * 0.45, r * 0.28, light); }
   ctx.restore();
 }
-function hexToRgb(h) { const n = parseInt(h.slice(1), 16); return [n >> 16 & 255, n >> 8 & 255, n & 255]; }
+// accepts '#rrggbb' and 'rgb(r,g,b)' (mix() returns rgb(), so mixes can be chained)
+function hexToRgb(h) { if (h[0] !== '#') { const m = h.match(/[\d.]+/g); return [+m[0], +m[1], +m[2]]; } const n = parseInt(h.slice(1), 16); return [n >> 16 & 255, n >> 8 & 255, n & 255]; }
 function mix(a, b, t) { const A = hexToRgb(a), B = hexToRgb(b); return `rgb(${A.map((v, i) => Math.round(lerp(v, B[i], t))).join(',')})`; }
 function rgba(h, a) { const [r, g, b] = hexToRgb(h); return `rgba(${r},${g},${b},${a})`; }
 

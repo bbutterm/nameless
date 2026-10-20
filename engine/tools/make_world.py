@@ -2,7 +2,8 @@
 Source: Natural Earth 1:50m (public domain, naturalearthdata.com): land, major lakes, major rivers.
 usage: python3 engine/tools/make_world.py [--tol 0.06]
 Output: window.WORLD = {land: [ring...], lakes: [{name, rings}], rivers: [{name, lines}]}, points as [lon, lat] (0.01°).
-The modern Aral Sea is replaced by its historic shoreline (it was full until the 1960s)."""
+The modern Aral Sea is replaced by its historic shoreline (it was full until the 1960s). Holes in land polygons
+(the Caspian Sea) are kept as water bodies."""
 import json, sys, argparse, urllib.request, pathlib
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 CACHE = ROOT / 'out' / 'ne'
@@ -49,13 +50,15 @@ def lines(geom):
 
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument('--tol', type=float, default=0.06); a = ap.parse_args()
-    land = []
+    land, holes = [], []
     for f in get('ne_50m_land')['features']:
+        g = f['geometry']; polys = [g['coordinates']] if g['type'] == 'Polygon' else g['coordinates'] if g['type'] == 'MultiPolygon' else []
+        holes += [h for poly in polys for h in poly[1:] if area(h) > 1]  # inland seas cut out of the land (the Caspian)
         for r in rings(f['geometry']):
             if area(r) < 0.15: continue  # drop tiny islands
             s = dp_ring(r, a.tol)
             if len(s) >= 4: land.append(rnd(s))
-    lakes = [{'name': 'Aral Sea', 'rings': [ARAL_HISTORIC]}]
+    lakes = [{'name': 'Aral Sea', 'rings': [ARAL_HISTORIC]}] + [{'name': 'Caspian Sea' if area(h) > 30 else 'inland sea', 'rings': [rnd(dp_ring(h, a.tol))]} for h in holes]
     for f in get('ne_50m_lakes')['features']:
         n = f['properties'].get('name')
         if n in LAKES: lakes.append({'name': n, 'rings': [rnd(dp_ring(r, a.tol)) for r in rings(f['geometry'])]})

@@ -209,3 +209,63 @@ def section(bus, t0, t1, chords, roots, beat=0.6, gain=1.0, cutoff=800, bass=0.2
             if hats > 0: bus.add(hat(0.05), tt + beat / 2, 0.05 * hats * gain, pan=0.35)
             tt += beat; b += 1
         t += clen; k += 1
+
+
+# ---------- steppe / history instruments (Mongols and later history episodes) ----------
+def bowed(f, d, vib=5.5, depth=0.007, bright=2400, att=0.18):
+    """Bowed horse-head fiddle (morin khuur)-like tone: saw with delayed vibrato, body formants and a little bow noise."""
+    t = t_axis(d); vd = depth * np.clip((t - 0.25) / 0.4, 0, 1)
+    ph = np.cumsum(f * (1 + vd * np.sin(2 * np.pi * vib * t))) / SR
+    x = 2 * (ph % 1.0) - 1
+    x = lp(x, bright) * 0.7 + 0.45 * bp(x, 650, 1300) + 0.25 * bp(x, 2000, 3200)
+    x += 0.04 * bp(noise(d), 1500, 5000) * env_exp(d, 0.4)
+    return fade(x * env_adsr(d, att, min(0.5, d * 0.4), 1.2), 0.02, 0.05)
+def throat_drone(f, d, overtones=(8, 9, 10, 12, 10, 9), step=1.6):
+    """Overtone-singing-like drone: a buzzy low fundamental plus a whistled harmonic melody gliding over it."""
+    t = t_axis(d); base = saw(f, d) * 0.5 + 0.5 * saw(f * 1.003, d)
+    x = lp(base, 900) * 0.55 + 0.2 * bp(base, 300, 700)
+    hseq = np.array([overtones[int(k) % len(overtones)] for k in t / step], dtype=float)
+    hs = np.convolve(hseq, np.ones(T(0.25)) / T(0.25), 'same')  # glide between harmonics
+    whistle = np.sin(2 * np.pi * np.cumsum(f * hs) / SR) * (0.5 + 0.5 * np.sin(2 * np.pi * t / step) ** 2)
+    x += 0.18 * whistle
+    return fade(x * env_adsr(d, min(1.5, d * 0.3), min(2.0, d * 0.3)), 0.05, 0.2)
+def frame_drum(d=0.45, f=95, slap=0.4):
+    t = t_axis(d); ff = f + 60 * np.exp(-t / 0.02)
+    x = np.sin(2 * np.pi * np.cumsum(ff) / SR) * np.exp(-t / 0.18) + slap * bp(noise(d), 600, 3000) * np.exp(-t / 0.03)
+    return fade(softclip(x, 1.3))
+def gallop_drums(bus, t0, t1, beat=0.42, gain=1.0, pan=0.0):
+    """6/8 gallop: three hits per dotted beat (da-da-DUM), low drum on the downbeat."""
+    tt, k = t0, 0
+    while tt < t1 - 0.05:
+        for j, (off, a, fq) in enumerate([(0, 1.0, 82), (beat / 3, 0.45, 120), (2 * beat / 3, 0.7, 105)]):
+            if tt + off < t1: bus.add(frame_drum(0.4, fq, 0.35 + 0.2 * (j > 0)), tt + off, 0.32 * a * gain, pan=pan + (0.15 if j == 1 else -0.05))
+        if k % 4 == 0: bus.add(kick(0.5, 95, 38, 1.6), tt, 0.3 * gain)
+        tt += beat; k += 1
+def clop(f=1400):
+    d = 0.08; return fade(bp(noise(d), f * 0.6, f * 1.5) * env_exp(d, 0.012, 0.0005) + 0.6 * sine(160, d) * env_exp(d, 0.02))
+def hooves(d, rate=7.0, seed=3, fade_out=False):
+    g = np.random.default_rng(seed); out = np.zeros(T(d) + T(0.1)); tt = 0.0
+    while tt < d:
+        for off in (0, 0.07, 0.15):
+            i = T(tt + off); c = clop(g.uniform(1000, 1800)) * g.uniform(0.6, 1.0) * ((1 - tt / d) if fade_out else 1)
+            n = min(len(c), len(out) - i)
+            if n > 0: out[i:i + n] += c[:n]
+        tt += 1 / rate * 3
+    return out
+def neigh(d=1.2):
+    t = t_axis(d); f = 520 + 520 * np.exp(-((t - 0.15) / 0.18) ** 2) - 160 * t / d
+    f = f * (1 + 0.05 * np.sin(2 * np.pi * 17 * t))
+    x = saw(lambda tt: np.interp(tt, t, f), d)
+    x = bp(x, 700, 2600) + 0.3 * bp(noise(d), 1500, 4000) * np.exp(-t / 0.3)
+    return fade(x * env_adsr(d, 0.04, 0.5, 1.4) * 0.6)
+def twang(f=170):
+    """Bowstring release: a short low pluck plus the arrow's whoosh."""
+    x = pluck(f, 0.45, 1800, 0.07); w = whoosh(0.3, 900, 5000, 0.15); x[:len(w)] += 0.5 * w
+    return x
+def wind(d, lo=200, hi=900):
+    t = t_axis(d); x = bp(noise(d), lo, hi) * (0.6 + 0.4 * np.sin(2 * np.pi * t / 3.7) * np.sin(2 * np.pi * t / 1.9))
+    return fade(x * env_adsr(d, min(1.5, d * 0.3), min(1.5, d * 0.3)), 0.05, 0.1)
+def bleat(f=330):
+    d = 0.7; t = t_axis(d); x = saw(lambda tt: f * (1 + 0.04 * np.sin(2 * np.pi * 7 * tt)), d)
+    return fade((bp(x, 500, 1600) + 0.5 * bp(x, 2200, 3200)) * env_adsr(d, 0.05, 0.3) * 0.7)
+def clang(f=620, d=1.2): return bell(f, d, 0.25) * 0.6 + 0.4 * hp(noise(d), 2500) * env_exp(d, 0.03)

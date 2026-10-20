@@ -117,10 +117,29 @@ function dude(ctx, x, y, h, t, o = {}) {
   if (mood === 'happy') { ctx.beginPath(); ctx.arc(mx, my - hr * 0.12, hr * 0.2, 0.2, Math.PI - 0.2); ctx.stroke(); }
   else if (mood === 'scared') { ctx.fillStyle = '#2a1a2a'; ctx.beginPath(); ctx.ellipse(mx, my, hr * 0.1, hr * 0.13, 0, 0, TAU); ctx.fill(); }
   else if (mood !== 'sleep') { ctx.beginPath(); ctx.moveTo(mx - hr * 0.12, my); ctx.lineTo(mx + hr * 0.12, my); ctx.stroke(); }
+  // headwear: o.hat = {kind: 'mongol' | 'helmet' | 'cap', color, fur}
+  if (o.hat) hat(ctx, 0, hy, hr, o.hat);
   // cheeks
   ctx.globalAlpha *= 0.35; circle(ctx, -ex * 1.25, ey + hr * 0.3, hr * 0.12, '#ff7a9a'); circle(ctx, ex * 1.25, ey + hr * 0.3, hr * 0.12, '#ff7a9a');
   ctx.restore();
   return { headX: x, headY: y + hy * s, hr };
+}
+// headwear drawn over a dude() head at (x, hy) with head radius hr
+function hat(ctx, x, hy, hr, o) {
+  const c = o.color || '#c0392b', fur = o.fur || '#6b4a2e';
+  ctx.save(); ctx.translate(x, hy);
+  if (o.kind === 'mongol') {  // tall felt hat with an upturned fur brim and a small top knob
+    shaded(ctx, (g, k) => { if (!k) g.beginPath(); g.moveTo(-hr * 0.78, -hr * 0.55); g.quadraticCurveTo(-hr * 0.55, -hr * 1.75, 0, -hr * 1.95); g.quadraticCurveTo(hr * 0.55, -hr * 1.75, hr * 0.78, -hr * 0.55); g.closePath(); }, c, 'rgba(0,0,20,0.22)', -hr * 0.2, 0);
+    circle(ctx, 0, -hr * 1.98, hr * 0.13, PAL.amber);
+    shaded(ctx, (g, k) => { if (!k) g.beginPath(); g.ellipse(0, -hr * 0.6, hr * 1.12, hr * 0.32, 0, 0, TAU); }, fur, 'rgba(0,0,0,0.25)', 0, -hr * 0.1);
+  } else if (o.kind === 'helmet') {  // pointed iron helmet with a crest
+    shaded(ctx, (g, k) => { if (!k) g.beginPath(); g.moveTo(-hr * 1.02, -hr * 0.3); g.quadraticCurveTo(-hr * 0.95, -hr * 1.35, 0, -hr * 1.7); g.quadraticCurveTo(hr * 0.95, -hr * 1.35, hr * 1.02, -hr * 0.3); g.closePath(); }, o.color || '#8d97ad', 'rgba(0,0,20,0.25)', -hr * 0.25, 0);
+    ctx.fillStyle = o.crest || '#c0392b'; ctx.beginPath(); ctx.moveTo(0, -hr * 1.65); ctx.quadraticCurveTo(hr * 0.5, -hr * 2.3, hr * 0.15, -hr * 2.5); ctx.quadraticCurveTo(-hr * 0.05, -hr * 2.1, 0, -hr * 1.65); ctx.fill();
+    ctx.fillStyle = fur; rrect(ctx, -hr * 1.08, -hr * 0.42, hr * 2.16, hr * 0.26, hr * 0.12); ctx.fill();
+  } else {  // simple round cap
+    shaded(ctx, (g, k) => { if (!k) g.beginPath(); g.arc(0, -hr * 0.35, hr * 0.95, Math.PI, 0); g.closePath(); }, c, 'rgba(0,0,20,0.2)', -hr * 0.2, 0);
+  }
+  ctx.restore();
 }
 // tiny crowd person (no face) for far shots
 function mini(ctx, x, y, h, body, o = {}) {
@@ -297,4 +316,119 @@ function sceneTimeline(N, ids) {
   Bd.push(N.END);
   const S = {}; ids.forEach((id, i) => S[id] = i);
   return { Bd, S, lw: (id, word, n = 0) => N.at(id, word, n) - Bd[S[id]] };
+}
+
+// ================= history series: globe, crown, century ribbon, horse =================
+// Orthographic globe over engine/data/world.js (Natural Earth). A view = {lon0, lat0, R, cx, cy}; points behind the
+// globe are pulled onto the limb, which keeps filled land/regions closed and clean at any rotation.
+const D2R = Math.PI / 180;
+function geoView(lon0, lat0, R, cx = W / 2, cy = H / 2) { return { lon0, lat0, R, cx, cy, s0: Math.sin(lat0 * D2R), c0: Math.cos(lat0 * D2R) }; }
+function geoProj(v, lon, lat) {
+  const l = (lon - v.lon0) * D2R, p = lat * D2R, cp = Math.cos(p), sp = Math.sin(p), cl = Math.cos(l);
+  let x = v.R * cp * Math.sin(l), y = v.R * (v.c0 * sp - v.s0 * cp * cl); const c = v.s0 * sp + v.c0 * cp * cl;
+  if (c < 0) { const k = v.R / (Math.hypot(x, y) || 1); x *= k; y *= k; }
+  return [v.cx + x, v.cy - y, c];
+}
+// subdivide long edges of hand-made [lon, lat] polygons so they bend with the globe
+function geoDensify(ring, step = 1.5) {
+  const out = [];
+  for (let i = 0; i < ring.length; i++) {
+    const a = ring[i], b = ring[(i + 1) % ring.length]; const n = Math.max(1, Math.ceil(Math.hypot(b[0] - a[0], b[1] - a[1]) / step));
+    for (let k = 0; k < n; k++) out.push([lerp(a[0], b[0], k / n), lerp(a[1], b[1], k / n)]);
+  }
+  return out;
+}
+// add rings as subpaths; skips rings fully behind the globe or far off screen
+function geoRings(ctx, v, rings, closed = true) {
+  for (const r of rings) {
+    let vis = false, x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9; const P = r.map(([lo, la]) => { const q = geoProj(v, lo, la); if (q[2] > 0) vis = true; x0 = Math.min(x0, q[0]); x1 = Math.max(x1, q[0]); y0 = Math.min(y0, q[1]); y1 = Math.max(y1, q[1]); return q; });
+    if (!vis || x1 < -200 || x0 > W + 200 || y1 < -200 || y0 > H + 200) continue;
+    ctx.moveTo(P[0][0], P[0][1]); for (let i = 1; i < P.length; i++) ctx.lineTo(P[i][0], P[i][1]); if (closed) ctx.closePath();
+  }
+}
+function geoFill(ctx, v, rings, fill) { ctx.beginPath(); geoRings(ctx, v, rings); ctx.fillStyle = fill; ctx.fill(); }
+const GLOBE = { ocean: '#123a5c', ocean2: '#0b2440', land: '#d9c38c', landD: '#bfa46c', lake: '#1b4d73', river: '#3f86b8', grid: 'rgba(160,210,255,0.07)', atmo: '#6fc3ff', rim: 'rgba(200,235,255,0.35)' };
+// o: {land, ocean, rivers (bool), grid (bool), shade (0..1), clipLand(ctx) → draws extra things clipped to land}
+function drawGlobe(ctx, v, t, o = {}) {
+  const C = { ...GLOBE, ...(o.colors || {}) }; const { cx, cy, R } = v;
+  glow(ctx, cx, cy, R * 1.22, rgba(C.atmo, 0.5), o.atmo ?? 0.55);
+  const g = ctx.createRadialGradient(cx - R * 0.35, cy - R * 0.4, R * 0.1, cx, cy, R);
+  g.addColorStop(0, mix(C.ocean, '#ffffff', 0.08)); g.addColorStop(1, C.ocean2);
+  ctx.save(); circle(ctx, cx, cy, R, null); ctx.fillStyle = g; ctx.fill(); ctx.clip();
+  if (o.grid !== false) {
+    ctx.strokeStyle = C.grid; ctx.lineWidth = Math.max(1, R / 700);
+    for (let lo = -180; lo < 180; lo += 15) { ctx.beginPath(); const pts = []; for (let la = -85; la <= 85; la += 5) pts.push([lo, la]); geoRings(ctx, v, [pts], false); ctx.stroke(); }
+    for (let la = -75; la <= 75; la += 15) { ctx.beginPath(); const pts = []; for (let lo = -180; lo <= 180; lo += 5) pts.push([lo, la]); geoRings(ctx, v, [pts], false); ctx.stroke(); }
+  }
+  ctx.beginPath(); geoRings(ctx, v, WORLD.land); ctx.fillStyle = C.land; ctx.fill();
+  // regions (o.under) are clipped to the coastline, so rough hand-made polygons never spill onto the sea
+  if (o.under || o.clipLand) { ctx.save(); ctx.clip(); if (o.clipLand) o.clipLand(ctx); if (o.under) o.under(ctx); ctx.restore(); }
+  for (const L of WORLD.lakes) geoFill(ctx, v, L.rings, C.lake);
+  if (o.rivers !== false) {
+    ctx.strokeStyle = C.river; ctx.lineWidth = Math.max(1.2, R / 520); ctx.lineJoin = ctx.lineCap = 'round';
+    for (const r of WORLD.rivers) { ctx.beginPath(); geoRings(ctx, v, r.lines, false); ctx.stroke(); }
+  }
+  if (o.over) o.over(ctx);
+  // flat night-side crescent and rim light (the Kurzgesagt "ball" look)
+  const sh = o.shade ?? 0.35;
+  if (sh > 0) { ctx.beginPath(); ctx.rect(cx - R - 2, cy - R - 2, 2 * R + 4, 2 * R + 4); ctx.arc(cx - R * 0.22, cy - R * 0.18, R * 1.05, 0, TAU, true); ctx.fillStyle = `rgba(5,10,35,${sh})`; ctx.fill('evenodd'); }
+  ctx.restore();
+  ctx.strokeStyle = C.rim; ctx.lineWidth = Math.max(1.5, R / 300); circle(ctx, cx, cy, R - ctx.lineWidth / 2, null); ctx.stroke();
+}
+// golden crown (series thread): s = width in px, p = appear 0..1, glint 0..1
+function crown(ctx, x, y, s, t, o = {}) {
+  const p = o.p ?? 1; if (p <= 0) return;
+  ctx.save(); ctx.translate(x, y); ctx.rotate(o.rot || 0); ctx.scale(p, p);
+  const w = s, h = s * 0.62;
+  ctx.fillStyle = 'rgba(0,0,20,0.25)'; ctx.beginPath(); ctx.ellipse(0, h * 0.08, w * 0.55, w * 0.07, 0, 0, TAU); ctx.fill();
+  const path = (g, k) => { if (!k) g.beginPath(); g.moveTo(-w / 2, 0); g.lineTo(-w / 2, -h * 0.75); g.lineTo(-w * 0.27, -h * 0.4); g.lineTo(0, -h); g.lineTo(w * 0.27, -h * 0.4); g.lineTo(w / 2, -h * 0.75); g.lineTo(w / 2, 0); g.closePath(); };
+  shaded(ctx, path, o.color || '#ffc53d', o.dark || '#d98a1c', -w * 0.12, 0);
+  ctx.fillStyle = o.band || '#e89a22'; rrect(ctx, -w / 2, -h * 0.2, w, h * 0.2, h * 0.05); ctx.fill();
+  for (const [jx, jc] of [[-0.3, '#ff5c7a'], [0, '#5ce1ff'], [0.3, '#2fd6b0']]) circle(ctx, jx * w, -h * 0.1, h * 0.065, jc);
+  for (const jx of [-0.5, 0, 0.5]) circle(ctx, jx * w, jx ? -h * 0.78 : -h * 1.02, h * 0.07, '#fff3c4');
+  const gl = o.glint || 0; if (gl > 0) { glow(ctx, -w * 0.2, -h * 0.55, w * 0.9, 'rgba(255,230,150,0.9)', gl * 0.7); ctx.save(); ctx.globalAlpha = gl; ctx.strokeStyle = '#fffbe6'; ctx.lineWidth = w * 0.025; ctx.lineCap = 'round'; const r = w * 0.18 * (0.6 + gl * 0.4); ctx.beginPath(); ctx.moveTo(w * 0.3 - r, -h * 0.75); ctx.lineTo(w * 0.3 + r, -h * 0.75); ctx.moveTo(w * 0.3, -h * 0.75 - r); ctx.lineTo(w * 0.3, -h * 0.75 + r); ctx.stroke(); ctx.restore(); }
+  ctx.restore();
+}
+// century ribbon (series HUD): screen space, top centre. year = current year (float), a = alpha
+function centuryBar(ctx, y0, y1, year, a, o = {}) {
+  if (a <= 0) return;
+  ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = a;
+  const x0 = W / 2 - 330, x1 = W / 2 + 330, yy = o.y || 64, f = clamp((year - y0) / (y1 - y0));
+  ctx.fillStyle = 'rgba(8,14,40,0.55)'; rrect(ctx, x0 - 90, yy - 30, x1 - x0 + 180, 60, 30); ctx.fill();
+  ctx.strokeStyle = 'rgba(255,255,255,0.25)'; ctx.lineWidth = 4; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(x0, yy); ctx.lineTo(x1, yy); ctx.stroke();
+  ctx.strokeStyle = o.color || '#ffc53d'; ctx.beginPath(); ctx.moveTo(x0, yy); ctx.lineTo(lerp(x0, x1, f), yy); ctx.stroke();
+  for (let k = 0; k <= 10; k++) { const x = lerp(x0, x1, k / 10); ctx.fillStyle = k / 10 <= f ? (o.color || '#ffc53d') : 'rgba(255,255,255,0.35)'; ctx.fillRect(x - 1.5, yy - (k % 5 ? 6 : 10), 3, k % 5 ? 12 : 20); }
+  ctx.font = '700 20px Unbounded, sans-serif'; ctx.textBaseline = 'middle'; ctx.fillStyle = 'rgba(255,255,255,0.75)';
+  ctx.textAlign = 'right'; ctx.fillText(String(y0), x0 - 20, yy + 1); ctx.textAlign = 'left'; ctx.fillText(String(y1), x1 + 20, yy + 1);
+  const mx = lerp(x0, x1, f); circle(ctx, mx, yy, 11, o.color || '#ffc53d'); circle(ctx, mx, yy, 5, '#fff8e0');
+  label(ctx, String(Math.floor(year)), mx, yy + 44, 26, { color: '#fff', bg: 'rgba(8,14,40,0.75)' });
+  ctx.restore();
+}
+// flat side-view horse; ph = gallop phase (radians), run 0..1 (0 = standing), facing: 1 right / -1 left
+function horse(ctx, x, y, s, ph, o = {}) {
+  const run = o.run ?? 1, c = o.color || '#8a5a3c', d = o.dark || mix(c.startsWith('#') ? c : '#8a5a3c', '#000000', 0.3), mane = o.mane || '#3b2a20';
+  ctx.save(); ctx.translate(x, y); ctx.scale((o.face || 1) * s / 100, s / 100);
+  const bob = Math.sin(ph * 2) * 3 * run; ctx.translate(0, bob);
+  if (!o.noShadow) { ctx.fillStyle = 'rgba(0,0,20,0.22)'; ctx.beginPath(); ctx.ellipse(0, -bob + 2, 62, 8, 0, 0, TAU); ctx.fill(); }
+  const leg = (hx, hy, a1, a2, col) => { const k1 = [hx + Math.sin(a1) * 30, hy + Math.cos(a1) * 30]; const k2 = [k1[0] + Math.sin(a1 + a2) * 30, k1[1] + Math.cos(a1 + a2) * 30];
+    ctx.strokeStyle = col; ctx.lineWidth = 10; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.beginPath(); ctx.moveTo(hx, hy); ctx.lineTo(k1[0], k1[1]); ctx.lineTo(k2[0], k2[1]); ctx.stroke(); circle(ctx, k2[0], k2[1], 5.5, '#2a1d18'); };
+  const sw = (p0) => Math.sin(ph + p0) * 0.75 * run, bend = (p0) => (0.15 + Math.max(0, Math.sin(ph + p0 + 1.2)) * 1.1 * run);
+  // far legs (darker), then body, then near legs
+  leg(32, -62, sw(0.6), -bend(0.6) * 0.6, d); leg(-36, -60, sw(3.6), bend(3.6), d);
+  ctx.fillStyle = mane; ctx.beginPath(); ctx.moveTo(-52, -78); ctx.quadraticCurveTo(-82, -70 + Math.sin(ph) * 6 * run, -84 - 6 * run, -40 + Math.sin(ph + 1) * 8); ctx.quadraticCurveTo(-68, -58, -50, -66); ctx.fill();
+  shaded(ctx, (g, k) => { if (!k) g.beginPath(); g.ellipse(-4, -76, 56, 24, 0, 0, TAU); }, c, d, 0, -10);
+  // neck + head
+  const hb = Math.sin(ph * 2 + 0.5) * 0.06 * run - (o.graze ? 0.9 : 0);
+  ctx.save(); ctx.translate(36, -86); ctx.rotate(hb);
+  shaded(ctx, (g, k) => { if (!k) g.beginPath(); g.moveTo(-14, 14); g.lineTo(6, -38); g.quadraticCurveTo(14, -50, 26, -46); g.lineTo(50, -30); g.quadraticCurveTo(58, -24, 50, -16); g.lineTo(28, -14); g.lineTo(18, 16); g.closePath(); }, c, d, 0, -8);
+  ctx.fillStyle = mane; ctx.beginPath(); ctx.moveTo(-12, 8); ctx.lineTo(4, -40); ctx.quadraticCurveTo(10, -50, 18, -50); ctx.lineTo(0, -6); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(16, -46); ctx.lineTo(14, -60); ctx.lineTo(24, -48); ctx.fill();
+  circle(ctx, 30, -36, 3.4, '#1a1010');
+  ctx.restore();
+  leg(40, -60, sw(0), -bend(0) * 0.6, c); leg(-30, -58, sw(3.0), bend(3.0), c);
+  // tail
+  ctx.fillStyle = mane; ctx.beginPath(); ctx.moveTo(-56, -86); ctx.quadraticCurveTo(-80, -80 + Math.sin(ph + 2) * 8 * run, -78 - 8 * run, -44 + Math.sin(ph) * 10 * run); ctx.quadraticCurveTo(-66, -60, -58, -74); ctx.fill();
+  if (o.saddle) { ctx.fillStyle = o.saddle; rrect(ctx, -22, -102, 40, 14, 6); ctx.fill(); }
+  ctx.restore();
+  return { seatX: x + (o.face || 1) * -2 * s / 100, seatY: y + (bob - 100) * s / 100 };
 }
