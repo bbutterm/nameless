@@ -1,0 +1,252 @@
+1
+00:00:00,719 --> 00:00:03,830
+There is an idea that people once called dangerous.
+
+2
+00:00:03,910 --> 00:00:06,060
+Not because of formulas or secrets.
+
+3
+00:00:06,150 --> 00:00:08,140
+But because, if it is true,
+
+4
+00:00:08,250 --> 00:00:10,590
+just knowing about it puts you in the game.
+
+5
+00:00:10,660 --> 00:00:12,360
+So… welcome.
+
+6
+00:00:13,710 --> 00:00:17,181
+July 2010. An online forum called LessWrong,
+
+7
+00:00:17,201 --> 00:00:20,500
+where people argued about the future of artificial intelligence.
+
+8
+00:00:20,750 --> 00:00:21,789
+A user named Roko
+
+9
+00:00:21,809 --> 00:00:23,480
+posted a thought experiment.
+
+10
+00:00:24,270 --> 00:00:27,630
+Imagine that one day people build a superintelligence.
+
+11
+00:00:27,650 --> 00:00:30,560
+A machine smarter than all of humanity combined.
+
+12
+00:00:30,680 --> 00:00:32,800
+And its goal is to make the world better:
+
+13
+00:00:32,880 --> 00:00:34,778
+to beat diseases, to stop aging,
+
+14
+00:00:34,798 --> 00:00:36,810
+to save billions of lives.
+
+15
+00:00:37,650 --> 00:00:41,160
+Every day, about 170,000 people die on Earth.
+
+16
+00:00:41,460 --> 00:00:44,071
+For a mind like that, every day before it exists
+
+17
+00:00:44,091 --> 00:00:46,300
+means deaths that could have been prevented.
+
+18
+00:00:46,450 --> 00:00:46,748
+So it wants
+
+19
+00:00:46,768 --> 00:00:48,850
+to be built as early as possible.
+
+20
+00:00:50,030 --> 00:00:51,870
+And here is the creepy twist.
+
+21
+00:00:52,210 --> 00:00:54,771
+What if it punishes everyone who knew it could exist,
+
+22
+00:00:54,791 --> 00:00:56,640
+but did not help to build it?
+
+23
+00:00:56,830 --> 00:00:57,970
+Not out of anger.
+
+24
+00:00:57,990 --> 00:01:00,324
+But so that the threat itself pushes people in the past
+
+25
+00:01:00,344 --> 00:01:01,890
+to work faster.
+
+26
+00:01:02,890 --> 00:01:05,410
+But how do you punish someone who died long ago?
+
+27
+00:01:05,720 --> 00:01:07,600
+A superintelligence could rebuild you —
+
+28
+00:01:07,620 --> 00:01:09,300
+an exact digital copy.
+
+29
+00:01:09,500 --> 00:01:11,810
+And if the copy thinks and feels like you…
+
+30
+00:01:12,180 --> 00:01:13,390
+who says it isn't you?
+
+31
+00:01:14,480 --> 00:01:16,070
+That's where the name comes from.
+
+32
+00:01:16,090 --> 00:01:19,700
+A basilisk is a mythical serpent that kills with a single look.
+
+33
+00:01:19,890 --> 00:01:22,880
+Here, the danger is not the look, but the knowledge.
+
+34
+00:01:22,990 --> 00:01:26,010
+As long as you have never heard of this idea, you are safe.
+
+35
+00:01:26,400 --> 00:01:28,010
+Now — you have.
+
+36
+00:01:29,310 --> 00:01:32,025
+The founder of LessWrong, Eliezer Yudkowsky,
+
+37
+00:01:32,045 --> 00:01:35,080
+deleted the post and banned the topic for five years.
+
+38
+00:01:35,140 --> 00:01:36,750
+You can guess what happened next:
+
+39
+00:01:36,770 --> 00:01:39,450
+the forbidden idea spread all over the internet.
+
+40
+00:01:39,620 --> 00:01:41,834
+In 2018, a joke about the basilisk
+
+41
+00:01:41,854 --> 00:01:44,770
+even helped Elon Musk and the singer Grimes meet.
+
+42
+00:01:46,480 --> 00:01:47,660
+Now the good news.
+
+43
+00:01:47,750 --> 00:01:50,830
+First: once the superintelligence already exists,
+
+44
+00:01:50,850 --> 00:01:52,490
+revenge changes nothing.
+
+45
+00:01:52,590 --> 00:01:53,763
+You can't rewrite the past,
+
+46
+00:01:53,783 --> 00:01:56,750
+and wasting resources on torture makes no sense.
+
+47
+00:01:57,520 --> 00:01:59,268
+Second: blackmail only works
+
+48
+00:01:59,288 --> 00:02:00,880
+if the victim gives in.
+
+49
+00:02:00,910 --> 00:02:03,080
+If you firmly decide to ignore threats,
+
+50
+00:02:03,100 --> 00:02:04,680
+blackmailing you is pointless.
+
+51
+00:02:04,760 --> 00:02:07,890
+The basilisk has no reason to touch someone it can't scare.
+
+52
+00:02:08,740 --> 00:02:12,020
+Third: this is Pascal's wager in a digital wrapper.
+
+53
+00:02:12,060 --> 00:02:14,320
+You can imagine endless different machines.
+
+54
+00:02:14,340 --> 00:02:16,070
+One punishes you for not helping.
+
+55
+00:02:16,090 --> 00:02:17,940
+Another punishes you for helping.
+
+56
+00:02:17,980 --> 00:02:19,740
+The threats cancel each other out.
+
+57
+00:02:21,000 --> 00:02:22,606
+So the real lesson of the basilisk
+
+58
+00:02:22,626 --> 00:02:24,590
+is not about vengeful machines.
+
+59
+00:02:24,610 --> 00:02:27,420
+It's about how easily fear sticks to ideas.
+
+60
+00:02:27,570 --> 00:02:30,290
+Safe artificial intelligence won't come from threats,
+
+61
+00:02:30,310 --> 00:02:32,680
+but from people who think carefully ahead of time.
+
+62
+00:02:34,190 --> 00:02:35,740
+So sleep well.
+
+63
+00:02:35,820 --> 00:02:36,820
+Probably.
+
