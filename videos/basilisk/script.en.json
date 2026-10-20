@@ -6,7 +6,10 @@
   "voice": "Marcus K - Calm Documentary Narrator",
   "voice_id": "3H55HGnNE1XjYxigHSAS",
   "model": "eleven_v4",
-  "flow": "https://elevenlabs.io/app/flows/66syXcW84QKgHTrhnGVu"
+  "flow": "https://elevenlabs.io/app/flows/66syXcW84QKgHTrhnGVu",
+  "take": "D (4 of 4), generation Q108ZUhBAWIGcPVywUqU",
+  "why": "clearest pauses between blocks, most headroom (peak -6.3 dBFS)",
+  "transcript": "eleven_scribe_v1, generation 2soeyTeIZF8eufxeyBbl"
  },
  "timing": {
   "lead": 0.6,

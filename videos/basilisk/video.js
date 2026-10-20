@@ -849,7 +849,7 @@ function s9(ctx, u, d, t) {
     av(560, tx('И'), tx('Илон Маск'), '#7aa2ff', pop(u, L('Илона') - 0.2, 0.4));
     av(1360, tx('Г'), tx('Граймс'), '#ff8fb8', pop(u, L('певицу') - 0.1, 0.4));
     const bp = pop(u, L('шутка') - 0.1, 0.4);
-    if (bp > 0) { ctx.save(); ctx.translate(960, 360); ctx.scale(bp, bp); ctx.font = '700 36px Montserrat, sans-serif'; const tx = tx('шутка про «Рококо-василиска»'); const w = ctx.measureText(tx).width + 70; rrect(ctx, -w / 2, -40, w, 80, 40); ctx.fillStyle = PAL.ice; ctx.fill(); label(ctx, tx, 0, 2, 36, { color: '#120d40', weight: 700, font: 'Montserrat' }); ctx.restore(); }
+    if (bp > 0) { ctx.save(); ctx.translate(960, 360); ctx.scale(bp, bp); ctx.font = '700 36px Montserrat, sans-serif'; const jt = tx('шутка про «Рококо-василиска»'); const w = ctx.measureText(jt).width + 70; rrect(ctx, -w / 2, -40, w, 80, 40); ctx.fillStyle = PAL.ice; ctx.fill(); label(ctx, jt, 0, 2, 36, { color: '#120d40', weight: 700, font: 'Montserrat' }); ctx.restore(); }
     const hp = pop(u, L('познакомила'), 0.5, 2.4);
     if (hp > 0) { ctx.save(); ctx.translate(960, 560); ctx.scale(hp * (1 + 0.06 * Math.sin(t * 7)), hp * (1 + 0.06 * Math.sin(t * 7))); heart(ctx, 0, 0, 80, PAL.mag); ctx.restore(); ctx.strokeStyle = rgba(PAL.pink, 0.6 * hp); ctx.setLineDash([14, 12]); ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(700, 560); ctx.lineTo(860, 560); ctx.moveTo(1060, 560); ctx.lineTo(1220, 560); ctx.stroke(); ctx.setLineDash([]); }
     ctx.restore();

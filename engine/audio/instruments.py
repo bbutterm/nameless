@@ -140,6 +140,10 @@ def load_voice(path):
     x = x.astype(np.float64); x = x / (np.abs(x).max() + 1e-9)
     if x.ndim == 2: x = x.mean(1)
     if sr != SR: x = signal.resample_poly(x, SR, sr)
+    # level by active-speech RMS, not by peak: voices differ in crest factor (Marcus K sat ~5 dB lower than Fuad after
+    # peak normalisation). -16.5 dB is where the Fuad takes already were, so older mixes keep their balance.
+    h = T(0.1); k = len(x) // h; r = np.sqrt((x[:k * h].reshape(k, h) ** 2).mean(1))
+    if k: x = x * 10 ** ((-16.5 - 20 * np.log10(r[r > np.percentile(r, 40)].mean() + 1e-12)) / 20)
     return x
 def envelope(x, att=0.02, rel=0.3):
     a = np.abs(x); w = T(0.03); a = np.convolve(a, np.ones(w) / w, 'same')
@@ -161,7 +165,15 @@ def master(music, sfx, voice, END, v_at, duck=0.55, mgain=1.0, sgain=1.0):
         vv = hp(vv, 80)
         mix += np.vstack([vv, vv]) * 0.55
         music = music * g
-    mix += music * 0.32 * mgain + sfx * 0.42 * sgain
+    bed = music * 0.32 * mgain + sfx * 0.42 * sgain
+    if voice is not None:
+        # balance check (CLAUDE.md: speech ~10–13 dB above the music): RMS over 100 ms frames where the voice is active
+        h = T(0.1); k = n // h
+        vr = np.sqrt((vv[:k * h].reshape(k, h) ** 2).mean(1)) * 0.55
+        br = np.sqrt((bed[:, :k * h].mean(0).reshape(k, h) ** 2).mean(1))
+        act = vr > np.percentile(vr, 40)
+        if act.any(): print(f'balance: voice is {20 * np.log10(vr[act].mean() / (br[act].mean() + 1e-12)):.1f} dB above music+sfx (target 10–13)')
+    mix += bed
     # gentle tail fade
     fo = T(0.6); mix[:, -fo:] *= np.linspace(1, 0, fo)
     pk = np.abs(mix).max(); mix = mix / pk * 0.89
