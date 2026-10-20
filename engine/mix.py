@@ -4,7 +4,7 @@ needs out/<v>/events.json (engine/dump_events.py) and, for narration, out/<v>/vo
 import sys, json, importlib.util, re
 sys.path.insert(0, str(__import__('pathlib').Path(__file__).resolve().parent / 'audio'))
 from instruments import *
-from browser import vdir, outdir
+from browser import vdir, outdir, timings_path, out_name
 
 def main():
     v = sys.argv[1]; O = outdir(v)
@@ -12,7 +12,7 @@ def main():
     spec = importlib.util.spec_from_file_location('score', vdir(v) / 'score.py'); mod = importlib.util.module_from_spec(spec); spec.loader.exec_module(mod)
     music, sfx = mod.score(ev, END)
     voice, v_at = None, 0.0
-    tj = vdir(v) / 'timings.js'
+    tj = timings_path(v)
     if (O / 'voice.wav').exists() and tj.exists():
         voice = load_voice(str(O / 'voice.wav'))
         v_at = json.loads(re.search(r'=\s*(\{.*\});', tj.read_text(encoding='utf-8'), re.S).group(1))['voice_at']

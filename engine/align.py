@@ -1,5 +1,5 @@
 """Turn the narration + ElevenLabs word timestamps into videos/<v>/timings.js for the animation.
-usage: python3 engine/align.py <video> [--lead 0.6] [--tail 4.0] [--tempo 1.0]   (defaults from script.json "timing")
+usage: python3 engine/align.py <video>[:lang] [--lead 0.6] [--tail 4.0] [--tempo 1.0]   (defaults from script.json "timing")
 inputs : videos/<v>/script.json (lines: id, say, text), videos/<v>/voice/narration.mp3, videos/<v>/voice/words.json
          (words.json = Scribe output: {"words":[{"text","start","end"}]}; without it we fall back to silence detection)
 outputs: videos/<v>/timings.js  (window.TIMINGS = {voice_at, end, lines[{id,t0,t1}], words[[text,t0,t1,line]], chunks[{t0,t1,text}]})
@@ -10,26 +10,26 @@ Times in timings.js are video times (voice offset by --lead)."""
 import sys, re, json, subprocess, argparse
 import numpy as np
 from scipy.io import wavfile
-from browser import vdir, outdir
+from browser import vdir, outdir, suffix, voice_dir, timings_path
 
 def norm(w): return re.sub(r'[^\wё]', '', w.lower().replace('ё', 'е'))
 
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument('v'); ap.add_argument('--lead', type=float); ap.add_argument('--tail', type=float); ap.add_argument('--tempo', type=float)
     a = ap.parse_args(); V = vdir(a.v)
-    script = json.load(open(V / 'script.json', encoding='utf-8'))
+    script = json.load(open(V / f'script{suffix(a.v)}.json', encoding='utf-8'))
     # defaults can live in script.json → "timing": {"lead": .., "tail": .., "tempo": ..}; CLI flags override
     tm = {'lead': 0.6, 'tail': 4.0, 'tempo': 1.0, **script.get('timing', {})}
     for k in tm:
         if getattr(a, k) is None: setattr(a, k, tm[k])
     wav = outdir(a.v) / 'voice.wav'
     af = [] if abs(a.tempo - 1) < 1e-3 else [f'atempo={a.tempo}']
-    subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', str(V / 'voice' / 'narration.mp3')] + (['-af', ','.join(af)] if af else []) + ['-ar', '48000', '-ac', '1', str(wav)], check=True)
+    subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', str(voice_dir(a.v) / 'narration.mp3')] + (['-af', ','.join(af)] if af else []) + ['-ar', '48000', '-ac', '1', str(wav)], check=True)
     dur = float(subprocess.run(['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', str(wav)], capture_output=True, text=True).stdout)
 
     sr, x = wavfile.read(wav)
     # transcript words without audio tags like [pause]
-    tw = [w for w in json.load(open(V / 'voice' / 'words.json', encoding='utf-8'))['words'] if not w['text'].startswith('[') and not w['text'].endswith(']') and norm(w['text'])]
+    tw = [w for w in json.load(open(voice_dir(a.v) / 'words.json', encoding='utf-8'))['words'] if not w['text'].startswith('[') and not w['text'].endswith(']') and norm(w['text'])]
     k = 0; segs = []
     for li, L in enumerate(script['lines']):
         say = [w for w in re.sub(r'\[[^\]]*\]', ' ', L['say']).split() if norm(w)]
@@ -67,9 +67,9 @@ def main():
         for p in parts:
             n = len([w for w in p.split() if norm(w)])
             sw = seg[i:i + n] or seg[-1:]
-            chunks.append({'t0': T(sw[0]['start']), 't1': T(sw[-1]['end']), 'text': p}); i += n
-    res = {'voice_at': a.lead, 'tempo': a.tempo, 'voice_dur': round(dur, 3), 'end': round(a.lead + dur + a.tail, 3), 'pauses': [[round(c + a.lead, 3), p] for c, p in cuts], 'lines': lines, 'words': words, 'chunks': chunks}
-    (V / 'timings.js').write_text('window.TIMINGS = ' + json.dumps(res, ensure_ascii=False) + ';\n', encoding='utf-8')
+            chunks.append({'t0': T(sw[0]['start']), 't1': T(sw[-1]['end']), 'text': p, 'line': li}); i += n
+    res = {'voice_at': a.lead, 'tempo': a.tempo, 'voice_dur': round(dur, 3), 'end': round(a.lead + dur + a.tail, 3), 'pauses': [[round(c + a.lead, 3), p] for c, p in cuts], 'lang': script.get('lang'), 'anchors': script.get('anchors', {}), 'lines': lines, 'words': words, 'chunks': chunks}
+    timings_path(a.v).write_text('window.TIMINGS = ' + json.dumps(res, ensure_ascii=False) + ';\n', encoding='utf-8')
     for L in lines: print(f"{L['id']:>18} {L['t0']:7.2f} → {L['t1']:7.2f}")
     print('voice', round(dur, 2), 's  END', res['end'])
 

@@ -120,7 +120,7 @@ function s1(ctx, u, d, t) {
     ctx.save(); ctx.translate(1560 + fq * 320, 690 - fq * 60); ctx.rotate(-0.08 + fq * 0.7); ctx.scale(fp, fp); ctx.globalAlpha *= 1 - fq;
     rrect(ctx, -110, -70, 90, 30, 10); ctx.fillStyle = '#c9902a'; ctx.fill(); rrect(ctx, -110, -55, 220, 150, 14); ctx.fillStyle = PAL.amber; ctx.fill();
     ctx.fillStyle = 'rgba(0,0,0,0.15)'; rrect(ctx, 0, -55, 110, 150, 12); ctx.fill();
-    label(ctx, 'СЕКРЕТНО', 0, 22, 26, { color: PAL.magD, weight: 900 });
+    label(ctx, tx('СЕКРЕТНО'), 0, 22, 26, { color: PAL.magD, weight: 900 });
     ctx.restore();
   }
   // the idea
@@ -162,7 +162,7 @@ function s2(ctx, u, d, t) {
   if (hb > 0 && hb < 1) { ctx.strokeStyle = rgba(PAL.cyan, 0.45 * (1 - hb)); ctx.lineWidth = 6 * (1 - hb) + 1; ctx.beginPath(); ctx.ellipse(ex, ey, 300 + hb * 420, 110 + hb * 300, 0, 0, TAU); ctx.stroke(); }
   dust(ctx, cam, t, '#9fdcff', 0.25);
   const tp = seg(u, tTitle, tTitle + 1.1), tout = seg(u, d - 0.9, d - 0.55);
-  if (tp > 0 && tout < 1) { ctx.save(); ctx.globalAlpha = 1 - tout; kineticWord(ctx, 'ВАСИЛИСК РОКО', 960, 690 + tout * 30, 96, tp, { glitch: true, track: 0.06, shadow: 'rgba(5,3,30,0.6)' }); ctx.restore(); }
+  if (tp > 0 && tout < 1) { ctx.save(); ctx.globalAlpha = 1 - tout; kineticWord(ctx, tx('ВАСИЛИСК РОКО'), 960, 690 + tout * 30, 96, tp, { glitch: true, track: 0.06, shadow: 'rgba(5,3,30,0.6)' }); ctx.restore(); }
   vignette(ctx, 0.6);
   fadeBlack(ctx, seg(u, d - 0.12, d), '2,2,14');
 }
@@ -175,7 +175,7 @@ function s1cam(u) {
 
 // S3 — the pupil is a monitor: July 2010, LessWrong, Roko posts a thought experiment
 const SCR = { x: 980, y: 505, w: 620, h: 380 };
-const GLYPHS = 'ИИРОКОLESSWRONG2010ЭКСПЕРИМЕНТ01ΣΔ#?'.split('');
+const GLYPHS = tx('ИИРОКОLESSWRONG2010ЭКСПЕРИМЕНТ01ΣΔ#?').split('');
 const PARTS = (() => { const R = rng(5); const a = []; for (let i = 0; i < 120; i++) a.push({ g: GLYPHS[Math.floor(R() * GLYPHS.length)], sx: (R() - .5), sy: (R() - .5), vx: (R() - .5) * 2.2, vy: -0.6 - R() * 1.4, del: R() * 0.45, sz: 22 + R() * 30, rot: (R() - .5) * 3, cx1: (R() - .5) * 900, cy1: -R() * 500, sp: 0.8 + R() * 0.5 }); return a; })();
 function forumCard(ctx, x, y, w, h, o = {}) {
   ctx.save(); ctx.translate(x, y);
@@ -191,9 +191,9 @@ function forumCard(ctx, x, y, w, h, o = {}) {
     ctx.globalAlpha = post;
     circle(ctx, -w / 2 + w * 0.085, -h / 2 + h * 0.31, h * 0.065, PAL.amber);
     ctx.fillStyle = '#2b2275'; ctx.font = `700 ${h * 0.065}px Montserrat, sans-serif`; ctx.fillText('Roko', -w / 2 + w * 0.15, -h / 2 + h * 0.31);
-    ctx.fillStyle = '#7d7fb3'; ctx.font = `500 ${h * 0.045}px Montserrat, sans-serif`; ctx.fillText('новый пост', -w / 2 + w * 0.15 + h * 0.2, -h / 2 + h * 0.315);
+    ctx.fillStyle = '#7d7fb3'; ctx.font = `500 ${h * 0.045}px Montserrat, sans-serif`; ctx.fillText(tx('новый пост'), -w / 2 + w * 0.15 + h * 0.2, -h / 2 + h * 0.315);
     if (o.nameHi > 0) { ctx.save(); ctx.globalAlpha = post * o.nameHi * 0.35; rrect(ctx, -w / 2 + w * 0.14, -h / 2 + h * 0.265, h * 0.19, h * 0.09, h * 0.02); ctx.fillStyle = PAL.amber; ctx.fill(); ctx.restore(); }
-    const title = 'Мысленный эксперимент'; const n = Math.floor((o.typed || 0) * title.length);
+    const title = tx('Мысленный эксперимент'); const n = Math.floor((o.typed || 0) * title.length);
     ctx.fillStyle = '#120d40'; ctx.font = `800 ${h * 0.085}px Montserrat, sans-serif`;
     const shown = title.slice(0, n); ctx.fillText(shown, -w / 2 + w * 0.05, -h / 2 + h * 0.5);
     if ((o.typed || 0) < 1 || o.cursor) { const cw = ctx.measureText(shown).width; if (Math.floor((o.t || 0) * 3) % 2 === 0) { ctx.fillStyle = PAL.cyanD; ctx.fillRect(-w / 2 + w * 0.05 + cw + 4, -h / 2 + h * 0.45, h * 0.02, h * 0.1); } }
@@ -215,7 +215,7 @@ function wallCalendar(ctx, x, y, flip, t) {
   rrect(ctx, -110, -130, 220, 270, 14); ctx.fillStyle = '#e9ebff'; ctx.fill();
   ctx.fillStyle = PAL.mag; rrect(ctx, -110, -130, 220, 70, 14); ctx.fill(); ctx.fillRect(-110, -90, 220, 30);
   [-60, 60].forEach(rx => { circle(ctx, rx, -130, 12, '#1a1450'); });
-  const pages = [['ИЮНЬ', '2010'], ['ИЮЛЬ', '2010']];
+  const pages = [[tx('ИЮНЬ'), '2010'], [tx('ИЮЛЬ'), '2010']];
   const cur = flip >= 1 ? 1 : 0;
   label(ctx, pages[cur][0], 0, -95, 34, { color: '#fff', weight: 900 });
   label(ctx, pages[cur][1], 0, 10, 64, { color: '#1a1450', weight: 900 });
@@ -280,7 +280,7 @@ function room(ctx, cam, u, t, o) {
   ctx.restore();
   // chat bubbles of the debate around the screen
   if (o.chat > 0) {
-    const B = [['ИИ опасен?', 1500, 250, '#5ce1ff'], ['Когда появится сверхразум?', 1450, 390, '#ff8fb8'], ['А если он решит…', 1530, 640, '#a68cff']];
+    const B = [[tx('ИИ опасен?'), 1500, 250, '#5ce1ff'], [tx('Когда появится сверхразум?'), 1450, 390, '#ff8fb8'], [tx('А если он решит…'), 1530, 640, '#a68cff']];
     ctx.save(); applyCam(ctx, cam, 1.08);
     B.forEach(([txt, x, y, c], i) => {
       const p = pop(o.chat, i * 0.18, 0.3, 2) * (1 - seg(o.chatOut, i * 0.1, i * 0.1 + 0.3));
@@ -415,8 +415,8 @@ function s4(ctx, u, d, t) {
     const sx = x => W / 2 + (x - cam.x) * cam.z, sy = y => H / 2 + (y - cam.y) * cam.z;
     ctx.save(); ctx.globalAlpha = lab;
     ctx.strokeStyle = PAL.white; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(sx(80), sy(1050)); ctx.lineTo(sx(80), sy(1070)); ctx.lineTo(sx(1840), sy(1070)); ctx.lineTo(sx(1840), sy(1050)); ctx.stroke();
-    label(ctx, 'ВСЁ ЧЕЛОВЕЧЕСТВО', sx(960), sy(1070) + 40, 30, { color: PAL.white });
-    label(ctx, 'СВЕРХРАЗУМ', sx(CORE.x), sy(CORE.y) + 240 * cam.z * 1.9, 40, { color: '#120d40', bg: PAL.cyan });
+    label(ctx, tx('ВСЁ ЧЕЛОВЕЧЕСТВО'), sx(960), sy(1070) + 40, 30, { color: PAL.white });
+    label(ctx, tx('СВЕРХРАЗУМ'), sx(CORE.x), sy(CORE.y) + 240 * cam.z * 1.9, 40, { color: '#120d40', bg: PAL.cyan });
     ctx.restore();
   }
   // goal icons: disease defeated, ageing stopped
@@ -449,8 +449,8 @@ function s5(ctx, u, d, t) {
   const ca = seg(u, L('около') - 0.3, L('около')) * (1 - seg(u, L('каждый', 1) + 0.6, L('каждый', 1) + 1.2));
   if (ca > 0) {
     ctx.save(); applyCam(ctx, cam, 1); ctx.globalAlpha = ca;
-    label(ctx, cnt.toLocaleString('ru-RU'), 1350, 470, 150, { color: PAL.white, weight: 900, shadow: 'rgba(5,3,30,0.6)' });
-    label(ctx, 'ЧЕЛОВЕК В ДЕНЬ', 1350, 590, 42, { color: PAL.amber, weight: 800 });
+    label(ctx, cnt.toLocaleString(LOCALE), 1350, 470, 150, { color: PAL.white, weight: 900, shadow: 'rgba(5,3,30,0.6)' });
+    label(ctx, tx('ЧЕЛОВЕК В ДЕНЬ'), 1350, 590, 42, { color: PAL.amber, weight: 800 });
     ctx.restore();
   }
   // the timeline of days until the AI arrives
@@ -461,7 +461,7 @@ function s5(ctx, u, d, t) {
   if (tlA > 0) {
     ctx.globalAlpha = tlA;
     ctx.strokeStyle = '#8f8ad8'; ctx.lineWidth = 6; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(DAYX0 - 160, TL_Y + 90); ctx.lineTo(DAYX0 + DAYS * DAYW + 420, TL_Y + 90); ctx.stroke();
-    label(ctx, 'СЕЙЧАС', DAYX0 - 60, TL_Y + 150, 30, { color: '#c9c6ff' });
+    label(ctx, tx('СЕЙЧАС'), DAYX0 - 60, TL_Y + 150, 30, { color: '#c9c6ff' });
     for (let i = 0; i < DAYS; i++) {
       const x = DAYX0 + i * DAYW; const ap = pop(u, L('каждый', 1) + i * 0.09, 0.3, 2);
       if (ap <= 0) continue;
@@ -471,9 +471,9 @@ function s5(ctx, u, d, t) {
       ctx.fillStyle = 'rgba(0,0,20,0.3)'; rrect(ctx, -58, -62, 124, 132, 14); ctx.fill();
       rrect(ctx, -62, -70, 124, 132, 14); ctx.fillStyle = base; ctx.fill();
       ctx.fillStyle = saved > 0.5 ? PAL.amberD : PAL.mag; rrect(ctx, -62, -70, 124, 30, 14); ctx.fill(); ctx.fillRect(-62, -52, 124, 12);
-      label(ctx, 'ДЕНЬ', 0, -55, 16, { color: '#fff', weight: 800 });
+      label(ctx, tx('ДЕНЬ'), 0, -55, 16, { color: '#fff', weight: 800 });
       label(ctx, String(i + 1), 0, 0, 46, { color: saved > 0.5 ? '#3a1f00' : (lost > 0.5 ? '#c9c6ff' : '#1a1450'), weight: 900 });
-      if (lost > 0) label(ctx, saved > 0.5 ? 'спасены' : '−170 тыс.', 0, 42, 17, { color: saved > 0.5 ? '#3a1f00' : '#e9e6ff', weight: 700, font: 'Montserrat', alpha: lost });
+      if (lost > 0) label(ctx, saved > 0.5 ? tx('спасены') : tx('−170 тыс.'), 0, 42, 17, { color: saved > 0.5 ? '#3a1f00' : '#e9e6ff', weight: 700, font: 'Montserrat', alpha: lost });
       ctx.restore();
     }
     ctx.globalAlpha = 1;
@@ -482,8 +482,8 @@ function s5(ctx, u, d, t) {
   if (tlA > 0) {
     aiCore(ctx, coreX, TL_Y - 40, 0.42 * tlA, t, { eye: 1, rings: 1, look: [-0.8, 0.2] });
     const ar = seg(u, L('как') - 0.2, L('раньше') + 0.2);
-    if (ar > 0) { kineticWord(ctx, '← РАНЬШЕ', coreX, TL_Y - 280, 76, ar, { color: PAL.amber, shadow: 'rgba(5,3,30,0.6)' }); }
-    ctx.globalAlpha = 1; label(ctx, 'ПОЯВЛЕНИЕ СВЕРХРАЗУМА', coreX, TL_Y + 150, 26, { color: PAL.cyan, alpha: tlA });
+    if (ar > 0) { kineticWord(ctx, tx('← РАНЬШЕ'), coreX, TL_Y - 280, 76, ar, { color: PAL.amber, shadow: 'rgba(5,3,30,0.6)' }); }
+    ctx.globalAlpha = 1; label(ctx, tx('ПОЯВЛЕНИЕ СВЕРХРАЗУМА'), coreX, TL_Y + 150, 26, { color: PAL.cyan, alpha: tlA });
   }
   ctx.restore();
   dust(ctx, cam, t, '#9fdcff', 0.2);
@@ -506,7 +506,7 @@ function s6(ctx, u, d, t) {
   // time axis
   ctx.strokeStyle = 'rgba(200,190,255,0.5)'; ctx.lineWidth = 6; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(120, 1010); ctx.lineTo(1900, 1010); ctx.stroke();
   ctx.fillStyle = 'rgba(200,190,255,0.5)'; ctx.beginPath(); ctx.moveTo(1930, 1010); ctx.lineTo(1890, 988); ctx.lineTo(1890, 1032); ctx.fill();
-  label(ctx, 'ПРОШЛОЕ', 300, 1060, 28, { color: '#c9c6ff' }); label(ctx, 'БУДУЩЕЕ', 1700, 1060, 28, { color: '#c9c6ff' });
+  label(ctx, tx('ПРОШЛОЕ'), 300, 1060, 28, { color: '#c9c6ff' }); label(ctx, tx('БУДУЩЕЕ'), 1700, 1060, 28, { color: '#c9c6ff' });
   // ground for the past
   rrect(ctx, 150, 880, 1020, 40, 20); ctx.fillStyle = '#2b2275'; ctx.fill();
   const scan0 = L('всех'), scanD = 1.6, mark0 = L('помог'), work0 = L('работать') - 0.5;
@@ -536,7 +536,7 @@ function s6(ctx, u, d, t) {
   // "not out of malice": the eye calms, a pill says it's arithmetic
   const calm = Math.sin(clamp((u - L('злобы') + 0.5) / 1.3) * Math.PI);
   aiCore(ctx, FUT.x, FUT.y, 0.9, t, { tint: turn * (1 - 0.7 * calm), slit: lerp(0.15, 0.5, calm), look: [-0.6, 0.4] });
-  if (calm > 0.01) { ctx.save(); ctx.globalAlpha = calm; label(ctx, 'не злость — расчёт', FUT.x, FUT.y - 360, 34, { color: '#120d40', bg: PAL.ice, weight: 700, font: 'Montserrat' }); ctx.restore(); }
+  if (calm > 0.01) { ctx.save(); ctx.globalAlpha = calm; label(ctx, tx('не злость — расчёт'), FUT.x, FUT.y - 360, 34, { color: '#120d40', bg: PAL.ice, weight: 700, font: 'Montserrat' }); ctx.restore(); }
   // the threat travels back in time
   if (sig > 0 && sig < 1) {
     const x = lerp(FUT.x - 100, 700, E.inOut(sig)), y = lerp(FUT.y + 100, 560, E.inOut(sig)) - Math.sin(sig * Math.PI) * 140;
@@ -551,7 +551,7 @@ function s6(ctx, u, d, t) {
     ctx.save(); ctx.globalAlpha = seg(pb, 0, 0.15);
     rrect(ctx, 260, 470, 760, 36, 18); ctx.fillStyle = '#1a1450'; ctx.fill();
     rrect(ctx, 260, 470, 760 * E.in2(pb) * 0.95 + 20, 36, 18); ctx.fillStyle = PAL.cyan; ctx.fill();
-    label(ctx, 'ПРОГРЕСС К СВЕРХРАЗУМУ', 640, 430, 26, { color: PAL.ice });
+    label(ctx, tx('ПРОГРЕСС К СВЕРХРАЗУМУ'), 640, 430, 26, { color: PAL.ice });
     ctx.restore();
   }
   ctx.restore();
@@ -575,7 +575,7 @@ function s7(ctx, u, d, t) {
     ctx.fillStyle = 'rgba(0,0,20,0.3)'; ctx.beginPath(); ctx.ellipse(10, 0, 110, 14, 0, 0, TAU); ctx.fill();
     ctx.beginPath(); ctx.moveTo(-80, 0); ctx.lineTo(-80, -150); ctx.arc(0, -150, 80, Math.PI, 0); ctx.lineTo(80, 0); ctx.closePath(); ctx.fillStyle = '#6b6894'; ctx.fill();
     ctx.fillStyle = 'rgba(0,0,20,0.2)'; ctx.fillRect(30, -200, 50, 200);
-    label(ctx, 'ТЫ', 0, -140, 46, { color: '#2a2650', weight: 900 }); label(ctx, '20XX', 0, -80, 24, { color: '#2a2650', weight: 800 });
+    label(ctx, tx('ТЫ'), 0, -140, 46, { color: '#2a2650', weight: 900 }); label(ctx, '20XX', 0, -80, 24, { color: '#2a2650', weight: 800 });
     ctx.restore();
   }
   if (fade < 1) dude(ctx, 620, 820 - fade * 40, 200, t, { alpha: 1 - fade, look: [0.2, -0.3], seed: 0.5 });
@@ -613,7 +613,7 @@ function s7(ctx, u, d, t) {
     ctx.fillStyle = 'rgba(255,255,255,0.18)'; ctx.beginPath(); ctx.moveTo(POD.x - 120, POD.y - 270); ctx.lineTo(POD.x - 80, POD.y - 270); ctx.lineTo(POD.x - 130, POD.y + 200); ctx.lineTo(POD.x - 140, POD.y + 120); ctx.fill();
     ctx.restore();
     const cp = pop(u, L('точную') - 0.1, 0.4) * (1 - seg(u, L('кто', 1) - 0.6, L('кто', 1) - 0.1));
-    if (cp > 0) { ctx.save(); ctx.translate(POD.x + 300, POD.y - 200); ctx.scale(cp, cp); label(ctx, 'КОПИЯ 1:1', 0, 0, 34, { color: '#120d40', bg: PAL.cyan }); ctx.restore(); }
+    if (cp > 0) { ctx.save(); ctx.translate(POD.x + 300, POD.y - 200); ctx.scale(cp, cp); label(ctx, tx('КОПИЯ 1:1'), 0, 0, 34, { color: '#120d40', bg: PAL.cyan }); ctx.restore(); }
     const th = pop(u, L('думает') - 0.1, 0.4) * (1 - seg(u, L('кто', 1) - 0.6, L('кто', 1) - 0.1)), hp = pop(u, L('чувствует'), 0.4, 2.4) * (1 - seg(u, L('кто', 1) - 0.6, L('кто', 1) - 0.1));
     if (th > 0) { ctx.save(); ctx.translate(POD.x - 270, POD.y - 330); ctx.scale(th, th); circle(ctx, 0, 0, 62, '#e9ebff'); circle(ctx, 60, 60, 14, '#e9ebff'); gear(ctx, -12, -6, 22, t * 2, '#8f8ad8'); gear(ctx, 24, 18, 13, -t * 3, '#a68cff'); ctx.restore(); }
     if (hp > 0) { ctx.save(); ctx.translate(POD.x + 250, POD.y - 40); ctx.scale(hp * (1 + 0.08 * Math.sin(t * 8)), hp * (1 + 0.08 * Math.sin(t * 8))); heart(ctx, 0, 0, 44, PAL.pink); ctx.restore(); }
@@ -706,7 +706,7 @@ function s8(ctx, u, d, t) {
   // victim 2: someone who KNOWS (bulb) — the bulb is the target
   const kn = E.outBack(seg(u, k0 - 0.3, k0 + 0.2));
   const kHit = seg(u, k0 + 0.25, k0 + 0.6);
-  if (kn > 0) { ctx.save(); ctx.globalAlpha = 1 - seg(u, L('Пока') - 0.3, L('Пока')); dude(ctx, 300, 935, 170 * kn, t, { body: '#ff8fb8', mood: kHit > 0 ? 'scared' : 'calm', look: [0.8, -0.4], seed: 0.2 }); bulb(ctx, 300, 690, 28 * kn, mix(PAL.amber, PAL.mag, kHit)); if (kn > 0.5) label(ctx, 'ЗНАНИЕ', 300, 620, 26, { color: '#120d40', bg: PAL.amber, alpha: clamp((kn - 0.5) * 2) }); ctx.restore(); }
+  if (kn > 0) { ctx.save(); ctx.globalAlpha = 1 - seg(u, L('Пока') - 0.3, L('Пока')); dude(ctx, 300, 935, 170 * kn, t, { body: '#ff8fb8', mood: kHit > 0 ? 'scared' : 'calm', look: [0.8, -0.4], seed: 0.2 }); bulb(ctx, 300, 690, 28 * kn, mix(PAL.amber, PAL.mag, kHit)); if (kn > 0.5) label(ctx, tx('ЗНАНИЕ'), 300, 620, 26, { color: '#120d40', bg: PAL.amber, alpha: clamp((kn - 0.5) * 2) }); ctx.restore(); }
   // you: no bulb yet, protected by ignorance
   const youA = seg(u, L('Пока') - 0.4, L('Пока') + 0.1);
   const heard = E.outBack(seg(u, tNow - 0.05, tNow + 0.35), 2.2);
@@ -730,7 +730,7 @@ function s8(ctx, u, d, t) {
   ctx.restore();
   // title
   const tp = seg(u, L('Василиск') - 0.1, L('Василиск') + 0.6), to = seg(u, L('убивающий') + 0.2, L('одним'));
-  if (tp > 0 && to < 1) { ctx.save(); ctx.globalAlpha = 1 - to; kineticWord(ctx, 'ВАСИЛИСК', 960, 200, 120, tp, { color: PAL.amber, shadow: 'rgba(5,3,30,0.6)', track: 0.08 }); ctx.restore(); }
+  if (tp > 0 && to < 1) { ctx.save(); ctx.globalAlpha = 1 - to; kineticWord(ctx, tx('ВАСИЛИСК'), 960, 200, 120, tp, { color: PAL.amber, shadow: 'rgba(5,3,30,0.6)', track: 0.08 }); ctx.restore(); }
   dust(ctx, cam, t, '#b6a8ff', 0.2);
   vignette(ctx, 0.55);
   // "Теперь — слышал": hard cut to the serpent's eye staring into the lens
@@ -801,7 +801,7 @@ function s9(ctx, u, d, t) {
     const s = lerp(2.8, 1, E.out3(sp2)) * (u > imp ? 1 + 0.06 * Math.exp(-(u - imp) * 10) : 1);
     ctx.save(); ctx.translate(40, 40); ctx.rotate(-0.2); ctx.scale(s, s); ctx.globalAlpha = clamp(sp2 * 3);
     ctx.strokeStyle = PAL.mag; ctx.lineWidth = 10; rrect(ctx, -300, -78, 600, 156, 16); ctx.stroke(); ctx.lineWidth = 4; rrect(ctx, -284, -62, 568, 124, 10); ctx.stroke();
-    label(ctx, 'УДАЛЕНО', 0, 6, 96, { color: PAL.mag, weight: 900 });
+    label(ctx, tx('УДАЛЕНО'), 0, 6, 96, { color: PAL.mag, weight: 900 });
     ctx.restore();
   }
   // padlock: drops, closes, then cracks open
@@ -819,7 +819,7 @@ function s9(ctx, u, d, t) {
   ctx.restore();
   // who deleted it
   const who = seg(u, L('Основатель') - 0.2, L('Основатель') + 0.3) * (1 - seg(u, L('удалил') - 0.2, L('удалил') + 0.1));
-  if (who > 0) { ctx.save(); ctx.globalAlpha = who; label(ctx, 'Элиезер Юдковский · основатель LessWrong', 960, 110, 32, { color: '#120d40', bg: PAL.ice, weight: 700, font: 'Montserrat' }); ctx.restore(); }
+  if (who > 0) { ctx.save(); ctx.globalAlpha = who; label(ctx, tx('Элиезер Юдковский · основатель LessWrong'), 960, 110, 32, { color: '#120d40', bg: PAL.ice, weight: 700, font: 'Montserrat' }); ctx.restore(); }
   // dust burst on the stamp
   if (u > imp && u < imp + 0.8) { const R = rng(9); const k = (u - imp) / 0.8; for (let i = 0; i < 26; i++) { const a = R() * TAU, s3 = 200 + R() * 380; ctx.globalAlpha = (1 - k) * 0.8; circle(ctx, 1000 + Math.cos(a) * (300 + s3 * E.out3(k)), 480 + Math.sin(a) * (100 + s3 * 0.5 * E.out3(k)), 6 * (1 - k) + 2, PAL.mag); } ctx.globalAlpha = 1; }
   // 2010 → 2015 counter under the card
@@ -828,7 +828,7 @@ function s9(ctx, u, d, t) {
   if (ca > 0) {
     const yv = Math.min(5, Math.floor(cp * 5.999)); const fl = (cp * 5.999) % 1;
     ctx.save(); ctx.globalAlpha = ca; ctx.translate(960, 860);
-    label(ctx, 'ОБСУЖДЕНИЕ ПОД ЗАПРЕТОМ', 0, -78, 30, { color: PAL.mag });
+    label(ctx, tx('ОБСУЖДЕНИЕ ПОД ЗАПРЕТОМ'), 0, -78, 30, { color: PAL.mag });
     ctx.font = '900 96px Unbounded, sans-serif'; ctx.fillStyle = PAL.white; ctx.textBaseline = 'middle'; ctx.textAlign = 'center';
     ctx.fillText('201', -34, 0);
     const flipping = yv < 5 && cp > 0 && fl > 0.7; const k = flipping ? (fl - 0.7) / 0.3 : 0;
@@ -837,7 +837,7 @@ function s9(ctx, u, d, t) {
   }
   ctx.restore();
   const rt = seg(u, L('запретная') - 0.2, L('запретная') + 0.4) * (1 - seg(u, y18 - 0.4, y18));
-  if (rt > 0) { ctx.save(); ctx.globalAlpha = rt; kineticWord(ctx, 'ЭФФЕКТ СТРЕЙЗАНД', 960, 960, 64, rt, { color: PAL.amber, shadow: 'rgba(5,3,30,0.6)' }); ctx.restore(); }
+  if (rt > 0) { ctx.save(); ctx.globalAlpha = rt; kineticWord(ctx, tx('ЭФФЕКТ СТРЕЙЗАНД'), 960, 960, 64, rt, { color: PAL.amber, shadow: 'rgba(5,3,30,0.6)' }); ctx.restore(); }
   // 2018: two people meet over a basilisk joke
   if (whip > 0) {
     ctx.save(); ctx.globalAlpha = whip;
@@ -846,10 +846,10 @@ function s9(ctx, u, d, t) {
     ctx.translate(ox, 0);
     label(ctx, '2018', 960, 170, 110, { color: PAL.amber, weight: 900, shadow: 'rgba(5,3,30,0.6)' });
     const av = (x, init, name, c, p) => { if (p <= 0) return; ctx.save(); ctx.translate(x, 560); ctx.scale(p, p); circle(ctx, 0, 8, 120, 'rgba(0,0,20,0.3)'); circle(ctx, 0, 0, 120, c); label(ctx, init, 0, 6, 84, { color: '#120d40', weight: 900 }); label(ctx, name, 0, 190, 34, { color: PAL.white, weight: 800 }); ctx.restore(); };
-    av(560, 'И', 'Илон Маск', '#7aa2ff', pop(u, L('Илона') - 0.2, 0.4));
-    av(1360, 'Г', 'Граймс', '#ff8fb8', pop(u, L('певицу') - 0.1, 0.4));
+    av(560, tx('И'), tx('Илон Маск'), '#7aa2ff', pop(u, L('Илона') - 0.2, 0.4));
+    av(1360, tx('Г'), tx('Граймс'), '#ff8fb8', pop(u, L('певицу') - 0.1, 0.4));
     const bp = pop(u, L('шутка') - 0.1, 0.4);
-    if (bp > 0) { ctx.save(); ctx.translate(960, 360); ctx.scale(bp, bp); ctx.font = '700 36px Montserrat, sans-serif'; const tx = 'шутка про «Рококо-василиска»'; const w = ctx.measureText(tx).width + 70; rrect(ctx, -w / 2, -40, w, 80, 40); ctx.fillStyle = PAL.ice; ctx.fill(); label(ctx, tx, 0, 2, 36, { color: '#120d40', weight: 700, font: 'Montserrat' }); ctx.restore(); }
+    if (bp > 0) { ctx.save(); ctx.translate(960, 360); ctx.scale(bp, bp); ctx.font = '700 36px Montserrat, sans-serif'; const tx = tx('шутка про «Рококо-василиска»'); const w = ctx.measureText(tx).width + 70; rrect(ctx, -w / 2, -40, w, 80, 40); ctx.fillStyle = PAL.ice; ctx.fill(); label(ctx, tx, 0, 2, 36, { color: '#120d40', weight: 700, font: 'Montserrat' }); ctx.restore(); }
     const hp = pop(u, L('познакомила'), 0.5, 2.4);
     if (hp > 0) { ctx.save(); ctx.translate(960, 560); ctx.scale(hp * (1 + 0.06 * Math.sin(t * 7)), hp * (1 + 0.06 * Math.sin(t * 7))); heart(ctx, 0, 0, 80, PAL.mag); ctx.restore(); ctx.strokeStyle = rgba(PAL.pink, 0.6 * hp); ctx.setLineDash([14, 12]); ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(700, 560); ctx.lineTo(860, 560); ctx.moveTo(1060, 560); ctx.lineTo(1220, 560); ctx.stroke(); ctx.setLineDash([]); }
     ctx.restore();
@@ -871,7 +871,7 @@ function s10(ctx, u, d, t) {
   const cam = camKeys([{ t: 0, v: [960, 470, 1.08, 0.0] }, { t: L('Первое'), v: [960, 440, 1.0, 0.0] }, { t: L('Прошлое'), v: [880, 460, 1.06, -0.008] }, { t: d, v: [1020, 430, 1.1, 0.01] }], u);
   dawnSky(ctx, cam, t, k);
   const hn = seg(u, L('хорошие') - 0.1, L('новости') + 0.3), hno = seg(u, L('Первое') - 0.2, L('Первое') + 0.2);
-  if (hn > 0 && hno < 1) { ctx.save(); ctx.globalAlpha = 1 - hno; kineticWord(ctx, 'ХОРОШИЕ НОВОСТИ', 960, 560 - hno * 40, 100, hn, { color: '#fff7e6', shadow: 'rgba(60,20,40,0.35)' }); ctx.restore(); }
+  if (hn > 0 && hno < 1) { ctx.save(); ctx.globalAlpha = 1 - hno; kineticWord(ctx, tx('ХОРОШИЕ НОВОСТИ'), 960, 560 - hno * 40, 100, hn, { color: '#fff7e6', shadow: 'rgba(60,20,40,0.35)' }); ctx.restore(); }
   const sc = seg(u, L('Первое') - 0.1, L('Первое') + 0.3);
   badge(ctx, 1, 130, 120, 62, E.outBack(sc, 2), PAL.amber);
   if (sc <= 0) return void vignette(ctx, 0.35);
@@ -882,13 +882,13 @@ function s10(ctx, u, d, t) {
   if (stone > 0) { rrect(ctx, 170, 600, 640 * stone, 80, 18); ctx.fillStyle = '#8a86a8'; ctx.fill(); ctx.fillStyle = 'rgba(0,0,20,0.18)'; ctx.fillRect(170, 650, 640 * stone, 30); for (let i = 0; i < 5; i++) { ctx.strokeStyle = 'rgba(40,30,60,0.4)'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(220 + i * 120, 610); ctx.lineTo(240 + i * 120, 640); ctx.lineTo(225 + i * 120, 670); ctx.stroke(); } }
   ctx.strokeStyle = '#fff1e0'; ctx.lineWidth = 6; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(180, 640); ctx.lineTo(lerp(180, 1740, lp), 640); ctx.stroke();
   if (lp > 0.95) { ctx.fillStyle = '#fff1e0'; ctx.beginPath(); ctx.moveTo(1762, 640); ctx.lineTo(1726, 618); ctx.lineTo(1726, 662); ctx.fill(); }
-  label(ctx, 'ПРОШЛОЕ', 330, 730, 30, { color: '#fff1e0', alpha: seg(u, L('Первое') + 0.3, L('Первое') + 0.6) });
-  label(ctx, 'БУДУЩЕЕ', 1590, 730, 30, { color: '#fff1e0', alpha: seg(u, L('Первое') + 0.5, L('Первое') + 0.8) });
+  label(ctx, tx('ПРОШЛОЕ'), 330, 730, 30, { color: '#fff1e0', alpha: seg(u, L('Первое') + 0.3, L('Первое') + 0.6) });
+  label(ctx, tx('БУДУЩЕЕ'), 1590, 730, 30, { color: '#fff1e0', alpha: seg(u, L('Первое') + 0.5, L('Первое') + 0.8) });
   const pin = E.outBack(seg(u, L('когда') - 0.2, L('когда') + 0.2));
   if (pin > 0) dude(ctx, 450, 640, 170 * pin, t, { body: '#4f7cff', look: [0.8, -0.3], mood: 'calm', seed: 0.4, noShadow: true });
   const ain = E.outBack(seg(u, L('сверхразум') - 0.2, L('сверхразум') + 0.3));
   if (ain > 0) aiCore(ctx, 1460, 420, 0.46 * ain, t, { look: [-0.8, 0.2] });
-  label(ctx, 'УЖЕ СУЩЕСТВУЕТ', 1460, 575, 28, { color: '#1d1240', bg: PAL.cyan, alpha: seg(u, L('существует') - 0.1, L('существует') + 0.2) });
+  label(ctx, tx('УЖЕ СУЩЕСТВУЕТ'), 1460, 575, 28, { color: '#1d1240', bg: PAL.cyan, alpha: seg(u, L('существует') - 0.1, L('существует') + 0.2) });
   // revenge arrow back to the past: shatters before arriving
   const ap = seg(u, L('месть') - 0.1, L('изменит') + 0.2), brk = seg(u, L('изменит') + 0.2, L('изменит') + 1.0);
   const P0 = { x: 1400, y: 410 }, P1 = { x: 960, y: 170 }, P2 = { x: 520, y: 420 };
@@ -900,7 +900,7 @@ function s10(ctx, u, d, t) {
       for (let q = 0; q <= reach; q += 0.01) { const p = qb(q); q === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y); } ctx.stroke(); ctx.setLineDash([]);
       const hp = qb(reach), hp2 = qb(Math.max(0, reach - 0.02)); const ang = Math.atan2(hp.y - hp2.y, hp.x - hp2.x);
       ctx.save(); ctx.translate(hp.x, hp.y); ctx.rotate(ang); ctx.fillStyle = PAL.mag; ctx.beginPath(); ctx.moveTo(26, 0); ctx.lineTo(-16, -20); ctx.lineTo(-16, 20); ctx.fill(); ctx.restore();
-      label(ctx, 'МЕСТЬ', 1130, 200, 32, { color: PAL.mag, alpha: seg(ap, 0.2, 0.4) });
+      label(ctx, tx('МЕСТЬ'), 1130, 200, 32, { color: PAL.mag, alpha: seg(ap, 0.2, 0.4) });
     } else {
       const R = rng(31);
       for (let q = 0; q < 0.62; q += 0.035) { const p = qb(q); const vx = (R() - 0.5) * 300, vy = -100 - R() * 200; const tt = brk * 1.1; ctx.save(); ctx.globalAlpha = sc * (1 - brk); ctx.translate(p.x + vx * tt, p.y + vy * tt + 900 * tt * tt); ctx.rotate(R() * 6 * tt); ctx.fillStyle = PAL.mag; ctx.fillRect(-11, -4.5, 22, 9); ctx.restore(); }
@@ -916,11 +916,11 @@ function s10(ctx, u, d, t) {
     ctx.save(); ctx.globalAlpha = ba * sc; ctx.translate(1460, 200);
     rrect(ctx, -110, -40, 220, 80, 14); ctx.fillStyle = '#1d1240'; ctx.fill(); ctx.fillRect(110, -16, 16, 32);
     const lvl = 1 - 0.88 * E.inOut(bp); rrect(ctx, -100, -30, 200 * lvl, 60, 10); ctx.fillStyle = lvl < 0.35 ? PAL.mag : PAL.teal; ctx.fill();
-    label(ctx, 'РЕСУРСЫ', 0, -70, 26, { color: '#fff1e0' });
+    label(ctx, tx('РЕСУРСЫ'), 0, -70, 26, { color: '#fff1e0' });
     ctx.restore();
   }
   const nr = seg(u, L('нерационально') - 0.1, L('нерационально') + 0.5);
-  if (nr > 0) { ctx.save(); ctx.translate(1460, 860); ctx.rotate(-0.06); kineticWord(ctx, 'НЕРАЦИОНАЛЬНО', 0, 0, 58, nr, { color: '#fff7e6', shadow: 'rgba(60,20,40,0.4)' }); ctx.restore(); }
+  if (nr > 0) { ctx.save(); ctx.translate(1460, 860); ctx.rotate(-0.06); kineticWord(ctx, tx('НЕРАЦИОНАЛЬНО'), 0, 0, 58, nr, { color: '#fff7e6', shadow: 'rgba(60,20,40,0.4)' }); ctx.restore(); }
   const qm = E.outBack(seg(u, L('изменит') + 0.3, L('изменит') + 0.7), 2.2);
   if (qm > 0) { ctx.save(); ctx.translate(1600, 300); ctx.scale(qm, qm); ctx.rotate(Math.sin(t * 3) * 0.08); label(ctx, '?', 0, 0, 120, { color: PAL.amber, weight: 900 }); ctx.restore(); }
   ctx.restore();
@@ -943,7 +943,7 @@ function s11(ctx, u, d, t) {
   dude(ctx, 560, 880, 220, t, { body: '#4f7cff', mood: firm > 0 ? (leave > 0.3 ? 'happy' : 'calm') : (yields > 0.2 ? 'scared' : 'calm'), arms: firm > 0 ? 'cross' : (yields > 0.3 ? 'up' : 'down'), look: [0.8, -0.1], seed: 0.3, squash: 1 - 0.08 * yields * (1 - firm) });
   // shield "НЕТ"
   const sh = E.outBack(seg(u, L('решил') - 0.1, L('решил') + 0.35), 1.6);
-  if (sh > 0) { ctx.save(); ctx.translate(780, 700); ctx.scale(sh, sh); ctx.fillStyle = rgba(PAL.cyan, 0.18); ctx.strokeStyle = rgba(PAL.cyan, 0.9); ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(0, -150); ctx.quadraticCurveTo(110, -130, 120, -100); ctx.quadraticCurveTo(120, 60, 0, 170); ctx.quadraticCurveTo(-120, 60, -120, -100); ctx.quadraticCurveTo(-110, -130, 0, -150); ctx.fill(); ctx.stroke(); label(ctx, 'НЕТ', 0, 0, 64, { color: PAL.white, weight: 900 }); ctx.restore(); }
+  if (sh > 0) { ctx.save(); ctx.translate(780, 700); ctx.scale(sh, sh); ctx.fillStyle = rgba(PAL.cyan, 0.18); ctx.strokeStyle = rgba(PAL.cyan, 0.9); ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(0, -150); ctx.quadraticCurveTo(110, -130, 120, -100); ctx.quadraticCurveTo(120, 60, 0, 170); ctx.quadraticCurveTo(-120, 60, -120, -100); ctx.quadraticCurveTo(-110, -130, 0, -150); ctx.fill(); ctx.stroke(); label(ctx, tx('НЕТ'), 0, 0, 64, { color: PAL.white, weight: 900 }); ctx.restore(); }
   // the serpent
   const sx = 1450 + leave * 1100, sy = 520;
   serpentHead(ctx, sx, sy, 1.15 * (1 - 0.3 * defl), t, { flip: true, look: 0.8, angry: defl < 0.5 && leave <= 0, deflate: defl, sweat: defl, rot: leave * 0.3 });
@@ -992,7 +992,7 @@ function s12(ctx, u, d, t) {
     }
     ctx.restore();
     const lt = seg(u, L('Паскаля') - 0.1, L('Паскаля') + 0.6);
-    if (lt > 0) { ctx.save(); ctx.globalAlpha = cinA; kineticWord(ctx, 'ПАРИ ПАСКАЛЯ', 960, 760, 76, lt, { color: '#fff7e6', shadow: 'rgba(60,20,40,0.4)' }); ctx.restore(); }
+    if (lt > 0) { ctx.save(); ctx.globalAlpha = cinA; kineticWord(ctx, tx('ПАРИ ПАСКАЛЯ'), 960, 760, 76, lt, { color: '#fff7e6', shadow: 'rgba(60,20,40,0.4)' }); ctx.restore(); }
   }
   // infinitely many imaginary machines
   const anni = seg(u, L('гасят') - 0.3, L('друга') + 0.5);
@@ -1013,8 +1013,8 @@ function s12(ctx, u, d, t) {
   const you = seg(u, L('Одна') - 0.4, L('Одна'));
   if (you > 0) dude(ctx, 960, 900, 220, t, { body: '#4f7cff', alpha: you, look: [two > 0.5 ? 0.9 : -0.9, -0.4], mood: boom > 0 ? 'happy' : 'scared', arms: boom > 0.3 ? 'shrug' : 'down', seed: 0.3 });
   if (boom < 1) {
-    if (one > 0) { const x = lerp(480, 960, clash), y = lerp(430, 420, clash); aiCore(ctx, x, y, 0.55 * one * (1 - boom), t, { tint: 1, look: [0.6, 0.6], slit: 0.15 }); if (clash < 0.2) label(ctx, 'накажу, если НЕ помог', 480, 640, 32, { color: '#fff', bg: PAL.magD, weight: 700, font: 'Montserrat', alpha: one * (1 - clash * 5) }); }
-    if (two > 0) { const x = lerp(1440, 960, clash), y = lerp(430, 420, clash); aiCore(ctx, x, y, 0.55 * two * (1 - boom), t, { look: [-0.6, 0.6], slit: 0.15 }); if (clash < 0.2) label(ctx, 'накажу, если помог', 1440, 640, 32, { color: '#120d40', bg: PAL.cyan, weight: 700, font: 'Montserrat', alpha: two * (1 - clash * 5) }); }
+    if (one > 0) { const x = lerp(480, 960, clash), y = lerp(430, 420, clash); aiCore(ctx, x, y, 0.55 * one * (1 - boom), t, { tint: 1, look: [0.6, 0.6], slit: 0.15 }); if (clash < 0.2) label(ctx, tx('накажу, если НЕ помог'), 480, 640, 32, { color: '#fff', bg: PAL.magD, weight: 700, font: 'Montserrat', alpha: one * (1 - clash * 5) }); }
+    if (two > 0) { const x = lerp(1440, 960, clash), y = lerp(430, 420, clash); aiCore(ctx, x, y, 0.55 * two * (1 - boom), t, { look: [-0.6, 0.6], slit: 0.15 }); if (clash < 0.2) label(ctx, tx('накажу, если помог'), 1440, 640, 32, { color: '#120d40', bg: PAL.cyan, weight: 700, font: 'Montserrat', alpha: two * (1 - clash * 5) }); }
   }
   if (boom > 0 && boom < 1) { const R = rng(12); for (let i = 0; i < 40; i++) { const a = R() * TAU, s = 100 + R() * 600; circle(ctx, 960 + Math.cos(a) * s * E.out3(boom), 420 + Math.sin(a) * s * E.out3(boom), 10 * (1 - boom) + 2, R() < 0.5 ? PAL.mag : PAL.cyan); } }
   ctx.restore();
@@ -1048,7 +1048,7 @@ function s13(ctx, u, d, t) {
     const ia = seg(u, 0, 0.5);
     ideaOrb(ctx, 760, 380, 46 * ia, t, { color: mix(PAL.amber, '#a58a9a', seg(u, L('цепляется'), L('идеи') + 0.5)) });
     const ur = seg(u, L('урок') - 0.2, L('урок') + 0.5) * (1 - seg(u, L('А') - 0.3, L('А') + 0.1));
-    if (ur > 0) kineticWord(ctx, 'НАСТОЯЩИЙ УРОК', 960, 640, 72, ur, { color: PAL.amber, shadow: 'rgba(5,3,30,0.6)' });
+    if (ur > 0) kineticWord(ctx, tx('НАСТОЯЩИЙ УРОК'), 960, 640, 72, ur, { color: PAL.amber, shadow: 'rgba(5,3,30,0.6)' });
     const cl = seg(u, L('страх') - 0.2, L('цепляется') + 0.6);
     for (let k = 0; k < 6; k++) { const a = k / 6 * TAU + 0.3; tendril(ctx, 760 + Math.cos(a) * 500, 380 + Math.sin(a) * 420, 760 + Math.cos(a) * 50, 380 + Math.sin(a) * 50, 26, cl, t, k * 7); }
     const crowd = seg(u, L('за') - 0.2, L('идеи') + 0.8);
@@ -1057,7 +1057,7 @@ function s13(ctx, u, d, t) {
       mini(ctx, x, 980, 150, ['#7aa2ff', '#ff8fb8', '#2fd6b0', '#ffb547', '#a68cff'][i % 5], { squash: 1 - 0.05 * k });
       if (k > 0) { ideaOrb(ctx, x, 770, 16 * k, t + i, { color: '#a58a9a', glow: 0.4 }); for (let j = 0; j < 3; j++) tendril(ctx, x + (j - 1) * 50, 860, x, 780, 8, k, t, i * 5 + j); }
     }
-    label(ctx, 'СТРАХ', 760, 120, 64, { color: '#d9b8ff', weight: 900, alpha: seg(u, L('страх') - 0.1, L('страх') + 0.3) });
+    label(ctx, tx('СТРАХ'), 760, 120, 64, { color: '#d9b8ff', weight: 900, alpha: seg(u, L('страх') - 0.1, L('страх') + 0.3) });
     ctx.restore();
   }
   if (dawn > 0) {

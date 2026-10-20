@@ -14,10 +14,19 @@
 <script src="kit.js"></script>
 <script>
 // Loads videos/<v>/timings.js (optional, written by engine/align.py) and videos/<v>/video.js (must set window.VIDEO).
-const v = new URLSearchParams(location.search).get('v') || 'basilisk';
+// With &lang=xx (a language variant): the original timings become TIMINGS_REF (word anchors in video.js are mapped
+// onto the new narration), timings.xx.js becomes TIMINGS, and strings.xx.js (window.STRINGS) translates on-screen text.
+const P = new URLSearchParams(location.search);
+const v = P.get('v') || 'basilisk', lang = P.get('lang');
+window.LANG = lang || null;
 const load = (src, optional) => new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = optional ? res : rej; document.head.appendChild(s); });
 window.READY = (async () => {
   await load(`../videos/${v}/timings.js`, true);
+  if (lang) {
+    window.TIMINGS_REF = window.TIMINGS; window.TIMINGS = undefined;
+    await load(`../videos/${v}/timings.${lang}.js`);
+    await load(`../videos/${v}/strings.${lang}.js`, true);
+  }
   const fams = ['800 40px Unbounded', '900 40px Unbounded', '700 40px Unbounded', '700 40px Montserrat', '800 40px Montserrat', '500 40px Montserrat', '800 40px Nunito', '900 40px Nunito', '700 40px Nunito'];
   for (const f of fams) await document.fonts.load(f, 'АБВабвABC2010∞');
   await load(`../videos/${v}/video.js`);

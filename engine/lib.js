@@ -169,16 +169,32 @@ function grain(ctx, t, a = 0.05) {
 
 // Narration clock from window.TIMINGS (engine/align.py): line/word times for syncing animation to the voice.
 // at(id, 'слово', n) -> start time of the n-th word in line `id` that starts with 'слово' (case/punctuation-insensitive).
+// Language variants: anchors are written against the original narration (TIMINGS_REF). In a variant each anchor is
+// mapped onto the new voice: an explicit override from script.<lang>.json "anchors" ({line: {"слово": "word" | "word#n"}})
+// or, by default, the same relative position inside the matching subtitle chunk ('|' pieces) of the same line.
 function narration() {
   const T = window.TIMINGS; if (!T) throw new Error('timings.js missing: run engine/align.py');
+  const R = window.TIMINGS_REF;
   const norm = s => s.toLowerCase().replace(/ё/g, 'е').replace(/[^\p{L}\p{N}]/gu, '');
   const idx = {}; T.lines.forEach((l, i) => idx[l.id] = i);
   const line = id => { const i = idx[id]; if (i === undefined) throw new Error('no line ' + id); return T.lines[i]; };
-  const at = (id, word, n = 0) => {
-    const i = idx[id]; const w = norm(word); const hits = T.words.filter(x => x[3] === i && norm(x[0]).startsWith(w));
-    if (!hits[n]) throw new Error(`no word "${word}"#${n} in ${id}`); return hits[n][1];
+  const find = (TT, id, word, n, which) => {
+    const i = TT.lines.findIndex(l => l.id === id); const w = norm(word); const hits = TT.words.filter(x => x[3] === i && norm(x[0]).startsWith(w));
+    if (!hits[n]) throw new Error(`no word "${word}"#${n} in ${id}`); return hits[n][which];
   };
-  const end = (id, word, n = 0) => { const i = idx[id]; const w = norm(word); return T.words.filter(x => x[3] === i && norm(x[0]).startsWith(w))[n][2]; };
+  const map = (id, word, n, which) => {
+    if (!R) return find(T, id, word, n, which);
+    const ov = (T.anchors || {})[id] && T.anchors[id][word];
+    if (ov) { const [w2, n2] = ov.split('#'); return find(T, id, w2, +(n2 || 0) + (n2 ? 0 : n), which); }
+    const tr = find(R, id, word, n, which);
+    const li = R.lines.findIndex(l => l.id === id), lt = T.lines.findIndex(l => l.id === id);
+    const rc = R.chunks.filter(c => c.line === li), tc = T.chunks.filter(c => c.line === lt);
+    let k = rc.findIndex(c => tr >= c.t0 - 1e-6 && tr <= c.t1 + 1e-6); if (k < 0) k = rc.findIndex(c => tr < c.t0); if (k < 0) k = rc.length - 1;
+    if (rc.length === tc.length && rc[k]) { const c = rc[k], d = tc[k]; const f = clamp((tr - c.t0) / Math.max(1e-3, c.t1 - c.t0)); return d.t0 + f * (d.t1 - d.t0); }
+    const a = R.lines[li], b = T.lines[lt]; return b.t0 + clamp((tr - a.t0) / Math.max(1e-3, a.t1 - a.t0)) * (b.t1 - b.t0);
+  };
+  const at = (id, word, n = 0) => map(id, word, n, 1);
+  const end = (id, word, n = 0) => map(id, word, n, 2);
   return { T, line, at, end, chunks: T.chunks, END: T.end, lines: T.lines };
 }
 

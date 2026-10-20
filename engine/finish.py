@@ -5,7 +5,7 @@ usage: python3 engine/finish.py <video> [--crf N]  -> out/<v>/<v>.mp4, out/<v>/<
 The master out/<v>/video.mp4 carries per-frame film grain at crf 16, so it is always re-encoded, never copied.
 Audio: AAC 192k, two-pass loudnorm to -14 LUFS / -1 dBTP."""
 import sys, json, re, subprocess
-from browser import vdir, outdir
+from browser import vdir, outdir, timings_path, out_name
 
 def srt_time(t):
     ms = int(round(t * 1000)); return f'{ms // 3600000:02d}:{ms // 60000 % 60:02d}:{ms // 1000 % 60:02d},{ms % 1000:03d}'
@@ -22,19 +22,19 @@ def main():
     j = json.loads(m[m.rindex('{'):m.rindex('}') + 1])
     ln = f"loudnorm=I=-14:TP=-1.0:LRA=11:measured_I={j['input_i']}:measured_TP={j['input_tp']}:measured_LRA={j['input_lra']}:measured_thresh={j['input_thresh']}:offset={j['target_offset']}:linear=true"
     subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', str(O / 'video.mp4'), '-i', str(O / 'mix.wav'), '-map', '0:v:0', '-map', '1:a:0', '-c:v', 'libx264', '-preset', 'slow', '-crf', crf, *cap, '-pix_fmt', 'yuv420p', '-r', '60',
-                    '-af', ln, '-c:a', 'aac', '-b:a', '192k', '-ar', '48000', '-t', f'{secs:.4f}', '-movflags', '+faststart', str(O / f'{v}.mp4')], check=True)
+                    '-af', ln, '-c:a', 'aac', '-b:a', '192k', '-ar', '48000', '-t', f'{secs:.4f}', '-movflags', '+faststart', str(O / f'{out_name(v)}.mp4')], check=True)
     if height > 720:  # light copy for sending in chat (big files don't get a download button there)
-        subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', str(O / f'{v}.mp4'), '-vf', 'scale=1280:720:flags=lanczos', '-c:v', 'libx264', '-preset', 'medium', '-crf', '24',
-                        '-maxrate', '2.2M', '-bufsize', '4M', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '128k', '-movflags', '+faststart', str(O / f'{v}_720p.mp4')], check=True)
-    tj = vdir(v) / 'timings.js'
+        subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', str(O / f'{out_name(v)}.mp4'), '-vf', 'scale=1280:720:flags=lanczos', '-c:v', 'libx264', '-preset', 'medium', '-crf', '24',
+                        '-maxrate', '2.2M', '-bufsize', '4M', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '128k', '-movflags', '+faststart', str(O / f'{out_name(v)}_720p.mp4')], check=True)
+    tj = timings_path(v)
     if tj.exists():
         tm = json.loads(re.search(r'=\s*(\{.*\});', tj.read_text(encoding='utf-8'), re.S).group(1))
         ch = tm.get('chunks') or []
-        with open(O / f'{v}.srt', 'w', encoding='utf-8') as f:
+        with open(O / f'{out_name(v)}.srt', 'w', encoding='utf-8') as f:
             for i, c in enumerate(ch):
                 t1 = max(c['t1'] + 0.3, c['t0'] + 1.0)
                 if i + 1 < len(ch): t1 = min(t1, ch[i + 1]['t0'] - 0.02)
                 f.write(f"{i + 1}\n{srt_time(c['t0'])} --> {srt_time(t1)}\n{c['text']}\n\n")
-    print(subprocess.run(['ffprobe', '-v', 'error', '-show_entries', 'stream=codec_name,pix_fmt,width,height,r_frame_rate,nb_frames,sample_rate,channels:format=duration', '-of', 'compact', str(O / f'{v}.mp4')], capture_output=True, text=True).stdout)
+    print(subprocess.run(['ffprobe', '-v', 'error', '-show_entries', 'stream=codec_name,pix_fmt,width,height,r_frame_rate,nb_frames,sample_rate,channels:format=duration', '-of', 'compact', str(O / f'{out_name(v)}.mp4')], capture_output=True, text=True).stdout)
 
 if __name__ == '__main__': main()

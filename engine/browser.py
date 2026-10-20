@@ -17,16 +17,31 @@ async def launch(p):
             if os.path.exists(exe): return await p.chromium.launch(args=ARGS, executable_path=exe)
         raise first
 
+def split(v):
+    """'basilisk:en' -> ('basilisk', 'en'); 'basilisk' -> ('basilisk', None). A language variant reuses the video's
+    scenes with its own narration (script.<lang>.json, voice/<lang>/, timings.<lang>.js, strings.<lang>.js)."""
+    base, _, lang = v.partition(':'); return base, (lang or None)
+
 async def open_video(browser, v, errors=None):
-    """Open engine/index.html?v=<v>; returns (page, END seconds)."""
+    """Open engine/index.html?v=<video>[&lang=xx]; returns (page, END seconds)."""
     pg = await browser.new_page(viewport={'width': 1920, 'height': 1080})
     if errors is not None:
         pg.on('pageerror', lambda e: errors.append(str(e)))
         pg.on('console', lambda m: errors.append(m.text) if m.type in ('error', 'warning') else None)
-    await pg.goto((ROOT / 'engine' / 'index.html').as_uri() + f'?v={v}')
+    base, lang = split(v)
+    await pg.goto((ROOT / 'engine' / 'index.html').as_uri() + f'?v={base}' + (f'&lang={lang}' if lang else ''))
     end = await pg.evaluate('window.READY')
     return pg, end
 
-def vdir(v): return ROOT / 'videos' / v
+def vdir(v): return ROOT / 'videos' / split(v)[0]
 def outdir(v):
-    d = ROOT / 'out' / v; d.mkdir(parents=True, exist_ok=True); return d
+    base, lang = split(v)
+    d = ROOT / 'out' / (f'{base}-{lang}' if lang else base); d.mkdir(parents=True, exist_ok=True); return d
+def suffix(v):
+    """'' for the original, '.en' for a language variant (script.en.json, timings.en.js, …)"""
+    lang = split(v)[1]; return f'.{lang}' if lang else ''
+def voice_dir(v):
+    lang = split(v)[1]; return vdir(v) / 'voice' / lang if lang else vdir(v) / 'voice'
+def timings_path(v): return vdir(v) / f'timings{suffix(v)}.js'
+def out_name(v):
+    base, lang = split(v); return f'{base}-{lang}' if lang else base

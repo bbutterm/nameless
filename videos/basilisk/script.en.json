@@ -1,0 +1,108 @@
+{
+ "title": "Roko's Basilisk",
+ "lang": "en",
+ "voice": {
+  "provider": "elevenlabs",
+  "voice": "Marcus K - Calm Documentary Narrator",
+  "voice_id": "3H55HGnNE1XjYxigHSAS",
+  "model": "eleven_v4",
+  "flow": "https://elevenlabs.io/app/flows/66syXcW84QKgHTrhnGVu"
+ },
+ "timing": {
+  "lead": 0.6,
+  "tail": 4.0,
+  "tempo": 1.0
+ },
+ "anchors": {
+  "every_day": {
+   "около": "about",
+   "тысяч": "170",
+   "человек": "people",
+   "Для": "For"
+  }
+ },
+ "lines": [
+  {
+   "id": "hook",
+   "say": "[curious] There is an idea that people once called dangerous. Not because of formulas or secrets. But because, if it is true, just knowing about it puts you in the game.",
+   "text": "There is an idea that people once called dangerous.|Not because of formulas or secrets.|But because, if it is true,|just knowing about it puts you in the game."
+  },
+  {
+   "id": "welcome",
+   "say": "[mischievously] So… welcome.",
+   "text": "So… welcome."
+  },
+  {
+   "id": "forum",
+   "say": "July 2010. An online forum called LessWrong, where people argued about the future of artificial intelligence. A user named Roko posted a thought experiment.",
+   "text": "July 2010. An online forum called LessWrong,|where people argued about the future of artificial intelligence.|A user named Roko|posted a thought experiment.",
+   "pause_before": 0.9
+  },
+  {
+   "id": "superintelligence",
+   "say": "Imagine that one day people build a superintelligence. A machine smarter than all of humanity combined. And its goal is to make the world better: to beat diseases, to stop aging, to save billions of lives.",
+   "text": "Imagine that one day people build a superintelligence.|A machine smarter than all of humanity combined.|And its goal is to make the world better:|to beat diseases, to stop aging,|to save billions of lives.",
+   "pause_before": 0.5
+  },
+  {
+   "id": "every_day",
+   "say": "Every day, about 170,000 people die on Earth. For a mind like that, every day before it exists means deaths that could have been prevented. So it wants to be built as early as possible.",
+   "text": "Every day, about 170,000 people die on Earth.|For a mind like that, every day before it exists|means deaths that could have been prevented.|So it wants|to be built as early as possible.",
+   "pause_before": 0.5
+  },
+  {
+   "id": "threat",
+   "say": "And here is the creepy twist. What if it punishes everyone who knew it could exist, but did not help to build it? Not out of anger. But so that the threat itself pushes people in the past to work faster.",
+   "text": "And here is the creepy twist.|What if it punishes everyone who knew it could exist,|but did not help to build it?|Not out of anger.|But so that the threat itself pushes people in the past|to work faster.",
+   "pause_before": 0.9
+  },
+  {
+   "id": "copy",
+   "say": "But how do you punish someone who died long ago? A superintelligence could rebuild you — an exact digital copy. And if the copy thinks and feels like you… [pause] who says it isn't you?",
+   "text": "But how do you punish someone who died long ago?|A superintelligence could rebuild you —|an exact digital copy.|And if the copy thinks and feels like you…|who says it isn't you?",
+   "pause_before": 0.6
+  },
+  {
+   "id": "basilisk",
+   "say": "That's where the name comes from. A basilisk is a mythical serpent that kills with a single look. Here, the danger is not the look, but the knowledge. As long as you have never heard of this idea, you are safe. [short pause] Now — you have.",
+   "text": "That's where the name comes from.|A basilisk is a mythical serpent that kills with a single look.|Here, the danger is not the look, but the knowledge.|As long as you have never heard of this idea, you are safe.|Now — you have.",
+   "pause_before": 0.7
+  },
+  {
+   "id": "ban",
+   "say": "The founder of LessWrong, Eliezer Yudkowsky, deleted the post and banned the topic for five years. You can guess what happened next: the forbidden idea spread all over the internet. In 2018, a joke about the basilisk even helped Elon Musk and the singer Grimes meet.",
+   "text": "The founder of LessWrong, Eliezer Yudkowsky,|deleted the post and banned the topic for five years.|You can guess what happened next:|the forbidden idea spread all over the internet.|In 2018, a joke about the basilisk|even helped Elon Musk and the singer Grimes meet.",
+   "pause_before": 0.9
+  },
+  {
+   "id": "no_effect",
+   "say": "[calm] Now the good news. First: once the superintelligence already exists, revenge changes nothing. You can't rewrite the past, and wasting resources on torture makes no sense.",
+   "text": "Now the good news.|First: once the superintelligence already exists,|revenge changes nothing.|You can't rewrite the past,|and wasting resources on torture makes no sense.",
+   "pause_before": 1.4
+  },
+  {
+   "id": "blackmail",
+   "say": "Second: blackmail only works if the victim gives in. If you firmly decide to ignore threats, blackmailing you is pointless. The basilisk has no reason to touch someone it can't scare.",
+   "text": "Second: blackmail only works|if the victim gives in.|If you firmly decide to ignore threats,|blackmailing you is pointless.|The basilisk has no reason to touch someone it can't scare.",
+   "pause_before": 0.5
+  },
+  {
+   "id": "pascal",
+   "say": "Third: this is Pascal's wager in a digital wrapper. You can imagine endless different machines. One punishes you for not helping. Another punishes you for helping. The threats cancel each other out.",
+   "text": "Third: this is Pascal's wager in a digital wrapper.|You can imagine endless different machines.|One punishes you for not helping.|Another punishes you for helping.|The threats cancel each other out.",
+   "pause_before": 0.5
+  },
+  {
+   "id": "lesson",
+   "say": "So the real lesson of the basilisk is not about vengeful machines. It's about how easily fear sticks to ideas. Safe artificial intelligence won't come from threats, but from people who think carefully ahead of time.",
+   "text": "So the real lesson of the basilisk|is not about vengeful machines.|It's about how easily fear sticks to ideas.|Safe artificial intelligence won't come from threats,|but from people who think carefully ahead of time.",
+   "pause_before": 1.1
+  },
+  {
+   "id": "ending",
+   "say": "[softly] So sleep well. [pause] [whispers] Probably.",
+   "text": "So sleep well.|Probably.",
+   "pause_before": 1.2
+  }
+ ]
+}

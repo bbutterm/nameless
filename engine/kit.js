@@ -1,6 +1,9 @@
 // Shared drawing kit for all videos: palette, sky, characters, the eye, the AI core, typography.
 // Loaded after lib.js and before the video. Videos may extend PAL (Object.assign) and override any function.
 'use strict';
+// On-screen text: tx('ТЕКСТ') returns the translation from strings.<lang>.js (window.STRINGS) in a language variant
+const tx = s => (window.STRINGS && window.STRINGS[s] !== undefined ? window.STRINGS[s] : s);
+const LOCALE = window.LANG === 'en' ? 'en-US' : 'ru-RU';
 const PAL = {
   bg0: '#0b0828', bg1: '#241a5e', ind: '#1a1450', ind2: '#2b2275', ind3: '#3d33a0',
   cyan: '#5ce1ff', cyanD: '#1f7fd6', ice: '#bff3ff', mag: '#ff3b6b', magD: '#b81d4a', amber: '#ffb547', amberD: '#d9831f',
