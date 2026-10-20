@@ -1,0 +1,135 @@
+{
+ "title": "Who Ruled the 1200s? The Mongols",
+ "lang": "en",
+ "series": "Who Ruled the World — one century at a time",
+ "voice": {
+  "provider": "elevenlabs",
+  "voice": "Marcus K - Calm Documentary Narrator",
+  "voice_id": "3H55HGnNE1XjYxigHSAS",
+  "model": "eleven_v4",
+  "take": "B (2 of 2), generation zZlku0A1WZLDyJKYksgU",
+  "why": "slightly slower pace (4:27) for non-native listeners, clean, peak -6.1 dBFS",
+  "flow": "https://elevenlabs.io/app/flows/GGylg4hGUJb5N0MNUtiq",
+  "transcript": "eleven_scribe_v1, generation 1Wo8Ur99VVUvlKrbzUoZ"
+ },
+ "timing": {
+  "lead": 0.8,
+  "tail": 4.0,
+  "tempo": 1.0
+ },
+ "lines": [
+  {
+   "id": "hook",
+   "say": "[curious] In the year 1200, almost nobody had heard of the Mongols. [pause] Eighty years later, they ruled the largest connected empire in history.",
+   "text": "In the year 1200,|almost nobody had heard of the Mongols.|Eighty years later,|they ruled the largest connected empire in history."
+  },
+  {
+   "id": "crown",
+   "pause_before": 0.6,
+   "say": "If the year 1200 had a crown, China would wear it. It was the richest place on Earth, with paper money, printing, gunpowder, and cities of a million people.",
+   "text": "If the year 1200 had a crown,|China would wear it.|It was the richest place on Earth,|with paper money, printing, gunpowder,|and cities of a million people."
+  },
+  {
+   "id": "steppe",
+   "pause_before": 0.6,
+   "say": "Far to the north lay the steppe: an ocean of grass. Here lived the Mongols. Maybe a million people, with no cities and no writing. Just tents, sheep, and horses. And their clans fought each other all the time.",
+   "text": "Far to the north lay the steppe:|an ocean of grass.|Here lived the Mongols.|Maybe a million people,|with no cities and no writing.|Just tents, sheep, and horses.|And their clans fought each other all the time."
+  },
+  {
+   "id": "boy",
+   "pause_before": 0.7,
+   "say": "Around 1162, a boy named Temüjin was born here. When he was nine, his father was poisoned. His clan left the family alone in the cold. Thieves once stole eight of their nine horses. Temüjin was even captured, and locked in a heavy wooden collar. [short pause] He escaped.",
+   "text": "Around 1162, a boy named Temüjin was born here.|When he was nine, his father was poisoned.|His clan left the family alone in the cold.|Thieves once stole eight of their nine horses.|Temüjin was even captured,|and locked in a heavy wooden collar.|He escaped."
+  },
+  {
+   "id": "khan",
+   "pause_before": 0.5,
+   "say": "Step by step, with friends, deals, and battles, he united the tribes of the steppe. In 1206, they gave him a new title: Genghis Khan.",
+   "text": "Step by step, with friends, deals, and battles,|he united the tribes of the steppe.|In 1206, they gave him a new title:|Genghis Khan."
+  },
+  {
+   "id": "question",
+   "pause_before": 0.7,
+   "say": "Then he looked at the rich world around him. So how could a small people with no cities beat the greatest empires on Earth? Here are five reasons.",
+   "text": "Then he looked at the rich world around him.|So how could a small people with no cities|beat the greatest empires on Earth?|Here are five reasons."
+  },
+  {
+   "id": "horses",
+   "pause_before": 0.6,
+   "say": "One: horses. Every rider brought several horses, and jumped onto a fresh one when the first got tired. Mongol armies moved faster than any army of their time. And their riders could shoot arrows at full gallop. Even backwards.",
+   "text": "One: horses.|Every rider brought several horses,|and jumped onto a fresh one when the first got tired.|Mongol armies moved faster than any army of their time.|And their riders could shoot arrows at full gallop.|Even backwards."
+  },
+  {
+   "id": "army",
+   "pause_before": 0.6,
+   "say": "Two: a new kind of army. Genghis broke the old clans apart. Soldiers were put into groups of ten, a hundred, a thousand, and ten thousand. Leaders were chosen for skill, not for family. Subutai, the son of a blacksmith, became one of the greatest generals in history.",
+   "text": "Two: a new kind of army.|Genghis broke the old clans apart.|Soldiers were put into groups of ten,|a hundred, a thousand, and ten thousand.|Leaders were chosen for skill, not for family.|Subutai, the son of a blacksmith,|became one of the greatest generals in history."
+  },
+  {
+   "id": "news",
+   "pause_before": 0.6,
+   "say": "Three: information. The Mongols built the Yam, a chain of stations with fresh horses. A messenger could ride around two hundred kilometers in a day. And spies and traders told the khan everything about his enemies, long before the first battle.",
+   "text": "Three: information.|The Mongols built the Yam,|a chain of stations with fresh horses.|A messenger could ride around two hundred kilometers in a day.|And spies and traders told the khan everything about his enemies,|long before the first battle."
+  },
+  {
+   "id": "learn",
+   "pause_before": 0.6,
+   "say": "Four: they learned fast. At first, the Mongols could not take walled cities. So they brought in Chinese and Persian engineers. Soon they had catapults, and even gunpowder bombs.",
+   "text": "Four: they learned fast.|At first, the Mongols could not take walled cities.|So they brought in Chinese and Persian engineers.|Soon they had catapults,|and even gunpowder bombs."
+  },
+  {
+   "id": "fear",
+   "pause_before": 0.8,
+   "say": "And five. The dark one: fear. A city that opened its gates was usually spared. A city that fought back could be wiped out. In 1221, great cities like Merv and Nishapur were destroyed. Millions of people died in the Mongol wars. The stories ran ahead of the army, and many cities simply gave up.",
+   "text": "And five. The dark one:|fear.|A city that opened its gates was usually spared.|A city that fought back could be wiped out.|In 1221, great cities like Merv and Nishapur were destroyed.|Millions of people died in the Mongol wars.|The stories ran ahead of the army,|and many cities simply gave up."
+  },
+  {
+   "id": "west",
+   "pause_before": 0.9,
+   "say": "Genghis died in 1227, but his sons and grandsons kept going. In 1241, Mongol armies crushed two European armies, in Poland and Hungary, in the same week. Europe was in panic. [pause] Then the Mongols turned around and left. Their Great Khan, Ögedei, had died, and the leaders rode home to choose a new one.",
+   "text": "Genghis died in 1227,|but his sons and grandsons kept going.|In 1241, Mongol armies crushed two European armies,|in Poland and Hungary, in the same week.|Europe was in panic.|Then the Mongols turned around and left.|Their Great Khan, Ögedei, had died,|and the leaders rode home to choose a new one."
+  },
+  {
+   "id": "peace",
+   "pause_before": 0.7,
+   "say": "Inside the empire, something surprising happened. The Mongols mostly did not care about your religion. Buddhists, Muslims, and Christians all served the khan. Trade was protected. With a metal pass called a paiza, a traveler could cross all of Asia. Historians call this the Pax Mongolica: the Mongol peace.",
+   "text": "Inside the empire, something surprising happened.|The Mongols mostly did not care about your religion.|Buddhists, Muslims, and Christians all served the khan.|Trade was protected.|With a metal pass called a paiza,|a traveler could cross all of Asia.|Historians call this the Pax Mongolica:|the Mongol peace."
+  },
+  {
+   "id": "kublai",
+   "pause_before": 0.5,
+   "say": "A young man from Venice, Marco Polo, went all the way to China and worked for Kublai Khan, Genghis's grandson. In 1279, Kublai finished the conquest of China. The crown had a new owner. The empire now stretched from Korea to Eastern Europe: about twenty-four million square kilometers. Almost the size of North America.",
+   "text": "A young man from Venice, Marco Polo,|went all the way to China|and worked for Kublai Khan, Genghis's grandson.|In 1279, Kublai finished the conquest of China.|The crown had a new owner.|The empire now stretched from Korea to Eastern Europe:|about 24 million square kilometers.|Almost the size of North America."
+  },
+  {
+   "id": "limits",
+   "pause_before": 0.8,
+   "say": "But even the Mongols had limits. In 1260, the Mamluks of Egypt beat them at a place called Ain Jalut. And twice, Mongol fleets sailing to Japan were wrecked by storms. The Japanese called them kamikaze: the divine wind.",
+   "text": "But even the Mongols had limits.|In 1260, the Mamluks of Egypt beat them|at a place called Ain Jalut.|And twice, Mongol fleets sailing to Japan|were wrecked by storms.|The Japanese called them kamikaze:|the divine wind."
+  },
+  {
+   "id": "split",
+   "pause_before": 0.6,
+   "say": "The biggest danger, though, was inside. Genghis's grandsons fought over the throne, and by the 1260s the empire had split into four. Each part went its own way. Less than a hundred years later, the Mongols were pushed out of China.",
+   "text": "The biggest danger, though, was inside.|Genghis's grandsons fought over the throne,|and by the 1260s the empire had split into four.|Each part went its own way.|Less than a hundred years later,|the Mongols were pushed out of China."
+  },
+  {
+   "id": "why",
+   "pause_before": 0.9,
+   "say": "So why did the Mongols rule the 1200s? Not because they were rich, or many. They were faster. They were better organized. They learned from everyone. And they used fear as a weapon.",
+   "text": "So why did the Mongols rule the 1200s?|Not because they were rich, or many.|They were faster.|They were better organized.|They learned from everyone.|And they used fear as a weapon."
+  },
+  {
+   "id": "plague",
+   "pause_before": 0.8,
+   "say": "But the open roads that carried silk, spices, and ideas would soon carry something else. In the 1340s, a disease moved west along them: the Black Death. [pause] But that's the story of the next century.",
+   "text": "But the open roads that carried silk, spices, and ideas|would soon carry something else.|In the 1340s, a disease moved west along them:|the Black Death.|But that's the story of the next century."
+  },
+  {
+   "id": "ending",
+   "pause_before": 1.0,
+   "say": "[mischievously] Not bad, by the way, for a boy whose family once lost eight of its nine horses.",
+   "text": "Not bad, by the way,|for a boy whose family once lost eight of its nine horses."
+  }
+ ]
+}
