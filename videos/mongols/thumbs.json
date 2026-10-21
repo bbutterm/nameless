@@ -1,0 +1,27 @@
+[
+ {
+  "name": "crown_empire",
+  "t": 0,
+  "draw": "empire",
+  "text": [
+   "NOBODY",
+   "TO",
+   "EVERYTHING"
+  ],
+  "side": "left",
+  "accent": "#ffc53d",
+  "size": 112,
+  "dim": 0.5
+ },
+ {
+  "name": "backwards",
+  "t": 85.9,
+  "text": [
+   "THEY SHOT",
+   "BACKWARDS"
+  ],
+  "side": "left",
+  "accent": "#ffc53d",
+  "y": 0.3
+ }
+]

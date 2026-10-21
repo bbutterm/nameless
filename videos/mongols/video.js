@@ -1090,4 +1090,13 @@ function events() {
   A('neigh', w('ending', 'horses') + 0.2); A('hooves', w('ending', 'horses') + 0.3, { d: 2.4 }); A('end_hit', END - 3.0);
   return { events: ev.sort((a, b) => a.t - b.t), Bd, END, lines: N.lines };
 }
+// thumbnail compositions (engine/still.py --thumbs, "draw": name)
+window.THUMBS = {
+  empire(ctx, t) {
+    mapBg(ctx, '#0b1a38', '#1d3f73');
+    const v = geoView(86, 40, 500, 1340, 610);
+    drawGlobe(ctx, v, t, { shade: 0.3, under: g => empire(g, v, 1279, { edge: 0.95, alpha: 0.92, ring: false }) });
+    const [x, y] = gp(v, [103, 47.5]); crown(ctx, x, y - 6, 230, t, { glint: 0.6 });
+  },
+};
 window.VIDEO = { drawScene, drawOverlay, mbFn, END, Bd, events };

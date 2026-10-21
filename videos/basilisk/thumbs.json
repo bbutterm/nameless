@@ -1,0 +1,4 @@
+[
+ {"name": "eye", "t": 87.9, "text": ["DON'T", "LEARN THIS"], "side": "left", "accent": "#ff3b6b", "dim": 0.75},
+ {"name": "window", "t": 156.6, "text": ["SLEEP", "WELL…?"], "side": "right", "accent": "#5ce1ff", "dim": 0.5, "y": 0.27}
+]
