@@ -4,7 +4,7 @@ Config: videos/<v>/shorts.json → [{name, from, to, title, tag?, cx?: [[t, x], 
   from/to are video times (pick natural pauses); cx keys move the square window (x of its centre in the 1920 frame);
   z/zoom > 1 zooms in (window smaller than 1080). Audio comes from the finished out/<v>/<v>.mp4 (already loudness-normalised).
 tail (default 2.4 s): after `to` the frame freezes under an end card while the sound fades.
-Output: out/<v>/shorts/<name>.mp4 (+ <name>.jpg cover frame). --preview renders 6 stills per short instead (contact sheet)."""
+Output: out/<v>/shorts/<name>.mp4 (for upload) + <name>_light.mp4 (~4–6 MB, for chat) + <name>.jpg cover frame. --preview renders 6 stills per short instead (contact sheet)."""
 import asyncio, base64, json, subprocess, argparse, os, time
 from playwright.async_api import async_playwright
 from PIL import Image
@@ -48,6 +48,9 @@ async def main():
             subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', str(silent), '-ss', f"{S['from']:.3f}", '-t', f'{dur + min(tail, 1.0):.3f}', '-i', str(src), '-map', '0:v', '-map', '1:a',
                             '-af', f'afade=t=in:d=0.15,afade=t=out:st={dur:.3f}:d={min(tail, 1.0) or 0.5:.3f},apad', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '160k', '-shortest', '-movflags', '+faststart', str(out)], check=True)
             silent.unlink()
+            # light copy for chat (~4–6 MB): same 1080×1920, softened grain, capped bitrate
+            subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', str(out), '-vf', 'hqdn3d=1.5:1.5:4:4', '-c:v', 'libx264', '-preset', 'slow', '-crf', '25', '-maxrate', '3M', '-bufsize', '6M',
+                            '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '128k', '-movflags', '+faststart', str(d / f"{S['name']}_light.mp4")], check=True)
             subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-ss', '1.2', '-i', str(out), '-frames:v', '1', str(d / f"{S['name']}.jpg")], check=True)
             print(out, f'{dur:.1f}s', f'{os.path.getsize(out) / 1e6:.1f} MB', f'{time.time() - t0:.0f}s')
         await b.close()
