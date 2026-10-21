@@ -386,7 +386,8 @@ function crown(ctx, x, y, s, t, o = {}) {
   ctx.fillStyle = o.band || '#e89a22'; rrect(ctx, -w / 2, -h * 0.2, w, h * 0.2, h * 0.05); ctx.fill();
   for (const [jx, jc] of [[-0.3, '#ff5c7a'], [0, '#5ce1ff'], [0.3, '#2fd6b0']]) circle(ctx, jx * w, -h * 0.1, h * 0.065, jc);
   for (const jx of [-0.5, 0, 0.5]) circle(ctx, jx * w, jx ? -h * 0.78 : -h * 1.02, h * 0.07, '#fff3c4');
-  const gl = o.glint || 0; if (gl > 0) { glow(ctx, -w * 0.2, -h * 0.55, w * 0.9, 'rgba(255,230,150,0.9)', gl * 0.7); ctx.save(); ctx.globalAlpha = gl; ctx.strokeStyle = '#fffbe6'; ctx.lineWidth = w * 0.025; ctx.lineCap = 'round'; const r = w * 0.18 * (0.6 + gl * 0.4); ctx.beginPath(); ctx.moveTo(w * 0.3 - r, -h * 0.75); ctx.lineTo(w * 0.3 + r, -h * 0.75); ctx.moveTo(w * 0.3, -h * 0.75 - r); ctx.lineTo(w * 0.3, -h * 0.75 + r); ctx.stroke(); ctx.restore(); }
+  // glint: a soft glow and a four-point sparkle on the right tip
+  const gl = o.glint || 0; if (gl > 0) { glow(ctx, -w * 0.2, -h * 0.55, w * 0.9, 'rgba(255,230,150,0.9)', gl * 0.7); const r = w * 0.16 * (0.6 + gl * 0.4), sx = w * 0.36, sy = -h * 0.86; ctx.save(); ctx.globalAlpha = gl; ctx.fillStyle = '#fffbe6'; ctx.beginPath(); for (let i = 0; i < 8; i++) { const ang = i / 8 * TAU - Math.PI / 2, rr = i % 2 ? r * 0.16 : r; ctx.lineTo(sx + Math.cos(ang) * rr, sy + Math.sin(ang) * rr); } ctx.fill(); ctx.restore(); }
   ctx.restore();
 }
 // century ribbon (series HUD): screen space, top centre. year = current year (float), a = alpha
