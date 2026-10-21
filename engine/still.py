@@ -1,5 +1,7 @@
 """Render lossless stills (channel art: avatar, banner, thumbnails) from a video's drawScene.
-usage: python3 engine/still.py <video> t1 t2 ... [--square 800] [--name avatar]
+usage: python3 engine/still.py <video> t1 t2 ... [--square 800] [--name avatar] [--hires K]
+  --hires K: draw VIDEO.drawScene straight onto a K× canvas (true vector detail, e.g. K=2 → 3840×2160 / 2160 square);
+             only for stills whose drawing never resets the transform (no fadeBlack/grain/layer) — channel art is fine.
   -> out/<video>/stills/<name>_<t>.png (1920×1080, or the centre square resized to N×N with --square N)
      + preview.png: each still in a circle at 800 / 98 / 40 px, the sizes YouTube shows an avatar at."""
 import asyncio, base64, argparse, io
@@ -13,13 +15,16 @@ def circle(im, size):
 
 async def main():
     ap = argparse.ArgumentParser(); ap.add_argument('v'); ap.add_argument('ts', nargs='+', type=float)
-    ap.add_argument('--square', type=int); ap.add_argument('--name', default='still'); a = ap.parse_args()
+    ap.add_argument('--square', type=int); ap.add_argument('--name', default='still'); ap.add_argument('--hires', type=float, default=1); a = ap.parse_args()
     d = outdir(a.v) / 'stills'; d.mkdir(exist_ok=True); ims = []
     async with async_playwright() as p:
         b = await launch(p); errs = []
         pg, _ = await open_video(b, a.v, errs)
         for t in a.ts:
-            data = await pg.evaluate("t=>{renderAt(t);return document.getElementById('c').toDataURL('image/png')}", t)
+            if a.hires > 1:
+                data = await pg.evaluate("([t,k])=>{const c=document.createElement('canvas');c.width=W*k;c.height=H*k;const g=c.getContext('2d');g.scale(k,k);VIDEO.drawScene(g,t);return c.toDataURL('image/png')}", [t, a.hires])
+            else:
+                data = await pg.evaluate("t=>{renderAt(t);return document.getElementById('c').toDataURL('image/png')}", t)
             im = Image.open(io.BytesIO(base64.b64decode(data.split(',')[1]))).convert('RGB')
             if a.square: w, h = im.size; s = min(w, h); im = im.crop(((w - s) // 2, (h - s) // 2, (w + s) // 2, (h + s) // 2)).resize((a.square, a.square), Image.LANCZOS)
             f = d / f'{a.name}_{t:g}.png'; im.save(f); ims.append(im); print(f)

@@ -9,16 +9,16 @@ function bgNight(ctx, t) {
 // A — the crown sitting on the world (the channel: big ideas about the world)
 function vA(ctx, t) {
   bgNight(ctx, t);
-  const v = geoView(45, 28, 310, CX, CY + 210);
+  const v = geoView(45, 28, 350, CX, CY + 215);
   drawGlobe(ctx, v, t, { shade: 0.32, atmo: 0.7 });
-  glow(ctx, CX, CY - 120, 380, 'rgba(255,200,90,0.9)', 0.5);
-  crown(ctx, CX, CY - 40, 470, t, { glint: 0.5 });
+  glow(ctx, CX, CY - 150, 420, 'rgba(255,200,90,0.9)', 0.5);
+  crown(ctx, CX, CY - 70, 540, t, { glint: 0.5 });
 }
 // B — crown alone, big and bold (reads best at 40 px)
 function vB(ctx, t) {
   bgNight(ctx, t);
   glow(ctx, CX, CY, 520, 'rgba(255,190,80,0.9)', 0.55);
-  crown(ctx, CX, CY + 150, 560, t, { glint: 0.55 });
+  crown(ctx, CX, CY + 175, 640, t, { glint: 0.55 });
 }
 // C — crown with an orbit: science + "ruling" ideas
 function vC(ctx, t) {
@@ -35,9 +35,9 @@ function vC(ctx, t) {
 // D — warm: crown on the globe at sunrise (stands out on both dark and light YouTube)
 function vD(ctx, t) {
   const g = ctx.createRadialGradient(CX, CY + 300, 80, CX, CY, 800); g.addColorStop(0, '#ffcf8a'); g.addColorStop(0.45, '#e98a7a'); g.addColorStop(1, '#3a2f6b'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-  const v = geoView(45, 28, 310, CX, CY + 210);
+  const v = geoView(45, 28, 350, CX, CY + 215);
   drawGlobe(ctx, v, t, { shade: 0.22, atmo: 0.5, colors: { atmo: '#ffd9a0', ocean: '#1b4f7a', ocean2: '#12365a' } });
-  crown(ctx, CX, CY - 40, 470, t, { glint: 0.5 });
+  crown(ctx, CX, CY - 70, 540, t, { glint: 0.5 });
 }
 const VAR = [vA, vB, vD];
 function drawScene(ctx, t) { VAR[Math.min(VAR.length - 1, Math.floor(t))](ctx, t); }
