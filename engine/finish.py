@@ -2,6 +2,8 @@
 usage: python3 engine/finish.py <video> [--crf N] [--burn]  -> out/<v>/<v>.mp4, out/<v>/<v>.srt (+ <v>_subs.mp4 with --burn)
 --burn: a second file with the subtitles drawn into the picture (Montserrat ExtraBold on a soft box; libass), for
 viewers who want them always on. The clean file + .srt stays the one for YouTube (captions are selectable there).
+--light: <v>_light.mp4 (from the subtitled file if --burn): 30 fps, grain softened, two-pass to ~650 kbit/s total
+(~5 MB per minute) — for sending in chat; the full files stay for YouTube.
 Translations: videos/<v>/subs.<lang>.txt (one line per subtitle chunk) → <v>.<lang>.srt with the same timings.
 720p master (default render): one light file, crf 23 slow capped at 2.5 Mbit/s (~20–40 MB) — downloads from chat.
 1080p master (render --size 1080): <v>.mp4 at crf 20 slow (~9 Mbit/s, for YouTube) + <v>_720p.mp4 (~20 MB) to send.
@@ -23,6 +25,15 @@ def burn(src, srt, dst, height):
 
 def srt_time(t):
     ms = int(round(t * 1000)); return f'{ms // 3600000:02d}:{ms // 60000 % 60:02d}:{ms // 1000 % 60:02d},{ms % 1000:03d}'
+
+def light(src, dst, secs, kbps=650):
+    """Small chat copy: 30 fps, light denoise (film grain is what makes files heavy), two-pass to a target bitrate."""
+    vb = f'{kbps - 96}k'; log = str(dst.with_suffix(''))
+    vf = 'fps=30,hqdn3d=1.5:1.5:4:4'
+    subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', str(src), '-vf', vf, '-c:v', 'libx264', '-preset', 'slow', '-b:v', vb, '-pass', '1', '-passlogfile', log, '-an', '-f', 'mp4', '/dev/null'], check=True)
+    subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', str(src), '-vf', vf, '-c:v', 'libx264', '-preset', 'slow', '-b:v', vb, '-pass', '2', '-passlogfile', log, '-pix_fmt', 'yuv420p',
+                    '-c:a', 'aac', '-b:a', '96k', '-movflags', '+faststart', str(dst)], check=True)
+    for f in dst.parent.glob(dst.stem + '*.log*'): f.unlink()
 
 def main():
     v = sys.argv[1]; O = outdir(v)
@@ -57,6 +68,9 @@ def main():
             if len(lines) != len(ch): print(f'WARNING {tf.name}: {len(lines)} lines for {len(ch)} subtitle chunks — skipped'); continue
             write_srt(O / f'{out_name(v)}.{tf.name.split(".")[1]}.srt', lines)
         if '--burn' in sys.argv: burn(O / f'{out_name(v)}.mp4', O / f'{out_name(v)}.srt', O / f'{out_name(v)}_subs.mp4', height)
+    if '--light' in sys.argv:
+        src = O / f'{out_name(v)}_subs.mp4' if '--burn' in sys.argv else O / f'{out_name(v)}.mp4'
+        light(src, O / f'{out_name(v)}_light.mp4', secs)
     print(subprocess.run(['ffprobe', '-v', 'error', '-show_entries', 'stream=codec_name,pix_fmt,width,height,r_frame_rate,nb_frames,sample_rate,channels:format=duration', '-of', 'compact', str(O / f'{out_name(v)}.mp4')], capture_output=True, text=True).stdout)
 
 if __name__ == '__main__': main()
